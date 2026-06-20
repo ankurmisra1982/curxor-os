@@ -1,56 +1,89 @@
 export const OOTB_APPS = [
   {
-    id: "my-work",
-    name: "My Work",
+    id: "claw-forge",
+    name: "The Forge",
+    href: "/claw-forge",
+    short: "FORGE",
     description:
-      "Your personal command center for daily tasks, notes, and local AI assistance — all on your appliance.",
-  },
-  {
-    id: "my-shop",
-    name: "My Shop",
-    description:
-      "Run a small storefront or inventory desk with offline tools for orders, stock, and customer pickup.",
-  },
-  {
-    id: "tesla-optimus-engine",
-    name: "Tesla Optimus Engine",
-    description:
-      "Humanoid motion planning and safety orchestration for Optimus-class units on your local mesh.",
-  },
-  {
-    id: "robotaxi-fleet-manager",
-    name: "Robotaxi Fleet Manager",
-    description:
-      "See every vehicle at a glance, assign routes, and monitor fleet health without leaving the building.",
-  },
-  {
-    id: "claw-cafe",
-    name: "Claw Cafe",
-    description:
-      "A playful claw-bot kiosk experience — grab prizes, run demos, and delight guests at events.",
-  },
-  {
-    id: "my-content-creator",
-    name: "My Content Creator",
-    description:
-      "Manage social channels, headless video pipelines, and post queues — drafted and scheduled on your appliance.",
+      "Prompt the local LLM to forge a custom Claw for your niche hustle — wire it to eno2 and deploy in one session.",
   },
   {
     id: "my-capital",
-    name: "My Capital",
+    name: "Capital Claw",
+    href: "/my-capital",
+    short: "CAP",
     description:
-      "Build flexible investment rules for stocks and crypto, monitor portfolios, and run automated strategies locally.",
+      "Algorithmic trading, crypto sniping, and automated portfolio rebalancing — your alpha stays on bare metal.",
   },
   {
-    id: "claw-forge",
-    name: "Claw Forge",
+    id: "my-content-creator",
+    name: "Creator Claw",
+    href: "/my-content",
+    short: "CRE",
     description:
-      "Design new claw bots in natural language — describe goals, attach photos, or pull live vision, then deploy locally.",
+      "SEO blog generation, X thread scheduling, and YouTube scripts — content pipelines with zero API rent.",
+  },
+  {
+    id: "my-work",
+    name: "Outreach Claw",
+    href: "/my-work",
+    short: "OUT",
+    description:
+      "Lead scraping, personalized cold email sequencing, and CRM follow-ups — outbound that never sleeps.",
+  },
+  {
+    id: "my-shop",
+    name: "Arbitrage Claw",
+    href: "/my-shop",
+    short: "ARB",
+    description:
+      "E-commerce price scraping, margin alerts, and automated dropshipping fulfillment — find spread, act instantly.",
+  },
+  {
+    id: "tesla-optimus-engine",
+    name: "Signal Claw",
+    href: "/optimus",
+    short: "SIG",
+    description:
+      "Ingest market feeds, social mentions, and news triggers — spin up agents the moment alpha appears.",
+  },
+  {
+    id: "robotaxi-fleet-manager",
+    name: "Swarm Claw",
+    href: "/robotaxi",
+    short: "SWARM",
+    description:
+      "Orchestrate dozens of Claws in parallel — assign workloads, monitor uptime, and scale your digital workforce.",
+  },
+  {
+    id: "claw-cafe",
+    name: "Engage Claw",
+    href: "/claw-cafe",
+    short: "ENG",
+    description:
+      "Auto-replies, DM triage, and community thread engagement on X and LinkedIn — grow audience while you sleep.",
   },
 ] as const;
 
 export type OotbAppId = (typeof OOTB_APPS)[number]["id"];
 
+export type OotbApp = (typeof OOTB_APPS)[number];
+
 export function isValidAppId(id: string): id is OotbAppId {
   return OOTB_APPS.some((app) => app.id === id);
 }
+
+export function getOotbApp(appId: OotbAppId): OotbApp {
+  const app = OOTB_APPS.find((a) => a.id === appId);
+  if (!app) throw new Error(`Unknown OOTB app: ${appId}`);
+  return app;
+}
+
+export const APP_ROUTES = OOTB_APPS.map(({ id, href, name, short }) => ({
+  id,
+  href,
+  name,
+  short,
+}));
+
+export type AppRouteId = OotbAppId;

@@ -2,12 +2,21 @@
 
 CurXor OS uses **two isolated network planes** on the MS-S1 MAX dual-NIC layout.
 
+## Strategic roles
+
+| Port | Marketing name | Operator purpose |
+|------|----------------|------------------|
+| **eno1** | **Command Port** | Laptop → Flight Command UI. Firewalled from the public internet. |
+| **eno2** | **Egress Port** | Internet gateway for Digital Bridges — Alpaca trades, X posts, scrapers. **Unplug to kill all outbound agents.** |
+
+Under the hood, eno2 also carries the local telemetry mesh for agent coordination. Captive portal and operator access stay on eno1 only.
+
 ## Interface roles
 
 | Interface | IP | Purpose | Configured by |
 |-----------|-----|---------|---------------|
-| **eno1** | `10.0.0.1/24` | User LAN, captive portal, dashboard access | `setup-captive-portal.sh` |
-| **eno2** | `10.77.0.1/24` | Robotics mesh, ZMQ broker only | `setup-mesh-network.sh` |
+| **eno1** | `10.0.0.1/24` | Command Port — user LAN, captive portal, Flight Command | `setup-captive-portal.sh` |
+| **eno2** | `10.77.0.1/24` | Egress Port — Digital Bridges + agent mesh (ZMQ broker) | `setup-mesh-network.sh` |
 
 **Rule:** Never run captive portal DNS/DHCP on eno2. Never bind the telemetry broker to eno1.
 
