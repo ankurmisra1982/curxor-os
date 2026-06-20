@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "released": "2026-06-19",
+  "channel": "stable",
+  "notes": "Mock release manifest for OTA integration testing.",
+  "artifact": {
+    "url": "https://github.com/curxor/curxor-os/releases/download/v0.2.0/curxor-os-0.2.0.tar.gz",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "post_update": "scripts/post-update.sh"
+}

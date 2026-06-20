@@ -1,0 +1,26 @@
+# CurXor OS — Full autoinstall reference (Ubuntu 24.04 Subiquity)
+#
+# Merge with your MS-S1 MAX hardware profile. This is a REFERENCE — adjust
+# storage, locale, and network interfaces for your image build pipeline.
+
+#autoinstall:
+#  version: 1
+#  locale: en_US.UTF-8
+#  identity:
+#    hostname: curxor-appliance
+#    username: curxor
+#    password: "$6$..."   # mkpasswd -m sha-512
+#
+#  network:
+#    network:
+#      version: 2
+#      ethernets:
+#        eno1:
+#          addresses: [10.0.0.1/24]
+#          optional: true
+#        eno2:
+#          addresses: [10.77.0.1/24]
+#          optional: true
+#
+#  late-commands:
+#    # See late-commands.yaml for the full CurXor payload + first-boot install block

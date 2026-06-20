@@ -1,0 +1,19 @@
+[Unit]
+Description=CurXor OS Pillar 1 — Local ROCm Inference (Docker Compose)
+Documentation=file:///opt/curxor/pillar-1-compute/README.md
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/curxor/pillar-1-compute
+EnvironmentFile=-/etc/curxor/compute.env
+ExecStartPre=/bin/bash -c 'test -e /dev/kfd'
+ExecStart=/bin/bash -c 'set -a; source /etc/curxor/compute.env; set +a; /usr/bin/docker compose --profile ${CURXOR_INFERENCE_BACKEND:-ollama} up -d --remove-orphans'
+ExecStop=/usr/bin/docker compose --profile ollama --profile vllm down
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

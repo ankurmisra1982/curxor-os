@@ -1,0 +1,5 @@
+#!/bin/bash
+# CurXor OS — nightly OTA check (installed to /etc/cron.daily/curxor-ota)
+# Note: cron.daily timing is distro-dependent (~06:25 on Ubuntu). For exact 03:00,
+# use scripts/install-ota-cron.sh which installs /etc/cron.d/curxor-ota instead.
+exec /opt/curxor/scripts/ota-updater.sh >> /var/log/curxor/ota-update.log 2>&1

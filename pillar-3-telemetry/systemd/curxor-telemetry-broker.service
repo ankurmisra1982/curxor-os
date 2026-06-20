@@ -1,0 +1,36 @@
+[Unit]
+Description=CurXor OS Pillar 3 — ZeroMQ Telemetry Broker + Digital Bridges
+Documentation=file:///opt/curxor/pillar-3-telemetry/README.md
+After=network-online.target
+Wants=network-online.target
+BindsTo=sys-subsystem-net-devices-eno2.device
+After=sys-subsystem-net-devices-eno2.device
+
+[Service]
+Type=simple
+User=curxor
+Group=curxor
+WorkingDirectory=/opt/curxor/pillar-3-telemetry
+EnvironmentFile=/etc/curxor/telemetry-broker.env
+EnvironmentFile=-/etc/curxor/digital.env
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=/bin/bash -c 'test -e /sys/class/net/${CURXOR_MESH_IFACE:-eno2}/operstate'
+ExecStart=/opt/curxor/pillar-3-telemetry/.venv/bin/curxor-broker-stack
+Restart=always
+RestartSec=2
+TimeoutStopSec=10
+KillMode=mixed
+
+MemorySwapMax=0
+Nice=-10
+LimitNOFILE=65536
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/curxor
+ReadOnlyPaths=/etc/curxor
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

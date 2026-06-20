@@ -1,0 +1,22 @@
+[project]
+name = "curxor-telemetry-broker"
+version = "0.1.0"
+description = "CurXor OS Pillar 3 — ZeroMQ pub/sub telemetry broker for robotics mesh"
+requires-python = ">=3.11"
+dependencies = [
+  "pyzmq>=25.1.0",
+  "aiohttp>=3.9.0",
+  "tweepy>=4.14.0",
+]
+
+[project.scripts]
+curxor-broker = "curxor_broker.main:main"
+curxor-broker-stack = "curxor_broker.stack_main:main"
+curxor-digital-bridges = "curxor_broker.digital_bridges:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

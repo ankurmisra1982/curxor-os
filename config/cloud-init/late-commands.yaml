@@ -1,0 +1,53 @@
+# CurXor OS — cloud-init late-commands fragment
+# Merge into your Ubuntu 24.04 autoinstall user-data (MS-S1 MAX).
+#
+# PREREQUISITE: bake the curxor-os tree onto install media at ONE of:
+#   /cdrom/curxor-os/          (recommended — offline sovereign)
+#   file:///cdrom/curxor-os.git
+#
+# ── Option A: Copy payload from install media (offline) ─────────────────────
+
+late-commands:
+  # Anti-bloat (extend your existing block above this section)
+  - curtin in-target --target=/target -- bash -c 'apt-get purge -y snapd modemmanager apport 2>/dev/null || true'
+
+  # 1. Stage CurXor OS payload into /opt/curxor
+  - curtin in-target --target=/target -- mkdir -p /opt/curxor
+  - curtin in-target --target=/target -- bash -c 'if [[ -d /cdrom/curxor-os ]]; then cp -a /cdrom/curxor-os/. /opt/curxor/; elif [[ -d /target/cdrom/curxor-os ]]; then cp -a /target/cdrom/curxor-os/. /opt/curxor/; else echo "ERROR: /cdrom/curxor-os not found on install media" >&2; exit 1; fi'
+
+  # 2. Make orchestration scripts executable
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/install-all.sh
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/setup-captive-portal.sh
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/setup-mesh-network.sh
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/apply-active-claw.sh
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/ota-updater.sh
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/install-ota-cron.sh
+  - curtin in-target --target=/target -- chmod +x /opt/curxor/scripts/post-update.sh
+  - curtin in-target --target=/target -- bash -c 'chmod +x /opt/curxor/pillar-*/scripts/*.sh 2>/dev/null || true'
+  - curtin in-target --target=/target -- bash -c 'chmod +x /opt/curxor/pillar-1-compute/config/vllm/entrypoint.sh 2>/dev/null || true'
+
+  # 3. First-boot installer (recommended — services need a running kernel/systemd)
+  - curtin in-target --target=/target -- bash -c 'cat > /etc/systemd/system/curxor-first-boot-install.service <<EOF
+[Unit]
+Description=CurXor OS First-Boot Meta-Installer
+ConditionPathExists=!/var/lib/curxor/.install-complete
+After=network-online.target
+Wants=network-online.target
+Before=curxor-os.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/curxor/scripts/install-all.sh
+ExecStartPost=/bin/bash -c "mkdir -p /var/lib/curxor && touch /var/lib/curxor/.install-complete"
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+  - curtin in-target --target=/target -- systemctl enable curxor-first-boot-install.service
+
+  # 4. Optional: run meta-installer immediately during install (requires network in chroot)
+  # Uncomment ONLY if your installer has working network + you accept chroot limitations:
+  # - curtin in-target --target=/target -- bash -c "/opt/curxor/scripts/install-all.sh"

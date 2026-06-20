@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-jetbrains: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+  --font-fira: "Fira Code", ui-monospace, monospace;
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #000000;
+}
+
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.35;
+  z-index: 50;
+}
+
+::selection {
+  background: rgba(188, 19, 254, 0.35);
+  color: #ffffff;
+}
+
+.font-display {
+  font-family: var(--font-jetbrains);
+}
+
+.font-mono {
+  font-family: var(--font-fira);
+}

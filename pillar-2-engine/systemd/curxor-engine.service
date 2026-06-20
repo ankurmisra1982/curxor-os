@@ -1,0 +1,31 @@
+[Unit]
+Description=CurXor OS Pillar 2 — OpenClaw Physical Agent Engine
+Documentation=file:///opt/curxor/pillar-2-engine/README.md
+After=network-online.target curxor-telemetry-broker.service curxor-compute.service
+Wants=network-online.target
+Requires=curxor-telemetry-broker.service
+
+[Service]
+Type=simple
+User=curxor
+Group=curxor
+WorkingDirectory=/opt/curxor/pillar-2-engine
+EnvironmentFile=/etc/curxor/engine.env
+EnvironmentFile=-/etc/curxor/engine.env.d/active-claw.conf
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node /opt/curxor/pillar-2-engine/dist/src/index.js
+Restart=always
+RestartSec=3
+TimeoutStopSec=15
+
+Nice=-5
+MemorySwapMax=0
+LimitNOFILE=65536
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/curxor
+
+[Install]
+WantedBy=multi-user.target

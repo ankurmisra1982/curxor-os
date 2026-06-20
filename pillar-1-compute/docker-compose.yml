@@ -1,0 +1,156 @@
+# CurXor OS — Pillar 1: Local inference on AMD ROCm (UMA-tuned)
+# Ryzen AI Max+ 395 (gfx1151) · 64 GB LPDDR5X unified memory
+#
+# Usage:
+#   cp .env.example .env
+#   ./scripts/deploy.sh                    # default: ollama profile
+#   ./scripts/deploy.sh --backend vllm     # vLLM OpenAI-compatible server
+#   docker compose --profile ollama up -d
+#   docker compose --profile vllm up -d
+
+name: curxor-compute
+
+x-rocm-devices: &rocm_devices
+  devices:
+    - /dev/kfd
+    - /dev/dri
+  group_add:
+    - video
+    - render
+  cap_add:
+    - SYS_PTRACE
+  security_opt:
+    - seccomp:unconfined
+
+x-rocm-env: &rocm_env
+  HSA_OVERRIDE_GFX_VERSION: ${CURXOR_GFX_VERSION:-11.5.1}
+  AMDGPU_TARGETS: ${CURXOR_ROCM_ARCH:-gfx1151}
+  HIP_VISIBLE_DEVICES: "0"
+  # Reduce allocator fragmentation across CPU/GPU unified heap
+  PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+  # Ollama ROCm path inside official image
+  OLLAMA_VULKAN: "0"
+
+x-uma-volumes: &uma_volumes
+  - type: bind
+    source: ${CURXOR_MODELS_DIR:-/var/lib/curxor/models}
+    target: /models
+  - type: bind
+    source: ${CURXOR_HF_CACHE_DIR:-/var/lib/curxor/huggingface}
+    target: /root/.cache/huggingface
+
+services:
+  # ── Ollama (recommended default for gfx1151 UMA stability) ────────────────
+  ollama:
+    profiles: ["ollama"]
+    image: ${OLLAMA_IMAGE:-ollama/ollama:rocm}
+    container_name: curxor-ollama
+    restart: unless-stopped
+    <<: *rocm_devices
+    environment:
+      <<: *rocm_env
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_MODELS: /root/.ollama
+      OLLAMA_MAX_LOADED_MODELS: ${OLLAMA_MAX_LOADED_MODELS:-1}
+      OLLAMA_NUM_PARALLEL: ${OLLAMA_NUM_PARALLEL:-1}
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-24h}
+      OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-8192}
+      # Pin flash-attention friendly paths on RDNA 3.5
+      OLLAMA_FLASH_ATTENTION: "1"
+    ports:
+      - "${CURXOR_BIND_ADDRESS:-127.0.0.1}:${OLLAMA_HOST_PORT:-11434}:11434"
+    volumes:
+      - type: bind
+        source: ${CURXOR_OLLAMA_DIR:-/var/lib/curxor/ollama}
+        target: /root/.ollama
+      - type: bind
+        source: ${CURXOR_MODELS_DIR:-/var/lib/curxor/models}
+        target: /models
+    shm_size: ${DOCKER_SHM_SIZE:-16g}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:11434/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── vLLM (OpenAI-compatible — for VLA serving at scale) ─────────────────
+  vllm:
+    profiles: ["vllm"]
+    image: ${VLLM_IMAGE:-rocm/vllm-dev:rocm7.2.1_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.16.0}
+    container_name: curxor-vllm
+    restart: unless-stopped
+    <<: *rocm_devices
+    ipc: ${VLLM_IPC_MODE:-host}
+    environment:
+      <<: *rocm_env
+      VLLM_WORKER_MULTIPROC_METHOD: spawn
+      HF_HOME: /root/.cache/huggingface
+      TRANSFORMERS_OFFLINE: "0"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+    ports:
+      - "${CURXOR_BIND_ADDRESS:-127.0.0.1}:${VLLM_HOST_PORT:-8000}:8000"
+    volumes:
+      - type: bind
+        source: ${CURXOR_HF_CACHE_DIR:-/var/lib/curxor/huggingface}
+        target: /root/.cache/huggingface
+      - type: bind
+        source: ${CURXOR_MODELS_DIR:-/var/lib/curxor/models}
+        target: /models
+      - type: bind
+        source: ./config/vllm/entrypoint.sh
+        target: /opt/curxor/vllm-entrypoint.sh
+        read_only: true
+    shm_size: ${DOCKER_SHM_SIZE:-16g}
+    entrypoint: ["/bin/bash", "/opt/curxor/vllm-entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 10
+      start_period: 300s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Optional: model pre-pull sidecar (runs once, then exits) ─────────────
+  ollama-init:
+    profiles: ["ollama", "init"]
+    image: ${OLLAMA_IMAGE:-ollama/ollama:rocm}
+    container_name: curxor-ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    network_mode: "service:ollama"
+    <<: *rocm_devices
+    environment:
+      <<: *rocm_env
+      OLLAMA_HOST: 127.0.0.1:11434
+      OLLAMA_VLA_MODEL: ${OLLAMA_VLA_MODEL:-moondream:1.8b}
+      OLLAMA_REASONING_MODEL: ${OLLAMA_REASONING_MODEL:-}
+    volumes:
+      - type: bind
+        source: ${CURXOR_OLLAMA_DIR:-/var/lib/curxor/ollama}
+        target: /root/.ollama
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -euo pipefail
+        echo "[curxor] Pulling VLA model: $${OLLAMA_VLA_MODEL}"
+        ollama pull "$${OLLAMA_VLA_MODEL}"
+        if [[ -n "$${OLLAMA_REASONING_MODEL}" ]]; then
+          echo "[curxor] Pulling reasoning model: $${OLLAMA_REASONING_MODEL}"
+          ollama pull "$${OLLAMA_REASONING_MODEL}"
+        fi
+        echo "[curxor] Warming VLA weights into UMA heap..."
+        ollama run "$${OLLAMA_VLA_MODEL}" "ready" --verbose || true
+        ollama ps
+    restart: "no"
