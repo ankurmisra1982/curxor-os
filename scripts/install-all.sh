@@ -30,8 +30,12 @@ echo "    Root: ${CURXOR_ROOT}"
 
 mkdir -p "${CURXOR_ROOT}/scripts" /etc/curxor/engine.env.d
 
-chmod +x "${SCRIPT_DIR}/setup-mesh-network.sh" "${SCRIPT_DIR}/apply-active-claw.sh" "${SCRIPT_DIR}/ota-updater.sh" "${SCRIPT_DIR}/install-ota-cron.sh" "${SCRIPT_DIR}/post-update.sh" 2>/dev/null || true
+chmod +x "${SCRIPT_DIR}/setup-mesh-network.sh" "${SCRIPT_DIR}/apply-active-claw.sh" "${SCRIPT_DIR}/ota-updater.sh" "${SCRIPT_DIR}/install-ota-cron.sh" "${SCRIPT_DIR}/post-update.sh" "${SCRIPT_DIR}/ensure-app-fre-dir.sh" "${SCRIPT_DIR}/patch-app-fre-dir.sh" 2>/dev/null || true
 chmod +x "${CURXOR_ROOT}/docs/scripts/export-guides-pdf.sh" 2>/dev/null || true
+
+echo ""
+echo "==> Preparing /etc/curxor (global + per-app FRE directories)..."
+"${SCRIPT_DIR}/ensure-app-fre-dir.sh"
 
 
 

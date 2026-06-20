@@ -1,4 +1,4 @@
-import type { AgentActionContext } from "../../actions/physical/types.js";
+import type { AgentActionContext } from "../../../actions/physical/types.js";
 import { packDigitalIntent } from "../../telemetry/digital-protocol.js";
 
 export const executeTradeTool = {

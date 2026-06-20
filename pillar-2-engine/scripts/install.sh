@@ -43,8 +43,9 @@ mkdir -p /etc/curxor/engine.env.d
 chmod 755 /etc/curxor/engine.env.d
 
 cd "${INSTALL_ROOT}"
-pnpm install --frozen-lockfile 2>/dev/null || pnpm install
-pnpm build
+cd "${INSTALL_ROOT}"
+npm ci 2>/dev/null || npm install
+npm run build
 
 cp "${INSTALL_ROOT}/systemd/curxor-engine.service" /etc/systemd/system/
 systemctl daemon-reload

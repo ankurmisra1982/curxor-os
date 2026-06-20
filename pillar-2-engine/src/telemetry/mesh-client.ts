@@ -54,7 +54,10 @@ export async function createMeshClient(config: EngineConfig): Promise<MeshClient
     },
 
     async readVision(timeoutMs = 100): Promise<VisionFrame | null> {
-      const parts = (await visionSub.receive({ timeout: timeoutMs })) as Buffer[] | undefined;
+      const parts = (await Promise.race([
+        visionSub.receive() as Promise<Buffer[]>,
+        sleep(timeoutMs).then(() => null),
+      ])) as Buffer[] | null;
       if (!parts || parts.length !== 3) return null;
 
       const header = parts[1];
