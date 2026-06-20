@@ -3,17 +3,22 @@
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { HOME_PATH } from "@/lib/ui-categories";
 import { OOTB_APPS, type OotbAppId } from "@/lib/ootb-apps";
 import { ModuleSelectionStep } from "./ModuleSelectionStep";
 import { ProvisioningStep } from "./ProvisioningStep";
 import { SystemHandshakeStep } from "./SystemHandshakeStep";
 
-const STEPS = ["System Handshake", "Module Selection", "Provisioning"] as const;
+const STEPS = ["Check system", "Pick Claws", "Finish setup"] as const;
 
 export function SetupWizard() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [selectedApps, setSelectedApps] = useState<OotbAppId[]>(["claw-cafe"]);
+  const [selectedApps, setSelectedApps] = useState<OotbAppId[]>([
+    "my-capital",
+    "my-content-creator",
+    "my-work",
+  ]);
   const [provisioning, setProvisioning] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +44,7 @@ export function SetupWizard() {
       });
       if (!res.ok) throw new Error("Provision failed");
       await res.json();
-      router.push("/my-work");
+      router.push(`${HOME_PATH}?setup=complete`);
       router.refresh();
     } catch {
       setError("Provisioning failed. Check appliance logs and retry.");
@@ -54,7 +59,7 @@ export function SetupWizard() {
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">CurXor OS</p>
-            <h1 className="font-display text-2xl uppercase tracking-[0.16em] text-stark">First Run Setup</h1>
+            <h1 className="font-sans text-2xl font-semibold tracking-tight text-stark">Welcome — let&apos;s set up your box</h1>
           </div>
           <div className="font-mono text-[10px] uppercase tracking-widest text-muted">
             STEP {step + 1} / {STEPS.length}
@@ -119,7 +124,7 @@ export function SetupWizard() {
         </section>
 
         <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
-          Sovereign appliance · No cloud · {OOTB_APPS.length} OOTB modules available
+          Sovereign appliance · Change everything later in Settings · {OOTB_APPS.length} Claws available
         </p>
       </div>
     </div>

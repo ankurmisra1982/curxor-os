@@ -2,6 +2,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { addClawProfile } from "@/lib/claw-profiles";
+import { requireLanAuth } from "@/lib/lan-auth";
 import { restartEngineForActiveClaw, writeActiveClawEnv } from "@/lib/active-claw";
 import {
   clawNameFromIntent,
@@ -38,6 +39,9 @@ function validModelId(id: string): boolean {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const denied = requireLanAuth(request);
+  if (denied) return denied;
+
   let body: CreateBody;
   try {
     body = (await request.json()) as CreateBody;

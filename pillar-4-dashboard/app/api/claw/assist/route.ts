@@ -28,6 +28,6 @@ export async function POST(request: Request): Promise<Response> {
   const liveVision = Boolean(body.liveVision);
   const history = Array.isArray(body.history) ? body.history.filter(isTurn) : [];
 
-  const result = assistClawForge({ message, imageBase64, liveVision, history });
+  const result = await assistClawForge({ message, imageBase64, liveVision, history });
   return Response.json(result);
 }

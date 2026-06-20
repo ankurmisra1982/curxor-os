@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "selectedApps": [
+    "my-capital",
+    "my-content-creator",
+    "my-work",
+    "my-shop",
+    "tesla-optimus-engine",
+    "robotaxi-fleet-manager",
+    "claw-cafe"
+  ],
+  "appearance": {
+    "uiMode": "simple",
+    "colorScheme": "curxor",
+    "themeMode": "dark"
+  },
+  "intelligence": {
+    "primarySource": "local",
+    "localModel": "qwen2.5:7b-instruct-q4_K_M",
+    "frontierProviderId": null,
+    "frontierModel": null,
+    "allowFrontierForChat": true,
+    "allowFrontierForPlanning": true,
+    "connectedProviders": {}
+  },
+  "updatedAt": "2026-06-20T11:49:02.691Z"
+}

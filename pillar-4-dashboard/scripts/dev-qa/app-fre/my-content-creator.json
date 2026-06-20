@@ -1,0 +1,9 @@
+{
+  "initialized": true,
+  "config": {
+    "channels": ["youtube", "x"],
+    "contentTone": "technical",
+    "autoSchedule": false
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

@@ -7,7 +7,12 @@
     "dev": "next dev --hostname 127.0.0.1 --port 3080",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0 --port 3080",
-    "lint": "next lint"
+    "typecheck": "tsc --noEmit",
+    "lint": "next lint",
+    "qa:smoke": "node scripts/qa-smoke.mjs",
+    "qa:wait": "node scripts/wait-for-server.mjs",
+    "qa:local": "node scripts/qa-local.mjs",
+    "demo:capture": "node scripts/capture-demo-screenshots.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.0",

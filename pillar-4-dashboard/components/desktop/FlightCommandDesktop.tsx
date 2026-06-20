@@ -1,45 +1,236 @@
 "use client";
 
+
+
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+
+
 
 import { StartNewClawButton } from "@/components/claw/StartNewClawButton";
+
+import { DesktopRouteGuard } from "@/components/desktop/DesktopRouteGuard";
+
+import { CommandPalette } from "@/components/ui/CommandPalette";
+import { ContextHintBar } from "@/components/ui/ContextHintBar";
+import { ExpertBodyClass } from "@/components/ui/ExpertBodyClass";
+import { SettingsBootstrap } from "@/components/ui/SettingsBootstrap";
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
+
 import { SystemHealthDrawer } from "@/components/system/SystemHealthDrawer";
+
+import { TelemetryProvider } from "@/components/telemetry/TelemetryProvider";
+
 import { AppNav } from "./AppNav";
-import { MasterClawSidebar } from "./MasterClawSidebar";
+
 import { LiveTelemetryStrip } from "@/components/telemetry/LiveTelemetryStrip";
 
-export function FlightCommandDesktop({ children }: { children: ReactNode }) {
+import { UiModeProvider, useUiMode } from "@/components/ui/UiModeProvider";
+
+import { SETTINGS_PATH } from "@/lib/ui-categories";
+import type { OotbAppId } from "@/lib/ootb-apps";
+import type { ColorScheme, ThemeMode, UiMode } from "@/lib/user-settings-types";
+
+
+
+interface FlightCommandDesktopProps {
+  children: ReactNode;
+  selectedApps: OotbAppId[];
+  initialUiMode?: UiMode;
+  initialColorScheme?: ColorScheme;
+  initialThemeMode?: ThemeMode;
+}
+
+
+
+function DesktopInner({ children, selectedApps }: FlightCommandDesktopProps) {
+
   const [healthOpen, setHealthOpen] = useState(false);
 
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  const { isExpert, toggleMode } = useUiMode();
+
+
+
+  const openHealth = useCallback(() => setHealthOpen(true), []);
+
+
+
+  useEffect(() => {
+
+    function onHealth() {
+
+      setHealthOpen(true);
+
+    }
+
+    window.addEventListener("curxor:open-health", onHealth);
+
+    return () => window.removeEventListener("curxor:open-health", onHealth);
+
+  }, []);
+
+
+
+  useEffect(() => {
+
+    function onKey(e: KeyboardEvent) {
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+
+        e.preventDefault();
+
+        setPaletteOpen(true);
+
+      }
+
+    }
+
+    window.addEventListener("keydown", onKey);
+
+    return () => window.removeEventListener("keydown", onKey);
+
+  }, []);
+
+
+
   return (
-    <div className="flex h-screen overflow-hidden bg-void">
-      <aside className="h-full w-[30%] min-w-[300px] max-w-[480px] shrink-0 border-r border-line">
-        <MasterClawSidebar />
-      </aside>
-      <div className="flex h-full min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-line bg-panel px-4 py-2">
+
+    <>
+
+      <DesktopRouteGuard selectedApps={selectedApps} />
+
+      <div className="flex h-screen flex-col overflow-hidden bg-void">
+
+        <header className="flex shrink-0 items-center justify-between border-b border-line bg-panel px-4 py-3">
+
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-cursor-glow">CurXor OS</p>
-            <h1 className="font-display text-sm uppercase tracking-[0.18em] text-stark">Flight Command Desktop</h1>
+
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">CurXor OS</p>
+
+            <h1 className="font-sans text-base font-semibold tracking-tight text-stark">Flight Command</h1>
+
           </div>
-          <div className="flex items-center gap-3">
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+
+            <button
+
+              type="button"
+
+              onClick={() => setPaletteOpen(true)}
+
+              className="hidden border border-line px-3 py-1.5 font-sans text-xs text-muted transition hover:border-cursor-glow hover:text-stark sm:inline-flex"
+
+            >
+
+              Search <span className="ml-2 font-mono text-[10px] text-muted">Ctrl K</span>
+
+            </button>
+
+            <button
+
+              type="button"
+
+              onClick={toggleMode}
+
+              className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow"
+
+              title={isExpert ? "Hide technical telemetry" : "Show mesh and telemetry details"}
+
+            >
+
+              {isExpert ? "Simple" : "Expert"}
+
+            </button>
+
+            <Link
+              href={SETTINGS_PATH}
+              className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow hover:text-cursor-glow"
+            >
+              Settings
+            </Link>
+
             <button
               type="button"
-              onClick={() => setHealthOpen(true)}
-              className="border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-stark transition hover:border-cursor-glow hover:text-cursor-glow"
+              onClick={openHealth}
+              className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow hover:text-cursor-glow"
             >
-              System Health
+              Health
             </button>
+
             <StartNewClawButton />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">OFFLINE SOVEREIGN</span>
+
           </div>
+
         </header>
-        <AppNav />
-        <LiveTelemetryStrip />
-        <main className="flex-1 overflow-y-auto bg-panel p-4">{children}</main>
+
+
+
+        <AppNav selectedApps={selectedApps} />
+
+        <ContextHintBar />
+
+        {isExpert ? <LiveTelemetryStrip /> : null}
+
+
+
+        <main className="min-h-0 flex-1 overflow-y-auto bg-panel p-4 md:p-6">{children}</main>
+
       </div>
+
+
+
       <SystemHealthDrawer open={healthOpen} onClose={() => setHealthOpen(false)} />
-    </div>
+
+      <CommandPalette
+
+        open={paletteOpen}
+
+        onClose={() => setPaletteOpen(false)}
+
+        selectedApps={selectedApps}
+
+        onOpenHealth={openHealth}
+
+        onToggleMode={toggleMode}
+
+        isExpert={isExpert}
+
+      />
+
+    </>
+
+  );
+
+}
+
+
+
+export function FlightCommandDesktop({
+  children,
+  selectedApps,
+  initialUiMode,
+  initialColorScheme,
+  initialThemeMode,
+}: FlightCommandDesktopProps) {
+  return (
+    <TelemetryProvider>
+      <ThemeProvider initialScheme={initialColorScheme ?? "curxor"} initialThemeMode={initialThemeMode ?? "dark"}>
+        <UiModeProvider initialMode={initialUiMode ?? "simple"}>
+          <SettingsBootstrap
+            initialUiMode={initialUiMode}
+            initialColorScheme={initialColorScheme}
+            initialThemeMode={initialThemeMode}
+          />
+          <ExpertBodyClass />
+          <DesktopInner selectedApps={selectedApps}>{children}</DesktopInner>
+        </UiModeProvider>
+      </ThemeProvider>
+    </TelemetryProvider>
   );
 }
+
+

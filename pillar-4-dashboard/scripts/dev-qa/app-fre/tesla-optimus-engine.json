@@ -1,0 +1,9 @@
+{
+  "initialized": true,
+  "config": {
+    "unitId": "OPTIMUS-01",
+    "safetyProfile": "standard",
+    "enableRl": true
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

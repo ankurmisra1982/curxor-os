@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 
+import { ComputeMetricsWidget } from "./ComputeMetricsWidget";
 import { OtaTerminalWidget } from "./OtaTerminalWidget";
 
 interface SystemHealthDrawerProps {
@@ -47,8 +48,9 @@ export function SystemHealthDrawer({ open, onClose }: SystemHealthDrawerProps) {
             Close
           </button>
         </header>
-        <div className="min-h-0 flex-1 p-3">
-          <OtaTerminalWidget active={open} className="h-full min-h-[60vh]" />
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
+          <ComputeMetricsWidget active={open} />
+          <OtaTerminalWidget active={open} className="h-full min-h-[50vh]" />
         </div>
       </aside>
     </>

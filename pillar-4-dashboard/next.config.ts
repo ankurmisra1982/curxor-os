@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  serverExternalPackages: ["zeromq"],
   // Sovereign appliance — no external image/font CDNs
   images: { unoptimized: true, remotePatterns: [] },
   experimental: {

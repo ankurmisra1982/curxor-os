@@ -39,6 +39,13 @@ if [[ ! -f "${CLAW_PROFILES}" ]]; then
   printf '%s\n' '{"claws":[],"activeClawId":null}' > "${CLAW_PROFILES}"
 fi
 chmod 644 "${FRE_STATE}" "${CLAW_PROFILES}"
+if [[ -x "${CURXOR_ROOT:-/opt/curxor}/scripts/ensure-app-fre-dir.sh" ]]; then
+  "${CURXOR_ROOT:-/opt/curxor}/scripts/ensure-app-fre-dir.sh"
+else
+  mkdir -p /etc/curxor/app-fre
+  chmod 755 /etc/curxor/app-fre
+  chown -R "${SERVICE_USER}:${SERVICE_USER}" /etc/curxor/app-fre
+fi
 rsync -a --delete \
   --exclude node_modules \
   --exclude .next \
@@ -49,8 +56,8 @@ if [[ ! -f "${ENV_FILE}" ]]; then
 fi
 
 cd "${INSTALL_ROOT}"
-pnpm install --frozen-lockfile 2>/dev/null || pnpm install
-pnpm build
+npm ci 2>/dev/null || npm install
+npm run build
 
 mkdir -p /etc/curxor/engine.env.d
 SUDOERS="/etc/sudoers.d/curxor-claw"

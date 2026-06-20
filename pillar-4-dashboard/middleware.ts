@@ -1,60 +1,175 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+
+
+import { defaultAppHref, isPathEnabled, normalizeSelectedApps } from "@/lib/fre-routing";
+
+import type { OotbAppId } from "@/lib/ootb-apps";
+
+
+
 const SETUP_PATH = "/setup";
+
 const STATUS_PATH = "/api/setup/status";
-const DEFAULT_APP = "/my-work";
+
 const CACHE_TTL_MS = 2_000;
 
-let freCache: { at: number; initialized: boolean } | null = null;
 
-async function readInitialized(request: NextRequest): Promise<boolean> {
+
+interface FreCache {
+
+  at: number;
+
+  initialized: boolean;
+
+  defaultHref: string;
+
+  selectedApps: OotbAppId[];
+
+}
+
+
+
+let freCache: FreCache | null = null;
+
+
+
+async function readFreRouting(request: NextRequest): Promise<FreCache> {
+
   const now = Date.now();
+
   if (freCache && now - freCache.at < CACHE_TTL_MS) {
-    return freCache.initialized;
+
+    return freCache;
+
   }
+
+
+
+  const fallback: FreCache = {
+
+    at: now,
+
+    initialized: false,
+
+    defaultHref: "/home",
+
+    selectedApps: [],
+
+  };
+
+
 
   try {
+
     const url = new URL(STATUS_PATH, request.url);
+
     const res = await fetch(url, { cache: "no-store" });
+
     if (!res.ok) {
-      freCache = { at: now, initialized: false };
-      return false;
+
+      freCache = fallback;
+
+      return fallback;
+
     }
-    const data = (await res.json()) as { initialized?: boolean };
+
+    const data = (await res.json()) as { initialized?: boolean; selectedApps?: string[] };
+
     const initialized = data.initialized === true;
-    freCache = { at: now, initialized };
-    return initialized;
+
+    const selected = normalizeSelectedApps(Array.isArray(data.selectedApps) ? data.selectedApps : []);
+
+    const entry: FreCache = {
+
+      at: now,
+
+      initialized,
+
+      defaultHref: defaultAppHref(selected),
+
+      selectedApps: selected,
+
+    };
+
+    freCache = entry;
+
+    return entry;
+
   } catch {
-    freCache = { at: now, initialized: false };
-    return false;
+
+    freCache = fallback;
+
+    return fallback;
+
   }
+
 }
+
+
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+
   const { pathname } = request.nextUrl;
 
+
+
   if (pathname.startsWith("/api") || pathname.startsWith("/_next")) {
+
     return NextResponse.next();
+
   }
 
-  const initialized = await readInitialized(request);
+
+
+  const fre = await readFreRouting(request);
+
+
 
   if (pathname.startsWith(SETUP_PATH)) {
-    if (initialized) return NextResponse.redirect(new URL(DEFAULT_APP, request.url));
+
+    if (fre.initialized) return NextResponse.redirect(new URL(fre.defaultHref, request.url));
+
     return NextResponse.next();
+
   }
 
-  if (!initialized) {
+
+
+  if (!fre.initialized) {
+
     return NextResponse.redirect(new URL(SETUP_PATH, request.url));
+
   }
+
+
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL(DEFAULT_APP, request.url));
+
+    return NextResponse.redirect(new URL(fre.defaultHref, request.url));
+
   }
 
+
+
+  if (!isPathEnabled(pathname, fre.selectedApps)) {
+
+    return NextResponse.redirect(new URL(fre.defaultHref, request.url));
+
+  }
+
+
+
   return NextResponse.next();
+
 }
 
+
+
 export const config = {
+
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+
 };
+
+

@@ -1,0 +1,9 @@
+{
+  "initialized": true,
+  "config": {
+    "storeName": "Arbitrage Desk",
+    "fulfillmentMode": "pick_pack_ship",
+    "clawLanes": ["INGEST", "SORT"]
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

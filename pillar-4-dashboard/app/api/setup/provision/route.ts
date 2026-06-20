@@ -1,7 +1,11 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+import { defaultFreConfig } from "@/lib/app-agent-catalog";
+import { markAppFreComplete } from "@/lib/app-fre-state";
 import { markFreProvisioned, validateAppIds } from "@/lib/fre-state";
+import { requireLanAuth } from "@/lib/lan-auth";
+import { updateSelectedClaws } from "@/lib/user-settings";
 
 interface ProvisionRequest {
   apps?: string[];
@@ -14,6 +18,9 @@ function sleep(ms: number): Promise<void> {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const denied = requireLanAuth(request);
+  if (denied) return denied;
+
   let body: ProvisionRequest;
   try {
     body = (await request.json()) as ProvisionRequest;
@@ -31,6 +38,15 @@ export async function POST(request: Request): Promise<Response> {
   await sleep(PROVISION_DELAY_MS);
 
   await markFreProvisioned(apps);
+  await updateSelectedClaws(apps);
 
-  return Response.json({ ok: true }, { status: 200 });
+  for (const appId of apps) {
+    try {
+      await markAppFreComplete(appId, defaultFreConfig(appId));
+    } catch (err) {
+      console.warn(`[setup/provision] Could not pre-seed app FRE for ${appId}:`, err);
+    }
+  }
+
+  return Response.json({ ok: true, apps }, { status: 200 });
 }

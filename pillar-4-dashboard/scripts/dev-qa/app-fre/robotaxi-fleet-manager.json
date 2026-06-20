@@ -1,0 +1,9 @@
+{
+  "initialized": true,
+  "config": {
+    "depotGrid": "A1",
+    "fleetSize": "4",
+    "dispatchPolicy": "latency"
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

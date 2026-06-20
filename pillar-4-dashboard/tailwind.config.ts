@@ -5,28 +5,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: "#000000",
-        panel: "#0a0a0a",
-        surface: "#111111",
-        line: "#222222",
-        muted: "#8a8a8a",
-        stark: "#ffffff",
+        void: "var(--color-void)",
+        panel: "var(--color-panel)",
+        surface: "var(--color-surface)",
+        line: "var(--color-line)",
+        muted: "var(--color-muted)",
+        stark: "var(--color-stark)",
         cursor: {
-          DEFAULT: "#a855f7",
-          glow: "#bc13fe",
-          dim: "#6b21a8",
+          DEFAULT: "var(--color-cursor)",
+          glow: "var(--color-cursor-glow)",
+          dim: "var(--color-cursor-dim)",
         },
       },
       fontFamily: {
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
         mono: ["var(--font-jetbrains)", "var(--font-fira)", "ui-monospace", "monospace"],
         display: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        cursor: "0 0 12px rgba(188, 19, 254, 0.35)",
+        cursor: "var(--shadow-cursor)",
         panel: "inset 0 1px 0 rgba(255,255,255,0.04)",
       },
       animation: {
-        pulse-cursor: "pulse-cursor 2s ease-in-out infinite",
+        "pulse-cursor": "pulse-cursor 2s ease-in-out infinite",
         scanline: "scanline 8s linear infinite",
       },
       keyframes: {

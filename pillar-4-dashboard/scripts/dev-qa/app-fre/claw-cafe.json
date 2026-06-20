@@ -1,0 +1,9 @@
+{
+  "initialized": true,
+  "config": {
+    "kioskName": "Engage Desk",
+    "prizeMode": "demo",
+    "activeLanes": ["A", "B"]
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

@@ -9,16 +9,20 @@ Browsers cannot speak ZeroMQ. The dashboard uses **server-side ZMQ XPUB subscrib
 ```
 Mesh XPUB :9101/:9201 ──SUB──► Next.js Node (lib/zmq-bridge.ts)
                                     │
-                    SSE /api/stream/vision  ──► VisionFeedWidget
-                    SSE /api/stream/motor   ──► MotorMatrixWidget
-                    GET /api/metrics/compute ──► ComputeMetricsWidget (poll)
+                    SSE /api/stream/vision  ──► TelemetryProvider (shared)
+                    SSE /api/stream/motor   ──► LiveTelemetryStrip + apps
+                    POST /api/mesh/motor       ──► ZMQ motor_out (:9200)
+                    POST /api/mesh/digital     ──► ZMQ digital_out (:9200)
+                    GET /api/metrics/compute ──► System Health (poll)
+                    SSE /api/stream/digital   ──► Content / Capital receipts
 ```
 
 | Widget | Source | Update |
 |--------|--------|--------|
-| **Vision IN** | `telemetry/vision_in` @ `:9101` | SSE real-time |
-| **Motor OUT** | `telemetry/motor_out` @ `:9201` | SSE real-time (conflated) |
-| **Compute** | vLLM `:8000` + `/proc/meminfo` | Poll 2s |
+| **Vision IN** | `telemetry/vision_in` @ `:9101` | SSE via `TelemetryProvider` |
+| **Motor OUT** | `telemetry/motor_out` @ `:9201` | SSE via `TelemetryProvider` |
+| **Digital IN** | `telemetry/digital_in` @ `:9101` | SSE per-app receipts |
+| **Compute** | Ollama/vLLM + `/proc/meminfo` | Poll in System Health |
 
 ## Design System
 
@@ -147,4 +151,4 @@ Click **✚ New Claw** in the desktop header to launch a FRE-style wizard:
 2. **Choose LLMs** — manual local model pick or **auto-choose** by UMA budget tier (Economy / Balanced / Performance)
 3. **Provision Claw** — simulated deploy matrix + `POST /api/claw/create` (3s mock delay)
 
-Profiles persist to `/etc/curxor/claw-profiles.json`. **Claw Forge** OOTB app: `/claw-forge` (header **+ Forge** shortcut).
+Profiles persist to `/etc/curxor/claw-profiles.json`. **The Forge** OOTB app: `/claw-forge` (header **+ Forge** shortcut).

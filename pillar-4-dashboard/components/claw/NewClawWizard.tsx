@@ -154,7 +154,7 @@ export function NewClawWizard({
       <div className={panelClass}>
         <header className="flex items-center justify-between border-b border-line px-6 py-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">Claw Forge</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">The Forge</p>
             <h2 className="font-display text-lg uppercase tracking-[0.14em] text-stark">Forge New Claw</h2>
           </div>
           <button

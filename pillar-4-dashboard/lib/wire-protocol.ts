@@ -25,6 +25,37 @@ export interface VisionFrame {
   previewBase64?: string;
 }
 
+export function epochNowNs(): bigint {
+  return BigInt(Date.now()) * 1_000_000n;
+}
+
+export function packMotor(cmd: {
+  timestampNs?: bigint;
+  seq: number;
+  clawId: number;
+  torqueX?: number;
+  torqueY?: number;
+  torqueZ?: number;
+  x: number;
+  y: number;
+  z: number;
+  flags?: number;
+}): Buffer {
+  const buf = Buffer.alloc(MOTOR_WIRE_SIZE);
+  buf.writeBigUInt64LE(cmd.timestampNs ?? epochNowNs(), 0);
+  buf.writeUInt32LE(cmd.seq >>> 0, 8);
+  buf.writeUInt8(cmd.clawId & 0xff, 12);
+  buf.writeUInt8(0, 13);
+  buf.writeFloatLE(cmd.torqueX ?? 0, 14);
+  buf.writeFloatLE(cmd.torqueY ?? 0, 18);
+  buf.writeFloatLE(cmd.torqueZ ?? 0, 22);
+  buf.writeFloatLE(cmd.x, 26);
+  buf.writeFloatLE(cmd.y, 30);
+  buf.writeFloatLE(cmd.z, 34);
+  buf.writeUInt16LE((cmd.flags ?? 0) & 0xffff, 38);
+  return buf;
+}
+
 export function unpackMotor(payload: Buffer): MotorCommand {
   return {
     timestampNs: payload.readBigUInt64LE(0).toString(),
