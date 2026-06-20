@@ -27,8 +27,8 @@ Local LLM → Engine tool → JSON intent → digital_out (:9200)
 
 | Tool | Bridge worker | Credentials |
 |------|---------------|-------------|
-| `capital.execute_trade` | AlpacaTradeWorker | `ALPACA_*` in `/etc/curxor/digital.env` |
-| `content.publish_post` | XPublishWorker | `X_*` in `/etc/curxor/digital.env` |
+| `capital.execute_trade` | AlpacaTradeWorker | **Capital Claw** · `ALPACA_*` in `/etc/curxor/digital.env` |
+| `content.publish_post` | XPublishWorker | **Creator Claw** · `X_*` in `/etc/curxor/digital.env` |
 
 ## Setup
 
@@ -64,3 +64,9 @@ Service runs `curxor-broker-stack` (broker + digital bridges).
   "receipt": { "order_id": "…", "filled_price": "150.25", "status": "accepted" }
 }
 ```
+
+## Related guides
+
+- [Quick Start](00-quick-start.md)
+- [Flight Command User Guide](07-flight-command-dashboard.md)
+- [Operations & Troubleshooting](09-operations-troubleshooting.md)

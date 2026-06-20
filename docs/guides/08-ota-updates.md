@@ -39,6 +39,8 @@ Cron installed:
    - Verify SHA256 (when manifest provides non-placeholder hash)
    - Extract to staging, `rsync` into `/opt/curxor/`
    - Run `post_update` hook from manifest (default: `scripts/post-update.sh`)
+     - Ensures `/etc/curxor/app-fre` exists
+     - Rebuilds **pillar-2-engine** (`dist/`) and **pillar-4-dashboard** (`.next/`)
    - `systemctl restart curxor-os.target`
    - Health-check broker, engine, dashboard
    - On failure → **automatic rollback** from backup

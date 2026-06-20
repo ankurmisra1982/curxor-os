@@ -81,11 +81,33 @@ Ensure matching backend across env files:
 
 | File | Key |
 |------|-----|
-| `/etc/curxor/compute.env` | `CURXOR_INFERENCE_BACKEND` |
+| `/etc/curxor/compute.env` | `CURXOR_INFERENCE_BACKEND`, model pull vars |
 | `/etc/curxor/engine.env` | `CURXOR_INFERENCE_BACKEND`, `CURXOR_INFERENCE_MODEL` |
-| `/etc/curxor/dashboard.env` | `CURXOR_INFERENCE_BACKEND` |
+| `/etc/curxor/dashboard.env` | `CURXOR_INFERENCE_BACKEND`, `CURXOR_INFERENCE_MODEL`, `CURXOR_DASHBOARD_INFERENCE_ENABLED` |
 
-Engine defaults to Ollama at `127.0.0.1:11434`. Cloud inference URLs are **rejected** at engine startup.
+Engine and dashboard default to Ollama at `127.0.0.1:11434`. Cloud inference URLs are **rejected** at runtime.
+
+## Dashboard consumption (Pillar 4)
+
+Flight Command uses the **same local stack** as the engine for chat — not bundled in the Next.js build.
+
+| Consumer | When |
+|----------|------|
+| Pillar 2 engine | Every new vision frame (rate-limited) |
+| The Forge (`/api/claw/assist`) | Operator chat + multimodal forge assist |
+| Creator / Capital agents | Chat + Draft Post / Create Rule skills |
+| Other app agents | Rule-based fallback; skills unchanged |
+
+Requests are **serialized** in the dashboard to reduce UMA contention with the engine loop. Set `CURXOR_DASHBOARD_INFERENCE_ENABLED=0` to disable dashboard LLM calls while keeping the engine on inference.
+
+Verify from the appliance:
+
+```bash
+curl -sf http://127.0.0.1:3080/api/metrics/compute | jq .backend
+# "ollama" when tags endpoint reachable; "unknown" when compute down
+```
+
+See [Flight Command User Guide](07-flight-command-dashboard.md) for operator workflows.
 
 ## Related guides
 

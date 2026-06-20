@@ -107,6 +107,25 @@ Re-run:
 sudo /opt/curxor/scripts/setup-captive-portal.sh
 ```
 
+### Dashboard chat uses rules instead of LLM
+
+1. Check Ollama: `curl http://127.0.0.1:11434/api/tags`
+2. Check `CURXOR_DASHBOARD_INFERENCE_ENABLED=1` in `/etc/curxor/dashboard.env`
+3. Restart compute then dashboard
+4. System Health → compute metrics should show `backend: ollama`
+
+### Dev server / QA smoke failures
+
+- **Port in use:** another process on `:3080` — `npm run qa:local -- --port 3081`
+- **500 / missing vendor chunk:** stale `.next` — `npm run qa:local -- --rebuild`
+- **One-command QA:** `npm run qa:local` (sets dev-qa env, starts server, runs 14 checks, stops)
+- **Manual:** export `CURXOR_APP_FRE_DIR=scripts/dev-qa/app-fre` plus paths in [dev-qa README](../../pillar-4-dashboard/scripts/dev-qa/README.md)
+- See [Quick Start](00-quick-start.md) dev section
+
+### Optional LAN token on mutating APIs
+
+When `CURXOR_LAN_AUTH_TOKEN` is set in `dashboard.env`, LAN clients must send `Authorization: Bearer <token>` or `X-CurXor-Token` on `/api/mesh/*`, `/api/setup/provision`, `/api/claw/create`, and app FRE POST. Localhost (`127.0.0.1`) always bypasses.
+
 ### FRE wizard loop / can't reach apps
 
 Reset FRE (see [Installation Guide](01-installation.md)) and restart dashboard.
@@ -118,7 +137,7 @@ Reset FRE (see [Installation Guide](01-installation.md)) and restart dashboard.
 | Full stack | `sudo systemctl restart curxor-os.target` |
 | Inference only | `sudo systemctl restart curxor-compute` |
 | Re-pull models | `sudo /opt/curxor/pillar-1-compute/scripts/deploy.sh --pull-models` |
-| Dashboard rebuild | `cd /opt/curxor/pillar-4-dashboard && pnpm build && sudo systemctl restart curxor-dashboard` |
+| Dashboard rebuild | `cd /opt/curxor/pillar-4-dashboard && npm ci && npm run build && sudo systemctl restart curxor-dashboard` |
 | Apply new claw profile | `sudo /opt/curxor/scripts/apply-active-claw.sh` |
 
 ## Backup strategy
@@ -143,10 +162,13 @@ sudo tar -czf /var/backups/curxor/etc-curxor-$(date +%F).tar.gz -C /etc curxor
 | `CURXOR_MIN_REASON_INTERVAL_MS` | engine.env | Reduce LLM call rate |
 | `CURXOR_MOTOR_CONFLATE=1` | telemetry-broker.env | Last-value motor frames only |
 | `CURXOR_VISION_RCVHWM` | telemetry-broker.env | Vision buffer depth |
+| `CURXOR_DASHBOARD_INFERENCE_ENABLED` | dashboard.env | Disable dashboard LLM (keep engine inference) |
+| `CURXOR_INFERENCE_TIMEOUT_MS` | dashboard.env | Chat timeout before fallback |
 | `OLLAMA_MAX_LOADED_MODELS` | compute.env | UMA pressure |
 
 ## Related guides
 
+- [Quick Start](00-quick-start.md)
 - [Installation](01-installation.md)
 - [OTA Updates](08-ota-updates.md)
 - [Networking](03-networking.md)

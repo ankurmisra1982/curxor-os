@@ -34,4 +34,12 @@ Product positioning, audit, and marketing accuracy live in the sibling repo:
 
 - Storefront / waitlist / pitch deck
 - Copy and positioning (use TECHNICAL-HANDOFF facts)
-- PDF docs export: `./docs/scripts/export-guides-pdf.sh`
+- PDF docs export: `./docs/scripts/export-guides-pdf.sh` (Linux/WSL + pandoc)
+- Local QA: `cd pillar-4-dashboard && npm run qa:local -- --port 3081`
+- Demo screenshots: `cd pillar-4-dashboard && npm run demo:capture`
+
+## When you're back (quick wins)
+
+1. `npm run qa:local -- --port 3081` — confirms 17/17 API smoke locally
+2. Open Flight Command canvas mockup in Cursor Glass
+3. Continue storefront GTM pages (architecture, FAQ, pricing)

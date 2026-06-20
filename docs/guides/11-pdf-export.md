@@ -21,7 +21,7 @@ Produces:
 | PDF | Source |
 |-----|--------|
 | `docs/pdf/curxor-os-complete.pdf` | All guides merged |
-| `docs/pdf/01-installation.pdf` … `11-pdf-export.pdf` | Individual guides |
+| `docs/pdf/00-quick-start.pdf` … `12-digital-action-layer.pdf` | Individual guides |
 | `docs/pdf/operator-quick-reference.pdf` | Operator card |
 
 ### Install dependencies (Ubuntu 24.04)

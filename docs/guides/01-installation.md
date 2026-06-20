@@ -44,18 +44,24 @@ Do **not** use `git clone /opt/curxor` in cloud-init — copy the payload from C
 # 1. Pull inference models (first boot — can take 30+ minutes)
 sudo /opt/curxor/pillar-1-compute/scripts/deploy.sh --pull-models
 
-# 2. Verify systemd stack
+# 2. Verify local LLM (required for engine + dashboard chat)
+curl -sf http://127.0.0.1:11434/api/tags && echo "Ollama OK"
+
+# 3. Verify systemd stack
 systemctl status curxor-os.target
 systemctl status curxor-compute curxor-telemetry-broker curxor-engine curxor-dashboard
 
-# 3. Optional: captive portal on eno1
+# 4. Optional: captive portal on eno1
 sudo /opt/curxor/scripts/setup-captive-portal.sh
 
-# 4. Optional: nightly OTA checks
+# 5. Optional: nightly OTA checks
 sudo /opt/curxor/scripts/install-ota-cron.sh
 
-# 5. Open dashboard
+# 6. Open dashboard → FRE at /setup
 # http://<appliance-ip>:3080  or  http://10.0.0.1  (captive mode)
+
+# 7. Align dashboard inference with compute (if not already set)
+grep CURXOR_INFERENCE /etc/curxor/dashboard.env /etc/curxor/compute.env
 ```
 
 ## Configuration files created on install
@@ -67,6 +73,7 @@ sudo /opt/curxor/scripts/install-ota-cron.sh
 | `/etc/curxor/telemetry-broker.env` | Pillar 3 |
 | `/etc/curxor/dashboard.env` | Pillar 4 |
 | `/etc/curxor/fre-state.json` | Dashboard FRE |
+| `/etc/curxor/app-fre/{appId}.json` | Per-app agent FRE (8 OOTB modules) |
 | `/etc/curxor/claw-profiles.json` | Claw wizard |
 | `/etc/curxor/ota.env` | OTA (after `install-ota-cron.sh`) |
 
@@ -95,6 +102,7 @@ journalctl -u curxor-telemetry-broker -f
 
 ## Next steps
 
+- [Quick Start](00-quick-start.md) — operators: Claws, LLM, Forge
 - [Architecture](02-architecture.md) — understand how pillars connect
 - [Networking](03-networking.md) — eno1 vs eno2
 - [Inference & Compute](04-inference-compute.md) — models and UMA

@@ -50,7 +50,7 @@ Loaded by `curxor-engine.service` after `engine.env`.
 
 Flight Command **Start New Claw** flow:
 
-1. Operator describes intent (e.g. "Optimus pick-and-place")
+1. Operator describes intent (e.g. "Outbound sequence for SaaS leads")
 2. Wizard recommends vision / reasoning / VLA models by budget tier
 3. `POST /api/claw/create` saves profile to `/etc/curxor/claw-profiles.json`
 4. Writes `active-claw.conf` and restarts engine via `apply-active-claw.sh`

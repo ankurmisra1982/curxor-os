@@ -1,0 +1,90 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  pillar-2-engine:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pillar-2-engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: pillar-2-engine/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+
+  pillar-4-dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pillar-4-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: pillar-4-dashboard/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+        env:
+          CURXOR_MESH_BROKER_IP: 127.0.0.1
+          CURXOR_FRE_STATE_PATH: /tmp/fre-state.json
+          CURXOR_APP_FRE_DIR: /tmp/app-fre
+
+  pillar-4-qa-smoke:
+    runs-on: ubuntu-latest
+    needs: pillar-4-dashboard
+    defaults:
+      run:
+        working-directory: pillar-4-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: pillar-4-dashboard/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build production bundle
+        run: npm run build
+        env:
+          CURXOR_MESH_BROKER_IP: 127.0.0.1
+          CURXOR_FRE_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/fre-state.json
+          CURXOR_USER_SETTINGS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/user-settings.json
+          CURXOR_LLM_CREDENTIALS_PATH: /tmp/curxor-llm-credentials.json
+          CURXOR_APP_FRE_DIR: /tmp/curxor-app-fre
+          CURXOR_CLAW_PROFILES_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/claw-profiles.json
+      - name: Prepare QA state
+        run: mkdir -p /tmp/curxor-app-fre
+      - name: Start production server
+        run: npm run start &
+        env:
+          CURXOR_MESH_BROKER_IP: 127.0.0.1
+          CURXOR_FRE_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/fre-state.json
+          CURXOR_USER_SETTINGS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/user-settings.json
+          CURXOR_LLM_CREDENTIALS_PATH: /tmp/curxor-llm-credentials.json
+          CURXOR_APP_FRE_DIR: /tmp/curxor-app-fre
+          CURXOR_CLAW_PROFILES_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/claw-profiles.json
+      - name: Wait for server
+        run: node scripts/wait-for-server.mjs http://127.0.0.1:3080 90000
+      - name: QA smoke tests
+        run: npm run qa:smoke
