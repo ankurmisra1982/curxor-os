@@ -314,7 +314,10 @@ export async function fetchCapitalStatus(): Promise<CapitalQueueStatus> {
   const account = creds ? await fetchAlpacaAccount(creds) : null;
   const todayStart = startOfTodayUtc();
   const filledToday = file.trades.filter(
-    (t) => t.status === "filled" && t.filledAt && Date.parse(t.filledAt) >= todayStart,
+    (t) =>
+      (t.status === "filled" || t.status === "simulated") &&
+      t.filledAt &&
+      Date.parse(t.filledAt) >= todayStart,
   ).length;
   const autoRemaining = Math.max(0, file.permissions.maxAutoTradesPerDay - file.autoTradesToday);
   const demoVal = demoPortfolioValue(watchlist);

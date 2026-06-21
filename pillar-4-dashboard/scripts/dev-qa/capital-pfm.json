@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "accounts": [
+    {
+      "id": "acct-checking",
+      "name": "Everyday Checking",
+      "institution": "Chase",
+      "type": "checking",
+      "balanceUsd": 4280.42,
+      "currency": "USD",
+      "lastSyncedAt": "2026-06-21T20:00:27.884Z",
+      "maskedNumber": "••4821"
+    },
+    {
+      "id": "acct-savings",
+      "name": "High-Yield Savings",
+      "institution": "Marcus",
+      "type": "savings",
+      "balanceUsd": 18650,
+      "currency": "USD",
+      "lastSyncedAt": "2026-06-21T20:00:27.884Z",
+      "maskedNumber": "••9033"
+    },
+    {
+      "id": "acct-credit",
+      "name": "Sapphire Reserve",
+      "institution": "Chase",
+      "type": "credit",
+      "balanceUsd": -2140.88,
+      "currency": "USD",
+      "lastSyncedAt": "2026-06-21T20:00:27.884Z",
+      "maskedNumber": "••7712"
+    },
+    {
+      "id": "acct-invest",
+      "name": "Brokerage",
+      "institution": "Alpaca",
+      "type": "investment",
+      "balanceUsd": 42180.5,
+      "currency": "USD",
+      "lastSyncedAt": "2026-06-21T20:00:27.884Z",
+      "maskedNumber": "••0044"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx-payroll",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-01T12:00:00.000Z",
+      "description": "Direct deposit",
+      "merchant": "Acme Corp",
+      "amountUsd": 6250,
+      "category": "income",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-payroll-1",
+      "accountId": "acct-checking",
+      "postedAt": "2026-05-01T12:00:00.000Z",
+      "description": "Direct deposit",
+      "merchant": "Acme Corp",
+      "amountUsd": 6250,
+      "category": "income",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-payroll-2",
+      "accountId": "acct-checking",
+      "postedAt": "2026-04-01T12:00:00.000Z",
+      "description": "Direct deposit",
+      "merchant": "Acme Corp",
+      "amountUsd": 6250,
+      "category": "income",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-rent",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-03T12:00:00.000Z",
+      "description": "Rent payment",
+      "merchant": "Greystar Apts",
+      "amountUsd": -2150,
+      "category": "housing",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-rent-1",
+      "accountId": "acct-checking",
+      "postedAt": "2026-05-03T12:00:00.000Z",
+      "description": "Rent payment",
+      "merchant": "Greystar Apts",
+      "amountUsd": -2150,
+      "category": "housing",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-rent-2",
+      "accountId": "acct-checking",
+      "postedAt": "2026-04-03T12:00:00.000Z",
+      "description": "Rent payment",
+      "merchant": "Greystar Apts",
+      "amountUsd": -2150,
+      "category": "housing",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-electric",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-13T20:00:27.885Z",
+      "description": "Utility bill",
+      "merchant": "ConEd",
+      "amountUsd": -142.33,
+      "category": "utilities",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-electric-1",
+      "accountId": "acct-checking",
+      "postedAt": "2026-05-14T20:00:27.885Z",
+      "description": "Utility bill",
+      "merchant": "ConEd",
+      "amountUsd": -128.9,
+      "category": "utilities",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-grocery-1",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-19T20:00:27.885Z",
+      "description": "Groceries",
+      "merchant": "Whole Foods",
+      "amountUsd": -186.44,
+      "category": "groceries"
+    },
+    {
+      "id": "tx-grocery-2",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-12T20:00:27.885Z",
+      "description": "Groceries",
+      "merchant": "Trader Joe's",
+      "amountUsd": -94.2,
+      "category": "groceries"
+    },
+    {
+      "id": "tx-grocery-3",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-05T20:00:27.885Z",
+      "description": "Groceries",
+      "merchant": "Whole Foods",
+      "amountUsd": -201.11,
+      "category": "groceries"
+    },
+    {
+      "id": "tx-dining-1",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-20T20:00:27.885Z",
+      "description": "Dining",
+      "merchant": "Sweetgreen",
+      "amountUsd": -18.75,
+      "category": "dining"
+    },
+    {
+      "id": "tx-dining-2",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-17T20:00:27.885Z",
+      "description": "Dining",
+      "merchant": "DoorDash",
+      "amountUsd": -62.4,
+      "category": "dining"
+    },
+    {
+      "id": "tx-dining-3",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-10T20:00:27.885Z",
+      "description": "Dining",
+      "merchant": "Nobu",
+      "amountUsd": -248,
+      "category": "dining"
+    },
+    {
+      "id": "tx-sub-netflix",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-16T20:00:27.885Z",
+      "description": "Subscription",
+      "merchant": "Netflix",
+      "amountUsd": -15.99,
+      "category": "subscriptions",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-sub-spotify",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-16T20:00:27.885Z",
+      "description": "Subscription",
+      "merchant": "Spotify",
+      "amountUsd": -11.99,
+      "category": "subscriptions",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-sub-gym",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-15T20:00:27.885Z",
+      "description": "Subscription",
+      "merchant": "Equinox",
+      "amountUsd": -220,
+      "category": "subscriptions",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-transport-1",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-18T20:00:27.885Z",
+      "description": "Ride share",
+      "merchant": "Uber",
+      "amountUsd": -34.5,
+      "category": "transport"
+    },
+    {
+      "id": "tx-transport-2",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-14T20:00:27.885Z",
+      "description": "Metro card",
+      "merchant": "MTA",
+      "amountUsd": -127,
+      "category": "transport",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-shop-1",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-15T20:00:27.885Z",
+      "description": "Shopping",
+      "merchant": "Amazon",
+      "amountUsd": -89.99,
+      "category": "shopping"
+    },
+    {
+      "id": "tx-shop-2",
+      "accountId": "acct-credit",
+      "postedAt": "2026-06-07T20:00:27.885Z",
+      "description": "Shopping",
+      "merchant": "Apple Store",
+      "amountUsd": -1299,
+      "category": "shopping"
+    },
+    {
+      "id": "tx-health",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-09T20:00:27.885Z",
+      "description": "Copay",
+      "merchant": "One Medical",
+      "amountUsd": -45,
+      "category": "healthcare"
+    },
+    {
+      "id": "tx-invest-auto",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-05T12:00:00.000Z",
+      "description": "Auto invest",
+      "merchant": "Alpaca",
+      "amountUsd": -500,
+      "category": "investment",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-invest-auto-1",
+      "accountId": "acct-checking",
+      "postedAt": "2026-05-05T12:00:00.000Z",
+      "description": "Auto invest",
+      "merchant": "Alpaca",
+      "amountUsd": -500,
+      "category": "investment",
+      "isRecurring": true
+    },
+    {
+      "id": "tx-savings-xfer",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-11T20:00:27.885Z",
+      "description": "Transfer to savings",
+      "merchant": "Marcus",
+      "amountUsd": -800,
+      "category": "transfer"
+    },
+    {
+      "id": "tx-savings-in",
+      "accountId": "acct-savings",
+      "postedAt": "2026-06-11T20:00:27.885Z",
+      "description": "Transfer from checking",
+      "merchant": "Chase",
+      "amountUsd": 800,
+      "category": "transfer"
+    },
+    {
+      "id": "tx-fee",
+      "accountId": "acct-checking",
+      "postedAt": "2026-06-01T20:00:27.885Z",
+      "description": "ATM fee",
+      "merchant": "Chase",
+      "amountUsd": -3,
+      "category": "fees"
+    }
+  ],
+  "goals": [
+    {
+      "id": "goal-emergency",
+      "name": "Emergency fund",
+      "targetUsd": 25000,
+      "currentUsd": 18650,
+      "targetDate": "2026-12-31",
+      "monthlyContributionUsd": 800,
+      "linkedCategory": "transfer"
+    },
+    {
+      "id": "goal-house",
+      "name": "Down payment",
+      "targetUsd": 80000,
+      "currentUsd": 22400,
+      "targetDate": "2028-06-01",
+      "monthlyContributionUsd": 1200
+    },
+    {
+      "id": "goal-retire",
+      "name": "Brokerage growth",
+      "targetUsd": 100000,
+      "currentUsd": 42180.5,
+      "targetDate": null,
+      "monthlyContributionUsd": 500,
+      "linkedCategory": "investment"
+    }
+  ],
+  "adSlots": [
+    {
+      "id": "ad-hysa",
+      "placement": "pfm_overview",
+      "sponsor": "Marcus by Goldman Sachs",
+      "headline": "Earn more on idle cash",
+      "body": "High-yield savings accounts can boost your emergency fund yield while staying FDIC-insured.",
+      "ctaLabel": "Compare rates",
+      "ctaUrl": null,
+      "disclosure": "Sponsored · Capital Claw does not receive compensation in demo mode",
+      "enabled": false
+    },
+    {
+      "id": "ad-robo",
+      "placement": "wealth_plan",
+      "sponsor": "Betterment",
+      "headline": "Automate goal-based investing",
+      "body": "Set a target date and let recurring contributions work toward your down payment or retirement.",
+      "ctaLabel": "Learn more",
+      "ctaUrl": null,
+      "disclosure": "Sponsored · Ads are contextual to your goals and never influence trade execution",
+      "enabled": false
+    },
+    {
+      "id": "ad-cashback",
+      "placement": "suggestions",
+      "sponsor": "Chase Sapphire",
+      "headline": "Optimize dining spend",
+      "body": "Your dining category is up 18% MoM — a 3× dining card could offset $40/mo at your current pace.",
+      "ctaLabel": "See offer",
+      "ctaUrl": null,
+      "disclosure": "Sponsored · Suggestions remain independent of ad placement",
+      "enabled": false
+    }
+  ],
+  "updatedAt": "2026-06-21T20:00:27.885Z"
+}

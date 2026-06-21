@@ -1,0 +1,713 @@
+{
+  "version": 2,
+  "updatedAt": "2026-06-21T22:23:43.138Z",
+  "digest": {
+    "digest": [
+      {
+        "id": "d8db30e60aaa07",
+        "headline": "$QQQ on watch — link X_BEARER_TOKEN for live FinTwit search",
+        "source": "X · FinTwit (demo)",
+        "url": null,
+        "tickers": [
+          "QQQ",
+          "API"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T22:23:37.802Z"
+      },
+      {
+        "id": "f70709ef99f6d4",
+        "headline": "$BTCUSD on watch — link X_BEARER_TOKEN for live FinTwit search",
+        "source": "X · FinTwit (demo)",
+        "url": null,
+        "tickers": [
+          "API"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T22:23:37.802Z"
+      },
+      {
+        "id": "a814f775699b75",
+        "headline": "Stock futures fall as investors await key reading on inflation: Live updates",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/stock-market-today-live-updates.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T22:10:12.000Z"
+      },
+      {
+        "id": "a5fcadb1a6beac",
+        "headline": "Trump threatens Iran with fresh strikes as Vance leads peace talks in Switzerland",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/us-and-iranians-meet-in-switzerland-for-peace-talks.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T22:01:33.000Z"
+      },
+      {
+        "id": "84d3d43d0b7798",
+        "headline": "No one wants AI data centers on Earth. Do they make sense in space?",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/do-space-based-ai-data-centers-make-economic-sense.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T21:22:53.000Z"
+      },
+      {
+        "id": "2b6e9fb269ebdd",
+        "headline": "Pixar&apos;s &apos;Toy Story 5&apos; lassos biggest opening weekend in franchise history with $160 million haul",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/pixar-toy-story-5-box-office-biggest-opening-in-franchise-history-.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T16:06:06.000Z"
+      },
+      {
+        "id": "ec6a7d7a56e18d",
+        "headline": "UK&apos;s Starmer considers political future, could decide as soon as Monday",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/uk-minister-says-pm-starmer-is-considering-political-realities.html",
+        "tickers": [
+          "UK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T15:17:40.000Z"
+      },
+      {
+        "id": "a4dbdbd65d8787",
+        "headline": "She saved $24,000 to launch a craft festival in an old Joann store: &apos;This is my dream come true&apos;",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/she-saved-24000-to-launch-a-craft-festival-in-an-old-joann-store.html",
+        "tickers": [],
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-21T14:30:01.000Z"
+      },
+      {
+        "id": "a16d55abed46b0",
+        "headline": "Raising the minimum wage has been a big political winner. Now it&apos;s running into resistance",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/raise-minimum-wage-inflation-politics.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T14:07:29.000Z"
+      },
+      {
+        "id": "68f991ffd0ec9f",
+        "headline": "Republicans buy crypto more than Democrats, data shows — what&apos;s driving the divide",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/republicans-democrats-crypto-bitcoin-use.html",
+        "tickers": [],
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-21T13:30:01.000Z"
+      },
+      {
+        "id": "f23ef4a1283951",
+        "headline": "The best parents and leaders use a 3-step formula to help people handle uncertainty, says Dr. Becky Kennedy",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/use-a-3-step-formula-to-help-people-handle-uncertainty-dr-becky-kennedy.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T12:30:02.000Z"
+      },
+      {
+        "id": "9ca3464b54667b",
+        "headline": "Top Wall Street analysts like these 3 dividend stocks for solid returns",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/top-wall-street-analysts-like-these-3-dividend-stocks-for-solid-returns.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T11:19:06.000Z"
+      },
+      {
+        "id": "887e02afde6b89",
+        "headline": "&apos;Regime change but in a velvet glove&apos;: How Kevin Warsh has set out to remake the Fed",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/21/how-kevin-warsh-has-set-out-to-remake-the-fed.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-21T11:14:02.000Z"
+      },
+      {
+        "id": "8d340e9c8dc5b4",
+        "headline": "&apos;Fun dads&apos; get 5 things right about parenting that many people forget—&apos;they&apos;re worth borrowing&apos; this Father&apos;s Day, says expert",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/20/fun-dads-get-5-things-right-about-parenting-that-many-people-forget-says-expert.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-20T17:35:35.000Z"
+      },
+      {
+        "id": "4384f045509dc6",
+        "headline": "The budget airline model in the U.S. is running out of runway",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/20/cheap-airline-fares-summer-travel.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-20T15:05:02.000Z"
+      },
+      {
+        "id": "f9ae135fd7bcef",
+        "headline": "AI buildout gives tech investors new reasons to watch bond market",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/20/ai-buildout-giving-tech-investors-new-reasons-to-watch-bond-market.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-20T12:00:01.000Z"
+      },
+      {
+        "id": "8c89bddc84c32b",
+        "headline": "SNAP restrictions could change what shoppers buy — and food giants are watching",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/20/maha-snap-restrictions-junk-food-spending.html",
+        "tickers": [
+          "SNAP"
+        ],
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-20T12:00:01.000Z"
+      },
+      {
+        "id": "a801e51014a01e",
+        "headline": "Goldman Sachs is betting that a recent merger will drive sharp gains for this travel stock",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/20/goldman-sachs-bets-a-recent-merger-will-drive-sharp-gains-for-this-travel-stock.html",
+        "tickers": [],
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-20T11:04:17.000Z"
+      },
+      {
+        "id": "6f5bd2bd7c6dac",
+        "headline": "Five top tech stocks with major upside, Bank of America says",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/20/five-top-tech-stocks-with-major-upside-bank-of-america-says.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-20T11:00:47.000Z"
+      },
+      {
+        "id": "47bc3f52a95177",
+        "headline": "Volato Group, Inc.  (SOAR, SOARW)  (CIK 0001853070) filed 8-K",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/1853070/000149315226029363/0001493152-26-029363-index.htm",
+        "tickers": [
+          "SOAR",
+          "SOARW",
+          "CIK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-18T12:00:00.000Z"
+      }
+    ],
+    "featuredTickers": [
+      "QQQ",
+      "BTC-USD",
+      "NVDA",
+      "SPY"
+    ],
+    "updatedAt": "2026-06-21T22:23:40.712Z"
+  },
+  "tickerBySymbol": {
+    "SPY": {
+      "symbol": "SPY",
+      "fundamentals": {
+        "symbol": "SPY",
+        "name": "State Street SPDR S&P 500 ETF Trust",
+        "price": 746.74,
+        "changePct1d": null,
+        "changePct5d": 1.2171966649734531,
+        "marketCap": null,
+        "peRatio": null,
+        "fiftyTwoWeekHigh": null,
+        "fiftyTwoWeekLow": null,
+        "volume": null,
+        "avgVolume": null
+      },
+      "chart": [
+        {
+          "t": "2026-03-19T13:30:00.000Z",
+          "close": 659.7999877929688,
+          "volume": 111272500
+        },
+        {
+          "t": "2026-03-20T13:30:00.000Z",
+          "close": 648.5700073242188,
+          "volume": 163617500
+        },
+        {
+          "t": "2026-03-23T13:30:00.000Z",
+          "close": 655.3800048828125,
+          "volume": 134802700
+        },
+        {
+          "t": "2026-03-24T13:30:00.000Z",
+          "close": 653.1799926757812,
+          "volume": 96457500
+        },
+        {
+          "t": "2026-03-25T13:30:00.000Z",
+          "close": 656.8200073242188,
+          "volume": 90653800
+        },
+        {
+          "t": "2026-03-26T13:30:00.000Z",
+          "close": 645.0900268554688,
+          "volume": 96494400
+        },
+        {
+          "t": "2026-03-27T13:30:00.000Z",
+          "close": 634.0900268554688,
+          "volume": 103649400
+        },
+        {
+          "t": "2026-03-30T13:30:00.000Z",
+          "close": 631.969970703125,
+          "volume": 99275900
+        },
+        {
+          "t": "2026-03-31T13:30:00.000Z",
+          "close": 650.3400268554688,
+          "volume": 152534100
+        },
+        {
+          "t": "2026-04-01T13:30:00.000Z",
+          "close": 655.239990234375,
+          "volume": 97841500
+        },
+        {
+          "t": "2026-04-02T13:30:00.000Z",
+          "close": 655.8300170898438,
+          "volume": 68358700
+        },
+        {
+          "t": "2026-04-06T13:30:00.000Z",
+          "close": 658.9299926757812,
+          "volume": 39105800
+        },
+        {
+          "t": "2026-04-07T13:30:00.000Z",
+          "close": 659.219970703125,
+          "volume": 69980400
+        },
+        {
+          "t": "2026-04-08T13:30:00.000Z",
+          "close": 676.010009765625,
+          "volume": 93606100
+        },
+        {
+          "t": "2026-04-09T13:30:00.000Z",
+          "close": 679.9099731445312,
+          "volume": 57134400
+        },
+        {
+          "t": "2026-04-10T13:30:00.000Z",
+          "close": 679.4600219726562,
+          "volume": 42253500
+        },
+        {
+          "t": "2026-04-13T13:30:00.000Z",
+          "close": 686.0999755859375,
+          "volume": 54185800
+        },
+        {
+          "t": "2026-04-14T13:30:00.000Z",
+          "close": 694.4600219726562,
+          "volume": 63480500
+        },
+        {
+          "t": "2026-04-15T13:30:00.000Z",
+          "close": 699.9400024414062,
+          "volume": 58240400
+        },
+        {
+          "t": "2026-04-16T13:30:00.000Z",
+          "close": 701.6599731445312,
+          "volume": 49972400
+        },
+        {
+          "t": "2026-04-17T13:30:00.000Z",
+          "close": 710.1400146484375,
+          "volume": 70661900
+        },
+        {
+          "t": "2026-04-20T13:30:00.000Z",
+          "close": 708.719970703125,
+          "volume": 43546800
+        },
+        {
+          "t": "2026-04-21T13:30:00.000Z",
+          "close": 704.0800170898438,
+          "volume": 58941400
+        },
+        {
+          "t": "2026-04-22T13:30:00.000Z",
+          "close": 711.2100219726562,
+          "volume": 42518500
+        },
+        {
+          "t": "2026-04-23T13:30:00.000Z",
+          "close": 708.4500122070312,
+          "volume": 56174000
+        },
+        {
+          "t": "2026-04-24T13:30:00.000Z",
+          "close": 713.9400024414062,
+          "volume": 45182000
+        },
+        {
+          "t": "2026-04-27T13:30:00.000Z",
+          "close": 715.1699829101562,
+          "volume": 33135900
+        },
+        {
+          "t": "2026-04-28T13:30:00.000Z",
+          "close": 711.6900024414062,
+          "volume": 43117400
+        },
+        {
+          "t": "2026-04-29T13:30:00.000Z",
+          "close": 711.5800170898438,
+          "volume": 41859200
+        },
+        {
+          "t": "2026-04-30T13:30:00.000Z",
+          "close": 718.6599731445312,
+          "volume": 67240900
+        },
+        {
+          "t": "2026-05-01T13:30:00.000Z",
+          "close": 720.6500244140625,
+          "volume": 43049800
+        },
+        {
+          "t": "2026-05-04T13:30:00.000Z",
+          "close": 718.010009765625,
+          "volume": 51950600
+        },
+        {
+          "t": "2026-05-05T13:30:00.000Z",
+          "close": 723.77001953125,
+          "volume": 36933200
+        },
+        {
+          "t": "2026-05-06T13:30:00.000Z",
+          "close": 733.8300170898438,
+          "volume": 53288900
+        },
+        {
+          "t": "2026-05-07T13:30:00.000Z",
+          "close": 731.5800170898438,
+          "volume": 51724600
+        },
+        {
+          "t": "2026-05-08T13:30:00.000Z",
+          "close": 737.6199951171875,
+          "volume": 47227100
+        },
+        {
+          "t": "2026-05-11T13:30:00.000Z",
+          "close": 739.2999877929688,
+          "volume": 44024000
+        },
+        {
+          "t": "2026-05-12T13:30:00.000Z",
+          "close": 738.1799926757812,
+          "volume": 54185300
+        },
+        {
+          "t": "2026-05-13T13:30:00.000Z",
+          "close": 742.3099975585938,
+          "volume": 44200200
+        },
+        {
+          "t": "2026-05-14T13:30:00.000Z",
+          "close": 748.1699829101562,
+          "volume": 45307600
+        },
+        {
+          "t": "2026-05-15T13:30:00.000Z",
+          "close": 739.1699829101562,
+          "volume": 60410800
+        },
+        {
+          "t": "2026-05-18T13:30:00.000Z",
+          "close": 738.6500244140625,
+          "volume": 47843900
+        },
+        {
+          "t": "2026-05-19T13:30:00.000Z",
+          "close": 733.72998046875,
+          "volume": 54255900
+        },
+        {
+          "t": "2026-05-20T13:30:00.000Z",
+          "close": 741.25,
+          "volume": 45768000
+        },
+        {
+          "t": "2026-05-21T13:30:00.000Z",
+          "close": 742.719970703125,
+          "volume": 43332200
+        },
+        {
+          "t": "2026-05-22T13:30:00.000Z",
+          "close": 745.6400146484375,
+          "volume": 41762000
+        },
+        {
+          "t": "2026-05-26T13:30:00.000Z",
+          "close": 750.5900268554688,
+          "volume": 41123600
+        },
+        {
+          "t": "2026-05-27T13:30:00.000Z",
+          "close": 750.4600219726562,
+          "volume": 42106300
+        },
+        {
+          "t": "2026-05-28T13:30:00.000Z",
+          "close": 754.5999755859375,
+          "volume": 41562600
+        },
+        {
+          "t": "2026-05-29T13:30:00.000Z",
+          "close": 756.47998046875,
+          "volume": 55075700
+        },
+        {
+          "t": "2026-06-01T13:30:00.000Z",
+          "close": 758.5399780273438,
+          "volume": 43634900
+        },
+        {
+          "t": "2026-06-02T13:30:00.000Z",
+          "close": 759.5700073242188,
+          "volume": 31581900
+        },
+        {
+          "t": "2026-06-03T13:30:00.000Z",
+          "close": 754.239990234375,
+          "volume": 51402500
+        },
+        {
+          "t": "2026-06-04T13:30:00.000Z",
+          "close": 757.0900268554688,
+          "volume": 49923000
+        },
+        {
+          "t": "2026-06-05T13:30:00.000Z",
+          "close": 737.5499877929688,
+          "volume": 93989400
+        },
+        {
+          "t": "2026-06-08T13:30:00.000Z",
+          "close": 739.219970703125,
+          "volume": 49319100
+        },
+        {
+          "t": "2026-06-09T13:30:00.000Z",
+          "close": 737.0499877929688,
+          "volume": 87683500
+        },
+        {
+          "t": "2026-06-10T13:30:00.000Z",
+          "close": 725.4299926757812,
+          "volume": 60341300
+        },
+        {
+          "t": "2026-06-11T13:30:00.000Z",
+          "close": 737.760009765625,
+          "volume": 86330500
+        },
+        {
+          "t": "2026-06-12T13:30:00.000Z",
+          "close": 741.75,
+          "volume": 57079500
+        },
+        {
+          "t": "2026-06-15T13:30:00.000Z",
+          "close": 754.8300170898438,
+          "volume": 60176400
+        },
+        {
+          "t": "2026-06-16T13:30:00.000Z",
+          "close": 750.3300170898438,
+          "volume": 67093100
+        },
+        {
+          "t": "2026-06-17T13:30:00.000Z",
+          "close": 740.9600219726562,
+          "volume": 85945200
+        },
+        {
+          "t": "2026-06-18T13:30:00.000Z",
+          "close": 746.739990234375,
+          "volume": 80875700
+        }
+      ],
+      "news": [
+        {
+          "id": "a814f775699b75",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Stock futures fall as investors await key reading on inflation: Live updates",
+          "excerpt": "U.S. equity futures were lower on Sunday as Wall Street awaited the release of inflation data that is closely watched by the Federal Reserve.",
+          "url": "https://www.cnbc.com/2026/06/21/stock-market-today-live-updates.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T22:10:12.000Z"
+        },
+        {
+          "id": "a5fcadb1a6beac",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Trump threatens Iran with fresh strikes as Vance leads peace talks in Switzerland",
+          "excerpt": "The talks in Switzerland were the first to be held under the terms of a memorandum of understanding agreed a week ago.",
+          "url": "https://www.cnbc.com/2026/06/21/us-and-iranians-meet-in-switzerland-for-peace-talks.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T22:01:33.000Z"
+        },
+        {
+          "id": "84d3d43d0b7798",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "No one wants AI data centers on Earth. Do they make sense in space?",
+          "excerpt": "Elon Musk's SpaceX is betting big on orbital AI data centers. The public doesn't want them on Earth, but the economic case for space-based is questionable.",
+          "url": "https://www.cnbc.com/2026/06/21/do-space-based-ai-data-centers-make-economic-sense.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T21:22:53.000Z"
+        },
+        {
+          "id": "2b6e9fb269ebdd",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Pixar&apos;s &apos;Toy Story 5&apos; lassos biggest opening weekend in franchise history with $160 million haul",
+          "excerpt": "Disney and Pixar's \"Toy Story 5\" tallied $160 million domestically during its opening weekend, the highest debut in franchise history.",
+          "url": "https://www.cnbc.com/2026/06/21/pixar-toy-story-5-box-office-biggest-opening-in-franchise-history-.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T16:06:06.000Z"
+        },
+        {
+          "id": "ec6a7d7a56e18d",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "UK&apos;s Starmer considers political future, could decide as soon as Monday",
+          "excerpt": "The threat to Starmer's position increased sharply on Friday when former Greater Manchester Mayor Andy Burnham won a seat in parliament.",
+          "url": "https://www.cnbc.com/2026/06/21/uk-minister-says-pm-starmer-is-considering-political-realities.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T15:17:40.000Z"
+        },
+        {
+          "id": "a16d55abed46b0",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Raising the minimum wage has been a big political winner. Now it&apos;s running into resistance",
+          "excerpt": "Raising the minimum wage has been a progressive policy winner at the ballot box, but recent losses suggest an economic mood slowing its political momentum.",
+          "url": "https://www.cnbc.com/2026/06/21/raise-minimum-wage-inflation-politics.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T14:07:29.000Z"
+        },
+        {
+          "id": "f23ef4a1283951",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "The best parents and leaders use a 3-step formula to help people handle uncertainty, says Dr. Becky Kennedy",
+          "excerpt": "Even if you can't control an outcome, you can still help your child or co-worker feel more at ease with uncertainty, just by how you describe a situation.",
+          "url": "https://www.cnbc.com/2026/06/21/use-a-3-step-formula-to-help-people-handle-uncertainty-dr-becky-kennedy.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T12:30:02.000Z"
+        },
+        {
+          "id": "9ca3464b54667b",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Top Wall Street analysts like these 3 dividend stocks for solid returns",
+          "excerpt": "TipRanks discusses three dividend-paying stocks.",
+          "url": "https://www.cnbc.com/2026/06/21/top-wall-street-analysts-like-these-3-dividend-stocks-for-solid-returns.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T11:19:06.000Z"
+        },
+        {
+          "id": "887e02afde6b89",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "&apos;Regime change but in a velvet glove&apos;: How Kevin Warsh has set out to remake the Fed",
+          "excerpt": "The first big announced changes point toward a quiet revolution, with task forces set up to rethink virtually everything done at the Fed.",
+          "url": "https://www.cnbc.com/2026/06/21/how-kevin-warsh-has-set-out-to-remake-the-fed.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T11:14:02.000Z"
+        },
+        {
+          "id": "8d340e9c8dc5b4",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "&apos;Fun dads&apos; get 5 things right about parenting that many people forget—&apos;they&apos;re worth borrowing&apos; this Father&apos;s Day, says expert",
+          "excerpt": "Many parents spend their days managing schedules, chores and responsibilities. This Father's Day, a parenting expert shares five \"fun dad\" habits that can increase joy and strengthen parent-child relationships.",
+          "url": "https://www.cnbc.com/2026/06/20/fun-dads-get-5-things-right-about-parenting-that-many-people-forget-says-expert.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-20T17:35:35.000Z"
+        },
+        {
+          "id": "a801e51014a01e",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Goldman Sachs is betting that a recent merger will drive sharp gains for this travel stock",
+          "excerpt": "The bank this week upgraded the airline to buy from neutral.",
+          "url": "https://www.cnbc.com/2026/06/20/goldman-sachs-bets-a-recent-merger-will-drive-sharp-gains-for-this-travel-stock.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-06-20T11:04:17.000Z"
+        },
+        {
+          "id": "6f5bd2bd7c6dac",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Five top tech stocks with major upside, Bank of America says",
+          "excerpt": "Bank of America reveals its top tech stocks heading into the second half.",
+          "url": "https://www.cnbc.com/2026/06/20/five-top-tech-stocks-with-major-upside-bank-of-america-says.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-20T11:00:47.000Z"
+        }
+      ],
+      "chatter": [
+        {
+          "id": "b99fe7987c8cb3",
+          "source": "x_general",
+          "sourceLabel": "X · FinTwit (demo)",
+          "title": "$SPY on watch — link X_BEARER_TOKEN for live FinTwit search",
+          "excerpt": "Configure X API in digital.env to pull live cashtag chatter from FinTwit and finance spaces.",
+          "url": null,
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-21T22:23:42.807Z"
+        }
+      ],
+      "sentiment": {
+        "label": "mixed",
+        "score": 0.058823529411764705,
+        "bullishPct": 6,
+        "bearishPct": 0,
+        "sampleSize": 17
+      },
+      "smartTake": "SPY price updating · Chatter skews mixed (6% bull / 0% bear). CNBC: Stock futures fall as investors await key reading on inflation: Live updates",
+      "citations": [
+        "CNBC: Stock futures fall as investors await key reading on inflation: Live updates",
+        "CNBC: Trump threatens Iran with fresh strikes as Vance leads peace talks in Switzerlan",
+        "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
+      ],
+      "nextEarningsDate": null,
+      "contradictionNote": null,
+      "updatedAt": "2026-06-21T22:23:43.136Z"
+    }
+  },
+  "alertRules": [],
+  "alertFires": []
+}

@@ -181,5 +181,33 @@ await check("flow: creator wizard path create → preflight → schedule", async
   );
 });
 
+await check("flow: capital demo tour → go_live", async () => {
+  const tour = await postJson("/api/capital/status", { action: "run_demo_tour" });
+  if (!tour.ok || !tour.json.ok || !tour.json.tradeId) return false;
+  const goLive = await postJson("/api/capital/status", { action: "go_live" });
+  const gl = goLive.json.goLive;
+  return (
+    goLive.ok &&
+    gl &&
+    (gl.today?.filledToday >= 1 || gl.today?.armedRules >= 1 || gl.progress?.complete >= 3)
+  );
+});
+
+await check("flow: capital execute_now armed rule", async () => {
+  const created = await postJson("/api/capital/status", {
+    action: "create_rule",
+    name: "QA flow rule",
+    asset: "SPY",
+    actionTrade: "buy",
+    qty: 1,
+  });
+  if (!created.ok || !created.json.rule?.id) return false;
+  const ruleId = created.json.rule.id;
+  const armed = await postJson("/api/capital/status", { action: "arm_rule", ruleId });
+  if (!armed.ok) return false;
+  const exec = await postJson("/api/capital/status", { action: "execute_now", ruleId });
+  return exec.ok && exec.json.ok !== false;
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

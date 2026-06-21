@@ -3,7 +3,12 @@
   "config": {
     "riskProfile": "balanced",
     "tradingMode": "paper",
-    "seedWatchlist": ["BTC-USD", "NVDA", "SPY"]
+    "seedWatchlist": [
+      "QQQ",
+      "BTC-USD",
+      "NVDA",
+      "SPY"
+    ]
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

@@ -98,6 +98,13 @@ await check("capital run_demo_tour", async () => {
   return ok && json.ok === true && Array.isArray(json.steps) && json.tradeId;
 });
 
+await check("capital execute_now", async () => {
+  const armed = await postJson("/api/capital/status", { action: "arm_rule", ruleId: "RULE-01" });
+  if (!armed.ok) return false;
+  const { ok, json } = await postJson("/api/capital/status", { action: "execute_now", ruleId: "RULE-01" });
+  return ok && json.ok !== false;
+});
+
 await check("capital dashboard_bootstrap", async () => {
   const { ok, json } = await postJson("/api/capital/status", { action: "dashboard_bootstrap" });
   return ok && json.status && Array.isArray(json.status.rules);
@@ -227,14 +234,17 @@ await check("capital set_agent_kill_switch", async () => {
   );
 });
 
-await check("capital webull oauth status", async () => {
-  const data = await getJson("/api/capital/webull");
-  return data.ok === true && typeof data.linked === "boolean";
-});
-
-await check("capital etrade oauth status", async () => {
-  const data = await getJson("/api/capital/etrade");
-  return data.ok === true && typeof data.linked === "boolean";
+await check("capital broker oauth status (webull + etrade)", async () => {
+  const [webull, etrade] = await Promise.all([
+    getJson("/api/capital/webull"),
+    getJson("/api/capital/etrade"),
+  ]);
+  return (
+    webull.ok === true &&
+    typeof webull.linked === "boolean" &&
+    etrade.ok === true &&
+    typeof etrade.linked === "boolean"
+  );
 });
 
 await check("capital list_pilots", async () => {

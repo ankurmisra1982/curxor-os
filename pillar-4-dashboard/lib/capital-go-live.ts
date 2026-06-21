@@ -106,7 +106,10 @@ export async function buildCapitalGoLiveReport(): Promise<CapitalGoLiveReport> {
 
   const todayStart = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
   const filledToday = file.trades.filter(
-    (t) => t.status === "filled" && t.filledAt && Date.parse(t.filledAt) >= todayStart,
+    (t) =>
+      (t.status === "filled" || t.status === "simulated") &&
+      t.filledAt &&
+      Date.parse(t.filledAt) >= todayStart,
   ).length;
 
   return {

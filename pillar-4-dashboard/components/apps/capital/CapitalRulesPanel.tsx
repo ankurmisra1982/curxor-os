@@ -54,6 +54,10 @@ interface CapitalRulesPanelProps {
 
   defaultAsset?: string;
 
+  onRunDemoTour?: () => void;
+
+  onQuickCreateDipRule?: (asset: string) => void;
+
 }
 
 
@@ -77,6 +81,10 @@ export function CapitalRulesPanel({
   onCreateStructured,
 
   defaultAsset,
+
+  onRunDemoTour,
+
+  onQuickCreateDipRule,
 
 }: CapitalRulesPanelProps) {
 
@@ -152,6 +160,32 @@ export function CapitalRulesPanel({
         </div>
 
       )}
+
+      {rules.length === 0 ? (
+        <div className="border border-line/60 bg-panel px-3 py-3 text-[10px] text-muted">
+          <p className="text-stark">No rules yet — start with a guided demo or a quick dip rule.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {onRunDemoTour ? (
+              <button
+                type="button"
+                onClick={onRunDemoTour}
+                className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow"
+              >
+                Run demo tour
+              </button>
+            ) : null}
+            {onQuickCreateDipRule ? (
+              <button
+                type="button"
+                onClick={() => onQuickCreateDipRule(defaultAsset ?? "SPY")}
+                className="border border-line px-2 py-0.5 uppercase text-stark hover:border-cursor-glow hover:text-cursor-glow"
+              >
+                Quick dip rule · {defaultAsset ?? "SPY"}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
 
       <table className="w-full border-collapse">
 

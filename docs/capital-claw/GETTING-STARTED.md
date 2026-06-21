@@ -67,6 +67,21 @@ Grant permission on the **Risk & permissions** panel:
 | `approval_each` | Heartbeat/agent fires → Telegram approval → Submit |
 | `auto_armed_rules` | Armed rules auto-evaluate on heartbeat (risk guard applies) |
 
+## Heartbeat daemon
+
+The dashboard heartbeat (`scripts/heartbeat-daemon.mjs`) keeps Capital Claw warm without manual refreshes:
+
+| Tick | Action | Purpose |
+|------|--------|---------|
+| Rules | `evaluate_rules` | Auto-fire armed rules when `autonomousMode` is `auto_armed_rules` |
+| Pilots | `sync_pilot_subscriptions` | Mirror subscribed pilot signals into the trade queue |
+| Intel | `GET /api/capital/intel?refresh=1` | Refresh market digest cache (`CURXOR_CAPITAL_INTEL_PATH`) |
+| Alerts | `POST /api/capital/intel` `{ "action": "evaluate_alerts" }` | Telegram/Slack nudges on dip or sentiment triggers |
+| PFM | `POST /api/capital/pfm` `{ "action": "refresh_snapshot" }` | Cash-flow and spending snapshot when Plaid is linked |
+| Quotes | `refresh_quotes` | Movers and position marks (Standard+ desk lazy-load) |
+
+Run locally: `node scripts/heartbeat-daemon.mjs --base http://127.0.0.1:3080`. On appliance, systemd timer or cron invokes the same script against the LAN dashboard port.
+
 ## TradingView webhooks
 
 Set `CURXOR_CAPITAL_TV_SECRET` and point alerts to:
@@ -141,6 +156,9 @@ See [BEST-IN-CLASS.md](./BEST-IN-CLASS.md) — Alpaca (live), TradingView (webho
 
 ```json
 { "action": "dashboard_bootstrap" }
+{ "action": "run_demo_tour" }
+{ "action": "go_live" }
+{ "action": "execute_now", "ruleId": "RULE-01" }
 { "action": "create_rule", "name": "BTC dip", "asset": "BTC-USD", "qty": 0.01 }
 { "action": "arm_rule", "ruleId": "RULE-01" }
 { "action": "execute_trade", "ruleId": "RULE-01" }

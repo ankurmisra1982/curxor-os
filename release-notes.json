@@ -32,5 +32,13 @@
       "Open/reply analytics on outbound queue; heartbeat process_due for scheduled sequence steps",
       "66 smoke + 12 user-flow QA checks including outreach import, analytics, and process_due"
     ]
+  },
+  "0.3.2": {
+    "highlights": [
+      "Capital Claw day-one desk — Go Live checklist, demo tour with simulated fills, rule engine, and 27 panels",
+      "Tier A/B polish — Trade · Research · Risk · Agents workspace tabs, execute_now, empty-rule CTA, Beginner FRE nudge",
+      "dashboard_bootstrap + heartbeat docs — evaluate_rules, pilot sync, intel digest, PFM refresh on daemon tick",
+      "Capital QA seeds + user flows — demo tour → go_live, execute_now armed rule; tagged v0.3.2"
+    ]
   }
 }

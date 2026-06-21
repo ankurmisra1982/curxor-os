@@ -169,6 +169,23 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ...result, status: await fetchCapitalStatus() });
       }
 
+      case "execute_now": {
+        const file = await ensureCapitalQueue();
+        const ruleId = body.ruleId ?? file.rules.find((r) => r.state === "ARMED")?.id;
+        if (!ruleId) {
+          return Response.json(
+            { ok: false, error: "No armed rule — arm a rule or run demo tour first" },
+            { status: 400 },
+          );
+        }
+        const result = await executeCapitalTrade({
+          ruleId,
+          source: "manual",
+        });
+        const goLive = await buildCapitalGoLiveReport();
+        return Response.json({ ...result, goLive, status: await fetchCapitalStatus() });
+      }
+
       case "submit_trade": {
         if (!body.tradeId) return Response.json({ ok: false, error: "tradeId required" }, { status: 400 });
         const result = await submitTradeToBridge(body.tradeId);

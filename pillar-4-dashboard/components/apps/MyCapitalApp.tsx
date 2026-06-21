@@ -26,6 +26,12 @@ import { CapitalTradeDecisionPanel } from "@/components/apps/capital/CapitalTrad
 import { CapitalTradeLogPanel } from "@/components/apps/capital/CapitalTradeLogPanel";
 import { CapitalTickerIntelPanel } from "@/components/apps/capital/CapitalTickerIntelPanel";
 import { CapitalWatchlistIntelStrip } from "@/components/apps/capital/CapitalWatchlistIntelStrip";
+import {
+  CapitalWorkspaceTabs,
+  capitalSectionVisible,
+  defaultCapitalTab,
+  type CapitalWorkspaceTab,
+} from "@/components/apps/capital/CapitalWorkspaceTabs";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { defaultAutoApprovalPolicy } from "@/lib/capital-auto-approval-types";
@@ -79,6 +85,11 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [signal, setSignal] = useState("Syncing capital desk…");
   const [selectedTradeId, setSelectedTradeId] = useState<string | null>(null);
   const [demoTourRunning, setDemoTourRunning] = useState(false);
+  const [executeRunning, setExecuteRunning] = useState(false);
+  const [workspaceTab, setWorkspaceTab] = useState<CapitalWorkspaceTab>(() => defaultCapitalTab(level));
+
+  const hideCapitalSection = (sectionId: string) => !capitalSectionVisible(sectionId, workspaceTab);
+  const armedRuleId = status?.rules.find((r) => r.state === "ARMED")?.id ?? null;
 
   const applyStatus = useCallback((next: CapitalQueueStatus) => {
     setStatus(next);
@@ -112,12 +123,24 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     if (json.status) applyStatus(json.status);
   }, [applyStatus]);
 
+  const loadGrowthData = useCallback(async () => {
+    const json = await postCapital({ action: "refresh_quotes" });
+    if (json.status) applyStatus(json.status);
+  }, [applyStatus]);
+
   useEffect(() => {
     void loadBootstrap();
-    void loadRecovery();
+    if (level !== "beginner") {
+      void loadRecovery();
+      void loadGrowthData();
+    }
     const id = setInterval(() => void loadStatus(), 30_000);
     return () => clearInterval(id);
-  }, [loadBootstrap, loadRecovery, loadStatus]);
+  }, [loadBootstrap, loadRecovery, loadGrowthData, loadStatus, level]);
+
+  useEffect(() => {
+    if (level !== "beginner") void loadGrowthData();
+  }, [level, loadGrowthData]);
 
   useEffect(() => {
     const rule = status?.rules.find((r) => r.id === selectedRuleId);
@@ -257,6 +280,32 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
   const pendingTrades = (status?.trades ?? []).filter((t) => t.status === "pending_approval");
 
+  const runDemoTour = () => {
+    setDemoTourRunning(true);
+    void action({ action: "run_demo_tour" })
+      .then((j) => {
+        const t = j as { ok?: boolean; tradeId?: string; error?: string };
+        if (j.status) applyStatus(j.status as CapitalQueueStatus);
+        if (t.tradeId) setSelectedTradeId(t.tradeId);
+        setSignal(t.ok ? "Demo tour complete · simulated fill" : t.error ?? "Demo tour failed");
+        void postCapital({ action: "go_live" }).then((gl) => gl.goLive && setGoLive(gl.goLive));
+      })
+      .finally(() => setDemoTourRunning(false));
+  };
+
+  const runExecuteNow = () => {
+    setExecuteRunning(true);
+    void action({ action: "execute_now", ruleId: armedRuleId ?? undefined })
+      .then((j) => {
+        const t = j as { ok?: boolean; trade?: CapitalTrade; goLive?: CapitalGoLiveReportRow; error?: string };
+        if (t.goLive) setGoLive(t.goLive);
+        setSignal(
+          formatTradeOutcomeMessage(t.trade, typeof j.error === "string" ? j.error : t.ok ? null : "Execute failed"),
+        );
+      })
+      .finally(() => setExecuteRunning(false));
+  };
+
   return (
     <div className="space-y-4 p-4">
       <header className="border border-line bg-panel px-4 py-3">
@@ -275,6 +324,8 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           <ExperienceLevelBadge />
         </p>
       </header>
+
+      <CapitalWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} experienceLevel={level} />
 
       <CapitalPendingTradesBanner
         trades={status?.trades ?? []}
@@ -300,7 +351,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         }
       />
 
-      {level !== "beginner" ? (
+      {level !== "beginner" && capitalSectionVisible("research", workspaceTab) ? (
         <CapitalWatchlistIntelStrip
           watchlist={status?.watchlist ?? ["NVDA", "SPY", "BTC-USD"]}
           onTickerClick={openResearch}
@@ -308,27 +359,34 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       ) : null}
 
       {level === "beginner" ? (
-        <ExperienceAppSection appId="my-capital" sectionId="recent-trades" minLevel="beginner" title="Recent trades" subtitle="Last 5 executions · upgrade to Standard for full log">
+        <ExperienceAppSection
+          appId="my-capital"
+          sectionId="recent-trades"
+          minLevel="beginner"
+          title="Recent trades"
+          subtitle="Last 5 executions · upgrade to Standard for full log"
+          hideWhen={hideCapitalSection("recent-trades")}
+        >
           <CapitalRecentTradesStrip trades={status?.trades ?? []} />
         </ExperienceAppSection>
       ) : null}
 
       {level === "beginner" || (goLive && !goLive.ready) ? (
-        <ExperienceAppSection appId="my-capital" sectionId="go-live" minLevel="beginner" title="Go Live" subtitle="Demo mode OK without broker keys · paper checklist when you connect Alpaca">
+        <ExperienceAppSection
+          appId="my-capital"
+          sectionId="go-live"
+          minLevel="beginner"
+          title="Go Live"
+          subtitle="Demo mode OK without broker keys · paper checklist when you connect Alpaca"
+          hideWhen={hideCapitalSection("go-live")}
+        >
           <CapitalGoLivePanel
             report={goLive}
             demoTourRunning={demoTourRunning}
-            onRunDemoTour={() => {
-              setDemoTourRunning(true);
-              void action({ action: "run_demo_tour" })
-                .then((j) => {
-                  const t = j as { ok?: boolean; tradeId?: string; error?: string };
-                  if (j.status) applyStatus(j.status as CapitalQueueStatus);
-                  if (t.tradeId) setSelectedTradeId(t.tradeId);
-                  setSignal(t.ok ? "Demo tour complete · simulated fill" : t.error ?? "Demo tour failed");
-                })
-                .finally(() => setDemoTourRunning(false));
-            }}
+            armedRuleId={armedRuleId}
+            executeRunning={executeRunning}
+            onExecuteNow={armedRuleId ? runExecuteNow : undefined}
+            onRunDemoTour={runDemoTour}
             onRefresh={() => void postCapital({ action: "go_live" }).then((j) => j.goLive && setGoLive(j.goLive))}
           />
         </ExperienceAppSection>
@@ -345,7 +403,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </div>
 
-      <ExperienceAppSection appId="my-capital" sectionId="research" minLevel="beginner" title="Ticker research" subtitle="Price · smart take · headlines — chart & chatter unlock in Standard">
+      <ExperienceAppSection appId="my-capital" sectionId="research" minLevel="beginner" title="Ticker research" subtitle="Price · smart take · headlines — chart & chatter unlock in Standard" hideWhen={hideCapitalSection("research")}>
         <CapitalTickerIntelPanel
           watchlist={status?.watchlist ?? ["NVDA", "SPY", "BTC-USD"]}
           focusTicker={researchTicker}
@@ -375,15 +433,15 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="intel-alerts" minLevel="standard" title="Intel alerts" subtitle="Telegram/Slack nudge when dip or sentiment triggers">
+      <ExperienceAppSection appId="my-capital" sectionId="intel-alerts" minLevel="standard" title="Intel alerts" subtitle="Telegram/Slack nudge when dip or sentiment triggers" hideWhen={hideCapitalSection("intel-alerts")}>
         <CapitalIntelAlertsPanel symbol={activeIntelSymbol ?? researchTicker ?? status?.watchlist[0] ?? null} />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="digest" minLevel="standard" title="Market intel digest" subtitle="CNBC + WSB + Reddit + FinTwit across your watchlist">
+      <ExperienceAppSection appId="my-capital" sectionId="digest" minLevel="standard" title="Market intel digest" subtitle="CNBC + WSB + Reddit + FinTwit across your watchlist" hideWhen={hideCapitalSection("digest")}>
         <CapitalMarketDigestPanel onTickerClick={(t) => setResearchTicker(t)} />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="pilots" minLevel="beginner" title="Pilot marketplace" subtitle="Choose a portfolio · allocate · auto-mirror trades">
+      <ExperienceAppSection appId="my-capital" sectionId="pilots" minLevel="beginner" title="Pilot marketplace" subtitle="Choose a portfolio · allocate · auto-mirror trades" hideWhen={hideCapitalSection("pilots")}>
         <div className="mb-2 flex justify-end">
           <button
             type="button"
@@ -407,7 +465,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="subscriptions" minLevel="standard" title="Your pilots" subtitle="Pause · re-sync · unsubscribe">
+      <ExperienceAppSection appId="my-capital" sectionId="subscriptions" minLevel="standard" title="Your pilots" subtitle="Pause · re-sync · unsubscribe" hideWhen={hideCapitalSection("subscriptions")}>
         <CapitalSubscriptionsPanel
           subscriptions={status?.subscriptions ?? []}
           pilots={status?.pilots ?? []}
@@ -419,7 +477,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="risk" minLevel="beginner" title="Risk & permissions" subtitle="Crisis mode · autonomous trading · guardrails">
+      <ExperienceAppSection appId="my-capital" sectionId="risk" minLevel="beginner" title="Risk & permissions" subtitle="Crisis mode · autonomous trading · guardrails" hideWhen={hideCapitalSection("risk")}>
         <CapitalPermissionsPanel
           permissions={status?.permissions ?? { autonomousMode: "off", autonomousGrantedAt: null, allowedBrokers: [], activeBrokerId: "alpaca", maxAutoTradesPerDay: 10, tradingviewWebhookSecret: null, liveMoneyConfirmedAt: null }}
           riskLimits={status?.riskLimits ?? { maxPositionPct: 15, maxDailyLossPct: 4, maxSectorPct: 40, pdtGuard: true }}
@@ -447,7 +505,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="auto-approval" minLevel="standard" title="Auto-approval stack" subtitle="Sovereign execution policy · paper-first · notional caps">
+      <ExperienceAppSection appId="my-capital" sectionId="auto-approval" minLevel="standard" title="Auto-approval stack" subtitle="Sovereign execution policy · paper-first · notional caps" hideWhen={hideCapitalSection("auto-approval")}>
         <CapitalAutoApprovalPanel
           policy={status?.autoApproval ?? defaultAutoApprovalPolicy()}
           tradingMode={mode}
@@ -455,7 +513,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="agent-trading" minLevel="standard" title="Agent & MCP trading" subtitle="Claude · Cursor · Claw chat · review before execute">
+      <ExperienceAppSection appId="my-capital" sectionId="agent-trading" minLevel="standard" title="Agent & MCP trading" subtitle="Claude · Cursor · Claw chat · review before execute" hideWhen={hideCapitalSection("agent-trading")}>
         <CapitalAgentTradingPanel
           autoApproval={status?.autoApproval ?? defaultAutoApprovalPolicy()}
           auditLog={status?.agentAuditLog ?? []}
@@ -489,19 +547,19 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       </ExperienceAppSection>
 
       {level !== "beginner" ? (
-        <ExperienceAppSection appId="my-capital" sectionId="pfm" minLevel="standard" title="Personal finance" subtitle="Cash flow · spending · wealth goals · Mint-style insights on-appliance">
+        <ExperienceAppSection appId="my-capital" sectionId="pfm" minLevel="standard" title="Personal finance" subtitle="Cash flow · spending · wealth goals · Mint-style insights on-appliance" hideWhen={hideCapitalSection("pfm")}>
           <CapitalPlaidLinkSection onLinked={() => void loadStatus()} />
           <CapitalPfmPanel onSuggestionAction={handlePfmSuggestion} />
         </ExperienceAppSection>
       ) : null}
 
       {level !== "beginner" ? (
-        <ExperienceAppSection appId="my-capital" sectionId="portfolio-health" minLevel="standard" title="Portfolio health" subtitle="Concentration · sector mix · rebalance hints">
+        <ExperienceAppSection appId="my-capital" sectionId="portfolio-health" minLevel="standard" title="Portfolio health" subtitle="Concentration · sector mix · rebalance hints" hideWhen={hideCapitalSection("portfolio-health")}>
           <CapitalPortfolioHealthPanel health={portfolioHealth} />
         </ExperienceAppSection>
       ) : null}
 
-      <ExperienceAppSection appId="my-capital" sectionId="movers" minLevel="standard" title="Movers & positions" subtitle="Quote cache · Alpaca sync">
+      <ExperienceAppSection appId="my-capital" sectionId="movers" minLevel="standard" title="Movers & positions" subtitle="Quote cache · Alpaca sync" hideWhen={hideCapitalSection("movers")}>
         <CapitalMoversPanel
           movers={status?.movers ?? []}
           positions={status?.positions ?? []}
@@ -509,7 +567,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="brokers" minLevel="standard" title="Broker integrations" subtitle="Alpaca live · TradingView webhook · Robinhood MCP">
+      <ExperienceAppSection appId="my-capital" sectionId="brokers" minLevel="standard" title="Broker integrations" subtitle="Alpaca live · TradingView webhook · Robinhood MCP" hideWhen={hideCapitalSection("brokers")}>
         <CapitalBrokersPanel
           brokers={status?.brokers ?? []}
           activeBrokerId={status?.permissions.activeBrokerId}
@@ -617,7 +675,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
-      <ExperienceAppSection appId="my-capital" sectionId="portfolio" minLevel="beginner" title="Rule engine" subtitle="WHEN / THEN · Arm · Execute via digital bridge">
+      <ExperienceAppSection appId="my-capital" sectionId="portfolio" minLevel="beginner" title="Rule engine" subtitle="WHEN / THEN · Arm · Execute via digital bridge" hideWhen={hideCapitalSection("portfolio")}>
         <CapitalRulesPanel
           rules={status?.rules ?? []}
           selectedRuleId={selectedRuleId}
@@ -647,12 +705,19 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               stopLossPct: input.stopLossPct,
             }).then(() => setSignal(`Rule created · ${input.name}`))
           }
+          onRunDemoTour={runDemoTour}
+          onQuickCreateDipRule={(sym) =>
+            void action({ action: "create_dip_rule", ticker: sym, dropPct: 5 }).then((j) => {
+              if (j.status) applyStatus(j.status);
+              setSignal(`Dip rule created for ${sym}`);
+            })
+          }
           onCreate={() => {}}
         />
       </ExperienceAppSection>
 
       <div id="capital-trade-log">
-        <ExperienceAppSection appId="my-capital" sectionId="trades" minLevel="standard" title="Trade log" subtitle="Paper orders · simulated · recovery">
+        <ExperienceAppSection appId="my-capital" sectionId="trades" minLevel="standard" title="Trade log" subtitle="Paper orders · simulated · recovery" hideWhen={hideCapitalSection("trades")}>
           <CapitalTradeLogPanel
             trades={status?.trades ?? []}
             selectedTradeId={selectedTradeId}
@@ -669,7 +734,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       </div>
 
       {level !== "beginner" ? (
-        <ExperienceAppSection appId="my-capital" sectionId="recovery" minLevel="standard" title="Trade recovery" subtitle="Retry failed Alpaca submissions">
+        <ExperienceAppSection appId="my-capital" sectionId="recovery" minLevel="standard" title="Trade recovery" subtitle="Retry failed Alpaca submissions" hideWhen={hideCapitalSection("recovery")}>
           <CapitalRecoveryPanel
             failed={failedTrades}
             onRetry={(tradeId) => void action({ action: "recovery_retry", tradeId })}

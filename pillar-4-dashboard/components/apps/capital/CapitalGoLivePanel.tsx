@@ -39,6 +39,9 @@ interface CapitalGoLivePanelProps {
   onRefresh: () => void;
   onRunDemoTour?: () => void;
   demoTourRunning?: boolean;
+  armedRuleId?: string | null;
+  onExecuteNow?: () => void;
+  executeRunning?: boolean;
 }
 
 export function CapitalGoLivePanel({
@@ -46,6 +49,9 @@ export function CapitalGoLivePanel({
   onRefresh,
   onRunDemoTour,
   demoTourRunning,
+  armedRuleId,
+  onExecuteNow,
+  executeRunning,
 }: CapitalGoLivePanelProps) {
   if (!report) return <p className="font-mono text-[10px] text-muted">Loading go-live checklist…</p>;
 
@@ -84,6 +90,16 @@ export function CapitalGoLivePanel({
             className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow disabled:opacity-40"
           >
             {demoTourRunning ? "Running tour…" : "Run demo tour"}
+          </button>
+        ) : null}
+        {armedRuleId && onExecuteNow ? (
+          <button
+            type="button"
+            disabled={executeRunning || demoTourRunning}
+            onClick={onExecuteNow}
+            className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow disabled:opacity-40"
+          >
+            {executeRunning ? "Executing…" : "Execute now"}
           </button>
         ) : null}
       </div>
