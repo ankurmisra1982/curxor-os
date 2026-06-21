@@ -19,6 +19,7 @@ export interface GoLiveTodayRow {
 
 export interface GoLiveReportRow {
   ready: boolean;
+  partiallyReady?: boolean;
   progress: { complete: number; total: number };
   steps: GoLiveStepRow[];
   today: GoLiveTodayRow;
@@ -51,14 +52,20 @@ export function ContentGoLivePanel({ report, onRefresh, onOpenWizard }: ContentG
     );
   }
 
-  const { today, steps, progress, ready } = report;
+  const { today, steps, progress, ready, partiallyReady } = report;
+
+  const statusLabel = ready
+    ? "Ready to publish"
+    : partiallyReady
+      ? `Partially ready · ${progress.complete}/${progress.total}`
+      : `Go live · ${progress.complete}/${progress.total}`;
+
+  const headerStatusClass = ready ? "text-cursor-glow" : partiallyReady ? "text-stark" : "text-amber-400";
 
   return (
     <div className="space-y-3 font-mono text-[10px]">
       <div className="flex flex-wrap items-center gap-2">
-        <span className={ready ? "text-cursor-glow uppercase" : "text-amber-400 uppercase"}>
-          {ready ? "Ready to publish" : `Go live · ${progress.complete}/${progress.total}`}
-        </span>
+        <span className={`${headerStatusClass} uppercase`}>{statusLabel}</span>
         <button type="button" onClick={onRefresh} className="border border-line px-2 py-0.5 uppercase text-muted hover:text-stark">
           Refresh
         </button>

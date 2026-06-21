@@ -288,6 +288,40 @@ export function suggestBestSlotsThisWeek(
   return suggestions.sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));
 }
 
+export async function buildScheduleInsightsBundle(
+  anchor = new Date(),
+  selectedPostId?: string,
+): Promise<{
+  insights: PlatformScheduleInsight[];
+  weekSlots: ScheduleSlotSuggestion[];
+  timeZone: string;
+  suggestion: ScheduleSlotSuggestion | null;
+}> {
+  const { readAppFreState } = await import("./app-fre-state");
+  const { listPostMetrics } = await import("./content-analytics-store");
+  const { fetchContentStatus } = await import("./content-queue-store");
+
+  const fre = await readAppFreState("my-content-creator");
+  const timeZone = typeof fre.config.timezone === "string" ? fre.config.timezone : undefined;
+  const status = await fetchContentStatus();
+  const metrics = await listPostMetrics();
+  const insights = buildPlatformScheduleInsights({ metrics, posts: status.posts, timeZone });
+  const channels = Array.isArray(fre.config.channels)
+    ? fre.config.channels.filter((x): x is string => typeof x === "string")
+    : status.channels;
+  const weekSlots = suggestBestSlotsThisWeek(channels, metrics, status.posts, anchor, timeZone);
+  const suggestion = selectedPostId
+    ? suggestBestSlotForPost(selectedPostId, metrics, status.posts, timeZone)
+    : null;
+
+  return {
+    insights,
+    weekSlots,
+    timeZone: timeZone ?? "local",
+    suggestion,
+  };
+}
+
 export async function resolveScheduleTimeForPost(
   postId: string,
   explicit?: string | null,

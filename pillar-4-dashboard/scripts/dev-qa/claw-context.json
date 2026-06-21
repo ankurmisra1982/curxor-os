@@ -2,14 +2,14 @@
   "records": [
     {
       "envelope": {
-        "id": "a7e3dfc9-0cdc-4514-93b9-b83296e11bc0",
+        "id": "86b5fe7d-56a7-4409-a79b-cd5028e94078",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": null,
         "scope": "work",
         "key": "inbox.rollup",
-        "timestamp": "2026-06-21T07:06:54.820Z",
+        "timestamp": "2026-06-21T07:50:20.746Z",
         "ttlSeconds": 3600,
         "payload": {
           "sessionCount": 7,
@@ -20,7 +20,7 @@
               "appId": "tesla-optimus-engine",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
-              "updatedAt": "2026-06-21T07:06:54.811Z"
+              "updatedAt": "2026-06-21T07:50:20.736Z"
             },
             {
               "sessionId": "webchat:my-vital",
@@ -28,7 +28,7 @@
               "appId": "my-vital",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
-              "updatedAt": "2026-06-21T07:06:54.495Z"
+              "updatedAt": "2026-06-21T07:50:20.519Z"
             },
             {
               "sessionId": "webchat:my-work",
@@ -36,7 +36,7 @@
               "appId": "my-work",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
-              "updatedAt": "2026-06-21T07:06:54.360Z"
+              "updatedAt": "2026-06-21T07:50:20.416Z"
             },
             {
               "sessionId": "webchat:my-capital",
@@ -44,7 +44,7 @@
               "appId": "my-capital",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance.",
-              "updatedAt": "2026-06-21T07:06:53.764Z"
+              "updatedAt": "2026-06-21T07:50:19.929Z"
             },
             {
               "sessionId": "webchat:my-shop",
@@ -52,7 +52,7 @@
               "appId": "my-shop",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
-              "updatedAt": "2026-06-21T07:06:52.073Z"
+              "updatedAt": "2026-06-21T07:50:18.859Z"
             },
             {
               "sessionId": "webchat:webchat:my-work",
@@ -71,22 +71,22 @@
               "updatedAt": "2026-06-21T03:14:26.211Z"
             }
           ],
-          "updatedAt": "2026-06-21T07:06:54.820Z"
+          "updatedAt": "2026-06-21T07:50:20.746Z"
         }
       },
-      "storedAt": "2026-06-21T07:06:54.820Z",
-      "expiresAt": "2026-06-21T08:06:54.820Z"
+      "storedAt": "2026-06-21T07:50:20.746Z",
+      "expiresAt": "2026-06-21T08:50:20.746Z"
     },
     {
       "envelope": {
-        "id": "80e1c3fa-318f-482c-8af4-339f80cfee0f",
+        "id": "df98d4f4-6a54-48df-b758-3c9f71db31c3",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
         "scope": "hardware",
         "key": "inbox.webchat:tesla-optimus-engine",
-        "timestamp": "2026-06-21T07:06:54.815Z",
+        "timestamp": "2026-06-21T07:50:20.739Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:tesla-optimus-engine",
@@ -99,22 +99,22 @@
           "lastUser": "What do you know about my household?",
           "lastReply": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
           "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
-          "updatedAt": "2026-06-21T07:06:54.814Z"
+          "updatedAt": "2026-06-21T07:50:20.739Z"
         }
       },
-      "storedAt": "2026-06-21T07:06:54.815Z",
-      "expiresAt": "2026-06-28T07:06:54.815Z"
+      "storedAt": "2026-06-21T07:50:20.739Z",
+      "expiresAt": "2026-06-28T07:50:20.739Z"
     },
     {
       "envelope": {
-        "id": "a8e30b67-87c0-4ea3-95fd-a9ea02284ed5",
+        "id": "d51c3b65-5ae7-444d-a257-8b0e13e6d2e8",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
         "scope": "personal",
         "key": "comms.latest.webchat:my-vital",
-        "timestamp": "2026-06-21T07:06:54.499Z",
+        "timestamp": "2026-06-21T07:50:20.522Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:my-vital",
@@ -127,12 +127,41 @@
           "lastUser": "status check",
           "lastReply": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
           "preview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
-          "updatedAt": "2026-06-21T07:06:54.499Z",
+          "updatedAt": "2026-06-21T07:50:20.521Z",
           "unified": true
         }
       },
-      "storedAt": "2026-06-21T07:06:54.499Z",
-      "expiresAt": "2026-06-28T07:06:54.499Z"
+      "storedAt": "2026-06-21T07:50:20.522Z",
+      "expiresAt": "2026-06-28T07:50:20.522Z"
+    },
+    {
+      "envelope": {
+        "id": "98927935-f445-4a01-85c6-88352d3df1de",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+        "scope": "personal",
+        "key": "comms.latest.webchat:my-work",
+        "timestamp": "2026-06-21T07:50:20.418Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-work",
+          "channel": "webchat",
+          "externalChatId": "my-work",
+          "appId": "my-work",
+          "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+          "profileName": "Primary operator",
+          "senderLabel": "dashboard",
+          "lastUser": "Remember to follow up with Acme Corp tomorrow morning",
+          "lastReply": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+          "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+          "updatedAt": "2026-06-21T07:50:20.418Z",
+          "unified": true
+        }
+      },
+      "storedAt": "2026-06-21T07:50:20.418Z",
+      "expiresAt": "2026-06-28T07:50:20.418Z"
     }
   ]
 }

@@ -5,6 +5,7 @@ import { mkdirSync } from "node:fs";
 
 import { getAppFreDir, markAppFreComplete, readAppFreState } from "@/lib/app-fre-state";
 import { defaultFreConfig } from "@/lib/app-agent-catalog";
+import { ensureBeginnerExperienceAfterCreatorFre } from "@/lib/content-creator-onboarding";
 import { requireLanAuth } from "@/lib/lan-auth";
 import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
 
@@ -49,6 +50,11 @@ export async function POST(
     }
 
     const state = await markAppFreComplete(appId as OotbAppId, config);
+    if (appId === "my-content-creator") {
+      await ensureBeginnerExperienceAfterCreatorFre().catch((err) => {
+        console.warn("[app-fre] Creator beginner experience nudge failed:", err);
+      });
+    }
     return Response.json({ ok: true, state });
   } catch (err) {
     console.warn("[app-fre] Failed to persist FRE state:", err);

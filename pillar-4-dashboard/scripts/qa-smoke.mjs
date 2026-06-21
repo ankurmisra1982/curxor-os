@@ -215,6 +215,7 @@ await check("content go_live checklist", async () => {
     ok &&
     json.goLive?.steps?.length >= 4 &&
     typeof json.goLive?.ready === "boolean" &&
+    typeof json.goLive?.partiallyReady === "boolean" &&
     json.goLive?.today?.recoveryCount !== undefined
   );
 });
@@ -222,6 +223,61 @@ await check("content go_live checklist", async () => {
 await check("content recovery_list", async () => {
   const { ok, json } = await postJson("/api/content/status", { action: "recovery_list" });
   return ok && Array.isArray(json.candidates);
+});
+
+await check("content create post", async () => {
+  const { ok, json } = await postJson("/api/content/status", {
+    action: "create",
+    platform: "x",
+    channel: "QA smoke create",
+    draftText: "Creator Claw day-one QA draft",
+  });
+  return ok && typeof json.post?.id === "string" && json.post.platform === "x";
+});
+
+await check("content preflight_check", async () => {
+  const current = await getJson("/api/content/status");
+  const postId = current.posts?.[0]?.id;
+  if (!postId) return false;
+  const { ok, json } = await postJson("/api/content/status", { action: "preflight_check", postId });
+  return ok && typeof json.report?.ready === "boolean" && Array.isArray(json.report?.checks);
+});
+
+await check("content schedule (useBestTime)", async () => {
+  const current = await getJson("/api/content/status");
+  const draftPost = current.posts?.find((p) => p.stage !== "PUBLISHED") ?? current.posts?.[0];
+  if (!draftPost?.id) return false;
+  const { ok, json } = await postJson("/api/content/status", {
+    action: "schedule",
+    postId: draftPost.id,
+    useBestTime: true,
+  });
+  return ok && typeof json.scheduledAt === "string" && json.post?.stage === "SCHEDULED";
+});
+
+await check("content dashboard_bootstrap", async () => {
+  const { ok, json } = await postJson("/api/content/status", { action: "dashboard_bootstrap" });
+  return (
+    ok &&
+    json.status?.posts &&
+    json.goLive?.steps?.length >= 4 &&
+    typeof json.goLive?.partiallyReady === "boolean" &&
+    json.bridgeHealth?.platforms &&
+    json.calendar?.days?.length === 7 &&
+    json.studio
+  );
+});
+
+await check("content publish_now (X bridge path)", async () => {
+  const current = await getJson("/api/content/status");
+  const draftPost =
+    current.posts?.find((p) => p.stage === "DRAFT" || p.stage === "SCHEDULED") ?? current.posts?.[0];
+  if (!draftPost?.id) return false;
+  const { ok, json } = await postJson("/api/content/status", {
+    action: "publish_now",
+    postId: draftPost.id,
+  });
+  return ok && (json.mode === "published" || json.mode === "pending");
 });
 
 await check("app-agent assist (outreach)", async () => {

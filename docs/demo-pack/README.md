@@ -88,7 +88,8 @@ Copy these into `curxor storefront/public/demo/` when updating GTM assets.
 | Blank or tiny PNG (~7KB) | Stop dev server, delete `pillar-4-dashboard/.next`, restart with env vars above |
 | Playwright timeout on `networkidle` | Do not use `networkidle` — SSE streams on `/api/stream/*` never idle. Use `capture-one-demo.mjs` (domcontentloaded + wait) |
 | Redirect to `/setup` | Ensure `fre-state.json` has `"initialized": true` and `/api/setup/status` returns 200 before capture |
-| Creator panels show "Standard/Expert feature" gates | Set `experienceLevel` to `standard` (or `expert`) in `scripts/dev-qa/user-settings.json` before capture |
+| `--base` ignored in capture | Pass `--base` last: `… "Go Live" --base http://127.0.0.1:3080` |
+| Creator panels show "Standard/Expert feature" gates | Set `experienceLevel` to `beginner` for Go Live screenshot; `standard` for calendar/recovery captures |
 
 ## PDF documentation
 

@@ -18,7 +18,9 @@ The **Go Live** panel at the top tracks:
 | Publish bridges ready | Add OAuth tokens to `/etc/curxor/digital.env` (see Bridge Health panel for missing keys) |
 | Public media URL | Set `CURXOR_CONTENT_PUBLIC_BASE` in `dashboard.env` if you publish to Instagram, Pinterest, or TikTok with local images |
 | Operator notifications | Optional but recommended: `CURXOR_APPROVAL_TELEGRAM_CHAT_IDS` for `/approve` and publish-failure alerts |
-| First post scheduled | Run **Creation Wizard** → draft → attach media → schedule |
+| First post scheduled | Run **Creation Wizard** — Channel → Draft → Media → Pre-flight → Schedule |
+
+**Ready to publish** requires every FRE-enabled bridge to be **ready** (not merely warning). **Partially ready** means your first post is scheduled but bridges or public media URL still need attention.
 
 The **Today** strip shows next scheduled post, pending approvals, failed publishes, and crisis pause state.
 
@@ -51,12 +53,14 @@ Local assets are served at `/api/content/asset?file=…` once this base URL is r
 
 ## 4. First post (recommended path)
 
-1. Click **Creation wizard** (or use Go Live → Creation wizard).
-2. Pick channel and write a draft (local LLM — no outbound call on publish).
-3. **Attach media from disk** (JPG/PNG/MP4) or capture a vision thumbnail / render video.
-4. Run **Pre-flight** — fix char limits, brand kit, bridge readiness.
-5. **Schedule** (drag on calendar or “Schedule at best time”).
-6. Optional: enable **Require approval before publish** in FRE — approve via dashboard, Telegram (`/approve POST-001`), or Slack.
+1. Click **Creation wizard** (or use Go Live → Start wizard).
+2. **Channel** — pick primary platform from your FRE channels.
+3. **Draft** — write copy (or leave blank and use Draft Post skill after).
+4. **Media** — attach JPG/PNG/MP4 from disk, generate AI thumb, or skip (add in Creation Studio before IG/TikTok publish).
+5. **Pre-flight** — fix blockers (char limits, brand kit, bridge readiness); warnings are OK to schedule.
+6. **Schedule** — uses learned best time when **Use data-driven schedule** is on in FRE.
+7. Wizard scrolls to **Pre-publish Preview** when done — run Publish skill when pre-flight is green.
+8. Optional: enable **Require approval before publish** in FRE — approve via dashboard, Telegram (`/approve POST-001`), or Slack.
 
 ## 5. Telegram & Slack operators
 
@@ -105,16 +109,26 @@ node scripts/capture-demo-screenshots.mjs
 
 All actions are available via `POST /api/content/status` with an `action` field. Examples:
 
+- `dashboard_bootstrap` — single load for Creator workspace (queue, Go Live, bridge health, calendar, approval)
 - `go_live` — checklist report
-- `create`, `update_draft`, `schedule`, `publish`
+- `create`, `update_draft`, `preflight_check`, `schedule`, `publish_now`, `publish`
 - `recovery_list`, `recovery_retry`
 - `attach` via `POST /api/content/upload` (multipart: `postId`, `kind`, `file`)
 
 REST tools catalog: `/api/content/tools`.
 
-## 8. Heartbeat jobs
+## 8. Heartbeat & scheduled publish
 
-The appliance heartbeat daemon runs:
+The appliance **heartbeat daemon** (`scripts/heartbeat-daemon.mjs`, systemd `curxor-scheduler.service`) runs on a short interval and calls `POST /api/scheduler` with `action: run_due`. That executes due scheduler jobs — including Creator Claw **auto-publish** jobs created when you schedule a post (`content-{postId}` → skill `publish_post`).
+
+```bash
+# Local dev — run heartbeat alongside Next.js (separate terminal)
+node scripts/heartbeat-daemon.mjs
+```
+
+Scheduled posts stay in **SCHEDULED** until the job fires; the daemon then invokes the same publish path as **Publish now** / the Publish skill. If **Require approval before publish** is on, scheduled jobs queue for approval instead of hitting the bridge immediately.
+
+Other heartbeat tasks (same daemon):
 
 - Social engage poll (comments/mentions)
 - Metrics pull (live platform stats)

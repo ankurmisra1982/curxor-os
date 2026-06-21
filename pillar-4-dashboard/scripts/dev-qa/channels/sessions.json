@@ -144,9 +144,25 @@
         {
           "role": "assistant",
           "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "any alerts?"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
         }
       ],
-      "updatedAt": "2026-06-21T07:06:52.073Z"
+      "updatedAt": "2026-06-21T07:50:18.859Z"
     },
     {
       "id": "webchat:my-work",
@@ -238,7 +254,7 @@
           "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
         }
       ],
-      "updatedAt": "2026-06-21T07:06:54.360Z"
+      "updatedAt": "2026-06-21T07:50:20.416Z"
     },
     {
       "id": "webchat:my-vital",
@@ -330,7 +346,7 @@
           "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
         }
       ],
-      "updatedAt": "2026-06-21T07:06:54.495Z"
+      "updatedAt": "2026-06-21T07:50:20.519Z"
     },
     {
       "id": "webchat:my-capital",
@@ -372,9 +388,25 @@
         {
           "role": "assistant",
           "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
         }
       ],
-      "updatedAt": "2026-06-21T07:06:53.764Z"
+      "updatedAt": "2026-06-21T07:50:19.929Z"
     },
     {
       "id": "webchat:tesla-optimus-engine",
@@ -416,9 +448,25 @@
         {
           "role": "assistant",
           "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
         }
       ],
-      "updatedAt": "2026-06-21T07:06:54.811Z"
+      "updatedAt": "2026-06-21T07:50:20.736Z"
     }
   ]
 }

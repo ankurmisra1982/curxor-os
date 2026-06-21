@@ -2,6 +2,72 @@
   "version": 1,
   "posts": [
     {
+      "id": "POST-889",
+      "channel": "User flow QA",
+      "platform": "x",
+      "format": "short",
+      "stage": "SCHEDULED",
+      "draftText": "Day-one Creator Claw — sovereign publish pipeline on bare metal.",
+      "inIdeaBacklog": false,
+      "campaignId": null,
+      "scheduledAt": "2026-06-23T13:00:00.000Z",
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-21T07:50:20.869Z",
+      "updatedAt": "2026-06-21T07:50:20.982Z",
+      "performanceScore": 63
+    },
+    {
+      "id": "POST-888",
+      "channel": "QA smoke create",
+      "platform": "x",
+      "format": "short",
+      "stage": "SUBMITTED",
+      "draftText": "Creator Claw day-one QA draft",
+      "inIdeaBacklog": false,
+      "campaignId": null,
+      "scheduledAt": "2026-06-23T13:00:00.000Z",
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-21T07:50:11.917Z",
+      "updatedAt": "2026-06-21T07:50:12.262Z",
+      "performanceScore": 59,
+      "pendingPublishIntentId": "8a9877dd-10d9-460e-86b9-5f771c47e5a1",
+      "approvalNote": null
+    },
+    {
+      "id": "POST-887",
+      "channel": "User flow QA",
+      "platform": "x",
+      "format": "short",
+      "stage": "SCHEDULED",
+      "draftText": "QA smoke draft — sovereign Creator Claw on bare metal.",
+      "inIdeaBacklog": false,
+      "campaignId": null,
+      "scheduledAt": "2026-06-23T13:00:00.000Z",
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-21T07:29:13.003Z",
+      "updatedAt": "2026-06-21T07:50:11.797Z",
+      "performanceScore": 63
+    },
+    {
+      "id": "POST-886",
+      "channel": "QA smoke create",
+      "platform": "x",
+      "format": "short",
+      "stage": "SCHEDULED",
+      "draftText": "Creator Claw day-one QA draft",
+      "inIdeaBacklog": false,
+      "campaignId": null,
+      "scheduledAt": "2026-06-23T13:00:00.000Z",
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-21T07:29:02.763Z",
+      "updatedAt": "2026-06-21T07:29:03.320Z",
+      "performanceScore": 59
+    },
+    {
       "id": "POST-881",
       "channel": "Tech Briefs Daily",
       "platform": "youtube",
@@ -12,7 +78,7 @@
       "publishedAt": null,
       "publishedUrl": null,
       "createdAt": "2026-06-20T08:00:00.000Z",
-      "updatedAt": "2026-06-21T07:06:44.115Z",
+      "updatedAt": "2026-06-21T07:29:02.623Z",
       "performanceScore": 47
     },
     {
@@ -70,5 +136,5 @@
       "updatedAt": "2026-06-20T11:00:00.000Z"
     }
   ],
-  "updatedAt": "2026-06-21T07:06:44.115Z"
+  "updatedAt": "2026-06-21T07:50:20.982Z"
 }

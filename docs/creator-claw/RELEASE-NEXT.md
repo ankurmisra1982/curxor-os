@@ -118,14 +118,16 @@
 
 **Deferred (not needed for 90% day-one):** MCP server · multi-brand workspaces · blog atomization · X streaming webhook · Reddit/Discord reply bridges · mobile PWA · compliance archive · dedicated job worker unit
 
-**Day-one release polish**
-- **Go Live checklist** — FRE + bridge + public base + first post · Today strip (next schedule, approvals, recovery)
-- **Publish failure alerts** — Telegram/Slack when bridge publish fails (same operator chats as approval)
-- **Media attach** — upload image/video from disk → local assets + public URL
-- **Demo seed** — `scripts/dev-qa/content-queue.json` · screenshot `08-creator-claw.png`
-- **Operator guide** — [GETTING-STARTED.md](./GETTING-STARTED.md)
+**Day-one release polish (v0.3.0 — shipped)**
+- **Go Live checklist** — strict `ready` vs `partiallyReady`; public base URL probe
+- **Creation wizard** — 5-step flow with media upload, pre-flight gate, best-time schedule, scroll to preview
+- **dashboard_bootstrap** — single API load for Creator workspace mount
+- **Beginner default** — FRE completion nudges experience level unless Expert explicitly chosen
+- **Signal feed** — hidden when empty
+- **QA** — create · preflight · schedule · bootstrap smoke + creator user flow
+- **Operator guide** — [GETTING-STARTED.md](./GETTING-STARTED.md) · [DAY-ONE-SPRINT.md](./DAY-ONE-SPRINT.md)
 
-**New API actions:** `recovery_list` · `recovery_retry` · `recovery_clear` · `content_plan` · `hashtag_intel` · `alt_text` · `signal_feed` · `go_live` · `POST /api/content/upload`
+**New API actions:** `dashboard_bootstrap` · `recovery_list` · `recovery_retry` · `recovery_clear` · `content_plan` · `hashtag_intel` · `alt_text` · `signal_feed` · `go_live` · `POST /api/content/upload`
 
 ### Previously shipped (tier 1 + 2)
 - Metrics ingest, live + scheduled pull, reply bridges, campaigns entity, creation studio, calendar, webhooks, jobs worker, etc.

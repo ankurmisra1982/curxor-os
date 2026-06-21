@@ -13,10 +13,16 @@
       "Agent runtime v0.2 — SOUL/USER/MEMORY workspace, skills, heartbeat scheduler, and channel gateway",
       "Unified communications — Telegram, Slack, WhatsApp, iMessage, and dashboard chat share one router and CCP inbox",
       "Kin channel handles route external senders to household profiles; unified inbox on Home and Outreach Claw",
-      "Creator Claw day-one — Go Live checklist, content queue, multi-platform bridges, engage loop, and analytics",
       "Universal experience levels — Beginner, Standard, Expert across all OOTB Claws",
-      "Wearables and health devices via user-configured OAuth; MCP tool protocol; Playwright browser automation on eno2",
-      "57 automated QA checks — smoke, user flows, typecheck, and production build"
+      "Wearables and health devices via user-configured OAuth; MCP tool protocol; Playwright browser automation on eno2"
+    ]
+  },
+  "0.3.0": {
+    "highlights": [
+      "Creator Claw day-one launch — Go Live checklist, 5-step Creation Wizard (media → pre-flight → best-time schedule), and strict ready semantics",
+      "Multi-platform publish desk — 10 live bridges, bridge health, publish recovery, approval + Telegram/Slack operators",
+      "Closed-loop growth — engage inbox, analytics recommendations, content planner, library, and campaigns (Standard/Expert)",
+      "dashboard_bootstrap API — single-load Creator workspace; 61 smoke + 12 user-flow QA checks"
     ]
   }
 }

@@ -147,7 +147,7 @@ Agent behavior: `pillar-4-dashboard/lib/app-agent-catalog.ts`
 |--------------|-------|--------------|------------------|
 | **The Forge** | `/claw-forge` | `claw-forge` | Mint Claws — intent, photo, vision, model stack, provision |
 | **Capital Claw** | `/my-capital` | `my-capital` | Rule engine, paper trades via Alpaca bridge |
-| **Creator Claw** | `/my-content` | `my-content-creator` | Content queue, draft/schedule/publish via X bridge |
+| **Creator Claw** | `/my-content` | `my-content-creator` | Sovereign content ops — queue, calendar, 10-platform publish, Go Live, engage loop, analytics |
 | **Outreach Claw** | `/my-work` | `my-work` | Outbound desk, sequences, task matrix (mock CRM) |
 | **Arbitrage Claw** | `/my-shop` | `my-shop` | Margin / fulfillment desk (mock e-com) |
 | **Signal Claw** | `/optimus` | `tesla-optimus-engine` | Feed triggers, alert thresholds (demo canvas) |
@@ -169,7 +169,7 @@ Agent behavior: `pillar-4-dashboard/lib/app-agent-catalog.ts`
 | App | Chat | Skill LLM |
 |-----|------|-----------|
 | The Forge | Yes (`/api/claw/assist`) | N/A (wizard is UI) |
-| Creator Claw | Yes | Draft Post |
+| Creator Claw | Yes | Draft Post, schedule, fan-out, engage reply |
 | Capital Claw | Yes | Create Rule |
 | Outreach Claw | Yes | Summarize Day |
 | Arbitrage Claw | Yes | Ingest Order (margin brief) |

@@ -60,6 +60,13 @@ import { ContentRecoveryPanel, type RecoveryCandidateRow } from "@/components/ap
 import { ContentPlanPanel, type ContentPlanReportRow } from "@/components/apps/content/ContentPlanPanel";
 import { ContentSignalPanel, type SignalFeedItemRow } from "@/components/apps/content/ContentSignalPanel";
 import { ContentGoLivePanel, type GoLiveReportRow } from "@/components/apps/content/ContentGoLivePanel";
+import { ContentEmptyQueuePanel } from "@/components/apps/content/ContentEmptyQueuePanel";
+import {
+  ContentWorkspaceTabs,
+  creatorSectionVisible,
+  defaultCreatorTab,
+  type CreatorWorkspaceTab,
+} from "@/components/apps/content/ContentWorkspaceTabs";
 import { ContentMediaAttachPanel } from "@/components/apps/content/ContentMediaAttachPanel";
 import type { ContentReply } from "@/lib/content-replies-store";
 import { getOotbApp } from "@/lib/ootb-apps";
@@ -150,6 +157,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [signalItems, setSignalItems] = useState<SignalFeedItemRow[]>([]);
   const [goLive, setGoLive] = useState<GoLiveReportRow | null>(null);
   const [growthBusy, setGrowthBusy] = useState(false);
+  const [useDataDrivenSchedule, setUseDataDrivenSchedule] = useState(true);
   const [brandKitForm, setBrandKitForm] = useState<BrandKitFormState>({
     styleGuide: "",
     voiceTone: "",
@@ -161,8 +169,16 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     suggestedHashtags: "",
     bannedHashtags: "",
   });
-  const { level: experienceLevel, levelLabel } = useExperienceLevel();
+  const { level: experienceLevel, levelLabel, meetsLevel } = useExperienceLevel();
+  const [workspaceTab, setWorkspaceTab] = useState<CreatorWorkspaceTab>(() => defaultCreatorTab(experienceLevel));
+  const [publishingNow, setPublishingNow] = useState(false);
   const { toasts, pushToast, dismissToast } = useContentToasts();
+
+  const hideCreatorSection = (sectionId: string) => !creatorSectionVisible(sectionId, workspaceTab);
+
+  useEffect(() => {
+    setWorkspaceTab(defaultCreatorTab(experienceLevel));
+  }, [experienceLevel]);
 
   const loadCalendar = useCallback(async (anchor = weekAnchor) => {
     try {
@@ -358,21 +374,6 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       if (!res.ok) return;
       const data = (await res.json()) as { experiments?: ExperimentRow[] };
       if (data.experiments) setExperiments(data.experiments);
-    } catch {
-      /* optional */
-    }
-  }, []);
-
-  const loadGoLive = useCallback(async () => {
-    try {
-      const res = await fetch("/api/content/status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "go_live" }),
-      });
-      if (!res.ok) return;
-      const data = (await res.json()) as { goLive?: GoLiveReportRow };
-      if (data.goLive) setGoLive(data.goLive);
     } catch {
       /* optional */
     }
@@ -582,31 +583,111 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     }
   }, []);
 
-  const loadStatus = useCallback(async () => {
-    try {
-      const res = await fetch("/api/content/status", { cache: "no-store" });
-      if (!res.ok) return;
-      const data = (await res.json()) as ContentStatusResponse;
-      setStatus(data);
-      if (data.posts[0] && !data.posts.some((p) => p.id === selected)) {
-        setSelected(data.posts[0].id);
+  const loadBootstrap = useCallback(
+    async (opts?: { week?: Date; postId?: string }) => {
+      try {
+        const anchor = opts?.week ?? weekAnchor;
+        const res = await fetch("/api/content/status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "dashboard_bootstrap",
+            week: anchor.toISOString(),
+            postId: opts?.postId ?? (selected || undefined),
+          }),
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          status?: ContentStatusResponse;
+          goLive?: GoLiveReportRow;
+          bridgeHealth?: {
+            digitalEnvPath?: string;
+            summary: BridgeHealthSummary;
+            platforms: BridgeHealthEntryRow[];
+          };
+          calendar?: CalendarWeek;
+          scheduleInsights?: PlatformScheduleInsightRow[];
+          weekSlots?: ScheduleSlotRow[];
+          scheduleTimeZone?: string;
+          scheduleSuggestion?: ScheduleSlotRow | null;
+          approval?: {
+            posts?: ContentPost[];
+            replies?: ContentReply[];
+            requirePublishApproval?: boolean;
+            requireReplyApproval?: boolean;
+            approvalTelegram?: {
+              configured: boolean;
+              notifyEnabled: boolean;
+              chatIdCount: number;
+            };
+          };
+          recovery?: { candidates?: RecoveryCandidateRow[] };
+          studio?: { tts?: string; imageGen?: boolean };
+          freConfig?: { useDataDrivenSchedule?: boolean; autoSchedule?: boolean };
+        };
+
+        if (data.status) {
+          setStatus(data.status);
+          if (data.status.posts[0] && !data.status.posts.some((p) => p.id === selected)) {
+            setSelected(data.status.posts[0].id);
+          }
+        }
+        if (data.goLive) setGoLive(data.goLive);
+        if (data.bridgeHealth?.summary && data.bridgeHealth.platforms) {
+          setBridgeHealth({
+            digitalEnvPath: data.bridgeHealth.digitalEnvPath ?? "/etc/curxor/digital.env",
+            summary: data.bridgeHealth.summary,
+            platforms: data.bridgeHealth.platforms,
+          });
+        }
+        if (data.calendar) setCalendar(data.calendar);
+        if (data.scheduleInsights) setScheduleInsights(data.scheduleInsights);
+        if (data.weekSlots) setWeekSlots(data.weekSlots);
+        if (data.scheduleTimeZone) setScheduleTimeZone(data.scheduleTimeZone);
+        setScheduleSuggestion(data.scheduleSuggestion ?? null);
+        if (data.approval) {
+          if (data.approval.posts) setApprovalPosts(data.approval.posts);
+          if (data.approval.replies) setApprovalReplies(data.approval.replies);
+          setRequirePublishApproval(data.approval.requirePublishApproval === true);
+          setRequireReplyApproval(data.approval.requireReplyApproval === true);
+          if (data.approval.approvalTelegram) setApprovalTelegram(data.approval.approvalTelegram);
+        }
+        if (data.recovery?.candidates) setRecoveryCandidates(data.recovery.candidates);
+        if (data.studio) {
+          setStudioCaps({ tts: data.studio.tts ?? "none", imageGen: data.studio.imageGen ?? false });
+        }
+        if (data.freConfig) {
+          setUseDataDrivenSchedule(data.freConfig.useDataDrivenSchedule !== false);
+        }
+      } catch {
+        /* retry on next load */
       }
-      void loadCalendar(weekAnchor);
-      void loadEngage();
-      void loadReplies(selected || undefined);
-      void loadMetricsPullState();
-      void loadSocialEngageState();
-      void loadRecommendations();
-      void loadApproval();
-      void loadMetricsRules();
-      void loadScheduleInsights(weekAnchor, selected || undefined);
-      void loadBridgeHealth();
-      void loadOps();
-      void loadExperiments();
-    } catch {
-      /* retry on poll */
-    }
-  }, [selected, weekAnchor, loadCalendar, loadEngage, loadReplies, loadMetricsPullState, loadSocialEngageState, loadRecommendations, loadApproval, loadMetricsRules, loadScheduleInsights, loadBridgeHealth, loadOps, loadExperiments]);
+    },
+    [selected, weekAnchor],
+  );
+
+  const loadStatus = useCallback(async () => {
+    await loadBootstrap();
+    void loadEngage();
+    void loadReplies(selected || undefined);
+    void loadMetricsPullState();
+    void loadSocialEngageState();
+    void loadRecommendations();
+    void loadMetricsRules();
+    void loadOps();
+    void loadExperiments();
+  }, [
+    selected,
+    loadBootstrap,
+    loadEngage,
+    loadReplies,
+    loadMetricsPullState,
+    loadSocialEngageState,
+    loadRecommendations,
+    loadMetricsRules,
+    loadOps,
+    loadExperiments,
+  ]);
 
   /** Lightweight queue refresh — avoids ~12 API calls on the 30s poll. */
   const refreshQueue = useCallback(async () => {
@@ -693,22 +774,31 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   );
 
   useEffect(() => {
-    void loadStatus();
-    void loadGoLive();
-    void loadGrowthData();
-    void fetch("/api/content/status", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "studio_status" }),
-    })
-      .then((r) => r.json())
-      .then((d: { studio?: { tts?: string; imageGen?: boolean } }) => {
-        if (d.studio) setStudioCaps({ tts: d.studio.tts ?? "none", imageGen: d.studio.imageGen ?? false });
-      })
-      .catch(() => undefined);
+    void loadBootstrap();
+    void loadEngage();
+    void loadMetricsPullState();
+    void loadSocialEngageState();
+    void loadRecommendations();
+    void loadMetricsRules();
+    void loadOps();
+    void loadExperiments();
     const timer = setInterval(() => void refreshQueue(), 30_000);
     return () => clearInterval(timer);
-  }, [loadStatus, loadGoLive, loadGrowthData, refreshQueue]);
+  }, [
+    loadBootstrap,
+    loadEngage,
+    loadMetricsPullState,
+    loadSocialEngageState,
+    loadRecommendations,
+    loadMetricsRules,
+    loadOps,
+    loadExperiments,
+    refreshQueue,
+  ]);
+
+  useEffect(() => {
+    if (meetsLevel("standard")) void loadGrowthData();
+  }, [experienceLevel, meetsLevel, loadGrowthData]);
 
   useEffect(() => {
     const raw = config.brandKit;
@@ -802,7 +892,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         body: JSON.stringify({ action, postId, publishedUrl: receipt.ok ? extractPublishedUrl(receipt) : undefined, receipt }),
       }).then(() => {
         void loadStatus();
-        void loadGoLive();
+        void loadBootstrap();
         void loadBridgeHealth();
         void loadAnalytics(postId);
         pushToast(receipt.ok ? "Post published" : "Publish failed", receipt.ok ? "success" : "error");
@@ -823,7 +913,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         pushToast(receipt.ok ? "Reply published" : "Reply failed", receipt.ok ? "success" : "error");
       });
     }
-  }, [digital.receipts, syncedReceiptIds, selected, status?.posts, loadStatus, loadGoLive, loadAnalytics, loadReplies]);
+  }, [digital.receipts, syncedReceiptIds, selected, status?.posts, loadStatus, loadBootstrap, loadAnalytics, loadReplies]);
 
   const reschedulePost = useCallback(
     async (postId: string, scheduledAt: string) => {
@@ -992,6 +1082,40 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     }
   }, [selected, draftEdit, loadStatus]);
 
+  const publishNow = useCallback(
+    async (postId: string) => {
+      setPublishingNow(true);
+      try {
+        const res = await fetch("/api/content/status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "publish_now", postId }),
+        });
+        const data = (await res.json()) as {
+          mode?: "published" | "pending";
+          result?: { ok?: boolean; error?: string };
+          error?: string;
+        };
+        if (!res.ok) {
+          pushToast(data.error ?? "Publish failed", "error");
+          return;
+        }
+        if (data.mode === "pending") {
+          pushToast("Submitted for approval", "success");
+        } else if (data.mode === "published" && data.result?.ok) {
+          pushToast("Publish sent to bridge", "success");
+        } else {
+          pushToast(data.result?.error ?? "Publish failed", "error");
+        }
+        void loadStatus();
+        void loadBootstrap();
+      } finally {
+        setPublishingNow(false);
+      }
+    },
+    [loadStatus, loadBootstrap, pushToast],
+  );
+
   const addPost = useCallback(async () => {
     setCreating(true);
     try {
@@ -1047,9 +1171,22 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         channels={status?.channels ?? ["x"]}
         tone={tone}
         selectedPostId={selected}
-        onComplete={() => {
-          void loadStatus();
-          pushToast("Wizard complete — check queue", "success");
+        useBestTime={useDataDrivenSchedule}
+        onComplete={(result) => {
+          if (result.postId) setSelected(result.postId);
+          void loadBootstrap({ postId: result.postId });
+          if (meetsLevel("standard")) void loadGrowthData();
+          pushToast(
+            result.scheduledAt
+              ? `Scheduled ${result.postId} · ${new Date(result.scheduledAt).toLocaleString()}`
+              : "Wizard complete — review pre-flight before publish",
+            "success",
+          );
+          if (result.scrollToPreflight) {
+            requestAnimationFrame(() => {
+              document.getElementById("creator-preflight-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          }
         }}
       />
       <header className="border border-line bg-panel px-4 py-3">
@@ -1086,22 +1223,11 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       ) : null}
 
-      <ExperienceAppSection
-        appId="my-content-creator"
-        sectionId="go-live"
-        minLevel="beginner"
-        title="Go Live"
-        subtitle="Checklist · today · first post"
-      >
-        <ContentGoLivePanel
-          report={goLive}
-          onRefresh={() => {
-            void loadGoLive();
-            void loadStatus();
-          }}
-          onOpenWizard={() => setWizardOpen(true)}
-        />
-      </ExperienceAppSection>
+      <ContentWorkspaceTabs
+        active={workspaceTab}
+        onChange={setWorkspaceTab}
+        experienceLevel={experienceLevel}
+      />
 
       <div className="grid gap-4 md:grid-cols-4">
         <AppMetric label="Queue" value={String(status?.posts.length ?? "—")} unit={queueSource} highlight />
@@ -1126,8 +1252,27 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
       <ExperienceAppSection
         appId="my-content-creator"
+        sectionId="go-live"
+        minLevel="beginner"
+        hideWhen={hideCreatorSection("go-live")}
+        title="Go Live"
+        subtitle="Checklist · today · first post"
+      >
+        <ContentGoLivePanel
+          report={goLive}
+          onRefresh={() => {
+            void loadBootstrap();
+            void loadStatus();
+          }}
+          onOpenWizard={() => setWizardOpen(true)}
+        />
+      </ExperienceAppSection>
+
+      <ExperienceAppSection
+        appId="my-content-creator"
         sectionId="bridge"
         minLevel="standard"
+        hideWhen={hideCreatorSection("bridge")}
         title="Bridge Health"
         subtitle="OAuth status · last publish · rate limits · fix hints for digital.env"
       >
@@ -1145,6 +1290,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="bridge-roadmap"
         minLevel="expert"
+        hideWhen={hideCreatorSection("bridge-roadmap")}
         title="Bridge Roadmap"
         subtitle={`Step ${buildStep.step} in progress · ${buildStep.title} — ${buildStep.summary}`}
       >
@@ -1170,6 +1316,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="recovery"
         minLevel="standard"
+        hideWhen={hideCreatorSection("recovery")}
         title="Publish Recovery"
         subtitle="Failed publishes · fix hints · one-click retry"
       >
@@ -1202,6 +1349,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="content-plan"
         minLevel="beginner"
+        hideWhen={hideCreatorSection("content-plan")}
         title="Content Planner"
         subtitle="Gap detection · fill week from playbooks & evergreen"
       >
@@ -1232,6 +1380,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           appId="my-content-creator"
           sectionId="creation-studio"
           minLevel="beginner"
+          hideWhen={hideCreatorSection("creation-studio")}
           title="Creation Studio"
           subtitle={`AI pipeline · TTS: ${studioCaps.tts} · image gen: ${studioCaps.imageGen ? "ollama" : "off"} · auto-schedule: ${autoSchedule ? "ON" : "OFF"}`}
         >
@@ -1517,6 +1666,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="calendar"
         minLevel="beginner"
+        hideWhen={hideCreatorSection("calendar")}
         title="Content Calendar"
         subtitle="Week view · learned best times from your metrics"
       >
@@ -1561,11 +1711,21 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           appId="my-content-creator"
           sectionId="preflight"
           minLevel="beginner"
+          hideWhen={hideCreatorSection("preflight")}
           title="Pre-publish Preview"
           subtitle="Validation + platform payload before Publish skill"
         >
-          <ContentPreflightPanel report={preflightReport} loading={previewLoading} />
-          <PublishPreviewPanel preview={preview} loading={previewLoading} />
+          <div id="creator-preflight-section">
+            <ContentPreflightPanel
+              report={preflightReport}
+              loading={previewLoading}
+              postId={selectedPost?.id}
+              onPublishNow={() => selectedPost && void publishNow(selectedPost.id)}
+              publishing={publishingNow}
+              requireApproval={requirePublishApproval}
+            />
+            <PublishPreviewPanel preview={preview} loading={previewLoading} />
+          </div>
         </ExperienceAppSection>
       )}
 
@@ -1573,6 +1733,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="queue"
         minLevel="beginner"
+        hideWhen={hideCreatorSection("queue")}
         title="Content Queue"
         subtitle="Persisted on appliance · Draft Post saves to queue · Publish sends text via digital_out"
       >
@@ -1589,6 +1750,13 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             Channels: {(status?.channels ?? []).join(", ") || "x, youtube"}
           </span>
         </div>
+        {(status?.posts ?? []).length === 0 ? (
+          <ContentEmptyQueuePanel
+            onOpenWizard={() => setWizardOpen(true)}
+            onCreatePost={() => void addPost()}
+            creating={creating}
+          />
+        ) : (
         <table className="w-full border-collapse font-mono text-xs">
           <thead>
             <tr className="border-b border-line text-[10px] uppercase tracking-widest text-muted">
@@ -1616,6 +1784,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             ))}
           </tbody>
         </table>
+        )}
       </ExperienceAppSection>
 
       {selectedPost && (
@@ -1623,6 +1792,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           appId="my-content-creator"
           sectionId="draft-editor"
           minLevel="beginner"
+          hideWhen={hideCreatorSection("draft-editor")}
           title="Draft Editor"
           subtitle={
             selectedPost
@@ -1732,6 +1902,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="playbooks"
         minLevel="beginner"
+        hideWhen={hideCreatorSection("playbooks")}
         title="Playbook Studio"
         subtitle="Templates · one-click new posts · apply to selected draft"
       >
@@ -1774,6 +1945,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="brand-studio"
         minLevel="standard"
+        hideWhen={hideCreatorSection("brand-studio")}
         title="Brand Studio"
         subtitle="Style guide · voice · UTM defaults · link tracking"
       >
@@ -1800,6 +1972,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="library"
         minLevel="standard"
+        hideWhen={hideCreatorSection("library")}
         title="Content Library"
         subtitle="Reusable assets · evergreen recycling · clone to queue"
       >
@@ -1855,6 +2028,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="ig-grid"
         minLevel="standard"
+        hideWhen={hideCreatorSection("ig-grid")}
         title="Instagram Grid Planner"
         subtitle="Visual feed preview · gap warnings · scheduled + published"
       >
@@ -1865,6 +2039,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="analytics"
         minLevel="standard"
+        hideWhen={hideCreatorSection("analytics")}
         title="Analytics"
         subtitle="Full-funnel metrics · manual import · UTM clicks · live pull"
       >
@@ -1954,6 +2129,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="attribution"
         minLevel="standard"
+        hideWhen={hideCreatorSection("attribution")}
         title="Attribution & Clicks"
         subtitle="UTM auto-tag · click redirect · platform funnel"
       >
@@ -1968,6 +2144,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="team-review"
         minLevel="expert"
+        hideWhen={hideCreatorSection("team-review")}
         title="Team Review"
         subtitle="Draft comments · request changes · reviewer notes"
       >
@@ -1998,6 +2175,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="approval"
         minLevel="standard"
+        hideWhen={hideCreatorSection("approval")}
         title="Publish approval"
         subtitle="Human gate before bridge send · audit trail at /etc/curxor/content-audit.json"
       >
@@ -2020,6 +2198,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="engage"
         minLevel="standard"
+        hideWhen={hideCreatorSection("engage")}
         title="Engage → Reply → Publish"
         subtitle="X/LinkedIn/Threads comments & mentions → inbox · Meta webhook · heartbeat poll"
       >
@@ -2076,6 +2255,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="ops"
         minLevel="expert"
+        hideWhen={hideCreatorSection("ops")}
         title="Ops controls"
         subtitle="Crisis pause · weekly digest · /pause /resume on Telegram & Slack"
       >
@@ -2086,6 +2266,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         appId="my-content-creator"
         sectionId="experiments"
         minLevel="expert"
+        hideWhen={hideCreatorSection("experiments")}
         title="Structured experiments"
         subtitle="Hook & thumbnail A/B with auto-winner from metrics"
       >
@@ -2101,6 +2282,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           appId="my-content-creator"
           sectionId="pinterest-board"
           minLevel="expert"
+          hideWhen={hideCreatorSection("pinterest-board")}
           title="Pinterest board"
           subtitle="Override PINTEREST_DEFAULT_BOARD_ID per post"
         >
@@ -2128,6 +2310,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </ExperienceAppSection>
       )}
 
+      {creatorSectionVisible("campaign", workspaceTab) ? (
       <ContentCampaignPanel
         posts={status?.posts ?? []}
         campaigns={status?.campaigns ?? []}
@@ -2136,12 +2319,14 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         tone={tone}
         onRefresh={() => void loadStatus()}
       />
+      ) : null}
 
       {selectedPost && (
         <ExperienceAppSection
           appId="my-content-creator"
           sectionId="reply-queue"
           minLevel="standard"
+          hideWhen={hideCreatorSection("reply-queue")}
           title="Reply queue"
           subtitle="Thread replies via content.publish_reply (X · Threads · LinkedIn · Bluesky)"
         >
@@ -2226,35 +2411,39 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </ExperienceAppSection>
       )}
 
-      <ExperienceAppSection
-        appId="my-content-creator"
-        sectionId="signal-feed"
-        minLevel="expert"
-        title="Signal Feed"
-        subtitle="Reactive drafts from Signal Claw · trend → queue"
-      >
-        <ContentSignalPanel
-          items={signalItems}
-          onRefresh={() => void loadGrowthData()}
-          onDraft={(signalId, platform) => {
-            void fetch("/api/content/status", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ action: "signal_feed", subAction: "draft", targetId: signalId, platform }),
-            }).then(async (r) => {
-              const d = (await r.json()) as { draft?: { postId?: string } };
-              pushToast(d.draft?.postId ? `Draft ${d.draft.postId} scheduled` : "Signal draft failed", d.draft?.postId ? "success" : "error");
-              void loadStatus();
-              void loadGrowthData();
-            });
-          }}
-        />
-      </ExperienceAppSection>
+      {signalItems.length > 0 ? (
+        <ExperienceAppSection
+          appId="my-content-creator"
+          sectionId="signal-feed"
+          minLevel="expert"
+          hideWhen={hideCreatorSection("signal-feed")}
+          title="Signal Feed"
+          subtitle="Reactive drafts from Signal Claw · trend → queue"
+        >
+          <ContentSignalPanel
+            items={signalItems}
+            onRefresh={() => void loadGrowthData()}
+            onDraft={(signalId, platform) => {
+              void fetch("/api/content/status", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "signal_feed", subAction: "draft", targetId: signalId, platform }),
+              }).then(async (r) => {
+                const d = (await r.json()) as { draft?: { postId?: string } };
+                pushToast(d.draft?.postId ? `Draft ${d.draft.postId} scheduled` : "Signal draft failed", d.draft?.postId ? "success" : "error");
+                void loadStatus();
+                void loadGrowthData();
+              });
+            }}
+          />
+        </ExperienceAppSection>
+      ) : null}
 
       <ExperienceAppSection
         appId="my-content-creator"
         sectionId="export"
         minLevel="expert"
+        hideWhen={hideCreatorSection("export")}
         title="Export & tools"
         subtitle="ZIP manifest · agent tools at /api/content/tools"
       >
@@ -2289,6 +2478,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </div>
       </ExperienceAppSection>
 
+      {creatorSectionVisible("publish-receipts", workspaceTab) ? (
       <DigitalReceiptPanel
         title="Publish Receipts"
         receipts={digital.receipts.filter(
@@ -2301,6 +2491,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         }
         connected={digital.connected}
       />
+      ) : null}
     </div>
   );
 }

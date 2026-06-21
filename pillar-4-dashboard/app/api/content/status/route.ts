@@ -72,6 +72,7 @@ import {
   listApprovalQueue,
   rejectPost,
   rejectReply,
+  requestPostPublish,
 } from "@/lib/content-approval-service";
 import { runMetricsRules } from "@/lib/content-metrics-rules-engine";
 import { listMetricsRuleFires, listMetricsRules, updateMetricsRule } from "@/lib/content-metrics-rules-store";
@@ -858,6 +859,19 @@ export async function POST(request: Request): Promise<Response> {
       });
     }
 
+    case "publish_now": {
+      if (!body.postId) return Response.json({ error: "postId required" }, { status: 400 });
+      try {
+        const fre = await readAppFreState("my-content-creator");
+        const out = await requestPostPublish(body.postId, fre.config, body.actor ?? "operator");
+        const status = await fetchContentStatus();
+        return Response.json({ ok: true, ...out, ...status });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return Response.json({ error: msg }, { status: 400 });
+      }
+    }
+
     case "approve_post": {
       if (!body.postId) return Response.json({ error: "postId required" }, { status: 400 });
       try {
@@ -1314,6 +1328,16 @@ export async function POST(request: Request): Promise<Response> {
       const { buildGoLiveReport } = await import("@/lib/content-go-live");
       const report = await buildGoLiveReport();
       return Response.json({ ok: true, goLive: report });
+    }
+
+    case "dashboard_bootstrap": {
+      const { buildContentDashboardBootstrap } = await import("@/lib/content-dashboard-bootstrap");
+      const anchor = typeof body.week === "string" ? new Date(body.week) : new Date();
+      const bootstrap = await buildContentDashboardBootstrap({
+        week: anchor,
+        selectedPostId: typeof body.postId === "string" ? body.postId : undefined,
+      });
+      return Response.json(bootstrap);
     }
 
     default:

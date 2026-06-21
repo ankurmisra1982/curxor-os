@@ -7,6 +7,7 @@ import { readAppFreState } from "./app-fre-state";
 import { ensureContentQueue } from "./content-queue-store";
 import { readContentOpsState } from "./content-ops-controls";
 import { listApprovalQueue } from "./content-approval-service";
+import { probePublicContentBase } from "./content-public-base-probe";
 import type { SocialPlatformId } from "./social-channels";
 import { platformLabel } from "./social-channels";
 
@@ -28,7 +29,10 @@ export interface GoLiveTodaySummary {
 }
 
 export interface GoLiveReport {
+  /** All required checklist steps complete — safe to publish on every FRE channel. */
   ready: boolean;
+  /** FRE + first post done; bridges or public base may still need work. */
+  partiallyReady: boolean;
   progress: { complete: number; total: number };
   steps: GoLiveStep[];
   today: GoLiveTodaySummary;
@@ -71,6 +75,8 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
   const blocked = enabledPlatforms.filter(
     (p) => p.health === "unconfigured" || p.health === "auth_expired" || p.health === "planned",
   );
+  const bridgesAllReady =
+    enabledPlatforms.length > 0 && readyCount === enabledPlatforms.length;
 
   steps.push({
     id: "bridges",
@@ -78,7 +84,7 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
     status:
       enabledPlatforms.length === 0
         ? "pending"
-        : readyCount === enabledPlatforms.length
+        : bridgesAllReady
           ? "complete"
           : readyCount > 0
             ? "warning"
@@ -86,7 +92,7 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
     detail:
       enabledPlatforms.length === 0
         ? "No FRE channels to check"
-        : readyCount === enabledPlatforms.length
+        : bridgesAllReady
           ? `${readyCount}/${enabledPlatforms.length} ready`
           : blocked.length > 0
             ? `Fix: ${blocked.map((b) => platformLabel(b.platform)).join(", ")} — see Bridge Health`
@@ -95,15 +101,29 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
 
   const needsPublicBase = channels.some((c) => MEDIA_PLATFORMS.has(c));
   const publicBase = process.env.CURXOR_CONTENT_PUBLIC_BASE?.trim();
+  let publicBaseDetail = publicBase
+    ? publicBase.replace(/\/$/, "")
+    : needsPublicBase
+      ? "Set CURXOR_CONTENT_PUBLIC_BASE in dashboard.env so bridges can fetch image_url"
+      : "Not required for your current channels";
+
+  let publicBaseStatus: GoLiveStepStatus = !needsPublicBase
+    ? "optional"
+    : publicBase
+      ? "complete"
+      : "warning";
+
+  if (needsPublicBase && publicBase) {
+    const probe = await probePublicContentBase(publicBase);
+    publicBaseDetail = probe.detail;
+    publicBaseStatus = probe.ok ? "complete" : "warning";
+  }
+
   steps.push({
     id: "public_base",
     label: "Public media URL (IG / Pinterest / TikTok)",
-    status: !needsPublicBase ? "optional" : publicBase ? "complete" : "warning",
-    detail: publicBase
-      ? publicBase.replace(/\/$/, "")
-      : needsPublicBase
-        ? "Set CURXOR_CONTENT_PUBLIC_BASE in dashboard.env so bridges can fetch image_url"
-        : "Not required for your current channels",
+    status: publicBaseStatus,
+    detail: publicBaseDetail,
   });
 
   const notifyConfigured = telegram.configured || slackChannels.length > 0;
@@ -135,11 +155,22 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
 
   const requiredSteps = steps.filter((s) => s.status !== "optional");
   const complete = requiredSteps.filter((s) => s.status === "complete").length;
-  const ready =
-    steps.find((s) => s.id === "fre")?.status === "complete" &&
-    (steps.find((s) => s.id === "bridges")?.status === "complete" ||
-      steps.find((s) => s.id === "bridges")?.status === "warning") &&
-    steps.find((s) => s.id === "first_post")?.status === "complete";
+
+  const freComplete = steps.find((s) => s.id === "fre")?.status === "complete";
+  const firstPostComplete = steps.find((s) => s.id === "first_post")?.status === "complete";
+  const publicBaseOk =
+    steps.find((s) => s.id === "public_base")?.status === "complete" ||
+    steps.find((s) => s.id === "public_base")?.status === "optional";
+
+  const ready = Boolean(
+    freComplete &&
+      bridgesAllReady &&
+      firstPostComplete &&
+      publicBaseOk &&
+      enabledPlatforms.length > 0,
+  );
+
+  const partiallyReady = Boolean(freComplete && firstPostComplete && !ready);
 
   const scheduled = queue.posts
     .filter((p) => p.stage === "SCHEDULED" && p.scheduledAt)
@@ -151,6 +182,7 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
 
   return {
     ready,
+    partiallyReady,
     progress: { complete, total: requiredSteps.length },
     steps,
     freChannels: channels,

@@ -154,5 +154,32 @@ await check("flow: optimus reads merged context after vital chat", async () => {
   return ctx.ok === true && typeof ctx.context === "object";
 });
 
+await check("flow: creator wizard path create → preflight → schedule", async () => {
+  const created = await postJson("/api/content/status", {
+    action: "create",
+    platform: "x",
+    channel: "User flow QA",
+    draftText: "Day-one Creator Claw — sovereign publish pipeline on bare metal.",
+  });
+  if (!created.ok || !created.json.post?.id) return false;
+  const postId = created.json.post.id;
+
+  const preflight = await postJson("/api/content/status", { action: "preflight_check", postId });
+  if (!preflight.ok || !Array.isArray(preflight.json.report?.checks)) return false;
+
+  const scheduled = await postJson("/api/content/status", {
+    action: "schedule",
+    postId,
+    useBestTime: true,
+  });
+  if (!scheduled.ok || scheduled.json.post?.stage !== "SCHEDULED") return false;
+
+  const bootstrap = await postJson("/api/content/status", { action: "dashboard_bootstrap", postId });
+  return (
+    bootstrap.ok &&
+    bootstrap.json.status?.posts?.some((p) => p.id === postId && p.stage === "SCHEDULED")
+  );
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

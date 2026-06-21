@@ -1,9 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { ContentPlatform } from "@/lib/content-queue-types";
 import { platformLabel } from "@/lib/social-channels";
+
+export interface WizardPreflightReport {
+  ready: boolean;
+  blockers: number;
+  warnings: number;
+  checks: Array<{ severity: string; message: string; fixHint?: string }>;
+}
+
+export interface WizardCompleteResult {
+  postId: string;
+  scrollToPreflight: boolean;
+  scheduledAt?: string;
+}
 
 interface ContentCreationWizardProps {
   open: boolean;
@@ -11,10 +24,11 @@ interface ContentCreationWizardProps {
   channels: string[];
   tone: string;
   selectedPostId: string;
-  onComplete: () => void;
+  useBestTime?: boolean;
+  onComplete: (result: WizardCompleteResult) => void;
 }
 
-const STEPS = ["Idea", "Draft", "Media", "Publish"] as const;
+const STEPS = ["Channel", "Draft", "Media", "Pre-flight", "Schedule"] as const;
 
 export function ContentCreationWizard({
   open,
@@ -22,6 +36,7 @@ export function ContentCreationWizard({
   channels,
   tone,
   selectedPostId,
+  useBestTime = true,
   onComplete,
 }: ContentCreationWizardProps) {
   const [step, setStep] = useState(0);
@@ -29,8 +44,33 @@ export function ContentCreationWizard({
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [postId, setPostId] = useState(selectedPostId);
+  const [mediaSkipped, setMediaSkipped] = useState(false);
+  const [mediaAttached, setMediaAttached] = useState(false);
+  const [preflight, setPreflight] = useState<WizardPreflightReport | null>(null);
+  const [scheduledAt, setScheduledAt] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const wasOpen = useRef(false);
+
+  useEffect(() => {
+    if (open && !wasOpen.current) {
+      setStep(0);
+      setPlatform((channels[0] as ContentPlatform) ?? "x");
+      setDraft("");
+      setBusy(false);
+      setPostId(selectedPostId);
+      setMediaSkipped(false);
+      setMediaAttached(false);
+      setPreflight(null);
+      setScheduledAt(null);
+      setError(null);
+    }
+    wasOpen.current = open;
+  }, [open, selectedPostId, channels]);
 
   if (!open) return null;
+
+  const activePostId = postId || selectedPostId;
 
   const api = async (action: string, extra: Record<string, unknown> = {}) => {
     const res = await fetch("/api/content/status", {
@@ -38,42 +78,102 @@ export function ContentCreationWizard({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, ...extra }),
     });
-    return res.json() as Promise<Record<string, unknown>>;
+    const json = (await res.json()) as Record<string, unknown>;
+    if (!res.ok) {
+      throw new Error(typeof json.error === "string" ? json.error : "Request failed");
+    }
+    return json;
+  };
+
+  const runPreflight = async (id: string) => {
+    const data = await api("preflight_check", { postId: id });
+    const report = data.report as WizardPreflightReport | undefined;
+    if (report) setPreflight(report);
+    return report ?? null;
+  };
+
+  const uploadMedia = async (file: File, kind: "image" | "video") => {
+    const form = new FormData();
+    form.set("postId", activePostId);
+    form.set("kind", kind);
+    form.set("file", file);
+    const res = await fetch("/api/content/upload", { method: "POST", body: form });
+    const data = (await res.json()) as { ok?: boolean; error?: string };
+    if (!res.ok || !data.ok) {
+      throw new Error(data.error ?? "Upload failed");
+    }
+    setMediaAttached(true);
+    setMediaSkipped(false);
   };
 
   const runStep = async () => {
     setBusy(true);
+    setError(null);
     try {
       if (step === 0) {
-        if (!postId) {
-          const data = await api("create", { platform, channel: `${platformLabel(platform)} · wizard`, draftText: "" });
+        if (!activePostId) {
+          const data = await api("create", {
+            platform,
+            channel: `${platformLabel(platform)} · wizard`,
+            draftText: "",
+          });
           const p = data.post as { id?: string } | undefined;
           if (p?.id) setPostId(p.id);
         }
         setStep(1);
-      } else if (step === 1) {
-        const id = postId || selectedPostId;
-        if (id && draft.trim()) {
+        return;
+      }
+
+      const id = postId || selectedPostId;
+      if (!id) {
+        setError("No post selected — go back to Channel step");
+        return;
+      }
+
+      if (step === 1) {
+        if (draft.trim()) {
           await api("update_draft", { postId: id, draftText: draft });
         }
         setStep(2);
-      } else if (step === 2) {
-        const id = postId || selectedPostId;
-        if (id) {
-          await api("generate_ai_image", { postId: id }).catch(() => undefined);
-        }
-        setStep(3);
-      } else {
-        const id = postId || selectedPostId;
-        if (id) {
-          await api("schedule", { postId: id });
-        }
-        onComplete();
-        onClose();
+        return;
       }
+
+      if (step === 2) {
+        setStep(3);
+        await runPreflight(id);
+        return;
+      }
+
+      if (step === 3) {
+        const report = preflight ?? (await runPreflight(id));
+        if (report && report.blockers > 0) {
+          setError(`Fix ${report.blockers} blocker(s) before scheduling — see Pre-flight below`);
+          return;
+        }
+        setStep(4);
+        return;
+      }
+
+      const data = await api("schedule", { postId: id, useBestTime });
+      const when = typeof data.scheduledAt === "string" ? data.scheduledAt : null;
+      setScheduledAt(when);
+      onComplete({
+        postId: id,
+        scrollToPreflight: true,
+        scheduledAt: when ?? undefined,
+      });
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Step failed");
     } finally {
       setBusy(false);
     }
+  };
+
+  const skipMedia = () => {
+    setMediaSkipped(true);
+    setStep(3);
+    if (activePostId) void runPreflight(activePostId);
   };
 
   return (
@@ -87,10 +187,7 @@ export function ContentCreationWizard({
         </div>
         <div className="mb-4 flex gap-1">
           {STEPS.map((s, i) => (
-            <div
-              key={s}
-              className={`h-1 flex-1 ${i <= step ? "bg-cursor-glow" : "bg-line"}`}
-            />
+            <div key={s} className={`h-1 flex-1 ${i <= step ? "bg-cursor-glow" : "bg-line"}`} title={s} />
           ))}
         </div>
 
@@ -113,7 +210,7 @@ export function ContentCreationWizard({
 
         {step === 1 && (
           <div className="space-y-2">
-            <p className="text-muted">Draft copy ({tone} tone) — or leave blank for LLM.</p>
+            <p className="text-muted">Draft copy ({tone} tone) — or leave blank and use Draft Post skill after.</p>
             <textarea
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
@@ -125,14 +222,102 @@ export function ContentCreationWizard({
         )}
 
         {step === 2 && (
-          <p className="text-muted">
-            Generate AI thumbnail for {postId || selectedPostId || "post"}. Vision capture available in Creation Studio after wizard.
-          </p>
+          <div className="space-y-3">
+            <p className="text-muted">
+              Attach image or video from disk for IG/TikTok/YouTube — or skip and add media in Creation Studio later.
+            </p>
+            <input
+              ref={imageRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (!f || !activePostId) return;
+                const kind = f.type.startsWith("video/") ? "video" : "image";
+                setBusy(true);
+                void uploadMedia(f, kind)
+                  .catch((err) => setError(err instanceof Error ? err.message : "Upload failed"))
+                  .finally(() => setBusy(false));
+                e.target.value = "";
+              }}
+            />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={!activePostId || busy}
+                onClick={() => imageRef.current?.click()}
+                className="border border-cursor-glow px-3 py-1 uppercase text-cursor-glow disabled:opacity-50"
+              >
+                {mediaAttached ? "Replace media" : "Attach from disk"}
+              </button>
+              <button
+                type="button"
+                disabled={!activePostId || busy}
+                onClick={() => {
+                  if (!activePostId) return;
+                  setBusy(true);
+                  void api("generate_ai_image", { postId: activePostId })
+                    .then(() => setMediaAttached(true))
+                    .catch(() => setError("AI image unavailable — attach from disk or skip"))
+                    .finally(() => setBusy(false));
+                }}
+                className="border border-line px-3 py-1 uppercase text-stark hover:border-cursor-glow disabled:opacity-50"
+              >
+                Generate AI thumb
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={skipMedia}
+                className="border border-line px-3 py-1 uppercase text-muted hover:text-stark"
+              >
+                Skip media
+              </button>
+            </div>
+            {mediaAttached ? <p className="text-cursor-glow">Media attached ✓</p> : null}
+            {mediaSkipped ? <p className="text-muted">Skipped — add media before publish on image/video platforms</p> : null}
+          </div>
         )}
 
         {step === 3 && (
-          <p className="text-muted">Schedule post for default slot, then publish from queue when ready.</p>
+          <div className="space-y-2">
+            <p className="text-muted">Pre-flight checks brand kit, char limits, bridge readiness, and media.</p>
+            {!preflight ? (
+              <p className="text-muted">Running checks…</p>
+            ) : (
+              <>
+                <p className={preflight.blockers > 0 ? "text-amber-400" : "text-cursor-glow"}>
+                  {preflight.blockers > 0
+                    ? `${preflight.blockers} blocker(s) · ${preflight.warnings} warning(s)`
+                    : preflight.warnings > 0
+                      ? `Ready with ${preflight.warnings} warning(s)`
+                      : "All checks passed"}
+                </p>
+                <ul className="max-h-32 space-y-1 overflow-y-auto">
+                  {preflight.checks.slice(0, 8).map((c, i) => (
+                    <li key={i} className={c.severity === "error" ? "text-amber-400" : "text-muted"}>
+                      {c.message}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
         )}
+
+        {step === 4 && (
+          <div className="space-y-2">
+            <p className="text-muted">
+              Schedule {activePostId} {useBestTime ? "at learned best time" : "for default slot"}.
+            </p>
+            {scheduledAt ? (
+              <p className="text-cursor-glow">Scheduled · {new Date(scheduledAt).toLocaleString()}</p>
+            ) : null}
+          </div>
+        )}
+
+        {error ? <p className="mt-2 text-amber-400">{error}</p> : null}
 
         <div className="mt-4 flex justify-between">
           <button
@@ -149,7 +334,7 @@ export function ContentCreationWizard({
             onClick={() => void runStep()}
             className="border border-cursor-glow px-3 py-1 uppercase text-cursor-glow"
           >
-            {busy ? "…" : step === 3 ? "Finish" : "Next"}
+            {busy ? "…" : step === 4 ? "Schedule & finish" : step === 2 ? "Continue" : "Next"}
           </button>
         </div>
       </div>

@@ -398,7 +398,7 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           id: "requirePublishApproval",
           label: "Require approval before publish",
           type: "toggle",
-          defaultValue: false,
+          defaultValue: true,
         },
         {
           id: "requireReplyApproval",

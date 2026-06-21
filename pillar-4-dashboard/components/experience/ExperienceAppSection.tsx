@@ -19,6 +19,7 @@ export function ExperienceAppSection({
   className = "",
   action,
   showCoach = true,
+  hideWhen = false,
 }: {
   appId: OotbAppId;
   sectionId: string;
@@ -29,8 +30,11 @@ export function ExperienceAppSection({
   className?: string;
   action?: ReactNode;
   showCoach?: boolean;
+  hideWhen?: boolean;
 }) {
   const { meetsLevel } = useExperienceLevel();
+
+  if (hideWhen) return null;
 
   if (!meetsLevel(minLevel)) {
     return (

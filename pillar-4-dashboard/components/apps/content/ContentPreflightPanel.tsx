@@ -21,9 +21,20 @@ export interface PreflightReportRow {
 interface ContentPreflightPanelProps {
   report: PreflightReportRow | null;
   loading?: boolean;
+  postId?: string;
+  onPublishNow?: () => void;
+  publishing?: boolean;
+  requireApproval?: boolean;
 }
 
-export function ContentPreflightPanel({ report, loading }: ContentPreflightPanelProps) {
+export function ContentPreflightPanel({
+  report,
+  loading,
+  postId,
+  onPublishNow,
+  publishing,
+  requireApproval,
+}: ContentPreflightPanelProps) {
   if (loading) return <p className="font-mono text-[10px] text-muted">Running pre-flight checks…</p>;
   if (!report) return null;
 
@@ -48,6 +59,20 @@ export function ContentPreflightPanel({ report, loading }: ContentPreflightPanel
           <span className="text-muted">Voice {report.styleScore}/100</span>
         ) : null}
       </div>
+      {report.ready && postId && onPublishNow ? (
+        <button
+          type="button"
+          disabled={publishing}
+          onClick={onPublishNow}
+          className="border border-cursor-glow px-3 py-1 uppercase tracking-widest text-cursor-glow disabled:opacity-50"
+        >
+          {publishing
+            ? "Publishing…"
+            : requireApproval
+              ? "Submit for approval"
+              : "Publish now"}
+        </button>
+      ) : null}
       <ul className="space-y-1">
         {report.checks.map((c) => (
           <li
