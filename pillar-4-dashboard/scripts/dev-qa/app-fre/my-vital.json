@@ -1,0 +1,8 @@
+{
+  "initialized": true,
+  "config": {
+    "wearableSources": ["oura", "apple_health"],
+    "longevityFocus": "metabolic"
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

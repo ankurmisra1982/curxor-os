@@ -1,0 +1,9 @@
+{
+  "initialized": true,
+  "config": {
+    "householdName": "CurXor Household",
+    "defaultCommStyle": "warm",
+    "allowChildProfiles": true
+  },
+  "initializedAt": "2026-06-20T08:00:00.000Z"
+}

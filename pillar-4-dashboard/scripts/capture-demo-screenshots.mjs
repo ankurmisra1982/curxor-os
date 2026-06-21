@@ -28,6 +28,8 @@ const TARGETS = [
   { path: "/settings", file: "02-settings.png", label: "Settings" },
   { path: "/my-capital", file: "03-capital-claw.png", label: "Capital Claw" },
   { path: "/claw-forge", file: "04-forge.png", label: "The Forge" },
+  { path: "/my-vital", file: "05-vital-claw.png", label: "Vital Claw" },
+  { path: "/my-family", file: "06-kin-claw.png", label: "Kin Claw" },
 ];
 
 function runPlaywright(url, dest) {

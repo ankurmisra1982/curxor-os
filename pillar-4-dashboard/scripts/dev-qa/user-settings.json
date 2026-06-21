@@ -7,7 +7,10 @@
     "my-shop",
     "tesla-optimus-engine",
     "robotaxi-fleet-manager",
-    "claw-cafe"
+    "claw-cafe",
+    "my-vital",
+    "my-family",
+    "claw-forge"
   ],
   "appearance": {
     "uiMode": "simple",
@@ -23,5 +26,18 @@
     "allowFrontierForPlanning": true,
     "connectedProviders": {}
   },
-  "updatedAt": "2026-06-21T01:09:35.110Z"
+  "multiModel": {
+    "enabled": false,
+    "planningProviderId": null,
+    "codingProviderId": null,
+    "longContextProviderId": null
+  },
+  "mcp": {
+    "enabled": false,
+    "servers": []
+  },
+  "egress": {
+    "allowHosts": []
+  },
+  "updatedAt": "2026-06-21T02:49:53.585Z"
 }

@@ -35,6 +35,8 @@ Output: `docs/demo-pack/screenshots/`
 | `02-settings.png` | `/settings` | User freedom — Claws, intelligence, appearance |
 | `03-capital-claw.png` | `/my-capital` | Wealth Claw workspace |
 | `04-forge.png` | `/claw-forge` | Create-to-earn |
+| `05-vital-claw.png` | `/my-vital` | Life & family — longevity desk |
+| `06-kin-claw.png` | `/my-family` | Life & family — household profiles |
 
 Copy these into `curxor storefront/public/demo/` when updating GTM assets.
 
