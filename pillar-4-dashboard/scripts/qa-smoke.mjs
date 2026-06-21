@@ -288,6 +288,38 @@ await check("app-agent assist (outreach)", async () => {
   return typeof json.reply === "string" && json.reply.length > 0;
 });
 
+await check("work status bootstrap", async () => {
+  const data = await getJson("/api/work/status");
+  return Array.isArray(data.leads) && Array.isArray(data.sequences);
+});
+
+await check("work go_live checklist", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "go_live" });
+  return ok && json.goLive && Array.isArray(json.goLive.steps);
+});
+
+await check("work draft_sequence", async () => {
+  const current = await getJson("/api/work/status");
+  const leadId = current.leads?.[0]?.id;
+  if (!leadId) return false;
+  const { ok, json } = await postJson("/api/work/status", {
+    action: "draft_sequence",
+    leadId,
+    name: "QA sequence",
+  });
+  return ok && typeof json.sequenceId === "string";
+});
+
+await check("work scan_inbox", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "scan_inbox" });
+  return ok && typeof json.indexed === "number";
+});
+
+await check("work recovery_list", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "recovery_list" });
+  return ok && Array.isArray(json.failed);
+});
+
 await check("app-agent assist (capital digital skill)", async () => {
   const { json } = await postJson("/api/app-agent/assist", {
     appId: "my-capital",

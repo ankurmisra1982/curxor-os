@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-21T07:58:08.229Z",
+  "leads": [
+    {
+      "id": "LEAD-001",
+      "name": "Jordan Lee",
+      "email": "jordan@fintechlabs.io",
+      "company": "Fintech Labs",
+      "title": "Head of Ops",
+      "stage": "contacted",
+      "tags": [
+        "fintech",
+        "warm"
+      ],
+      "notes": "Met at demo — interested in sovereign appliance for outbound.",
+      "source": "demo",
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z",
+      "lastTouchAt": "2026-06-21T07:58:08.036Z"
+    },
+    {
+      "id": "LEAD-002",
+      "name": "Sam Rivera",
+      "email": "sam@buildco.dev",
+      "company": "BuildCo",
+      "title": "Founder",
+      "stage": "new",
+      "tags": [
+        "saas"
+      ],
+      "notes": "",
+      "source": "import",
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-003",
+      "name": "Alex Chen",
+      "email": "alex@edgecompute.ai",
+      "company": "EdgeCompute",
+      "title": "CTO",
+      "stage": "replied",
+      "tags": [
+        "technical"
+      ],
+      "notes": "Asked for pricing on Creator + Outreach bundle.",
+      "source": "inbound",
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z",
+      "lastTouchAt": "2026-06-21T07:58:08.036Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Follow up with Alex on appliance pricing",
+      "priority": "P1",
+      "done": false,
+      "leadId": "LEAD-003",
+      "dueAt": null,
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z"
+    },
+    {
+      "id": "TASK-002",
+      "title": "Import Q2 prospect CSV",
+      "priority": "P2",
+      "done": false,
+      "leadId": null,
+      "dueAt": null,
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z"
+    },
+    {
+      "id": "TASK-003",
+      "title": "Review sequence templates",
+      "priority": "P3",
+      "done": true,
+      "leadId": null,
+      "dueAt": null,
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z"
+    }
+  ],
+  "sequences": [
+    {
+      "id": "SEQ-001",
+      "name": "Sovereign appliance intro",
+      "leadId": "LEAD-001",
+      "status": "active",
+      "pauseOnReply": true,
+      "currentStepIndex": 1,
+      "activatedAt": "2026-06-21T07:58:08.036Z",
+      "completedAt": null,
+      "lastError": null,
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z",
+      "steps": [
+        {
+          "id": "STEP-001",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "Quick question on outbound stack",
+          "body": "Hi {{name}} — saw {{company}} is scaling outbound. We run Creator + Outreach Claw on bare metal with zero SaaS rent. Worth a 10-min look?",
+          "sentAt": "2026-06-21T07:58:08.036Z",
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-002",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: sovereign outbound",
+          "body": "Following up — happy to share how we pause sequences on reply and keep CRM on-appliance.",
+          "sentAt": null,
+          "scheduledAt": "2026-06-23T07:58:08.036Z"
+        }
+      ]
+    },
+    {
+      "id": "SEQ-002",
+      "name": "Founder cold intro",
+      "leadId": "LEAD-002",
+      "status": "draft",
+      "pauseOnReply": true,
+      "currentStepIndex": 0,
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null,
+      "createdAt": "2026-06-21T07:58:08.036Z",
+      "updatedAt": "2026-06-21T07:58:08.036Z",
+      "steps": [
+        {
+          "id": "STEP-010",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "CurXor for {{company}}",
+          "body": "Hi {{name}} — local LLM drafts sequences; eno2 bridge sends mail. No cloud CRM bill.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ]
+    },
+    {
+      "id": "SEQ-003",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-757948b5",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-a1a8a51f",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-2ba1838a",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T07:58:08.182Z",
+      "updatedAt": "2026-06-21T07:58:08.182Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    }
+  ],
+  "sends": [],
+  "mailIndex": [
+    {
+      "id": "MAIL-4c57b57b",
+      "from": "alex@edgecompute.ai",
+      "subject": "Re: CurXor pricing",
+      "snippet": "Thanks — can you share appliance tiers?",
+      "receivedAt": "2026-06-21T07:58:08.228Z",
+      "leadId": "LEAD-003",
+      "matchedReply": true
+    },
+    {
+      "id": "MAIL-9bbc4f8f",
+      "from": "notifications@calendar.local",
+      "subject": "Standup block · 30m",
+      "snippet": "Local calendar sync",
+      "receivedAt": "2026-06-21T07:58:08.228Z",
+      "leadId": null,
+      "matchedReply": false
+    }
+  ]
+}

@@ -86,6 +86,25 @@ export async function executeSkillMesh(
       }
       return { executed: out.result.ok, kind: "digital", digital: out.result };
     }
+    if (appId === "my-work" && (skillId === "send_sequence_step" || skillId === "send_email")) {
+      const sequenceId = cfgStr(config, "selectedSequenceId", "");
+      if (!sequenceId) {
+        return { executed: false, kind: "digital", skipReason: "select a sequence in Outreach desk first" };
+      }
+      const { sendSequenceStep, executeOutboundSend } = await import("./work-send-executor");
+      const out = await sendSequenceStep(sequenceId);
+      if (!out.ok) {
+        return { executed: false, kind: "digital", skipReason: out.error ?? "send failed" };
+      }
+      if (out.send?.status === "pending_approval") {
+        return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
+      }
+      if (out.send?.status === "queued" && out.send.id) {
+        const sent = await executeOutboundSend(out.send.id);
+        return { executed: sent.ok, kind: "digital", digital: sent.ok ? { ok: true, id: out.send.id, tool: "work.email.send" } : undefined, skipReason: sent.error };
+      }
+      return { executed: true, kind: "digital", digital: { ok: true, id: out.send?.id ?? "", tool: "work.email.send" } };
+    }
     const digital = await buildDigitalIntent(appId, skillId, config);
     if (!digital) {
       return { executed: false, kind: "digital", skipReason: "no digital mapping" };
@@ -364,6 +383,32 @@ async function buildDigitalIntent(
             action: "buy",
             mode: cfgStr(config, "tradingMode", "paper"),
             rule_id: ruleId || undefined,
+          },
+        };
+      }
+      break;
+
+    case "my-work":
+      if (skillId === "send_email" || skillId === "send_sequence_step") {
+        const sequenceId = cfgStr(config, "selectedSequenceId", "");
+        if (!sequenceId) return null;
+        const { ensureWorkQueue, getLead, personalizeTemplate } = await import("./work-store");
+        const file = await ensureWorkQueue();
+        const seq = file.sequences.find((s) => s.id === sequenceId);
+        if (!seq) return null;
+        const step = seq.steps[seq.currentStepIndex];
+        if (!step || step.kind !== "email") return null;
+        const lead = await getLead(seq.leadId);
+        if (!lead?.email) return null;
+        return {
+          tool: "work.email.send",
+          payload: {
+            to: lead.email,
+            subject: personalizeTemplate(step.subject, lead),
+            body: personalizeTemplate(step.body, lead),
+            sequence_id: seq.id,
+            step_id: step.id,
+            lead_id: lead.id,
           },
         };
       }

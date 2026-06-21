@@ -340,6 +340,28 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
   ],
   "my-work": [
     {
+      sectionId: "go-live",
+      tips: [
+        {
+          id: "work-go-live-beginner",
+          minLevel: "beginner",
+          title: "Go live checklist",
+          body: "Configure SMTP in digital.env, add a lead, create a sequence, then activate. Sequences auto-pause when a reply is detected.",
+        },
+      ],
+    },
+    {
+      sectionId: "pipeline",
+      tips: [
+        {
+          id: "work-pipeline-beginner",
+          minLevel: "beginner",
+          title: "Lead pipeline",
+          body: "Track stages from new → contacted → replied → qualified. All CRM data stays in /etc/curxor/work-queue.json on-appliance.",
+        },
+      ],
+    },
+    {
       sectionId: "tasks",
       tips: [
         {
@@ -358,6 +380,17 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           minLevel: "standard",
           title: "Unified inbox",
           body: "All channel conversations in one place — Telegram, Slack, WhatsApp, and dashboard chat route to the right Claw.",
+        },
+      ],
+    },
+    {
+      sectionId: "sequences",
+      tips: [
+        {
+          id: "work-sequences-standard",
+          minLevel: "standard",
+          title: "Multi-step sequences",
+          body: "Draft with the agent, personalize with {{name}} and {{company}}, activate to send step 1. Follow-ups schedule automatically with delay days.",
         },
       ],
     },

@@ -59,9 +59,11 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       "Outbound publishes through digital bridges — your playbook stays on-box.",
     ],
     skills: [
-      { id: "scan_inbox", label: "Scan Inbox", description: "Index offline mail queue", kind: "plan" },
-      { id: "sort_tray", label: "Sort Tray", description: "Claw sorts by priority labels", kind: "physical" },
+      { id: "scan_inbox", label: "Scan Inbox", description: "Index offline mail · pause sequences on reply", kind: "plan" },
+      { id: "draft_sequence", label: "Draft Sequence", description: "Local LLM multi-step cold email", kind: "plan" },
+      { id: "send_sequence_step", label: "Send Step", description: "Send current sequence step via SMTP bridge", kind: "digital" },
       { id: "summarize_day", label: "Summarize Day", description: "Local LLM day brief", kind: "plan" },
+      { id: "sort_tray", label: "Sort Tray", description: "Claw sorts by priority labels", kind: "physical" },
       { id: "move_to_tray", label: "Move to Tray", description: "Physical move via motor_out", kind: "physical" },
     ],
     fre: {

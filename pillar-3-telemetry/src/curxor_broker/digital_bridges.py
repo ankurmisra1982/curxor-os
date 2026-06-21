@@ -48,6 +48,7 @@ TOOL_WHATSAPP_SEND = "channel.whatsapp.send"
 TOOL_IMESSAGE_SEND = "channel.imessage.send"
 TOOL_BROWSER_FETCH = "browser.fetch_page"
 TOOL_BROWSER_AUTOMATE = "browser.automate"
+TOOL_WORK_EMAIL_SEND = "work.email.send"
 
 GARMIN_OAUTH_PATH = os.environ.get("CURXOR_GARMIN_OAUTH_PATH", "/etc/curxor/garmin-oauth.json")
 GARMIN_TOKEN_URL = "https://diauth.garmin.com/di-oauth2-service/oauth/token"
@@ -2348,6 +2349,56 @@ class IMessageSendWorker:
             return DigitalReceipt.failure(intent, str(exc))
 
 
+class WorkEmailSendWorker:
+    """Outbound email — work.email.send intents via SMTP."""
+
+    def __init__(self) -> None:
+        self._host = os.environ.get("SMTP_HOST", "").strip()
+        self._port = int(os.environ.get("SMTP_PORT", "587") or "587")
+        self._user = os.environ.get("SMTP_USER", "").strip()
+        self._password = os.environ.get("SMTP_PASS", "").strip()
+        self._from = os.environ.get("SMTP_FROM", "").strip()
+        self._use_tls = os.environ.get("SMTP_USE_TLS", "1").strip().lower() not in ("0", "false", "no")
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._host and self._from)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(intent, "SMTP_HOST and SMTP_FROM not configured in digital.env")
+        to_addr = str(intent.payload.get("to", "")).strip()
+        subject = str(intent.payload.get("subject", "")).strip()
+        body = str(intent.payload.get("body", "")).strip()
+        if not to_addr or not subject:
+            return DigitalReceipt.failure(intent, "Missing to or subject")
+        from_addr = str(intent.payload.get("from", "")).strip() or self._from
+
+        def _send_sync() -> dict[str, Any]:
+            import smtplib
+            from email.message import EmailMessage
+
+            msg = EmailMessage()
+            msg["Subject"] = subject[:998]
+            msg["From"] = from_addr
+            msg["To"] = to_addr
+            msg.set_content(body)
+            with smtplib.SMTP(self._host, self._port, timeout=30) as smtp:
+                if self._use_tls:
+                    smtp.starttls()
+                if self._user and self._password:
+                    smtp.login(self._user, self._password)
+                smtp.send_message(msg)
+            return {"to": to_addr, "subject": subject[:120]}
+
+        try:
+            loop = asyncio.get_running_loop()
+            result = await loop.run_in_executor(None, _send_sync)
+            return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            return DigitalReceipt.failure(intent, str(exc))
+
+
 class BrowserFetchWorker:
     """Headless page fetch scaffold — browser.fetch_page on eno2."""
 
@@ -2461,6 +2512,7 @@ class DigitalBridgeRuntime:
         self._imessage = IMessageSendWorker()
         self._browser = BrowserFetchWorker()
         self._browser_auto = BrowserAutomateWorker()
+        self._work_email = WorkEmailSendWorker()
         self._ctx = zmq.asyncio.Context.instance()
         self._running = True
 
@@ -2569,6 +2621,8 @@ class DigitalBridgeRuntime:
             return await self._browser.handle(intent)
         if intent.tool == TOOL_BROWSER_AUTOMATE:
             return await self._browser_auto.handle(intent)
+        if intent.tool == TOOL_WORK_EMAIL_SEND:
+            return await self._work_email.handle(intent)
         return DigitalReceipt.failure(intent, f"Unknown digital tool: {intent.tool}")
 
     def stop(self) -> None:
