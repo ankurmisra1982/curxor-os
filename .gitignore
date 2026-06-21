@@ -2,3 +2,8 @@ __pycache__/
 *.py[cod]
 *.pyo
 .Python
+
+# Local diagnostic captures (do not commit)
+build-out.txt
+qa-out.txt
+typecheck-out.txt
