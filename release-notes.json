@@ -22,7 +22,15 @@
       "Creator Claw day-one launch — Go Live checklist, 5-step Creation Wizard (media → pre-flight → best-time schedule), and strict ready semantics",
       "Multi-platform publish desk — 10 live bridges, bridge health, publish recovery, approval + Telegram/Slack operators",
       "Closed-loop growth — engage inbox, analytics recommendations, content planner, library, and campaigns (Standard/Expert)",
-      "dashboard_bootstrap API — single-load Creator workspace; 61 smoke + 12 user-flow QA checks"
+      "dashboard_bootstrap API — single-load Creator workspace; tabbed workspace; publish_now; tagged v0.3.0"
+    ]
+  },
+  "0.3.1": {
+    "highlights": [
+      "Outreach Claw Tier B — A/B subject variants per sequence step, reply intent tagging, and CSV lead import",
+      "Send policy — per-mailbox daily limit and stagger between sends (FRE-configurable)",
+      "Open/reply analytics on outbound queue; heartbeat process_due for scheduled sequence steps",
+      "66 smoke + 12 user-flow QA checks including outreach import, analytics, and process_due"
     ]
   }
 }
