@@ -21,7 +21,7 @@ export const OOTB_APPS = [
     href: "/my-content",
     short: "CRE",
     description:
-      "SEO blog generation, X thread scheduling, and YouTube scripts — content pipelines with zero API rent.",
+      "Draft, adapt, and publish across social channels — video pipelines, engage inbox, calendar, and digital bridges on eno2 with zero API rent.",
   },
   {
     id: "my-work",
