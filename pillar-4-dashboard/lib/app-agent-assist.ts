@@ -9,10 +9,19 @@ import {
   parseJsonLoose,
 } from "./local-inference";
 import type { OotbAppId } from "./ootb-apps";
+import { buildContextPromptBlock } from "./claw-context-service";
 
 export type { AgentAssistRequest, AgentAssistResult, AgentChatTurn } from "./app-agent-types";
 
-const LLM_CHAT_APPS: OotbAppId[] = ["my-work", "my-shop", "my-content-creator", "my-capital"];
+const LLM_CHAT_APPS: OotbAppId[] = [
+  "my-work",
+  "my-shop",
+  "my-content-creator",
+  "my-capital",
+  "my-vital",
+  "my-family",
+  "tesla-optimus-engine",
+];
 const LLM_PLAN_SKILLS: Partial<Record<OotbAppId, string[]>> = {
   "my-work": ["summarize_day"],
   "my-shop": ["ingest_order"],
@@ -64,11 +73,14 @@ async function tryLlmAgentChat(
   }));
 
   const configNote = `Config: ${JSON.stringify(req.config ?? {})}`;
+  const profileId =
+    typeof req.config?.selectedProfileId === "string" ? req.config.selectedProfileId : null;
+  const contextBlock = await buildContextPromptBlock(req.appId, profileId);
 
   const result = await chatCompletion({
     format: "json",
     messages: [
-      { role: "system", content: buildAgentSystemPrompt(agent) },
+      { role: "system", content: buildAgentSystemPrompt(agent) + contextBlock },
       ...history,
       { role: "user", content: `${message}\n\n${configNote}` },
     ],

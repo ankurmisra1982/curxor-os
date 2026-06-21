@@ -15,7 +15,7 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   [SETTINGS_PATH]: {
     id: "settings-intro",
     title: "Your preferences, your rules",
-    body: "Add or remove Claws anytime, connect a frontier LLM with your own key or subscription, and tune theme and display mode.",
+    body: "Add or remove Claws anytime, connect a frontier LLM with your API key or OAuth sign-in (OpenAI), and tune theme and display mode.",
   },
   "/claw-forge": {
     id: "forge-intro",
@@ -25,7 +25,7 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   "/my-capital": {
     id: "capital-intro",
     title: "Paper trading first",
-    body: "Portfolio loads from your FRE watchlist — live when Alpaca paper creds are in digital.env. Trades egress only through eno2.",
+    body: "Portfolio loads from your FRE watchlist — live when Alpaca paper creds are in digital.env. Optional frontier models for planning: Settings → Intelligence (API key or OAuth). Trades egress only through eno2.",
   },
   "/my-content": {
     id: "content-intro",
@@ -44,8 +44,18 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   },
   "/optimus": {
     id: "signal-intro",
-    title: "Signal monitoring",
-    body: "Adjust thresholds in the workspace. Skills reset baselines or run test moves on the mesh.",
+    title: "Optimus + signals",
+    body: "Signal Claw drives Optimus hardware and ingests feeds. It subscribes to the Claw Context mesh — health, work, and family from Vital and Kin Claws.",
+  },
+  "/my-vital": {
+    id: "vital-intro",
+    title: "Longevity desk",
+    body: "Connect wearables and health apps via bridges. Vital Claw builds your protocol and publishes health context to Optimus and Kin Claw.",
+  },
+  "/my-family": {
+    id: "family-intro",
+    title: "Household hub",
+    body: "Add family members, bind devices, and set personalities. Kin Claw syncs profiles to every subscribed Claw on the mesh.",
   },
   "/robotaxi": {
     id: "swarm-intro",

@@ -1,0 +1,156 @@
+{
+  "records": [
+    {
+      "envelope": {
+        "id": "20ce9754-1481-45e6-9112-feb394fc1c9b",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-family",
+        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+        "scope": "family",
+        "key": "members.9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+        "timestamp": "2026-06-20T23:36:49.961Z",
+        "ttlSeconds": null,
+        "payload": {
+          "displayName": "Primary operator",
+          "role": "owner",
+          "personality": {
+            "traits": [
+              "sovereign",
+              "builder"
+            ],
+            "communicationStyle": "warm",
+            "notes": ""
+          },
+          "sharedScopes": [
+            "personal",
+            "health",
+            "work",
+            "finance"
+          ],
+          "deviceCount": 0
+        }
+      },
+      "storedAt": "2026-06-20T23:36:49.961Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "3382a94a-bbd3-43c8-95b5-0dd7134da7d2",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-vital",
+        "profileId": null,
+        "scope": "health",
+        "key": "protocol.active",
+        "timestamp": "2026-06-20T23:36:49.939Z",
+        "ttlSeconds": 86400,
+        "payload": {
+          "steps": [
+            {
+              "id": "sleep-01",
+              "category": "sleep",
+              "title": "Consistent sleep window",
+              "detail": "In bed 22:30–06:30; dim lights 60 min before bed.",
+              "frequency": "Daily",
+              "priority": "core"
+            },
+            {
+              "id": "move-01",
+              "category": "movement",
+              "title": "Zone 2 cardio",
+              "detail": "45 min brisk walk or cycle — conversational pace.",
+              "frequency": "4× / week",
+              "priority": "core"
+            },
+            {
+              "id": "nutrition-01",
+              "category": "nutrition",
+              "title": "Protein-forward meals",
+              "detail": "≥30g protein at breakfast and lunch from whole foods.",
+              "frequency": "Daily",
+              "priority": "core"
+            },
+            {
+              "id": "labs-01",
+              "category": "labs",
+              "title": "Quarterly metabolic panel",
+              "detail": "Sync PDF reports from your provider portal into Vital Claw.",
+              "frequency": "Quarterly",
+              "priority": "optional"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-20T23:36:49.939Z",
+      "expiresAt": "2026-06-21T23:36:49.939Z"
+    },
+    {
+      "envelope": {
+        "id": "375a0a92-57d6-4d94-8757-21b25f00feaa",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-vital",
+        "profileId": null,
+        "scope": "health",
+        "key": "vitals.latest",
+        "timestamp": "2026-06-20T23:36:49.929Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "readings": [
+            {
+              "metric": "resting_hr",
+              "value": 58,
+              "unit": "bpm",
+              "recordedAt": "2026-06-20T23:36:49.781Z",
+              "source": "oura"
+            },
+            {
+              "metric": "hrv",
+              "value": 42,
+              "unit": "ms",
+              "recordedAt": "2026-06-20T23:36:49.781Z",
+              "source": "oura"
+            },
+            {
+              "metric": "sleep_score",
+              "value": 82,
+              "unit": "score",
+              "recordedAt": "2026-06-20T23:36:49.781Z",
+              "source": "oura"
+            },
+            {
+              "metric": "steps",
+              "value": 8420,
+              "unit": "count",
+              "recordedAt": "2026-06-20T23:36:49.781Z",
+              "source": "apple_health"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-20T23:36:49.929Z",
+      "expiresAt": "2026-06-21T00:36:49.929Z"
+    },
+    {
+      "envelope": {
+        "id": "b5992141-0b0f-485a-8a26-af58bfd3ebe1",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "system",
+        "profileId": null,
+        "scope": "hardware",
+        "key": "optimus.status",
+        "timestamp": "2026-06-20T23:36:49.921Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "unitId": "OPTIMUS-01",
+          "mode": "standby",
+          "safetyProfile": "standard"
+        }
+      },
+      "storedAt": "2026-06-20T23:36:49.921Z",
+      "expiresAt": "2026-06-21T00:36:49.921Z"
+    }
+  ]
+}

@@ -21,15 +21,19 @@ CurXor is a **two-repo product**:
 **What works today (software):**
 
 - Meta-installer, four-pillar systemd target, eno1/eno2 networking scripts
-- Flight Command UI with 8 Claw workspaces + The Forge
+- Flight Command UI with **10 Claw workspaces** + The Forge
+- **Claw Context Protocol (CCP)** — unified inter-Claw + hardware context mesh (`telemetry/claw_context`)
+- **Vital Claw** — longevity desk (wearables, medical reports, health protocol)
+- **Kin Claw (My Family)** — household profiles, devices, personalities via CCP
 - Flight Command **Settings** (`/settings`) — Claws toggle, intelligence (local/frontier/auto), appearance (themes, light/dark)
 - Agent consoles (chat, skills, activity), global + per-app FRE
 - Capital Claw **live portfolio template** — Alpaca paper when `digital.env` configured, else FRE watchlist demo
 - Mesh publish/subscribe (motor, vision, digital) with SSE dashboard widgets
-- Local + optional frontier LLM routing (`inference-router.ts`, API key validation on connect)
+- Local + optional frontier LLM routing (`inference-router.ts`, API key validation on connect, **OAuth PKCE** for OpenAI subscription sign-in)
+- Frontier provider **OAuth PKCE** — OpenAI (ChatGPT/Codex flow), Google when env configured; guided link fallback for Cursor/Anthropic
 - OTA updater with backup/rollback scaffold
 - Storefront synced to Settings / user-freedom messaging
-- CI `pillar-4-qa-smoke` job (17 checks incl. settings + capital status)
+- CI `pillar-4-qa-smoke` job (22+ checks incl. CCP, Vital, Kin, settings, OAuth link-session)
 
 **What is blocked or incomplete:**
 
@@ -39,7 +43,7 @@ CurXor is a **two-repo product**:
 - Many workspace UIs still use **demo data** except Capital portfolio (live when Alpaca configured)
 - CI smoke runs on Linux CI; local Windows QA may need `--port` if 3080 is busy
 
-**Last verified:** typecheck + build (P2, P4), `npm run qa:smoke` 17/17 (settings, capital status).
+**Last verified:** typecheck + build (P2, P4), `npm run qa:local` 18/18 (settings, OAuth link-session, capital status).
 
 ---
 

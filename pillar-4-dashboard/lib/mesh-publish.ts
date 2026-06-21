@@ -45,9 +45,20 @@ export interface DigitalPublishResult {
   error?: string;
 }
 
+export interface ClawContextPublishInput {
+  envelope: Record<string, unknown>;
+}
+
+export interface ClawContextPublishResult {
+  ok: boolean;
+  id: string;
+  error?: string;
+}
+
 class MeshPublisher {
   private motorPub: Publisher | null = null;
   private digitalPub: Publisher | null = null;
+  private contextPub: Publisher | null = null;
   private startPromise: Promise<void> | null = null;
   private motorSeq = 0;
 
@@ -77,6 +88,14 @@ class MeshPublisher {
       (this.digitalPub as Publisher & { immediate: boolean }).immediate = true;
     }
     this.digitalPub.connect(endpoint);
+
+    this.contextPub = new Publisher();
+    this.contextPub.sendHighWaterMark = 8;
+    this.contextPub.linger = 0;
+    if ("immediate" in this.contextPub) {
+      (this.contextPub as Publisher & { immediate: boolean }).immediate = true;
+    }
+    this.contextPub.connect(endpoint);
 
     await sleep(ZMQ_CONNECT_SETTLE_MS);
   }
@@ -143,6 +162,30 @@ class MeshPublisher {
       };
     }
   }
+
+  async publishClawContext(input: ClawContextPublishInput): Promise<ClawContextPublishResult> {
+    try {
+      await this.ensureStarted();
+      const env = loadDashboardEnv();
+      const pub = this.contextPub;
+      if (!pub) return { ok: false, id: "", error: "context publisher unavailable" };
+
+      const id = randomUUID();
+      const body = Buffer.from(
+        JSON.stringify({ id, ...input.envelope, timestamp: new Date().toISOString() }),
+        "utf8",
+      );
+
+      await pub.send([env.topicClawContext, body]);
+      return { ok: true, id };
+    } catch (err) {
+      return {
+        ok: false,
+        id: "",
+        error: err instanceof Error ? err.message : "context publish failed",
+      };
+    }
+  }
 }
 
 declare global {
@@ -163,6 +206,10 @@ export async function publishMotorCommand(input: MotorPublishInput): Promise<Mot
 
 export async function publishDigitalIntent(input: DigitalPublishInput): Promise<DigitalPublishResult> {
   return getPublisher().publishDigital(input);
+}
+
+export async function publishClawContextMesh(input: ClawContextPublishInput): Promise<ClawContextPublishResult> {
+  return getPublisher().publishClawContext(input);
 }
 
 function sleep(ms: number): Promise<void> {

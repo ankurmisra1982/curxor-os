@@ -71,6 +71,10 @@ jobs:
           CURXOR_FRE_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/fre-state.json
           CURXOR_USER_SETTINGS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/user-settings.json
           CURXOR_LLM_CREDENTIALS_PATH: /tmp/curxor-llm-credentials.json
+          CURXOR_PROVIDER_LINK_SESSIONS_PATH: /tmp/curxor-provider-link-sessions.json
+          CURXOR_CLAW_CONTEXT_PATH: /tmp/curxor-claw-context.json
+          CURXOR_FAMILY_PROFILES_PATH: /tmp/curxor-family-profiles.json
+          CURXOR_VITAL_STATE_PATH: /tmp/curxor-vital-health.json
           CURXOR_APP_FRE_DIR: /tmp/curxor-app-fre
           CURXOR_CLAW_PROFILES_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/claw-profiles.json
       - name: Prepare QA state
@@ -82,6 +86,10 @@ jobs:
           CURXOR_FRE_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/fre-state.json
           CURXOR_USER_SETTINGS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/user-settings.json
           CURXOR_LLM_CREDENTIALS_PATH: /tmp/curxor-llm-credentials.json
+          CURXOR_PROVIDER_LINK_SESSIONS_PATH: /tmp/curxor-provider-link-sessions.json
+          CURXOR_CLAW_CONTEXT_PATH: /tmp/curxor-claw-context.json
+          CURXOR_FAMILY_PROFILES_PATH: /tmp/curxor-family-profiles.json
+          CURXOR_VITAL_STATE_PATH: /tmp/curxor-vital-health.json
           CURXOR_APP_FRE_DIR: /tmp/curxor-app-fre
           CURXOR_CLAW_PROFILES_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/claw-profiles.json
       - name: Wait for server

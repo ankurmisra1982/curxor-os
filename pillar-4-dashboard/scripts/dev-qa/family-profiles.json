@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "primaryProfileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+  "members": [
+    {
+      "id": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "displayName": "Primary operator",
+      "role": "owner",
+      "avatarColor": "#bc13fe",
+      "devices": [],
+      "personality": {
+        "traits": [
+          "sovereign",
+          "builder"
+        ],
+        "communicationStyle": "warm",
+        "notes": ""
+      },
+      "sharedScopes": [
+        "personal",
+        "health",
+        "work",
+        "finance"
+      ],
+      "createdAt": "2026-06-20T23:36:47.968Z",
+      "updatedAt": "2026-06-20T23:36:47.968Z"
+    }
+  ]
+}

@@ -65,6 +65,14 @@ await check("settings claws POST", async () => {
   return ok && json.settings?.selectedApps?.length >= 1;
 });
 
+await check("settings llm link-session (openai oauth)", async () => {
+  const { ok, json } = await postJson("/api/settings/llm/link-session", {
+    providerId: "openai",
+    frontierModel: "gpt-4o-mini",
+  });
+  return ok && typeof json.linkPath === "string" && json.linkMode === "oauth" && typeof json.authorizeUrl === "string";
+});
+
 await check("capital status", async () => {
   const data = await getJson("/api/capital/status");
   return Array.isArray(data.rules) && typeof data.tradingMode === "string";
@@ -117,9 +125,31 @@ await check("claw profiles", async () => {
   return Array.isArray(data.claws);
 });
 
+await check("vital status", async () => {
+  const data = await getJson("/api/vital/status");
+  return data.version === 1 && Array.isArray(data.protocol);
+});
+
+await check("family profiles GET", async () => {
+  const data = await getJson("/api/family");
+  return Array.isArray(data.members) && data.members.length >= 1;
+});
+
+await check("mesh context registry", async () => {
+  const data = await getJson("/api/mesh/context?registry=1");
+  return Array.isArray(data.registry?.publications) && Array.isArray(data.registry?.subscriptions);
+});
+
+await check("mesh context for optimus", async () => {
+  const data = await getJson("/api/mesh/context?appId=tesla-optimus-engine");
+  return data.ok === true && typeof data.context === "object";
+});
+
 const appIds = [
   "my-shop",
   "my-content-creator",
+  "my-vital",
+  "my-family",
   "tesla-optimus-engine",
   "robotaxi-fleet-manager",
   "claw-cafe",

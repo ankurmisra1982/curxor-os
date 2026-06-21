@@ -1,3 +1,5 @@
+"use client";
+
 import { HomeOverview } from "@/components/desktop/HomeOverview";
 import type { OotbAppId } from "@/lib/ootb-apps";
 

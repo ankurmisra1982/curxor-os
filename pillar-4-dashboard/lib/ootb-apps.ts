@@ -63,6 +63,22 @@ export const OOTB_APPS = [
     description:
       "Auto-replies, DM triage, and community thread engagement on X and LinkedIn — grow audience while you sleep.",
   },
+  {
+    id: "my-vital",
+    name: "Vital Claw",
+    href: "/my-vital",
+    short: "VIT",
+    description:
+      "Longevity desk — wearable vitals, medical reports, diet and health app sync, and a personalized health protocol on your metal.",
+  },
+  {
+    id: "my-family",
+    name: "Kin Claw",
+    href: "/my-family",
+    short: "KIN",
+    description:
+      "Family profiles — each member's devices, personality, and preferences sync through the Claw Context mesh.",
+  },
 ] as const;
 
 export type OotbAppId = (typeof OOTB_APPS)[number]["id"];

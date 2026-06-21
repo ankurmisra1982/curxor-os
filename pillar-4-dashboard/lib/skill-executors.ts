@@ -42,6 +42,10 @@ export async function executeSkillMesh(
   const skill = agent.skills.find((s) => s.id === skillId);
   if (!skill) return { executed: false, kind: "none", skipReason: "unknown skill" };
 
+  if (appId === "tesla-optimus-engine" && skillId === "sync_context") {
+    return { executed: false, kind: "plan", skipReason: "context sync via workspace or /api/mesh/context" };
+  }
+
   if (skill.kind === "plan") {
     return { executed: false, kind: "plan", skipReason: "local-only skill" };
   }

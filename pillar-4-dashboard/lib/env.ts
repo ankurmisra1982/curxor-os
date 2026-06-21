@@ -7,6 +7,7 @@ export interface DashboardEnv {
   topicMotor: string;
   topicDigitalIn: string;
   topicDigitalOut: string;
+  topicClawContext: string;
   inferenceBackend: "ollama" | "vllm";
   inferenceBaseUrl: string;
   inferenceMetricsUrl: string;
@@ -39,6 +40,7 @@ export function loadDashboardEnv(): DashboardEnv {
     topicMotor: process.env.CURXOR_TOPIC_MOTOR ?? "telemetry/motor_out",
     topicDigitalIn: process.env.CURXOR_TOPIC_DIGITAL_IN ?? "telemetry/digital_in",
     topicDigitalOut: process.env.CURXOR_TOPIC_DIGITAL_OUT ?? "telemetry/digital_out",
+    topicClawContext: process.env.CURXOR_TOPIC_CLAW_CONTEXT ?? "telemetry/claw_context",
     inferenceBackend,
     inferenceBaseUrl: (process.env.CURXOR_INFERENCE_BASE_URL ?? defaultInferenceBase).replace(/\/$/, ""),
     inferenceMetricsUrl: process.env.CURXOR_INFERENCE_METRICS_URL ?? "http://127.0.0.1:8000/metrics",

@@ -40,6 +40,6 @@ Product positioning, audit, and marketing accuracy live in the sibling repo:
 
 ## When you're back (quick wins)
 
-1. `npm run qa:local -- --port 3081` — confirms 17/17 API smoke locally
+1. `npm run qa:local -- --port 3081` — confirms 24/24 API smoke locally (CCP, Vital, Kin, OAuth)
 2. Open Flight Command canvas mockup in Cursor Glass
 3. Continue storefront GTM pages (architecture, FAQ, pricing)

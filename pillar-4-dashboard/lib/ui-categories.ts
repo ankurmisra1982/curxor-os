@@ -4,7 +4,7 @@ import { APP_ROUTES } from "./app-routes";
 export const HOME_PATH = "/home";
 export const SETTINGS_PATH = "/settings";
 
-export type ClawCategoryId = "home" | "wealth" | "work" | "physical" | "forge";
+export type ClawCategoryId = "home" | "wealth" | "work" | "physical" | "life" | "forge";
 
 export interface ClawCategory {
   id: ClawCategoryId;
@@ -16,7 +16,8 @@ export const CLAW_CATEGORIES: ClawCategory[] = [
   { id: "home", label: "Home", description: "Overview and quick actions" },
   { id: "wealth", label: "Wealth & growth", description: "Money and audience on your terms" },
   { id: "work", label: "Work & commerce", description: "Outreach and fulfillment desks" },
-  { id: "physical", label: "Signals & swarm", description: "Feeds, fleets, and engagement" },
+  { id: "physical", label: "Signals & swarm", description: "Feeds, fleets, robots, and engagement" },
+  { id: "life", label: "Life & family", description: "Longevity, health, and household context" },
   { id: "forge", label: "Create", description: "Mint new digital employees" },
 ];
 
@@ -28,6 +29,8 @@ const APP_CATEGORY: Record<OotbAppId, ClawCategoryId> = {
   "tesla-optimus-engine": "physical",
   "robotaxi-fleet-manager": "physical",
   "claw-cafe": "physical",
+  "my-vital": "life",
+  "my-family": "life",
   "claw-forge": "forge",
 };
 
