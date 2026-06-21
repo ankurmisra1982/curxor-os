@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "posts": [
+    {
+      "id": "POST-881",
+      "channel": "Tech Briefs Daily",
+      "platform": "youtube",
+      "format": "long-form",
+      "stage": "SCRIPT",
+      "draftText": "QA smoke draft — sovereign Creator Claw on bare metal.",
+      "scheduledAt": null,
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-21T07:06:44.115Z",
+      "performanceScore": 47
+    },
+    {
+      "id": "POST-882",
+      "channel": "Market Pulse Shorts",
+      "platform": "tiktok",
+      "format": "reel",
+      "stage": "RENDER",
+      "draftText": "Three signals before the open: BTC funding flat, NVDA vol compressing, macro calendar light. Capital Claw stays in paper until the rule fires.",
+      "scheduledAt": null,
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-20T08:00:00.000Z"
+    },
+    {
+      "id": "POST-883",
+      "channel": "CurXor Dev Log",
+      "platform": "x",
+      "format": "thread",
+      "stage": "SCHEDULED",
+      "draftText": "Ship log: Creator Claw now persists the content queue on appliance storage. Draft locally, publish via eno2 bridge — LLM never touches the internet.",
+      "scheduledAt": "2026-06-21T18:00:00.000Z",
+      "publishedAt": null,
+      "publishedUrl": null,
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-20T08:00:00.000Z"
+    },
+    {
+      "id": "POST-884",
+      "channel": "CurXor Launch",
+      "platform": "linkedin",
+      "format": "post",
+      "stage": "PUBLISHED",
+      "draftText": "Creator Claw on CurXor OS: draft with local LLM, approve on Telegram, publish through your own bridge. No SaaS rent on your content pipeline.",
+      "scheduledAt": "2026-06-19T14:00:00.000Z",
+      "publishedAt": "2026-06-19T14:05:00.000Z",
+      "publishedUrl": "https://www.linkedin.com/feed/update/demo",
+      "platformPostId": "demo-linkedin-884",
+      "createdAt": "2026-06-18T10:00:00.000Z",
+      "updatedAt": "2026-06-19T14:05:00.000Z"
+    },
+    {
+      "id": "POST-885",
+      "channel": "IG Grid Demo",
+      "platform": "instagram",
+      "format": "reel",
+      "stage": "SCHEDULED",
+      "draftText": "Behind the appliance: how Creator Claw fills your week from evergreen library + playbooks.",
+      "scheduledAt": "2026-06-22T17:00:00.000Z",
+      "publishedAt": null,
+      "publishedUrl": null,
+      "lastPublishError": "validation: image_url unreachable — set CURXOR_CONTENT_PUBLIC_BASE",
+      "createdAt": "2026-06-20T09:00:00.000Z",
+      "updatedAt": "2026-06-20T11:00:00.000Z"
+    }
+  ],
+  "updatedAt": "2026-06-21T07:06:44.115Z"
+}

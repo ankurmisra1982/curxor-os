@@ -1,9 +1,11 @@
 {
   "initialized": true,
   "config": {
-    "channels": ["youtube", "x"],
+    "channels": ["youtube", "x", "linkedin", "instagram", "tiktok"],
     "contentTone": "technical",
-    "autoSchedule": false
+    "autoSchedule": true,
+    "requirePublishApproval": false,
+    "notifyApprovalOnTelegram": true
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

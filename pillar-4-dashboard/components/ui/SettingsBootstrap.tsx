@@ -3,28 +3,41 @@
 import { useEffect } from "react";
 
 import { useTheme } from "@/components/ui/ThemeProvider";
-import { useUiMode } from "@/components/ui/UiModeProvider";
+import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+import type { ExperienceLevel } from "@/lib/experience-level";
 import type { ColorScheme, ThemeMode, UiMode } from "@/lib/user-settings-types";
 
 interface SettingsBootstrapProps {
   initialUiMode?: UiMode;
+  initialExperienceLevel?: ExperienceLevel;
   initialColorScheme?: ColorScheme;
   initialThemeMode?: ThemeMode;
 }
 
 export function SettingsBootstrap({
   initialUiMode,
+  initialExperienceLevel,
   initialColorScheme,
   initialThemeMode,
 }: SettingsBootstrapProps) {
-  const { setMode } = useUiMode();
+  const { setLevel, setMode } = useExperienceLevel();
   const { setColorScheme, setThemeMode } = useTheme();
 
   useEffect(() => {
-    if (initialUiMode) setMode(initialUiMode);
+    if (initialExperienceLevel) setLevel(initialExperienceLevel);
+    else if (initialUiMode) setMode(initialUiMode);
     if (initialColorScheme) setColorScheme(initialColorScheme);
     if (initialThemeMode) setThemeMode(initialThemeMode);
-  }, [initialUiMode, initialColorScheme, initialThemeMode, setMode, setColorScheme, setThemeMode]);
+  }, [
+    initialExperienceLevel,
+    initialUiMode,
+    initialColorScheme,
+    initialThemeMode,
+    setLevel,
+    setMode,
+    setColorScheme,
+    setThemeMode,
+  ]);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,11 +48,17 @@ export function SettingsBootstrap({
         if (!res.ok || cancelled) return;
         const data = (await res.json()) as {
           settings?: {
-            appearance?: { uiMode?: UiMode; colorScheme?: ColorScheme; themeMode?: ThemeMode };
+            appearance?: {
+              uiMode?: UiMode;
+              experienceLevel?: ExperienceLevel;
+              colorScheme?: ColorScheme;
+              themeMode?: ThemeMode;
+            };
           };
         };
         const appearance = data.settings?.appearance;
-        if (appearance?.uiMode) setMode(appearance.uiMode);
+        if (appearance?.experienceLevel) setLevel(appearance.experienceLevel);
+        else if (appearance?.uiMode) setMode(appearance.uiMode);
         if (appearance?.colorScheme) setColorScheme(appearance.colorScheme);
         if (appearance?.themeMode) setThemeMode(appearance.themeMode);
       } catch {
@@ -51,7 +70,7 @@ export function SettingsBootstrap({
     return () => {
       cancelled = true;
     };
-  }, [setMode, setColorScheme, setThemeMode]);
+  }, [setLevel, setMode, setColorScheme, setThemeMode]);
 
   return null;
 }

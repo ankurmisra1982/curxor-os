@@ -112,9 +112,41 @@
         {
           "role": "assistant",
           "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "any alerts?"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "any alerts?"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
         }
       ],
-      "updatedAt": "2026-06-21T03:15:43.975Z"
+      "updatedAt": "2026-06-21T07:06:52.073Z"
     },
     {
       "id": "webchat:my-work",
@@ -127,11 +159,43 @@
       "history": [
         {
           "role": "user",
+          "text": "Remember to follow up with Acme Corp tomorrow morning"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
           "text": "inbox sync test"
         },
         {
           "role": "assistant",
-          "text": "Tracking Outreach Desk. Ask me to prioritize tasks or draft a cold sequence — all local."
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "Draft outreach priority for today"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "Remember to follow up with Acme Corp tomorrow morning"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
         },
         {
           "role": "user",
@@ -174,7 +238,7 @@
           "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
         }
       ],
-      "updatedAt": "2026-06-21T03:15:45.648Z"
+      "updatedAt": "2026-06-21T07:06:54.360Z"
     },
     {
       "id": "webchat:my-vital",
@@ -187,6 +251,38 @@
       "history": [
         {
           "role": "user",
+          "text": "status check"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "What is my longevity focus?"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "Summarize that in one sentence"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "status check"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
           "text": "What is my longevity focus?"
         },
         {
@@ -234,7 +330,7 @@
           "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
         }
       ],
-      "updatedAt": "2026-06-21T03:15:45.750Z"
+      "updatedAt": "2026-06-21T07:06:54.495Z"
     },
     {
       "id": "webchat:my-capital",
@@ -260,9 +356,25 @@
         {
           "role": "assistant",
           "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
         }
       ],
-      "updatedAt": "2026-06-21T03:15:44.865Z"
+      "updatedAt": "2026-06-21T07:06:53.764Z"
     },
     {
       "id": "webchat:tesla-optimus-engine",
@@ -288,9 +400,25 @@
         {
           "role": "assistant",
           "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
         }
       ],
-      "updatedAt": "2026-06-21T03:15:45.939Z"
+      "updatedAt": "2026-06-21T07:06:54.811Z"
     }
   ]
 }

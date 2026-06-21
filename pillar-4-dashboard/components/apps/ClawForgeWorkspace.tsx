@@ -10,6 +10,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
 
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
+
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 
 import { useForgeAssist } from "@/components/claw/ForgeAssistProvider";
@@ -155,6 +159,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
           <p className="mt-1 font-mono text-[10px] text-muted">
 
             Forge Master · chat in agent panel · {profiles.claws.length} claws provisioned
+            <ExperienceLevelBadge />
 
           </p>
 
@@ -194,7 +199,13 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
       <div className="grid gap-4 lg:grid-cols-2">
 
-        <AppSection title="Intent Brief" subtitle="Type mission · attach photo · or enable live vision before forging">
+        <ExperienceAppSection
+          appId="claw-forge"
+          sectionId="intent"
+          minLevel="beginner"
+          title="Intent Brief"
+          subtitle="Type mission · attach photo · or enable live vision before forging"
+        >
 
           <textarea
 
@@ -292,11 +303,17 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
           ) : null}
 
-        </AppSection>
+        </ExperienceAppSection>
 
 
 
-        <AppSection title="Claw Fleet Registry" subtitle="Provisioned bots · tap + to add another">
+        <ExperienceAppSection
+          appId="claw-forge"
+          sectionId="fleet"
+          minLevel="standard"
+          title="Claw Fleet Registry"
+          subtitle="Provisioned bots · tap + to add another"
+        >
 
           {profiles.claws.length === 0 ? (
 
@@ -332,7 +349,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
           )}
 
-        </AppSection>
+        </ExperienceAppSection>
 
       </div>
 

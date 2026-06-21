@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
@@ -55,10 +57,20 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{workspace}</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
           Outreach Claw · leads & sequences · mesh {motorUp ? "linked" : "idle"}
+          <ExperienceLevelBadge />
         </p>
       </header>
 
-      <UnifiedInboxPanel title="Comms desk — all channels" />
+      <ExperienceAppSection
+        appId="my-work"
+        sectionId="comms"
+        minLevel="standard"
+        title="Comms desk — all channels"
+        subtitle="Unified inbox across messaging bridges"
+        showCoach={false}
+      >
+        <UnifiedInboxPanel embedded />
+      </ExperienceAppSection>
 
       <div className="grid gap-4 md:grid-cols-3">
         <AppMetric label="Open Tasks" value={String(tasks.filter((t) => !t.done).length)} unit="local queue" highlight />
@@ -67,7 +79,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <AppSection title="Task Matrix" subtitle="Tap to complete · Outreach Claw prioritizes P1 first">
+        <ExperienceAppSection
+          appId="my-work"
+          sectionId="tasks"
+          minLevel="beginner"
+          title="Task Matrix"
+          subtitle="Tap to complete · Outreach Claw prioritizes P1 first"
+        >
           <div className="space-y-2 font-mono text-xs">
             {tasks.map((t) => (
               <button
@@ -87,9 +105,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
               </button>
             ))}
           </div>
-        </AppSection>
+        </ExperienceAppSection>
 
-        <AppSection title="Outbound Queue" subtitle={`Lane ${lane} · sequence staging`}>
+        <ExperienceAppSection
+          appId="my-work"
+          sectionId="outbound"
+          minLevel="standard"
+          title="Outbound Queue"
+          subtitle={`Lane ${lane} · sequence staging`}
+        >
           {sortQueue.length === 0 ? (
             <p className="font-mono text-[11px] text-muted">
               No sequences queued. Ask Outreach Claw to &quot;draft a cold sequence&quot; or tap Sort Tray in the agent panel.
@@ -103,10 +127,16 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
               ))}
             </ul>
           )}
-        </AppSection>
+        </ExperienceAppSection>
       </div>
 
-      <AppSection title="Local Sync Log" subtitle="Calendar & mail · zero cloud calls">
+      <ExperienceAppSection
+        appId="my-work"
+        sectionId="sync-log"
+        minLevel="expert"
+        title="Local Sync Log"
+        subtitle="Calendar & mail · zero cloud calls"
+      >
         <table className="w-full border-collapse font-mono text-xs">
           <thead>
             <tr className="border-b border-line text-[10px] uppercase tracking-widest text-muted">
@@ -127,7 +157,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             ))}
           </tbody>
         </table>
-      </AppSection>
+      </ExperienceAppSection>
     </div>
   );
 }

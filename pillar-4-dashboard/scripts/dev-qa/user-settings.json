@@ -14,6 +14,7 @@
   ],
   "appearance": {
     "uiMode": "simple",
+    "experienceLevel": "standard",
     "colorScheme": "curxor",
     "themeMode": "dark"
   },
@@ -39,5 +40,5 @@
   "egress": {
     "allowHosts": []
   },
-  "updatedAt": "2026-06-21T03:15:45.837Z"
+  "updatedAt": "2026-06-21T07:06:54.633Z"
 }

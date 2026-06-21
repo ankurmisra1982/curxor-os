@@ -28,7 +28,18 @@ Local LLM → Engine tool → JSON intent → digital_out (:9200)
 | Tool | Bridge worker | Credentials |
 |------|---------------|-------------|
 | `capital.execute_trade` | AlpacaTradeWorker | **Capital Claw** · `ALPACA_*` in `/etc/curxor/digital.env` |
-| `content.publish_post` | XPublishWorker | **Creator Claw** · `X_*` in `/etc/curxor/digital.env` |
+| `content.publish_post` | XPublishWorker | **X** · `X_*` in `digital.env` |
+| `content.publish_threads` | MetaPublishWorker | **Threads** · `META_ACCESS_TOKEN` + `META_THREADS_USER_ID` |
+| `content.publish_facebook` | MetaPublishWorker | **Facebook Page** · `META_ACCESS_TOKEN` + `META_PAGE_ID` |
+| `content.publish_instagram` | MetaPublishWorker | **Instagram** · `META_*` + `image_url` in payload |
+| `content.publish_tiktok` | TikTokPublishWorker | **TikTok** · `TIKTOK_ACCESS_TOKEN` + `video_url` or `video_path` |
+| `content.publish_youtube` | YouTubePublishWorker | **YouTube** · `YOUTUBE_*` OAuth refresh + `video_url` or `video_path` |
+| `content.publish_linkedin` | LinkedInPublishWorker | **LinkedIn** · `LINKEDIN_ACCESS_TOKEN` + optional `LINKEDIN_AUTHOR_URN` |
+| `content.publish_bluesky` | BlueskyPublishWorker | **Bluesky** · `BLUESKY_HANDLE` + `BLUESKY_APP_PASSWORD` |
+| `content.publish_reddit` | RedditPublishWorker | **Reddit** · OAuth refresh + `REDDIT_DEFAULT_SUBREDDIT` |
+| `content.publish_pinterest` | PinterestPublishWorker | **Pinterest** · OAuth refresh + `image_url` + `PINTEREST_DEFAULT_BOARD_ID` |
+| `content.publish_snapchat` | SnapchatPublishWorker | **Snapchat** · OAuth refresh + `video_path`/`video_url` + `SNAP_PUBLIC_PROFILE_ID` |
+| `channel.discord.send` | DiscordSendWorker | **Discord** · `DISCORD_BOT_TOKEN` + `DISCORD_CHANNEL_ID` |
 
 ## Setup
 

@@ -5,7 +5,7 @@ import { formatPostReceipt } from "@/lib/digital-protocol";
 
 interface DigitalReceiptPanelProps {
   title: string;
-  toolFilter: string;
+  toolFilter?: string;
   receipts: DigitalReceipt[];
   latest: DigitalReceipt | null;
   connected: boolean;
@@ -20,7 +20,8 @@ export function DigitalReceiptPanel({
   connected,
   formatReceipt = formatPostReceipt,
 }: DigitalReceiptPanelProps) {
-  const filtered = receipts.filter((r) => r.tool === toolFilter);
+  const filtered = toolFilter ? receipts.filter((r) => r.tool === toolFilter) : receipts;
+  const showLatest = latest && (!toolFilter || latest.tool === toolFilter);
 
   return (
     <section className="border border-line bg-void">
@@ -39,7 +40,7 @@ export function DigitalReceiptPanel({
         </div>
       </header>
       <div className="max-h-48 overflow-y-auto p-4 font-mono text-xs">
-        {latest && latest.tool === toolFilter ? (
+        {showLatest ? (
           <div
             className={`mb-3 border px-3 py-2 ${latest.ok ? "border-cursor-glow/50 bg-surface" : "border-red-900/50 bg-panel"}`}
           >

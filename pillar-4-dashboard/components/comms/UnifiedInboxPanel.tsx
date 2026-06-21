@@ -26,6 +26,8 @@ interface InboxResponse {
 interface UnifiedInboxPanelProps {
   /** Compact mode for Home — fewer rows, no mesh footer */
   compact?: boolean;
+  /** Hide outer chrome when nested inside ExperienceAppSection */
+  embedded?: boolean;
   title?: string;
 }
 
@@ -40,7 +42,7 @@ function formatRelative(iso: string): string {
   return new Date(iso).toLocaleDateString();
 }
 
-export function UnifiedInboxPanel({ compact = false, title = "Unified inbox" }: UnifiedInboxPanelProps) {
+export function UnifiedInboxPanel({ compact = false, embedded = false, title = "Unified inbox" }: UnifiedInboxPanelProps) {
   const [data, setData] = useState<InboxResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,35 +66,21 @@ export function UnifiedInboxPanel({ compact = false, title = "Unified inbox" }: 
   const limit = compact ? 5 : 12;
   const sessions = data?.sessions.slice(0, limit) ?? [];
 
-  return (
-    <section className="border border-line bg-panel">
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
-        <div>
-          <h2 className="font-sans text-sm font-medium text-stark">{title}</h2>
-          <p className="mt-0.5 font-sans text-xs text-muted">
-            Telegram, Slack, WhatsApp, iMessage, and dashboard chat — synced to Claw Context Protocol
-          </p>
-        </div>
-        {data ? (
-          <p className="font-mono text-[10px] text-muted">
-            {data.stats.external} external · {data.stats.webchat} dashboard
-          </p>
-        ) : null}
-      </header>
-
-      {error ? <p className="px-4 py-3 font-sans text-xs text-red-400">{error}</p> : null}
+  const body = (
+    <>
+      {error ? <p className={`font-sans text-xs text-red-400 ${embedded ? "" : "px-4 py-3"}`}>{error}</p> : null}
 
       {!error && sessions.length === 0 ? (
-        <p className="px-4 py-6 font-sans text-sm text-muted">
+        <p className={`font-sans text-sm text-muted ${embedded ? "" : "px-4 py-6"}`}>
           No conversations yet. Message a Claw from the dashboard or link a channel in Settings → Agent runtime.
         </p>
       ) : (
-        <ul className="divide-y divide-line">
+        <ul className={embedded ? "space-y-0 divide-y divide-line" : "divide-y divide-line"}>
           {sessions.map((s) => (
             <li key={s.id}>
               <Link
                 href={s.href}
-                className="flex flex-wrap items-start gap-3 px-4 py-3 transition hover:bg-void"
+                className={`flex flex-wrap items-start gap-3 transition hover:bg-void ${embedded ? "py-3" : "px-4 py-3"}`}
               >
                 <span className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-cursor-glow">
                   {s.channelLabel}
@@ -115,13 +103,34 @@ export function UnifiedInboxPanel({ compact = false, title = "Unified inbox" }: 
         </ul>
       )}
 
-      {!compact ? (
+      {!compact && !embedded ? (
         <footer className="border-t border-line px-4 py-2">
           <Link href="/my-work" className="font-sans text-xs text-cursor-glow hover:underline">
             Open Outreach Claw for full comms desk →
           </Link>
         </footer>
       ) : null}
+    </>
+  );
+
+  if (embedded) return body;
+
+  return (
+    <section className="border border-line bg-panel">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
+        <div>
+          <h2 className="font-sans text-sm font-medium text-stark">{title}</h2>
+          <p className="mt-0.5 font-sans text-xs text-muted">
+            Telegram, Slack, WhatsApp, iMessage, and dashboard chat — synced to Claw Context Protocol
+          </p>
+        </div>
+        {data ? (
+          <p className="font-mono text-[10px] text-muted">
+            {data.stats.external} external · {data.stats.webchat} dashboard
+          </p>
+        ) : null}
+      </header>
+      {body}
     </section>
   );
 }

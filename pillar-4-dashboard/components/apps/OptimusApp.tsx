@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { AppMetric } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -44,7 +46,10 @@ export function OptimusApp({ config, skillTick, lastSkillId }: AgentAppContext) 
           OOTB · {getOotbApp("tesla-optimus-engine").name}
         </p>
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{unitId}</h1>
-        <p className="mt-1 font-mono text-[10px] text-muted">Signal Claw · {safety} profile · {lastAction}</p>
+        <p className="mt-1 font-mono text-[10px] text-muted">
+          Signal Claw · {safety} profile · {lastAction}
+          <ExperienceLevelBadge />
+        </p>
       </header>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -54,7 +59,13 @@ export function OptimusApp({ config, skillTick, lastSkillId }: AgentAppContext) 
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <AppSection title="Joint Torque Tuning" subtitle="Adjust limits · Tune Joint skill applies to motor_out">
+        <ExperienceAppSection
+          appId="tesla-optimus-engine"
+          sectionId="torque"
+          minLevel="beginner"
+          title="Joint Torque Tuning"
+          subtitle="Adjust limits · Tune Joint skill applies to motor_out"
+        >
           <div className="space-y-4">
             {JOINTS.map((joint) => (
               <label key={joint} className="block font-mono text-xs">
@@ -74,9 +85,15 @@ export function OptimusApp({ config, skillTick, lastSkillId }: AgentAppContext) 
               </label>
             ))}
           </div>
-        </AppSection>
+        </ExperienceAppSection>
 
-        <AppSection title="RL Policy Weights" subtitle="Exploration ε · RL Step skill runs one local epoch">
+        <ExperienceAppSection
+          appId="tesla-optimus-engine"
+          sectionId="rl"
+          minLevel="expert"
+          title="RL Policy Weights"
+          subtitle="Exploration ε · RL Step skill runs one local epoch"
+        >
           <label className="block font-mono text-xs">
             <span className="text-[10px] uppercase tracking-widest text-muted">Exploration ε</span>
             <input
@@ -96,7 +113,7 @@ export function OptimusApp({ config, skillTick, lastSkillId }: AgentAppContext) 
             <Cell k="enable RL" v={config.enableRl ? "ON" : "OFF"} />
             <Cell k="mesh" v={connected ? "LIVE" : "OFF"} />
           </div>
-        </AppSection>
+        </ExperienceAppSection>
       </div>
     </div>
   );

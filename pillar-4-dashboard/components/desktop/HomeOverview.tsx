@@ -6,7 +6,7 @@ import { ActiveClawBadge } from "@/components/claw/ActiveClawBadge";
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { WelcomeSettingsBanner } from "@/components/desktop/WelcomeSettingsBanner";
 import { StartNewClawButton } from "@/components/claw/StartNewClawButton";
-import { useUiMode } from "@/components/ui/UiModeProvider";
+import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { useMotorStream } from "@/hooks/useMotorStream";
 import { useVisionStream } from "@/hooks/useVisionStream";
 import { enabledAppRoutes } from "@/lib/fre-routing";
@@ -26,7 +26,8 @@ const CATEGORY_LABEL: Record<string, string> = {
 };
 
 export function HomeOverview({ selectedApps, onOpenHealth }: HomeOverviewProps) {
-  const { isExpert } = useUiMode();
+  const { level } = useExperienceLevel();
+  const showExpertTelemetry = level === "expert";
   const routes = enabledAppRoutes(selectedApps).filter((r) => r.id !== "claw-forge");
   const { frame, connected: visionUp } = useVisionStream();
   const { command, connected: motorUp } = useMotorStream();
@@ -113,7 +114,7 @@ export function HomeOverview({ selectedApps, onOpenHealth }: HomeOverviewProps) 
         />
       </section>
 
-      {isExpert ? (
+      {showExpertTelemetry ? (
         <section className="border border-line bg-void p-4">
           <h2 className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow">Expert telemetry</h2>
           <div className="mt-3 grid gap-3 font-mono text-xs sm:grid-cols-2">

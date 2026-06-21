@@ -2,6 +2,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { queryClawContext } from "@/lib/claw-context-store";
+import { listEngageSuggestions } from "@/lib/content-engage-bridge";
 import { getChannelConfig, listChannelSessions } from "@/lib/agent-runtime/channel-store";
 import { getProfileNameMap } from "@/lib/agent-runtime/channel-sender-resolver";
 import { getOotbApp } from "@/lib/ootb-apps";
@@ -36,6 +37,7 @@ export async function GET(): Promise<Response> {
 
   const externalCount = sessions.filter((s) => s.channel !== "webchat").length;
   const webchatCount = sessions.filter((s) => s.channel === "webchat").length;
+  const engagePending = (await listEngageSuggestions(true)).length;
 
   return Response.json({
     ok: true,
@@ -44,6 +46,7 @@ export async function GET(): Promise<Response> {
       total: sessions.length,
       external: externalCount,
       webchat: webchatCount,
+      engagePending,
     },
     sessions: enriched,
     meshPreview: rollupRecords.slice(0, 12).map((r) => ({

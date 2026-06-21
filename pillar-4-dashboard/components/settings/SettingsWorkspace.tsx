@@ -7,7 +7,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
 import { AgentRuntimeSettingsPanels } from "@/components/settings/AgentRuntimeSettingsPanels";
 import { useTheme } from "@/components/ui/ThemeProvider";
-import { useUiMode } from "@/components/ui/UiModeProvider";
+import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+import {
+  EXPERIENCE_LEVEL_DESCRIPTIONS,
+  EXPERIENCE_LEVEL_LABELS,
+  type ExperienceLevel,
+} from "@/lib/experience-level";
 import type { FrontierProvider } from "@/lib/frontier-providers";
 import { THEME_PRESETS } from "@/lib/theme-presets";
 import type { OotbAppId } from "@/lib/ootb-apps";
@@ -50,7 +55,7 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
 export function SettingsWorkspace() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { mode, setMode, isExpert } = useUiMode();
+  const { level, setLevel, levelLabel, levelDescription, isExpert } = useExperienceLevel();
   const { colorScheme, setColorScheme, themeMode, setThemeMode } = useTheme();
 
   const [tab, setTab] = useState<SettingsTab>("claws");
@@ -207,7 +212,7 @@ export function SettingsWorkspace() {
     setMessage(null);
     try {
       const data = await postJson<SettingsPayload>("/api/settings", {
-        appearance: { uiMode: mode, colorScheme, themeMode },
+        appearance: { experienceLevel: level, uiMode: level === "expert" ? "expert" : "simple", colorScheme, themeMode },
       });
       setSettings(data.settings);
       setMessage("Appearance saved.");
@@ -216,7 +221,7 @@ export function SettingsWorkspace() {
     } finally {
       setSaving(false);
     }
-  }, [mode, colorScheme, themeMode]);
+  }, [level, colorScheme, themeMode]);
 
   const connectProvider = useCallback(async () => {
     if (!frontierProviderId) {
@@ -616,30 +621,32 @@ export function SettingsWorkspace() {
           {tab === "appearance" ? (
             <div className="space-y-6 p-6">
               <section>
-                <h2 className="font-sans text-lg font-semibold text-stark">Display mode</h2>
-                <div className="mt-4 flex gap-2">
-                  {(
-                    [
-                      ["simple", "Simple — hide telemetry"],
-                      ["expert", "Expert — mesh & metrics"],
-                    ] as const
-                  ).map(([value, label]) => (
+                <h2 className="font-sans text-lg font-semibold text-stark">Experience level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Applies to all Claw apps — controls panels, tips, and advanced tools.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {(["beginner", "standard", "expert"] as ExperienceLevel[]).map((value) => (
                     <button
                       key={value}
                       type="button"
-                      onClick={() => setMode(value as UiMode)}
-                      className={`border px-3 py-2 font-sans text-xs ${
-                        mode === value
+                      onClick={() => setLevel(value)}
+                      className={`border px-3 py-2 text-left font-sans text-xs ${
+                        level === value
                           ? "border-cursor-glow text-cursor-glow"
                           : "border-line text-muted hover:text-stark"
                       }`}
                     >
-                      {label}
+                      <span className="block font-medium">{EXPERIENCE_LEVEL_LABELS[value]}</span>
+                      <span className="mt-0.5 block text-[10px] opacity-80">
+                        {EXPERIENCE_LEVEL_DESCRIPTIONS[value]}
+                      </span>
                     </button>
                   ))}
                 </div>
                 <p className="mt-2 font-sans text-xs text-muted">
-                  Current: {isExpert ? "Expert" : "Simple"} mode
+                  Current: {levelLabel} — {levelDescription}
+                  {isExpert ? " · Mesh telemetry visible." : ""}
                 </p>
               </section>
 

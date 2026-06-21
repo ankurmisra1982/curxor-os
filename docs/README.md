@@ -11,6 +11,7 @@ Guides for deploying, operating, and extending the CurXor OS sovereign edge appl
 | Guide | What you'll learn |
 |-------|-------------------|
 | **[Feature & Function](FEATURE-FUNCTION.md)** | **Full product scope, maturity matrix, API catalog, Claws** |
+| **[Founder profile](founder/profile.md)** | Origin story, quote, mission — [JSON](founder/profile.json) for storefront |
 | **[Pitch deck (storefront)](../../curxor%20storefront/docs/PITCH-DECK.md)** | Investor narrative · `.pptx` with speaker notes |
 | **[Quick Start](guides/00-quick-start.md)** | **First boot, 8 Claws, local LLM, Forge, dev QA** |
 | [Installation](guides/01-installation.md) | Meta-installer, cloud-init, post-install checklist |

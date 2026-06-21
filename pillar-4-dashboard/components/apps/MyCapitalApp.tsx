@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { AppMetric } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import { DigitalReceiptPanel } from "@/components/digital/DigitalReceiptPanel";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
@@ -105,6 +107,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">Capital Claw Desk</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
           {risk} risk · {mode} · {lastSignal}
+          <ExperienceLevelBadge />
         </p>
       </header>
 
@@ -125,7 +128,13 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </div>
 
-      <AppSection title="Rule Engine" subtitle="WHEN / THEN blocks · Arm Rule · Execute Trade via digital bridge">
+      <ExperienceAppSection
+        appId="my-capital"
+        sectionId="portfolio"
+        minLevel="beginner"
+        title="Rule Engine"
+        subtitle="WHEN / THEN blocks · Arm Rule · Execute Trade via digital bridge"
+      >
         <div className="mb-4 border border-line bg-panel p-3 font-mono text-[10px] text-muted">
           WHEN [asset] [condition] THEN [action] — evaluated locally; trades publish to telemetry/digital_out
         </div>
@@ -169,7 +178,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             ))}
           </tbody>
         </table>
-      </AppSection>
+      </ExperienceAppSection>
 
       <DigitalReceiptPanel
         title="Trade Execution Receipts"

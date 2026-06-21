@@ -2,60 +2,121 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type UiMode = "simple" | "expert";
+import {
+  EXPERIENCE_LEVEL_DESCRIPTIONS,
+  EXPERIENCE_LEVEL_LABELS,
+  experienceLevelFromUiMode,
+  meetsExperienceLevel,
+  resolveExperienceLevel,
+  uiModeFromExperienceLevel,
+  type ExperienceLevel,
+  type UiMode,
+} from "@/lib/experience-level";
 
-interface UiModeContextValue {
+export type { UiMode, ExperienceLevel };
+
+interface ExperienceContextValue {
+  /** @deprecated use level */
   mode: UiMode;
+  level: ExperienceLevel;
+  isBeginner: boolean;
+  isStandard: boolean;
   isExpert: boolean;
+  /** @deprecated use isExpert */
+  isExpertLegacy: boolean;
+  setLevel: (level: ExperienceLevel) => void;
+  /** @deprecated use setLevel */
   setMode: (mode: UiMode) => void;
   toggleMode: () => void;
+  meetsLevel: (required: ExperienceLevel) => boolean;
+  levelLabel: string;
+  levelDescription: string;
 }
 
-const STORAGE_KEY = "curxor-ui-mode";
+const STORAGE_KEY = "curxor-experience-level";
+const LEGACY_STORAGE_KEY = "curxor-ui-mode";
 
-const UiModeContext = createContext<UiModeContextValue | null>(null);
+const ExperienceContext = createContext<ExperienceContextValue | null>(null);
 
 export function UiModeProvider({
   children,
   initialMode = "simple",
+  initialLevel,
 }: {
   children: ReactNode;
   initialMode?: UiMode;
+  initialLevel?: ExperienceLevel;
 }) {
-  const [mode, setModeState] = useState<UiMode>(initialMode);
+  const resolvedInitial = initialLevel ?? resolveExperienceLevel(initialMode, null);
+  const [level, setLevelState] = useState<ExperienceLevel>(resolvedInitial);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "expert" || stored === "simple") setModeState(stored);
+      if (stored === "beginner" || stored === "standard" || stored === "expert") {
+        setLevelState(stored);
+        return;
+      }
+      const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (legacy === "expert" || legacy === "simple") {
+        setLevelState(experienceLevelFromUiMode(legacy));
+      }
     } catch {
       /* private mode */
     }
   }, []);
 
-  const setMode = useCallback((next: UiMode) => {
-    setModeState(next);
+  const setLevel = useCallback((next: ExperienceLevel) => {
+    setLevelState(next);
     try {
       localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(LEGACY_STORAGE_KEY, uiModeFromExperienceLevel(next));
     } catch {
       /* ignore */
     }
   }, []);
 
-  const toggleMode = useCallback(() => {
-    setMode(mode === "simple" ? "expert" : "simple");
-  }, [mode, setMode]);
-
-  const value = useMemo(
-    () => ({ mode, isExpert: mode === "expert", setMode, toggleMode }),
-    [mode, setMode, toggleMode],
+  const setMode = useCallback(
+    (mode: UiMode) => {
+      setLevel(experienceLevelFromUiMode(mode));
+    },
+    [setLevel],
   );
 
-  return <UiModeContext.Provider value={value}>{children}</UiModeContext.Provider>;
+  const toggleMode = useCallback(() => {
+    setLevel(level === "expert" ? "beginner" : "expert");
+  }, [level, setLevel]);
+
+  const mode = uiModeFromExperienceLevel(level);
+
+  const value = useMemo(
+    () => ({
+      mode,
+      level,
+      isBeginner: level === "beginner",
+      isStandard: level === "standard",
+      isExpert: level === "expert",
+      isExpertLegacy: level === "expert",
+      setLevel,
+      setMode,
+      toggleMode,
+      meetsLevel: (required: ExperienceLevel) => meetsExperienceLevel(level, required),
+      levelLabel: EXPERIENCE_LEVEL_LABELS[level],
+      levelDescription: EXPERIENCE_LEVEL_DESCRIPTIONS[level],
+    }),
+    [level, mode, setLevel, setMode, toggleMode],
+  );
+
+  return <ExperienceContext.Provider value={value}>{children}</ExperienceContext.Provider>;
 }
 
-export function useUiMode(): UiModeContextValue {
-  const ctx = useContext(UiModeContext);
-  if (!ctx) throw new Error("useUiMode must be used within UiModeProvider");
+export function useExperienceLevel(): ExperienceContextValue {
+  const ctx = useContext(ExperienceContext);
+  if (!ctx) throw new Error("useExperienceLevel must be used within UiModeProvider");
   return ctx;
+}
+
+/** @deprecated use useExperienceLevel */
+export function useUiMode(): ExperienceContextValue {
+  return useExperienceLevel();
 }

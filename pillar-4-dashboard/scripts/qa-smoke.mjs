@@ -78,6 +78,152 @@ await check("capital status", async () => {
   return Array.isArray(data.rules) && typeof data.tradingMode === "string";
 });
 
+await check("content status", async () => {
+  const data = await getJson("/api/content/status");
+  return (
+    Array.isArray(data.posts) &&
+    data.posts.length >= 1 &&
+    typeof data.contentTone === "string" &&
+    Array.isArray(data.platformVault?.platforms) &&
+    data.platformVault.platforms.length >= 10
+  );
+});
+
+await check("content channels catalog", async () => {
+  const data = await getJson("/api/content/channels");
+  const ids = new Set((data.platforms ?? []).map((p) => p.id));
+  return (
+    data.ok === true &&
+    ids.has("tiktok") &&
+    ids.has("instagram") &&
+    ids.has("linkedin") &&
+    data.roadmap?.length >= 10 &&
+    data.currentStep?.step === 9 &&
+    data.currentStep?.status === "done"
+  );
+});
+
+await check("mesh digital discord", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "channel.discord.send",
+    payload: {
+      text: "CurXor QA — sovereign Discord bridge for Creator + Engage Claw.",
+      channel_id: "123456789012345678",
+    },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital snapchat", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_snapchat",
+    payload: {
+      text: "CurXor QA — sovereign Snapchat bridge #creator",
+      video_url: "https://example.com/demo.mp4",
+      format: "spotlight",
+      profile_id: "76da494b-76bc-4bbb-bb27-c5a66fb0d1ab",
+    },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital pinterest", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_pinterest",
+    payload: {
+      text: "CurXor QA — sovereign Pinterest bridge\nVisual pin description for Creator Claw.",
+      image_url: "https://example.com/pin.jpg",
+      board_id: "123456789",
+    },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital reddit", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_reddit",
+    payload: {
+      text: "CurXor QA — sovereign Reddit bridge\nBody text for self post on appliance.",
+      subreddit: "test",
+    },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital bluesky", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_bluesky",
+    payload: { text: "CurXor QA — sovereign Bluesky bridge on bare metal." },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital linkedin", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_linkedin",
+    payload: { text: "CurXor QA — sovereign LinkedIn bridge for B2B Creator Claw." },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital youtube", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_youtube",
+    payload: {
+      text: "CurXor QA — sovereign YouTube bridge\nTech Briefs Daily",
+      video_url: "https://example.com/demo.mp4",
+      format: "short",
+    },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital tiktok", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_tiktok",
+    payload: {
+      text: "CurXor QA — sovereign TikTok bridge",
+      video_url: "https://example.com/demo.mp4",
+    },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mesh digital meta threads", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "content.publish_threads",
+    payload: { text: "CurXor QA smoke — sovereign threads bridge test" },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("content queue POST (update_draft)", async () => {
+  const current = await getJson("/api/content/status");
+  const postId = current.posts?.[0]?.id;
+  if (!postId) return false;
+  const { ok, json } = await postJson("/api/content/status", {
+    action: "update_draft",
+    postId,
+    draftText: "QA smoke draft — sovereign Creator Claw on bare metal.",
+  });
+  return ok && json.post?.draftText?.includes("QA smoke");
+});
+
+await check("content go_live checklist", async () => {
+  const { ok, json } = await postJson("/api/content/status", { action: "go_live" });
+  return (
+    ok &&
+    json.goLive?.steps?.length >= 4 &&
+    typeof json.goLive?.ready === "boolean" &&
+    json.goLive?.today?.recoveryCount !== undefined
+  );
+});
+
+await check("content recovery_list", async () => {
+  const { ok, json } = await postJson("/api/content/status", { action: "recovery_list" });
+  return ok && Array.isArray(json.candidates);
+});
+
 await check("app-agent assist (outreach)", async () => {
   const { json } = await postJson("/api/app-agent/assist", {
     appId: "my-work",

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import type { LongevityProtocolStep, VitalHealthState, VitalReading } from "@/lib/vital-health-types";
@@ -70,6 +72,7 @@ export function MyVitalApp({ config, skillTick, lastSkillId, updateWorkspaceCont
         <p className="mt-2 font-sans text-sm text-muted">
           Wearables, medical reports, and diet apps feed Vital Claw — shared with Optimus and Kin Claw via the
           Claw Context mesh.
+          <ExperienceLevelBadge />
         </p>
       </header>
 
@@ -84,7 +87,33 @@ export function MyVitalApp({ config, skillTick, lastSkillId, updateWorkspaceCont
         ))}
       </div>
 
-      <AppSection title="Health app bridges" subtitle="Connect via eno2 when bridges are configured">
+      <ExperienceAppSection
+        appId="my-vital"
+        sectionId="protocol"
+        minLevel="beginner"
+        title="Active longevity protocol"
+        subtitle="Generated locally — adjust via chat or Update Protocol skill"
+      >
+        <ul className="space-y-3">
+          {protocol.map((step: LongevityProtocolStep) => (
+            <li key={step.id} className="border border-line bg-void p-4">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-sans text-sm font-medium text-stark">{step.title}</span>
+                <span className="font-mono text-[10px] uppercase text-muted">{step.frequency}</span>
+              </div>
+              <p className="mt-2 font-sans text-xs text-muted">{step.detail}</p>
+            </li>
+          ))}
+        </ul>
+      </ExperienceAppSection>
+
+      <ExperienceAppSection
+        appId="my-vital"
+        sectionId="bridges"
+        minLevel="standard"
+        title="Health app bridges"
+        subtitle="Connect via eno2 when bridges are configured"
+      >
         <ul className="space-y-2 font-sans text-sm">
           {(state?.healthAppSync ?? []).map((app) => (
             <li key={app.app} className="flex items-center justify-between border border-line px-3 py-2">
@@ -98,21 +127,7 @@ export function MyVitalApp({ config, skillTick, lastSkillId, updateWorkspaceCont
         <p className="mt-2 font-sans text-xs text-muted">
           Bridges ingest via eno2 when configured — vitals never leave the appliance unless you opt in.
         </p>
-      </AppSection>
-
-      <AppSection title="Active longevity protocol" subtitle="Generated locally — adjust via chat or Update Protocol skill">
-        <ul className="space-y-3">
-          {protocol.map((step: LongevityProtocolStep) => (
-            <li key={step.id} className="border border-line bg-void p-4">
-              <div className="flex items-center justify-between gap-2">
-                <span className="font-sans text-sm font-medium text-stark">{step.title}</span>
-                <span className="font-mono text-[10px] uppercase text-muted">{step.frequency}</span>
-              </div>
-              <p className="mt-2 font-sans text-xs text-muted">{step.detail}</p>
-            </li>
-          ))}
-        </ul>
-      </AppSection>
+      </ExperienceAppSection>
 
       <div className="flex flex-wrap gap-3">
         <button

@@ -152,9 +152,15 @@ async function tryLlmPlanSkill(
   if (appId === "my-content-creator" && skillId === "draft_post") {
     const tone = cfgStr(config, "contentTone", "technical");
     const channel = cfgStr(config, "primaryChannel", "x");
-    const prompt = message.trim() || `Draft a ${tone} ${channel} post about sovereign edge AI and local Claws.`;
+    const title = cfgStr(config, "selectedPostTitle", "");
+    const { platformFormatSpec } = await import("./content-platform-format");
+    const { getSocialChannel, isSocialPlatform } = await import("./social-channels");
+    const platform = isSocialPlatform(channel) ? channel : "x";
+    const spec = platformFormatSpec(platform);
+    const topic = title ? `about "${title}"` : "about sovereign edge AI and local Claws";
+    const prompt = message.trim() || `Draft a ${tone} ${getSocialChannel(platform).name} post ${topic}.`;
     return generateText(
-      `You are Creator Claw. Draft concise social content for local review only — do not include URLs to post.`,
+      `You are Creator Claw. Draft social content for local review only — no URLs. Platform: ${getSocialChannel(platform).name}. Max ${spec.charLimit ?? 2000} chars. ${spec.lineOneRule ?? ""} ${spec.hashtagHint ?? ""}`.trim(),
       prompt,
     );
   }
@@ -264,6 +270,36 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
       return { reply: `${cfgStr(config, "kioskName", "Engage Desk")} ready. Start Game on lane A for live demos.`, suggestedSkill: "start_game" };
 
     case "my-content-creator":
+      if (/thumbnail|thumb|image|vision|frame/.test(combined)) {
+        return {
+          reply: "Capture Thumbnail (vision) or AI Image (Ollama flux) for IG/Pinterest/TikTok covers.",
+          suggestedSkill: "generate_ai_image",
+        };
+      }
+      if (/ai image|generate image|flux|sd\b/.test(combined)) {
+        return {
+          reply: "AI Image runs local Ollama image model — requires CURXOR_IMAGE_MODEL (e.g. flux).",
+          suggestedSkill: "generate_ai_image",
+        };
+      }
+      if (/video|render|ffmpeg|short|reel|tts|voice/.test(combined)) {
+        return {
+          reply: "Render Video builds 9:16 mp4 from thumbnail with TTS voiceover (espeak-ng/piper) when available.",
+          suggestedSkill: "render_video",
+        };
+      }
+      if (/adapt|multi|all channel|format|rewrite/.test(combined)) {
+        return {
+          reply: "Adapt All rewrites your master draft per FRE channel with platform-specific limits and hashtags.",
+          suggestedSkill: "adapt_for_platforms",
+        };
+      }
+      if (/fan out|cross post|every channel/.test(combined)) {
+        return { reply: "Fan Out creates separate queue posts for each FRE channel.", suggestedSkill: "fan_out_channels" };
+      }
+      if (/batch|publish all/.test(combined)) {
+        return { reply: "Batch Publish sends all media-ready queue posts via digital bridges.", suggestedSkill: "batch_publish" };
+      }
       if (/publish|post|tweet|x\b/.test(combined)) {
         return {
           reply: "Publish routes intent to digital_out — bridge handles X API. LLM never touches internet.",
@@ -345,9 +381,204 @@ async function runSkillReply(
   skill: AgentSkill,
   message: string,
 ): Promise<AgentAssistResult> {
+  if (appId === "my-content-creator" && skillId === "schedule_post") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a post in the queue before scheduling.", activity: "[Schedule] no post selected" };
+    }
+    const { scheduleContentPost } = await import("./content-queue-store");
+    const post = await scheduleContentPost(postId);
+    if (!post) {
+      return { reply: "Post not found in queue.", activity: "[Schedule] post missing" };
+    }
+    const when = post.scheduledAt
+      ? new Date(post.scheduledAt).toLocaleString()
+      : "next available slot";
+    return {
+      reply: `${post.id} scheduled for ${when}. Scheduler will fire Publish at that time via digital bridge.`,
+      activity: `[${skill.label}] ${post.id} → ${when}`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
+  if (appId === "my-content-creator" && skillId === "thumbnail_vision") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    const b64 = cfgStr(config, "visionFrameBase64", "");
+    if (!postId) {
+      return { reply: "Select a post before capturing a thumbnail.", activity: "[Thumbnail] no post" };
+    }
+    if (!b64) {
+      return {
+        reply: "No vision frame attached — enable mesh camera or tap Capture Thumbnail in Creation Studio.",
+        activity: "[Thumbnail] waiting for vision frame",
+      };
+    }
+    const { captureThumbnailForPost } = await import("./content-creation-service");
+    const saved = await captureThumbnailForPost(postId, b64);
+    return {
+      reply: `Thumbnail saved for ${postId}${saved.imageUrl ? ` · ${saved.imageUrl}` : ` · ${saved.imagePath}`}`,
+      activity: `[${skill.label}] asset saved`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
+  if (appId === "my-content-creator" && skillId === "generate_ai_image") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a post before generating an AI thumbnail.", activity: "[AI Image] no post" };
+    }
+    try {
+      const { generateAiThumbnailForPost } = await import("./content-creation-service");
+      const saved = await generateAiThumbnailForPost(postId, cfgStr(config, "imagePrompt", "") || undefined);
+      return {
+        reply: `AI thumbnail saved for ${postId}${saved.imageUrl ? ` · ${saved.imageUrl}` : ""} · prompt: ${saved.prompt.slice(0, 80)}…`,
+        activity: `[${skill.label}] Ollama image gen`,
+        mesh: { kind: "plan", ok: true },
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { reply: msg, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
+    }
+  }
+
+  if (appId === "my-content-creator" && skillId === "render_video") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a post before rendering video.", activity: "[Render] no post" };
+    }
+    try {
+      const { renderVideoForPost } = await import("./content-creation-service");
+      const rendered = await renderVideoForPost(postId);
+      const ttsNote = rendered.ttsEngine !== "none" ? ` · TTS: ${rendered.ttsEngine}` : " · silent (no TTS)";
+      return {
+        reply: `Video rendered for ${postId}${rendered.videoUrl ? ` · ${rendered.videoUrl}` : ` · ${rendered.videoPath}`}${ttsNote}`,
+        activity: `[${skill.label}] ffmpeg + voiceover`,
+        mesh: { kind: "plan", ok: true },
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { reply: `Render failed: ${msg}`, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
+    }
+  }
+
+  if (appId === "my-content-creator" && skillId === "adapt_for_platforms") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a post with a master draft first.", activity: "[Adapt] no post" };
+    }
+    const channels = Array.isArray(config.channels)
+      ? config.channels.filter((c): c is string => typeof c === "string")
+      : [];
+    const { isSocialPlatform } = await import("./social-channels");
+    const platforms = channels.filter((c): c is import("./social-channels").SocialPlatformId => isSocialPlatform(c));
+    const tone = cfgStr(config, "contentTone", "technical");
+    try {
+      const { adaptPostForPlatforms } = await import("./content-creation-service");
+      const adapted = await adaptPostForPlatforms(postId, platforms.length ? platforms : ["x", "tiktok", "youtube"], tone);
+      const summary = adapted.map((a) => `${a.platform}: ${a.text.length} chars`).join(" · ");
+      return {
+        reply: `Adapted for ${adapted.length} platforms — ${summary}`,
+        activity: `[${skill.label}] ${adapted.length} variants`,
+        mesh: { kind: "plan", ok: true },
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { reply: msg, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
+    }
+  }
+
+  if (appId === "my-content-creator" && skillId === "generate_hooks") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a post before generating hook variants.", activity: "[Hooks] no post" };
+    }
+    try {
+      const { generateHookVariantsForPost } = await import("./content-creation-service");
+      const hooks = await generateHookVariantsForPost(postId);
+      return {
+        reply: `Generated ${hooks.length} hooks — ${hooks.map((h) => h.label).join(", ")}. Tap a variant in Creation Studio.`,
+        activity: `[${skill.label}] ${hooks.length} variants`,
+        mesh: { kind: "plan", ok: true },
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { reply: msg, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
+    }
+  }
+
+  if (appId === "my-content-creator" && skillId === "repurpose_content") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a source post to repurpose.", activity: "[Repurpose] no post" };
+    }
+    const tone = cfgStr(config, "contentTone", "technical");
+    const preset = cfgStr(config, "repurposePreset", "long_to_social") as import("./content-creation-service").RepurposePreset;
+    try {
+      const { repurposeContent } = await import("./content-creation-service");
+      const result = await repurposeContent(postId, preset, tone);
+      return {
+        reply: result.createdIds.length
+          ? `Repurposed into ${result.createdIds.length} posts: ${result.createdIds.join(", ")}`
+          : "Adapted copy but no new posts created (same platform only).",
+        activity: `[${skill.label}] ${result.createdIds.length} posts`,
+        mesh: { kind: "plan", ok: true },
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { reply: msg, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
+    }
+  }
+
+  if (appId === "my-content-creator" && skillId === "fan_out_channels") {
+    const postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      return { reply: "Select a source post to fan out.", activity: "[Fan Out] no post" };
+    }
+    const channels = Array.isArray(config.channels)
+      ? config.channels.filter((c): c is string => typeof c === "string")
+      : [];
+    const { isSocialPlatform } = await import("./social-channels");
+    const platforms = channels.filter((c): c is import("./social-channels").SocialPlatformId => isSocialPlatform(c));
+    const tone = cfgStr(config, "contentTone", "technical");
+    const autoSchedule = config.autoSchedule === true;
+    try {
+      const { fanOutPostToPlatforms } = await import("./content-creation-service");
+      const result = await fanOutPostToPlatforms(
+        postId,
+        platforms.length ? platforms : ["x", "tiktok", "youtube"],
+        tone,
+        { autoSchedule },
+      );
+      const scheduleNote =
+        result.scheduledIds.length > 0
+          ? ` · Scheduled ${result.scheduledIds.length} posts (stagger 30m)`
+          : autoSchedule
+            ? " · auto-schedule ON but nothing scheduled"
+            : "";
+      return {
+        reply: result.createdIds.length
+          ? `Created ${result.createdIds.length} channel posts: ${result.createdIds.join(", ")}${scheduleNote}`
+          : `No new posts created${scheduleNote}`,
+        activity: `[${skill.label}] ${result.createdIds.length} posts`,
+        mesh: { kind: "plan", ok: true },
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return { reply: msg, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
+    }
+  }
+
   if (skill.kind === "plan") {
     const draft = await tryLlmPlanSkill(appId, skillId, config, message);
     if (draft) {
+      if (appId === "my-content-creator" && skillId === "draft_post") {
+        const postId = cfgStr(config, "selectedPostId", "");
+        if (postId) {
+          const { savePostDraft, savePlatformVariants } = await import("./content-queue-store");
+          await savePostDraft(postId, draft);
+          await savePlatformVariants(postId, draft, {});
+        }
+      }
       if (message.trim().length > 12) {
         await appendMemory(`${appId}/${skillId}: ${message.trim().slice(0, 200)}`);
       }

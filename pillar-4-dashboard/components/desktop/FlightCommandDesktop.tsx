@@ -38,6 +38,7 @@ interface FlightCommandDesktopProps {
   children: ReactNode;
   selectedApps: OotbAppId[];
   initialUiMode?: UiMode;
+  initialExperienceLevel?: import("@/lib/experience-level").ExperienceLevel;
   initialColorScheme?: ColorScheme;
   initialThemeMode?: ThemeMode;
 }
@@ -213,15 +214,17 @@ export function FlightCommandDesktop({
   children,
   selectedApps,
   initialUiMode,
+  initialExperienceLevel,
   initialColorScheme,
   initialThemeMode,
 }: FlightCommandDesktopProps) {
   return (
     <TelemetryProvider>
       <ThemeProvider initialScheme={initialColorScheme ?? "curxor"} initialThemeMode={initialThemeMode ?? "dark"}>
-        <UiModeProvider initialMode={initialUiMode ?? "simple"}>
+        <UiModeProvider initialMode={initialUiMode ?? "simple"} initialLevel={initialExperienceLevel}>
           <SettingsBootstrap
             initialUiMode={initialUiMode}
+            initialExperienceLevel={initialExperienceLevel}
             initialColorScheme={initialColorScheme}
             initialThemeMode={initialThemeMode}
           />

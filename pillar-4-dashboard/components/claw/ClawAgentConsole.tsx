@@ -8,7 +8,7 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 
 import { useForgeAssistOptional } from "@/components/claw/ForgeAssistProvider";
 
-import { useUiMode } from "@/components/ui/UiModeProvider";
+import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 
 import { getAppAgent } from "@/lib/app-agent-catalog";
 
@@ -46,7 +46,7 @@ export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsolePro
 
   const agent = getAppAgent(appId);
 
-  const { isExpert } = useUiMode();
+  const { isExpert, isBeginner } = useExperienceLevel();
 
   const forge = useForgeAssistOptional();
 
@@ -65,6 +65,10 @@ export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsolePro
   const [loading, setLoading] = useState(false);
 
   const [helpOpen, setHelpOpen] = useState(false);
+
+  useEffect(() => {
+    if (isBeginner) setHelpOpen(true);
+  }, [isBeginner]);
 
   const [status, setStatus] = useState<"idle" | "acting" | "always-on">("always-on");
 

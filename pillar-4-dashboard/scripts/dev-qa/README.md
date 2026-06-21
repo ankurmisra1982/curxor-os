@@ -28,5 +28,6 @@ npm run qa:local -- --port 3081
 | `llm-credentials.json` | Created at runtime when connecting frontier providers (gitignored) |
 | `claw-profiles.json` | Empty fleet registry |
 | `app-fre/*.json` | Per-app FRE complete — skips wizard in each workspace |
+| `content-queue.json` | Creator Claw demo queue — scheduled, published, and recovery candidate |
 
 Do not commit secrets. Production uses `/etc/curxor/`.

@@ -29,6 +29,7 @@ const env = {
   CURXOR_CLAW_CONTEXT_PATH: path.join(DEV_QA, "claw-context.json"),
   CURXOR_FAMILY_PROFILES_PATH: path.join(DEV_QA, "family-profiles.json"),
   CURXOR_VITAL_STATE_PATH: path.join(DEV_QA, "vital-health.json"),
+  CURXOR_CONTENT_QUEUE_PATH: path.join(DEV_QA, "content-queue.json"),
   CURXOR_PROVIDER_LINK_SESSIONS_PATH: path.join(DEV_QA, "provider-link-sessions.json"),
   CURXOR_CLAW_PROFILES_PATH: path.join(DEV_QA, "claw-profiles.json"),
   CURXOR_APP_FRE_DIR: path.join(DEV_QA, "app-fre"),

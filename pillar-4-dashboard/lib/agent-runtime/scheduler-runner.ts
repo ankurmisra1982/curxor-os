@@ -17,8 +17,12 @@ export interface SchedulerRunResult {
 
 export async function runSchedulerJob(job: SchedulerJob): Promise<SchedulerRunResult> {
   try {
-    const { config } = await readAppFreState(job.appId);
+    const { config: configBase } = await readAppFreState(job.appId);
     if (job.kind === "skill" && job.skillId) {
+      let config = { ...configBase };
+      if (job.appId === "my-content-creator" && job.skillId === "publish_post" && job.id.startsWith("content-")) {
+        config = { ...config, selectedPostId: job.id.slice("content-".length) };
+      }
       const result = await assistAppAgent({
         appId: job.appId,
         message: "",
@@ -32,7 +36,7 @@ export async function runSchedulerJob(job: SchedulerJob): Promise<SchedulerRunRe
       const result = await assistAppAgent({
         appId: job.appId,
         message: job.message,
-        config,
+        config: configBase,
       });
       await markJobRun(job.id, "ok");
       return { jobId: job.id, appId: job.appId, status: "ok", reply: result.reply };

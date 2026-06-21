@@ -1,0 +1,82 @@
+{
+  "version": "0.1.0",
+  "updated": "2026-06-21",
+  "founder": {
+    "name": "Ankur Misra",
+    "role": "Founder & CEO",
+    "company": "CurXor",
+    "handles": {
+      "x": "ankurmisra",
+      "xDisplay": "CurXor_HQ",
+      "xUrl": "https://x.com/ankurmisra"
+    },
+    "links": {
+      "product": "https://curxor.ai",
+      "originThread": "https://x.com/ankurmisra/status/2067473753924129162"
+    }
+  },
+  "quote": {
+    "text": "The demo went viral months ago. The headline was Tuesday. I started shipping the box on Wednesday.",
+    "attribution": "Ankur Misra",
+    "context": "June 2026 — origin of CurXor"
+  },
+  "bios": {
+    "short": "Founder, CurXor. Shipping the sovereign edge box OpenClaw proved the world wants — local AI, Claws, and Flight Command out of the box.",
+    "medium": "Founder of CurXor. Building the appliance the agent stack should have shipped as: sovereign edge box, local inference, digital employees on bare metal. Started the day after SpaceX went public and Cursor's acquisition made the frontier undeniable.",
+    "tagline": "Sovereign AI on your metal."
+  },
+  "originStory": {
+    "title": "The viral moment",
+    "summary": "Months after OpenClaw went viral, SpaceX went public and Cursor's acquisition option made sovereign AI impossible to ignore. Ankur posted the CurXor vision publicly, rebranded to CurXor HQ, and started building within 24 hours.",
+    "catalystDate": "2026-06-18",
+    "buildStartDate": "2026-06-19",
+    "convictionOrigin": "OpenClaw viral moment — product should ship out of the box",
+    "catalystEvents": [
+      "SpaceX IPO",
+      "Cursor acquisition option exercised"
+    ],
+    "publicCommitment": [
+      "Origin thread to @elonmusk, @cursor_ai, @SpaceX",
+      "Rebrand to CurXor HQ — name, bio, header image"
+    ],
+    "visionStatement": "A sovereign edge box serving as your personal server and codebase. A centralized cognitive hub orchestrating a localized AI ecosystem."
+  },
+  "mission": "Make autonomous AI ownable — not rented, not hosted, not locked inside someone else's cloud. Ship the full stack working out of the box on hardware you control.",
+  "timeline": [
+    {
+      "date": "2026-01",
+      "label": "Early 2026",
+      "event": "OpenClaw goes viral — conviction: the product is the appliance"
+    },
+    {
+      "date": "2026-06-18",
+      "event": "SpaceX IPO + Cursor acquisition option exercised"
+    },
+    {
+      "date": "2026-06-18",
+      "event": "Origin thread posted — CurXor vision named in public",
+      "url": "https://x.com/ankurmisra/status/2067473753924129162"
+    },
+    {
+      "date": "2026-06-18",
+      "event": "Rebrand to CurXor HQ"
+    },
+    {
+      "date": "2026-06-19",
+      "event": "Build begins — curxor-os four-pillar stack"
+    },
+    {
+      "date": "2026-06",
+      "event": "Software scaffold complete; hardware validation pending"
+    }
+  ],
+  "sections": {
+    "originStory": "complete",
+    "quote": "complete",
+    "mission": "complete",
+    "timeline": "complete",
+    "background": "pending",
+    "headshot": "pending",
+    "press": "pending"
+  }
+}

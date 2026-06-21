@@ -5,6 +5,13 @@ import { getProviderApiKey, hasProviderOAuth } from "./llm-credentials";
 import { readFreState, writeFreState, validateAppIds } from "./fre-state";
 import type { OotbAppId } from "./ootb-apps";
 import {
+  isExperienceLevel,
+  isUiMode,
+  resolveExperienceLevel,
+  uiModeFromExperienceLevel,
+  type ExperienceLevel,
+} from "./experience-level";
+import {
   DEFAULT_USER_SETTINGS,
   getUserSettingsPath,
   type ColorScheme,
@@ -14,10 +21,6 @@ import {
   type UserSettings,
   type UserSettingsPatch,
 } from "./user-settings-types";
-
-function isUiMode(v: unknown): v is UiMode {
-  return v === "simple" || v === "expert";
-}
 
 function isColorScheme(v: unknown): v is ColorScheme {
   return v === "curxor" || v === "ocean" || v === "amber" || v === "mono";
@@ -32,13 +35,24 @@ function isThemeMode(v: unknown): v is ThemeMode {
 }
 
 function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSettings {
+  const uiMode = isUiMode(partial.appearance?.uiMode) ? partial.appearance.uiMode : base.appearance.uiMode;
+  const experienceLevel: ExperienceLevel = isExperienceLevel(partial.appearance?.experienceLevel)
+    ? partial.appearance.experienceLevel
+    : isExperienceLevel(base.appearance.experienceLevel)
+      ? base.appearance.experienceLevel
+      : resolveExperienceLevel(uiMode, null);
+  const syncedUiMode = isExperienceLevel(partial.appearance?.experienceLevel)
+    ? uiModeFromExperienceLevel(partial.appearance.experienceLevel)
+    : uiMode;
+
   return {
     version: 1,
     selectedApps: Array.isArray(partial.selectedApps)
       ? validateAppIds(partial.selectedApps.map(String))
       : base.selectedApps,
     appearance: {
-      uiMode: isUiMode(partial.appearance?.uiMode) ? partial.appearance.uiMode : base.appearance.uiMode,
+      uiMode: syncedUiMode,
+      experienceLevel,
       colorScheme: isColorScheme(partial.appearance?.colorScheme)
         ? partial.appearance.colorScheme
         : base.appearance.colorScheme,

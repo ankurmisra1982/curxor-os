@@ -32,7 +32,34 @@ export function formatTradeReceipt(receipt: DigitalReceipt): string {
   return `${r.side ?? "?"} ${r.qty ?? "?"} ${r.symbol ?? "?"} @ ${price} (${r.status ?? "ok"})`;
 }
 
+const PUBLISH_URL_KEYS = [
+  "post_url",
+  "pin_url",
+  "url",
+  "share_url",
+  "permalink",
+  "video_url",
+] as const;
+
+export function extractPublishedUrl(receipt: DigitalReceipt): string | null {
+  if (!receipt.ok) return null;
+  const r = receipt.receipt;
+  for (const key of PUBLISH_URL_KEYS) {
+    const val = r[key];
+    if (typeof val === "string" && val.startsWith("http")) return val;
+  }
+  const postId = r.post_id ?? r.pin_id ?? r.video_id;
+  if (typeof postId === "string" && postId.length > 0) {
+    if (receipt.tool.includes("pinterest")) return `https://www.pinterest.com/pin/${postId}/`;
+    if (receipt.tool.includes("youtube")) return `https://www.youtube.com/watch?v=${postId}`;
+    if (receipt.tool.includes("x") || receipt.tool.includes("twitter")) {
+      return `https://x.com/i/web/status/${postId}`;
+    }
+  }
+  return null;
+}
+
 export function formatPostReceipt(receipt: DigitalReceipt): string {
   if (!receipt.ok) return receipt.error ?? "Post failed";
-  return String(receipt.receipt.post_url ?? receipt.receipt.post_id ?? "Published");
+  return extractPublishedUrl(receipt) ?? String(receipt.receipt.post_id ?? receipt.receipt.pin_id ?? "Published");
 }

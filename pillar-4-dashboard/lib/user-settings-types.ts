@@ -1,5 +1,7 @@
 import type { OotbAppId } from "./ootb-apps";
+import type { ExperienceLevel } from "./experience-level";
 
+/** @deprecated use ExperienceLevel from experience-level.ts */
 export type UiMode = "simple" | "expert";
 export type ColorScheme = "curxor" | "ocean" | "amber" | "mono";
 export type ThemeMode = "dark" | "light" | "system";
@@ -20,6 +22,8 @@ export interface UserSettings {
   selectedApps: OotbAppId[];
   appearance: {
     uiMode: UiMode;
+    /** Canonical UX tier — drives progressive disclosure across all Claw apps. */
+    experienceLevel: ExperienceLevel;
     colorScheme: ColorScheme;
     themeMode: ThemeMode;
   };
@@ -65,6 +69,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   selectedApps: ["my-capital", "my-content-creator", "my-work"],
   appearance: {
     uiMode: "simple",
+    experienceLevel: "beginner",
     colorScheme: "curxor",
     themeMode: "dark",
   },

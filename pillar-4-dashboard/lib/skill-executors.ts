@@ -57,6 +57,35 @@ export async function executeSkillMesh(
   const clawId = cfgNum(config, "clawId", 1);
 
   if (skill.kind === "digital") {
+    if (appId === "my-content-creator" && skillId === "batch_publish") {
+      return executeBatchPublish(config);
+    }
+    if (appId === "my-content-creator" && skillId === "publish_post") {
+      const postId = cfgStr(config, "selectedPostId", "");
+      const digital = await buildDigitalIntent(appId, skillId, config);
+      if (!digital) {
+        return { executed: false, kind: "digital", skipReason: await publishPostSkipReason(config) };
+      }
+      const { requestPostPublish } = await import("./content-approval-service");
+      const out = await requestPostPublish(postId, config, "agent");
+      if (out.mode === "pending") {
+        return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
+      }
+      return { executed: out.result.ok, kind: "digital", digital: out.result };
+    }
+    if (appId === "my-content-creator" && skillId === "publish_reply") {
+      const replyId = cfgStr(config, "selectedReplyId", "");
+      const digital = await buildDigitalIntent(appId, skillId, config);
+      if (!digital) {
+        return { executed: false, kind: "digital", skipReason: "no reply mapping" };
+      }
+      const { requestReplyPublish } = await import("./content-approval-service");
+      const out = await requestReplyPublish(replyId, "agent");
+      if (out.mode === "pending") {
+        return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
+      }
+      return { executed: out.result.ok, kind: "digital", digital: out.result };
+    }
     const digital = await buildDigitalIntent(appId, skillId, config);
     if (!digital) {
       return { executed: false, kind: "digital", skipReason: "no digital mapping" };
@@ -155,6 +184,99 @@ async function buildMotorIntent(
   return null;
 }
 
+function resolveMediaForPost(
+  post: {
+    imageUrl?: string | null;
+    imagePath?: string | null;
+    videoUrl?: string | null;
+    videoPath?: string | null;
+  },
+  config: Record<string, unknown>,
+) {
+  return {
+    imageUrl: cfgStr(config, "selectedPostImageUrl", "") || post.imageUrl || "",
+    videoUrl: cfgStr(config, "selectedPostVideoUrl", "") || post.videoUrl || "",
+    videoPath: cfgStr(config, "selectedPostVideoPath", "") || post.videoPath || "",
+  };
+}
+
+async function executeBatchPublish(config: Record<string, unknown>): Promise<SkillMeshResult> {
+  const { listPublishablePosts } = await import("./content-queue-store");
+  const { requestPostPublish } = await import("./content-approval-service");
+  const { mediaReadiness } = await import("./content-creation-service");
+  const { resolvePublishTool } = await import("./content-channels-status");
+
+  const posts = await listPublishablePosts();
+  let ok = 0;
+  let pending = 0;
+  let skipped = 0;
+  let lastDigital: DigitalPublishResult | undefined;
+
+  for (const post of posts) {
+    const { tier } = resolvePublishTool(post.platform);
+    if (tier !== "live") {
+      skipped++;
+      continue;
+    }
+    const ready = mediaReadiness(post);
+    if (!ready.ready) {
+      skipped++;
+      continue;
+    }
+    const cfg = { ...config, selectedPostId: post.id };
+    const digital = await buildDigitalIntent("my-content-creator", "publish_post", cfg);
+    if (!digital) {
+      skipped++;
+      continue;
+    }
+    const out = await requestPostPublish(post.id, cfg, "batch");
+    if (out.mode === "pending") {
+      pending++;
+      continue;
+    }
+    lastDigital = out.result;
+    if (out.result.ok) ok++;
+  }
+
+  if (ok === 0 && pending === 0) {
+    return {
+      executed: false,
+      kind: "digital",
+      skipReason: skipped > 0 ? "no ready posts — add drafts, thumbnails, or video renders" : "queue empty",
+    };
+  }
+  if (ok === 0 && pending > 0) {
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `${pending} post(s) awaiting operator approval`,
+    };
+  }
+  return { executed: true, kind: "digital", digital: lastDigital };
+}
+
+async function publishPostSkipReason(config: Record<string, unknown>): Promise<string> {
+  const postId = cfgStr(config, "selectedPostId", "");
+  const { getContentPost } = await import("./content-queue-store");
+  const { mediaReadiness } = await import("./content-creation-service");
+  const post = postId ? await getContentPost(postId) : null;
+  if (!post?.draftText.trim()) {
+    return "selected post has no draft text — run Draft Post or save a draft first";
+  }
+  const media = resolveMediaForPost(post, config);
+  const enriched = { ...post, ...media };
+  const ready = mediaReadiness(enriched);
+  if (!ready.ready) {
+    return `missing: ${ready.missing.join(", ")} — use Creation Studio (Thumbnail / Render Video)`;
+  }
+  const { resolvePublishTool } = await import("./content-channels-status");
+  const { tier } = resolvePublishTool(post.platform);
+  if (tier !== "live") {
+    return `${post.platform} bridge not live yet — draft saved locally; configure digital.env when bridge ships`;
+  }
+  return "no digital mapping";
+}
+
 async function buildDigitalIntent(
   appId: OotbAppId,
   skillId: string,
@@ -175,14 +297,58 @@ async function buildDigitalIntent(
 
     case "my-content-creator":
       if (skillId === "publish_post") {
-        return {
-          tool: "content.publish_post",
-          payload: {
-            channel: cfgStr(config, "primaryChannel", "x"),
-            tone: cfgStr(config, "contentTone", "technical"),
-            post_id: cfgStr(config, "selectedPostId", `POST-${Date.now()}`),
-          },
+        const postId = cfgStr(config, "selectedPostId", "");
+        const { resolvePostForPublish } = await import("./content-queue-store");
+        const post = postId ? await resolvePostForPublish(postId) : null;
+        if (!post) return null;
+        const { resolvePublishTool } = await import("./content-channels-status");
+        const { tool, tier } = resolvePublishTool(post.platform);
+        if (tier !== "live") return null;
+        const { charLimitForPlatform } = await import("./social-channels");
+        const cap = charLimitForPlatform(post.platform) ?? 280;
+        const media = resolveMediaForPost(post, config);
+        const { imageUrl, videoUrl, videoPath } = media;
+        if (post.platform === "instagram" && !imageUrl && !post.imagePath) return null;
+        if (post.platform === "pinterest" && !imageUrl && !post.imagePath) return null;
+        if (
+          (post.platform === "tiktok" || post.platform === "youtube" || post.platform === "snapchat") &&
+          !videoUrl &&
+          !videoPath
+        ) {
+          return null;
+        }
+        const payload: Record<string, unknown> = {
+          text: post.draftText.slice(0, cap),
+          platform: post.platform,
+          channel: post.platform,
+          tone: cfgStr(config, "contentTone", "technical"),
+          post_id: post.id,
+          format: post.format,
         };
+        if (imageUrl) payload.image_url = imageUrl;
+        if (videoUrl) payload.video_url = videoUrl;
+        if (videoPath) payload.video_path = videoPath;
+        const boardId =
+          post.pinterestBoardId ||
+          cfgStr(config, "selectedBoardId", "") ||
+          cfgStr(config, "pinterestBoardId", "");
+        if (boardId) payload.board_id = boardId;
+        const pinLink = cfgStr(config, "selectedPinLink", "") || cfgStr(config, "pinterestLink", "");
+        if (pinLink) payload.link = pinLink;
+        const subreddit = cfgStr(config, "selectedSubreddit", "") || cfgStr(config, "redditSubreddit", "");
+        if (subreddit) payload.subreddit = subreddit;
+        const discordChannel = cfgStr(config, "selectedChannelId", "") || cfgStr(config, "discordChannelId", "");
+        if (discordChannel) payload.channel_id = discordChannel;
+        return { tool, payload };
+      }
+      if (skillId === "publish_reply") {
+        const replyId = cfgStr(config, "selectedReplyId", "");
+        if (!replyId) return null;
+        const { buildReplyIntent } = await import("./content-reply-publish");
+        const { getContentReply } = await import("./content-replies-store");
+        const reply = await getContentReply(replyId);
+        if (!reply) return null;
+        return buildReplyIntent(reply);
       }
       break;
 

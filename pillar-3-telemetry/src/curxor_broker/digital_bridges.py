@@ -29,9 +29,21 @@ DEFAULT_ENV_PATH = "/etc/curxor/digital.env"
 
 TOOL_EXECUTE_TRADE = "capital.execute_trade"
 TOOL_PUBLISH_POST = "content.publish_post"
+TOOL_PUBLISH_THREADS = "content.publish_threads"
+TOOL_PUBLISH_FACEBOOK = "content.publish_facebook"
+TOOL_PUBLISH_INSTAGRAM = "content.publish_instagram"
+TOOL_PUBLISH_TIKTOK = "content.publish_tiktok"
+TOOL_PUBLISH_YOUTUBE = "content.publish_youtube"
+TOOL_PUBLISH_LINKEDIN = "content.publish_linkedin"
+TOOL_PUBLISH_BLUESKY = "content.publish_bluesky"
+TOOL_PUBLISH_REDDIT = "content.publish_reddit"
+TOOL_PUBLISH_PINTEREST = "content.publish_pinterest"
+TOOL_PUBLISH_SNAPCHAT = "content.publish_snapchat"
+TOOL_PUBLISH_REPLY = "content.publish_reply"
 TOOL_HEALTH_SYNC = "health.sync_wearables"
 TOOL_TELEGRAM_SEND = "channel.telegram.send"
 TOOL_SLACK_SEND = "channel.slack.send"
+TOOL_DISCORD_SEND = "channel.discord.send"
 TOOL_WHATSAPP_SEND = "channel.whatsapp.send"
 TOOL_IMESSAGE_SEND = "channel.imessage.send"
 TOOL_BROWSER_FETCH = "browser.fetch_page"
@@ -282,6 +294,1644 @@ class XPublishWorker:
         return {"post_id": tweet_id, "post_url": post_url, "text": text}
 
 
+class MetaPublishWorker:
+    """Meta Graph — Threads text, Facebook Page feed, Instagram feed (image + caption)."""
+
+    def __init__(self) -> None:
+        self._token = os.environ.get("META_ACCESS_TOKEN", "").strip()
+        self._threads_user = os.environ.get("META_THREADS_USER_ID", "").strip()
+        self._page_id = os.environ.get("META_PAGE_ID", "").strip()
+        self._ig_user = os.environ.get("META_IG_USER_ID", "").strip()
+        self._graph_ver = os.environ.get("META_GRAPH_VERSION", "v21.0").strip()
+
+    def threads_enabled(self) -> bool:
+        return bool(self._token and self._threads_user)
+
+    def facebook_enabled(self) -> bool:
+        return bool(self._token and self._page_id)
+
+    def instagram_enabled(self) -> bool:
+        return bool(self._token and self._ig_user)
+
+    @property
+    def enabled(self) -> bool:
+        return self.threads_enabled() or self.facebook_enabled() or self.instagram_enabled()
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        text = str(intent.payload.get("text", "")).strip()
+        if not text:
+            return DigitalReceipt.failure(intent, "Missing text")
+
+        try:
+            if intent.tool == TOOL_PUBLISH_THREADS:
+                if not self.threads_enabled():
+                    return DigitalReceipt.failure(intent, "Threads not configured (META_ACCESS_TOKEN + META_THREADS_USER_ID)")
+                if len(text) > 500:
+                    return DigitalReceipt.failure(intent, "text exceeds 500 characters for Threads")
+                result = await self._publish_threads(text)
+            elif intent.tool == TOOL_PUBLISH_FACEBOOK:
+                if not self.facebook_enabled():
+                    return DigitalReceipt.failure(intent, "Facebook Page not configured (META_ACCESS_TOKEN + META_PAGE_ID)")
+                result = await self._publish_facebook(text)
+            elif intent.tool == TOOL_PUBLISH_INSTAGRAM:
+                if not self.instagram_enabled():
+                    return DigitalReceipt.failure(intent, "Instagram not configured (META_ACCESS_TOKEN + META_IG_USER_ID)")
+                image_url = str(intent.payload.get("image_url", "")).strip()
+                if not image_url:
+                    return DigitalReceipt.failure(
+                        intent,
+                        "Instagram feed requires image_url in publish payload — attach thumbnail or vision frame URL",
+                    )
+                if len(text) > 2200:
+                    return DigitalReceipt.failure(intent, "caption exceeds 2200 characters for Instagram")
+                result = await self._publish_instagram(text, image_url)
+            else:
+                return DigitalReceipt.failure(intent, f"Unknown Meta tool: {intent.tool}")
+
+            return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("Meta publish failed tool=%s", intent.tool)
+            return DigitalReceipt.failure(intent, str(exc))
+
+    async def _publish_threads(self, text: str) -> dict[str, Any]:
+        import aiohttp
+
+        base = "https://graph.threads.net/v1.0"
+        params = {"media_type": "TEXT", "text": text, "access_token": self._token}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"{base}/{self._threads_user}/threads", params=params, timeout=60) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(data))
+                creation_id = data.get("id")
+            if not creation_id:
+                raise RuntimeError("Threads API did not return creation id")
+            async with session.post(
+                f"{base}/{self._threads_user}/threads_publish",
+                params={"creation_id": creation_id, "access_token": self._token},
+                timeout=60,
+            ) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(data))
+                post_id = data.get("id")
+                return {
+                    "platform": "threads",
+                    "post_id": post_id,
+                    "post_url": f"https://www.threads.net/@me/post/{post_id}" if post_id else None,
+                    "text": text,
+                }
+
+    async def _publish_facebook(self, text: str) -> dict[str, Any]:
+        import aiohttp
+
+        url = f"https://graph.facebook.com/{self._graph_ver}/{self._page_id}/feed"
+        params = {"message": text, "access_token": self._token}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, params=params, timeout=60) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(data))
+                post_id = data.get("id")
+                return {
+                    "platform": "facebook",
+                    "post_id": post_id,
+                    "post_url": f"https://www.facebook.com/{post_id}" if post_id else None,
+                    "text": text,
+                }
+
+    async def _publish_instagram(self, caption: str, image_url: str) -> dict[str, Any]:
+        import aiohttp
+
+        base = f"https://graph.facebook.com/{self._graph_ver}/{self._ig_user}"
+        create_params = {"image_url": image_url, "caption": caption, "access_token": self._token}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"{base}/media", params=create_params, timeout=90) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(data))
+                creation_id = data.get("id")
+            if not creation_id:
+                raise RuntimeError("Instagram media container missing id")
+            async with session.post(
+                f"{base}/media_publish",
+                params={"creation_id": creation_id, "access_token": self._token},
+                timeout=90,
+            ) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(data))
+                post_id = data.get("id")
+                return {
+                    "platform": "instagram",
+                    "post_id": post_id,
+                    "post_url": f"https://www.instagram.com/p/{post_id}/" if post_id else None,
+                    "caption": caption,
+                    "image_url": image_url,
+                }
+
+
+def _meta_error(data: Any) -> str:
+    if isinstance(data, dict):
+        err = data.get("error")
+        if isinstance(err, dict):
+            return str(err.get("message") or err)
+    return str(data)
+
+
+def _tiktok_error(data: Any) -> str:
+    if isinstance(data, dict):
+        err = data.get("error")
+        if isinstance(err, dict) and err.get("message"):
+            return str(err["message"])
+        if data.get("message"):
+            return str(data["message"])
+    return str(data)
+
+
+class TikTokPublishWorker:
+    """TikTok Content Posting API — direct post or inbox draft via PULL_FROM_URL / FILE_UPLOAD."""
+
+    _API = "https://open.tiktokapis.com/v2/post/publish"
+    _TERMINAL_OK = frozenset({"PUBLISH_COMPLETE", "SEND_TO_USER_INBOX"})
+    _TERMINAL_FAIL = frozenset({"FAILED", "CANCELLED"})
+
+    def __init__(self) -> None:
+        self._access_token = os.environ.get("TIKTOK_ACCESS_TOKEN", "").strip()
+        self._privacy = os.environ.get("TIKTOK_DEFAULT_PRIVACY", "SELF_ONLY").strip()
+        self._publish_mode = os.environ.get("TIKTOK_PUBLISH_MODE", "direct").strip().lower()
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._access_token)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(intent, "TikTok not configured (TIKTOK_ACCESS_TOKEN in digital.env)")
+
+        caption = str(intent.payload.get("text", "")).strip()
+        video_url = str(intent.payload.get("video_url", "")).strip()
+        video_path = str(intent.payload.get("video_path", "") or intent.payload.get("local_video_path", "")).strip()
+        privacy = str(intent.payload.get("privacy_level", self._privacy)).strip() or "SELF_ONLY"
+        mode = str(intent.payload.get("publish_mode", self._publish_mode)).strip().lower() or "direct"
+
+        if not video_url and not video_path:
+            return DigitalReceipt.failure(
+                intent,
+                "TikTok requires video_url (verified PULL_FROM_URL) or video_path on appliance",
+            )
+        if len(caption) > 2200:
+            return DigitalReceipt.failure(intent, "caption exceeds 2200 characters for TikTok")
+
+        try:
+            if video_path and not video_url:
+                result = await self._publish_file_upload(caption, video_path, mode, privacy)
+            else:
+                result = await self._publish_pull_from_url(caption, video_url, mode, privacy)
+            return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("TikTok publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+    async def _publish_pull_from_url(self, caption: str, video_url: str, mode: str, privacy: str) -> dict[str, Any]:
+        import aiohttp
+
+        init_url = (
+            f"{self._API}/video/init/"
+            if mode == "direct"
+            else f"{self._API}/inbox/video/init/"
+        )
+        body: dict[str, Any] = {
+            "source_info": {"source": "PULL_FROM_URL", "video_url": video_url},
+        }
+        if mode == "direct":
+            body["post_info"] = {
+                "title": caption,
+                "privacy_level": privacy,
+                "disable_duet": False,
+                "disable_comment": False,
+                "disable_stitch": False,
+            }
+
+        async with aiohttp.ClientSession() as session:
+            data = await self._post_json(session, init_url, body)
+            publish_id = data.get("publish_id")
+            if not publish_id:
+                raise RuntimeError("TikTok init missing publish_id")
+            status = await self._poll_status(session, publish_id)
+            return {
+                "platform": "tiktok",
+                "publish_id": publish_id,
+                "status": status.get("status"),
+                "post_url": status.get("publicaly_available_post_id") or status.get("share_url"),
+                "caption": caption,
+                "video_url": video_url,
+                "mode": mode,
+            }
+
+    async def _publish_file_upload(self, caption: str, video_path: str, mode: str, privacy: str) -> dict[str, Any]:
+        import aiohttp
+
+        path = Path(video_path)
+        if not path.is_file():
+            raise RuntimeError(f"video_path not found: {video_path}")
+
+        video_size = path.stat().st_size
+        if video_size <= 0:
+            raise RuntimeError("video file is empty")
+
+        chunk_size = min(10_000_000, video_size)
+        total_chunk_count = max(1, (video_size + chunk_size - 1) // chunk_size)
+
+        init_url = (
+            f"{self._API}/video/init/"
+            if mode == "direct"
+            else f"{self._API}/inbox/video/init/"
+        )
+        body: dict[str, Any] = {
+            "source_info": {
+                "source": "FILE_UPLOAD",
+                "video_size": video_size,
+                "chunk_size": chunk_size,
+                "total_chunk_count": total_chunk_count,
+            },
+        }
+        if mode == "direct":
+            body["post_info"] = {
+                "title": caption,
+                "privacy_level": privacy,
+                "disable_duet": False,
+                "disable_comment": False,
+                "disable_stitch": False,
+            }
+
+        async with aiohttp.ClientSession() as session:
+            data = await self._post_json(session, init_url, body)
+            publish_id = data.get("publish_id")
+            upload_url = data.get("upload_url")
+            if not publish_id or not upload_url:
+                raise RuntimeError("TikTok FILE_UPLOAD init missing publish_id or upload_url")
+
+            await self._upload_file(session, upload_url, path, video_size, chunk_size)
+            status = await self._poll_status(session, publish_id)
+            return {
+                "platform": "tiktok",
+                "publish_id": publish_id,
+                "status": status.get("status"),
+                "post_url": status.get("publicaly_available_post_id") or status.get("share_url"),
+                "caption": caption,
+                "video_path": str(path),
+                "mode": mode,
+            }
+
+    async def _post_json(self, session: Any, url: str, body: dict[str, Any]) -> dict[str, Any]:
+        headers = {
+            "Authorization": f"Bearer {self._access_token}",
+            "Content-Type": "application/json; charset=UTF-8",
+        }
+        async with session.post(url, json=body, headers=headers, timeout=120) as resp:
+            payload = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_tiktok_error(payload))
+            if isinstance(payload, dict):
+                err = payload.get("error")
+                if isinstance(err, dict) and err.get("code") not in (None, "ok", ""):
+                    raise RuntimeError(_tiktok_error(payload))
+                inner = payload.get("data")
+                if isinstance(inner, dict):
+                    return inner
+            raise RuntimeError(_tiktok_error(payload))
+
+    async def _upload_file(
+        self,
+        session: Any,
+        upload_url: str,
+        path: Path,
+        video_size: int,
+        chunk_size: int,
+    ) -> None:
+        sent = 0
+        with path.open("rb") as fh:
+            while sent < video_size:
+                chunk = fh.read(chunk_size)
+                if not chunk:
+                    break
+                end = sent + len(chunk) - 1
+                headers = {
+                    "Content-Type": "video/mp4",
+                    "Content-Range": f"bytes {sent}-{end}/{video_size}",
+                }
+                async with session.put(upload_url, data=chunk, headers=headers, timeout=300) as resp:
+                    if resp.status not in (200, 201, 206):
+                        text = await resp.text()
+                        raise RuntimeError(f"TikTok upload failed HTTP {resp.status}: {text[:200]}")
+                sent += len(chunk)
+
+    async def _poll_status(self, session: Any, publish_id: str, max_wait: int = 180) -> dict[str, Any]:
+        import asyncio
+        import time
+
+        headers = {
+            "Authorization": f"Bearer {self._access_token}",
+            "Content-Type": "application/json; charset=UTF-8",
+        }
+        body = {"publish_id": publish_id}
+        deadline = time.time() + max_wait
+        while time.time() < deadline:
+            async with session.post(
+                f"{self._API}/status/fetch/",
+                json=body,
+                headers=headers,
+                timeout=60,
+            ) as resp:
+                payload = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_tiktok_error(payload))
+                err = payload.get("error") if isinstance(payload, dict) else None
+                if isinstance(err, dict) and err.get("code") not in (None, "ok", ""):
+                    raise RuntimeError(_tiktok_error(payload))
+                inner = payload.get("data") if isinstance(payload, dict) else {}
+                if not isinstance(inner, dict):
+                    inner = {}
+                status = str(inner.get("status") or "")
+                if status in self._TERMINAL_OK:
+                    return inner
+                if status in self._TERMINAL_FAIL:
+                    raise RuntimeError(inner.get("fail_reason") or f"TikTok publish {status}")
+            await asyncio.sleep(2)
+        raise RuntimeError("TikTok publish timed out waiting for status")
+
+
+def _google_error(data: Any) -> str:
+    if isinstance(data, dict):
+        err = data.get("error")
+        if isinstance(err, dict):
+            msg = err.get("message")
+            if msg:
+                return str(msg)
+        if data.get("error_description"):
+            return str(data["error_description"])
+    return str(data)
+
+
+class YouTubePublishWorker:
+    """YouTube Data API v3 — resumable video upload with OAuth refresh token."""
+
+    _TOKEN_URL = "https://oauth2.googleapis.com/token"
+    _UPLOAD_BASE = "https://www.googleapis.com/upload/youtube/v3/videos"
+
+    def __init__(self) -> None:
+        self._client_id = os.environ.get("YOUTUBE_CLIENT_ID", "").strip()
+        self._client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET", "").strip()
+        self._refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN", "").strip()
+        self._privacy = os.environ.get("YOUTUBE_DEFAULT_PRIVACY", "private").strip() or "private"
+        self._category = os.environ.get("YOUTUBE_CATEGORY_ID", "22").strip() or "22"
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._client_id and self._client_secret and self._refresh_token)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "YouTube not configured (YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN)",
+            )
+
+        text = str(intent.payload.get("text", "")).strip()
+        title_override = str(intent.payload.get("title", "")).strip()
+        video_url = str(intent.payload.get("video_url", "")).strip()
+        video_path = str(intent.payload.get("video_path", "") or intent.payload.get("local_video_path", "")).strip()
+        privacy = str(intent.payload.get("privacy_status", self._privacy)).strip() or "private"
+        fmt = str(intent.payload.get("format", "")).strip().lower()
+        is_short = bool(intent.payload.get("is_short")) or fmt in ("short", "reel")
+
+        if not video_url and not video_path:
+            return DigitalReceipt.failure(
+                intent,
+                "YouTube requires video_url or video_path on appliance — Shorts and long-form need video",
+            )
+
+        temp_path: Path | None = None
+        try:
+            import aiohttp
+
+            async with aiohttp.ClientSession() as session:
+                access_token = await self._fetch_access_token(session)
+                upload_path = Path(video_path) if video_path else None
+                if not upload_path or not upload_path.is_file():
+                    if not video_url:
+                        return DigitalReceipt.failure(intent, f"video_path not found: {video_path}")
+                    temp_path = await self._download_video(session, video_url)
+                    upload_path = temp_path
+
+                title, description = self._metadata(text, title_override, is_short)
+                if len(description) > 5000:
+                    return DigitalReceipt.failure(intent, "description exceeds 5000 characters for YouTube")
+
+                result = await self._resumable_upload(
+                    session,
+                    access_token,
+                    upload_path,
+                    title,
+                    description,
+                    privacy,
+                    is_short,
+                )
+                return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("YouTube publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+        finally:
+            if temp_path and temp_path.is_file():
+                try:
+                    temp_path.unlink()
+                except OSError:
+                    pass
+
+    def _metadata(self, text: str, title_override: str, is_short: bool) -> tuple[str, str]:
+        if title_override:
+            title = title_override[:100]
+            description = text[:5000] if text else title
+        elif text:
+            parts = text.split("\n", 1)
+            title = parts[0][:100]
+            description = text[:5000]
+        else:
+            title = "CurXor Creator Claw upload"
+            description = ""
+
+        blob = f"{title}\n{description}".lower()
+        if is_short and "#shorts" not in blob:
+            description = f"{description}\n\n#Shorts".strip() if description else "#Shorts"
+
+        return title, description
+
+    async def _fetch_access_token(self, session: Any) -> str:
+        body = {
+            "client_id": self._client_id,
+            "client_secret": self._client_secret,
+            "refresh_token": self._refresh_token,
+            "grant_type": "refresh_token",
+        }
+        async with session.post(self._TOKEN_URL, data=body, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_google_error(data))
+            token = data.get("access_token") if isinstance(data, dict) else None
+            if not token:
+                raise RuntimeError("YouTube OAuth missing access_token")
+            return str(token)
+
+    async def _download_video(self, session: Any, video_url: str) -> Path:
+        import tempfile
+
+        async with session.get(video_url, timeout=300) as resp:
+            if resp.status >= 400:
+                text = await resp.text()
+                raise RuntimeError(f"video_url fetch failed HTTP {resp.status}: {text[:200]}")
+            fd, tmp = tempfile.mkstemp(suffix=".mp4", prefix="curxor-yt-")
+            os.close(fd)
+            path = Path(tmp)
+            with path.open("wb") as fh:
+                async for chunk in resp.content.iter_chunked(1024 * 1024):
+                    fh.write(chunk)
+            if path.stat().st_size <= 0:
+                path.unlink(missing_ok=True)
+                raise RuntimeError("downloaded video is empty")
+            return path
+
+    async def _resumable_upload(
+        self,
+        session: Any,
+        access_token: str,
+        path: Path,
+        title: str,
+        description: str,
+        privacy: str,
+        is_short: bool,
+    ) -> dict[str, Any]:
+        if not path.is_file():
+            raise RuntimeError(f"video file not found: {path}")
+
+        video_size = path.stat().st_size
+        metadata: dict[str, Any] = {
+            "snippet": {
+                "title": title,
+                "description": description,
+                "categoryId": self._category,
+            },
+            "status": {
+                "privacyStatus": privacy,
+                "selfDeclaredMadeForKids": False,
+            },
+        }
+
+        init_headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-Upload-Content-Type": "video/mp4",
+            "X-Upload-Content-Length": str(video_size),
+        }
+        init_url = f"{self._UPLOAD_BASE}?uploadType=resumable&part=snippet,status"
+        async with session.post(init_url, json=metadata, headers=init_headers, timeout=120) as resp:
+            if resp.status not in (200, 201):
+                body = await resp.json(content_type=None)
+                raise RuntimeError(_google_error(body))
+            upload_url = resp.headers.get("Location")
+            if not upload_url:
+                raise RuntimeError("YouTube resumable upload missing Location header")
+
+        video_bytes = path.read_bytes()
+        upload_headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "video/mp4",
+            "Content-Length": str(video_size),
+        }
+        async with session.put(upload_url, data=video_bytes, headers=upload_headers, timeout=600) as resp:
+            body = await resp.json(content_type=None)
+            if resp.status not in (200, 201):
+                raise RuntimeError(_google_error(body))
+            if not isinstance(body, dict):
+                raise RuntimeError("YouTube upload returned invalid response")
+            video_id = body.get("id")
+            return {
+                "platform": "youtube",
+                "video_id": video_id,
+                "post_url": f"https://www.youtube.com/watch?v={video_id}" if video_id else None,
+                "title": title,
+                "description": description[:200],
+                "privacy_status": privacy,
+                "is_short": is_short,
+            }
+
+
+def _linkedin_error(data: Any, status: int = 0) -> str:
+    if isinstance(data, dict):
+        msg = data.get("message")
+        if msg:
+            return str(msg)
+        err = data.get("error")
+        if isinstance(err, dict):
+            return str(err.get("message") or err)
+        if isinstance(err, str):
+            return err
+    if status:
+        return f"HTTP {status}: {data}"
+    return str(data)
+
+
+class LinkedInPublishWorker:
+    """LinkedIn UGC Posts API — text posts for member or organization."""
+
+    _UGC_URL = "https://api.linkedin.com/v2/ugcPosts"
+    _USERINFO_URL = "https://api.linkedin.com/v2/userinfo"
+    _TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
+
+    def __init__(self) -> None:
+        self._client_id = os.environ.get("LINKEDIN_CLIENT_ID", "").strip()
+        self._client_secret = os.environ.get("LINKEDIN_CLIENT_SECRET", "").strip()
+        self._access_token = os.environ.get("LINKEDIN_ACCESS_TOKEN", "").strip()
+        self._refresh_token = os.environ.get("LINKEDIN_REFRESH_TOKEN", "").strip()
+        self._author_urn = os.environ.get("LINKEDIN_AUTHOR_URN", "").strip()
+        self._visibility = os.environ.get("LINKEDIN_DEFAULT_VISIBILITY", "PUBLIC").strip() or "PUBLIC"
+
+    @property
+    def enabled(self) -> bool:
+        return bool(
+            self._access_token
+            or (self._client_id and self._client_secret and self._refresh_token)
+        )
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "LinkedIn not configured (LINKEDIN_ACCESS_TOKEN or refresh token trio in digital.env)",
+            )
+
+        text = str(intent.payload.get("text", "")).strip()
+        if not text:
+            return DigitalReceipt.failure(intent, "Missing text")
+        if len(text) > 3000:
+            return DigitalReceipt.failure(intent, "text exceeds 3000 characters for LinkedIn")
+
+        visibility = str(intent.payload.get("visibility", self._visibility)).strip() or "PUBLIC"
+        author = str(intent.payload.get("author_urn", self._author_urn)).strip()
+
+        try:
+            import aiohttp
+
+            async with aiohttp.ClientSession() as session:
+                token = await self._resolve_access_token(session)
+                if not author:
+                    author = await self._resolve_author_urn(session, token)
+
+                body = {
+                    "author": author,
+                    "lifecycleState": "PUBLISHED",
+                    "specificContent": {
+                        "com.linkedin.ugc.ShareContent": {
+                            "shareCommentary": {"text": text},
+                            "shareMediaCategory": "NONE",
+                        }
+                    },
+                    "visibility": {
+                        "com.linkedin.ugc.MemberNetworkVisibility": visibility,
+                    },
+                }
+                headers = {
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                    "X-Restli-Protocol-Version": "2.0.0",
+                }
+                async with session.post(self._UGC_URL, json=body, headers=headers, timeout=60) as resp:
+                    restli_id = resp.headers.get("X-RestLi-Id") or resp.headers.get("x-restli-id")
+                    raw = await resp.text()
+                    payload: dict[str, Any] = {}
+                    if raw.strip():
+                        try:
+                            payload = json.loads(raw)
+                        except json.JSONDecodeError:
+                            payload = {"raw": raw[:200]}
+                    if resp.status not in (200, 201):
+                        raise RuntimeError(_linkedin_error(payload, resp.status))
+
+                    post_id = restli_id
+                    if not post_id and isinstance(payload, dict):
+                        post_id = payload.get("id")
+
+                    return DigitalReceipt.success(
+                        intent,
+                        {
+                            "platform": "linkedin",
+                            "post_id": post_id,
+                            "author_urn": author,
+                            "visibility": visibility,
+                            "text": text[:200],
+                        },
+                    )
+        except Exception as exc:
+            LOG.exception("LinkedIn publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+    async def _resolve_access_token(self, session: Any) -> str:
+        if self._access_token:
+            return self._access_token
+        if not (self._client_id and self._client_secret and self._refresh_token):
+            raise RuntimeError("LinkedIn access token missing and no refresh credentials")
+        body = {
+            "grant_type": "refresh_token",
+            "refresh_token": self._refresh_token,
+            "client_id": self._client_id,
+            "client_secret": self._client_secret,
+        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        async with session.post(self._TOKEN_URL, data=body, headers=headers, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_linkedin_error(data, resp.status))
+            token = data.get("access_token") if isinstance(data, dict) else None
+            if not token:
+                raise RuntimeError("LinkedIn token refresh missing access_token")
+            return str(token)
+
+    async def _resolve_author_urn(self, session: Any, token: str) -> str:
+        headers = {"Authorization": f"Bearer {token}"}
+        async with session.get(self._USERINFO_URL, headers=headers, timeout=30) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(
+                    _linkedin_error(data, resp.status)
+                    + " — set LINKEDIN_AUTHOR_URN (urn:li:person:… or urn:li:organization:…)",
+                )
+            if not isinstance(data, dict):
+                raise RuntimeError("LinkedIn userinfo returned invalid payload")
+            sub = str(data.get("sub") or "").strip()
+            if not sub:
+                raise RuntimeError("LinkedIn userinfo missing sub — set LINKEDIN_AUTHOR_URN manually")
+            if sub.startswith("urn:li:"):
+                return sub
+            return f"urn:li:person:{sub}"
+
+
+def _bluesky_error(data: Any, status: int = 0) -> str:
+    if isinstance(data, dict):
+        msg = data.get("message") or data.get("error")
+        if msg:
+            return str(msg)
+    if status:
+        return f"HTTP {status}: {data}"
+    return str(data)
+
+
+class BlueskyPublishWorker:
+    """Bluesky AT Protocol — app password session + com.atproto.repo.createRecord."""
+
+    def __init__(self) -> None:
+        self._handle = os.environ.get("BLUESKY_HANDLE", "").strip()
+        self._password = os.environ.get("BLUESKY_APP_PASSWORD", "").strip()
+        self._pds = os.environ.get("BLUESKY_PDS_URL", "https://bsky.social").strip().rstrip("/")
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._handle and self._password)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "Bluesky not configured (BLUESKY_HANDLE + BLUESKY_APP_PASSWORD in digital.env)",
+            )
+
+        text = str(intent.payload.get("text", "")).strip()
+        if not text:
+            return DigitalReceipt.failure(intent, "Missing text")
+        if len(text) > 300:
+            return DigitalReceipt.failure(intent, "text exceeds 300 characters for Bluesky")
+
+        try:
+            import aiohttp
+
+            async with aiohttp.ClientSession() as session:
+                auth = await self._create_session(session)
+                result = await self._create_post(session, auth, text)
+                return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("Bluesky publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+    async def _create_session(self, session: Any) -> dict[str, str]:
+        url = f"{self._pds}/xrpc/com.atproto.server.createSession"
+        body = {"identifier": self._handle, "password": self._password}
+        async with session.post(url, json=body, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_bluesky_error(data, resp.status))
+            if not isinstance(data, dict):
+                raise RuntimeError("Bluesky session returned invalid payload")
+            did = str(data.get("did") or "").strip()
+            token = str(data.get("accessJwt") or "").strip()
+            handle = str(data.get("handle") or self._handle).strip()
+            if not did or not token:
+                raise RuntimeError("Bluesky session missing did or accessJwt")
+            return {"did": did, "accessJwt": token, "handle": handle}
+
+    async def _create_post(self, session: Any, auth: dict[str, str], text: str) -> dict[str, Any]:
+        from datetime import datetime, timezone
+
+        created_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+        url = f"{self._pds}/xrpc/com.atproto.repo.createRecord"
+        body: dict[str, Any] = {
+            "repo": auth["did"],
+            "collection": "app.bsky.feed.post",
+            "record": {
+                "$type": "app.bsky.feed.post",
+                "text": text,
+                "createdAt": created_at,
+            },
+        }
+        headers = {"Authorization": f"Bearer {auth['accessJwt']}"}
+        async with session.post(url, json=body, headers=headers, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_bluesky_error(data, resp.status))
+            if not isinstance(data, dict):
+                raise RuntimeError("Bluesky createRecord returned invalid payload")
+
+        uri = str(data.get("uri") or "")
+        cid = data.get("cid")
+        rkey = uri.rsplit("/", 1)[-1] if uri else None
+        profile = auth["handle"].lstrip("@")
+        post_url = f"https://bsky.app/profile/{profile}/post/{rkey}" if rkey else None
+        return {
+            "platform": "bluesky",
+            "uri": uri,
+            "cid": cid,
+            "post_url": post_url,
+            "text": text,
+        }
+
+
+class ReplyPublishWorker:
+    """Thread replies — content.publish_reply (X, Threads, LinkedIn, Bluesky)."""
+
+    def __init__(self) -> None:
+        self._x = XPublishWorker()
+        self._meta = MetaPublishWorker()
+        self._linkedin = LinkedInPublishWorker()
+        self._bluesky = BlueskyPublishWorker()
+
+    @property
+    def enabled(self) -> bool:
+        return (
+            self._x.enabled
+            or self._meta.threads_enabled()
+            or self._linkedin.enabled
+            or self._bluesky.enabled
+        )
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        platform = str(intent.payload.get("platform", "x")).strip().lower()
+        text = str(intent.payload.get("text", "")).strip()
+        if not text:
+            return DigitalReceipt.failure(intent, "Missing reply text")
+
+        parent_id = str(intent.payload.get("parent_post_id", "")).strip()
+        thread_url = str(intent.payload.get("thread_url", "")).strip()
+        if not parent_id and thread_url:
+            parent_id = _extract_parent_id(platform, thread_url)
+
+        if not parent_id:
+            return DigitalReceipt.failure(intent, "Missing parent_post_id or thread_url")
+
+        try:
+            if platform == "x":
+                if not self._x.enabled:
+                    return DigitalReceipt.failure(intent, "X API not configured")
+                if len(text) > 280:
+                    return DigitalReceipt.failure(intent, "reply exceeds 280 characters")
+                loop = asyncio.get_running_loop()
+                result = await loop.run_in_executor(None, self._x_reply_sync, text, parent_id)
+            elif platform == "threads":
+                if not self._meta.threads_enabled():
+                    return DigitalReceipt.failure(intent, "Threads not configured")
+                if len(text) > 500:
+                    return DigitalReceipt.failure(intent, "reply exceeds 500 characters for Threads")
+                result = await self._meta_reply_threads(text, parent_id)
+            elif platform == "linkedin":
+                if not self._linkedin.enabled:
+                    return DigitalReceipt.failure(intent, "LinkedIn not configured")
+                if len(text) > 1250:
+                    return DigitalReceipt.failure(intent, "reply exceeds 1250 characters for LinkedIn")
+                result = await self._linkedin_comment(text, parent_id)
+            elif platform == "bluesky":
+                if not self._bluesky.enabled:
+                    return DigitalReceipt.failure(intent, "Bluesky not configured")
+                parent_uri = str(intent.payload.get("parent_uri", "")).strip()
+                parent_cid = str(intent.payload.get("parent_cid", "")).strip()
+                root_uri = str(intent.payload.get("root_uri", parent_uri)).strip()
+                root_cid = str(intent.payload.get("root_cid", parent_cid)).strip()
+                if not parent_uri or not parent_cid:
+                    return DigitalReceipt.failure(
+                        intent,
+                        "Bluesky reply requires parent_uri and parent_cid from publish receipt",
+                    )
+                result = await self._bluesky_reply(text, root_uri, root_cid, parent_uri, parent_cid)
+            else:
+                return DigitalReceipt.failure(intent, f"Reply not supported for platform: {platform}")
+
+            result["platform"] = platform
+            result["parent_post_id"] = parent_id
+            if intent.payload.get("reply_id"):
+                result["reply_id"] = intent.payload.get("reply_id")
+            if intent.payload.get("post_id"):
+                result["post_id"] = intent.payload.get("post_id")
+            return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("Reply publish failed platform=%s", platform)
+            return DigitalReceipt.failure(intent, str(exc))
+
+    def _x_reply_sync(self, text: str, in_reply_to_tweet_id: str) -> dict[str, Any]:
+        import tweepy
+
+        client = tweepy.Client(
+            consumer_key=self._x._api_key,
+            consumer_secret=self._x._api_secret,
+            access_token=self._x._access_token,
+            access_token_secret=self._x._access_secret,
+            bearer_token=self._x._bearer or None,
+        )
+        response = client.create_tweet(text=text, in_reply_to_tweet_id=in_reply_to_tweet_id)
+        tweet_id = response.data.get("id") if response.data else None
+        post_url = f"https://x.com/i/web/status/{tweet_id}" if tweet_id else None
+        return {"post_id": tweet_id, "post_url": post_url, "text": text, "kind": "reply"}
+
+    async def _meta_reply_threads(self, text: str, reply_to_id: str) -> dict[str, Any]:
+        import aiohttp
+
+        base = "https://graph.threads.net/v1.0"
+        token = self._meta._token
+        user = self._meta._threads_user
+        params = {
+            "media_type": "TEXT",
+            "text": text,
+            "reply_to_id": reply_to_id,
+            "access_token": token,
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"{base}/{user}/threads", params=params, timeout=60) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(data))
+                container_id = data.get("id") if isinstance(data, dict) else None
+            if not container_id:
+                raise RuntimeError("Threads reply container missing id")
+            publish_params = {"creation_id": container_id, "access_token": token}
+            async with session.post(f"{base}/{user}/threads_publish", params=publish_params, timeout=60) as resp:
+                pub = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_meta_error(pub))
+                post_id = pub.get("id") if isinstance(pub, dict) else None
+                post_url = f"https://www.threads.net/@me/post/{post_id}" if post_id else None
+                return {"post_id": post_id, "post_url": post_url, "text": text, "kind": "reply"}
+
+    async def _linkedin_comment(self, text: str, parent_urn: str) -> dict[str, Any]:
+        import aiohttp
+
+        urn = parent_urn if parent_urn.startswith("urn:li:") else f"urn:li:ugcPost:{parent_urn}"
+        encoded = urllib.parse.quote(urn, safe="")
+        async with aiohttp.ClientSession() as session:
+            token = await self._linkedin._resolve_access_token(session)
+            author = self._linkedin._author_urn
+            if not author:
+                author = await self._linkedin._resolve_author_urn(session, token)
+            url = f"https://api.linkedin.com/v2/socialActions/{encoded}/comments"
+            body = {
+                "actor": author,
+                "message": {"text": text},
+            }
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "X-Restli-Protocol-Version": "2.0.0",
+            }
+            async with session.post(url, json=body, headers=headers, timeout=60) as resp:
+                raw = await resp.text()
+                payload: dict[str, Any] = {}
+                if raw.strip():
+                    try:
+                        payload = json.loads(raw)
+                    except json.JSONDecodeError:
+                        payload = {"raw": raw[:200]}
+                if resp.status not in (200, 201):
+                    raise RuntimeError(_linkedin_error(payload, resp.status))
+                comment_id = payload.get("id") or resp.headers.get("X-RestLi-Id")
+                return {
+                    "post_id": comment_id,
+                    "post_url": None,
+                    "text": text,
+                    "kind": "reply",
+                    "parent_urn": urn,
+                }
+
+    async def _bluesky_reply(
+        self,
+        text: str,
+        root_uri: str,
+        root_cid: str,
+        parent_uri: str,
+        parent_cid: str,
+    ) -> dict[str, Any]:
+        import aiohttp
+        from datetime import datetime, timezone
+
+        async with aiohttp.ClientSession() as session:
+            auth = await self._bluesky._create_session(session)
+            created_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+            url = f"{self._bluesky._pds}/xrpc/com.atproto.repo.createRecord"
+            body: dict[str, Any] = {
+                "repo": auth["did"],
+                "collection": "app.bsky.feed.post",
+                "record": {
+                    "$type": "app.bsky.feed.post",
+                    "text": text,
+                    "createdAt": created_at,
+                    "reply": {
+                        "root": {"uri": root_uri, "cid": root_cid},
+                        "parent": {"uri": parent_uri, "cid": parent_cid},
+                    },
+                },
+            }
+            headers = {"Authorization": f"Bearer {auth['accessJwt']}"}
+            async with session.post(url, json=body, headers=headers, timeout=60) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(_bluesky_error(data, resp.status))
+            uri = str(data.get("uri") or "") if isinstance(data, dict) else ""
+            cid = data.get("cid") if isinstance(data, dict) else None
+            rkey = uri.rsplit("/", 1)[-1] if uri else None
+            profile = auth["handle"].lstrip("@")
+            post_url = f"https://bsky.app/profile/{profile}/post/{rkey}" if rkey else None
+            return {"uri": uri, "cid": cid, "post_url": post_url, "text": text, "kind": "reply"}
+
+
+def _extract_parent_id(platform: str, thread_url: str) -> str:
+    import re
+
+    if platform == "x":
+        m = re.search(r"status/(\d+)", thread_url)
+        return m.group(1) if m else ""
+    if platform == "threads":
+        m = re.search(r"/post/([^/?#]+)", thread_url)
+        return m.group(1) if m else ""
+    if platform == "linkedin":
+        if "urn:li:" in thread_url:
+            return thread_url
+        m = re.search(r"ugcPost[/-](\d+)", thread_url)
+        if m:
+            return f"urn:li:ugcPost:{m.group(1)}"
+    if platform == "bluesky":
+        m = re.search(r"/post/([^/?#]+)", thread_url)
+        return m.group(1) if m else ""
+    return ""
+
+
+def _reddit_error(data: Any, status: int = 0) -> str:
+    if isinstance(data, dict):
+        nested = data.get("json")
+        if isinstance(nested, dict):
+            errors = nested.get("errors")
+            if errors:
+                return str(errors)
+        msg = data.get("message") or data.get("error")
+        if msg:
+            return str(msg)
+    if status:
+        return f"HTTP {status}: {data}"
+    return str(data)
+
+
+class RedditPublishWorker:
+    """Reddit OAuth — text (self) posts via /api/submit."""
+
+    _TOKEN_URL = "https://www.reddit.com/api/v1/access_token"
+    _API_BASE = "https://oauth.reddit.com"
+
+    def __init__(self) -> None:
+        self._client_id = os.environ.get("REDDIT_CLIENT_ID", "").strip()
+        self._client_secret = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
+        self._refresh_token = os.environ.get("REDDIT_REFRESH_TOKEN", "").strip()
+        self._subreddit = os.environ.get("REDDIT_DEFAULT_SUBREDDIT", "").strip()
+        self._user_agent = os.environ.get("REDDIT_USER_AGENT", "CurXorOS/0.1").strip()
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._client_id and self._client_secret and self._refresh_token)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "Reddit not configured (REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_REFRESH_TOKEN)",
+            )
+
+        text = str(intent.payload.get("text", "")).strip()
+        title_override = str(intent.payload.get("title", "")).strip()
+        subreddit = str(intent.payload.get("subreddit", self._subreddit)).strip()
+
+        if not text and not title_override:
+            return DigitalReceipt.failure(intent, "Missing text or title")
+        if not subreddit:
+            return DigitalReceipt.failure(
+                intent,
+                "Reddit requires subreddit — set REDDIT_DEFAULT_SUBREDDIT or pass subreddit in payload",
+            )
+
+        title, body = self._split_title_body(text, title_override)
+        if not title:
+            return DigitalReceipt.failure(intent, "Missing post title")
+
+        try:
+            import aiohttp
+
+            async with aiohttp.ClientSession() as session:
+                token = await self._fetch_access_token(session)
+                result = await self._submit_self_post(session, token, subreddit, title, body)
+                return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("Reddit publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+    def _split_title_body(self, text: str, title_override: str) -> tuple[str, str]:
+        if title_override:
+            return title_override[:300], text[:40000]
+        if not text:
+            return "", ""
+        parts = text.split("\n", 1)
+        title = parts[0].strip()[:300]
+        body = parts[1].strip()[:40000] if len(parts) > 1 else ""
+        return title, body
+
+    async def _fetch_access_token(self, session: Any) -> str:
+        import base64
+
+        auth = base64.b64encode(f"{self._client_id}:{self._client_secret}".encode()).decode("ascii")
+        headers = {
+            "Authorization": f"Basic {auth}",
+            "User-Agent": self._user_agent,
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+        body = {"grant_type": "refresh_token", "refresh_token": self._refresh_token}
+        async with session.post(self._TOKEN_URL, headers=headers, data=body, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_reddit_error(data, resp.status))
+            token = data.get("access_token") if isinstance(data, dict) else None
+            if not token:
+                raise RuntimeError("Reddit token refresh missing access_token")
+            return str(token)
+
+    async def _submit_self_post(
+        self,
+        session: Any,
+        token: str,
+        subreddit: str,
+        title: str,
+        body: str,
+    ) -> dict[str, Any]:
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "User-Agent": self._user_agent,
+        }
+        form = {
+            "kind": "self",
+            "sr": subreddit,
+            "title": title,
+            "text": body,
+            "api_type": "json",
+        }
+        async with session.post(f"{self._API_BASE}/api/submit", headers=headers, data=form, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_reddit_error(data, resp.status))
+            if not isinstance(data, dict):
+                raise RuntimeError("Reddit submit returned invalid payload")
+            nested = data.get("json")
+            if isinstance(nested, dict):
+                errors = nested.get("errors") or []
+                if errors:
+                    raise RuntimeError(_reddit_error(data))
+                post_data = nested.get("data") or {}
+                if isinstance(post_data, dict):
+                    return {
+                        "platform": "reddit",
+                        "subreddit": subreddit,
+                        "post_id": post_data.get("id") or post_data.get("name"),
+                        "post_url": post_data.get("url"),
+                        "title": title,
+                    }
+            raise RuntimeError(_reddit_error(data))
+
+
+def _pinterest_error(data: Any, status: int = 0) -> str:
+    if isinstance(data, dict):
+        msg = data.get("message") or data.get("error")
+        if msg:
+            return str(msg)
+    if status:
+        return f"HTTP {status}: {data}"
+    return str(data)
+
+
+class PinterestPublishWorker:
+    """Pinterest API v5 — image pins via POST /pins."""
+
+    _API_BASE = "https://api.pinterest.com/v5"
+    _TOKEN_URL = "https://api.pinterest.com/v5/oauth/token"
+
+    def __init__(self) -> None:
+        self._client_id = os.environ.get("PINTEREST_APP_ID", "").strip()
+        self._client_secret = os.environ.get("PINTEREST_APP_SECRET", "").strip()
+        self._access_token = os.environ.get("PINTEREST_ACCESS_TOKEN", "").strip()
+        self._refresh_token = os.environ.get("PINTEREST_REFRESH_TOKEN", "").strip()
+        self._board_id = os.environ.get("PINTEREST_DEFAULT_BOARD_ID", "").strip()
+        self._default_link = os.environ.get("PINTEREST_DEFAULT_LINK", "").strip()
+
+    @property
+    def enabled(self) -> bool:
+        if self._access_token:
+            return True
+        return bool(self._client_id and self._client_secret and self._refresh_token)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "Pinterest not configured (PINTEREST_ACCESS_TOKEN or APP_ID+SECRET+REFRESH_TOKEN)",
+            )
+
+        text = str(intent.payload.get("text", "")).strip()
+        title_override = str(intent.payload.get("title", "")).strip()
+        image_url = str(intent.payload.get("image_url", "")).strip()
+        board_id = str(intent.payload.get("board_id", self._board_id)).strip()
+        link = str(intent.payload.get("link", self._default_link)).strip()
+
+        if not image_url:
+            return DigitalReceipt.failure(
+                intent,
+                "Pinterest requires image_url in publish payload — attach thumbnail or vision frame URL",
+            )
+        if not board_id:
+            return DigitalReceipt.failure(
+                intent,
+                "Pinterest requires board_id — set PINTEREST_DEFAULT_BOARD_ID or pass board_id in payload",
+            )
+        if not text and not title_override:
+            return DigitalReceipt.failure(intent, "Missing text or title")
+
+        title, description = self._split_title_description(text, title_override)
+        if not title:
+            return DigitalReceipt.failure(intent, "Missing pin title")
+
+        try:
+            import aiohttp
+
+            async with aiohttp.ClientSession() as session:
+                token = await self._resolve_access_token(session)
+                result = await self._create_pin(session, token, board_id, title, description, image_url, link)
+                return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("Pinterest publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+    def _split_title_description(self, text: str, title_override: str) -> tuple[str, str]:
+        if title_override:
+            return title_override[:100], text[:800] if text else ""
+        if not text:
+            return "", ""
+        parts = text.split("\n", 1)
+        title = parts[0].strip()[:100]
+        description = parts[1].strip()[:800] if len(parts) > 1 else ""
+        return title, description
+
+    async def _resolve_access_token(self, session: Any) -> str:
+        if self._access_token:
+            return self._access_token
+        if not (self._client_id and self._client_secret and self._refresh_token):
+            raise RuntimeError("Pinterest access token missing and no refresh credentials")
+        import base64
+
+        auth = base64.b64encode(f"{self._client_id}:{self._client_secret}".encode()).decode("ascii")
+        headers = {
+            "Authorization": f"Basic {auth}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+        body = {"grant_type": "refresh_token", "refresh_token": self._refresh_token}
+        async with session.post(self._TOKEN_URL, headers=headers, data=body, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_pinterest_error(data, resp.status))
+            token = data.get("access_token") if isinstance(data, dict) else None
+            if not token:
+                raise RuntimeError("Pinterest token refresh missing access_token")
+            return str(token)
+
+    async def _create_pin(
+        self,
+        session: Any,
+        token: str,
+        board_id: str,
+        title: str,
+        description: str,
+        image_url: str,
+        link: str,
+    ) -> dict[str, Any]:
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        body: dict[str, Any] = {
+            "board_id": board_id,
+            "title": title,
+            "media_source": {
+                "source_type": "image_url",
+                "url": image_url,
+            },
+        }
+        if description:
+            body["description"] = description
+        if link:
+            body["link"] = link
+
+        async with session.post(f"{self._API_BASE}/pins", json=body, headers=headers, timeout=90) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status not in (200, 201):
+                raise RuntimeError(_pinterest_error(data, resp.status))
+            if not isinstance(data, dict):
+                raise RuntimeError("Pinterest create pin returned invalid payload")
+
+            pin_id = data.get("id")
+            pin_url = None
+            if pin_id:
+                pin_url = f"https://www.pinterest.com/pin/{pin_id}/"
+
+            return {
+                "platform": "pinterest",
+                "pin_id": pin_id,
+                "pin_url": pin_url,
+                "board_id": board_id,
+                "title": title,
+                "image_url": image_url,
+            }
+
+
+def _snap_error(data: Any, status: int = 0) -> str:
+    if isinstance(data, dict):
+        msg = data.get("display_message") or data.get("debug_message") or data.get("error")
+        if msg:
+            return str(msg)
+    if status:
+        return f"HTTP {status}: {data}"
+    return str(data)
+
+
+def _snap_require_success(data: Any, status: int = 0) -> dict[str, Any]:
+    if status >= 400:
+        raise RuntimeError(_snap_error(data, status))
+    if not isinstance(data, dict):
+        raise RuntimeError("Snapchat API returned invalid payload")
+    if data.get("request_status") != "SUCCESS":
+        raise RuntimeError(_snap_error(data, status))
+    return data
+
+
+class SnapchatPublishWorker:
+    """Snapchat Public Profile API — Spotlight or Story via encrypted multipart upload."""
+
+    _API_BASE = "https://businessapi.snapchat.com"
+    _TOKEN_URL = "https://accounts.snapchat.com/login/oauth2/access_token"
+    _CHUNK_SIZE = 32 * 1024 * 1024
+
+    def __init__(self) -> None:
+        self._client_id = os.environ.get("SNAP_CLIENT_ID", "").strip()
+        self._client_secret = os.environ.get("SNAP_CLIENT_SECRET", "").strip()
+        self._refresh_token = os.environ.get("SNAP_REFRESH_TOKEN", "").strip()
+        self._redirect_uri = os.environ.get("SNAP_REDIRECT_URI", "").strip()
+        self._profile_id = os.environ.get("SNAP_PUBLIC_PROFILE_ID", "").strip()
+        self._locale = os.environ.get("SNAP_DEFAULT_LOCALE", "en_US").strip() or "en_US"
+        self._default_format = os.environ.get("SNAP_DEFAULT_FORMAT", "spotlight").strip().lower() or "spotlight"
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._client_id and self._client_secret and self._refresh_token and self._redirect_uri)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "Snapchat not configured (SNAP_CLIENT_ID, SNAP_CLIENT_SECRET, SNAP_REFRESH_TOKEN, SNAP_REDIRECT_URI)",
+            )
+
+        description = str(intent.payload.get("text", "")).strip()[:160]
+        video_url = str(intent.payload.get("video_url", "")).strip()
+        video_path = str(intent.payload.get("video_path", "") or intent.payload.get("local_video_path", "")).strip()
+        profile_id = str(intent.payload.get("profile_id", self._profile_id)).strip()
+        post_format = str(intent.payload.get("format", self._default_format)).strip().lower() or "spotlight"
+        locale = str(intent.payload.get("locale", self._locale)).strip() or "en_US"
+
+        if post_format in ("short", "reel"):
+            post_format = "spotlight"
+        if post_format not in ("spotlight", "story"):
+            post_format = "spotlight"
+
+        if not profile_id:
+            return DigitalReceipt.failure(
+                intent,
+                "Snapchat requires public profile — set SNAP_PUBLIC_PROFILE_ID or pass profile_id in payload",
+            )
+        if not video_url and not video_path:
+            return DigitalReceipt.failure(
+                intent,
+                "Snapchat requires video_url or video_path — attach render output (mp4, 6–60s, 9:16)",
+            )
+
+        temp_paths: list[Path] = []
+        try:
+            import aiohttp
+
+            async with aiohttp.ClientSession() as session:
+                token = await self._fetch_access_token(session)
+                source_path = await self._resolve_video_path(session, video_path, video_url, temp_paths)
+                encrypted_path, key, iv = self._encrypt_video(source_path, temp_paths)
+                media = await self._create_media(session, token, profile_id, source_path.name, key, iv)
+                await self._multipart_upload(session, token, encrypted_path, media)
+                if post_format == "story":
+                    result = await self._post_story(session, token, profile_id, media["media_id"])
+                else:
+                    result = await self._post_spotlight(
+                        session,
+                        token,
+                        profile_id,
+                        media["media_id"],
+                        description,
+                        locale,
+                    )
+                result["platform"] = "snapchat"
+                result["format"] = post_format
+                result["profile_id"] = profile_id
+                if description:
+                    result["description"] = description
+                return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            LOG.exception("Snapchat publish failed")
+            return DigitalReceipt.failure(intent, str(exc))
+        finally:
+            for path in temp_paths:
+                try:
+                    path.unlink(missing_ok=True)
+                except OSError:
+                    pass
+
+    async def _resolve_video_path(
+        self,
+        session: Any,
+        video_path: str,
+        video_url: str,
+        temp_paths: list[Path],
+    ) -> Path:
+        if video_path:
+            path = Path(video_path)
+            if not path.is_file():
+                raise RuntimeError(f"video_path not found: {video_path}")
+            return path
+        import tempfile
+
+        tmp = Path(tempfile.mktemp(suffix=".mp4"))
+        temp_paths.append(tmp)
+        async with session.get(video_url, timeout=300) as resp:
+            if resp.status >= 400:
+                text = await resp.text()
+                raise RuntimeError(f"Failed to download video_url HTTP {resp.status}: {text[:200]}")
+            tmp.write_bytes(await resp.read())
+        if tmp.stat().st_size <= 0:
+            raise RuntimeError("Downloaded video is empty")
+        return tmp
+
+    def _encrypt_video(self, source_path: Path, temp_paths: list[Path]) -> tuple[Path, bytes, bytes]:
+        import subprocess
+        import tempfile
+
+        key = os.urandom(32)
+        iv = os.urandom(16)
+        encrypted_path = Path(tempfile.mktemp(suffix=".enc.mp4"))
+        temp_paths.append(encrypted_path)
+        cmd = [
+            "openssl",
+            "enc",
+            "-aes-256-cbc",
+            "-nosalt",
+            "-e",
+            "-in",
+            str(source_path),
+            "-out",
+            str(encrypted_path),
+            "-K",
+            key.hex(),
+            "-iv",
+            iv.hex(),
+        ]
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+        if proc.returncode != 0:
+            detail = (proc.stderr or proc.stdout or "openssl encrypt failed").strip()
+            raise RuntimeError(detail[:300])
+        if not encrypted_path.is_file() or encrypted_path.stat().st_size <= 0:
+            raise RuntimeError("Encrypted video file is empty")
+        return encrypted_path, key, iv
+
+    async def _fetch_access_token(self, session: Any) -> str:
+        body = {
+            "grant_type": "refresh_token",
+            "refresh_token": self._refresh_token,
+            "client_id": self._client_id,
+            "client_secret": self._client_secret,
+            "redirect_uri": self._redirect_uri,
+        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        async with session.post(self._TOKEN_URL, data=body, headers=headers, timeout=60) as resp:
+            data = await resp.json(content_type=None)
+            if resp.status >= 400:
+                raise RuntimeError(_snap_error(data, resp.status))
+            token = data.get("access_token") if isinstance(data, dict) else None
+            if not token:
+                raise RuntimeError("Snapchat token refresh missing access_token")
+            return str(token)
+
+    async def _create_media(
+        self,
+        session: Any,
+        token: str,
+        profile_id: str,
+        name: str,
+        key: bytes,
+        iv: bytes,
+    ) -> dict[str, Any]:
+        import base64
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        body = {
+            "type": "VIDEO",
+            "name": name[:120] or "curxor-upload",
+            "key": base64.b64encode(key).decode("ascii"),
+            "iv": base64.b64encode(iv).decode("ascii"),
+        }
+        url = f"{self._API_BASE}/v1/public_profiles/{profile_id}/media"
+        async with session.post(url, json=body, headers=headers, timeout=90) as resp:
+            data = await resp.json(content_type=None)
+            payload = _snap_require_success(data, resp.status)
+            media_id = payload.get("media_id")
+            add_path = payload.get("add_path")
+            finalize_path = payload.get("finalize_path")
+            if not media_id or not add_path or not finalize_path:
+                raise RuntimeError("Snapchat create media missing media_id or upload paths")
+            return {
+                "media_id": str(media_id),
+                "add_path": str(add_path),
+                "finalize_path": str(finalize_path),
+            }
+
+    async def _multipart_upload(
+        self,
+        session: Any,
+        token: str,
+        encrypted_path: Path,
+        media: dict[str, str],
+    ) -> None:
+        chunks = self._read_chunks(encrypted_path)
+        add_url = f"{self._API_BASE}{media['add_path']}"
+        headers = {"Authorization": f"Bearer {token}"}
+
+        for part_number, chunk in enumerate(chunks, start=1):
+            import aiohttp
+
+            form = aiohttp.FormData()
+            form.add_field("action", "ADD")
+            form.add_field("file", chunk, filename=f"part{part_number}.enc", content_type="application/octet-stream")
+            form.add_field("part_number", str(part_number))
+            async with session.post(add_url, data=form, headers=headers, timeout=300) as resp:
+                data = await resp.json(content_type=None)
+                _snap_require_success(data, resp.status)
+
+        finalize_url = f"{self._API_BASE}{media['finalize_path']}"
+        form = aiohttp.FormData()
+        form.add_field("action", "FINALIZE")
+        async with session.post(finalize_url, data=form, headers=headers, timeout=120) as resp:
+            data = await resp.json(content_type=None)
+            _snap_require_success(data, resp.status)
+
+    def _read_chunks(self, path: Path) -> list[bytes]:
+        chunks: list[bytes] = []
+        with path.open("rb") as fh:
+            while True:
+                data = fh.read(self._CHUNK_SIZE)
+                if not data:
+                    break
+                chunks.append(data)
+        if not chunks:
+            raise RuntimeError("Encrypted video has no content")
+        return chunks
+
+    async def _post_spotlight(
+        self,
+        session: Any,
+        token: str,
+        profile_id: str,
+        media_id: str,
+        description: str,
+        locale: str,
+    ) -> dict[str, Any]:
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        body: dict[str, Any] = {
+            "media_id": media_id,
+            "locale": locale,
+            "skip_save_to_profile": False,
+        }
+        if description:
+            body["description"] = description
+        url = f"{self._API_BASE}/v1/public_profiles/{profile_id}/spotlights"
+        async with session.post(url, json=body, headers=headers, timeout=90) as resp:
+            data = await resp.json(content_type=None)
+            payload = _snap_require_success(data, resp.status)
+            return {
+                "spotlight_id": payload.get("spotlight_id"),
+                "media_id": media_id,
+            }
+
+    async def _post_story(
+        self,
+        session: Any,
+        token: str,
+        profile_id: str,
+        media_id: str,
+    ) -> dict[str, Any]:
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        body = {"media_id": media_id}
+        url = f"{self._API_BASE}/v1/public_profiles/{profile_id}/stories"
+        async with session.post(url, json=body, headers=headers, timeout=90) as resp:
+            data = await resp.json(content_type=None)
+            _snap_require_success(data, resp.status)
+            return {"media_id": media_id, "story_posted": True}
+
+
 class HealthSyncWorker:
     """Wearable health sync — Oura PAT, Garmin scaffold, Apple Health export file."""
 
@@ -467,16 +2117,37 @@ class TelegramSendWorker:
     async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
         if not self.enabled:
             return DigitalReceipt.failure(intent, "TELEGRAM_BOT_TOKEN not configured in digital.env")
-        chat_id = str(intent.payload.get("chat_id", "")).strip()
-        text = str(intent.payload.get("text", "")).strip()
-        if not chat_id or not text:
-            return DigitalReceipt.failure(intent, "Missing chat_id or text")
         try:
             import aiohttp
         except ImportError:
             return DigitalReceipt.failure(intent, "aiohttp not installed")
+
+        callback_query_id = str(intent.payload.get("callback_query_id", "")).strip()
+        callback_answer = str(intent.payload.get("callback_answer", "")).strip()
+        if callback_query_id:
+            url = f"https://api.telegram.org/bot{self._token}/answerCallbackQuery"
+            body: dict = {"callback_query_id": callback_query_id}
+            if callback_answer:
+                body["text"] = callback_answer[:200]
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(url, json=body, timeout=30) as resp:
+                        data = await resp.json(content_type=None)
+                        if resp.status >= 400 or not data.get("ok"):
+                            return DigitalReceipt.failure(intent, str(data.get("description") or resp.reason))
+                        return DigitalReceipt.success(intent, {"answered": True})
+            except Exception as exc:
+                return DigitalReceipt.failure(intent, str(exc))
+
+        chat_id = str(intent.payload.get("chat_id", "")).strip()
+        text = str(intent.payload.get("text", "")).strip()
+        if not chat_id or not text:
+            return DigitalReceipt.failure(intent, "Missing chat_id or text")
         url = f"https://api.telegram.org/bot{self._token}/sendMessage"
         body = {"chat_id": chat_id, "text": text[:4096]}
+        reply_markup = intent.payload.get("reply_markup")
+        if isinstance(reply_markup, dict):
+            body["reply_markup"] = reply_markup
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(url, json=body, timeout=30) as resp:
@@ -519,6 +2190,75 @@ class SlackSendWorker:
                     if not data.get("ok"):
                         return DigitalReceipt.failure(intent, str(data.get("error") or resp.reason))
                     return DigitalReceipt.success(intent, {"ts": data.get("ts"), "channel": data.get("channel")})
+        except Exception as exc:
+            return DigitalReceipt.failure(intent, str(exc))
+
+
+class DiscordSendWorker:
+    """Outbound Discord — channel.discord.send intents (bot posts to guild channel)."""
+
+    _API_BASE = "https://discord.com/api/v10"
+
+    def __init__(self) -> None:
+        self._token = os.environ.get("DISCORD_BOT_TOKEN", "").strip()
+        self._channel_id = os.environ.get("DISCORD_CHANNEL_ID", "").strip()
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._token)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(intent, "DISCORD_BOT_TOKEN not configured in digital.env")
+
+        channel_id = str(intent.payload.get("channel_id", self._channel_id)).strip()
+        text = str(intent.payload.get("text", "")).strip()
+        image_url = str(intent.payload.get("image_url", "")).strip()
+
+        if not channel_id:
+            return DigitalReceipt.failure(
+                intent,
+                "Missing channel_id — set DISCORD_CHANNEL_ID or pass channel_id in payload",
+            )
+        if not text and not image_url:
+            return DigitalReceipt.failure(intent, "Missing text or image_url")
+
+        body: dict[str, Any] = {}
+        if text:
+            body["content"] = text[:2000]
+        if image_url:
+            embed: dict[str, Any] = {"image": {"url": image_url}}
+            if text:
+                embed["description"] = text[:4096]
+                body.pop("content", None)
+            body["embeds"] = [embed]
+
+        try:
+            import aiohttp
+        except ImportError:
+            return DigitalReceipt.failure(intent, "aiohttp not installed")
+
+        url = f"{self._API_BASE}/channels/{channel_id}/messages"
+        headers = {
+            "Authorization": f"Bot {self._token}",
+            "Content-Type": "application/json",
+        }
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, json=body, headers=headers, timeout=30) as resp:
+                    data = await resp.json(content_type=None)
+                    if resp.status >= 400:
+                        msg = data.get("message") if isinstance(data, dict) else None
+                        return DigitalReceipt.failure(intent, str(msg or resp.reason))
+                    message_id = data.get("id") if isinstance(data, dict) else None
+                    return DigitalReceipt.success(
+                        intent,
+                        {
+                            "platform": "discord",
+                            "message_id": message_id,
+                            "channel_id": channel_id,
+                        },
+                    )
         except Exception as exc:
             return DigitalReceipt.failure(intent, str(exc))
 
@@ -704,9 +2444,19 @@ class DigitalBridgeRuntime:
         self._topic_in = os.environ.get("CURXOR_TOPIC_DIGITAL_IN", "telemetry/digital_in")
         self._alpaca = AlpacaTradeWorker()
         self._x = XPublishWorker()
+        self._meta = MetaPublishWorker()
+        self._tiktok = TikTokPublishWorker()
+        self._youtube = YouTubePublishWorker()
+        self._linkedin = LinkedInPublishWorker()
+        self._bluesky = BlueskyPublishWorker()
+        self._reddit = RedditPublishWorker()
+        self._pinterest = PinterestPublishWorker()
+        self._snapchat = SnapchatPublishWorker()
+        self._reply = ReplyPublishWorker()
         self._health = HealthSyncWorker()
         self._telegram = TelegramSendWorker()
         self._slack = SlackSendWorker()
+        self._discord = DiscordSendWorker()
         self._whatsapp = WhatsAppSendWorker()
         self._imessage = IMessageSendWorker()
         self._browser = BrowserFetchWorker()
@@ -740,9 +2490,25 @@ class DigitalBridgeRuntime:
         )
         LOG.info("Alpaca worker: %s", "enabled" if self._alpaca.enabled else "disabled (no creds)")
         LOG.info("X publish worker: %s", "enabled" if self._x.enabled else "disabled (no creds)")
+        LOG.info(
+            "Meta publish worker: %s (threads=%s fb=%s ig=%s)",
+            "enabled" if self._meta.enabled else "disabled",
+            self._meta.threads_enabled(),
+            self._meta.facebook_enabled(),
+            self._meta.instagram_enabled(),
+        )
+        LOG.info("TikTok publish worker: %s", "enabled" if self._tiktok.enabled else "disabled (no creds)")
+        LOG.info("YouTube publish worker: %s", "enabled" if self._youtube.enabled else "disabled (no creds)")
+        LOG.info("LinkedIn publish worker: %s", "enabled" if self._linkedin.enabled else "disabled (no creds)")
+        LOG.info("Bluesky publish worker: %s", "enabled" if self._bluesky.enabled else "disabled (no creds)")
+        LOG.info("Reddit publish worker: %s", "enabled" if self._reddit.enabled else "disabled (no creds)")
+        LOG.info("Pinterest publish worker: %s", "enabled" if self._pinterest.enabled else "disabled (no creds)")
+        LOG.info("Snapchat publish worker: %s", "enabled" if self._snapchat.enabled else "disabled (no creds)")
+        LOG.info("Reply publish worker: %s", "enabled" if self._reply.enabled else "disabled (no creds)")
         LOG.info("Health sync worker: %s", "enabled" if self._health.enabled else "disabled (no creds)")
         LOG.info("Telegram worker: %s", "enabled" if self._telegram.enabled else "disabled (no creds)")
         LOG.info("Slack worker: %s", "enabled" if self._slack.enabled else "disabled (no creds)")
+        LOG.info("Discord worker: %s", "enabled" if self._discord.enabled else "disabled (no creds)")
         LOG.info("WhatsApp worker: %s", "enabled" if self._whatsapp.enabled else "disabled (no creds)")
         LOG.info("iMessage worker: %s", "enabled" if self._imessage.enabled else "disabled (no creds)")
 
@@ -769,12 +2535,32 @@ class DigitalBridgeRuntime:
             return await self._alpaca.handle(intent)
         if intent.tool == TOOL_PUBLISH_POST:
             return await self._x.handle(intent)
+        if intent.tool in (TOOL_PUBLISH_THREADS, TOOL_PUBLISH_FACEBOOK, TOOL_PUBLISH_INSTAGRAM):
+            return await self._meta.handle(intent)
+        if intent.tool == TOOL_PUBLISH_TIKTOK:
+            return await self._tiktok.handle(intent)
+        if intent.tool == TOOL_PUBLISH_YOUTUBE:
+            return await self._youtube.handle(intent)
+        if intent.tool == TOOL_PUBLISH_LINKEDIN:
+            return await self._linkedin.handle(intent)
+        if intent.tool == TOOL_PUBLISH_BLUESKY:
+            return await self._bluesky.handle(intent)
+        if intent.tool == TOOL_PUBLISH_REDDIT:
+            return await self._reddit.handle(intent)
+        if intent.tool == TOOL_PUBLISH_PINTEREST:
+            return await self._pinterest.handle(intent)
+        if intent.tool == TOOL_PUBLISH_SNAPCHAT:
+            return await self._snapchat.handle(intent)
+        if intent.tool == TOOL_PUBLISH_REPLY:
+            return await self._reply.handle(intent)
         if intent.tool == TOOL_HEALTH_SYNC:
             return await self._health.handle(intent)
         if intent.tool == TOOL_TELEGRAM_SEND:
             return await self._telegram.handle(intent)
         if intent.tool == TOOL_SLACK_SEND:
             return await self._slack.handle(intent)
+        if intent.tool == TOOL_DISCORD_SEND:
+            return await self._discord.handle(intent)
         if intent.tool == TOOL_WHATSAPP_SEND:
             return await self._whatsapp.handle(intent)
         if intent.tool == TOOL_IMESSAGE_SEND:

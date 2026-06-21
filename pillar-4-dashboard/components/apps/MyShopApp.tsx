@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -77,6 +79,7 @@ export function MyShopApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{store}</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
           Arbitrage Claw · margin watch · eno2 fulfillment bridge
+          <ExperienceLevelBadge />
         </p>
       </header>
 
@@ -86,7 +89,13 @@ export function MyShopApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <AppMetric label="Active Order" value={selected} unit="tap row to select" />
       </div>
 
-      <AppSection title="Fulfillment Pipeline" subtitle="Select an order · use agent skills to advance stages">
+      <ExperienceAppSection
+        appId="my-shop"
+        sectionId="pipeline"
+        minLevel="beginner"
+        title="Fulfillment Pipeline"
+        subtitle="Select an order · use agent skills to advance stages"
+      >
         <div className="mb-4 grid gap-2 md:grid-cols-4">
           {STAGES.map((stage, idx) => {
             const count = orders.filter((o) => o.stage === stage).length;
@@ -118,7 +127,7 @@ export function MyShopApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             </button>
           ))}
         </div>
-      </AppSection>
+      </ExperienceAppSection>
     </div>
   );
 }

@@ -119,6 +119,54 @@ export async function generateText(
   }
 }
 
+/** Local image generation via Ollama (flux, sd, etc.) — localhost only. */
+export async function generateImageLocal(prompt: string, model?: string): Promise<Buffer | null> {
+  if (!(await isLocalInferenceAvailable())) return null;
+
+  const env = loadDashboardEnv();
+  if (env.inferenceBackend !== "ollama") return null;
+
+  const imageModel = model ?? process.env.CURXOR_IMAGE_MODEL?.trim() ?? "flux";
+  const timeout = Math.max(env.inferenceTimeoutMs, 120_000);
+
+  try {
+    const response = await fetchWithTimeout(
+      `${env.ollamaUrl}/api/generate`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: imageModel,
+          prompt,
+          stream: false,
+        }),
+      },
+      timeout,
+    );
+
+    const data = (await response.json()) as {
+      image?: string;
+      images?: string[];
+      response?: string;
+    };
+
+    const raw = data.images?.[0] ?? data.image ?? data.response;
+    if (typeof raw !== "string" || raw.length < 64) return null;
+
+    const payload = raw.includes(",") ? raw.split(",", 2)[1]! : raw;
+    const buf = Buffer.from(payload, "base64");
+    return buf.length > 0 ? buf : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function isImageGenerationAvailable(): Promise<boolean> {
+  if (!(await isLocalInferenceAvailable())) return false;
+  const env = loadDashboardEnv();
+  return env.inferenceBackend === "ollama";
+}
+
 export function parseJsonLoose<T>(text: string): T | null {
   try {
     return JSON.parse(text) as T;

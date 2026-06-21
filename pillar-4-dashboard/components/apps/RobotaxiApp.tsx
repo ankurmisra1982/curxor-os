@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -61,6 +63,7 @@ export function RobotaxiApp({ config, skillTick, lastSkillId }: AgentAppContext)
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">Swarm Command</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
           Swarm Claw · depot {depot} · policy {policy} · vision seq {frame?.seq ?? "—"}
+          <ExperienceLevelBadge />
         </p>
       </header>
 
@@ -71,7 +74,14 @@ export function RobotaxiApp({ config, skillTick, lastSkillId }: AgentAppContext)
       </div>
 
       <div className="grid gap-4 lg:grid-cols-5">
-        <AppSection className="lg:col-span-3" title="Geospatial Grid" subtitle="Click cell to set dispatch target · Assign Route skill dispatches">
+        <ExperienceAppSection
+          appId="robotaxi-fleet-manager"
+          sectionId="grid"
+          minLevel="beginner"
+          className="lg:col-span-3"
+          title="Geospatial Grid"
+          subtitle="Click cell to set dispatch target · Assign Route skill dispatches"
+        >
           <div className="grid grid-cols-4 gap-1">
             {GRID.map((cell) => {
               const occupied = fleet.find((v) => v.grid === cell);
@@ -95,9 +105,16 @@ export function RobotaxiApp({ config, skillTick, lastSkillId }: AgentAppContext)
               );
             })}
           </div>
-        </AppSection>
+        </ExperienceAppSection>
 
-        <AppSection className="lg:col-span-2" title="Fleet Status" subtitle="Select vehicle before dispatch skills">
+        <ExperienceAppSection
+          appId="robotaxi-fleet-manager"
+          sectionId="fleet"
+          minLevel="standard"
+          className="lg:col-span-2"
+          title="Fleet Status"
+          subtitle="Select vehicle before dispatch skills"
+        >
           <div className="space-y-2 font-mono text-xs">
             {fleet.map((v) => (
               <button
@@ -115,7 +132,7 @@ export function RobotaxiApp({ config, skillTick, lastSkillId }: AgentAppContext)
               </button>
             ))}
           </div>
-        </AppSection>
+        </ExperienceAppSection>
       </div>
     </div>
   );

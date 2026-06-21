@@ -1,0 +1,81 @@
+import "server-only";
+
+import type { DigitalPublishResult } from "./mesh-publish";
+import { publishDigitalIntent } from "./mesh-publish";
+import { markPostSubmitted } from "./content-queue-store";
+import { markReplySubmitted } from "./content-replies-store";
+import { buildDigitalIntentForPost, buildDigitalIntentForReply } from "./content-publish-intents";
+import { recordBridgeFailure } from "./content-bridge-health-store";
+import { getContentPost } from "./content-queue-store";
+import { getContentReply } from "./content-replies-store";
+import { isPublishingPaused } from "./content-ops-controls";
+
+export async function publishPostToBridge(
+  postId: string,
+  config: Record<string, unknown>,
+): Promise<DigitalPublishResult & { postId: string }> {
+  if (await isPublishingPaused()) {
+    return {
+      ok: false,
+      id: "",
+      tool: "content.publish",
+      error: "Publishing paused (crisis mode)",
+      postId,
+    };
+  }
+  const digital = await buildDigitalIntentForPost(postId, config);
+  if (!digital) {
+    return {
+      ok: false,
+      id: "",
+      tool: "content.publish",
+      error: "Cannot build publish intent",
+      postId,
+    };
+  }
+  const result = await publishDigitalIntent(digital);
+  if (result.ok) {
+    await markPostSubmitted(postId, result.id);
+  } else {
+    const post = await getContentPost(postId);
+    if (post) {
+      await recordBridgeFailure({
+        platform: post.platform,
+        tool: digital.tool,
+        error: result.error ?? "Bridge send failed",
+        intentId: result.id,
+      });
+    }
+  }
+  return { ...result, postId };
+}
+
+export async function publishReplyToBridge(
+  replyId: string,
+): Promise<DigitalPublishResult & { replyId: string }> {
+  const digital = await buildDigitalIntentForReply(replyId);
+  if (!digital) {
+    return {
+      ok: false,
+      id: "",
+      tool: "content.publish_reply",
+      error: "Cannot build reply intent",
+      replyId,
+    };
+  }
+  const result = await publishDigitalIntent(digital);
+  if (result.ok) {
+    await markReplySubmitted(replyId, result.id);
+  } else {
+    const reply = await getContentReply(replyId);
+    if (reply) {
+      await recordBridgeFailure({
+        platform: reply.platform,
+        tool: digital.tool,
+        error: result.error ?? "Bridge send failed",
+        intentId: result.id,
+      });
+    }
+  }
+  return { ...result, replyId };
+}

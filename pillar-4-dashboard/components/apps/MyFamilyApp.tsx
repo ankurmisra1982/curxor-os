@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { AppSection } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import type { FamilyChannelHandle, FamilyProfile } from "@/lib/family-types";
@@ -108,10 +109,17 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
         <p className="mt-2 font-sans text-sm text-muted">
           Each member gets their own profile, devices, and personality — synced to every Claw that needs it
           (Optimus, Vital, Outreach, and more).
+          <ExperienceLevelBadge />
         </p>
       </header>
 
-      <AppSection title="Family members" subtitle="Select a profile to view devices and shared scopes">
+      <ExperienceAppSection
+        appId="my-family"
+        sectionId="members"
+        minLevel="beginner"
+        title="Family members"
+        subtitle="Select a profile to view devices and shared scopes"
+      >
         <div className="flex flex-wrap gap-2">
           {members.map((m) => (
             <button
@@ -128,10 +136,16 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
             </button>
           ))}
         </div>
-      </AppSection>
+      </ExperienceAppSection>
 
       {selected ? (
-        <AppSection title={selected.displayName} subtitle={`Role: ${selected.role}`}>
+        <ExperienceAppSection
+          appId="my-family"
+          sectionId="profile"
+          minLevel="beginner"
+          title={selected.displayName}
+          subtitle={`Role: ${selected.role}`}
+        >
           <dl className="space-y-2 font-sans text-sm">
             <div className="flex justify-between border-b border-line py-2">
               <dt className="text-muted">Role</dt>
@@ -195,10 +209,16 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
               Link handle
             </button>
           </div>
-        </AppSection>
+        </ExperienceAppSection>
       ) : null}
 
-      <AppSection title="Add member" subtitle="Profiles sync to Optimus, Vital, and other subscribed Claws">
+      <ExperienceAppSection
+        appId="my-family"
+        sectionId="add-member"
+        minLevel="standard"
+        title="Add member"
+        subtitle="Profiles sync to Optimus, Vital, and other subscribed Claws"
+      >
         <div className="flex flex-wrap gap-2">
           <input
             value={draftName}
@@ -222,7 +242,7 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
             Resync mesh
           </button>
         </div>
-      </AppSection>
+      </ExperienceAppSection>
     </div>
   );
 }

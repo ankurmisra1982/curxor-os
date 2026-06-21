@@ -17,6 +17,7 @@ export default async function DesktopLayout({ children }: { children: ReactNode 
     <FlightCommandDesktop
       selectedApps={selectedApps}
       initialUiMode={settings.appearance.uiMode}
+      initialExperienceLevel={settings.appearance.experienceLevel}
       initialColorScheme={settings.appearance.colorScheme}
       initialThemeMode={settings.appearance.themeMode ?? "dark"}
     >

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { AppMetric } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -49,6 +51,7 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{kiosk}</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
           Engage Claw · lane {activeLane} · {gamesPlayed} engagements · vision {connected ? "LIVE" : "offline"}
+          <ExperienceLevelBadge />
         </p>
       </header>
 
@@ -73,29 +76,43 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
         ))}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {BOTS.map((bot, idx) => (
-          <AppSection
-            key={bot.id}
-            title={bot.id}
-            subtitle={`Lane ${bot.lane}${activeLane === bot.lane ? " · SELECTED" : ""}`}
-          >
-            <div className="relative aspect-video bg-void">
-              {idx === 0 && preview ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={preview} alt={`${bot.id} feed`} className="h-full w-full object-contain" />
-              ) : (
-                <div className="flex h-full items-center justify-center font-mono text-[10px] text-muted">
-                  {idx === 0 ? "AWAITING FRAME" : "MOCK FEED · LOCAL"}
-                </div>
-              )}
+      <ExperienceAppSection
+        appId="claw-cafe"
+        sectionId="lanes"
+        minLevel="beginner"
+        title="Lane vision feeds"
+        subtitle="Lane A uses live mesh vision when connected"
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          {BOTS.map((bot, idx) => (
+            <div key={bot.id} className="border border-line bg-panel p-3">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted">
+                {bot.id} · Lane {bot.lane}
+                {activeLane === bot.lane ? " · SELECTED" : ""}
+              </p>
+              <div className="relative mt-2 aspect-video bg-void">
+                {idx === 0 && preview ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={preview} alt={`${bot.id} feed`} className="h-full w-full object-contain" />
+                ) : (
+                  <div className="flex h-full items-center justify-center font-mono text-[10px] text-muted">
+                    {idx === 0 ? "AWAITING FRAME" : "MOCK FEED · LOCAL"}
+                  </div>
+                )}
+              </div>
             </div>
-          </AppSection>
-        ))}
-      </div>
+          ))}
+        </div>
+      </ExperienceAppSection>
 
       {guestQueue.length > 0 ? (
-        <AppSection title="Guest Queue" subtitle="Start Game adds guests · Drop Claw runs grab">
+        <ExperienceAppSection
+          appId="claw-cafe"
+          sectionId="guest-queue"
+          minLevel="standard"
+          title="Guest Queue"
+          subtitle="Start Game adds guests · Drop Claw runs grab"
+        >
           <ul className="font-mono text-xs text-stark">
             {guestQueue.map((g) => (
               <li key={g} className="border-b border-line/40 py-1">
@@ -103,7 +120,7 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
               </li>
             ))}
           </ul>
-        </AppSection>
+        </ExperienceAppSection>
       ) : null}
     </div>
   );

@@ -8,6 +8,10 @@ import type { AgentChatTurn } from "../app-agent-types";
 
 import { publishChannelTurnToCcp, publishInboxRollup } from "./channel-ccp-sync";
 import {
+  engageCaptureOnly,
+  ingestChannelMessageToEngageInbox,
+} from "../content-engage-ingest";
+import {
   appendSessionTurn,
   channelHelpText,
   getChannelConfig,
@@ -18,6 +22,12 @@ import {
 } from "./channel-store";
 import { resolveProfileIdForSender } from "./channel-sender-resolver";
 import type { ChannelType } from "./channel-types";
+import {
+  sendTelegramApprovalMessage,
+  tryHandleApprovalTelegramCallback,
+  tryHandleApprovalTelegramMessage,
+} from "../content-approval-telegram";
+import { tryHandleApprovalSlackMessage } from "../content-approval-slack";
 
 export interface InboundChannelMessage {
   channel: ChannelType;
@@ -84,9 +94,33 @@ export async function handleInboundChannelMessage(msg: InboundChannelMessage): P
     senderLabel: msg.senderLabel ?? null,
   });
 
-  const freConfig = { ...(await readAppFreState(appId)).config, ...(msg.config ?? {}), selectedProfileId: profileId };
-
   const userText = parsed.message.trim() || msg.text.trim();
+
+  await ingestChannelMessageToEngageInbox({
+    channel: msg.channel,
+    externalChatId: msg.externalChatId,
+    text: userText || msg.text,
+    senderLabel: msg.senderLabel,
+    appId,
+    sessionId: session.id,
+  });
+
+  if (engageCaptureOnly(appId) && msg.channel !== "webchat" && !msg.skillId) {
+    const ack =
+      "Logged to Creator Claw engage inbox — open My Content → Engage to convert to a draft.";
+    await appendSessionTurn(session.id, { role: "user", text: userText || msg.text });
+    await appendSessionTurn(session.id, { role: "assistant", text: ack });
+    await sendChannelReply(msg.channel, msg.externalChatId, ack);
+    return {
+      text: ack,
+      appId,
+      sessionId: session.id,
+      profileId,
+      activity: "[Engage] inbox capture",
+    };
+  }
+
+  const freConfig = { ...(await readAppFreState(appId)).config, ...(msg.config ?? {}), selectedProfileId: profileId };
 
   if (
     COMMAND_CHANNELS.includes(msg.channel) &&
@@ -213,6 +247,18 @@ export async function handleSlackEvent(payload: Record<string, unknown>): Promis
   const channelId = typeof event.channel === "string" ? event.channel : "";
   if (!channelId) return null;
 
+  const approval = await tryHandleApprovalSlackMessage(channelId, text);
+  if (approval.handled && approval.text) {
+    await sendChannelReply("slack", channelId, approval.text);
+    return {
+      text: approval.text,
+      appId: "my-content-creator",
+      sessionId: `slack:${channelId}`,
+      profileId: null,
+      activity: "[Approval] slack command",
+    };
+  }
+
   const reply = await handleInboundChannelMessage({
     channel: "slack",
     externalChatId: channelId,
@@ -225,6 +271,29 @@ export async function handleSlackEvent(payload: Record<string, unknown>): Promis
 }
 
 export async function handleTelegramUpdate(update: Record<string, unknown>): Promise<ChannelReply | null> {
+  const callback = update.callback_query as Record<string, unknown> | undefined;
+  if (callback) {
+    const data = typeof callback.data === "string" ? callback.data : "";
+    const cqId = typeof callback.id === "string" ? callback.id : String(callback.id ?? "");
+    const from = callback.message as Record<string, unknown> | undefined;
+    const chat = from?.chat as Record<string, unknown> | undefined;
+    const chatId = chat ? String(chat.id ?? "") : "";
+    if (data && cqId && chatId) {
+      const approval = await tryHandleApprovalTelegramCallback(cqId, chatId, data);
+      if (approval.handled && approval.text) {
+        await sendTelegramApprovalMessage(chatId, approval.text);
+        return {
+          text: approval.text,
+          appId: "my-content-creator",
+          sessionId: `telegram:${chatId}`,
+          profileId: null,
+          activity: "[Approval] telegram callback",
+        };
+      }
+    }
+    return null;
+  }
+
   const message = update.message as Record<string, unknown> | undefined;
   if (!message) return null;
   const chat = message.chat as Record<string, unknown> | undefined;
@@ -232,6 +301,18 @@ export async function handleTelegramUpdate(update: Record<string, unknown>): Pro
   if (!chat || !text) return null;
   const chatId = String(chat.id ?? "");
   if (!chatId) return null;
+
+  const approval = await tryHandleApprovalTelegramMessage(chatId, text);
+  if (approval.handled && approval.text) {
+    await sendTelegramApprovalMessage(chatId, approval.text);
+    return {
+      text: approval.text,
+      appId: "my-content-creator",
+      sessionId: `telegram:${chatId}`,
+      profileId: null,
+      activity: "[Approval] telegram command",
+    };
+  }
 
   const reply = await handleInboundChannelMessage({
     channel: "telegram",
