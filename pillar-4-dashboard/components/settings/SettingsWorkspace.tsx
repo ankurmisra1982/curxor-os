@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
+import { AgentRuntimeSettingsPanels } from "@/components/settings/AgentRuntimeSettingsPanels";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { useUiMode } from "@/components/ui/UiModeProvider";
 import type { FrontierProvider } from "@/lib/frontier-providers";
@@ -17,7 +18,7 @@ import type {
   UserSettings,
 } from "@/lib/user-settings-types";
 
-type SettingsTab = "claws" | "intelligence" | "appearance" | "general";
+type SettingsTab = "claws" | "intelligence" | "appearance" | "agent" | "general";
 
 interface InferenceStatus {
   localAvailable: boolean;
@@ -69,6 +70,10 @@ export function SettingsWorkspace() {
   const [frontierModel, setFrontierModel] = useState<string | null>(null);
   const [allowChat, setAllowChat] = useState(true);
   const [allowPlanning, setAllowPlanning] = useState(true);
+  const [multiModelEnabled, setMultiModelEnabled] = useState(false);
+  const [planningProviderId, setPlanningProviderId] = useState<string | null>(null);
+  const [codingProviderId, setCodingProviderId] = useState<string | null>(null);
+  const [longContextProviderId, setLongContextProviderId] = useState<string | null>(null);
   const [apiKeyDraft, setApiKeyDraft] = useState("");
 
   const load = useCallback(async () => {
@@ -88,6 +93,10 @@ export function SettingsWorkspace() {
       setFrontierModel(data.settings.intelligence.frontierModel);
       setAllowChat(data.settings.intelligence.allowFrontierForChat);
       setAllowPlanning(data.settings.intelligence.allowFrontierForPlanning);
+      setMultiModelEnabled(data.settings.multiModel.enabled);
+      setPlanningProviderId(data.settings.multiModel.planningProviderId);
+      setCodingProviderId(data.settings.multiModel.codingProviderId);
+      setLongContextProviderId(data.settings.multiModel.longContextProviderId);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Load failed");
     } finally {
@@ -164,6 +173,12 @@ export function SettingsWorkspace() {
           allowFrontierForChat: allowChat,
           allowFrontierForPlanning: allowPlanning,
         },
+        multiModel: {
+          enabled: multiModelEnabled,
+          planningProviderId,
+          codingProviderId,
+          longContextProviderId,
+        },
       });
       setSettings(data.settings);
       setInference(data.inference);
@@ -173,7 +188,18 @@ export function SettingsWorkspace() {
     } finally {
       setSaving(false);
     }
-  }, [primarySource, localModel, frontierProviderId, frontierModel, allowChat, allowPlanning]);
+  }, [
+    primarySource,
+    localModel,
+    frontierProviderId,
+    frontierModel,
+    allowChat,
+    allowPlanning,
+    multiModelEnabled,
+    planningProviderId,
+    codingProviderId,
+    longContextProviderId,
+  ]);
 
   const saveAppearance = useCallback(async () => {
     setSaving(true);
@@ -256,6 +282,7 @@ export function SettingsWorkspace() {
     { id: "claws", label: "Claws", hint: "Add or remove digital employees" },
     { id: "intelligence", label: "Intelligence", hint: "Local, frontier, or both" },
     { id: "appearance", label: "Appearance", hint: "Theme and display mode" },
+    { id: "agent", label: "Agent runtime", hint: "Channels, CCP, heartbeat" },
     { id: "general", label: "General", hint: "Appliance preferences" },
   ];
 
@@ -493,6 +520,71 @@ export function SettingsWorkspace() {
               ) : null}
 
               <section>
+                <h3 className="font-sans text-sm font-medium text-stark">Multi-model routing</h3>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  When frontier is active, route coding, planning, and long-context prompts to different
+                  providers you connect — Perplexity-style orchestration using your keys.
+                </p>
+                <label className="mt-3 flex items-center gap-2 font-sans text-sm text-muted">
+                  <input
+                    type="checkbox"
+                    checked={multiModelEnabled}
+                    onChange={(e) => setMultiModelEnabled(e.target.checked)}
+                  />
+                  Enable multi-model auto-routing
+                </label>
+                {multiModelEnabled ? (
+                  <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                    <label className="block font-sans text-xs text-muted">
+                      Planning
+                      <select
+                        value={planningProviderId ?? ""}
+                        onChange={(e) => setPlanningProviderId(e.target.value || null)}
+                        className="mt-1 w-full border border-line bg-surface px-2 py-1.5 text-sm text-stark"
+                      >
+                        <option value="">Default</option>
+                        {providers.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block font-sans text-xs text-muted">
+                      Coding
+                      <select
+                        value={codingProviderId ?? ""}
+                        onChange={(e) => setCodingProviderId(e.target.value || null)}
+                        className="mt-1 w-full border border-line bg-surface px-2 py-1.5 text-sm text-stark"
+                      >
+                        <option value="">Default</option>
+                        {providers.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block font-sans text-xs text-muted">
+                      Long context
+                      <select
+                        value={longContextProviderId ?? ""}
+                        onChange={(e) => setLongContextProviderId(e.target.value || null)}
+                        className="mt-1 w-full border border-line bg-surface px-2 py-1.5 text-sm text-stark"
+                      >
+                        <option value="">Default</option>
+                        {providers.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                ) : null}
+              </section>
+
+              <section>
                 <h3 className="font-sans text-sm font-medium text-stark">Frontier usage</h3>
                 <label className="mt-3 flex items-center gap-2 font-sans text-sm text-muted">
                   <input type="checkbox" checked={allowChat} onChange={(e) => setAllowChat(e.target.checked)} />
@@ -616,6 +708,12 @@ export function SettingsWorkspace() {
                   Save appearance
                 </button>
               </div>
+            </div>
+          ) : null}
+
+          {tab === "agent" ? (
+            <div className="p-6">
+              <AgentRuntimeSettingsPanels />
             </div>
           ) : null}
 

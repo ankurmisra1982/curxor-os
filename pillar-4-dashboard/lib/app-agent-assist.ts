@@ -8,7 +8,10 @@ import {
   isLocalInferenceAvailable,
   parseJsonLoose,
 } from "./local-inference";
+import { chatCompletionRouted } from "./inference-router";
 import type { OotbAppId } from "./ootb-apps";
+import { appendMemory, buildWorkspacePromptBlock } from "./agent-runtime/workspace-store";
+import { buildSkillsPromptBlock, getResolvedAgent } from "./agent-runtime/skills-loader";
 import { buildContextPromptBlock } from "./claw-context-service";
 
 export type { AgentAssistRequest, AgentAssistResult, AgentChatTurn } from "./app-agent-types";
@@ -34,15 +37,20 @@ function cfgStr(config: Record<string, unknown>, key: string, fallback: string):
   return typeof v === "string" ? v : fallback;
 }
 
-function skillById(appId: OotbAppId, id: string): AgentSkill | undefined {
-  return getAppAgent(appId).skills.find((s) => s.id === id);
+function skillById(appId: OotbAppId, id: string, skills: AgentSkill[]): AgentSkill | undefined {
+  return skills.find((s) => s.id === id);
 }
 
-function buildAgentSystemPrompt(agent: AppAgentDefinition): string {
-  const skills = agent.skills.map((s) => `${s.id}: ${s.label} — ${s.description}`).join("\n");
+async function buildAgentSystemPrompt(agent: AppAgentDefinition, appId: OotbAppId): Promise<string> {
+  const resolved = await getResolvedAgent(appId);
+  const skills = resolved.skills.map((s) => `${s.id}: ${s.label} — ${s.description}`).join("\n");
+  const workspaceBlock = await buildWorkspacePromptBlock(appId);
+  const skillsBlock = await buildSkillsPromptBlock(appId);
   return `You are ${agent.agentName} on a sovereign CurXor appliance. ${agent.tagline}
 Purpose:
 ${agent.purpose.map((p) => `- ${p}`).join("\n")}
+${workspaceBlock}
+${skillsBlock}
 Available skills (the operator must tap a skill button to execute — you cannot trade, publish, or call external APIs directly):
 ${skills}
 Rules:
@@ -64,6 +72,7 @@ async function tryLlmAgentChat(
   if (!(await isLocalInferenceAvailable())) return null;
 
   const agent = getAppAgent(req.appId);
+  const resolved = await getResolvedAgent(req.appId);
   const message = req.message.trim();
   if (!message) return null;
 
@@ -74,18 +83,20 @@ async function tryLlmAgentChat(
 
   const configNote = `Config: ${JSON.stringify(req.config ?? {})}`;
   const profileId =
-    typeof req.config?.selectedProfileId === "string" ? req.config.selectedProfileId : null;
+    req.profileId ??
+    (typeof req.config?.selectedProfileId === "string" ? req.config.selectedProfileId : null);
   const contextBlock = await buildContextPromptBlock(req.appId, profileId);
+  const systemContent = (await buildAgentSystemPrompt(agent, req.appId)) + contextBlock;
+  const messages = [
+    { role: "system" as const, content: systemContent },
+    ...history,
+    { role: "user" as const, content: `${message}\n\n${configNote}` },
+  ];
 
-  const result = await chatCompletion({
-    format: "json",
-    messages: [
-      { role: "system", content: buildAgentSystemPrompt(agent) + contextBlock },
-      ...history,
-      { role: "user", content: `${message}\n\n${configNote}` },
-    ],
-    temperature: 0.25,
-  });
+  const result = await chatCompletionRouted(
+    { format: "json", messages, temperature: 0.25 },
+    () => chatCompletion({ format: "json", messages, temperature: 0.25 }),
+  );
 
   const parsed = parseJsonLoose<{ reply?: string; suggestedSkill?: string | null }>(result.content);
   if (!parsed?.reply?.trim()) {
@@ -97,7 +108,7 @@ async function tryLlmAgentChat(
 
   return {
     reply: parsed.reply.trim(),
-    suggestedSkill: isValidSuggestedSkill(agent, parsed.suggestedSkill)
+    suggestedSkill: isValidSuggestedSkill(resolved, parsed.suggestedSkill)
       ? parsed.suggestedSkill
       : fallback.suggestedSkill,
   };
@@ -309,7 +320,8 @@ export async function assistAppAgent(req: AgentAssistRequest): Promise<AgentAssi
   const config = req.config ?? {};
 
   if (req.skillId) {
-    const skill = skillById(req.appId, req.skillId);
+    const resolved = await getResolvedAgent(req.appId);
+    const skill = skillById(req.appId, req.skillId, resolved.skills);
     if (!skill) return { reply: "Unknown skill.", activity: undefined };
     return runSkillReply(req.appId, req.skillId, config, skill, req.message);
   }
@@ -336,6 +348,9 @@ async function runSkillReply(
   if (skill.kind === "plan") {
     const draft = await tryLlmPlanSkill(appId, skillId, config, message);
     if (draft) {
+      if (message.trim().length > 12) {
+        await appendMemory(`${appId}/${skillId}: ${message.trim().slice(0, 200)}`);
+      }
       return {
         reply: draft,
         activity: `[${skill.label}] generated on local inference`,

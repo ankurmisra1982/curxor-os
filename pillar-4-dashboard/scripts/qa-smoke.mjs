@@ -145,6 +145,133 @@ await check("mesh context for optimus", async () => {
   return data.ok === true && typeof data.context === "object";
 });
 
+await check("mesh consent registry", async () => {
+  const data = await getJson("/api/mesh/consent");
+  return Array.isArray(data.consent?.entries) && data.consent.entries.length >= 1;
+});
+
+await check("agent workspace (capital)", async () => {
+  const data = await getJson("/api/agent-workspace/my-capital");
+  return data.ok === true && data.workspace?.app?.["SOUL.md"];
+});
+
+await check("scheduler GET", async () => {
+  const data = await getJson("/api/scheduler");
+  return data.version === 1 && Array.isArray(data.jobs);
+});
+
+await check("scheduler run_due", async () => {
+  const { ok, json } = await postJson("/api/scheduler", { action: "run_due" });
+  return ok && Array.isArray(json.results);
+});
+
+await check("channels GET", async () => {
+  const data = await getJson("/api/channels");
+  return data.ok === true && data.config?.version === 1;
+});
+
+await check("resolved agent (vital)", async () => {
+  const data = await getJson("/api/app-agent/my-vital");
+  return data.ok === true && Array.isArray(data.agent?.skills);
+});
+
+await check("mesh digital health sync", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "health.sync_wearables",
+    payload: { sources: ["oura"] },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("mcp GET", async () => {
+  const data = await getJson("/api/mcp");
+  return data.ok === true && typeof data.mcp === "object";
+});
+
+await check("settings multi-model POST", async () => {
+  const current = await getJson("/api/settings");
+  const { ok, json } = await postJson("/api/settings", {
+    multiModel: {
+      enabled: false,
+      planningProviderId: current.settings?.intelligence?.frontierProviderId ?? null,
+      codingProviderId: null,
+      longContextProviderId: null,
+    },
+  });
+  return ok && json.settings?.multiModel?.enabled === false;
+});
+
+await check("slack events url_verification", async () => {
+  const res = await fetch(`${BASE}/api/channels/slack/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "url_verification", challenge: "qa-challenge" }),
+  });
+  const json = await res.json();
+  return json.challenge === "qa-challenge";
+});
+
+await check("whatsapp webhook verify (GET)", async () => {
+  const tokenRes = await postJson("/api/channels", { action: "ensure_whatsapp_verify_token" });
+  const token = tokenRes.json.verifyToken;
+  if (!token) return false;
+  const res = await fetch(
+    `${BASE}/api/channels/whatsapp/webhook?hub.mode=subscribe&hub.verify_token=${encodeURIComponent(token)}&hub.challenge=wa-challenge`,
+  );
+  const text = await res.text();
+  return text === "wa-challenge";
+});
+
+await check("imessage webhook GET", async () => {
+  const data = await getJson("/api/channels/imessage/webhook");
+  return data.ok === true && typeof data.webhook === "string";
+});
+
+await check("garmin oauth status GET", async () => {
+  const data = await getJson("/api/vital/garmin");
+  return data.ok === true && typeof data.linked === "boolean";
+});
+
+await check("garmin oauth start POST", async () => {
+  const { ok, json } = await postJson("/api/vital/garmin", { action: "start" });
+  if (ok && json.authorizeUrl) return true;
+  return !ok && typeof json.error === "string";
+});
+
+await check("mesh digital browser automate", async () => {
+  const { json } = await postJson("/api/mesh/digital", {
+    tool: "browser.automate",
+    payload: { url: "https://example.com", action: "extract_text" },
+  });
+  return typeof json.ok === "boolean";
+});
+
+await check("channels webchat session history", async () => {
+  await postJson("/api/channels/webchat", { appId: "my-shop", message: "margin check" });
+  await postJson("/api/channels/webchat", { appId: "my-shop", message: "any alerts?" });
+  const inbox = await getJson("/api/channels/inbox");
+  const s = inbox.sessions?.find((x) => x.id === "webchat:my-shop");
+  return Boolean(s?.history?.length >= 2);
+});
+
+await check("channels webchat POST", async () => {
+  const { ok, json } = await postJson("/api/channels/webchat", {
+    appId: "my-work",
+    message: "inbox sync test",
+  });
+  return ok && typeof json.reply === "string" && typeof json.sessionId === "string";
+});
+
+await check("channels inbox GET", async () => {
+  const data = await getJson("/api/channels/inbox");
+  return data.ok === true && Array.isArray(data.sessions) && data.stats.total >= 1;
+});
+
+await check("mesh context inbox keys", async () => {
+  const data = await getJson("/api/mesh/context?appId=my-work");
+  return data.ok === true && typeof data.context === "object";
+});
+
 const appIds = [
   "my-shop",
   "my-content-creator",

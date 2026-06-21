@@ -77,6 +77,7 @@ Each profile gets a `profileId` on CCP messages so Vital can run per-member long
 
 - Publish requires scope write permission in registry
 - Read filtered by subscription matrix
+- Channel conversations publish to `work/inbox.*` and app scopes via bridge (see Agent runtime guide)
 - No automatic eno2 egress — bridges are separate
 - LAN auth gates mutating routes in production
 

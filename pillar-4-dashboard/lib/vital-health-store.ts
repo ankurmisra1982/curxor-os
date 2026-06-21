@@ -139,3 +139,16 @@ export async function markHealthAppConnected(app: string): Promise<VitalHealthSt
   await writeVitalState(state);
   return state;
 }
+
+export async function ingestVitalReadings(readings: VitalReading[]): Promise<VitalHealthState> {
+  const state = await readVitalState();
+  for (const r of readings) {
+    state.vitals = state.vitals.filter((v) => v.metric !== r.metric);
+    state.vitals.push(r);
+  }
+  state.vitals = state.vitals.slice(-32);
+  state.updatedAt = new Date().toISOString();
+  await writeVitalState(state);
+  await syncVitalContextToMesh(null);
+  return state;
+}

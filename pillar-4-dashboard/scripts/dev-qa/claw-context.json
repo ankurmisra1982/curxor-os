@@ -2,155 +2,137 @@
   "records": [
     {
       "envelope": {
-        "id": "20ce9754-1481-45e6-9112-feb394fc1c9b",
+        "id": "05190529-7467-4176-9c1d-20b6c2fc9670",
         "version": 1,
         "action": "publish",
-        "sourceAppId": "my-family",
-        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-        "scope": "family",
-        "key": "members.9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-        "timestamp": "2026-06-20T23:36:49.961Z",
-        "ttlSeconds": null,
+        "sourceAppId": "bridge",
+        "profileId": null,
+        "scope": "work",
+        "key": "inbox.rollup",
+        "timestamp": "2026-06-21T03:15:45.947Z",
+        "ttlSeconds": 3600,
         "payload": {
-          "displayName": "Primary operator",
-          "role": "owner",
-          "personality": {
-            "traits": [
-              "sovereign",
-              "builder"
-            ],
-            "communicationStyle": "warm",
-            "notes": ""
-          },
-          "sharedScopes": [
-            "personal",
-            "health",
-            "work",
-            "finance"
+          "sessionCount": 7,
+          "sessions": [
+            {
+              "sessionId": "webchat:tesla-optimus-engine",
+              "channel": "webchat",
+              "appId": "tesla-optimus-engine",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
+              "updatedAt": "2026-06-21T03:15:45.939Z"
+            },
+            {
+              "sessionId": "webchat:my-vital",
+              "channel": "webchat",
+              "appId": "my-vital",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
+              "updatedAt": "2026-06-21T03:15:45.750Z"
+            },
+            {
+              "sessionId": "webchat:my-work",
+              "channel": "webchat",
+              "appId": "my-work",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+              "updatedAt": "2026-06-21T03:15:45.648Z"
+            },
+            {
+              "sessionId": "webchat:my-capital",
+              "channel": "webchat",
+              "appId": "my-capital",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance.",
+              "updatedAt": "2026-06-21T03:15:44.865Z"
+            },
+            {
+              "sessionId": "webchat:my-shop",
+              "channel": "webchat",
+              "appId": "my-shop",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
+              "updatedAt": "2026-06-21T03:15:43.975Z"
+            },
+            {
+              "sessionId": "webchat:webchat:my-work",
+              "channel": "webchat",
+              "appId": "my-work",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+              "updatedAt": "2026-06-21T03:14:26.530Z"
+            },
+            {
+              "sessionId": "webchat:webchat:my-shop",
+              "channel": "webchat",
+              "appId": "my-shop",
+              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "preview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
+              "updatedAt": "2026-06-21T03:14:26.211Z"
+            }
           ],
-          "deviceCount": 0
+          "updatedAt": "2026-06-21T03:15:45.947Z"
         }
       },
-      "storedAt": "2026-06-20T23:36:49.961Z",
-      "expiresAt": null
+      "storedAt": "2026-06-21T03:15:45.947Z",
+      "expiresAt": "2026-06-21T04:15:45.947Z"
     },
     {
       "envelope": {
-        "id": "3382a94a-bbd3-43c8-95b5-0dd7134da7d2",
+        "id": "e9b0ac14-3a8d-4235-8340-81dac76ba910",
         "version": 1,
         "action": "publish",
-        "sourceAppId": "my-vital",
-        "profileId": null,
-        "scope": "health",
-        "key": "protocol.active",
-        "timestamp": "2026-06-20T23:36:49.939Z",
-        "ttlSeconds": 86400,
-        "payload": {
-          "steps": [
-            {
-              "id": "sleep-01",
-              "category": "sleep",
-              "title": "Consistent sleep window",
-              "detail": "In bed 22:30–06:30; dim lights 60 min before bed.",
-              "frequency": "Daily",
-              "priority": "core"
-            },
-            {
-              "id": "move-01",
-              "category": "movement",
-              "title": "Zone 2 cardio",
-              "detail": "45 min brisk walk or cycle — conversational pace.",
-              "frequency": "4× / week",
-              "priority": "core"
-            },
-            {
-              "id": "nutrition-01",
-              "category": "nutrition",
-              "title": "Protein-forward meals",
-              "detail": "≥30g protein at breakfast and lunch from whole foods.",
-              "frequency": "Daily",
-              "priority": "core"
-            },
-            {
-              "id": "labs-01",
-              "category": "labs",
-              "title": "Quarterly metabolic panel",
-              "detail": "Sync PDF reports from your provider portal into Vital Claw.",
-              "frequency": "Quarterly",
-              "priority": "optional"
-            }
-          ]
-        }
-      },
-      "storedAt": "2026-06-20T23:36:49.939Z",
-      "expiresAt": "2026-06-21T23:36:49.939Z"
-    },
-    {
-      "envelope": {
-        "id": "375a0a92-57d6-4d94-8757-21b25f00feaa",
-        "version": 1,
-        "action": "publish",
-        "sourceAppId": "my-vital",
-        "profileId": null,
-        "scope": "health",
-        "key": "vitals.latest",
-        "timestamp": "2026-06-20T23:36:49.929Z",
-        "ttlSeconds": 3600,
-        "payload": {
-          "readings": [
-            {
-              "metric": "resting_hr",
-              "value": 58,
-              "unit": "bpm",
-              "recordedAt": "2026-06-20T23:36:49.781Z",
-              "source": "oura"
-            },
-            {
-              "metric": "hrv",
-              "value": 42,
-              "unit": "ms",
-              "recordedAt": "2026-06-20T23:36:49.781Z",
-              "source": "oura"
-            },
-            {
-              "metric": "sleep_score",
-              "value": 82,
-              "unit": "score",
-              "recordedAt": "2026-06-20T23:36:49.781Z",
-              "source": "oura"
-            },
-            {
-              "metric": "steps",
-              "value": 8420,
-              "unit": "count",
-              "recordedAt": "2026-06-20T23:36:49.781Z",
-              "source": "apple_health"
-            }
-          ]
-        }
-      },
-      "storedAt": "2026-06-20T23:36:49.929Z",
-      "expiresAt": "2026-06-21T00:36:49.929Z"
-    },
-    {
-      "envelope": {
-        "id": "b5992141-0b0f-485a-8a26-af58bfd3ebe1",
-        "version": 1,
-        "action": "publish",
-        "sourceAppId": "system",
-        "profileId": null,
+        "sourceAppId": "bridge",
+        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
         "scope": "hardware",
-        "key": "optimus.status",
-        "timestamp": "2026-06-20T23:36:49.921Z",
-        "ttlSeconds": 3600,
+        "key": "inbox.webchat:tesla-optimus-engine",
+        "timestamp": "2026-06-21T03:15:45.942Z",
+        "ttlSeconds": 604800,
         "payload": {
-          "unitId": "OPTIMUS-01",
-          "mode": "standby",
-          "safetyProfile": "standard"
+          "sessionId": "webchat:tesla-optimus-engine",
+          "channel": "webchat",
+          "externalChatId": "tesla-optimus-engine",
+          "appId": "tesla-optimus-engine",
+          "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+          "profileName": "Primary operator",
+          "senderLabel": "dashboard",
+          "lastUser": "What do you know about my household?",
+          "lastReply": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
+          "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
+          "updatedAt": "2026-06-21T03:15:45.942Z"
         }
       },
-      "storedAt": "2026-06-20T23:36:49.921Z",
-      "expiresAt": "2026-06-21T00:36:49.921Z"
+      "storedAt": "2026-06-21T03:15:45.942Z",
+      "expiresAt": "2026-06-28T03:15:45.942Z"
+    },
+    {
+      "envelope": {
+        "id": "9692aa88-e054-474a-97a7-22cd1f9f0fae",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+        "scope": "personal",
+        "key": "comms.latest.webchat:my-vital",
+        "timestamp": "2026-06-21T03:15:45.753Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-vital",
+          "channel": "webchat",
+          "externalChatId": "my-vital",
+          "appId": "my-vital",
+          "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+          "profileName": "Primary operator",
+          "senderLabel": "dashboard",
+          "lastUser": "status check",
+          "lastReply": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
+          "preview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
+          "updatedAt": "2026-06-21T03:15:45.752Z",
+          "unified": true
+        }
+      },
+      "storedAt": "2026-06-21T03:15:45.753Z",
+      "expiresAt": "2026-06-28T03:15:45.753Z"
     }
   ]
 }

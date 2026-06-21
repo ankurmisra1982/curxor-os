@@ -24,6 +24,7 @@ export async function syncFamilyContextToMesh(): Promise<void> {
         personality: member.personality,
         sharedScopes: member.sharedScopes,
         deviceCount: member.devices.length,
+        channelHandles: member.channelHandles ?? [],
       },
       profileId: member.id,
       ttlSeconds: null,

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AppSection } from "@/components/app-shared/AppLayout";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
-import type { FamilyProfile } from "@/lib/family-types";
+import type { FamilyChannelHandle, FamilyProfile } from "@/lib/family-types";
 
 interface FamilyResponse {
   primaryProfileId: string | null;
@@ -16,6 +16,8 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
   const [data, setData] = useState<FamilyResponse | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draftName, setDraftName] = useState("");
+  const [handleChannel, setHandleChannel] = useState<FamilyChannelHandle["channel"]>("whatsapp");
+  const [handleAddress, setHandleAddress] = useState("");
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
@@ -70,6 +72,31 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
 
   const members = data?.members ?? [];
   const selected = members.find((m) => m.id === selectedId);
+
+  const addChannelHandle = useCallback(async () => {
+    if (!selected || !handleAddress.trim()) return;
+    setSaving(true);
+    try {
+      const nextHandles: FamilyChannelHandle[] = [
+        ...(selected.channelHandles ?? []),
+        { channel: handleChannel, address: handleAddress.trim() },
+      ];
+      await fetch("/api/family", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: selected.id,
+          displayName: selected.displayName,
+          channelHandles: nextHandles,
+        }),
+      });
+      setHandleAddress("");
+      await load();
+      await resyncMesh();
+    } finally {
+      setSaving(false);
+    }
+  }, [selected, handleChannel, handleAddress, load, resyncMesh]);
 
   return (
     <div className="space-y-6 p-6">
@@ -126,7 +153,48 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
               <dt className="text-muted">Devices</dt>
               <dd className="text-stark">{selected.devices.length}</dd>
             </div>
+            <div className="border-b border-line py-2">
+              <dt className="text-muted">Channel handles</dt>
+              <dd className="mt-2 space-y-1 font-mono text-xs text-stark">
+                {(selected.channelHandles ?? []).length === 0 ? (
+                  <span className="text-muted">None — add below to route WhatsApp/iMessage to this member</span>
+                ) : (
+                  selected.channelHandles.map((h) => (
+                    <div key={`${h.channel}-${h.address}`}>
+                      {h.channel}: {h.address}
+                    </div>
+                  ))
+                )}
+              </dd>
+            </div>
           </dl>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <select
+              value={handleChannel}
+              onChange={(e) => setHandleChannel(e.target.value as FamilyChannelHandle["channel"])}
+              className="border border-line bg-void px-2 py-2 font-sans text-sm text-stark"
+            >
+              <option value="whatsapp">WhatsApp</option>
+              <option value="telegram">Telegram</option>
+              <option value="imessage">iMessage</option>
+              <option value="slack">Slack</option>
+              <option value="email">Email</option>
+            </select>
+            <input
+              value={handleAddress}
+              onChange={(e) => setHandleAddress(e.target.value)}
+              placeholder="Phone, @username, or chat id"
+              className="min-w-[180px] flex-1 border border-line bg-void px-3 py-2 font-sans text-sm text-stark"
+            />
+            <button
+              type="button"
+              disabled={saving || !handleAddress.trim()}
+              onClick={() => void addChannelHandle()}
+              className="border border-cursor-glow px-3 py-2 font-sans text-sm text-stark disabled:opacity-50"
+            >
+              Link handle
+            </button>
+          </div>
         </AppSection>
       ) : null}
 

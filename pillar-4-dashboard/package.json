@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "qa:smoke": "node scripts/qa-smoke.mjs",
+    "qa:flows": "node scripts/qa-user-flows.mjs",
+    "heartbeat:daemon": "node scripts/heartbeat-daemon.mjs",
     "qa:wait": "node scripts/wait-for-server.mjs",
     "qa:local": "node scripts/qa-local.mjs",
     "demo:capture": "node scripts/capture-demo-screenshots.mjs"

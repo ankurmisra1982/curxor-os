@@ -1,6 +1,6 @@
 [Unit]
 Description=CurXor OS Appliance Master Target
-Wants=curxor-compute.service curxor-telemetry-broker.service curxor-engine.service curxor-dashboard.service
+Wants=curxor-compute.service curxor-telemetry-broker.service curxor-engine.service curxor-dashboard.service curxor-scheduler.service
 After=curxor-compute.service curxor-telemetry-broker.service
 
 [Install]

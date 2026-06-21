@@ -24,7 +24,8 @@ Guides for deploying, operating, and extending the CurXor OS sovereign edge appl
 | [Operations & Troubleshooting](guides/09-operations-troubleshooting.md) | Day-2 ops, logs, health checks, common failures |
 | [MS-S1 MAX Hardware & BIOS](guides/10-ms-s1-max-hardware-bios.md) | UMA carve-out, NIC roles, BIOS checklist, validation |
 | [PDF Export](guides/11-pdf-export.md) | Generate printable PDFs from all guides |
-| [Universal UI design](guides/13-universal-ui-design.md) | Novice-to-expert UX research + patterns |
+| [Claw Context Protocol](guides/15-claw-context-protocol.md) | CCP mesh |
+| [Agent runtime](guides/18-agent-runtime.md) | Workspace memory, channels, heartbeat |
 
 
 

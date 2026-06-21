@@ -484,7 +484,7 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       "Tap Publish Context to share vitals with subscribed Claws (never auto-egress).",
     ],
     skills: [
-      { id: "sync_wearables", label: "Sync Wearables", description: "Pull latest vitals from connected bridges", kind: "plan" },
+      { id: "sync_wearables", label: "Sync Wearables", description: "Pull latest vitals from connected bridges", kind: "digital" },
       { id: "ingest_report", label: "Ingest Report", description: "Add medical PDF summary to vault", kind: "plan" },
       { id: "update_protocol", label: "Update Protocol", description: "Regenerate longevity steps locally", kind: "plan" },
       { id: "publish_context", label: "Publish Context", description: "Push health slice to CCP mesh", kind: "plan" },

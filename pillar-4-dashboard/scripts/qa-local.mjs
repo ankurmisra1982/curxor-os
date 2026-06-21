@@ -32,6 +32,11 @@ const env = {
   CURXOR_PROVIDER_LINK_SESSIONS_PATH: path.join(DEV_QA, "provider-link-sessions.json"),
   CURXOR_CLAW_PROFILES_PATH: path.join(DEV_QA, "claw-profiles.json"),
   CURXOR_APP_FRE_DIR: path.join(DEV_QA, "app-fre"),
+  CURXOR_AGENT_WORKSPACE_PATH: path.join(DEV_QA, "agent-workspace"),
+  CURXOR_SCHEDULER_PATH: path.join(DEV_QA, "scheduler", "jobs.json"),
+  CURXOR_CHANNELS_PATH: path.join(DEV_QA, "channels"),
+  CURXOR_CCP_CONSENT_PATH: path.join(DEV_QA, "ccp-consent.json"),
+  CURXOR_GARMIN_OAUTH_PATH: path.join(DEV_QA, "garmin-oauth.json"),
   CURXOR_MESH_BROKER_IP: "127.0.0.1",
   PORT,
   HOSTNAME: "127.0.0.1",
@@ -132,6 +137,10 @@ async function main() {
   try {
     await waitForServer();
     exitCode = await run("node", ["scripts/qa-smoke.mjs", BASE]);
+    if (exitCode === 0) {
+      const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);
+      if (flowExit !== 0) exitCode = flowExit;
+    }
   } catch (err) {
     console.error(err instanceof Error ? err.message : String(err));
     exitCode = 1;

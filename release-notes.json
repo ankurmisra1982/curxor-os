@@ -7,5 +7,14 @@
       "The Forge — natural-language agent factory wired to eno2 egress bridges",
       "Dual-port networking: eno1 Command · eno2 Egress kill switch"
     ]
+  },
+  "0.2.0": {
+    "highlights": [
+      "Agent runtime v0.2 — SOUL/USER/MEMORY workspace, skills, heartbeat scheduler, and channel gateway",
+      "Unified communications — Telegram, Slack, WhatsApp, iMessage, and dashboard chat share one router and CCP inbox",
+      "Kin channel handles route external senders to household profiles; unified inbox on Home and Outreach Claw",
+      "Garmin OAuth PKCE, live MCP JSON-RPC handshake, Playwright browser automation on eno2",
+      "54 automated QA checks — smoke, user flows, typecheck, and production build"
+    ]
   }
 }

@@ -14,6 +14,13 @@ export interface FamilyPersonality {
   notes: string;
 }
 
+/** Maps external messaging identity → household member for Kin routing. */
+export interface FamilyChannelHandle {
+  channel: "telegram" | "slack" | "whatsapp" | "imessage" | "webchat" | "email";
+  /** Normalized handle: phone digits, slack user id, telegram id, email lowercased. */
+  address: string;
+}
+
 export interface FamilyProfile {
   id: string;
   displayName: string;
@@ -22,6 +29,7 @@ export interface FamilyProfile {
   devices: FamilyDevice[];
   personality: FamilyPersonality;
   sharedScopes: ("personal" | "health" | "work" | "finance")[];
+  channelHandles: FamilyChannelHandle[];
   createdAt: string;
   updatedAt: string;
 }

@@ -46,6 +46,10 @@ async function writeProfilesFile(data: FamilyProfilesFile): Promise<void> {
 
 export async function listFamilyProfiles(): Promise<FamilyProfilesFile> {
   const file = await readProfilesFile();
+  file.members = file.members.map((m) => ({
+    ...m,
+    channelHandles: m.channelHandles ?? [],
+  }));
   if (file.members.length === 0) {
     const owner: FamilyProfile = {
       id: randomUUID(),
@@ -55,6 +59,7 @@ export async function listFamilyProfiles(): Promise<FamilyProfilesFile> {
       devices: [],
       personality: { ...DEFAULT_PERSONALITY, traits: ["sovereign", "builder"] },
       sharedScopes: ["personal", "health", "work", "finance"],
+      channelHandles: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -80,6 +85,7 @@ export async function upsertFamilyProfile(
     devices: input.devices ?? existing?.devices ?? [],
     personality: input.personality ?? existing?.personality ?? DEFAULT_PERSONALITY,
     sharedScopes: input.sharedScopes ?? existing?.sharedScopes ?? ["personal"],
+    channelHandles: input.channelHandles ?? existing?.channelHandles ?? [],
     createdAt: existing?.createdAt ?? now,
     updatedAt: now,
   };

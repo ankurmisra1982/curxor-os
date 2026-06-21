@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { ActiveClawBadge } from "@/components/claw/ActiveClawBadge";
+import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { WelcomeSettingsBanner } from "@/components/desktop/WelcomeSettingsBanner";
 import { StartNewClawButton } from "@/components/claw/StartNewClawButton";
 import { useUiMode } from "@/components/ui/UiModeProvider";
@@ -68,6 +69,8 @@ export function HomeOverview({ selectedApps, onOpenHealth }: HomeOverviewProps) 
           <ActiveClawBadge />
         </div>
       </section>
+
+      <UnifiedInboxPanel compact title="Recent conversations" />
 
       <section>
         <h2 className="font-sans text-sm font-medium text-stark">Your Claws</h2>

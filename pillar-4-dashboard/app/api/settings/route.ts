@@ -45,8 +45,11 @@ export async function POST(request: Request): Promise<Response> {
   const patch: UserSettingsPatch = {};
   if (body.appearance) patch.appearance = body.appearance;
   if (body.intelligence) patch.intelligence = body.intelligence;
+  if (body.multiModel) patch.multiModel = body.multiModel;
+  if (body.mcp) patch.mcp = body.mcp;
+  if (body.egress) patch.egress = body.egress;
 
-  if (!patch.appearance && !patch.intelligence) {
+  if (!patch.appearance && !patch.intelligence && !patch.multiModel && !patch.mcp && !patch.egress) {
     return Response.json({ error: "Nothing to update" }, { status: 400 });
   }
 

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "enabled": true,
+  "defaultAppId": "my-work",
+  "telegram": {
+    "enabled": false,
+    "botUsername": null,
+    "webhookSecret": null
+  },
+  "slack": {
+    "enabled": false,
+    "signingSecret": null
+  },
+  "whatsapp": {
+    "enabled": false,
+    "verifyToken": "f7d1634a33ab48ea3667536445651ac9",
+    "phoneNumberId": null
+  },
+  "imessage": {
+    "enabled": false,
+    "webhookSecret": "6e108611e6b3f4d65c02996e942e9e01"
+  },
+  "routeRules": [],
+  "updatedAt": "2026-06-21T03:15:44.918Z"
+}

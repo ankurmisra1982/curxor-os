@@ -32,6 +32,22 @@ export interface UserSettings {
     allowFrontierForPlanning: boolean;
     connectedProviders: Record<string, ConnectedProvider>;
   };
+  /** Optional multi-model routing (P1) — uses user's own frontier keys. */
+  multiModel: {
+    enabled: boolean;
+    planningProviderId: string | null;
+    codingProviderId: string | null;
+    longContextProviderId: string | null;
+  };
+  /** MCP server endpoints (scaffold). */
+  mcp: {
+    enabled: boolean;
+    servers: Array<{ id: string; url: string; enabled: boolean }>;
+  };
+  /** Egress host allowlist for eno2 bridges (empty = bridge catalog only). */
+  egress: {
+    allowHosts: string[];
+  };
   updatedAt: string;
 }
 
@@ -39,6 +55,9 @@ export type UserSettingsPatch = {
   selectedApps?: OotbAppId[];
   appearance?: Partial<UserSettings["appearance"]>;
   intelligence?: Partial<UserSettings["intelligence"]>;
+  multiModel?: Partial<UserSettings["multiModel"]>;
+  mcp?: Partial<UserSettings["mcp"]>;
+  egress?: Partial<UserSettings["egress"]>;
 };
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
@@ -57,6 +76,19 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     allowFrontierForChat: true,
     allowFrontierForPlanning: true,
     connectedProviders: {},
+  },
+  multiModel: {
+    enabled: false,
+    planningProviderId: null,
+    codingProviderId: null,
+    longContextProviderId: null,
+  },
+  mcp: {
+    enabled: false,
+    servers: [],
+  },
+  egress: {
+    allowHosts: [],
   },
   updatedAt: new Date(0).toISOString(),
 };

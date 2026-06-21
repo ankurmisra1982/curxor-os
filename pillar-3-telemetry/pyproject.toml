@@ -14,6 +14,9 @@ curxor-broker = "curxor_broker.main:main"
 curxor-broker-stack = "curxor_broker.stack_main:main"
 curxor-digital-bridges = "curxor_broker.digital_bridges:main"
 
+[project.optional-dependencies]
+browser = ["playwright>=1.40.0"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"

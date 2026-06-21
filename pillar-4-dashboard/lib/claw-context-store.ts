@@ -6,6 +6,7 @@ import { randomUUID } from "node:crypto";
 
 import type { ClawContextEnvelope, ClawContextRecord, ClawContextScope } from "./claw-mesh-protocol";
 import { subscriptionsForApp, scopeAllowedForApp } from "./claw-mesh-protocol";
+import { filterConsentedScopes } from "./ccp-consent-store";
 import type { OotbAppId } from "./ootb-apps";
 
 interface ClawContextFile {
@@ -100,8 +101,10 @@ export async function queryClawContext(options: {
   keyPrefix?: string;
   limit?: number;
 }): Promise<ClawContextRecord[]> {
-  const allowedScopes =
-    options.scopes ?? subscriptionsForApp(options.appId)?.scopes ?? [];
+  const allowedScopes = await filterConsentedScopes(
+    options.appId,
+    options.scopes ?? subscriptionsForApp(options.appId)?.scopes ?? [],
+  );
 
   const file = await readFile_();
   const limit = options.limit ?? 50;

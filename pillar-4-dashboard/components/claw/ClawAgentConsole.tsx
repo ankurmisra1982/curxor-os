@@ -12,8 +12,6 @@ import { useUiMode } from "@/components/ui/UiModeProvider";
 
 import { getAppAgent } from "@/lib/app-agent-catalog";
 
-import type { AgentChatTurn } from "@/lib/app-agent-types";
-
 import { skillActivityLine } from "@/lib/app-agent-types";
 
 import type { ForgeAssistResult } from "@/lib/claw-assist";
@@ -228,21 +226,13 @@ export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsolePro
 
       try {
 
-        const history: AgentChatTurn[] = messages
-
-          .filter((m) => m.role === "user" || m.role === "assistant")
-
-          .map((m) => ({ role: m.role as "user" | "assistant", text: m.text }));
-
-
-
-        const res = await fetch("/api/app-agent/assist", {
+        const res = await fetch("/api/channels/webchat", {
 
           method: "POST",
 
           headers: { "Content-Type": "application/json" },
 
-          body: JSON.stringify({ appId, message, history, config, skillId }),
+          body: JSON.stringify({ appId, message, config, skillId }),
 
         });
 

@@ -28,7 +28,7 @@ Research-backed design for a **novice-to-expert appliance** (June 2026).
 | OpenClaw | CurXor OS |
 |----------|-----------|
 | Software gateway on a PC | **Hardware appliance** + captive portal |
-| Many channels | **Eight Claws** + Forge on bare metal |
+| Many channels | **Ten Claws** + Forge on bare metal |
 | Operator often technical | **Novice buyers** ($3,999 appliance GTM) |
 | Always-on telemetry | **Simple mode** hides mesh strip |
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -56,6 +57,8 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           Outreach Claw · leads & sequences · mesh {motorUp ? "linked" : "idle"}
         </p>
       </header>
+
+      <UnifiedInboxPanel title="Comms desk — all channels" />
 
       <div className="grid gap-4 md:grid-cols-3">
         <AppMetric label="Open Tasks" value={String(tasks.filter((t) => !t.done).length)} unit="local queue" highlight />

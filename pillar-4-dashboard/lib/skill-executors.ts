@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getAppAgent } from "./app-agent-catalog";
+import { getResolvedAgent } from "./agent-runtime/skills-loader";
 import { publishDigitalIntent, publishMotorCommand, type DigitalPublishResult, type MotorPublishResult } from "./mesh-publish";
 import type { OotbAppId } from "./ootb-apps";
 
@@ -38,7 +38,7 @@ export async function executeSkillMesh(
   skillId: string,
   config: Record<string, unknown>,
 ): Promise<SkillMeshResult> {
-  const agent = getAppAgent(appId);
+  const agent = await getResolvedAgent(appId);
   const skill = agent.skills.find((s) => s.id === skillId);
   if (!skill) return { executed: false, kind: "none", skipReason: "unknown skill" };
 
@@ -161,6 +161,18 @@ async function buildDigitalIntent(
   config: Record<string, unknown>,
 ): Promise<{ tool: string; payload: Record<string, unknown> } | null> {
   switch (appId) {
+    case "my-vital":
+      if (skillId === "sync_wearables") {
+        return {
+          tool: "health.sync_wearables",
+          payload: {
+            sources: ["oura", "garmin", "apple_health"],
+            profile_id: cfgStr(config, "selectedProfileId", ""),
+          },
+        };
+      }
+      break;
+
     case "my-content-creator":
       if (skillId === "publish_post") {
         return {

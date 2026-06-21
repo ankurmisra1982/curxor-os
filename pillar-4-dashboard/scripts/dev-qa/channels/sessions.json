@@ -1,0 +1,296 @@
+{
+  "sessions": [
+    {
+      "id": "webchat:webchat:my-work",
+      "channel": "webchat",
+      "externalChatId": "webchat:my-work",
+      "appId": "my-work",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+      "history": [
+        {
+          "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "Tracking Outreach Desk. Ask me to prioritize tasks or draft a cold sequence — all local."
+        },
+        {
+          "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:14:26.530Z"
+    },
+    {
+      "id": "webchat:webchat:my-shop",
+      "channel": "webchat",
+      "externalChatId": "webchat:my-shop",
+      "appId": "my-shop",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
+      "history": [
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "any alerts?"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:14:26.211Z"
+    },
+    {
+      "id": "webchat:my-shop",
+      "channel": "webchat",
+      "externalChatId": "my-shop",
+      "appId": "my-shop",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
+      "history": [
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "any alerts?"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "margin check"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        },
+        {
+          "role": "user",
+          "text": "any alerts?"
+        },
+        {
+          "role": "assistant",
+          "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:15:43.975Z"
+    },
+    {
+      "id": "webchat:my-work",
+      "channel": "webchat",
+      "externalChatId": "my-work",
+      "appId": "my-work",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+      "history": [
+        {
+          "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "Tracking Outreach Desk. Ask me to prioritize tasks or draft a cold sequence — all local."
+        },
+        {
+          "role": "user",
+          "text": "Draft outreach priority for today"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "Remember to follow up with Acme Corp tomorrow morning"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "Draft outreach priority for today"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
+          "text": "Remember to follow up with Acme Corp tomorrow morning"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:15:45.648Z"
+    },
+    {
+      "id": "webchat:my-vital",
+      "channel": "webchat",
+      "externalChatId": "my-vital",
+      "appId": "my-vital",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
+      "history": [
+        {
+          "role": "user",
+          "text": "What is my longevity focus?"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "Summarize that in one sentence"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "status check"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "What is my longevity focus?"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "Summarize that in one sentence"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        },
+        {
+          "role": "user",
+          "text": "status check"
+        },
+        {
+          "role": "assistant",
+          "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:15:45.750Z"
+    },
+    {
+      "id": "webchat:my-capital",
+      "channel": "webchat",
+      "externalChatId": "my-capital",
+      "appId": "my-capital",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance.",
+      "history": [
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Capital Claw in paper mode. Ask about watchlist or create a new rule."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:15:44.865Z"
+    },
+    {
+      "id": "webchat:tesla-optimus-engine",
+      "channel": "webchat",
+      "externalChatId": "tesla-optimus-engine",
+      "appId": "tesla-optimus-engine",
+      "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+      "senderLabel": "dashboard",
+      "lastPreview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
+      "history": [
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        }
+      ],
+      "updatedAt": "2026-06-21T03:15:45.939Z"
+    }
+  ]
+}

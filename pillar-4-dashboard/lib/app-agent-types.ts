@@ -12,6 +12,9 @@ export interface AgentAssistRequest {
   history?: AgentChatTurn[];
   config?: Record<string, unknown>;
   skillId?: string;
+  profileId?: string | null;
+  channel?: string;
+  sessionId?: string;
 }
 
 export interface AgentAssistResult {

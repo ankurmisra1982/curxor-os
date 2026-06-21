@@ -65,7 +65,7 @@ export const CCP_REGISTRY: {
     {
       appId: "my-vital",
       scopes: ["health", "personal"],
-      keys: ["vitals.*", "protocol.*", "reports.*", "diet.*"],
+      keys: ["vitals.*", "protocol.*", "reports.*", "diet.*", "inbox.*"],
       description: "Wearables, medical reports, longevity protocol",
     },
     {
@@ -83,7 +83,7 @@ export const CCP_REGISTRY: {
     {
       appId: "my-work",
       scopes: ["work"],
-      keys: ["pipeline.*", "calendar.*", "crm.*"],
+      keys: ["pipeline.*", "calendar.*", "crm.*", "inbox.*"],
       description: "Outreach and CRM context",
     },
     {

@@ -22,8 +22,14 @@
         "work",
         "finance"
       ],
+      "channelHandles": [
+        {
+          "channel": "whatsapp",
+          "address": "+15551234567"
+        }
+      ],
       "createdAt": "2026-06-20T23:36:47.968Z",
-      "updatedAt": "2026-06-20T23:36:47.968Z"
+      "updatedAt": "2026-06-21T03:15:45.023Z"
     }
   ]
 }

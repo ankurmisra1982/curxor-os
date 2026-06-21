@@ -33,7 +33,7 @@ Unplug **eno2** to kill all outbound agent traffic. Inference stays on `127.0.0.
 
 ---
 
-## Eight Claws + The Forge
+## Ten Claws + The Forge
 
 Canonical names (storefront and dashboard aligned):
 

@@ -79,6 +79,39 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
           ? { ...base.intelligence.connectedProviders, ...partial.intelligence.connectedProviders }
           : base.intelligence.connectedProviders,
     },
+    multiModel: {
+      enabled:
+        typeof partial.multiModel?.enabled === "boolean"
+          ? partial.multiModel.enabled
+          : base.multiModel.enabled,
+      planningProviderId:
+        typeof partial.multiModel?.planningProviderId === "string"
+          ? partial.multiModel.planningProviderId
+          : partial.multiModel?.planningProviderId === null
+            ? null
+            : base.multiModel.planningProviderId,
+      codingProviderId:
+        typeof partial.multiModel?.codingProviderId === "string"
+          ? partial.multiModel.codingProviderId
+          : partial.multiModel?.codingProviderId === null
+            ? null
+            : base.multiModel.codingProviderId,
+      longContextProviderId:
+        typeof partial.multiModel?.longContextProviderId === "string"
+          ? partial.multiModel.longContextProviderId
+          : partial.multiModel?.longContextProviderId === null
+            ? null
+            : base.multiModel.longContextProviderId,
+    },
+    mcp: {
+      enabled: typeof partial.mcp?.enabled === "boolean" ? partial.mcp.enabled : base.mcp.enabled,
+      servers: Array.isArray(partial.mcp?.servers) ? partial.mcp.servers : base.mcp.servers,
+    },
+    egress: {
+      allowHosts: Array.isArray(partial.egress?.allowHosts)
+        ? partial.egress.allowHosts.map(String)
+        : base.egress.allowHosts,
+    },
     updatedAt: new Date().toISOString(),
   };
 }

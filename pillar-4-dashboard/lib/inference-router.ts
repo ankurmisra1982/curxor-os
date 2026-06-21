@@ -67,12 +67,42 @@ export async function chatCompletionRouted(
   const tryFrontier = source === "frontier" || source === "auto";
 
   if (tryFrontier && settings.intelligence.allowFrontierForChat) {
-    const frontier = await tryFrontierCompletion(options, settings);
+    const routedSettings = resolveMultiModelSettings(settings, options);
+    const frontier = await tryFrontierCompletion(options, routedSettings);
     if (frontier) return frontier;
     if (source === "frontier") throw new Error("Frontier LLM unavailable — check Settings → Intelligence");
   }
 
   return localFn();
+}
+
+/** Pick specialized frontier provider when multi-model routing is enabled. */
+function resolveMultiModelSettings(
+  settings: Awaited<ReturnType<typeof readUserSettings>>,
+  options: ChatCompletionOptions,
+): Awaited<ReturnType<typeof readUserSettings>> {
+  if (!settings.multiModel.enabled) return settings;
+
+  const text = options.messages.map((m) => m.content).join("\n").toLowerCase();
+  let providerId = settings.intelligence.frontierProviderId;
+
+  if (/code|debug|typescript|python|refactor|implement/.test(text) && settings.multiModel.codingProviderId) {
+    providerId = settings.multiModel.codingProviderId;
+  } else if (/plan|summarize|brief|strategy|protocol/.test(text) && settings.multiModel.planningProviderId) {
+    providerId = settings.multiModel.planningProviderId;
+  } else if (text.length > 4000 && settings.multiModel.longContextProviderId) {
+    providerId = settings.multiModel.longContextProviderId;
+  }
+
+  if (!providerId || providerId === settings.intelligence.frontierProviderId) return settings;
+
+  return {
+    ...settings,
+    intelligence: {
+      ...settings.intelligence,
+      frontierProviderId: providerId,
+    },
+  };
 }
 
 async function tryFrontierCompletion(

@@ -1,0 +1,15 @@
+[Unit]
+Description=CurXor OS Heartbeat Scheduler — runs due Claw jobs via dashboard API
+After=curxor-dashboard.service
+Wants=curxor-dashboard.service
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/curxor/dashboard.env
+ExecStart=/usr/bin/node /opt/curxor/pillar-4-dashboard/scripts/heartbeat-daemon.mjs http://127.0.0.1:3080
+Restart=always
+RestartSec=10
+User=curxor
+
+[Install]
+WantedBy=curxor-os.target
