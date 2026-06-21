@@ -78,6 +78,17 @@ Output: `docs/demo-pack/screenshots/` (+ `screenshots/creator/` for Creator Claw
 
 Copy these into `curxor storefront/public/demo/` when updating GTM assets.
 
+## Walkthrough video (~90s)
+
+Record Creator Claw scroll tour for storefront `/creator`:
+
+```bash
+node scripts/record-creator-walkthrough.mjs
+# or: node scripts/record-creator-walkthrough.mjs --base http://127.0.0.1:3080
+```
+
+Output: `docs/demo-pack/creator-walkthrough.webm` → auto-copied to `curxor storefront/public/demo/creator-walkthrough.webm`
+
 ## Troubleshooting
 
 | Symptom | Fix |

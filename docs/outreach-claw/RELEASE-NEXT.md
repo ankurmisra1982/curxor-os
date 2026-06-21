@@ -9,14 +9,14 @@
 - Agent skills: draft_sequence, send_sequence_step, scan_inbox, summarize_day
 - QA smoke: bootstrap, go_live, draft_sequence, scan_inbox, recovery_list
 
-## Week-one (Tier B)
+## Shipped (Tier B — week-one)
 
-- [ ] A/B subject line variants per step
-- [ ] Reply intent tagging (interested / objection / OOO)
-- [ ] Per-mailbox send limits + stagger
-- [ ] Open/reply analytics (IMAP ingest or webhook)
-- [ ] CSV lead import
-- [ ] Heartbeat daemon: `process_due` on schedule
+- [x] A/B subject line variants per step (`subjectAlt` · variant picked per lead at send)
+- [x] Reply intent tagging (interested / objection / OOO / neutral / unknown) — auto on scan + manual override
+- [x] Per-mailbox send limits + stagger (`dailySendLimit`, `sendStaggerMinutes` in FRE)
+- [x] Open/reply analytics on outbound sends + `track_open` webhook action
+- [x] CSV lead import (`import_leads` action + pipeline panel)
+- [x] Heartbeat daemon: `process_due` on schedule (due sequence steps)
 
 ## Deferred
 
@@ -24,3 +24,4 @@
 - Multi-mailbox rotation at scale
 - Salesforce/HubSpot sync
 - Dedicated outbound job worker process
+- Real IMAP ingest (today: local mail index + demo scan)

@@ -24,6 +24,29 @@ Outreach Claw (`/my-work`) is your on-appliance outbound desk: lead pipeline, mu
 | Go Live | Checklist: FRE, SMTP, lead, sequence, activation |
 | Recovery | Retry failed sends from the dashboard |
 | Failure alerts | Telegram/Slack notify on send failure (reuse Creator approval channels) |
+| A/B subjects | `subjectAlt` on sequence steps — variant A/B picked per lead at send |
+| Send policy | Daily limit + stagger between sends (FRE: `dailySendLimit`, `sendStaggerMinutes`) |
+| Reply intent | Auto-classify on inbox scan; override in Mail index panel |
+| CSV import | Pipeline panel → paste CSV with `name,email,company,title` header |
+| Analytics | Open/reply rates on outbound queue; intent breakdown from mail index |
+
+## Tier B API actions
+
+```json
+{ "action": "import_leads", "csv": "name,email,company\\nJordan,j@co.io,Co" }
+{ "action": "tag_reply_intent", "mailId": "MAIL-…", "intent": "interested" }
+{ "action": "track_open", "sendId": "SEND-001" }
+{ "action": "process_due" }
+{ "action": "analytics" }
+```
+
+## Heartbeat
+
+The appliance heartbeat daemon calls `process_due` each tick so scheduled sequence steps send automatically (respects daily limit + stagger).
+
+```bash
+node scripts/heartbeat-daemon.mjs
+```
 
 ## API
 

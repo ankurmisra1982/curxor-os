@@ -27,6 +27,9 @@ export function WorkOutboundPanel({ sends, onRetry }: WorkOutboundPanelProps) {
               <p className="text-stark truncate">{send.subject}</p>
               <p className="text-[10px] text-muted">
                 {send.to} · {send.id}
+                {send.subjectVariant ? ` · var ${send.subjectVariant.toUpperCase()}` : ""}
+                {send.openedAt ? " · opened" : ""}
+                {send.repliedAt ? " · replied" : ""}
               </p>
               {send.error ? <p className="text-[10px] text-red-400">{send.error}</p> : null}
             </div>

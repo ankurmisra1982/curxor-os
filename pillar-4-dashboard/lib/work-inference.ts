@@ -45,6 +45,7 @@ export async function draftSequenceWithLlm(input: {
           {
             delayDays: 0,
             subject: `{{company}} + local outbound stack`,
+            subjectAlt: "{{name}}, quick question on outbound",
             body: `Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?`,
           },
           {

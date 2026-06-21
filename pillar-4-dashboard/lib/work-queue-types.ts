@@ -8,6 +8,10 @@ export type SequenceStepKind = "email" | "wait" | "task";
 
 export type SendStatus = "queued" | "pending_approval" | "sent" | "failed" | "skipped";
 
+export type ReplyIntent = "interested" | "objection" | "ooo" | "neutral" | "unknown";
+
+export type SubjectVariant = "a" | "b";
+
 export interface WorkLead {
   id: string;
   name: string;
@@ -39,6 +43,9 @@ export interface SequenceStep {
   kind: SequenceStepKind;
   delayDays: number;
   subject: string;
+  /** A/B variant B subject — picked per lead at send time */
+  subjectAlt?: string;
+  subjectVariant?: SubjectVariant;
   body: string;
   sentAt: string | null;
   scheduledAt: string | null;
@@ -68,7 +75,10 @@ export interface OutboundSend {
   subject: string;
   body: string;
   status: SendStatus;
+  subjectVariant?: SubjectVariant;
   sentAt: string | null;
+  openedAt?: string | null;
+  repliedAt?: string | null;
   error: string | null;
   createdAt: string;
 }
@@ -81,6 +91,7 @@ export interface MailIndexEntry {
   receivedAt: string;
   leadId: string | null;
   matchedReply: boolean;
+  replyIntent?: ReplyIntent;
 }
 
 export interface WorkQueueFile {
@@ -111,5 +122,20 @@ export interface WorkQueueStatus {
     leadsInPipeline: number;
     repliesThisWeek: number;
     pendingSends: number;
+    sendsToday: number;
+  };
+  sendPolicy: {
+    dailySendLimit: number;
+    sendStaggerMinutes: number;
+    sendsToday: number;
+    remainingToday: number;
+  };
+  analytics: {
+    sentCount: number;
+    openedCount: number;
+    repliedCount: number;
+    openRate: number | null;
+    replyRate: number | null;
+    replyIntentBreakdown: Record<ReplyIntent, number>;
   };
 }

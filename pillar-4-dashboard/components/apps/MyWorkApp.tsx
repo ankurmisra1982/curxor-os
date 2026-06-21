@@ -7,12 +7,15 @@ import { ExperienceAppSection } from "@/components/experience/ExperienceAppSecti
 import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
+import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
+import { WorkImportPanel } from "@/components/apps/work/WorkImportPanel";
+import { WorkMailIndexPanel } from "@/components/apps/work/WorkMailIndexPanel";
 import { WorkOutboundPanel } from "@/components/apps/work/WorkOutboundPanel";
 import { WorkPipelinePanel } from "@/components/apps/work/WorkPipelinePanel";
 import { WorkRecoveryPanel } from "@/components/apps/work/WorkRecoveryPanel";
 import { WorkSequencePanel } from "@/components/apps/work/WorkSequencePanel";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
-import type { LeadStage, OutboundSend, WorkQueueStatus } from "@/lib/work-queue-types";
+import type { LeadStage, OutboundSend, ReplyIntent, WorkQueueStatus } from "@/lib/work-queue-types";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -153,9 +156,19 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       <div className="grid gap-4 md:grid-cols-4">
         <AppMetric label="Pipeline" value={String(status?.stats.leadsInPipeline ?? "—")} unit="leads" highlight />
         <AppMetric label="Active Seq" value={String(status?.stats.activeSequences ?? "—")} unit="running" />
-        <AppMetric label="Open Tasks" value={String(status?.stats.openTasks ?? "—")} unit="local queue" />
+        <AppMetric
+          label="Sends today"
+          value={String(status?.sendPolicy?.sendsToday ?? "—")}
+          unit={`${status?.sendPolicy?.remainingToday ?? "—"} left`}
+        />
         <AppMetric label="Replies" value={String(status?.stats.repliesThisWeek ?? "—")} unit="this week" />
       </div>
+
+      {status?.analytics ? (
+        <ExperienceAppSection appId="my-work" sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
+          <WorkAnalyticsPanel analytics={status.analytics} sendPolicy={status.sendPolicy} />
+        </ExperienceAppSection>
+      ) : null}
 
       <ExperienceAppSection appId="my-work" sectionId="comms" minLevel="standard" title="Comms desk" subtitle="Unified inbox · auto-pause sequences on reply" showCoach={false}>
         <UnifiedInboxPanel embedded />
@@ -174,6 +187,19 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
               if (name && email) void action({ action: "create_lead", name, email });
             }}
           />
+          <div className="mt-3 border-t border-line/60 pt-3">
+            <WorkImportPanel
+              onImport={async (csv) => {
+                const json = await postWork({ action: "import_leads", csv });
+                if (json.status) applyStatus(json.status);
+                return {
+                  imported: (json as { imported?: number }).imported,
+                  skipped: (json as { skipped?: number }).skipped,
+                  error: json.error,
+                };
+              }}
+            />
+          </div>
         </ExperienceAppSection>
 
         <ExperienceAppSection appId="my-work" sectionId="sequences" minLevel="standard" title="Sequences" subtitle="Multi-step outbound · pause on reply">
@@ -233,25 +259,11 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </ExperienceAppSection>
       ) : null}
 
-      <ExperienceAppSection appId="my-work" sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Offline queue · zero cloud calls">
-        <table className="w-full border-collapse font-mono text-xs">
-          <thead>
-            <tr className="border-b border-line text-[10px] uppercase tracking-widest text-muted">
-              <th className="py-2 text-left">From</th>
-              <th className="py-2 text-left">Subject</th>
-              <th className="py-2 text-right">Reply</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(status?.mailIndex ?? []).slice(0, 8).map((row) => (
-              <tr key={row.id} className="border-b border-line/40">
-                <td className="py-2 text-muted">{row.from}</td>
-                <td className="py-2">{row.subject}</td>
-                <td className="py-2 text-right text-cursor-glow">{row.matchedReply ? "MATCH" : "—"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <ExperienceAppSection appId="my-work" sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Reply intent tagging · offline queue">
+        <WorkMailIndexPanel
+          rows={status?.mailIndex ?? []}
+          onTagIntent={(mailId, intent: ReplyIntent) => void action({ action: "tag_reply_intent", mailId, intent })}
+        />
       </ExperienceAppSection>
     </div>
   );

@@ -17,14 +17,17 @@ import {
   createTask,
   ensureWorkQueue,
   fetchWorkStatus,
+  importLeadsFromCsv,
   markSequenceReplied,
   pauseSequence,
   scanLocalMailQueue,
+  tagMailReplyIntent,
   toggleTaskDone,
+  trackSendOpen,
   updateLeadStage,
   upsertLead,
 } from "@/lib/work-store";
-import type { LeadStage, TaskPriority } from "@/lib/work-queue-types";
+import type { LeadStage, ReplyIntent, TaskPriority } from "@/lib/work-queue-types";
 
 export async function GET(): Promise<Response> {
   const status = await fetchWorkStatus();
@@ -50,7 +53,10 @@ export async function POST(request: Request): Promise<Response> {
     titleTask?: string;
     prompt?: string;
     receipt?: Record<string, unknown>;
-    steps?: Array<{ subject?: string; body?: string; delayDays?: number }>;
+    steps?: Array<{ subject?: string; subjectAlt?: string; body?: string; delayDays?: number }>;
+    csv?: string;
+    intent?: string;
+    mailId?: string;
   };
 
   try {
@@ -178,6 +184,35 @@ export async function POST(request: Request): Promise<Response> {
       case "process_due": {
         const processed = await processDueSequenceSteps();
         return Response.json({ ok: true, processed, status: await fetchWorkStatus() });
+      }
+
+      case "import_leads": {
+        if (!body.csv?.trim()) {
+          return Response.json({ ok: false, error: "csv required" }, { status: 400 });
+        }
+        const result = await importLeadsFromCsv(body.csv);
+        return Response.json({ ok: true, ...result, status: await fetchWorkStatus() });
+      }
+
+      case "tag_reply_intent": {
+        if (!body.mailId || !body.intent) {
+          return Response.json({ ok: false, error: "mailId and intent required" }, { status: 400 });
+        }
+        const entry = await tagMailReplyIntent(body.mailId, body.intent as ReplyIntent);
+        if (!entry) return Response.json({ ok: false, error: "Mail entry not found" }, { status: 404 });
+        return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "track_open": {
+        if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        const send = await trackSendOpen(body.sendId);
+        if (!send) return Response.json({ ok: false, error: "Send not found" }, { status: 404 });
+        return Response.json({ ok: true, send, status: await fetchWorkStatus() });
+      }
+
+      case "analytics": {
+        const status = await fetchWorkStatus();
+        return Response.json({ ok: true, analytics: status.analytics, sendPolicy: status.sendPolicy, status });
       }
 
       case "scan_inbox": {

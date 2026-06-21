@@ -67,7 +67,16 @@ export function WorkSequencePanel({
             <div key={step.id} className="border-l-2 border-line pl-2 text-[10px]">
               <p className={i === selected.currentStepIndex ? "text-cursor-glow" : "text-stark"}>
                 {step.kind === "email" ? step.subject || "(no subject)" : step.kind}
+                {step.subjectAlt ? (
+                  <span className="ml-1 text-muted">· A/B</span>
+                ) : null}
+                {step.subjectVariant ? (
+                  <span className="ml-1 text-muted">· sent {step.subjectVariant.toUpperCase()}</span>
+                ) : null}
               </p>
+              {step.subjectAlt ? (
+                <p className="text-muted truncate">Alt: {step.subjectAlt}</p>
+              ) : null}
               <p className="text-muted">
                 {step.sentAt ? `Sent ${new Date(step.sentAt).toLocaleString()}` : step.scheduledAt ? `Scheduled ${new Date(step.scheduledAt).toLocaleString()}` : "Pending"}
               </p>

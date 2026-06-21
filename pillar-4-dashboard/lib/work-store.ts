@@ -6,12 +6,17 @@ import { randomUUID } from "node:crypto";
 
 import { readAppFreState } from "./app-fre-state";
 import { loadDigitalEnv } from "./digital-env";
+import { buildWorkAnalytics } from "./work-analytics";
+import { classifyReplyIntent } from "./work-reply-intent";
+import { countSendsToday, readWorkSendPolicy } from "./work-send-policy";
 import type {
   LeadStage,
   MailIndexEntry,
   OutboundSend,
+  ReplyIntent,
   SequenceStep,
   SequenceStepKind,
+  SubjectVariant,
   TaskPriority,
   WorkLead,
   WorkQueueFile,
@@ -172,6 +177,7 @@ function seedDemoQueue(): WorkQueueFile {
           kind: "email",
           delayDays: 3,
           subject: "Re: sovereign outbound",
+          subjectAlt: "Quick follow-up on local CRM",
           body: "Following up — happy to share how we pause sequences on reply and keep CRM on-appliance.",
           sentAt: null,
           scheduledAt: new Date(Date.now() + 2 * 86400000).toISOString(),
@@ -217,6 +223,9 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const file = await ensureWorkQueue();
   const bridgeConfigured = await isWorkEmailBridgeConfigured();
   const weekAgo = Date.now() - 7 * 86400000;
+  const policy = await readWorkSendPolicy();
+  const sendsToday = countSendsToday(file.sends);
+  const analytics = buildWorkAnalytics(file.sends, file.mailIndex);
 
   return {
     source: bridgeConfigured ? "live" : "demo",
@@ -238,7 +247,15 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
       leadsInPipeline: file.leads.filter((l) => !["won", "lost"].includes(l.stage)).length,
       repliesThisWeek: file.leads.filter((l) => l.stage === "replied" && l.lastTouchAt && Date.parse(l.lastTouchAt) >= weekAgo).length,
       pendingSends: file.sends.filter((s) => s.status === "queued" || s.status === "pending_approval").length,
+      sendsToday,
     },
+    sendPolicy: {
+      dailySendLimit: policy.dailySendLimit,
+      sendStaggerMinutes: policy.sendStaggerMinutes,
+      sendsToday,
+      remainingToday: Math.max(0, policy.dailySendLimit - sendsToday),
+    },
+    analytics,
   };
 }
 
@@ -322,7 +339,7 @@ export async function toggleTaskDone(taskId: string): Promise<WorkTask | null> {
 export async function createSequence(input: {
   name: string;
   leadId: string;
-  steps?: Array<{ kind?: SequenceStepKind; delayDays?: number; subject?: string; body?: string }>;
+  steps?: Array<{ kind?: SequenceStepKind; delayDays?: number; subject?: string; subjectAlt?: string; body?: string }>;
 }): Promise<WorkSequence> {
   const file = await ensureWorkQueue();
   const now = new Date().toISOString();
@@ -333,6 +350,7 @@ export async function createSequence(input: {
           kind: s.kind ?? "email",
           delayDays: s.delayDays ?? (i === 0 ? 0 : 3),
           subject: s.subject ?? "",
+          subjectAlt: s.subjectAlt?.trim() || undefined,
           body: s.body ?? "",
           sentAt: null,
           scheduledAt: null,
@@ -420,7 +438,11 @@ export async function markSequenceReplied(sequenceId: string): Promise<WorkSeque
   return file.sequences[idx]!;
 }
 
-export async function markSequenceStepSent(sequenceId: string, stepId: string): Promise<WorkSequence | null> {
+export async function markSequenceStepSent(
+  sequenceId: string,
+  stepId: string,
+  variant?: SubjectVariant,
+): Promise<WorkSequence | null> {
   const file = await ensureWorkQueue();
   const idx = file.sequences.findIndex((s) => s.id === sequenceId);
   if (idx < 0) return null;
@@ -428,12 +450,27 @@ export async function markSequenceStepSent(sequenceId: string, stepId: string): 
   const stepIdx = seq.steps.findIndex((st) => st.id === stepId);
   if (stepIdx < 0) return null;
   const now = new Date().toISOString();
-  seq.steps[stepIdx] = { ...seq.steps[stepIdx]!, sentAt: now, scheduledAt: null };
+  seq.steps[stepIdx] = { ...seq.steps[stepIdx]!, sentAt: now, scheduledAt: null, subjectVariant: variant ?? seq.steps[stepIdx]!.subjectVariant };
   if (seq.status === "draft") seq.status = "active";
   seq.updatedAt = now;
   file.sequences[idx] = seq;
   await writeWorkFile(file);
   return seq;
+}
+
+export async function rescheduleSequenceStep(
+  sequenceId: string,
+  stepIndex: number,
+  scheduledAt: string,
+): Promise<WorkSequence | null> {
+  const file = await ensureWorkQueue();
+  const idx = file.sequences.findIndex((s) => s.id === sequenceId);
+  if (idx < 0) return null;
+  const seq = file.sequences[idx]!;
+  const steps = seq.steps.map((st, i) => (i === stepIndex ? { ...st, scheduledAt } : st));
+  file.sequences[idx] = { ...seq, steps, updatedAt: new Date().toISOString() };
+  await writeWorkFile(file);
+  return file.sequences[idx]!;
 }
 
 export async function advanceSequenceStep(sequenceId: string): Promise<WorkSequence | null> {
@@ -507,24 +544,149 @@ export async function scanLocalMailQueue(): Promise<MailIndexEntry[]> {
       id: `MAIL-${randomUUID().slice(0, 8)}`,
       from: "alex@edgecompute.ai",
       subject: "Re: CurXor pricing",
-      snippet: "Thanks — can you share appliance tiers?",
+      snippet: "Thanks — interested in appliance tiers. Can we schedule a call?",
       receivedAt: now,
       leadId: "LEAD-003",
       matchedReply: true,
+      replyIntent: classifyReplyIntent("Re: CurXor pricing", "Thanks — interested in appliance tiers. Can we schedule a call?"),
     },
     {
       id: `MAIL-${randomUUID().slice(0, 8)}`,
       from: "notifications@calendar.local",
-      subject: "Standup block · 30m",
-      snippet: "Local calendar sync",
+      subject: "Out of office until Monday",
+      snippet: "I am away from email — automatic reply",
       receivedAt: now,
       leadId: null,
       matchedReply: false,
+      replyIntent: classifyReplyIntent("Out of office until Monday", "I am away from email"),
     },
   ];
   file.mailIndex = [...demo, ...file.mailIndex.filter((m) => !demo.some((d) => d.from === m.from))].slice(0, 50);
   await writeWorkFile(file);
+  for (const entry of demo.filter((e) => e.matchedReply && e.leadId)) {
+    await markSendRepliedForLead(entry.leadId!);
+  }
   return demo;
+}
+
+function parseCsvLine(line: string): string[] {
+  const out: string[] = [];
+  let cur = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]!;
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+      continue;
+    }
+    if (ch === "," && !inQuotes) {
+      out.push(cur.trim());
+      cur = "";
+      continue;
+    }
+    cur += ch;
+  }
+  out.push(cur.trim());
+  return out;
+}
+
+export async function importLeadsFromCsv(csvText: string): Promise<{ imported: number; skipped: number; leads: WorkLead[] }> {
+  const lines = csvText.trim().split(/\r?\n/).filter((l) => l.trim().length > 0);
+  if (lines.length === 0) return { imported: 0, skipped: 0, leads: [] };
+
+  const header = parseCsvLine(lines[0]!).map((h) => h.toLowerCase());
+  const hasHeader = header.includes("email");
+  const dataLines = hasHeader ? lines.slice(1) : lines;
+
+  const idx = {
+    name: hasHeader ? header.indexOf("name") : 0,
+    email: hasHeader ? header.indexOf("email") : 1,
+    company: hasHeader ? header.indexOf("company") : 2,
+    title: hasHeader ? header.indexOf("title") : 3,
+  };
+
+  const file = await ensureWorkQueue();
+  const existingEmails = new Set(file.leads.map((l) => l.email.toLowerCase()));
+  const created: WorkLead[] = [];
+  let skipped = 0;
+
+  for (const line of dataLines) {
+    const cols = parseCsvLine(line);
+    const email = (cols[idx.email >= 0 ? idx.email : 1] ?? "").trim().toLowerCase();
+    if (!email || !email.includes("@")) {
+      skipped += 1;
+      continue;
+    }
+    if (existingEmails.has(email)) {
+      skipped += 1;
+      continue;
+    }
+    const name = (cols[idx.name >= 0 ? idx.name : 0] ?? email.split("@")[0] ?? "Prospect").trim();
+    const lead = await upsertLead({
+      name,
+      email,
+      company: cols[idx.company >= 0 ? idx.company : 2]?.trim(),
+      title: cols[idx.title >= 0 ? idx.title : 3]?.trim(),
+      source: "csv",
+    });
+    existingEmails.add(email);
+    created.push(lead);
+  }
+
+  return { imported: created.length, skipped, leads: created };
+}
+
+export async function tagMailReplyIntent(mailId: string, intent: ReplyIntent): Promise<MailIndexEntry | null> {
+  const file = await ensureWorkQueue();
+  const idx = file.mailIndex.findIndex((m) => m.id === mailId);
+  if (idx < 0) return null;
+  file.mailIndex[idx] = { ...file.mailIndex[idx]!, replyIntent: intent };
+  await writeWorkFile(file);
+  return file.mailIndex[idx]!;
+}
+
+export async function trackSendOpen(sendId: string): Promise<OutboundSend | null> {
+  const file = await ensureWorkQueue();
+  const idx = file.sends.findIndex((s) => s.id === sendId);
+  if (idx < 0) return null;
+  if (!file.sends[idx]!.openedAt) {
+    file.sends[idx] = { ...file.sends[idx]!, openedAt: new Date().toISOString() };
+    await writeWorkFile(file);
+  }
+  return file.sends[idx]!;
+}
+
+export async function markSendRepliedForLead(leadId: string): Promise<number> {
+  const file = await ensureWorkQueue();
+  const now = new Date().toISOString();
+  let updated = 0;
+  for (let i = 0; i < file.sends.length; i++) {
+    const send = file.sends[i]!;
+    if (send.leadId !== leadId || send.status !== "sent" || send.repliedAt) continue;
+    file.sends[i] = { ...send, repliedAt: now };
+    updated += 1;
+    break;
+  }
+  if (updated > 0) await writeWorkFile(file);
+  return updated;
+}
+
+export function pickSubjectVariant(leadId: string): SubjectVariant {
+  let hash = 0;
+  for (let i = 0; i < leadId.length; i++) hash = (hash + leadId.charCodeAt(i)) % 1000;
+  return hash % 2 === 0 ? "a" : "b";
+}
+
+export function resolveStepSubject(
+  step: SequenceStep,
+  lead: WorkLead,
+): { subject: string; variant: SubjectVariant } {
+  if (!step.subjectAlt?.trim()) {
+    return { subject: personalizeTemplate(step.subject, lead), variant: "a" };
+  }
+  const variant = pickSubjectVariant(lead.id);
+  const raw = variant === "b" ? step.subjectAlt : step.subject;
+  return { subject: personalizeTemplate(raw, lead), variant };
 }
 
 export function personalizeTemplate(text: string, lead: WorkLead): string {

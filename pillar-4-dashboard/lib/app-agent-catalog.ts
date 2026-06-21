@@ -96,6 +96,30 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
             { value: "none", label: "No lane yet" },
           ],
         },
+        {
+          id: "dailySendLimit",
+          label: "Daily send limit (per mailbox)",
+          type: "text",
+          defaultValue: "50",
+          placeholder: "50",
+        },
+        {
+          id: "sendStaggerMinutes",
+          label: "Minutes between sends (stagger)",
+          type: "text",
+          defaultValue: "5",
+          placeholder: "5",
+        },
+        {
+          id: "outreachTone",
+          label: "Sequence tone",
+          type: "select",
+          defaultValue: "direct",
+          options: [
+            { value: "direct", label: "Direct" },
+            { value: "warm", label: "Warm" },
+          ],
+        },
       ],
       activateTitle: "Activate Outreach Claw",
       activateTips: [

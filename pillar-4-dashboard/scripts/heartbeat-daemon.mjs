@@ -8,6 +8,20 @@ const INTERVAL_SEC = Number.parseInt(process.argv[3] ?? "60", 10);
 
 async function tick() {
   try {
+    const workRes = await fetch(`${BASE}/api/work/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "process_due" }),
+    });
+    const workJson = (await workRes.json()) as { processed?: number };
+    if ((workJson.processed ?? 0) > 0) {
+      console.log(`[heartbeat] outreach processed ${workJson.processed} due sequence step(s)`);
+    }
+  } catch (err) {
+    console.error("[heartbeat] outreach process_due failed:", err instanceof Error ? err.message : String(err));
+  }
+
+  try {
     const res = await fetch(`${BASE}/api/scheduler`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

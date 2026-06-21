@@ -320,6 +320,37 @@ await check("work recovery_list", async () => {
   return ok && Array.isArray(json.failed);
 });
 
+await check("work import_leads CSV", async () => {
+  const { ok, json } = await postJson("/api/work/status", {
+    action: "import_leads",
+    csv: "name,email,company\nQA TierB,qa-tierb@curxor.dev,QA Co",
+  });
+  return ok && typeof json.imported === "number" && json.imported >= 1;
+});
+
+await check("work process_due", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "process_due" });
+  return ok && typeof json.processed === "number";
+});
+
+await check("work tag_reply_intent", async () => {
+  await postJson("/api/work/status", { action: "scan_inbox" });
+  const current = await getJson("/api/work/status");
+  const mailId = current.mailIndex?.[0]?.id;
+  if (!mailId) return false;
+  const { ok, json } = await postJson("/api/work/status", {
+    action: "tag_reply_intent",
+    mailId,
+    intent: "interested",
+  });
+  return ok && json.entry?.replyIntent === "interested";
+});
+
+await check("work analytics", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "analytics" });
+  return ok && typeof json.analytics?.sentCount === "number" && json.sendPolicy?.dailySendLimit > 0;
+});
+
 await check("app-agent assist (capital digital skill)", async () => {
   const { json } = await postJson("/api/app-agent/assist", {
     appId: "my-capital",

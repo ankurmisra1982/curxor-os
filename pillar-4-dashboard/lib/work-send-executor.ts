@@ -9,10 +9,13 @@ import {
   markSequenceStepSent,
   personalizeTemplate,
   recordSend,
+  rescheduleSequenceStep,
+  resolveStepSubject,
   updateSendStatus,
 } from "./work-store";
 import type { OutboundSend, WorkSequence } from "./work-queue-types";
 import { notifyWorkSendFailure } from "./work-publish-failure-notify";
+import { evaluateSendPolicy, readWorkSendPolicy } from "./work-send-policy";
 
 export function requireWorkSendApproval(): boolean {
   const env = process.env.CURXOR_WORK_REQUIRE_APPROVAL?.trim().toLowerCase();
@@ -65,7 +68,16 @@ export async function sendSequenceStep(
   const lead = await getLead(seq.leadId);
   if (!lead?.email) return { ok: false, error: "Lead email missing" };
 
-  const subject = personalizeTemplate(step.subject, lead);
+  const policy = await readWorkSendPolicy();
+  const gate = evaluateSendPolicy(file, policy);
+  if (!gate.ok) {
+    if (gate.retryAfter) {
+      await rescheduleSequenceStep(sequenceId, idx, gate.retryAfter);
+    }
+    return { ok: false, error: gate.reason };
+  }
+
+  const { subject, variant } = resolveStepSubject(step, lead);
   const body = personalizeTemplate(step.body, lead);
 
   const send = await recordSend({
@@ -75,6 +87,7 @@ export async function sendSequenceStep(
     to: lead.email,
     subject,
     body,
+    subjectVariant: variant,
     status: requireWorkSendApproval() ? "pending_approval" : "queued",
     sentAt: null,
     error: null,
@@ -108,7 +121,7 @@ export async function executeOutboundSend(sendId: string): Promise<{ ok: boolean
       sentAt: new Date().toISOString(),
       error: null,
     });
-    await markSequenceStepSent(send.sequenceId, send.stepId);
+    await markSequenceStepSent(send.sequenceId, send.stepId, send.subjectVariant);
     await advanceSequenceStep(send.sequenceId);
     return { ok: true, send: updated ?? undefined };
   }
