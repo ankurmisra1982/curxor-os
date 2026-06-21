@@ -1,3 +1,5 @@
+export type ProviderAuthMethod = "api_key" | "oauth_pkce" | "guided_link";
+
 export interface FrontierProvider {
   id: string;
   name: string;
@@ -6,6 +8,7 @@ export interface FrontierProvider {
   connectUrl: string;
   purchaseUrl: string;
   docsUrl: string;
+  authMethods: ProviderAuthMethod[];
   supportsSubscriptionLogin: boolean;
 }
 
@@ -22,6 +25,7 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     connectUrl: "https://platform.openai.com/api-keys",
     purchaseUrl: "https://platform.openai.com/signup",
     docsUrl: "https://platform.openai.com/docs",
+    authMethods: ["api_key", "oauth_pkce"],
     supportsSubscriptionLogin: true,
   },
   {
@@ -35,6 +39,7 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     connectUrl: "https://console.anthropic.com/settings/keys",
     purchaseUrl: "https://console.anthropic.com/",
     docsUrl: "https://docs.anthropic.com/",
+    authMethods: ["api_key", "guided_link"],
     supportsSubscriptionLogin: true,
   },
   {
@@ -48,6 +53,7 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     connectUrl: "https://aistudio.google.com/apikey",
     purchaseUrl: "https://aistudio.google.com/",
     docsUrl: "https://ai.google.dev/",
+    authMethods: ["api_key", "oauth_pkce"],
     supportsSubscriptionLogin: true,
   },
   {
@@ -58,6 +64,7 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     connectUrl: "https://cursor.com/settings",
     purchaseUrl: "https://cursor.com/pricing",
     docsUrl: "https://cursor.com/docs",
+    authMethods: ["api_key", "guided_link"],
     supportsSubscriptionLogin: true,
   },
   {
@@ -71,6 +78,7 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     connectUrl: "https://openrouter.ai/keys",
     purchaseUrl: "https://openrouter.ai/",
     docsUrl: "https://openrouter.ai/docs",
+    authMethods: ["api_key"],
     supportsSubscriptionLogin: false,
   },
 ];

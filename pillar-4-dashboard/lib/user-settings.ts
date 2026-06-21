@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { getProviderApiKey } from "./llm-credentials";
+import { getProviderApiKey, hasProviderOAuth } from "./llm-credentials";
 import { readFreState, writeFreState, validateAppIds } from "./fre-state";
 import type { OotbAppId } from "./ootb-apps";
 import {
@@ -139,7 +139,13 @@ export async function sanitizeSettingsForClient(settings: UserSettings): Promise
 
   for (const [id, conn] of Object.entries(settings.intelligence.connectedProviders)) {
     const hasApiKey = Boolean(await getProviderApiKey(id));
-    connectedProviders[id] = { ...conn, hasApiKey };
+    const oauthLinked = await hasProviderOAuth(id);
+    connectedProviders[id] = {
+      ...conn,
+      hasApiKey,
+      oauthLinked,
+      subscriptionLinked: conn.subscriptionLinked || oauthLinked,
+    };
   }
 
   return {

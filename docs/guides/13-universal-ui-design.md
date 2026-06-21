@@ -59,11 +59,11 @@ User freedom is explicit — nothing is locked at FRE time.
 | Tab | What the user controls |
 |-----|------------------------|
 | **Claws** | Add/remove any OOTB Claw (Forge always on); syncs nav + middleware |
-| **Intelligence** | Local-only, frontier-only, or auto; Ollama model name; connect OpenAI / Anthropic / Google / Cursor / OpenRouter via API key or subscription link; purchase/docs links |
-| **Appearance** | Simple vs Expert mode; color scheme (CurXor, Ocean, Amber, Mono) |
+| **Intelligence** | Local-only, frontier-only, or auto; Ollama model name; connect providers via API key, **OAuth PKCE** (OpenAI; Google when configured), or guided subscription link; purchase/docs links |
+| **Appearance** | Simple vs Expert mode; color scheme (CurXor, Ocean, Amber, Mono); light / dark / system |
 | **General** | Last updated, counts, link back to Home |
 
-Persistence: `/etc/curxor/user-settings.json` (API keys in `llm-credentials.json`, mode 0600). Chat routing uses `lib/inference-router.ts` — frontier when configured, local fallback in auto mode.
+Persistence: `/etc/curxor/user-settings.json` (API keys + OAuth tokens in `llm-credentials.json`, mode 0600; link sessions in `provider-link-sessions.json`). Chat routing uses `lib/inference-router.ts` — frontier when configured (API key or OAuth token with refresh), local fallback in auto mode.
 
 ## Flow render
 

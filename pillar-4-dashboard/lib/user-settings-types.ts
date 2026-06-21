@@ -9,6 +9,9 @@ export interface ConnectedProvider {
   connectedAt: string;
   label: string;
   hasApiKey: boolean;
+  /** OAuth PKCE login (OpenAI ChatGPT, Google when configured). */
+  oauthLinked: boolean;
+  /** Guided attestation when OAuth is unavailable (Cursor, Anthropic). */
   subscriptionLinked: boolean;
 }
 

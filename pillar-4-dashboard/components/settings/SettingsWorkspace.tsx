@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
@@ -48,6 +48,7 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
 
 export function SettingsWorkspace() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { mode, setMode, isExpert } = useUiMode();
   const { colorScheme, setColorScheme, themeMode, setThemeMode } = useTheme();
 
@@ -97,6 +98,20 @@ export function SettingsWorkspace() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    const oauth = searchParams.get("oauth");
+    const oauthError = searchParams.get("oauth_error");
+    if (oauth === "success") {
+      setMessage("Provider linked via OAuth.");
+      setTab("intelligence");
+      router.replace("/settings");
+    } else if (oauthError) {
+      setError(decodeURIComponent(oauthError));
+      setTab("intelligence");
+      router.replace("/settings");
+    }
+  }, [searchParams, router]);
 
   const activeProvider = useMemo(
     () => providers.find((p) => p.id === frontierProviderId) ?? null,
@@ -204,24 +219,20 @@ export function SettingsWorkspace() {
 
   const linkSubscription = useCallback(async () => {
     if (!frontierProviderId || !activeProvider) return;
-    window.open(activeProvider.connectUrl, "_blank", "noopener,noreferrer");
     setSaving(true);
     setError(null);
     try {
-      const data = await postJson<{ settings: UserSettings }>("/api/settings/llm/connect", {
+      const data = await postJson<{ linkPath: string }>("/api/settings/llm/link-session", {
         providerId: frontierProviderId,
-        subscriptionLinked: true,
         frontierModel,
       });
-      setSettings(data.settings);
-      setMessage(`Linked ${activeProvider.name} subscription on this appliance.`);
-      await load();
+      router.push(data.linkPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Link failed");
     } finally {
       setSaving(false);
     }
-  }, [frontierProviderId, activeProvider, frontierModel, load]);
+  }, [frontierProviderId, activeProvider, frontierModel, router]);
 
   const disconnectProvider = useCallback(async () => {
     if (!frontierProviderId) return;
@@ -437,7 +448,9 @@ export function SettingsWorkspace() {
                         onClick={() => void linkSubscription()}
                         className="border border-line px-3 py-2 font-sans text-xs text-stark hover:border-cursor-glow disabled:opacity-50"
                       >
-                        Link existing subscription
+                        {activeProvider.authMethods.includes("oauth_pkce")
+                          ? "Sign in with subscription (OAuth)"
+                          : "Link existing subscription"}
                       </button>
                     ) : null}
                     {connected ? (
@@ -467,8 +480,14 @@ export function SettingsWorkspace() {
                       Docs
                     </a>
                   </div>
-                  {connected?.subscriptionLinked ? (
-                    <p className="font-sans text-xs text-cursor-glow">Subscription linked on this appliance.</p>
+                  {connected?.oauthLinked ? (
+                    <p className="font-sans text-xs text-cursor-glow">
+                      OAuth subscription linked on this appliance.
+                    </p>
+                  ) : connected?.subscriptionLinked ? (
+                    <p className="font-sans text-xs text-cursor-glow">
+                      Subscription linked on this appliance.
+                    </p>
                   ) : null}
                 </section>
               ) : null}

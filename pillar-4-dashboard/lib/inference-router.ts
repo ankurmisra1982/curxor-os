@@ -1,7 +1,8 @@
 import "server-only";
 
 import { frontierApiBase, getFrontierProvider } from "./frontier-providers";
-import { getProviderApiKey } from "./llm-credentials";
+import { hasProviderOAuth, getProviderApiKey } from "./llm-credentials";
+import { resolveFrontierAuth } from "./oauth/resolve-auth";
 import type { ChatCompletionOptions, ChatCompletionResult } from "./local-inference";
 import { loadDashboardEnv } from "./env";
 import { readUserSettings } from "./user-settings";
@@ -20,10 +21,11 @@ export async function resolveInferenceStatus(localAvailable: boolean): Promise<I
   const settings = await readUserSettings();
   const providerId = settings.intelligence.frontierProviderId;
   const hasKey = providerId ? Boolean(await getProviderApiKey(providerId)) : false;
+  const hasOAuth = providerId ? await hasProviderOAuth(providerId) : false;
   const linked = providerId
     ? Boolean(settings.intelligence.connectedProviders[providerId]?.subscriptionLinked)
     : false;
-  const frontierAvailable = Boolean(providerId && (hasKey || linked));
+  const frontierAvailable = Boolean(providerId && (hasKey || hasOAuth || linked));
 
   return {
     localAvailable,
@@ -44,7 +46,7 @@ export async function shouldUseFrontier(forPlanning = false): Promise<boolean> {
 
   if (primarySource === "local") return false;
   if (primarySource === "frontier") return true;
-  return true; // auto — try frontier first when configured
+  return true;
 }
 
 export async function isFrontierConfigured(): Promise<boolean> {
@@ -52,6 +54,7 @@ export async function isFrontierConfigured(): Promise<boolean> {
   const providerId = settings.intelligence.frontierProviderId;
   if (!providerId) return false;
   if (await getProviderApiKey(providerId)) return true;
+  if (await hasProviderOAuth(providerId)) return true;
   return Boolean(settings.intelligence.connectedProviders[providerId]?.subscriptionLinked);
 }
 
@@ -82,9 +85,9 @@ async function tryFrontierCompletion(
   const provider = getFrontierProvider(providerId);
   if (!provider) return null;
 
-  const apiKey = await getProviderApiKey(providerId);
+  const auth = await resolveFrontierAuth(providerId);
   const linked = settings.intelligence.connectedProviders[providerId]?.subscriptionLinked;
-  if (!apiKey && !linked) return null;
+  if (!auth && !linked) return null;
 
   const model = options.model ?? settings.intelligence.frontierModel ?? provider.models[0]?.id;
   if (!model) return null;
@@ -107,8 +110,13 @@ async function tryFrontierCompletion(
     "Content-Type": "application/json",
   };
 
-  if (apiKey) {
-    headers.Authorization = `Bearer ${apiKey}`;
+  if (auth) {
+    if (auth.kind === "api_key" && providerId === "anthropic") {
+      headers["x-api-key"] = auth.credential;
+      headers["anthropic-version"] = "2023-06-01";
+    } else {
+      headers.Authorization = `Bearer ${auth.credential}`;
+    }
   } else if (linked) {
     headers["X-CurXor-Subscription"] = providerId;
   }
@@ -122,10 +130,24 @@ async function tryFrontierCompletion(
   const timer = setTimeout(() => controller.abort(), env.inferenceTimeoutMs);
 
   try {
-    const response = await fetch(`${base}/chat/completions`, {
+    const endpoint =
+      providerId === "anthropic" && auth?.kind === "api_key"
+        ? `${base}/messages`
+        : `${base}/chat/completions`;
+
+    const requestBody =
+      providerId === "anthropic" && auth?.kind === "api_key"
+        ? {
+            model,
+            max_tokens: 4096,
+            messages: body.messages,
+          }
+        : body;
+
+    const response = await fetch(endpoint, {
       method: "POST",
       headers,
-      body: JSON.stringify(body),
+      body: JSON.stringify(requestBody),
       signal: controller.signal,
     });
 
@@ -133,10 +155,17 @@ async function tryFrontierCompletion(
 
     const data = (await response.json()) as {
       choices?: Array<{ message?: { content?: string | null } }>;
+      content?: Array<{ text?: string }>;
     };
 
+    const anthropicText =
+      providerId === "anthropic" ? data.content?.[0]?.text?.trim() : undefined;
+
     return {
-      content: data.choices?.[0]?.message?.content?.trim() ?? "",
+      content:
+        anthropicText ??
+        data.choices?.[0]?.message?.content?.trim() ??
+        "",
       model: `${providerId}/${model}`,
     };
   } catch {

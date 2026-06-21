@@ -67,6 +67,7 @@ export async function POST(request: Request): Promise<Response> {
           connectedAt: new Date().toISOString(),
           label: provider.name,
           hasApiKey: hasKey,
+          oauthLinked: current.intelligence.connectedProviders[providerId]?.oauthLinked === true,
           subscriptionLinked: subscriptionLinked || current.intelligence.connectedProviders[providerId]?.subscriptionLinked === true,
         },
       },

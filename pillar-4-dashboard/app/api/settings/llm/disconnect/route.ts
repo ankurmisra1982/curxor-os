@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { getFrontierProvider } from "@/lib/frontier-providers";
 import { requireLanAuth } from "@/lib/lan-auth";
-import { removeProviderApiKey } from "@/lib/llm-credentials";
+import { removeAllProviderCredentials } from "@/lib/llm-credentials";
 import { readUserSettings, sanitizeSettingsForClient, updateUserSettings } from "@/lib/user-settings";
 
 export async function POST(request: Request): Promise<Response> {
@@ -22,7 +22,7 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: "Unknown provider" }, { status: 400 });
   }
 
-  await removeProviderApiKey(providerId);
+  await removeAllProviderCredentials(providerId);
 
   const current = await readUserSettings();
   const nextProviders = { ...current.intelligence.connectedProviders };
