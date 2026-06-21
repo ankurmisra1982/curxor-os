@@ -31,6 +31,12 @@ const env = {
   CURXOR_VITAL_STATE_PATH: path.join(DEV_QA, "vital-health.json"),
   CURXOR_CONTENT_QUEUE_PATH: path.join(DEV_QA, "content-queue.json"),
   CURXOR_WORK_QUEUE_PATH: path.join(DEV_QA, "work-queue.json"),
+  CURXOR_CAPITAL_QUEUE_PATH: path.join(DEV_QA, "capital-queue.json"),
+  CURXOR_CAPITAL_PFM_PATH: path.join(DEV_QA, "capital-pfm.json"),
+  CURXOR_CAPITAL_INTEL_PATH: path.join(DEV_QA, "capital-intel.json"),
+  CURXOR_CAPITAL_PLAID_PATH: path.join(DEV_QA, "capital-plaid.json"),
+  CURXOR_CAPITAL_SNAPTRADE_PATH: path.join(DEV_QA, "capital-snaptrade.json"),
+  CURXOR_DIGITAL_ENV_PATH: path.join(DEV_QA, "digital.env"),
   CURXOR_PROVIDER_LINK_SESSIONS_PATH: path.join(DEV_QA, "provider-link-sessions.json"),
   CURXOR_CLAW_PROFILES_PATH: path.join(DEV_QA, "claw-profiles.json"),
   CURXOR_APP_FRE_DIR: path.join(DEV_QA, "app-fre"),
@@ -139,6 +145,10 @@ async function main() {
   try {
     await waitForServer();
     exitCode = await run("node", ["scripts/qa-smoke.mjs", BASE]);
+    if (exitCode === 0) {
+      const capitalExit = await run("node", ["scripts/capital-checklist.mjs", BASE]);
+      if (capitalExit !== 0) exitCode = capitalExit;
+    }
     if (exitCode === 0) {
       const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);
       if (flowExit !== 0) exitCode = flowExit;

@@ -512,22 +512,31 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       "Portfolio, watchlist, and execution receipts — governed, auditable.",
     ],
     howToUse: [
+      "Demo mode: no digital.env keys required — portfolio, PFM, and trade log use local demo data.",
+      "Complete Go Live when ready — Alpaca paper keys, first rule, arm, execute.",
       "Review rules in the engine table — Arm or Pause as needed.",
-      "Tap Create Rule to open the template builder (mock until saved).",
-      "Execute Trade sends paper order through digital bridge when armed.",
-      "Chat: “Arm BTC dip rule” or “Show watchlist movers.”",
+      "Execute Trade logs locally; paper orders need Alpaca keys in digital.env.",
+      "Agent & MCP: connect /api/capital/mcp — preview_trade then agent_execute_trade (or MCP review_equity_order / place_equity_order).",
+      "Chat: “Arm BTC dip rule”, “Preview SPY buy”, or “Execute trade on RULE-01.”",
     ],
     skills: [
-      { id: "create_rule", label: "Create Rule", description: "Open rule builder", kind: "plan" },
-      { id: "arm_rule", label: "Arm Rule", description: "Enable selected rule", kind: "plan" },
+      { id: "create_rule", label: "Create Rule", description: "Add WHEN/THEN rule to local store", kind: "plan" },
+      { id: "arm_rule", label: "Arm Rule", description: "Enable selected rule for execution", kind: "plan" },
       { id: "execute_trade", label: "Execute Trade", description: "Paper trade via Alpaca bridge", kind: "digital" },
       { id: "rebalance", label: "Rebalance", description: "Simulate allocation drift fix", kind: "plan" },
+      { id: "subscribe_pilot", label: "Subscribe Pilot", description: "Mirror a marketplace pilot portfolio", kind: "plan" },
+      { id: "sync_pilots", label: "Sync Pilots", description: "Rebalance all active pilot subscriptions", kind: "digital" },
+      { id: "research_ticker", label: "Research Ticker", description: "Fundamentals + news + WSB/FinTwit chatter", kind: "plan" },
+      { id: "create_rule_from_thesis", label: "Rule from Thesis", description: "Build rule from ticker intel smart take", kind: "plan" },
+      { id: "preview_trade", label: "Preview Trade", description: "Notional, risk note, auto-approve eligibility", kind: "plan" },
+      { id: "agent_execute_trade", label: "Agent Execute", description: "Preview then confirm paper trade (agent pipeline)", kind: "digital" },
+      { id: "pfm_refresh", label: "Refresh PFM", description: "Reload cash flow and net worth snapshot", kind: "plan" },
     ],
     fre: {
       welcomeTitle: "Welcome to Capital Claw",
-      welcomeLead: "Capital Claw automates investing with local rules — your LLM plans, bridges execute.",
+      welcomeLead: "Capital Claw automates investing with local rules — demo mode works without broker keys; bridges execute when you configure digital.env.",
       configureTitle: "Risk profile",
-      configureLead: "Set paper trading defaults and watchlist seeds.",
+      configureLead: "Paper-only defaults and watchlist seeds — stay on Paper for demo release.",
       fields: [
         {
           id: "riskProfile",
@@ -548,6 +557,7 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           options: [
             { value: "paper", label: "Paper only (default)" },
             { value: "dry_run", label: "Dry run — log only" },
+            { value: "live", label: "Live money (requires env gate + desk confirm)" },
           ],
         },
         {
@@ -565,12 +575,13 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       ],
       activateTitle: "Activate Capital Claw",
       activateTips: [
+        "Demo release: no Alpaca keys needed — explore rules, research, and trade log locally.",
         "Default is paper trading — no live brokerage without explicit config.",
-        "Rules evaluate locally; trades publish to digital_out.",
+        "Rules evaluate locally; trades publish to digital_out when bridge is configured.",
         "Trade receipts appear in the execution panel when bridge is running.",
       ],
     },
-    bootMessage: "Capital Claw armed in paper mode. Ask about rules or watchlist.",
+    bootMessage: "Capital Claw in demo mode. Ask about rules, watchlist, or research — broker setup optional.",
   },
   "my-vital": {
     appId: "my-vital",

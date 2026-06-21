@@ -29,7 +29,7 @@ const LLM_PLAN_SKILLS: Partial<Record<OotbAppId, string[]>> = {
   "my-work": ["summarize_day"],
   "my-shop": ["ingest_order"],
   "my-content-creator": ["draft_post"],
-  "my-capital": ["create_rule"],
+  "my-capital": ["create_rule", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade"],
 };
 
 function cfgStr(config: Record<string, unknown>, key: string, fallback: string): string {
@@ -321,10 +321,39 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
       return { reply: "Select a post in the queue or ask me to draft for a channel.", suggestedSkill: "draft_post" };
 
     case "my-capital":
-      if (/trade|buy|sell|execute/.test(combined)) {
+      if (/thesis|smart take|dip rule|from intel/.test(combined)) {
+        const sym = cfgStr(config, "selectedAsset", "SPY");
         return {
-          reply: "Execute Trade sends paper order via Alpaca bridge. Mode: " + cfgStr(config, "tradingMode", "paper") + ".",
-          suggestedSkill: "execute_trade",
+          reply: `Creating a rule from ${sym} research thesis — dip or manual buy based on sentiment.`,
+          suggestedSkill: "create_rule_from_thesis",
+        };
+      }
+      if (/research|intel|chatter|headline|news|wsb|cnbc/.test(combined)) {
+        const sym = cfgStr(config, "selectedAsset", "SPY");
+        return {
+          reply: `Pulling intel for ${sym} — fundamentals, Alpaca/CNBC/SEC news, and WSB chatter with a smart take.`,
+          suggestedSkill: "research_ticker",
+        };
+      }
+      if (/pilot|copy|subscribe|mirror/.test(combined)) {
+        return {
+          reply: "Browse pilots on the marketplace — subscribe to mirror proportional paper trades on the sovereign bridge.",
+          suggestedSkill: "subscribe_pilot",
+        };
+      }
+      if (/sync pilot|rebalance pilot/.test(combined)) {
+        return { reply: "Syncing active pilot subscriptions against latest signals.", suggestedSkill: "sync_pilots" };
+      }
+      if (/trade|buy|sell|execute/.test(combined)) {
+        if (/preview|review|simulate/.test(combined)) {
+          return {
+            reply: "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
+            suggestedSkill: "preview_trade",
+          };
+        }
+        return {
+          reply: "Agent Execute uses preview → confirm pipeline. Mode: " + cfgStr(config, "tradingMode", "paper") + ".",
+          suggestedSkill: "agent_execute_trade",
         };
       }
       if (/arm|enable|rule/.test(combined)) {

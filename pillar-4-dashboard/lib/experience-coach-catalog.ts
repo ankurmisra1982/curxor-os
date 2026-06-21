@@ -593,19 +593,220 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
   ],
   "my-capital": [
     {
+      sectionId: "go-live",
+      tips: [
+        {
+          id: "cap-go-live-beginner",
+          minLevel: "beginner",
+          title: "Go live checklist",
+          body: "Demo mode is fine without Alpaca keys — create a rule, arm it, execute locally. Add digital.env keys later for paper bridge fills.",
+        },
+        {
+          id: "cap-demo-release",
+          minLevel: "beginner",
+          title: "Demo release",
+          body: "Current build ships demo-only: sample portfolio, PFM, pilots, and trade log. Broker linking is on the RELEASE-NEXT todo when you are ready.",
+        },
+      ],
+    },
+    {
       sectionId: "portfolio",
       tips: [
         {
           id: "cap-beginner",
           minLevel: "beginner",
           title: "Paper trading first",
-          body: "Capital Claw defaults to paper mode until you configure Alpaca in digital.env and switch trading mode in setup.",
+          body: "Capital Claw defaults to demo mode without digital.env keys. Paper bridge and live money are optional — see Go Live when ready.",
         },
         {
           id: "cap-standard",
           minLevel: "standard",
           title: "Rule engine",
           body: "Arm a rule, then Execute Trade sends intents through the digital bridge — never direct API from the LLM.",
+        },
+      ],
+    },
+    {
+      sectionId: "research",
+      tips: [
+        {
+          id: "cap-research-beginner",
+          minLevel: "beginner",
+          title: "Start with a ticker",
+          body: "Enter a symbol or tap a watchlist chip. You get price, a one-line smart take, and top CNBC headlines — no account needed.",
+        },
+        {
+          id: "cap-research-standard",
+          minLevel: "standard",
+          title: "Chart + social chatter",
+          body: "Standard mode adds the 3-month chart, fundamentals grid, and WSB / Reddit / FinTwit posts blended into sentiment.",
+        },
+        {
+          id: "cap-research-expert",
+          minLevel: "expert",
+          title: "Full intel depth",
+          body: "Expert shows engagement counts, sentiment score, avg volume, and extended chatter — link X_BEARER_TOKEN in digital.env for live FinTwit.",
+        },
+      ],
+    },
+    {
+      sectionId: "digest",
+      tips: [
+        {
+          id: "cap-digest-standard",
+          minLevel: "standard",
+          title: "Watchlist digest",
+          body: "Headlines and social posts from Alpaca, CNBC, SEC 8-K, WSB, and FinTwit merge for your FRE watchlist. Tap any $TICKER to open full research.",
+        },
+        {
+          id: "cap-digest-expert",
+          minLevel: "expert",
+          title: "Full feed",
+          body: "Expert shows timestamps, sentiment labels, and the complete digest list refreshed on heartbeat.",
+        },
+      ],
+    },
+    {
+      sectionId: "intel-alerts",
+      tips: [
+        {
+          id: "cap-alerts-standard",
+          minLevel: "standard",
+          title: "Intel alerts",
+          body: "Set dip or sentiment alerts — heartbeat evaluates them and nudges Telegram/Slack when conditions hit.",
+        },
+      ],
+    },
+    {
+      sectionId: "pilots",
+      tips: [
+        {
+          id: "cap-pilots-beginner",
+          minLevel: "beginner",
+          title: "Copy trading on-box",
+          body: "Pick a demo pilot, set an allocation, and Capital Claw mirrors proportional paper trades — sovereign Autopilot-style, no third-party app.",
+        },
+      ],
+    },
+    {
+      sectionId: "risk",
+      tips: [
+        {
+          id: "cap-risk-beginner",
+          minLevel: "beginner",
+          title: "Permissions first",
+          body: "Autonomous mode stays off until you grant it. Crisis pause halts all rule evaluation and pilot sync immediately.",
+        },
+      ],
+    },
+    {
+      sectionId: "auto-approval",
+      tips: [
+        {
+          id: "cap-auto-approval-standard",
+          minLevel: "standard",
+          title: "Auto-approval stack",
+          body: "Set a max notional and keep paper-only on at launch. Armed rules and PFM suggestions skip pending_approval when risk guard passes.",
+        },
+        {
+          id: "cap-auto-approval-expert",
+          minLevel: "expert",
+          title: "Preview before live",
+          body: "Use preview_trade on the status API to check autoApproveEligible and risk notes before enabling pilot copy or TradingView auto-submit.",
+        },
+      ],
+    },
+    {
+      sectionId: "pfm",
+      tips: [
+        {
+          id: "cap-pfm-standard",
+          minLevel: "standard",
+          title: "Mint-style PFM on-box",
+          body: "Linked accounts, category spend, and wealth goals run locally — demo seed until you wire Plaid. Tap a suggestion to create a dip rule or bump a goal.",
+        },
+      ],
+    },
+    {
+      sectionId: "agent-trading",
+      tips: [
+        {
+          id: "cap-agent-trading-standard",
+          minLevel: "standard",
+          title: "Claw / MCP trading",
+          body: "Connect Claude or Cursor to /api/capital/mcp — review_equity_order before place_equity_order. Keep requireAgentPreview on until you trust auto-approval caps.",
+        },
+        {
+          id: "cap-agent-trading-expert",
+          minLevel: "expert",
+          title: "Kill switch & audit",
+          body: "Agent kill switch blocks all MCP and Claw chat trades instantly. Every preview and execution lands in the agent audit log with source and trade ID.",
+        },
+      ],
+    },
+    {
+      sectionId: "portfolio-health",
+      tips: [
+        {
+          id: "cap-portfolio-health-standard",
+          minLevel: "standard",
+          title: "Health score",
+          body: "Concentration and sector weights update from Alpaca positions. Scores below 65 or single-name >45% trigger rebalance hints.",
+        },
+      ],
+    },
+    {
+      sectionId: "trades",
+      tips: [
+        {
+          id: "cap-trades-standard",
+          minLevel: "standard",
+          title: "Trade log",
+          body: "Every paper order is logged locally. Failed Alpaca submissions appear in Trade Recovery — retry without re-arming the rule.",
+        },
+      ],
+    },
+    {
+      sectionId: "recovery",
+      tips: [
+        {
+          id: "cap-recovery-standard",
+          minLevel: "standard",
+          title: "Trade recovery",
+          body: "Bridge errors (auth, market hours, invalid symbol) land here. Fix digital.env then retry the trade ID.",
+        },
+      ],
+    },
+    {
+      sectionId: "pfm",
+      tips: [
+        {
+          id: "cap-pfm-standard",
+          minLevel: "standard",
+          title: "Mint-style PFM on-box",
+          body: "Demo accounts show cash flow, spending categories, and wealth goals. Suggestions can arm dip rules or subscribe pilots — never bypass risk guard.",
+        },
+      ],
+    },
+    {
+      sectionId: "auto-approval",
+      tips: [
+        {
+          id: "cap-auto-approval-standard",
+          minLevel: "standard",
+          title: "Auto-approval stack",
+          body: "Paper-first notional caps skip pending_approval when risk guard passes. Pilot copy and TradingView stay off by default.",
+        },
+      ],
+    },
+    {
+      sectionId: "portfolio-health",
+      tips: [
+        {
+          id: "cap-health-expert",
+          minLevel: "expert",
+          title: "Portfolio health",
+          body: "Concentration and sector mix scores help spot drift before pilot sync or rebalance rules fire.",
         },
       ],
     },

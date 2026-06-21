@@ -75,7 +75,327 @@ await check("settings llm link-session (openai oauth)", async () => {
 
 await check("capital status", async () => {
   const data = await getJson("/api/capital/status");
-  return Array.isArray(data.rules) && typeof data.tradingMode === "string";
+  return (
+    Array.isArray(data.rules) &&
+    Array.isArray(data.trades) &&
+    typeof data.tradingMode === "string" &&
+    data.permissions &&
+    Array.isArray(data.brokers) &&
+    Array.isArray(data.pilots) &&
+    data.autoApproval &&
+    typeof data.autoApproval.autoApproveAgentChat === "boolean" &&
+    Array.isArray(data.agentAuditLog)
+  );
+});
+
+await check("capital go_live checklist", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "go_live" });
+  return ok && json.goLive && Array.isArray(json.goLive.steps);
+});
+
+await check("capital run_demo_tour", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "run_demo_tour" });
+  return ok && json.ok === true && Array.isArray(json.steps) && json.tradeId;
+});
+
+await check("capital dashboard_bootstrap", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "dashboard_bootstrap" });
+  return ok && json.status && Array.isArray(json.status.rules);
+});
+
+await check("capital create_rule", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "create_rule",
+    name: "QA rule",
+    asset: "SPY",
+    qty: 1,
+  });
+  return ok && json.rule?.id;
+});
+
+await check("capital recovery_list", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "recovery_list" });
+  return ok && Array.isArray(json.failed);
+});
+
+await check("capital execute_trade dry_run", async () => {
+  const current = await getJson("/api/capital/status");
+  const armed = current.rules?.find((r) => r.state === "ARMED") ?? current.rules?.[0];
+  if (!armed?.id) return false;
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "execute_trade",
+    ruleId: armed.id,
+  });
+  return ok && (json.trade?.status === "dry_run" || json.trade?.status === "queued" || json.trade?.status === "submitted" || json.trade?.status === "simulated" || json.trade?.status === "failed" || json.trade?.status === "blocked_risk" || json.trade?.status === "pending_approval");
+});
+
+await check("capital refresh_quotes", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "refresh_quotes" });
+  return ok && Array.isArray(json.status?.movers);
+});
+
+await check("capital evaluate_rules", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "evaluate_rules" });
+  return ok && typeof json.evaluated === "number";
+});
+
+await check("capital set_autonomous_mode", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "set_autonomous_mode",
+    autonomousMode: "off",
+  });
+  return ok && json.permissions?.autonomousMode === "off";
+});
+
+await check("capital pfm snapshot", async () => {
+  const data = await getJson("/api/capital/pfm");
+  return (
+    Array.isArray(data.accounts) &&
+    Array.isArray(data.goals) &&
+    typeof data.cashFlow?.savingsRatePct === "number" &&
+    Array.isArray(data.suggestions)
+  );
+});
+
+await check("capital set_auto_approval", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "set_auto_approval",
+    autoApproval: { enabled: true, maxNotionalUsd: 750, paperOnly: true },
+  });
+  return ok && json.autoApproval?.maxNotionalUsd === 750 && json.autoApproval?.enabled === true;
+});
+
+await check("capital preview_trade", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "preview_trade",
+    ticker: "SPY",
+    previewQty: 1,
+    actionTrade: "buy",
+  });
+  return ok && json.preview?.ticker === "SPY" && typeof json.preview?.autoApproveEligible === "boolean";
+});
+
+await check("capital mcp GET", async () => {
+  const data = await getJson("/api/capital/mcp");
+  return (
+    data.ok === true &&
+    data.name === "capital-claw" &&
+    Array.isArray(data.tools) &&
+    data.tools.some((t) => t.name === "review_equity_order") &&
+    data.tools.some((t) => t.name === "place_equity_order")
+  );
+});
+
+await check("capital mcp tools/list", async () => {
+  const { ok, json } = await postJson("/api/capital/mcp", {
+    jsonrpc: "2.0",
+    id: 1,
+    method: "tools/list",
+  });
+  return (
+    ok &&
+    json.result?.tools?.length >= 8 &&
+    json.result.tools.some((t) => t.name === "get_desk_status")
+  );
+});
+
+await check("capital agent_execute_trade preview", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "agent_execute_trade",
+    ticker: "SPY",
+    qty: 1,
+    actionTrade: "buy",
+    confirm: false,
+  });
+  return ok && json.phase === "preview" && json.preview?.ticker === "SPY";
+});
+
+await check("capital set_agent_kill_switch", async () => {
+  const on = await postJson("/api/capital/status", {
+    action: "set_agent_kill_switch",
+    agentKillSwitch: true,
+  });
+  const off = await postJson("/api/capital/status", {
+    action: "set_agent_kill_switch",
+    agentKillSwitch: false,
+  });
+  return (
+    on.ok &&
+    on.json.agentKillSwitch === true &&
+    off.ok &&
+    off.json.agentKillSwitch === false
+  );
+});
+
+await check("capital webull oauth status", async () => {
+  const data = await getJson("/api/capital/webull");
+  return data.ok === true && typeof data.linked === "boolean";
+});
+
+await check("capital etrade oauth status", async () => {
+  const data = await getJson("/api/capital/etrade");
+  return data.ok === true && typeof data.linked === "boolean";
+});
+
+await check("capital list_pilots", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "list_pilots" });
+  return ok && Array.isArray(json.pilots) && json.pilots.length >= 3;
+});
+
+await check("capital subscribe_pilot dry_run", async () => {
+  const pilots = await postJson("/api/capital/status", { action: "list_pilots" });
+  const pilotId = pilots.json?.pilots?.[0]?.id;
+  if (!pilotId) return false;
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "subscribe_pilot",
+    pilotId,
+    allocationUsd: 1000,
+  });
+  return ok && json.subscription?.pilotId === pilotId;
+});
+
+await check("capital intel digest", async () => {
+  const data = await getJson("/api/capital/intel");
+  return data.ok === true && Array.isArray(data.digest?.digest);
+});
+
+await check("capital intel ticker lookup", async () => {
+  const data = await getJson("/api/capital/intel?ticker=SPY&refresh=1");
+  return (
+    data.ok === true &&
+    data.intel?.symbol === "SPY" &&
+    typeof data.intel?.fundamentals === "object" &&
+    Array.isArray(data.intel?.chart) &&
+    typeof data.intel?.smartTake === "string"
+  );
+});
+
+await check("capital intel tools catalog", async () => {
+  const data = await getJson("/api/capital/tools?tool=catalog");
+  return (
+    data.ok === true &&
+    data.version === 2 &&
+    Array.isArray(data.tools) &&
+    data.tools.some((t) => t.id === "get_pfm_snapshot") &&
+    data.tools.some((t) => t.id === "preview_trade")
+  );
+});
+
+await check("capital tools pfm snapshot", async () => {
+  const data = await getJson("/api/capital/tools?tool=get_pfm_snapshot");
+  return data.ok === true && typeof data.pfm?.netWorthUsd === "number";
+});
+
+await check("capital tools portfolio health", async () => {
+  const data = await getJson("/api/capital/tools?tool=get_portfolio_health");
+  return data.ok === true && typeof data.health?.score === "number";
+});
+
+await check("capital tools quiver status", async () => {
+  const data = await getJson("/api/capital/tools?tool=get_quiver_status");
+  return data.ok === true && typeof data.quiver?.note === "string";
+});
+
+await check("capital plaid status", async () => {
+  const data = await getJson("/api/capital/plaid");
+  return data.ok === true && (data.mode === "demo" || data.mode === "plaid");
+});
+
+await check("capital intel meta providers", async () => {
+  const data = await getJson("/api/capital/intel?meta=1");
+  return data.ok === true && Array.isArray(data.providers) && data.providers.length >= 5;
+});
+
+await check("capital create_dip_rule", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "create_dip_rule",
+    ticker: "SPY",
+    dropPct: 5,
+  });
+  return ok && json.rule?.asset === "SPY";
+});
+
+await check("capital add_to_watchlist", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "add_to_watchlist",
+    ticker: "QQQ",
+  });
+  return ok && Array.isArray(json.watchlist) && json.watchlist.includes("QQQ");
+});
+
+await check("capital create_rule_from_thesis", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "create_rule_from_thesis",
+    ticker: "SPY",
+  });
+  return ok && typeof json.rule?.id === "string";
+});
+
+await check("capital refresh_pilot_feeds", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "refresh_pilot_feeds" });
+  return ok && Array.isArray(json.updated) && json.updated.length >= 1;
+});
+
+await check("capital set_active_broker", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "set_active_broker",
+    brokerId: "alpaca",
+  });
+  return ok && json.permissions?.activeBrokerId === "alpaca";
+});
+
+await check("capital robinhood mcp status", async () => {
+  const data = await getJson("/api/capital/robinhood");
+  return data.ok === true && typeof data.enabled === "boolean";
+});
+
+await check("capital backtest_rule", async () => {
+  const current = await getJson("/api/capital/status");
+  const rule = current.rules?.[0];
+  if (!rule) return false;
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "backtest_rule",
+    ruleId: rule.id,
+  });
+  return ok && json.rule?.backtest && typeof json.rule.backtest.fires90d === "number";
+});
+
+await check("capital snaptrade broker catalog", async () => {
+  const data = await getJson("/api/capital/status");
+  return Array.isArray(data.brokers) && data.brokers.some((b) => b.id === "snaptrade");
+});
+
+await check("capital snaptrade oauth status", async () => {
+  const data = await getJson("/api/capital/snaptrade");
+  return data.ok === true && typeof data.clientConfigured === "boolean";
+});
+
+await check("capital live gate fields", async () => {
+  const data = await getJson("/api/capital/status");
+  return typeof data.liveEnvEnabled === "boolean" && typeof data.liveMoneyConfirmed === "boolean";
+});
+
+await check("capital go_live live_money step", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "go_live" });
+  return ok && Array.isArray(json.goLive?.steps) && json.goLive.steps.some((s) => s.id === "live_money");
+});
+
+await check("capital set_tv_secret", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "set_tv_secret",
+    secret: "qa-smoke-test-secret",
+  });
+  return ok && json.status?.permissions?.tradingviewWebhookSecret === "qa-smoke-test-secret";
+});
+
+await check("capital plaid link token action", async () => {
+  const { json } = await postJson("/api/capital/plaid", { action: "create_link_token" });
+  return json.ok === false || typeof json.linkToken === "string";
+});
+
+await check("capital portfolio health cost basis beta", async () => {
+  const data = await getJson("/api/capital/status");
+  return Array.isArray(data.portfolioHealth?.costBasisBeta);
 });
 
 await check("content status", async () => {
@@ -321,9 +641,10 @@ await check("work recovery_list", async () => {
 });
 
 await check("work import_leads CSV", async () => {
+  const unique = `qa-tierb-${Date.now()}@curxor.dev`;
   const { ok, json } = await postJson("/api/work/status", {
     action: "import_leads",
-    csv: "name,email,company\nQA TierB,qa-tierb@curxor.dev,QA Co",
+    csv: `name,email,company\nQA TierB,${unique},QA Co`,
   });
   return ok && typeof json.imported === "number" && json.imported >= 1;
 });
