@@ -5,7 +5,7 @@ import { spawn } from "node:child_process";
 import { loadDigitalEnv } from "./digital-env";
 import { publishDigitalIntent } from "./mesh-publish";
 import type { MailIndexEntry, ReplyIntent } from "./work-queue-types";
-import { classifyReplyIntent } from "./work-reply-intent";
+import { parseReplyForIntent } from "./work-reply-parser";
 
 export async function isWorkImapConfigured(): Promise<boolean> {
   const env = await loadDigitalEnv();
@@ -36,9 +36,11 @@ export function parseImapMessagesToMailIndex(
   return messages.map((m, i) => {
     const from = (m.from ?? "").trim().toLowerCase();
     const subject = m.subject ?? "(no subject)";
-    const snippet = m.snippet ?? m.body?.slice(0, 200) ?? "";
+    const rawSnippet = m.snippet ?? m.body?.slice(0, 200) ?? "";
+    const parsed = parseReplyForIntent(subject, m.body ?? rawSnippet);
+    const snippet = parsed.snippet.slice(0, 200) || rawSnippet;
     const leadId = leadEmailMap.get(from) ?? null;
-    const intent: ReplyIntent = classifyReplyIntent(subject, snippet);
+    const intent: ReplyIntent = parsed.intent;
     return {
       id: m.id ?? `IMAP-${i}-${Date.now()}`,
       from,

@@ -12,7 +12,7 @@ import { loadDigitalEnv } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
 import { buildWorkDeliverabilitySummary } from "./work-deliverability";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
-import { classifyReplyIntent } from "./work-reply-intent";
+import { parseReplyForIntent } from "./work-reply-parser";
 import { groupMailIntoThreads, type MailThread } from "./work-mail-threads";
 import { isWorkImapConfigured, fetchImapMailForScan } from "./work-imap-client";
 import { emitWorkWebhook } from "./work-webhook-emitter";
@@ -647,7 +647,7 @@ export async function recordSend(send: Omit<OutboundSend, "id" | "createdAt">): 
 
 export async function updateSendStatus(
   sendId: string,
-  patch: Partial<Pick<OutboundSend, "status" | "sentAt" | "error">>,
+  patch: Partial<Pick<OutboundSend, "status" | "sentAt" | "error" | "undoUntil">>,
 ): Promise<OutboundSend | null> {
   const file = await ensureWorkQueue();
   const idx = file.sends.findIndex((s) => s.id === sendId);
@@ -681,38 +681,39 @@ export async function scanLocalMailQueue(): Promise<MailIndexEntry[]> {
   }
 
   const now = new Date().toISOString();
-  const demo: MailIndexEntry[] = [
+  const demoBodies = [
     {
-      id: `MAIL-${randomUUID().slice(0, 8)}`,
       from: "alex@edgecompute.ai",
       subject: "Re: CurXor pricing",
-      snippet: "Thanks — interested in appliance tiers. Can we schedule a call?",
-      receivedAt: now,
+      body: "Thanks — interested in appliance tiers. Can we schedule a call?\n\nOn Mon, Jun 1 wrote:\n> What tiers do you offer?",
       leadId: "LEAD-003",
-      matchedReply: true,
-      replyIntent: classifyReplyIntent("Re: CurXor pricing", "Thanks — interested in appliance tiers. Can we schedule a call?"),
     },
     {
-      id: `MAIL-${randomUUID().slice(0, 8)}`,
       from: "alex@edgecompute.ai",
       subject: "Re: CurXor pricing",
-      snippet: "Following up on my note — still keen to learn more about on-prem outreach.",
-      receivedAt: new Date(Date.now() - 86400000).toISOString(),
+      body: "Following up on my note — still keen to learn more about on-prem outreach.",
       leadId: "LEAD-003",
-      matchedReply: true,
-      replyIntent: "interested",
     },
     {
-      id: `MAIL-${randomUUID().slice(0, 8)}`,
       from: "notifications@calendar.local",
       subject: "Out of office until Monday",
-      snippet: "I am away from email — automatic reply",
-      receivedAt: now,
+      body: "I am away from email — automatic reply",
       leadId: null,
-      matchedReply: false,
-      replyIntent: classifyReplyIntent("Out of office until Monday", "I am away from email"),
     },
   ];
+  const demo: MailIndexEntry[] = demoBodies.map((row) => {
+    const parsed = parseReplyForIntent(row.subject, row.body);
+    return {
+      id: `MAIL-${randomUUID().slice(0, 8)}`,
+      from: row.from,
+      subject: row.subject,
+      snippet: parsed.snippet.slice(0, 200),
+      receivedAt: row === demoBodies[1] ? new Date(Date.now() - 86400000).toISOString() : now,
+      leadId: row.leadId,
+      matchedReply: Boolean(row.leadId && parsed.intent === "interested"),
+      replyIntent: parsed.intent,
+    };
+  });
   file.mailIndex = [...demo, ...file.mailIndex.filter((m) => !demo.some((d) => d.from === m.from))].slice(0, 50);
   await writeWorkFile(file);
   for (const entry of demo.filter((e) => e.matchedReply && e.leadId)) {
@@ -920,6 +921,7 @@ export async function snoozeMail(mailId: string, days = 1): Promise<{ task: Work
     priority: "P2",
     done: false,
     leadId: entry?.leadId ?? null,
+    mailId,
     dueAt,
     createdAt: now,
     updatedAt: now,
@@ -927,6 +929,44 @@ export async function snoozeMail(mailId: string, days = 1): Promise<{ task: Work
   file.tasks.push(task);
   await writeWorkFile(file);
   return { task, entry };
+}
+
+export async function processExpiredSnoozes(opts?: { mailId?: string; force?: boolean }): Promise<{ returned: number; entries: MailIndexEntry[] }> {
+  const file = await ensureWorkQueue();
+  const now = Date.now();
+  let returned = 0;
+  const entries: MailIndexEntry[] = [];
+
+  for (let i = 0; i < file.mailIndex.length; i++) {
+    const mail = file.mailIndex[i]!;
+    if (!mail.snoozedUntil) continue;
+    const prevSnoozedUntil = mail.snoozedUntil;
+    const due = Date.parse(prevSnoozedUntil);
+    const shouldReturn = opts?.mailId
+      ? mail.id === opts.mailId && (opts.force === true || due <= now)
+      : due <= now;
+    if (!shouldReturn) continue;
+    file.mailIndex[i] = { ...mail, snoozedUntil: null };
+    entries.push(file.mailIndex[i]!);
+    returned += 1;
+    for (const task of file.tasks) {
+      if (task.done) continue;
+      if (task.mailId === mail.id || (task.title.startsWith("Snoozed:") && task.dueAt === prevSnoozedUntil)) {
+        task.done = true;
+        task.updatedAt = new Date().toISOString();
+      }
+    }
+  }
+
+  if (returned > 0) await writeWorkFile(file);
+  return { returned, entries };
+}
+
+export async function clearMailSnooze(mailId: string, force = false): Promise<MailIndexEntry | null> {
+  const result = await processExpiredSnoozes({ mailId, force: force || undefined });
+  if (result.entries[0]) return result.entries[0];
+  const file = await ensureWorkQueue();
+  return file.mailIndex.find((m) => m.id === mailId) ?? null;
 }
 
 export async function handleBounceForLead(leadId: string, error: string): Promise<{ paused: number }> {
@@ -986,7 +1026,14 @@ export async function sendComposeReply(input: {
   mailId: string;
   subject: string;
   body: string;
-}): Promise<{ ok: boolean; sendId?: string; status?: string; error?: string }> {
+}): Promise<{
+  ok: boolean;
+  sendId?: string;
+  status?: string;
+  undoUntil?: string | null;
+  undoPending?: boolean;
+  error?: string;
+}> {
   const file = await ensureWorkQueue();
   const mail = file.mailIndex.find((m) => m.id === input.mailId);
   if (!mail) return { ok: false, error: "mail not found" };
@@ -1010,7 +1057,14 @@ export async function sendComposeReply(input: {
 
   const { executeOutboundSend } = await import("./work-send-executor");
   const result = await executeOutboundSend(send.id);
-  return { ok: result.ok, sendId: send.id, status: result.send?.status, error: result.error };
+  return {
+    ok: result.ok,
+    sendId: send.id,
+    status: result.send?.status,
+    undoUntil: result.send?.undoUntil ?? null,
+    undoPending: result.undoPending ?? false,
+    error: result.error,
+  };
 }
 
 export async function personalizeTemplateForLead(text: string, lead: WorkLead): Promise<string> {

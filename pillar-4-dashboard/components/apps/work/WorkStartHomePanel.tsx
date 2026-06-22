@@ -3,11 +3,10 @@
 import { useMemo, useState } from "react";
 
 import type { GrowthLevel } from "@/lib/os-growth-level";
+import { countMailBySplit, filterMailBySplit, type InboxSplit } from "@/lib/work-inbox-splits";
 import type { MailIndexEntry, WorkTask } from "@/lib/work-queue-types";
 import { workTerm } from "@/lib/work-level-copy";
 import type { WorkTemplate, WorkTemplatePack } from "@/lib/work-template-packs-data";
-
-type InboxStrip = "unassigned" | "replied" | "all";
 
 interface WorkStartHomePanelProps {
   growthLevel: GrowthLevel;
@@ -44,16 +43,14 @@ export function WorkStartHomePanel({
 }: WorkStartHomePanelProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<WorkTemplate | null>(null);
   const [packBusy, setPackBusy] = useState(false);
-  const [inboxStrip, setInboxStrip] = useState<InboxStrip>("unassigned");
+  const [inboxStrip, setInboxStrip] = useState<InboxSplit>("waiting");
   const [copied, setCopied] = useState(false);
 
-  const waitingRows = useMemo(() => {
-    if (inboxStrip === "replied") {
-      return mailIndex.filter((m) => m.matchedReply || m.replyIntent === "interested").slice(0, 8);
-    }
-    if (inboxStrip === "all") return mailIndex.slice(0, 8);
-    return mailIndex.filter((m) => !m.leadId && !m.matchedReply).slice(0, 8);
-  }, [inboxStrip, mailIndex]);
+  const stripCounts = useMemo(() => countMailBySplit(mailIndex, tasks), [mailIndex, tasks]);
+  const waitingRows = useMemo(
+    () => filterMailBySplit(mailIndex, tasks, inboxStrip).slice(0, 8),
+    [inboxStrip, mailIndex, tasks],
+  );
 
   const openTasks = tasks.filter((t) => !t.done).slice(0, 6);
 
@@ -79,9 +76,9 @@ export function WorkStartHomePanel({
 
       <section>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-[10px] uppercase tracking-widest text-cursor-glow">People waiting</h3>
+          <h3 className="text-[10px] uppercase tracking-widest text-cursor-glow">Inbox strips</h3>
           <div className="flex gap-1">
-            {(["unassigned", "replied", "all"] as const).map((strip) => (
+            {(["waiting", "snoozed", "done"] as const).map((strip) => (
               <button
                 key={strip}
                 type="button"
@@ -90,13 +87,13 @@ export function WorkStartHomePanel({
                   inboxStrip === strip ? "border-cursor-glow text-cursor-glow" : "border-line text-muted"
                 }`}
               >
-                {strip}
+                {strip} ({stripCounts[strip]})
               </button>
             ))}
           </div>
         </div>
         {waitingRows.length === 0 ? (
-          <p className="text-[11px] text-muted">No messages in this strip — scan inbox or check comms.</p>
+          <p className="text-[11px] text-muted">No messages in {inboxStrip} — scan inbox or check comms.</p>
         ) : (
           <ul className="space-y-1">
             {waitingRows.map((m) => (
@@ -110,8 +107,13 @@ export function WorkStartHomePanel({
                 >
                   <span className="text-stark">{m.from || "Message"}</span>
                   <span className="ml-2 text-[10px] text-muted">{m.subject?.slice(0, 48)}</span>
+                  {m.snoozedUntil ? (
+                    <span className="ml-2 text-[9px] text-amber-400">snoozed</span>
+                  ) : m.doneAt || m.archivedAt ? (
+                    <span className="ml-2 text-[9px] text-muted">done</span>
+                  ) : null}
                 </button>
-                {focusMailId === m.id ? (
+                {focusMailId === m.id && inboxStrip === "waiting" ? (
                   <div className="mt-1 flex flex-wrap gap-1 pl-1">
                     <button
                       type="button"

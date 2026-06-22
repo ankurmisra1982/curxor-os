@@ -113,14 +113,19 @@
 - [x] **W29** — Live proof GTM: `verify:work-live-proof`, EXIT-DEMO live-ready runbook, `record-work-exit-demo.mjs`, persona screenshots 24–29, connector vault live-proof badge, morning brief live mail source metadata
 - [x] Work checklist **57/57** · `verify:work-live-proof` in `qa:local`
 
+## Shipped (Phase 3 excellence W30 — v0.5.3)
+
+- [x] **W30** — Inbox pro: compose undo window, snooze return, reply parser, home/triage strip alignment, `undo_send` / `clear_snooze` / `finalize_send`
+- [x] Work checklist **60/60**
+
 ## Next
 
-**Phase 3 excellence arc (W29–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
+**Phase 3 excellence arc (W31–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
 
 | Sprint | Focus | Target tag |
 |--------|--------|------------|
 | W29 | Live proof GTM + EXIT-DEMO video | v0.5.2 ✓ |
-| W30 | Inbox pro (live send, undo, snooze return) | v0.5.3 |
+| W30 | Inbox pro (live send, undo, snooze return) | v0.5.3 ✓ |
 | W31 | Deliverability operator UI | v0.5.4 |
 | W32–W33 | Outbound worker + team lite | v0.6.0 |
 | W34 | HubSpot OAuth + activity timeline | v0.6.1 |

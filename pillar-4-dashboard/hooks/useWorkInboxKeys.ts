@@ -18,6 +18,8 @@ interface UseWorkInboxKeysOptions {
   onTagIntent: (mailId: string, intent: ReplyIntent) => void;
   leads: WorkLead[];
   defaultLeadId?: string;
+  undoAvailable?: boolean;
+  onUndo?: () => void;
 }
 
 const INTENT_KEYS: Record<string, ReplyIntent> = {
@@ -41,6 +43,8 @@ export function useWorkInboxKeys({
   onTagIntent,
   leads,
   defaultLeadId,
+  undoAvailable,
+  onUndo,
 }: UseWorkInboxKeysOptions): void {
   useEffect(() => {
     if (!enabled || threads.length === 0) return;
@@ -89,6 +93,11 @@ export function useWorkInboxKeys({
         onMarkDone(mailId);
         return;
       }
+      if (e.key === "u" && undoAvailable && onUndo) {
+        e.preventDefault();
+        onUndo();
+        return;
+      }
       const intent = INTENT_KEYS[e.key];
       if (intent) {
         e.preventDefault();
@@ -109,7 +118,9 @@ export function useWorkInboxKeys({
     onSelectIndex,
     onSnooze,
     onTagIntent,
+    onUndo,
     selectedIndex,
     threads,
+    undoAvailable,
   ]);
 }

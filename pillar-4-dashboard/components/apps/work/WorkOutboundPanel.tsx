@@ -5,12 +5,14 @@ import type { OutboundSend } from "@/lib/work-queue-types";
 interface WorkOutboundPanelProps {
   sends: OutboundSend[];
   onRetry: (sendId: string) => void;
+  onUndo?: (sendId: string) => void;
 }
 
 function statusClass(status: OutboundSend["status"]): string {
   if (status === "sent" || status === "simulated") return "text-cursor-glow";
   if (status === "failed") return "text-red-400";
   if (status === "pending_approval") return "text-amber-400";
+  if (status === "skipped") return "text-muted";
   return "text-stark";
 }
 
@@ -18,7 +20,7 @@ function isBounceLike(error: string | null): boolean {
   return Boolean(error && /\b(bounce|550|mailbox|user unknown)\b/i.test(error));
 }
 
-export function WorkOutboundPanel({ sends, onRetry }: WorkOutboundPanelProps) {
+export function WorkOutboundPanel({ sends, onRetry, onUndo }: WorkOutboundPanelProps) {
   const recent = sends.slice(0, 12);
   return (
     <div className="space-y-2 font-mono text-xs">
@@ -44,6 +46,11 @@ export function WorkOutboundPanel({ sends, onRetry }: WorkOutboundPanelProps) {
             </div>
             <div className="text-right">
               <p className={`text-[10px] uppercase ${statusClass(send.status)}`}>{send.status}</p>
+              {send.undoUntil && send.status === "queued" && Date.parse(send.undoUntil) > Date.now() && onUndo ? (
+                <button type="button" onClick={() => onUndo(send.id)} className="mt-1 border border-line px-1 py-0.5 text-[9px] uppercase text-muted hover:text-stark">
+                  Undo
+                </button>
+              ) : null}
               {send.status === "failed" || send.status === "pending_approval" ? (
                 <button type="button" onClick={() => onRetry(send.id)} className="mt-1 border border-line px-1 py-0.5 text-[9px] uppercase text-muted hover:text-stark">
                   {send.status === "pending_approval" ? "Send" : "Retry"}

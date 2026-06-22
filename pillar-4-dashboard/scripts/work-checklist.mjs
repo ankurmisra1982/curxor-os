@@ -82,7 +82,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
       : null;
   const l1Ok = json.tourKind === "L1-explorer" && json.mailId && json.steps?.some((s) => s.id === "draft_reply" && s.done);
   const l3Ok = tourSend?.status === "pending_approval";
-  const sendOk = tourSend?.status === "simulated" || tourSend?.status === "sent" || l3Ok;
+  const sendOk = tourSend?.status === "simulated" || tourSend?.status === "sent" || tourSend?.status === "queued" || l3Ok;
   const gtmOk = json.sequenceId && sendOk;
   if (ok && json.ok && Array.isArray(json.steps) && json.steps.length >= 3 && (l1Ok || gtmOk)) {
     pass("run_demo_tour", json.tourKind ?? `${json.sendId} · ${tourSend?.status ?? "L1"}`);
@@ -104,7 +104,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
 // 6. Outbound send path (simulated when SMTP unconfigured)
 {
   const status = (await get("/api/work/status")).json;
-  const proven = status.sends?.find((s) => s.status === "simulated" || s.status === "sent");
+  const proven = status.sends?.find((s) => s.status === "simulated" || s.status === "sent" || s.status === "queued");
   if (proven) {
     pass("send path smoke", `${proven.id} · ${proven.status}`);
   } else {
@@ -733,6 +733,77 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
     pass("xp_opt_out", emit.json.skipped ? "opt-out path ok" : emit.json.event.id);
   } else {
     fail("xp_opt_out", "emit failed");
+  }
+}
+
+// W30 — compose_send_live_status
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.find((m) => !m.archivedAt && !m.doneAt)?.id ?? status.mailIndex?.[0]?.id;
+  if (!mailId) {
+    fail("compose_send_live_status", "no mail");
+  } else {
+    const { ok, json } = await post("/api/work/status", {
+      action: "compose_send",
+      mailId,
+      subject: "Re: live status",
+      body: "W30 compose send status check.",
+    });
+    const st = json.sendStatus ?? json.status;
+    if (ok && json.sendId && (st === "queued" || st === "simulated" || st === "sent" || json.undoPending)) {
+      pass("compose_send_live_status", `${st}${json.undoPending ? "+undo" : ""}`);
+    } else {
+      fail("compose_send_live_status", `sendId=${json.sendId} status=${st}`);
+    }
+  }
+}
+
+// W30 — undo_send_smoke
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.find((m) => !m.archivedAt)?.id ?? status.mailIndex?.[0]?.id;
+  if (!mailId) {
+    fail("undo_send_smoke", "no mail");
+  } else {
+    const compose = await post("/api/work/status", {
+      action: "compose_send",
+      mailId,
+      subject: "Re: undo",
+      body: "Undo window smoke.",
+    });
+    const sendId = compose.json.sendId;
+    if (!compose.ok || !sendId) {
+      fail("undo_send_smoke", "compose failed");
+    } else {
+      const undo = await post("/api/work/status", { action: "undo_send", sendId });
+      if (undo.ok && undo.json.send?.status === "skipped") {
+        pass("undo_send_smoke", sendId);
+      } else {
+        fail("undo_send_smoke", undo.json.error ?? undo.json.send?.status ?? "failed");
+      }
+    }
+  }
+}
+
+// W30 — snooze_return
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.find((m) => !m.archivedAt && !m.doneAt)?.id;
+  if (!mailId) {
+    fail("snooze_return", "no mail");
+  } else {
+    const snooze = await post("/api/work/status", { action: "snooze_mail", mailId, days: 2 });
+    if (!snooze.ok) {
+      fail("snooze_return", "snooze failed");
+    } else {
+      const cleared = await post("/api/work/status", { action: "clear_snooze", mailId, force: true });
+      const entry = cleared.json.entry;
+      if (cleared.ok && entry && !entry.snoozedUntil) {
+        pass("snooze_return", mailId);
+      } else {
+        fail("snooze_return", `snoozedUntil=${entry?.snoozedUntil}`);
+      }
+    }
   }
 }
 

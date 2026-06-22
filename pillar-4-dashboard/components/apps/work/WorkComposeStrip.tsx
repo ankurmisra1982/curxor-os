@@ -9,6 +9,15 @@ interface WorkComposeStripSimpleProps {
   onSendReply?: (mailId: string, subject: string, body: string) => void;
   onClear: () => void;
   sendBusy?: boolean;
+  sendFeedback?: {
+    sendId: string;
+    sendStatus: string;
+    undoUntil?: string | null;
+    undoPending?: boolean;
+    error?: string | null;
+  } | null;
+  onUndoSend?: (sendId: string) => void;
+  onOpenOutbound?: () => void;
 }
 
 interface WorkComposeStripEditorProps {
@@ -28,7 +37,7 @@ function isSimple(props: WorkComposeStripProps): props is WorkComposeStripSimple
 
 export function WorkComposeStrip(props: WorkComposeStripProps) {
   if (isSimple(props)) {
-    const { mailId, draftPreview, onDraftReply, onSendReply, onClear, sendBusy } = props;
+    const { mailId, draftPreview, onDraftReply, onSendReply, onClear, sendBusy, sendFeedback, onUndoSend, onOpenOutbound } = props;
     const [prompt, setPrompt] = useState("");
     const lines = draftPreview.split("\n");
     const subject = lines[0] ?? "";
@@ -84,6 +93,43 @@ export function WorkComposeStrip(props: WorkComposeStripProps) {
         ) : (
           <p className="text-muted">Select mail and draft — or use templates from Home.</p>
         )}
+        {sendFeedback ? (
+          <div
+            className={`border px-2 py-1 ${
+              sendFeedback.sendStatus === "failed"
+                ? "border-red-400/50 text-red-400"
+                : sendFeedback.sendStatus === "skipped"
+                  ? "border-line text-muted"
+                  : "border-cursor-glow/50 text-cursor-glow"
+            }`}
+          >
+            {sendFeedback.error
+              ? `Send failed — ${sendFeedback.error}`
+              : sendFeedback.undoPending
+                ? `Queued · undo open (${sendFeedback.sendId})`
+                : `${sendFeedback.sendStatus} · ${sendFeedback.sendId}`}
+            <div className="mt-1 flex flex-wrap gap-1">
+              {sendFeedback.undoPending && onUndoSend ? (
+                <button
+                  type="button"
+                  onClick={() => onUndoSend(sendFeedback.sendId)}
+                  className="border border-line px-1.5 py-0.5 uppercase text-stark hover:border-cursor-glow"
+                >
+                  Undo (u)
+                </button>
+              ) : null}
+              {onOpenOutbound ? (
+                <button
+                  type="button"
+                  onClick={onOpenOutbound}
+                  className="border border-line px-1.5 py-0.5 uppercase text-muted hover:text-stark"
+                >
+                  Outbound queue
+                </button>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
       </div>
     );
   }

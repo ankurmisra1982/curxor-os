@@ -142,10 +142,10 @@ W29 → W30 → W31 → W32 → W33 → W34 → W35
 
 **Acceptance**
 
-- [ ] Live SMTP: compose send records `sent` or `simulated` with clear status in UI
-- [ ] Undo within window marks send `skipped` (demo path OK)
-- [ ] Snoozed mail reappears in Waiting after `snoozedUntil` (demo: API force-clear)
-- [ ] `work-checklist.mjs`: `compose_send_live_status`, `undo_send_smoke`, `snooze_return`
+- [x] Live SMTP: compose send records `sent` or `simulated` with clear status in UI
+- [x] Undo within window marks send `skipped` (demo path OK)
+- [x] Snoozed mail reappears in Waiting after `snoozedUntil` (demo: API force-clear)
+- [x] `work-checklist.mjs`: `compose_send_live_status`, `undo_send_smoke`, `snooze_return`
 
 **Growth levels:** L1–L4 primary.
 

@@ -3,12 +3,11 @@
 import { useMemo, useState } from "react";
 
 import { useWorkInboxKeys } from "@/hooks/useWorkInboxKeys";
+import { filterMailBySplit, type InboxSplit } from "@/lib/work-inbox-splits";
 import { groupMailIntoThreads } from "@/lib/work-mail-threads";
 import type { MailIndexEntry, ReplyIntent, WorkLead, WorkTask } from "@/lib/work-queue-types";
 
 const INTENTS: ReplyIntent[] = ["interested", "objection", "ooo", "neutral", "unknown"];
-
-type InboxSplit = "waiting" | "snoozed" | "done";
 
 interface WorkInboxTriagePanelProps {
   rows: MailIndexEntry[];
@@ -22,18 +21,12 @@ interface WorkInboxTriagePanelProps {
   onSnooze?: (mailId: string) => void;
   onArchive?: (mailId: string) => void;
   onMarkDone?: (mailId: string) => void;
+  undoSendId?: string | null;
+  onUndoSend?: () => void;
 }
 
 function filterBySplit(rows: MailIndexEntry[], tasks: WorkTask[], split: InboxSplit): MailIndexEntry[] {
-  const now = Date.now();
-  if (split === "done") return rows.filter((m) => m.doneAt || m.archivedAt);
-  if (split === "snoozed") {
-    return rows.filter((m) => {
-      if (m.snoozedUntil && Date.parse(m.snoozedUntil) > now) return true;
-      return tasks.some((t) => !t.done && t.title.startsWith("Snoozed:") && t.leadId === m.leadId);
-    });
-  }
-  return rows.filter((m) => !m.archivedAt && !m.doneAt && (!m.snoozedUntil || Date.parse(m.snoozedUntil) <= now));
+  return filterMailBySplit(rows, tasks, split);
 }
 
 export function WorkInboxTriagePanel({
@@ -48,6 +41,8 @@ export function WorkInboxTriagePanel({
   onSnooze,
   onArchive,
   onMarkDone,
+  undoSendId,
+  onUndoSend,
 }: WorkInboxTriagePanelProps) {
   const [split, setSplit] = useState<InboxSplit>("waiting");
   const [expandedThreadId, setExpandedThreadId] = useState<string | null>(null);
@@ -72,6 +67,8 @@ export function WorkInboxTriagePanel({
     onTagIntent,
     leads,
     defaultLeadId: leads[0]?.id,
+    undoAvailable: Boolean(undoSendId && onUndoSend),
+    onUndo: onUndoSend,
   });
 
   if (rows.length === 0) {
@@ -92,7 +89,7 @@ export function WorkInboxTriagePanel({
           </button>
         ))}
       </div>
-      <p className="text-muted uppercase">j/k navigate · r draft · a assign · s snooze · e archive · d done · 1–5 intent</p>
+      <p className="text-muted uppercase">j/k navigate · r draft · a assign · s snooze · e archive · d done · u undo · 1–5 intent</p>
       {displayRows.map((row, idx) => {
         const thread = threads.find((t) => t.id === row.threadId);
         const expanded = expandedThreadId === row.threadId;

@@ -113,6 +113,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [signals, setSignals] = useState<Array<{ id: string; title: string; source: string; intent: string; score: number; receivedAt: string }>>([]);
   const [signalBusy, setSignalBusy] = useState(false);
   const [composeSendBusy, setComposeSendBusy] = useState(false);
+  const [composeSendFeedback, setComposeSendFeedback] = useState<{
+    sendId: string;
+    sendStatus: string;
+    undoUntil?: string | null;
+    undoPending?: boolean;
+    error?: string | null;
+  } | null>(null);
 
   const growthLevel = useMemo((): GrowthLevel => {
     const fromStatus = status?.growthProfile?.growthLevel;
@@ -202,6 +209,27 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       if (sj.signals) setSignals(sj.signals);
     }
   }, [applyStatus, growthLevel]);
+
+  const undoComposeSend = useCallback(
+    (sendId: string) => {
+      void postWork({ action: "undo_send", sendId }).then((json) => {
+        const sj = json as { ok?: boolean; send?: OutboundSend; error?: string };
+        if (sj.ok && sj.send) {
+          setComposeSendFeedback({
+            sendId: sj.send.id,
+            sendStatus: sj.send.status,
+            undoPending: false,
+            error: sj.send.error,
+          });
+          setSignal("Send cancelled");
+        } else {
+          setSignal(sj.error ?? "Undo failed");
+        }
+        void loadBootstrap();
+      });
+    },
+    [loadBootstrap],
+  );
 
   const refreshGoLive = useCallback(async () => {
     const json = await postWork({ action: "go_live" });
@@ -660,6 +688,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           <WorkOutboundPanel
             sends={status?.sends ?? []}
             onRetry={(sendId) => void action({ action: "send_now", sendId })}
+            onUndo={(sendId) => undoComposeSend(sendId)}
           />
         </ExperienceAppSection>
       ) : null}
@@ -669,6 +698,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           <WorkOutboundPanel
             sends={status?.sends ?? []}
             onRetry={(sendId) => void action({ action: "send_now", sendId })}
+            onUndo={(sendId) => undoComposeSend(sendId)}
           />
         </ExperienceAppSection>
       ) : null}
@@ -692,6 +722,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onSnooze={(mailId) => void action({ action: "snooze_mail", mailId })}
             onArchive={(mailId) => void action({ action: "archive_mail", mailId })}
             onMarkDone={(mailId) => void action({ action: "mark_mail_done", mailId })}
+            undoSendId={composeSendFeedback?.undoPending ? composeSendFeedback.sendId : null}
+            onUndoSend={
+              composeSendFeedback?.undoPending
+                ? () => undoComposeSend(composeSendFeedback.sendId)
+                : undefined
+            }
           />
           <WorkComposeStrip
             mailId={focusMailId}
@@ -700,11 +736,43 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onSendReply={(mailId, subject, body) => {
               setComposeSendBusy(true);
               void postWork({ action: "compose_send", mailId, subject, body })
-                .then(() => loadBootstrap())
+                .then((json) => {
+                  const cj = json as {
+                    sendId?: string;
+                    sendStatus?: string;
+                    undoUntil?: string | null;
+                    undoPending?: boolean;
+                    error?: string;
+                    ok?: boolean;
+                  };
+                  if (cj.sendId) {
+                    setComposeSendFeedback({
+                      sendId: cj.sendId,
+                      sendStatus: cj.sendStatus ?? "queued",
+                      undoUntil: cj.undoUntil,
+                      undoPending: cj.undoPending ?? cj.sendStatus === "queued",
+                      error: cj.error ?? null,
+                    });
+                    setSignal(
+                      cj.undoPending
+                        ? `Queued · undo open (${cj.sendId})`
+                        : cj.error
+                          ? `Send failed — ${cj.error}`
+                          : `${cj.sendStatus ?? "sent"} · ${cj.sendId}`,
+                    );
+                  }
+                  return loadBootstrap();
+                })
                 .finally(() => setComposeSendBusy(false));
             }}
             sendBusy={composeSendBusy}
-            onClear={() => setDraftReplyPreview("")}
+            sendFeedback={composeSendFeedback}
+            onUndoSend={undoComposeSend}
+            onOpenOutbound={() => setWorkspaceTab("outreach")}
+            onClear={() => {
+              setDraftReplyPreview("");
+              setComposeSendFeedback(null);
+            }}
           />
           {draftReplyPreview ? (
             <pre className="mt-3 whitespace-pre-wrap border border-line/60 p-2 font-mono text-[10px] text-stark">{draftReplyPreview}</pre>

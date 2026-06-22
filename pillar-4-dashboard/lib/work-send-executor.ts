@@ -22,6 +22,8 @@ import { notifyWorkPendingApproval } from "./work-approval-notify";
 import { evaluateSendPolicy, readWorkSendPolicy } from "./work-send-policy";
 import { addSuppression, isEmailSuppressed } from "./work-suppression";
 
+export const UNDO_SEND_WINDOW_MS = 8000;
+
 export function requireWorkSendApproval(): boolean {
   const env = process.env.CURXOR_WORK_REQUIRE_APPROVAL?.trim().toLowerCase();
   if (env === "1" || env === "true") return true;
@@ -124,6 +126,43 @@ export async function sendSequenceStep(
   return executeOutboundSend(send.id);
 }
 
+export async function executeOutboundSend(
+  sendId: string,
+  opts?: { skipUndo?: boolean },
+): Promise<{ ok: boolean; send?: OutboundSend; error?: string; undoPending?: boolean }> {
+  const file = await ensureWorkQueue();
+  const send = file.sends.find((s) => s.id === sendId);
+  if (!send) return { ok: false, error: "Send not found" };
+
+  if (send.status === "skipped") {
+    return { ok: true, send };
+  }
+  if (send.status === "sent" || send.status === "simulated") {
+    return { ok: true, send };
+  }
+  if (send.status === "failed") {
+    return { ok: false, send, error: send.error ?? "Send failed" };
+  }
+  if (send.status === "pending_approval") {
+    return { ok: true, send };
+  }
+
+  const now = Date.now();
+  if (!opts?.skipUndo) {
+    if (send.undoUntil && now < Date.parse(send.undoUntil)) {
+      return { ok: true, send, undoPending: true };
+    }
+    if (!send.undoUntil) {
+      const updated = await updateSendStatus(sendId, {
+        undoUntil: new Date(now + UNDO_SEND_WINDOW_MS).toISOString(),
+      });
+      return { ok: true, send: updated ?? undefined, undoPending: true };
+    }
+  }
+
+  return executeOutboundSendNow(sendId);
+}
+
 /** Demo-mode send when SMTP bridge is not configured — local only, not sent to eno2. */
 async function simulateDemoSend(sendId: string): Promise<OutboundSend | null> {
   const file = await ensureWorkQueue();
@@ -133,6 +172,7 @@ async function simulateDemoSend(sendId: string): Promise<OutboundSend | null> {
     status: "simulated",
     sentAt: new Date().toISOString(),
     error: null,
+    undoUntil: null,
   });
   if (updated) {
     await markSequenceStepSent(send.sequenceId, send.stepId, send.subjectVariant);
@@ -141,7 +181,7 @@ async function simulateDemoSend(sendId: string): Promise<OutboundSend | null> {
   return updated;
 }
 
-export async function executeOutboundSend(sendId: string): Promise<{ ok: boolean; send?: OutboundSend; error?: string }> {
+async function executeOutboundSendNow(sendId: string): Promise<{ ok: boolean; send?: OutboundSend; error?: string }> {
   const file = await ensureWorkQueue();
   const send = file.sends.find((s) => s.id === sendId);
   if (!send) return { ok: false, error: "Send not found" };
@@ -166,6 +206,7 @@ export async function executeOutboundSend(sendId: string): Promise<{ ok: boolean
       status: "sent",
       sentAt: new Date().toISOString(),
       error: null,
+      undoUntil: null,
     });
     await markSequenceStepSent(send.sequenceId, send.stepId, send.subjectVariant);
     await advanceSequenceStep(send.sequenceId);
@@ -173,12 +214,41 @@ export async function executeOutboundSend(sendId: string): Promise<{ ok: boolean
   }
 
   const err = result.error ?? "Bridge send failed";
-  const failed = await updateSendStatus(sendId, { status: "failed", error: err });
+  const failed = await updateSendStatus(sendId, { status: "failed", error: err, undoUntil: null });
   if (err.toLowerCase().includes("bounce") || err.includes("550")) {
     await addSuppression(send.to, err, "bounce");
   }
   await notifyWorkSendFailure(send, err);
   return { ok: false, send: failed ?? undefined, error: err };
+}
+
+export async function undoOutboundSend(sendId: string): Promise<{ ok: boolean; send?: OutboundSend; error?: string }> {
+  const file = await ensureWorkQueue();
+  const send = file.sends.find((s) => s.id === sendId);
+  if (!send) return { ok: false, error: "Send not found" };
+  if (send.status !== "queued") return { ok: false, error: `Cannot undo ${send.status} send` };
+  if (!send.undoUntil || Date.now() >= Date.parse(send.undoUntil)) {
+    return { ok: false, error: "Undo window closed" };
+  }
+  const updated = await updateSendStatus(sendId, {
+    status: "skipped",
+    error: "Cancelled by operator",
+    undoUntil: null,
+  });
+  return { ok: true, send: updated ?? undefined };
+}
+
+export async function finalizeDueOutboundSends(): Promise<number> {
+  const file = await ensureWorkQueue();
+  const now = Date.now();
+  let finalized = 0;
+  for (const send of file.sends) {
+    if (send.status !== "queued") continue;
+    if (!send.undoUntil || Date.parse(send.undoUntil) > now) continue;
+    const res = await executeOutboundSend(send.id, { skipUndo: true });
+    if (res.ok) finalized += 1;
+  }
+  return finalized;
 }
 
 export async function processDueSequenceSteps(): Promise<number> {

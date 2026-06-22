@@ -48,6 +48,7 @@ export interface WorkTask {
   priority: TaskPriority;
   done: boolean;
   leadId: string | null;
+  mailId?: string | null;
   dueAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -96,6 +97,7 @@ export interface OutboundSend {
   sentAt: string | null;
   openedAt?: string | null;
   repliedAt?: string | null;
+  undoUntil?: string | null;
   error: string | null;
   createdAt: string;
 }

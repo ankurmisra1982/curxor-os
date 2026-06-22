@@ -29,8 +29,10 @@ import { handleWorkEmailReceipt } from "@/lib/work-receipt-handler";
 import { resolveAutoSendOnActivate, readWorkSendPolicy, type AutoSendPolicy } from "@/lib/work-send-policy";
 import {
   executeOutboundSend,
+  finalizeDueOutboundSends,
   processDueSequenceSteps,
   sendSequenceStep,
+  undoOutboundSend,
 } from "@/lib/work-send-executor";
 import {
   activateSequence,
@@ -38,6 +40,7 @@ import {
   approveSend,
   archiveMail,
   assignMailToLead,
+  clearMailSnooze,
   createSequence,
   createTask,
   deferSequenceStepSend,
@@ -50,6 +53,7 @@ import {
   markMailDone,
   markSequenceReplied,
   pauseSequence,
+  processExpiredSnoozes,
   rejectSend,
   scanLocalMailQueue,
   sendComposeReply,
@@ -258,13 +262,23 @@ export async function POST(request: Request): Promise<Response> {
 
       case "send_now": {
         if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
-        const result = await executeOutboundSend(body.sendId);
+        const result = await executeOutboundSend(body.sendId, { skipUndo: true });
         return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
       case "process_due": {
-        const processed = await processDueSequenceSteps();
-        return Response.json({ ok: true, processed, status: await fetchWorkStatus() });
+        const [processed, finalizedSends, snoozeReturn] = await Promise.all([
+          processDueSequenceSteps(),
+          finalizeDueOutboundSends(),
+          processExpiredSnoozes(),
+        ]);
+        return Response.json({
+          ok: true,
+          processed,
+          finalizedSends,
+          snoozeReturned: snoozeReturn.returned,
+          status: await fetchWorkStatus(),
+        });
       }
 
       case "import_leads": {
@@ -565,6 +579,26 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
+      case "clear_snooze": {
+        if (!body.mailId) return Response.json({ ok: false, error: "mailId required" }, { status: 400 });
+        const force = (body as { force?: boolean }).force === true;
+        const entry = await clearMailSnooze(body.mailId, force);
+        if (!entry) return Response.json({ ok: false, error: "mail not found" }, { status: 404 });
+        return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "undo_send": {
+        if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        const result = await undoOutboundSend(body.sendId);
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "finalize_send": {
+        if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        const result = await executeOutboundSend(body.sendId, { skipUndo: true });
+        return Response.json({ ...result, sendStatus: result.send?.status, status: await fetchWorkStatus() });
+      }
+
       case "list_threads": {
         const file = await ensureWorkQueue();
         if (file.mailIndex.length === 0) await scanLocalMailQueue();
@@ -596,7 +630,11 @@ export async function POST(request: Request): Promise<Response> {
           return Response.json({ ok: false, error: "mailId and body required" }, { status: 400 });
         }
         const result = await sendComposeReply({ mailId, subject, body: replyBody });
-        return Response.json({ ...result, sendStatus: result.status, status: await fetchWorkStatus() });
+        return Response.json({
+          ...result,
+          sendStatus: result.status,
+          status: await fetchWorkStatus(),
+        });
       }
 
       case "suppression_list": {
