@@ -9,6 +9,8 @@ import { loadDigitalEnv } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { classifyReplyIntent } from "./work-reply-intent";
+import { isWorkImapConfigured, fetchImapMailForScan } from "./work-imap-client";
+import { emitWorkWebhook } from "./work-webhook-emitter";
 import { countSendsToday, readAutoSendOnActivateFre, readWorkSendPolicy, resolveAutoSendOnActivate } from "./work-send-policy";
 import type {
   LeadStage,
@@ -19,6 +21,7 @@ import type {
   SequenceStepKind,
   SubjectVariant,
   TaskPriority,
+  WorkAgentAuditEntry,
   WorkLead,
   WorkQueueFile,
   WorkQueueStatus,
@@ -58,6 +61,11 @@ export async function ensureWorkQueue(): Promise<WorkQueueFile> {
       sends: Array.isArray(parsed.sends) ? parsed.sends : [],
       mailIndex: Array.isArray(parsed.mailIndex) ? parsed.mailIndex : [],
       syncLog: Array.isArray(parsed.syncLog) ? parsed.syncLog : [],
+      agentAuditLog: Array.isArray(parsed.agentAuditLog) ? parsed.agentAuditLog : [],
+      unsubscribeTokens:
+        parsed.unsubscribeTokens && typeof parsed.unsubscribeTokens === "object"
+          ? (parsed.unsubscribeTokens as Record<string, string>)
+          : {},
     };
   } catch {
     const seeded = seedDemoQueue();
@@ -71,6 +79,15 @@ async function writeWorkFile(data: WorkQueueFile): Promise<void> {
   await mkdir(path.dirname(filePath), { recursive: true });
   data.updatedAt = new Date().toISOString();
   await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, { mode: 0o640 });
+}
+
+export async function writeWorkFilePartial(data: WorkQueueFile): Promise<void> {
+  await writeWorkFile(data);
+}
+
+export async function readOutboundKillSwitch(): Promise<boolean> {
+  const fre = await readAppFreState("my-work");
+  return fre.config.outboundKillSwitch === true;
 }
 
 function seedDemoQueue(): WorkQueueFile {
@@ -214,7 +231,7 @@ function seedDemoQueue(): WorkQueueFile {
     },
   ];
 
-  return { version: 1, updatedAt: now, leads, tasks, sequences, sends: [], mailIndex: [] };
+  return { version: 1, updatedAt: now, leads, tasks, sequences, sends: [], mailIndex: [], unsubscribeTokens: {} };
 }
 
 export async function isWorkEmailBridgeConfigured(): Promise<boolean> {
@@ -233,6 +250,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const connectorVault = await buildWorkConnectorHealthReport();
   const autoSendFre = await readAutoSendOnActivateFre();
   const autoSendOnActivate = autoSendFre ?? (await resolveAutoSendOnActivate(bridgeConfigured));
+  const outboundKillSwitch = await readOutboundKillSwitch();
 
   return {
     source: bridgeConfigured ? "live" : "demo",
@@ -267,6 +285,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
     syncLog: file.syncLog ?? [],
     autoSendOnActivate,
     autoSendDefault: bridgeConfigured,
+    outboundKillSwitch,
   };
 }
 
@@ -321,7 +340,9 @@ export async function updateLeadStage(leadId: string, stage: LeadStage): Promise
     }
   }
   await writeWorkFile(file);
-  return file.leads[idx]!;
+  const lead = file.leads[idx]!;
+  void emitWorkWebhook("lead.stage_changed", { leadId, stage, email: lead.email });
+  return lead;
 }
 
 export async function createTask(title: string, priority: TaskPriority = "P2", leadId?: string): Promise<WorkTask> {
@@ -571,6 +592,10 @@ export async function recordSend(send: Omit<OutboundSend, "id" | "createdAt">): 
   file.sends.unshift(row);
   file.sends = file.sends.slice(0, 200);
   await writeWorkFile(file);
+  const priorForLead = file.sends.filter((s) => s.leadId === row.leadId && s.id !== row.id);
+  if (priorForLead.length === 0 && (row.status === "sent" || row.status === "simulated")) {
+    void emitWorkWebhook("sequence.first_send", { sendId: row.id, leadId: row.leadId, sequenceId: row.sequenceId });
+  }
   return row;
 }
 
@@ -595,6 +620,20 @@ export async function ingestMailIndex(entries: MailIndexEntry[]): Promise<number
 
 export async function scanLocalMailQueue(): Promise<MailIndexEntry[]> {
   const file = await ensureWorkQueue();
+  const leadEmailMap = new Map(file.leads.map((l) => [l.email.toLowerCase(), l.id]));
+
+  if (await isWorkImapConfigured()) {
+    const imapEntries = await fetchImapMailForScan(leadEmailMap);
+    if (imapEntries.length > 0) {
+      file.mailIndex = [...imapEntries, ...file.mailIndex].slice(0, 50);
+      await writeWorkFile(file);
+      for (const entry of imapEntries.filter((e) => e.matchedReply && e.leadId)) {
+        await markSendRepliedForLead(entry.leadId!);
+      }
+      return imapEntries;
+    }
+  }
+
   const now = new Date().toISOString();
   const demo: MailIndexEntry[] = [
     {
@@ -699,7 +738,61 @@ export async function tagMailReplyIntent(mailId: string, intent: ReplyIntent): P
   if (idx < 0) return null;
   file.mailIndex[idx] = { ...file.mailIndex[idx]!, replyIntent: intent };
   await writeWorkFile(file);
+  if (intent === "interested") {
+    void emitWorkWebhook("mail.interested", {
+      mailId,
+      leadId: file.mailIndex[idx]!.leadId,
+      from: file.mailIndex[idx]!.from,
+    });
+  }
   return file.mailIndex[idx]!;
+}
+
+export async function assignMailToLead(
+  mailId: string,
+  leadId: string,
+  assignedTo?: string,
+): Promise<MailIndexEntry | null> {
+  const file = await ensureWorkQueue();
+  const idx = file.mailIndex.findIndex((m) => m.id === mailId);
+  if (idx < 0) return null;
+  file.mailIndex[idx] = {
+    ...file.mailIndex[idx]!,
+    leadId,
+    assignedTo: assignedTo ?? leadId,
+    matchedReply: true,
+  };
+  await writeWorkFile(file);
+  return file.mailIndex[idx]!;
+}
+
+export function getUnsubscribeUrl(leadId: string, file?: WorkQueueFile): string {
+  const base = process.env.CURXOR_CONTENT_PUBLIC_BASE?.trim() || "http://127.0.0.1:3080";
+  const tokens = file?.unsubscribeTokens ?? {};
+  const token = tokens[leadId] ?? `unsub-${leadId.toLowerCase().replace(/[^a-z0-9]/g, "")}`;
+  return `${base}/api/work/unsubscribe?token=${encodeURIComponent(token)}`;
+}
+
+export async function ensureUnsubscribeToken(leadId: string): Promise<string> {
+  const file = await ensureWorkQueue();
+  if (!file.unsubscribeTokens) file.unsubscribeTokens = {};
+  if (!file.unsubscribeTokens[leadId]) {
+    file.unsubscribeTokens[leadId] = `tok-${randomUUID().slice(0, 12)}`;
+    await writeWorkFile(file);
+  }
+  return file.unsubscribeTokens[leadId]!;
+}
+
+export async function approveSend(sendId: string): Promise<OutboundSend | null> {
+  const file = await ensureWorkQueue();
+  const send = file.sends.find((s) => s.id === sendId);
+  if (!send || send.status !== "pending_approval") return null;
+  await updateSendStatus(sendId, { status: "queued" });
+  return send;
+}
+
+export async function rejectSend(sendId: string, reason?: string): Promise<OutboundSend | null> {
+  return updateSendStatus(sendId, { status: "skipped", error: reason ?? "Rejected by operator" });
 }
 
 export async function trackSendOpen(sendId: string): Promise<OutboundSend | null> {
@@ -746,10 +839,19 @@ export function resolveStepSubject(
   return { subject: personalizeTemplate(raw, lead), variant };
 }
 
-export function personalizeTemplate(text: string, lead: WorkLead): string {
+export function personalizeTemplate(text: string, lead: WorkLead, extra?: { unsubscribeUrl?: string }): string {
+  const unsub = extra?.unsubscribeUrl ?? "";
   return text
     .replace(/\{\{name\}\}/gi, lead.name.split(" ")[0] ?? lead.name)
     .replace(/\{\{company\}\}/gi, lead.company || "your team")
     .replace(/\{\{email\}\}/gi, lead.email)
-    .replace(/\{\{title\}\}/gi, lead.title || "there");
+    .replace(/\{\{title\}\}/gi, lead.title || "there")
+    .replace(/\{\{unsubscribe_url\}\}/gi, unsub);
+}
+
+export async function personalizeTemplateForLead(text: string, lead: WorkLead): Promise<string> {
+  await ensureUnsubscribeToken(lead.id);
+  const file = await ensureWorkQueue();
+  const unsub = getUnsubscribeUrl(lead.id, file);
+  return personalizeTemplate(text, lead, { unsubscribeUrl: unsub });
 }

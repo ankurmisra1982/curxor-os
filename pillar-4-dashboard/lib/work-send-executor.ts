@@ -8,14 +8,16 @@ import {
   isWorkEmailBridgeConfigured,
   markSequenceReplied,
   markSequenceStepSent,
-  personalizeTemplate,
+  personalizeTemplateForLead,
+  readOutboundKillSwitch,
   recordSend,
   rescheduleSequenceStep,
   resolveStepSubject,
   updateSendStatus,
 } from "./work-store";
-import type { OutboundSend, WorkSequence } from "./work-queue-types";
+import type { OutboundSend, ReplyIntent, WorkSequence } from "./work-queue-types";
 import { notifyWorkSendFailure } from "./work-publish-failure-notify";
+import { notifyWorkPendingApproval } from "./work-approval-notify";
 import { evaluateSendPolicy, readWorkSendPolicy } from "./work-send-policy";
 
 export function requireWorkSendApproval(): boolean {
@@ -49,6 +51,10 @@ export async function sendSequenceStep(
   sequenceId: string,
   stepIndex?: number,
 ): Promise<{ ok: boolean; send?: OutboundSend; error?: string }> {
+  if (await readOutboundKillSwitch()) {
+    return { ok: false, error: "Outbound kill switch is ON — sends blocked" };
+  }
+
   const file = await ensureWorkQueue();
   const seqIdx = file.sequences.findIndex((s) => s.id === sequenceId);
   if (seqIdx < 0) return { ok: false, error: "Sequence not found" };
@@ -79,7 +85,7 @@ export async function sendSequenceStep(
   }
 
   const { subject, variant } = resolveStepSubject(step, lead);
-  const body = personalizeTemplate(step.body, lead);
+  const body = await personalizeTemplateForLead(step.body, lead);
 
   const send = await recordSend({
     sequenceId: seq.id,
@@ -95,6 +101,7 @@ export async function sendSequenceStep(
   });
 
   if (requireWorkSendApproval()) {
+    await notifyWorkPendingApproval(send);
     return { ok: true, send };
   }
 
@@ -177,7 +184,10 @@ export async function processDueSequenceSteps(): Promise<number> {
   return processed;
 }
 
-export async function pauseSequencesOnReply(fromEmail: string): Promise<WorkSequence[]> {
+export async function pauseSequencesOnReply(
+  fromEmail: string,
+  intent?: ReplyIntent,
+): Promise<WorkSequence[]> {
   const file = await ensureWorkQueue();
   const email = fromEmail.trim().toLowerCase();
   const lead = file.leads.find((l) => l.email === email);
@@ -186,6 +196,29 @@ export async function pauseSequencesOnReply(fromEmail: string): Promise<WorkSequ
   const paused: WorkSequence[] = [];
   for (const seq of file.sequences) {
     if (seq.leadId !== lead.id || !seq.pauseOnReply || seq.status !== "active") continue;
+
+    const currentStep = seq.steps[seq.currentStepIndex];
+    const branchIndex =
+      intent && currentStep?.onReplyIntent?.[intent] != null
+        ? currentStep.onReplyIntent[intent]!
+        : null;
+
+    if (branchIndex != null && branchIndex >= 0 && branchIndex < seq.steps.length) {
+      const file2 = await ensureWorkQueue();
+      const idx = file2.sequences.findIndex((s) => s.id === seq.id);
+      if (idx >= 0) {
+        file2.sequences[idx] = {
+          ...file2.sequences[idx]!,
+          currentStepIndex: branchIndex,
+          updatedAt: new Date().toISOString(),
+        };
+        const { writeWorkFilePartial } = await import("./work-store");
+        await writeWorkFilePartial(file2);
+        paused.push(file2.sequences[idx]!);
+        continue;
+      }
+    }
+
     const updated = await markSequenceReplied(seq.id);
     if (updated) paused.push(updated);
   }

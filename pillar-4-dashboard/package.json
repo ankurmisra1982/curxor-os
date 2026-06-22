@@ -19,11 +19,14 @@
     "qa:creator-checklist": "node scripts/creator-checklist.mjs",
     "qa:work-checklist": "node scripts/work-checklist.mjs",
     "setup:capital-env": "node scripts/setup-capital-env.mjs",
+    "setup:work-env": "node scripts/setup-work-env.mjs",
     "configure:capital-keys": "node scripts/configure-capital-keys.mjs --open-signup-pages",
     "verify:exit-demo-scaffold": "node scripts/verify-exit-demo-scaffold.mjs",
+    "verify:work-exit-demo-scaffold": "node scripts/verify-work-exit-demo-scaffold.mjs",
     "demo:capture": "node scripts/capture-demo-screenshots.mjs",
     "demo:capture:capital": "node scripts/capture-capital-demo.mjs",
     "demo:capture:work": "node scripts/capture-work-demo.mjs",
+    "demo:record:work": "node scripts/record-outreach-walkthrough.mjs",
     "demo:capture:marketing": "node scripts/capture-marketing-flows.mjs"
   },
   "dependencies": {

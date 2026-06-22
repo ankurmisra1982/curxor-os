@@ -62,7 +62,12 @@ export const WORK_SECTION_TAB: Record<string, WorkWorkspaceTab> = {
   analytics: "ops",
   recovery: "ops",
   "send-policy": "ops",
+  "inbox-triage": "comms",
+  "morning-brief": "start",
   "day-brief": "ops",
+  "approval": "ops",
+  "kanban": "outreach",
+  "kill-switch": "ops",
   "connector-vault": "integrations",
   "sync-audit": "integrations",
 };

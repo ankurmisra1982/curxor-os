@@ -38,11 +38,18 @@
 - [x] **W5 Twenty CRM** — GraphQL adapter, `crmBackend` FRE, `sync_crm` / `crm_status`
 - [x] **W6 Polish** — day brief v2, won-stage task automation, `N8N-TEMPLATES.md`, extended QA
 
+## Shipped (Excellence arc W7–W11 — v0.3.7)
+
+- [x] **W7 Exit demo** — `EXIT-DEMO.md`, `setup:work-env`, `verify:work-exit-demo-scaffold`, IMAP `work.email.fetch`, Go Live exit CTA
+- [x] **W8 Comms** — `WorkInboxTriagePanel`, `draft_reply` skill, `work-mail-sanitize.ts`, assign mail to lead
+- [x] **W9 GTM** — `enrich_lead`, sequence `onReplyIntent` branching, `{{unsubscribe_url}}`, Cal.com, approval panel, outbound kill switch
+- [x] **W10 Agent** — `/api/work/mcp`, `work-agent-audit`, n8n webhook emitter, Notion pull, HubSpot preview
+- [x] **W11 Polish** — `WorkSetupWizard`, kanban pipeline, morning brief panel, OAuth vault links, `demo:record:work`
+
 ## Deferred
 
 - LinkedIn automation
 - Multi-mailbox rotation at scale
-- Salesforce/HubSpot live sync (registry only)
+- Salesforce live sync (HubSpot read-only preview shipped)
 - Dedicated outbound job worker process
-- Real IMAP ingest (today: local mail index + demo scan)
-- Automatic n8n webhook POST on every work event (templates documented; manual wire today)
+- Full UnInbox-style shared team inbox

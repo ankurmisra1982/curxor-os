@@ -72,5 +72,13 @@
       "Agent skills — morning_brief, prep_meeting, slack_digest; day brief v2 with connector context",
       "131+ smoke checks — google route, crm_status, connector vault, work wizard user flow; tagged v0.3.6"
     ]
+  },
+  "0.3.7": {
+    "highlights": [
+      "Work Claw excellence W7–W11 — EXIT-DEMO, IMAP fetch, inbox triage, enrich/approval/kill switch, work MCP + n8n webhooks",
+      "Desk polish — Setup Wizard, pipeline kanban, morning brief on Start, OAuth vault links, demo:record:work",
+      "Comms hardening — draft_reply + mail sanitizer, assign_mail_to_lead, sequence onReplyIntent branching",
+      "140+ smoke + work exit-demo scaffold in qa:local; tagged v0.3.7"
+    ]
   }
 }

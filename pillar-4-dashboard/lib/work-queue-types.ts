@@ -46,6 +46,8 @@ export interface SequenceStep {
   /** A/B variant B subject — picked per lead at send time */
   subjectAlt?: string;
   subjectVariant?: SubjectVariant;
+  /** When reply intent matches, jump to this step index instead of default advance */
+  onReplyIntent?: Partial<Record<ReplyIntent, number>>;
   body: string;
   sentAt: string | null;
   scheduledAt: string | null;
@@ -90,8 +92,20 @@ export interface MailIndexEntry {
   snippet: string;
   receivedAt: string;
   leadId: string | null;
+  assignedTo?: string | null;
   matchedReply: boolean;
   replyIntent?: ReplyIntent;
+}
+
+export interface WorkAgentAuditEntry {
+  id: string;
+  at: string;
+  kind: "send" | "sync" | "approval" | "mcp" | "kill_switch";
+  source: string;
+  tool?: string;
+  note: string;
+  sendId?: string | null;
+  leadId?: string | null;
 }
 
 export interface WorkSyncLogEntry {
@@ -111,6 +125,8 @@ export interface WorkQueueFile {
   sends: OutboundSend[];
   mailIndex: MailIndexEntry[];
   syncLog?: WorkSyncLogEntry[];
+  agentAuditLog?: WorkAgentAuditEntry[];
+  unsubscribeTokens?: Record<string, string>;
 }
 
 export interface WorkConnectorVaultSummary {
@@ -182,4 +198,5 @@ export interface WorkQueueStatus {
   syncLog?: WorkSyncLogEntry[];
   autoSendOnActivate?: boolean;
   autoSendDefault?: boolean;
+  outboundKillSwitch?: boolean;
 }

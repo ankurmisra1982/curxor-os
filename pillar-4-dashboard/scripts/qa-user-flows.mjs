@@ -142,6 +142,19 @@ await check("flow: work wizard create draft activate", async () => {
   );
 });
 
+await check("flow: work enrich mcp draft_reply", async () => {
+  const status = await getJson("/api/work/status");
+  const leadId = status.leads?.[0]?.id;
+  const mailId = status.mailIndex?.[0]?.id;
+  if (!leadId) return false;
+  const enrich = await postJson("/api/work/status", { action: "enrich_lead", leadId });
+  const mcp = await getJson("/api/work/mcp");
+  if (!enrich.ok || !mcp.ok || !Array.isArray(mcp.tools)) return false;
+  if (!mailId) return true;
+  const draft = await postJson("/api/work/status", { action: "draft_reply", mailId });
+  return draft.ok && typeof draft.json.body === "string";
+});
+
 await check("flow: vital status + webchat same app", async () => {
   const vital = await getJson("/api/vital/status");
   const chat = await postJson("/api/channels/webchat", {

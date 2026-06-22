@@ -19,6 +19,8 @@ interface WorkConnectorVaultPanelProps {
   report: WorkConnectorVaultReport | null;
   onRefresh: () => void;
   busy?: boolean;
+  onLinkGoogle?: () => void;
+  onLinkNotion?: () => void;
 }
 
 function healthClass(health: string): string {
@@ -29,7 +31,7 @@ function healthClass(health: string): string {
   return "text-muted border-line/60";
 }
 
-export function WorkConnectorVaultPanel({ report, onRefresh, busy }: WorkConnectorVaultPanelProps) {
+export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle, onLinkNotion }: WorkConnectorVaultPanelProps) {
   if (!report) {
     return <p className="font-mono text-[10px] text-muted">Loading connector vault…</p>;
   }
@@ -57,6 +59,27 @@ export function WorkConnectorVaultPanel({ report, onRefresh, busy }: WorkConnect
           No comms path — configure SMTP, Google Workspace, or IMAP for live outbound.
         </p>
       ) : null}
+
+      <div className="flex flex-wrap gap-2">
+        {onLinkGoogle ? (
+          <button
+            type="button"
+            onClick={onLinkGoogle}
+            className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
+          >
+            Link Google
+          </button>
+        ) : null}
+        {onLinkNotion ? (
+          <button
+            type="button"
+            onClick={onLinkNotion}
+            className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
+          >
+            Link Notion
+          </button>
+        ) : null}
+      </div>
 
       <div className="space-y-2">
         {connectors.map((c) => (

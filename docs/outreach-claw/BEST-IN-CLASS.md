@@ -72,22 +72,24 @@ CurXor wedge: **sovereign on-appliance** — one desk for mail, CRM, tasks, cale
 
 ---
 
-## Current ship state (v0.3.6)
+## Current ship state (v0.3.7)
 
 | Area | Status |
 |------|--------|
 | Local CRM + sequences | Shipped |
 | SMTP send + simulated fallback | Shipped |
-| Unified inbox (CCP) + scan_inbox | Shipped — demo mail index |
+| Unified inbox (CCP) + scan_inbox | Shipped — IMAP live when configured |
 | Go Live + demo tour + work-checklist | Shipped |
 | Skill refresh-only (no double-execute) | Shipped |
 | Tier B — A/B subjects, CSV import, analytics, heartbeat `process_due` | Shipped |
-| Workspace tabs (Start / Outreach / Comms / Ops / Integrations) | **Shipped v0.3.6** |
-| `loadStatus` vs bootstrap split on manual actions | **Shipped v0.3.6** |
-| Connector vault UI | **Shipped v0.3.6** |
-| Google Workspace / Notion / Slack / CRM bridges | **Shipped v0.3.6** (demo fallbacks when unconfigured) |
-| Real IMAP ingest | Deferred |
-| Demo-pack screenshots | **Shipped** — `demo:capture:work` |
+| Workspace tabs (Start / Outreach / Comms / Ops / Integrations) | Shipped v0.3.6 |
+| Connector vault UI | Shipped v0.3.6 |
+| Google / Notion / Slack / Twenty bridges | Shipped v0.3.6 |
+| **W7 Exit demo** — EXIT-DEMO.md, IMAP fetch, setup:work-env, verify scaffold | **Shipped v0.3.7** |
+| **W8 Comms** — inbox triage, draft_reply, mail sanitizer | **Shipped v0.3.7** |
+| **W9 GTM** — enrich, branching, approval queue, kill switch, Cal.com | **Shipped v0.3.7** |
+| **W10 Agent** — work MCP, audit, n8n webhooks, Notion pull, HubSpot preview | **Shipped v0.3.7** |
+| **W11 Polish** — setup wizard, kanban, morning brief, walkthrough video | **Shipped v0.3.7** |
 
 ---
 
@@ -98,7 +100,7 @@ Proposed `work-connector-registry.ts` + FRE panel **Integrations**:
 | Connector | Tier | Bridge / tool | Env / OAuth | Work actions |
 |-----------|------|---------------|-------------|--------------|
 | **SMTP outbound** | Live | `work.email.send` | `SMTP_*` in digital.env | Sequences, one-off send |
-| **IMAP inbound** | Planned | `work.email.fetch` (new) | `IMAP_*` | scan_inbox live |
+| **IMAP inbound** | Live | `work.email.fetch` | `IMAP_*` | scan_inbox live |
 | **Gmail / Google Workspace** | OAuth | Google API via eno2 | OAuth link session | Read mail, Calendar free/busy, Drive search |
 | **Microsoft 365** | Planned | Graph API | OAuth | Mail + Calendar |
 | **Slack** | Live (global) | `channel.slack.send` | `SLACK_BOT_TOKEN` | Notify on reply, digest, approval |
@@ -237,7 +239,7 @@ Match Capital/Creator capture scripts:
 | Primary desk tab | ✅ | ✅ | ✅ |
 | Analytics | ✅ | ✅ | ✅ |
 | Connector vault | brokers | platform vault | ✅ |
-| Walkthrough video | capital-walkthrough.webm | ❌ | ❌ |
+| Walkthrough video | capital-walkthrough.webm | ❌ | **Shipped** — `demo:record:work` |
 
 Script: `npm run demo:capture:work` (new) → `docs/demo-pack/screenshots/outreach/`
 

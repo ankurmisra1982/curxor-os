@@ -783,6 +783,32 @@ await check("work activate_sequence policy", async () => {
   return ok && (json.autoSendPolicy === "immediate" || json.autoSendPolicy === "deferred");
 });
 
+await check("work mcp GET", async () => {
+  const json = await getJson("/api/work/mcp");
+  return json.ok && Array.isArray(json.tools) && json.tools.length >= 5;
+});
+
+await check("work webhook noop", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "webhook_test" });
+  return ok && json.demo === true;
+});
+
+await check("work draft_reply", async () => {
+  const status = await getJson("/api/work/status");
+  const mailId = status.mailIndex?.[0]?.id;
+  if (!mailId) return true;
+  const { ok, json } = await postJson("/api/work/status", { action: "draft_reply", mailId });
+  return ok && typeof json.body === "string";
+});
+
+await check("work enrich_lead", async () => {
+  const status = await getJson("/api/work/status");
+  const leadId = status.leads?.[0]?.id;
+  if (!leadId) return false;
+  const { ok, json } = await postJson("/api/work/status", { action: "enrich_lead", leadId });
+  return ok && json.ok === true;
+});
+
 await check("app-agent assist (capital digital skill)", async () => {
   const { json } = await postJson("/api/app-agent/assist", {
     appId: "my-capital",

@@ -51,6 +51,7 @@ TOOL_IMESSAGE_SEND = "channel.imessage.send"
 TOOL_BROWSER_FETCH = "browser.fetch_page"
 TOOL_BROWSER_AUTOMATE = "browser.automate"
 TOOL_WORK_EMAIL_SEND = "work.email.send"
+TOOL_WORK_EMAIL_FETCH = "work.email.fetch"
 
 GARMIN_OAUTH_PATH = os.environ.get("CURXOR_GARMIN_OAUTH_PATH", "/etc/curxor/garmin-oauth.json")
 GARMIN_TOKEN_URL = "https://diauth.garmin.com/di-oauth2-service/oauth/token"
@@ -2828,6 +2829,78 @@ class WorkEmailSendWorker:
             return DigitalReceipt.failure(intent, str(exc))
 
 
+class WorkEmailFetchWorker:
+    """Inbound email — work.email.fetch intents via IMAP."""
+
+    def __init__(self) -> None:
+        self._host = os.environ.get("IMAP_HOST", "").strip()
+        self._port = int(os.environ.get("IMAP_PORT", "993") or "993")
+        self._user = os.environ.get("IMAP_USER", "").strip()
+        self._password = os.environ.get("IMAP_PASS", "").strip()
+        self._use_tls = os.environ.get("IMAP_USE_TLS", "1").strip().lower() not in ("0", "false", "no")
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._host and self._user and self._password)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(intent, "IMAP_HOST, IMAP_USER, IMAP_PASS not configured in digital.env")
+        limit = int(intent.payload.get("limit", 25) or 25)
+
+        def _fetch_sync() -> dict[str, Any]:
+            import email as email_lib
+            import imaplib
+
+            if self._use_tls:
+                conn = imaplib.IMAP4_SSL(self._host, self._port)
+            else:
+                conn = imaplib.IMAP4(self._host, self._port)
+            conn.login(self._user, self._password)
+            conn.select("INBOX")
+            _, data = conn.search(None, "ALL")
+            ids = data[0].split()[-limit:] if data and data[0] else []
+            messages: list[dict[str, Any]] = []
+            for mid in ids:
+                _, msg_data = conn.fetch(mid, "(RFC822)")
+                if not msg_data or not msg_data[0]:
+                    continue
+                raw = msg_data[0][1]
+                msg = email_lib.message_from_bytes(raw)
+                subj = str(msg.get("Subject", ""))
+                frm = str(msg.get("From", ""))
+                body = ""
+                if msg.is_multipart():
+                    for part in msg.walk():
+                        if part.get_content_type() == "text/plain":
+                            payload = part.get_payload(decode=True)
+                            if payload:
+                                body = payload.decode(errors="ignore")[:500]
+                            break
+                else:
+                    payload = msg.get_payload(decode=True)
+                    if payload:
+                        body = payload.decode(errors="ignore")[:500]
+                messages.append(
+                    {
+                        "id": mid.decode() if isinstance(mid, bytes) else str(mid),
+                        "from": frm,
+                        "subject": subj,
+                        "snippet": body[:200],
+                        "body": body,
+                    }
+                )
+            conn.logout()
+            return {"messages": messages, "count": len(messages)}
+
+        try:
+            loop = asyncio.get_running_loop()
+            result = await loop.run_in_executor(None, _fetch_sync)
+            return DigitalReceipt.success(intent, result)
+        except Exception as exc:
+            return DigitalReceipt.failure(intent, str(exc))
+
+
 class BrowserFetchWorker:
     """Headless page fetch scaffold — browser.fetch_page on eno2."""
 
@@ -2945,6 +3018,7 @@ class DigitalBridgeRuntime:
         self._browser = BrowserFetchWorker()
         self._browser_auto = BrowserAutomateWorker()
         self._work_email = WorkEmailSendWorker()
+        self._work_email_fetch = WorkEmailFetchWorker()
         self._ctx = zmq.asyncio.Context.instance()
         self._running = True
 
@@ -3066,6 +3140,8 @@ class DigitalBridgeRuntime:
             return await self._browser_auto.handle(intent)
         if intent.tool == TOOL_WORK_EMAIL_SEND:
             return await self._work_email.handle(intent)
+        if intent.tool == TOOL_WORK_EMAIL_FETCH:
+            return await self._work_email_fetch.handle(intent)
         return DigitalReceipt.failure(intent, f"Unknown digital tool: {intent.tool}")
 
     def stop(self) -> None:

@@ -1,7 +1,8 @@
 import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
-import { createSequence, ensureWorkQueue, upsertLead } from "./work-store";
+import { createSequence, ensureWorkQueue, getLead, upsertLead } from "./work-store";
+import { sanitizeMailForLlm } from "./work-mail-sanitize";
 import { getCrmStatus } from "./work-crm-sync";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { fetchWorkCalendarPreview } from "./work-google-client";
@@ -29,6 +30,7 @@ export async function draftSequenceWithLlm(input: {
   const leadId = lead?.id ?? (await upsertLead({ name: "New prospect", email: "prospect@example.com" })).id;
   const company = lead?.company || "your company";
   const tone = typeof fre.config.outreachTone === "string" ? fre.config.outreachTone : "direct";
+  const sanitizedPrompt = input.prompt ? sanitizeMailForLlm("", input.prompt).body : "";
 
   const steps =
     tone === "warm"
@@ -64,7 +66,7 @@ export async function draftSequenceWithLlm(input: {
         ];
 
   const seq = await createSequence({
-    name: input.name ?? `Sequence · ${lead?.name ?? "prospect"}`,
+    name: input.name ?? `Sequence · ${lead?.name ?? "prospect"}${sanitizedPrompt ? " · reply context" : ""}`,
     leadId,
     steps,
   });
@@ -108,4 +110,36 @@ export async function buildDayBrief(): Promise<string> {
   }
 
   return lines.join("\n");
+}
+
+export async function draftReplyWithLlm(input: {
+  mailId?: string;
+  leadId?: string;
+  prompt?: string;
+}): Promise<{ subject: string; body: string; leadId: string | null }> {
+  const file = await ensureWorkQueue();
+  const mail = input.mailId ? file.mailIndex.find((m) => m.id === input.mailId) : null;
+  const lead =
+    (input.leadId ? file.leads.find((l) => l.id === input.leadId) : null) ??
+    (mail?.leadId ? file.leads.find((l) => l.id === mail.leadId) : null) ??
+    file.leads[0] ??
+    null;
+
+  const rawSubject = mail?.subject ? `Re: ${mail.subject.replace(/^Re:\s*/i, "")}` : "Re: your note";
+  const rawBody = mail?.snippet ?? input.prompt ?? "Thanks for reaching out.";
+  const sanitized = sanitizeMailForLlm(rawSubject, rawBody);
+
+  const name = lead?.name.split(" ")[0] ?? "there";
+  const body = [
+    `Hi ${name},`,
+    "",
+    sanitized.body.includes("interested") || sanitized.body.includes("schedule")
+      ? "Great to hear — happy to find time this week. What does your calendar look like?"
+      : "Thanks for the note — let me know if sovereign outbound is still on your radar.",
+    "",
+    "Best,",
+    "Outreach Desk",
+  ].join("\n");
+
+  return { subject: sanitized.subject, body, leadId: lead?.id ?? null };
 }

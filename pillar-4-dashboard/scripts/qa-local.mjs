@@ -165,6 +165,10 @@ async function main() {
       if (scaffoldExit !== 0) exitCode = scaffoldExit;
     }
     if (exitCode === 0) {
+      const workScaffoldExit = await run("node", ["scripts/verify-work-exit-demo-scaffold.mjs", BASE]);
+      if (workScaffoldExit !== 0) exitCode = workScaffoldExit;
+    }
+    if (exitCode === 0) {
       const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);
       if (flowExit !== 0) exitCode = flowExit;
     }

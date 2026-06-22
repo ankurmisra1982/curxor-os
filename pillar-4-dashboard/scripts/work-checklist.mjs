@@ -197,6 +197,58 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// 12. work mcp
+{
+  const res = await get("/api/work/mcp");
+  if (res.ok && Array.isArray(res.json.tools) && res.json.tools.length >= 5) {
+    pass("work mcp tools", `${res.json.tools.length} tools`);
+  } else {
+    fail("work mcp tools", `tools=${res.json?.tools?.length}`);
+  }
+}
+
+// 13. enrich_lead demo
+{
+  const status = (await get("/api/work/status")).json;
+  const leadId = status.leads?.[0]?.id;
+  if (!leadId) {
+    fail("enrich_lead", "no lead");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "enrich_lead", leadId });
+    if (ok && json.ok && json.demo === true) {
+      pass("enrich_lead demo", json.source);
+    } else {
+      fail("enrich_lead demo", `demo=${json.demo}`);
+    }
+  }
+}
+
+// 14. draft_reply
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.[0]?.id;
+  if (!mailId) {
+    fail("draft_reply", "no mail");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "draft_reply", mailId });
+    if (ok && typeof json.body === "string") {
+      pass("draft_reply", json.subject?.slice(0, 40) ?? "ok");
+    } else {
+      fail("draft_reply", "missing body");
+    }
+  }
+}
+
+// 15. webhook_test noop
+{
+  const { ok, json } = await post("/api/work/status", { action: "webhook_test" });
+  if (ok && json.demo === true) {
+    pass("webhook_test noop", json.detail ?? "demo");
+  } else {
+    fail("webhook_test noop", `demo=${json.demo}`);
+  }
+}
+
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

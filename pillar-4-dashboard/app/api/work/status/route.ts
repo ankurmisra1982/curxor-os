@@ -6,7 +6,13 @@ import { readAppFreState, writeAppFreState } from "@/lib/app-fre-state";
 import { parseDigitalReceipt } from "@/lib/digital-protocol";
 import { syncCrmBothWays, getCrmStatus } from "@/lib/work-crm-sync";
 import { fetchWorkCalendarPreview, fetchWorkMailPreview } from "@/lib/work-google-client";
-import { buildDayBrief, draftSequenceWithLlm } from "@/lib/work-inference";
+import { buildDayBrief, draftReplyWithLlm, draftSequenceWithLlm } from "@/lib/work-inference";
+import { enrichLead } from "@/lib/work-lead-enrichment";
+import { bookMeeting } from "@/lib/work-calcom";
+import { hubspotPreviewContacts } from "@/lib/work-hubspot-client";
+import { pullNotionLeads } from "@/lib/work-notion-sync";
+import { appendAgentAudit } from "@/lib/work-agent-audit";
+import { emitWorkWebhook } from "@/lib/work-webhook-emitter";
 import { buildMorningBrief, buildPrepMeetingBrief } from "@/lib/work-morning-brief";
 import { pushLeadNotesToNotion } from "@/lib/work-notion-client";
 import { sendSlackDigest } from "@/lib/work-slack-digest";
@@ -22,6 +28,8 @@ import {
 import {
   activateSequence,
   appendWorkSyncLog,
+  approveSend,
+  assignMailToLead,
   createSequence,
   createTask,
   deferSequenceStepSend,
@@ -33,6 +41,7 @@ import {
   isWorkEmailBridgeConfigured,
   markSequenceReplied,
   pauseSequence,
+  rejectSend,
   scanLocalMailQueue,
   tagMailReplyIntent,
   toggleTaskDone,
@@ -70,6 +79,7 @@ export async function POST(request: Request): Promise<Response> {
     csv?: string;
     intent?: string;
     mailId?: string;
+    outboundKillSwitch?: boolean;
     autoSendOnActivate?: boolean;
   };
 
@@ -267,7 +277,7 @@ export async function POST(request: Request): Promise<Response> {
         const entries = await scanLocalMailQueue();
         const { pauseSequencesOnReply } = await import("@/lib/work-send-executor");
         for (const entry of entries.filter((e) => e.matchedReply && e.from)) {
-          await pauseSequencesOnReply(entry.from);
+          await pauseSequencesOnReply(entry.from, entry.replyIntent);
         }
         return Response.json({ ok: true, indexed: entries.length, status: await fetchWorkStatus() });
       }
@@ -365,7 +375,105 @@ export async function POST(request: Request): Promise<Response> {
 
       case "sync_crm": {
         const sync = await syncCrmBothWays();
+        await appendAgentAudit({ kind: "sync", source: "desk", note: "sync_crm" });
         return Response.json({ ok: true, ...sync, status: await fetchWorkStatus() });
+      }
+
+      case "assign_mail_to_lead": {
+        if (!body.mailId || !body.leadId) {
+          return Response.json({ ok: false, error: "mailId and leadId required" }, { status: 400 });
+        }
+        const entry = await assignMailToLead(body.mailId, body.leadId);
+        if (!entry) return Response.json({ ok: false, error: "Mail entry not found" }, { status: 404 });
+        return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "draft_reply": {
+        const draft = await draftReplyWithLlm({
+          mailId: body.mailId,
+          leadId: body.leadId,
+          prompt: body.prompt,
+        });
+        return Response.json({ ok: true, ...draft, status: await fetchWorkStatus() });
+      }
+
+      case "enrich_lead": {
+        if (!body.leadId) return Response.json({ ok: false, error: "leadId required" }, { status: 400 });
+        const result = await enrichLead(body.leadId);
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "book_meeting": {
+        const lead = body.leadId ? await getLead(body.leadId) : null;
+        if (!lead) return Response.json({ ok: false, error: "leadId required" }, { status: 400 });
+        const result = await bookMeeting({
+          leadEmail: lead.email,
+          leadName: lead.name,
+          slotHint: body.prompt,
+        });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "approve_send": {
+        if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        const approved = await approveSend(body.sendId);
+        if (!approved) return Response.json({ ok: false, error: "Send not pending approval" }, { status: 404 });
+        const result = await executeOutboundSend(body.sendId);
+        await appendAgentAudit({
+          kind: "approval",
+          source: "desk",
+          sendId: body.sendId,
+          note: "approve_send",
+        });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "reject_send": {
+        if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        const rejected = await rejectSend(body.sendId);
+        if (!rejected) return Response.json({ ok: false, error: "Send not found" }, { status: 404 });
+        await appendAgentAudit({
+          kind: "approval",
+          source: "desk",
+          sendId: body.sendId,
+          note: "reject_send",
+        });
+        return Response.json({ ok: true, send: rejected, status: await fetchWorkStatus() });
+      }
+
+      case "hubspot_preview": {
+        const preview = await hubspotPreviewContacts();
+        return Response.json({ ...preview, status: await fetchWorkStatus() });
+      }
+
+      case "pull_notion_leads": {
+        const pull = await pullNotionLeads();
+        await appendWorkSyncLog({
+          connector: "notion",
+          action: "pull_notion_leads",
+          detail: `imported=${pull.imported} demo=${pull.demo}`,
+        });
+        return Response.json({ ok: true, ...pull, status: await fetchWorkStatus() });
+      }
+
+      case "set_outbound_kill_switch": {
+        const fre = await readAppFreState("my-work");
+        const enabled = (body as { outboundKillSwitch?: boolean }).outboundKillSwitch === true;
+        await writeAppFreState("my-work", {
+          ...fre,
+          config: { ...fre.config, outboundKillSwitch: enabled },
+        });
+        await appendAgentAudit({
+          kind: "kill_switch",
+          source: "desk",
+          note: enabled ? "Outbound kill switch ON" : "Outbound kill switch cleared",
+        });
+        return Response.json({ ok: true, outboundKillSwitch: enabled, status: await fetchWorkStatus() });
+      }
+
+      case "webhook_test": {
+        const result = await emitWorkWebhook("lead.stage_changed", { test: true, leadId: body.leadId ?? "test" });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
       default:

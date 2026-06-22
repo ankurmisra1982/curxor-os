@@ -8,14 +8,19 @@ import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBad
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
+import { WorkApprovalPanel } from "@/components/apps/work/WorkApprovalPanel";
 import { WorkConnectorVaultPanel } from "@/components/apps/work/WorkConnectorVaultPanel";
 import { WorkImportPanel } from "@/components/apps/work/WorkImportPanel";
+import { WorkInboxTriagePanel } from "@/components/apps/work/WorkInboxTriagePanel";
 import { WorkMailIndexPanel } from "@/components/apps/work/WorkMailIndexPanel";
+import { WorkMorningBriefPanel } from "@/components/apps/work/WorkMorningBriefPanel";
 import { WorkOutboundPanel } from "@/components/apps/work/WorkOutboundPanel";
+import { WorkPipelineKanban } from "@/components/apps/work/WorkPipelineKanban";
 import { WorkPipelinePanel } from "@/components/apps/work/WorkPipelinePanel";
 import { WorkRecoveryPanel } from "@/components/apps/work/WorkRecoveryPanel";
 import { WorkSendPolicyPanel } from "@/components/apps/work/WorkSendPolicyPanel";
 import { WorkSequencePanel } from "@/components/apps/work/WorkSequencePanel";
+import { WorkSetupWizard } from "@/components/apps/work/WorkSetupWizard";
 import {
   WorkWorkspaceTabs,
   defaultWorkTab,
@@ -37,9 +42,13 @@ const BOOTSTRAP_ACTIONS = new Set([
   "toggle_task",
   "update_lead_stage",
   "update_send_policy",
+  "set_outbound_kill_switch",
   "sync_crm",
   "sync_notion_lead",
   "slack_digest",
+  "approve_send",
+  "reject_send",
+  "enrich_lead",
 ]);
 
 async function postWork(body: Record<string, unknown>) {
@@ -71,6 +80,8 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [signal, setSignal] = useState("Syncing outreach desk…");
   const [demoTourRunning, setDemoTourRunning] = useState(false);
   const [policyBusy, setPolicyBusy] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [draftReplyPreview, setDraftReplyPreview] = useState("");
 
   const workspace = typeof config.workspaceName === "string" ? config.workspaceName : "Outreach Desk";
   const lane = typeof config.clawLane === "string" ? config.clawLane : "A";
@@ -148,6 +159,9 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       "morning_brief",
       "prep_meeting",
       "slack_digest",
+      "draft_reply",
+      "enrich_lead",
+      "book_meeting",
     ]);
     const physicalSkills = new Set(["sort_tray", "move_to_tray"]);
 
@@ -185,6 +199,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         setSignal("Step sent · check outbound queue");
       } else if (lastSkillId === "slack_digest") {
         setSignal("Slack digest sent");
+      } else if (lastSkillId === "draft_reply") {
+        setSignal("Reply draft ready");
+      } else if (lastSkillId === "enrich_lead") {
+        setSignal("Lead enriched");
+      } else if (lastSkillId === "book_meeting") {
+        setSignal("Meeting booking logged");
       } else if (lastSkillId === "prep_meeting") {
         setSignal("Meeting prep ready");
       }
@@ -214,7 +234,30 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     return json;
   };
 
+  const linkOAuth = async (provider: "google" | "notion") => {
+    const res = await fetch(`/api/work/${provider}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start" }),
+    });
+    const json = (await res.json()) as { authorizeUrl?: string; error?: string };
+    if (json.authorizeUrl) {
+      window.open(json.authorizeUrl, "_blank", "noopener,noreferrer");
+      setSignal(`${provider} OAuth started — complete in new tab`);
+    } else {
+      setSignal(json.error ?? "OAuth start failed");
+    }
+  };
+
   const show = (sectionId: string) => workSectionVisible(sectionId, workspaceTab);
+  const goLiveChip =
+    workspaceTab !== "start" && goLive
+      ? goLive.liveReady
+        ? "live"
+        : goLive.demoReady
+          ? "demo"
+          : null
+      : null;
 
   return (
     <div className="space-y-4 p-4">
@@ -225,8 +268,23 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{workspace}</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
           Outreach Claw · {status?.source === "live" ? "live SMTP" : "demo queue"} · mesh {motorUp ? "linked" : "idle"} · {signal}
+          {goLiveChip ? (
+            <span className="ml-2 border border-cursor-glow/50 px-1 uppercase text-cursor-glow">{goLiveChip} ready</span>
+          ) : null}
+          {status?.outboundKillSwitch ? (
+            <span className="ml-2 border border-red-400/50 px-1 uppercase text-red-400">kill switch</span>
+          ) : null}
           <ExperienceLevelBadge />
         </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setWizardOpen(true)}
+            className="border border-line px-2 py-0.5 font-mono text-[10px] uppercase text-muted hover:text-stark"
+          >
+            Setup wizard
+          </button>
+        </div>
       </header>
 
       <WorkWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} experienceLevel={level} />
@@ -241,6 +299,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         />
         <AppMetric label="Replies" value={String(status?.stats.repliesThisWeek ?? "—")} unit="this week" />
       </div>
+
+      {show("morning-brief") ? (
+        <ExperienceAppSection appId="my-work" sectionId="morning-brief" minLevel="beginner" title="Morning brief" subtitle="Mail + calendar + tasks on mount">
+          <WorkMorningBriefPanel />
+        </ExperienceAppSection>
+      ) : null}
 
       {show("go-live") ? (
         <ExperienceAppSection appId="my-work" sectionId="go-live" minLevel="beginner" title="Go Live" subtitle="Checklist before first outbound send">
@@ -288,6 +352,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
                 if (name && email) void action({ action: "create_lead", name, email });
               }}
             />
+            <div className="mt-3 border-t border-line/60 pt-3">
+              <p className="mb-2 font-mono text-[10px] uppercase text-muted">Kanban · drag to stage</p>
+              <WorkPipelineKanban
+                leads={status?.leads ?? []}
+                selectedLeadId={selectedLeadId}
+                onSelect={setSelectedLeadId}
+                onStageChange={(leadId, stage) => void action({ action: "update_lead_stage", leadId, stage })}
+              />
+            </div>
             <div className="mt-3 border-t border-line/60 pt-3">
               <WorkImportPanel
                 onImport={async (csv) => {
@@ -343,6 +416,27 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </ExperienceAppSection>
       ) : null}
 
+      {show("inbox-triage") ? (
+        <ExperienceAppSection appId="my-work" sectionId="inbox-triage" minLevel="standard" title="Inbox triage" subtitle="Reply intent · assign · draft reply">
+          <WorkInboxTriagePanel
+            rows={status?.mailIndex ?? []}
+            leads={status?.leads ?? []}
+            onAssign={(mailId, leadId) => void action({ action: "assign_mail_to_lead", mailId, leadId })}
+            onTagIntent={(mailId, intent) => void action({ action: "tag_reply_intent", mailId, intent })}
+            onDraftReply={(mailId) => {
+              void postWork({ action: "draft_reply", mailId }).then((json) => {
+                const draft = json as { body?: string; subject?: string };
+                setDraftReplyPreview(`${draft.subject ?? ""}\n\n${draft.body ?? ""}`);
+                setSignal("Reply draft ready");
+              });
+            }}
+          />
+          {draftReplyPreview ? (
+            <pre className="mt-3 whitespace-pre-wrap border border-line/60 p-2 font-mono text-[10px] text-stark">{draftReplyPreview}</pre>
+          ) : null}
+        </ExperienceAppSection>
+      ) : null}
+
       {show("sync-log") ? (
         <ExperienceAppSection appId="my-work" sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Reply intent tagging · offline queue">
           <WorkMailIndexPanel
@@ -355,6 +449,42 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       {show("analytics") && status?.analytics ? (
         <ExperienceAppSection appId="my-work" sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
           <WorkAnalyticsPanel analytics={status.analytics} sendPolicy={status.sendPolicy} />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("approval") ? (
+        <ExperienceAppSection appId="my-work" sectionId="approval" minLevel="standard" title="Send approval" subtitle="Human gate before outbound">
+          <WorkApprovalPanel
+            sends={status?.sends ?? []}
+            onApprove={async (sendId) => {
+              await postWork({ action: "approve_send", sendId });
+              await loadBootstrap();
+            }}
+            onReject={async (sendId) => {
+              await postWork({ action: "reject_send", sendId });
+              await loadBootstrap();
+            }}
+            onRefresh={() => void loadBootstrap()}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("kill-switch") ? (
+        <ExperienceAppSection appId="my-work" sectionId="kill-switch" minLevel="expert" title="Outbound kill switch" subtitle="Block all sequence sends">
+          <button
+            type="button"
+            onClick={() =>
+              void action({
+                action: "set_outbound_kill_switch",
+                outboundKillSwitch: !status?.outboundKillSwitch,
+              })
+            }
+            className={`border px-3 py-1 font-mono text-[10px] uppercase ${
+              status?.outboundKillSwitch ? "border-red-400 text-red-400" : "border-line text-muted"
+            }`}
+          >
+            {status?.outboundKillSwitch ? "Clear kill switch" : "Enable kill switch"}
+          </button>
         </ExperienceAppSection>
       ) : null}
 
@@ -396,6 +526,8 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           <WorkConnectorVaultPanel
             report={status?.connectorVault ?? null}
             onRefresh={() => void loadBootstrap()}
+            onLinkGoogle={() => void linkOAuth("google")}
+            onLinkNotion={() => void linkOAuth("notion")}
           />
         </ExperienceAppSection>
       ) : null}
@@ -412,6 +544,16 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           </div>
         </ExperienceAppSection>
       ) : null}
+
+      <WorkSetupWizard
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        onComplete={() => {
+          setWizardOpen(false);
+          void loadBootstrap();
+          setSignal("Setup wizard complete");
+        }}
+      />
     </div>
   );
 }

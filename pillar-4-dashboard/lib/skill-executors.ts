@@ -121,7 +121,7 @@ async function executeMyWorkSkill(
     const { pauseSequencesOnReply } = await import("./work-send-executor");
     const entries = await scanLocalMailQueue();
     for (const entry of entries.filter((e) => e.matchedReply && e.from)) {
-      await pauseSequencesOnReply(entry.from);
+      await pauseSequencesOnReply(entry.from, entry.replyIntent);
     }
     return {
       executed: true,
@@ -158,6 +158,30 @@ async function executeMyWorkSkill(
   if (skillId === "slack_digest") {
     const { sendSlackDigest } = await import("./work-slack-digest");
     const out = await sendSlackDigest();
+    return { executed: out.ok, kind: "digital", skipReason: out.detail };
+  }
+  if (skillId === "draft_reply") {
+    const mailId = cfgStr(config, "selectedMailId", "");
+    const leadId = cfgStr(config, "selectedLeadId", "");
+    const { draftReplyWithLlm } = await import("./work-inference");
+    const draft = await draftReplyWithLlm({ mailId: mailId || undefined, leadId: leadId || undefined });
+    return { executed: true, kind: "plan", skipReason: `${draft.subject}\n${draft.body.slice(0, 120)}` };
+  }
+  if (skillId === "enrich_lead") {
+    const leadId = cfgStr(config, "selectedLeadId", "");
+    if (!leadId) return { executed: false, kind: "plan", skipReason: "select a lead first" };
+    const { enrichLead } = await import("./work-lead-enrichment");
+    const out = await enrichLead(leadId);
+    return { executed: out.ok, kind: "plan", skipReason: out.detail };
+  }
+  if (skillId === "book_meeting") {
+    const leadId = cfgStr(config, "selectedLeadId", "");
+    if (!leadId) return { executed: false, kind: "digital", skipReason: "select a lead first" };
+    const { getLead } = await import("./work-store");
+    const { bookMeeting } = await import("./work-calcom");
+    const lead = await getLead(leadId);
+    if (!lead) return { executed: false, kind: "digital", skipReason: "lead not found" };
+    const out = await bookMeeting({ leadEmail: lead.email, leadName: lead.name });
     return { executed: out.ok, kind: "digital", skipReason: out.detail };
   }
   if (skillId === "run_demo_tour") {
