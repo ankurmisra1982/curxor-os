@@ -6,6 +6,7 @@ import { isWorkMicrosoftLinked } from "./work-microsoft-oauth";
 import { isWorkNotionConfigured } from "./work-notion-client";
 import { isTwentyConfiguredAsync } from "./work-twenty-client";
 import { CONNECTOR_CATALOG, type WorkConnectorDefinition, type WorkConnectorId } from "./work-connector-registry";
+import { buildWorkLiveProofReport, toLiveProofVaultSummary } from "./work-live-proof";
 
 export type WorkConnectorHealth =
   | "live"
@@ -42,6 +43,12 @@ export interface WorkConnectorVaultReport {
   connectors: WorkConnectorHealthEntry[];
   /** At least one comms path: SMTP, Google, IMAP, or demo mode */
   commsPathReady: boolean;
+  liveProof: {
+    badge: boolean;
+    detail: string;
+    mailSource: string;
+    mailSourceLive: boolean;
+  };
 }
 
 function missingEnvKeys(env: Record<string, string>, required: string[]): string[] {
@@ -130,6 +137,8 @@ export async function buildWorkConnectorHealthReport(): Promise<WorkConnectorVau
     smtp?.configured || google?.configured || imap?.configured || !smtp?.configured,
   );
 
+  const liveProof = toLiveProofVaultSummary(await buildWorkLiveProofReport());
+
   const summary = {
     total: connectors.length,
     live: connectors.filter((c) => c.tier === "live" || c.tier === "oauth").length,
@@ -147,5 +156,6 @@ export async function buildWorkConnectorHealthReport(): Promise<WorkConnectorVau
     summary,
     connectors,
     commsPathReady,
+    liveProof,
   };
 }

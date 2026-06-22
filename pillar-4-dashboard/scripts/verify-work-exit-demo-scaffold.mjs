@@ -93,6 +93,11 @@ await check("work mcp GET", async () => {
   return json.ok && Array.isArray(json.tools) && json.tools.length >= 5;
 });
 
+await check("work microsoft oauth status route", async () => {
+  const json = await getJson("/api/work/microsoft");
+  return json.ok !== false && typeof json.clientConfigured === "boolean";
+});
+
 await check("setup-work-env script exists", async () => {
   return existsSync(path.join(__dirname, "setup-work-env.mjs"));
 });

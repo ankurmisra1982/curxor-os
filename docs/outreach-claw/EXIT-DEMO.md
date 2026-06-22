@@ -21,6 +21,28 @@ Verify scaffold (no keys required):
 
 ```bash
 npm run verify:work-exit-demo-scaffold
+npm run verify:work-live-proof
+```
+
+## Live-ready {#live-ready}
+
+Buyer proof path — linked mailbox, real SMTP send, reply ingested:
+
+| Path | Setup | Morning brief mail source |
+|------|-------|-------------------------|
+| **Google Workspace** | `CURXOR_GOOGLE_OAUTH_*` → Integrations → **Link Google** | `Gmail (live)` |
+| **Microsoft 365** | `MICROSOFT_CLIENT_ID` + `MICROSOFT_CLIENT_SECRET` → **Link Microsoft 365** | `Microsoft 365 (live)` |
+| **IMAP inbound** | `IMAP_*` keys + pillar-3 bridge | `IMAP (live)` |
+
+1. Configure SMTP (`SMTP_*`) and restart dev server.
+2. Link Google **or** M365 from Integrations → Connector vault.
+3. Activate sequence → **Send Step** → status **`sent`** (not `simulated`).
+4. Go Live → `liveReady` true · Connector vault shows **Live proof verified** when OAuth + sent.
+
+```bash
+npm run verify:work-live-proof    # scaffold OK without keys
+npm run demo:record:work:exit     # work-exit-walkthrough.webm
+npm run demo:capture:work:levels  # screenshots 24–29 incl. live-proof panel
 ```
 
 ## Step 2 — Add comms keys (pick paths)
@@ -32,6 +54,7 @@ Edit `scripts/dev-qa/digital.env`:
 | **SMTP outbound** | `SMTP_HOST`, `SMTP_FROM`, `SMTP_USER`, `SMTP_PASS` | Go Live → SMTP **complete** · sends status `sent` |
 | **IMAP inbound** | `IMAP_HOST`, `IMAP_USER`, `IMAP_PASS` | Scan Inbox · live mail index via `work.email.fetch` |
 | **Google Workspace** | OAuth client + link | Integrations → Link Google · morning brief uses Gmail |
+| **Microsoft 365** | `MICROSOFT_CLIENT_ID` + `MICROSOFT_CLIENT_SECRET` + link | Integrations → Link Microsoft 365 · morning brief uses Graph mail |
 | **Twenty CRM** | `TWENTY_API_URL`, `TWENTY_API_KEY` | Integrations → sync_crm live |
 | **Notion** | OAuth + `NOTION_DATABASE_ID` | Pull/push lead notes |
 

@@ -18,9 +18,17 @@ const TMP = path.join(OUT, ".work-exit-demo-tmp");
 
 const args = process.argv.slice(2);
 const baseIdx = args.indexOf("--base");
+const skipVideo = args.includes("--skip-video");
 const BASE = baseIdx >= 0 ? args[baseIdx + 1] : (process.env.CURXOR_DEMO_BASE ?? "http://127.0.0.1:3080");
 
 async function main() {
+  if (skipVideo) {
+    mkdirSync(OUT, { recursive: true });
+    const dest = path.join(OUT, "work-exit-walkthrough.webm");
+    console.log(`==> Skipping video (--skip-video) · scaffold documents ${dest}`);
+    console.log("Run without --skip-video when dev server + Playwright are available.");
+    return;
+  }
   rmSync(TMP, { recursive: true, force: true });
   mkdirSync(TMP, { recursive: true });
   mkdirSync(OUT, { recursive: true });

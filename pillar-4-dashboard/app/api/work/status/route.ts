@@ -19,6 +19,7 @@ import { detectWorkStalls } from "@/lib/work-stall-detection";
 import { emitWorkXpEvent } from "@/lib/work-xp-events";
 import { emitWorkWebhook } from "@/lib/work-webhook-emitter";
 import { buildMorningBrief, buildPrepMeetingBrief } from "@/lib/work-morning-brief";
+import { buildWorkLiveProofReport } from "@/lib/work-live-proof";
 import { pushLeadNotesToNotion } from "@/lib/work-notion-client";
 import { sendSlackDigest } from "@/lib/work-slack-digest";
 import { notifySlackInterestedReply } from "@/lib/work-slack-notify";
@@ -123,6 +124,11 @@ export async function POST(request: Request): Promise<Response> {
           })();
         }
         return Response.json({ ok: true, goLive, status: await fetchWorkStatus() });
+      }
+
+      case "live_proof": {
+        const liveProof = await buildWorkLiveProofReport();
+        return Response.json({ ok: true, liveProof, status: await fetchWorkStatus() });
       }
 
       case "run_demo_tour": {
@@ -353,8 +359,14 @@ export async function POST(request: Request): Promise<Response> {
       }
 
       case "morning_brief": {
-        const brief = await buildMorningBrief();
-        return Response.json({ ok: true, brief, status: await fetchWorkStatus() });
+        const [brief, liveProof] = await Promise.all([buildMorningBrief(), buildWorkLiveProofReport()]);
+        return Response.json({
+          ok: true,
+          brief,
+          mailSource: liveProof.mailSourceLabel,
+          mailSourceLive: liveProof.mailSourceLive,
+          status: await fetchWorkStatus(),
+        });
       }
 
       case "prep_meeting": {

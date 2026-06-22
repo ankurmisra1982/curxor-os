@@ -48,7 +48,7 @@ Full operator checklist: [GETTING-STARTED.md](./GETTING-STARTED.md).
 | **L2 Side Hustle** | Etsy / freelance | Mini-sequences and hustle packs — polite follow-up without a SaaS stack. |
 | **L3 Operator** | Nonprofit / advocacy | Approvals, deliverability, and send policy — sovereign outbound with human gates. |
 
-Capture persona screenshots: `npm run demo:capture:work:levels` (requires dev server). EXIT-DEMO recording: `npm run demo:record:work:exit`.
+Capture persona screenshots: `npm run demo:capture:work:levels` (requires dev server). EXIT-DEMO recording: `npm run demo:record:work:exit`. Live-proof scaffold: `npm run verify:work-live-proof`.
 
 ---
 

@@ -34,10 +34,31 @@ const DEMO_SIGNALS: Omit<WorkSignal, "id">[] = [
 
 export async function ensureSignalFeedSeeded(): Promise<WorkSignal[]> {
   const file = await ensureWorkQueue();
-  if (!file.signals || file.signals.length === 0) {
+  if (!file.signals) file.signals = [];
+
+  const unconvertedCount = () => file.signals!.filter((s) => !s.convertedLeadId).length;
+
+  if (file.signals.length === 0) {
     file.signals = DEMO_SIGNALS.map((s) => ({ ...s, id: `SIG-${randomUUID().slice(0, 8)}` }));
     await writeWorkFilePartial(file);
+    return file.signals;
   }
+
+  if (unconvertedCount() < 3) {
+    for (const demo of DEMO_SIGNALS) {
+      if (unconvertedCount() >= 3) break;
+      if (!file.signals.some((s) => s.title === demo.title && !s.convertedLeadId)) {
+        file.signals.unshift({ ...demo, id: `SIG-${randomUUID().slice(0, 8)}` });
+      }
+    }
+    while (unconvertedCount() < 3) {
+      const demo = DEMO_SIGNALS[unconvertedCount() % DEMO_SIGNALS.length]!;
+      file.signals.unshift({ ...demo, id: `SIG-${randomUUID().slice(0, 8)}` });
+    }
+    file.signals = file.signals.slice(0, 100);
+    await writeWorkFilePartial(file);
+  }
+
   return file.signals ?? [];
 }
 

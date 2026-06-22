@@ -736,6 +736,34 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W29 — live_proof_scaffold
+{
+  const { ok, json } = await post("/api/work/status", { action: "live_proof" });
+  if (ok && json.liveProof?.livePathDocumented === true) {
+    pass("live_proof_scaffold", json.liveProof.scaffoldMode ? "scaffold" : "configured");
+  } else {
+    fail("live_proof_scaffold", "missing liveProof");
+  }
+}
+
+// W29 — mail_source_live_when_linked (demo skip OK)
+{
+  const proof = await post("/api/work/status", { action: "live_proof" });
+  const brief = await post("/api/work/status", { action: "morning_brief" });
+  const linked = proof.json.liveProof?.googleLinked || proof.json.liveProof?.microsoftLinked;
+  if (!proof.ok || !brief.ok) {
+    fail("mail_source_live_when_linked", "api failed");
+  } else if (!linked) {
+    pass("mail_source_live_when_linked", "demo ok — no oauth linked");
+  } else if (brief.json.mailSourceLive === true) {
+    pass("mail_source_live_when_linked", brief.json.mailSource);
+  } else if (brief.json.brief?.includes("(live)")) {
+    pass("mail_source_live_when_linked", "brief shows live label");
+  } else {
+    fail("mail_source_live_when_linked", `mailSourceLive=${brief.json.mailSourceLive}`);
+  }
+}
+
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

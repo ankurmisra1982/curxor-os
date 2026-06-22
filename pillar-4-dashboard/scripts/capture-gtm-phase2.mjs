@@ -168,6 +168,19 @@ const OUTREACH_FLOWS_L2 = [
 ];
 
 /** @type {{ file: string; label: string; setup: (page: import('playwright').Page) => Promise<void> }[]} */
+const OUTREACH_FLOWS_LIVE_PROOF = [
+  {
+    file: "29-live-proof.png",
+    label: "Live proof panel",
+    setup: async (page) => {
+      await page.getByRole("button", { name: /^Integrations$/i }).first().click();
+      await page.waitForTimeout(600);
+      await page.getByText("Live proof", { exact: false }).first().scrollIntoViewIfNeeded();
+    },
+  },
+];
+
+/** @type {{ file: string; label: string; setup: (page: import('playwright').Page) => Promise<void> }[]} */
 const OUTREACH_FLOWS_L3 = [
   {
     file: "27-l3-deliverability.png",
@@ -334,6 +347,27 @@ async function main() {
     await page.waitForTimeout(SETTLE_MS);
     await waitForText(page, "Outreach Desk");
     for (const flow of OUTREACH_FLOWS_L3) {
+      const dest = path.join(OUTREACH_OUT, flow.file);
+      console.log(`==> ${flow.label} → outreach/${flow.file}`);
+      try {
+        await flow.setup(page);
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: dest, fullPage: false });
+        copyToStorefront(path.join("outreach", flow.file));
+        console.log("");
+      } catch (err) {
+        failed += 1;
+        console.error(`    FAILED: ${err instanceof Error ? err.message : String(err)}\n`);
+      }
+    }
+  });
+
+  console.log("==> Outreach Claw live-proof panel (expert experience patch)\n");
+  await withExperienceLevel("expert", async () => {
+    await page.goto(outreachUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
+    await page.waitForTimeout(SETTLE_MS);
+    await waitForText(page, "Outreach Desk");
+    for (const flow of OUTREACH_FLOWS_LIVE_PROOF) {
       const dest = path.join(OUTREACH_OUT, flow.file);
       console.log(`==> ${flow.label} → outreach/${flow.file}`);
       try {

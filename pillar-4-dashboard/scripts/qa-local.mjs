@@ -173,6 +173,10 @@ async function main() {
       if (workScaffoldExit !== 0) exitCode = workScaffoldExit;
     }
     if (exitCode === 0) {
+      const workLiveProofExit = await run("node", ["scripts/verify-work-live-proof.mjs", BASE]);
+      if (workLiveProofExit !== 0) exitCode = workLiveProofExit;
+    }
+    if (exitCode === 0) {
       const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);
       if (flowExit !== 0) exitCode = flowExit;
     }

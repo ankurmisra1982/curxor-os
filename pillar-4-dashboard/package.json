@@ -24,6 +24,7 @@
     "configure:capital-keys": "node scripts/configure-capital-keys.mjs --open-signup-pages",
     "verify:exit-demo-scaffold": "node scripts/verify-exit-demo-scaffold.mjs",
     "verify:work-exit-demo-scaffold": "node scripts/verify-work-exit-demo-scaffold.mjs",
+    "verify:work-live-proof": "node scripts/verify-work-live-proof.mjs",
     "demo:capture": "node scripts/capture-demo-screenshots.mjs",
     "demo:capture:capital": "node scripts/capture-capital-demo.mjs",
     "demo:capture:work": "node scripts/capture-work-demo.mjs",

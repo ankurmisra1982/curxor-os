@@ -360,7 +360,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     return json;
   };
 
-  const linkOAuth = async (provider: "google" | "notion") => {
+  const linkOAuth = async (provider: "google" | "notion" | "microsoft") => {
     const res = await fetch(`/api/work/${provider}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -834,6 +834,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             report={status?.connectorVault ?? null}
             onRefresh={() => void loadBootstrap()}
             onLinkGoogle={() => void linkOAuth("google")}
+            onLinkMicrosoft={() => void linkOAuth("microsoft")}
             onLinkNotion={() => void linkOAuth("notion")}
           />
         </ExperienceAppSection>

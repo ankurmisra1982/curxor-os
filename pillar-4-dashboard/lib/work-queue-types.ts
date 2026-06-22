@@ -185,6 +185,12 @@ export interface WorkConnectorVaultReport {
   summary: WorkConnectorVaultSummary;
   connectors: WorkConnectorHealthRow[];
   commsPathReady: boolean;
+  liveProof?: {
+    badge: boolean;
+    detail: string;
+    mailSource: string;
+    mailSourceLive: boolean;
+  };
 }
 
 export interface WorkQueueStatus {

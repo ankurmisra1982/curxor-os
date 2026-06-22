@@ -2,7 +2,8 @@ import "server-only";
 
 import { fetchWorkCalendarPreview, fetchWorkMailPreview } from "./work-google-client";
 import { fetchWorkMicrosoftCalendarPreview, fetchWorkMicrosoftMailPreview, getWorkMicrosoftStatus } from "./work-microsoft-client";
-import { isWorkMicrosoftLinked } from "./work-microsoft-oauth";
+import { isWorkGoogleLinked } from "./work-google-oauth";
+import { resolveWorkMorningMailSource } from "./work-live-proof";
 import { ensureWorkQueue, readOutboundKillSwitch } from "./work-store";
 import { getCrmStatus } from "./work-crm-sync";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
@@ -14,16 +15,17 @@ const CROSS_CLAW_DEMO = {
 };
 
 export async function buildMorningBrief(): Promise<string> {
-  const m365Linked = await isWorkMicrosoftLinked();
-  const [file, mail, calendar, crm, vault, needsYou, killSwitch, m365] = await Promise.all([
+  const mailCtx = await resolveWorkMorningMailSource();
+  const [file, mail, calendar, crm, vault, needsYou, killSwitch, m365, googleLinked] = await Promise.all([
     ensureWorkQueue(),
-    m365Linked ? fetchWorkMicrosoftMailPreview(5) : fetchWorkMailPreview(5),
-    m365Linked ? fetchWorkMicrosoftCalendarPreview(5) : fetchWorkCalendarPreview(5),
+    mailCtx.useMicrosoft ? fetchWorkMicrosoftMailPreview(5) : fetchWorkMailPreview(5),
+    mailCtx.useMicrosoft ? fetchWorkMicrosoftCalendarPreview(5) : fetchWorkCalendarPreview(5),
     getCrmStatus(),
     buildWorkConnectorHealthReport(),
     buildNeedsYouSummary(),
     readOutboundKillSwitch(),
     getWorkMicrosoftStatus(),
+    isWorkGoogleLinked(),
   ]);
 
   const openTasks = file.tasks.filter((t) => !t.done);
@@ -37,22 +39,27 @@ export async function buildMorningBrief(): Promise<string> {
     `Pipeline: ${file.leads.filter((l) => !["won", "lost"].includes(l.stage)).length} active leads`,
     `Sequences: ${file.sequences.filter((s) => s.status === "active").length} running`,
     "",
-    `Mail (${mail.source}): ${mail.messages.length} recent`,
+    `Mail (${mailCtx.live ? mailCtx.label : "demo"}): ${mail.messages.length} recent`,
   ];
 
   for (const m of mail.messages.slice(0, 3)) {
     lines.push(`  · ${m.from}: ${m.subject}`);
   }
 
-  if (!m365Linked && (m365.demo || m365.linked)) {
+  if (!mailCtx.useMicrosoft && !googleLinked && (m365.demo || m365.linked)) {
     const m365Mail = await fetchWorkMicrosoftMailPreview(3);
-    lines.push("", `Microsoft 365 (${m365Mail.source}): ${m365Mail.messages.length} preview`);
+    lines.push("", `Microsoft 365 (${m365Mail.source === "microsoft" ? "live" : "demo"}): ${m365Mail.messages.length} preview`);
     for (const m of m365Mail.messages.slice(0, 2)) {
       lines.push(`  · ${m.from}: ${m.subject}`);
     }
   }
 
-  lines.push("", `Calendar (${calendar.source}): ${calendar.events.length} upcoming`);
+  const calendarLabel = mailCtx.live
+    ? mailCtx.useMicrosoft
+      ? "Microsoft 365 (live)"
+      : "Gmail (live)"
+    : calendar.source;
+  lines.push("", `Calendar (${calendarLabel}): ${calendar.events.length} upcoming`);
   for (const e of calendar.events.slice(0, 3)) {
     lines.push(`  · ${new Date(e.startAt).toLocaleTimeString()} — ${e.title}`);
   }

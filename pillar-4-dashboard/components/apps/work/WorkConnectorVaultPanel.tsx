@@ -20,6 +20,7 @@ interface WorkConnectorVaultPanelProps {
   onRefresh: () => void;
   busy?: boolean;
   onLinkGoogle?: () => void;
+  onLinkMicrosoft?: () => void;
   onLinkNotion?: () => void;
 }
 
@@ -31,7 +32,7 @@ function healthClass(health: string): string {
   return "text-muted border-line/60";
 }
 
-export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle, onLinkNotion }: WorkConnectorVaultPanelProps) {
+export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle, onLinkMicrosoft, onLinkNotion }: WorkConnectorVaultPanelProps) {
   if (!report) {
     return <p className="font-mono text-[10px] text-muted">Loading connector vault…</p>;
   }
@@ -60,6 +61,19 @@ export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle,
         </p>
       ) : null}
 
+      {report.liveProof ? (
+        <p
+          className={`border px-2 py-1 ${
+            report.liveProof.badge
+              ? "border-cursor-glow/60 text-cursor-glow"
+              : "border-line/60 text-muted"
+          }`}
+        >
+          {report.liveProof.badge ? "Live proof verified" : "Live proof path"} — {report.liveProof.detail}
+          {report.liveProof.mailSourceLive ? ` · mail: ${report.liveProof.mailSource}` : ""}
+        </p>
+      ) : null}
+
       <div className="flex flex-wrap gap-2">
         {onLinkGoogle ? (
           <button
@@ -68,6 +82,15 @@ export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle,
             className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
           >
             Link Google
+          </button>
+        ) : null}
+        {onLinkMicrosoft ? (
+          <button
+            type="button"
+            onClick={onLinkMicrosoft}
+            className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
+          >
+            Link Microsoft 365
           </button>
         ) : null}
         {onLinkNotion ? (

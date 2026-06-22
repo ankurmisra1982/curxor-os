@@ -108,9 +108,23 @@
 - [x] **W28** — `/api/work/xp`, gamification opt-out, `OUTBOUND-WORKER.md`, permissions stub
 - [x] Work checklist **55/55** · user flows **25/25** · `qa:local` green
 
+## Shipped (Phase 3 excellence W29 — v0.5.2)
+
+- [x] **W29** — Live proof GTM: `verify:work-live-proof`, EXIT-DEMO live-ready runbook, `record-work-exit-demo.mjs`, persona screenshots 24–29, connector vault live-proof badge, morning brief live mail source metadata
+- [x] Work checklist **57/57** · `verify:work-live-proof` in `qa:local`
+
 ## Next
 
-Post–v0.5.1: live M365 buyer proof in production, pre-send modal UI polish, Claw Cafe XP panel UI, dedicated outbound worker process (design in `OUTBOUND-WORKER.md`).
+**Phase 3 excellence arc (W29–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
+
+| Sprint | Focus | Target tag |
+|--------|--------|------------|
+| W29 | Live proof GTM + EXIT-DEMO video | v0.5.2 ✓ |
+| W30 | Inbox pro (live send, undo, snooze return) | v0.5.3 |
+| W31 | Deliverability operator UI | v0.5.4 |
+| W32–W33 | Outbound worker + team lite | v0.6.0 |
+| W34 | HubSpot OAuth + activity timeline | v0.6.1 |
+| W35 | OS moat + Cafe XP + governance UI | v0.6.2 |
 
 Deferred items unchanged — see **Deferred** above.
 
