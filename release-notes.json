@@ -64,5 +64,13 @@
       "Three-claw demo bar — Capital, Creator, Outreach share demo tour + checklist + STARTUP-GUIDE pattern",
       "124 smoke + capital/creator/work checklists in qa:local; tagged v0.3.5"
     ]
+  },
+  "0.3.6": {
+    "highlights": [
+      "Work Claw Professional Workstation W1–W6 — workspace tabs, connector vault, Google/Notion/Slack/Twenty bridges",
+      "Desk parity — loadBootstrap on mutations, auto-send policy + Go Live steps, demo:capture:work",
+      "Agent skills — morning_brief, prep_meeting, slack_digest; day brief v2 with connector context",
+      "131+ smoke checks — google route, crm_status, connector vault, work wizard user flow; tagged v0.3.6"
+    ]
   }
 }

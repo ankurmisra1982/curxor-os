@@ -120,6 +120,83 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// 7. Work wizard path: create lead → draft → activate (deferred send OK)
+{
+  const email = `checklist-${Date.now()}@example.com`;
+  const create = await post("/api/work/status", {
+    action: "create_lead",
+    name: "Checklist Prospect",
+    email,
+  });
+  const leadId = create.json.lead?.id ?? create.json.status?.leads?.find((l) => l.email === email)?.id;
+  if (!create.ok || !leadId) {
+    fail("work wizard create_lead", `leadId=${leadId}`);
+  } else {
+    const draft = await post("/api/work/status", {
+      action: "draft_sequence",
+      leadId,
+      name: "Wizard sequence",
+    });
+    const statusAfterDraft = (await get("/api/work/status")).json;
+    const seq = statusAfterDraft.sequences?.find((s) => s.leadId === leadId && s.status === "draft");
+    if (!draft.ok || !seq?.id) {
+      fail("work wizard draft_sequence", `seq=${seq?.id}`);
+    } else {
+      const activate = await post("/api/work/status", {
+        action: "activate_sequence",
+        sequenceId: seq.id,
+      });
+      const policy = activate.json.autoSendPolicy;
+      if (activate.ok && seq.id && (policy === "immediate" || policy === "deferred")) {
+        pass("work wizard activate", `${seq.id} · ${policy}`);
+      } else {
+        fail("work wizard activate", `policy=${policy}`);
+      }
+    }
+  }
+}
+
+// 8. Connector vault on bootstrap
+{
+  const { ok, json } = await post("/api/work/status", { action: "dashboard_bootstrap" });
+  const vault = json.status?.connectorVault;
+  if (ok && vault?.connectors?.length >= 8) {
+    pass("connector_vault bootstrap", `${vault.connectors.length} connectors`);
+  } else {
+    fail("connector_vault bootstrap", `connectors=${vault?.connectors?.length}`);
+  }
+}
+
+// 9. morning_brief
+{
+  const { ok, json } = await post("/api/work/status", { action: "morning_brief" });
+  if (ok && typeof json.brief === "string" && json.brief.includes("Morning brief")) {
+    pass("morning_brief", `${json.brief.split("\n")[0]}`);
+  } else {
+    fail("morning_brief", `brief=${typeof json.brief}`);
+  }
+}
+
+// 10. crm_status demo
+{
+  const { ok, json } = await post("/api/work/status", { action: "crm_status" });
+  if (ok && json.crm?.demo === true && json.crm?.backend) {
+    pass("crm_status demo", `backend=${json.crm.backend}`);
+  } else {
+    fail("crm_status demo", `demo=${json.crm?.demo}`);
+  }
+}
+
+// 11. sync_crm demo log
+{
+  const { ok, json } = await post("/api/work/status", { action: "sync_crm" });
+  if (ok && json.push && json.pull) {
+    pass("sync_crm", `push=${json.push.pushed} pull=${json.pull.imported}`);
+  } else {
+    fail("sync_crm", "missing push/pull");
+  }
+}
+
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

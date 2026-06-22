@@ -95,6 +95,24 @@ npm run demo:capture:capital
 
 Set `experienceLevel` to `standard` in `user-settings.json` before capture if Analytics tab is gated.
 
+### Outreach Claw flows (screenshots/outreach/)
+
+| File | Focus | Use |
+|------|-------|-----|
+| `20-go-live.png` | Go Live checklist | Start tab · demo vs live path |
+| `21-pipeline.png` | Lead pipeline | Outreach tab |
+| `22-sequences.png` | Sequences panel | Outreach tab |
+| `23-analytics.png` | Analytics | Ops tab (Standard+) |
+
+Capture Outreach-only assets:
+
+```bash
+npm run demo:capture:work
+# or: node scripts/capture-work-demo.mjs --base http://127.0.0.1:3080
+```
+
+Set `experienceLevel` to `expert` for Integrations connector vault screenshot.
+
 ## Walkthrough video (~90s)
 
 Record Creator Claw scroll tour for storefront `/creator`:
@@ -105,6 +123,20 @@ node scripts/record-creator-walkthrough.mjs
 ```
 
 Output: `docs/demo-pack/creator-walkthrough.webm` → auto-copied to `curxor storefront/public/demo/creator-walkthrough.webm`
+
+Record Capital Claw scroll tour for storefront `/capital`:
+
+```bash
+node scripts/record-capital-walkthrough.mjs
+```
+
+Output: `docs/demo-pack/capital-walkthrough.webm` → auto-copied to `curxor storefront/public/demo/capital-walkthrough.webm`
+
+Capture Capital + Outreach phase-2 assets (screenshots → storefront `public/demo/`):
+
+```bash
+node scripts/capture-gtm-phase2.mjs
+```
 
 ## Troubleshooting
 

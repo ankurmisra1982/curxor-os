@@ -7,8 +7,9 @@ import { randomUUID } from "node:crypto";
 import { readAppFreState } from "./app-fre-state";
 import { loadDigitalEnv } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
+import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { classifyReplyIntent } from "./work-reply-intent";
-import { countSendsToday, readWorkSendPolicy } from "./work-send-policy";
+import { countSendsToday, readAutoSendOnActivateFre, readWorkSendPolicy, resolveAutoSendOnActivate } from "./work-send-policy";
 import type {
   LeadStage,
   MailIndexEntry,
@@ -22,6 +23,7 @@ import type {
   WorkQueueFile,
   WorkQueueStatus,
   WorkSequence,
+  WorkSyncLogEntry,
   WorkTask,
 } from "./work-queue-types";
 
@@ -38,6 +40,7 @@ function emptyFile(): WorkQueueFile {
     sequences: [],
     sends: [],
     mailIndex: [],
+    syncLog: [],
   };
 }
 
@@ -54,6 +57,7 @@ export async function ensureWorkQueue(): Promise<WorkQueueFile> {
       sequences: Array.isArray(parsed.sequences) ? parsed.sequences : [],
       sends: Array.isArray(parsed.sends) ? parsed.sends : [],
       mailIndex: Array.isArray(parsed.mailIndex) ? parsed.mailIndex : [],
+      syncLog: Array.isArray(parsed.syncLog) ? parsed.syncLog : [],
     };
   } catch {
     const seeded = seedDemoQueue();
@@ -226,6 +230,9 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const policy = await readWorkSendPolicy();
   const sendsToday = countSendsToday(file.sends);
   const analytics = buildWorkAnalytics(file.sends, file.mailIndex);
+  const connectorVault = await buildWorkConnectorHealthReport();
+  const autoSendFre = await readAutoSendOnActivateFre();
+  const autoSendOnActivate = autoSendFre ?? (await resolveAutoSendOnActivate(bridgeConfigured));
 
   return {
     source: bridgeConfigured ? "live" : "demo",
@@ -256,6 +263,10 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
       remainingToday: Math.max(0, policy.dailySendLimit - sendsToday),
     },
     analytics,
+    connectorVault,
+    syncLog: file.syncLog ?? [],
+    autoSendOnActivate,
+    autoSendDefault: bridgeConfigured,
   };
 }
 
@@ -301,6 +312,14 @@ export async function updateLeadStage(leadId: string, stage: LeadStage): Promise
     updatedAt: new Date().toISOString(),
     lastTouchAt: stage === "replied" ? new Date().toISOString() : file.leads[idx]!.lastTouchAt,
   };
+  if (stage === "won") {
+    for (let i = 0; i < file.tasks.length; i++) {
+      const task = file.tasks[i]!;
+      if (task.leadId === leadId && !task.done) {
+        file.tasks[i] = { ...task, done: true, updatedAt: new Date().toISOString() };
+      }
+    }
+  }
   await writeWorkFile(file);
   return file.leads[idx]!;
 }
@@ -456,6 +475,44 @@ export async function markSequenceStepSent(
   file.sequences[idx] = seq;
   await writeWorkFile(file);
   return seq;
+}
+
+export async function appendWorkSyncLog(input: {
+  connector: string;
+  action: string;
+  detail: string;
+}): Promise<WorkSyncLogEntry> {
+  const file = await ensureWorkQueue();
+  const entry: WorkSyncLogEntry = {
+    id: `SYNC-${randomUUID().slice(0, 8)}`,
+    connector: input.connector,
+    action: input.action,
+    detail: input.detail,
+    createdAt: new Date().toISOString(),
+  };
+  file.syncLog = [entry, ...(file.syncLog ?? [])].slice(0, 100);
+  await writeWorkFile(file);
+  return entry;
+}
+
+export async function deferSequenceStepSend(
+  sequenceId: string,
+  delayMs: number,
+): Promise<string | null> {
+  const file = await ensureWorkQueue();
+  const seq = file.sequences.find((s) => s.id === sequenceId);
+  if (!seq) return null;
+  const scheduledAt = new Date(Date.now() + delayMs).toISOString();
+  await rescheduleSequenceStep(sequenceId, seq.currentStepIndex, scheduledAt);
+  return scheduledAt;
+}
+
+export async function getSequenceNextDueAt(sequenceId: string): Promise<string | null> {
+  const file = await ensureWorkQueue();
+  const seq = file.sequences.find((s) => s.id === sequenceId);
+  if (!seq) return null;
+  const step = seq.steps[seq.currentStepIndex];
+  return step?.scheduledAt ?? null;
 }
 
 export async function rescheduleSequenceStep(

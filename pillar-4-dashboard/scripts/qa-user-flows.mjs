@@ -114,6 +114,34 @@ await check("flow: workspace memory append via agent", async () => {
   return before.ok === true;
 });
 
+await check("flow: work wizard create draft activate", async () => {
+  const email = `flow-${Date.now()}@example.com`;
+  const create = await postJson("/api/work/status", {
+    action: "create_lead",
+    name: "Flow Prospect",
+    email,
+  });
+  const leadId = create.json.lead?.id;
+  if (!create.ok || !leadId) return false;
+  const draft = await postJson("/api/work/status", {
+    action: "draft_sequence",
+    leadId,
+    name: "Flow sequence",
+  });
+  if (!draft.ok) return false;
+  const status = await getJson("/api/work/status");
+  const seq = status.sequences?.find((s) => s.leadId === leadId && s.status === "draft");
+  if (!seq?.id) return false;
+  const activate = await postJson("/api/work/status", {
+    action: "activate_sequence",
+    sequenceId: seq.id,
+  });
+  return (
+    activate.ok &&
+    (activate.json.autoSendPolicy === "immediate" || activate.json.autoSendPolicy === "deferred")
+  );
+});
+
 await check("flow: vital status + webchat same app", async () => {
   const vital = await getJson("/api/vital/status");
   const chat = await postJson("/api/channels/webchat", {

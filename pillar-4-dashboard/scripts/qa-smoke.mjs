@@ -755,6 +755,34 @@ await check("work summarize_day", async () => {
   return ok && typeof json.brief === "string" && json.brief.length > 0;
 });
 
+await check("work google status route", async () => {
+  const data = await getJson("/api/work/google");
+  return data.ok === true && typeof data.linked === "boolean" && typeof data.clientConfigured === "boolean";
+});
+
+await check("work morning_brief", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "morning_brief" });
+  return ok && typeof json.brief === "string" && json.brief.includes("Morning brief");
+});
+
+await check("work crm_status demo", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "crm_status" });
+  return ok && json.crm?.demo === true && typeof json.crm?.backend === "string";
+});
+
+await check("work connector_vault bootstrap", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "dashboard_bootstrap" });
+  return ok && Array.isArray(json.status?.connectorVault?.connectors) && json.status.connectorVault.connectors.length >= 8;
+});
+
+await check("work activate_sequence policy", async () => {
+  const current = await getJson("/api/work/status");
+  const seq = current.sequences?.find((s) => s.status === "draft");
+  if (!seq?.id) return true;
+  const { ok, json } = await postJson("/api/work/status", { action: "activate_sequence", sequenceId: seq.id });
+  return ok && (json.autoSendPolicy === "immediate" || json.autoSendPolicy === "deferred");
+});
+
 await check("app-agent assist (capital digital skill)", async () => {
   const { json } = await postJson("/api/app-agent/assist", {
     appId: "my-capital",

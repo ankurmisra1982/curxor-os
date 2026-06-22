@@ -2,6 +2,9 @@ import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
 import { createSequence, ensureWorkQueue, upsertLead } from "./work-store";
+import { getCrmStatus } from "./work-crm-sync";
+import { buildWorkConnectorHealthReport } from "./work-connector-health";
+import { fetchWorkCalendarPreview } from "./work-google-client";
 
 export async function draftSequenceWithLlm(input: {
   leadId?: string;
@@ -70,17 +73,30 @@ export async function draftSequenceWithLlm(input: {
 }
 
 export async function buildDayBrief(): Promise<string> {
-  const file = await ensureWorkQueue();
+  const [file, calendar, crm, vault] = await Promise.all([
+    ensureWorkQueue(),
+    fetchWorkCalendarPreview(5),
+    getCrmStatus(),
+    buildWorkConnectorHealthReport(),
+  ]);
+
   const openTasks = file.tasks.filter((t) => !t.done);
   const active = file.sequences.filter((s) => s.status === "active");
   const replied = file.leads.filter((l) => l.stage === "replied");
+  const notionSync = (file.syncLog ?? []).find((e) => e.connector === "notion");
+  const googleLinked = vault.connectors.find((c) => c.id === "google_workspace")?.configured;
 
   const lines = [
-    `Outreach day brief · ${new Date().toLocaleDateString()}`,
+    `Outreach day brief v2 · ${new Date().toLocaleDateString()}`,
     "",
     `Open tasks: ${openTasks.length} (${openTasks.filter((t) => t.priority === "P1").length} P1)`,
     `Active sequences: ${active.length}`,
     `Replied leads: ${replied.length}`,
+    "",
+    `Connectors: ${vault.summary.ready}/${vault.summary.total} ready`,
+    `Google calendar: ${calendar.events.length} events (${calendar.source})${googleLinked ? " · linked" : ""}`,
+    `CRM backend: ${crm.backend}${crm.demo ? " (demo)" : ""}`,
+    notionSync ? `Notion: ${notionSync.detail}` : "Notion: no recent sync",
     "",
   ];
 

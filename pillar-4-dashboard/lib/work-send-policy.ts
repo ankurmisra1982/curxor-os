@@ -1,7 +1,10 @@
 import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
+import { loadDigitalEnv } from "./digital-env";
 import type { OutboundSend, WorkQueueFile } from "./work-queue-types";
+
+export type AutoSendPolicy = "immediate" | "deferred";
 
 export interface WorkSendPolicy {
   dailySendLimit: number;
@@ -85,4 +88,25 @@ export function evaluateSendPolicy(
   }
 
   return { ok: true };
+}
+
+/** Default false in demo/no SMTP; true when SMTP live unless FRE explicitly sets autoSendOnActivate. */
+export async function resolveAutoSendOnActivate(bridgeConfigured?: boolean): Promise<boolean> {
+  const fre = await readAppFreState("my-work");
+  const raw = fre.config.autoSendOnActivate;
+  if (raw === false || raw === "false") return false;
+  if (raw === true || raw === "true") return true;
+  const bridge = bridgeConfigured ?? (await (async () => {
+    const env = await loadDigitalEnv();
+    return Boolean(env.SMTP_HOST?.trim() && env.SMTP_FROM?.trim());
+  })());
+  return bridge;
+}
+
+export async function readAutoSendOnActivateFre(): Promise<boolean | null> {
+  const fre = await readAppFreState("my-work");
+  const raw = fre.config.autoSendOnActivate;
+  if (raw === true || raw === "true") return true;
+  if (raw === false || raw === "false") return false;
+  return null;
 }

@@ -8,17 +8,39 @@ import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBad
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
+import { WorkConnectorVaultPanel } from "@/components/apps/work/WorkConnectorVaultPanel";
 import { WorkImportPanel } from "@/components/apps/work/WorkImportPanel";
 import { WorkMailIndexPanel } from "@/components/apps/work/WorkMailIndexPanel";
 import { WorkOutboundPanel } from "@/components/apps/work/WorkOutboundPanel";
 import { WorkPipelinePanel } from "@/components/apps/work/WorkPipelinePanel";
 import { WorkRecoveryPanel } from "@/components/apps/work/WorkRecoveryPanel";
+import { WorkSendPolicyPanel } from "@/components/apps/work/WorkSendPolicyPanel";
 import { WorkSequencePanel } from "@/components/apps/work/WorkSequencePanel";
+import {
+  WorkWorkspaceTabs,
+  defaultWorkTab,
+  workSectionVisible,
+  type WorkWorkspaceTab,
+} from "@/components/apps/work/WorkWorkspaceTabs";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import type { LeadStage, OutboundSend, ReplyIntent, WorkQueueStatus } from "@/lib/work-queue-types";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { useMotorStream } from "@/hooks/useMotorStream";
+
+const BOOTSTRAP_ACTIONS = new Set([
+  "create_lead",
+  "import_leads",
+  "activate_sequence",
+  "pause_sequence",
+  "send_now",
+  "toggle_task",
+  "update_lead_stage",
+  "update_send_policy",
+  "sync_crm",
+  "sync_notion_lead",
+  "slack_digest",
+]);
 
 async function postWork(body: Record<string, unknown>) {
   const res = await fetch("/api/work/status", {
@@ -26,13 +48,20 @@ async function postWork(body: Record<string, unknown>) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return res.json() as Promise<{ ok: boolean; status?: WorkQueueStatus; goLive?: WorkGoLiveReportRow; failed?: OutboundSend[]; error?: string }>;
+  return res.json() as Promise<{
+    ok: boolean;
+    status?: WorkQueueStatus;
+    goLive?: WorkGoLiveReportRow;
+    failed?: OutboundSend[];
+    error?: string;
+  }>;
 }
 
 export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceContext }: AgentAppContext) {
   const { connected: motorUp } = useMotorStream();
   const { level } = useExperienceLevel();
 
+  const [workspaceTab, setWorkspaceTab] = useState<WorkWorkspaceTab>(() => defaultWorkTab(level));
   const [status, setStatus] = useState<WorkQueueStatus | null>(null);
   const [goLive, setGoLive] = useState<WorkGoLiveReportRow | null>(null);
   const [failedSends, setFailedSends] = useState<OutboundSend[]>([]);
@@ -41,6 +70,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [dayBrief, setDayBrief] = useState("");
   const [signal, setSignal] = useState("Syncing outreach desk…");
   const [demoTourRunning, setDemoTourRunning] = useState(false);
+  const [policyBusy, setPolicyBusy] = useState(false);
 
   const workspace = typeof config.workspaceName === "string" ? config.workspaceName : "Outreach Desk";
   const lane = typeof config.clawLane === "string" ? config.clawLane : "A";
@@ -77,6 +107,10 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   }, [applyStatus]);
 
   useEffect(() => {
+    setWorkspaceTab(defaultWorkTab(level));
+  }, [level]);
+
+  useEffect(() => {
     void loadBootstrap();
     if (level !== "beginner") {
       void loadRecovery();
@@ -105,13 +139,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   useEffect(() => {
     if (skillTick === 0 || !lastSkillId) return;
 
-    /** Already executed server-side in skill-executors — refresh desk only (avoid double mutations). */
     const serverExecuted = new Set([
       "scan_inbox",
       "summarize_day",
       "draft_sequence",
       "send_sequence_step",
       "run_demo_tour",
+      "morning_brief",
+      "prep_meeting",
+      "slack_digest",
     ]);
     const physicalSkills = new Set(["sort_tray", "move_to_tray"]);
 
@@ -124,15 +160,20 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
       if (!serverExecuted.has(lastSkillId)) return;
 
-      await loadStatus();
-      if (lastSkillId === "summarize_day") {
-        const briefJson = await postWork({ action: "summarize_day" });
+      if (lastSkillId === "run_demo_tour" || lastSkillId === "morning_brief" || lastSkillId === "prep_meeting") {
+        await loadBootstrap();
+      } else {
+        await loadStatus();
+      }
+
+      if (lastSkillId === "summarize_day" || lastSkillId === "morning_brief") {
+        const action = lastSkillId === "morning_brief" ? "morning_brief" : "summarize_day";
+        const briefJson = await postWork({ action });
         setDayBrief((briefJson as { brief?: string }).brief ?? "");
-        setSignal("Day brief ready");
+        setSignal(lastSkillId === "morning_brief" ? "Morning brief ready" : "Day brief ready");
         return;
       }
       if (lastSkillId === "run_demo_tour") {
-        await refreshGoLive();
         setSignal("Demo tour complete · simulated send");
         return;
       }
@@ -142,9 +183,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         setSignal("Sequence drafted");
       } else if (lastSkillId === "send_sequence_step") {
         setSignal("Step sent · check outbound queue");
+      } else if (lastSkillId === "slack_digest") {
+        setSignal("Slack digest sent");
+      } else if (lastSkillId === "prep_meeting") {
+        setSignal("Meeting prep ready");
       }
     })();
-  }, [skillTick, lastSkillId, loadStatus, refreshGoLive, lane]);
+  }, [skillTick, lastSkillId, loadStatus, loadBootstrap, lane]);
 
   const runDemoTour = () => {
     setDemoTourRunning(true);
@@ -159,10 +204,17 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
   const action = async (body: Record<string, unknown>) => {
     const json = await postWork(body);
-    if (json.status) applyStatus(json.status);
+    const actionName = typeof body.action === "string" ? body.action : "";
+    if (BOOTSTRAP_ACTIONS.has(actionName)) {
+      await loadBootstrap();
+    } else if (json.status) {
+      applyStatus(json.status);
+    }
     if (json.error) setSignal(json.error);
     return json;
   };
+
+  const show = (sectionId: string) => workSectionVisible(sectionId, workspaceTab);
 
   return (
     <div className="space-y-4 p-4">
@@ -177,16 +229,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </p>
       </header>
 
-      {level === "beginner" ? (
-        <ExperienceAppSection appId="my-work" sectionId="go-live" minLevel="beginner" title="Go Live" subtitle="Checklist before first outbound send">
-          <WorkGoLivePanel
-            report={goLive}
-            onRefresh={() => void refreshGoLive()}
-            onRunDemoTour={runDemoTour}
-            demoTourRunning={demoTourRunning}
-          />
-        </ExperienceAppSection>
-      ) : null}
+      <WorkWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} experienceLevel={level} />
 
       <div className="grid gap-4 md:grid-cols-4">
         <AppMetric label="Pipeline" value={String(status?.stats.leadsInPipeline ?? "—")} unit="leads" highlight />
@@ -199,58 +242,18 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <AppMetric label="Replies" value={String(status?.stats.repliesThisWeek ?? "—")} unit="this week" />
       </div>
 
-      {status?.analytics ? (
-        <ExperienceAppSection appId="my-work" sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
-          <WorkAnalyticsPanel analytics={status.analytics} sendPolicy={status.sendPolicy} />
+      {show("go-live") ? (
+        <ExperienceAppSection appId="my-work" sectionId="go-live" minLevel="beginner" title="Go Live" subtitle="Checklist before first outbound send">
+          <WorkGoLivePanel
+            report={goLive}
+            onRefresh={() => void refreshGoLive()}
+            onRunDemoTour={runDemoTour}
+            demoTourRunning={demoTourRunning}
+          />
         </ExperienceAppSection>
       ) : null}
 
-      <ExperienceAppSection appId="my-work" sectionId="comms" minLevel="standard" title="Comms desk" subtitle="Unified inbox · auto-pause sequences on reply" showCoach={false}>
-        <UnifiedInboxPanel embedded />
-      </ExperienceAppSection>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <ExperienceAppSection appId="my-work" sectionId="pipeline" minLevel="beginner" title="Lead pipeline" subtitle="CRM stages · local store">
-          <WorkPipelinePanel
-            leads={status?.leads ?? []}
-            selectedLeadId={selectedLeadId}
-            onSelect={setSelectedLeadId}
-            onStageChange={(leadId, stage: LeadStage) => void action({ action: "update_lead_stage", leadId, stage })}
-            onAddLead={() => {
-              const name = prompt("Lead name");
-              const email = prompt("Email");
-              if (name && email) void action({ action: "create_lead", name, email });
-            }}
-          />
-          <div className="mt-3 border-t border-line/60 pt-3">
-            <WorkImportPanel
-              onImport={async (csv) => {
-                const json = await postWork({ action: "import_leads", csv });
-                if (json.status) applyStatus(json.status);
-                return {
-                  imported: (json as { imported?: number }).imported,
-                  skipped: (json as { skipped?: number }).skipped,
-                  error: json.error,
-                };
-              }}
-            />
-          </div>
-        </ExperienceAppSection>
-
-        <ExperienceAppSection appId="my-work" sectionId="sequences" minLevel="standard" title="Sequences" subtitle="Multi-step outbound · pause on reply">
-          <WorkSequencePanel
-            sequences={status?.sequences ?? []}
-            selectedSequenceId={selectedSequenceId}
-            onSelect={setSelectedSequenceId}
-            onActivate={(id) => void action({ action: "activate_sequence", sequenceId: id })}
-            onPause={(id) => void action({ action: "pause_sequence", sequenceId: id })}
-            onMarkReplied={(id) => void action({ action: "mark_replied", sequenceId: id })}
-            onDraft={() => void action({ action: "draft_sequence", leadId: selectedLeadId || undefined })}
-          />
-        </ExperienceAppSection>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
+      {show("tasks") ? (
         <ExperienceAppSection appId="my-work" sectionId="tasks" minLevel="beginner" title="Task matrix" subtitle="P1 first · tap to complete">
           <div className="space-y-2 font-mono text-xs">
             {(status?.tasks ?? []).map((t) => (
@@ -269,16 +272,110 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             ))}
           </div>
         </ExperienceAppSection>
+      ) : null}
 
+      {show("pipeline") ? (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <ExperienceAppSection appId="my-work" sectionId="pipeline" minLevel="beginner" title="Lead pipeline" subtitle="CRM stages · local store">
+            <WorkPipelinePanel
+              leads={status?.leads ?? []}
+              selectedLeadId={selectedLeadId}
+              onSelect={setSelectedLeadId}
+              onStageChange={(leadId, stage: LeadStage) => void action({ action: "update_lead_stage", leadId, stage })}
+              onAddLead={() => {
+                const name = prompt("Lead name");
+                const email = prompt("Email");
+                if (name && email) void action({ action: "create_lead", name, email });
+              }}
+            />
+            <div className="mt-3 border-t border-line/60 pt-3">
+              <WorkImportPanel
+                onImport={async (csv) => {
+                  const json = await postWork({ action: "import_leads", csv });
+                  await loadBootstrap();
+                  return {
+                    imported: (json as { imported?: number }).imported,
+                    skipped: (json as { skipped?: number }).skipped,
+                    error: json.error,
+                  };
+                }}
+              />
+            </div>
+          </ExperienceAppSection>
+
+          {show("sequences") ? (
+            <ExperienceAppSection appId="my-work" sectionId="sequences" minLevel="standard" title="Sequences" subtitle="Multi-step outbound · pause on reply">
+              <WorkSequencePanel
+                sequences={status?.sequences ?? []}
+                selectedSequenceId={selectedSequenceId}
+                onSelect={setSelectedSequenceId}
+                onActivate={(id) => void action({ action: "activate_sequence", sequenceId: id })}
+                onPause={(id) => void action({ action: "pause_sequence", sequenceId: id })}
+                onMarkReplied={(id) => void action({ action: "mark_replied", sequenceId: id })}
+                onDraft={() => void action({ action: "draft_sequence", leadId: selectedLeadId || undefined })}
+              />
+            </ExperienceAppSection>
+          ) : null}
+        </div>
+      ) : null}
+
+      {show("outbound") && !show("pipeline") ? (
         <ExperienceAppSection appId="my-work" sectionId="outbound" minLevel="standard" title="Outbound queue" subtitle={`Lane ${lane} · send log`}>
           <WorkOutboundPanel
             sends={status?.sends ?? []}
             onRetry={(sendId) => void action({ action: "send_now", sendId })}
           />
         </ExperienceAppSection>
-      </div>
+      ) : null}
 
-      {level !== "beginner" ? (
+      {show("pipeline") && show("outbound") ? (
+        <ExperienceAppSection appId="my-work" sectionId="outbound" minLevel="standard" title="Outbound queue" subtitle={`Lane ${lane} · send log`}>
+          <WorkOutboundPanel
+            sends={status?.sends ?? []}
+            onRetry={(sendId) => void action({ action: "send_now", sendId })}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("comms") ? (
+        <ExperienceAppSection appId="my-work" sectionId="comms" minLevel="standard" title="Comms desk" subtitle="Unified inbox · auto-pause sequences on reply" showCoach={false}>
+          <UnifiedInboxPanel embedded />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("sync-log") ? (
+        <ExperienceAppSection appId="my-work" sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Reply intent tagging · offline queue">
+          <WorkMailIndexPanel
+            rows={status?.mailIndex ?? []}
+            onTagIntent={(mailId, intent: ReplyIntent) => void action({ action: "tag_reply_intent", mailId, intent })}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("analytics") && status?.analytics ? (
+        <ExperienceAppSection appId="my-work" sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
+          <WorkAnalyticsPanel analytics={status.analytics} sendPolicy={status.sendPolicy} />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("send-policy") ? (
+        <ExperienceAppSection appId="my-work" sectionId="send-policy" minLevel="expert" title="Send policy" subtitle="Daily limit · stagger · auto-send on activate">
+          <WorkSendPolicyPanel
+            autoSendOnActivate={status?.autoSendOnActivate ?? false}
+            defaultAutoSend={status?.autoSendDefault ?? false}
+            bridgeConfigured={status?.bridgeConfigured ?? false}
+            sendStaggerMinutes={status?.sendPolicy?.sendStaggerMinutes ?? 5}
+            dailySendLimit={status?.sendPolicy?.dailySendLimit ?? 50}
+            busy={policyBusy}
+            onToggleAutoSend={(value) => {
+              setPolicyBusy(true);
+              void action({ action: "update_send_policy", autoSendOnActivate: value }).finally(() => setPolicyBusy(false));
+            }}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("recovery") && level !== "beginner" ? (
         <ExperienceAppSection appId="my-work" sectionId="recovery" minLevel="standard" title="Send recovery" subtitle="Retry failed bridge sends">
           <WorkRecoveryPanel
             failed={failedSends}
@@ -288,18 +385,33 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </ExperienceAppSection>
       ) : null}
 
-      {dayBrief ? (
+      {show("day-brief") && dayBrief ? (
         <ExperienceAppSection appId="my-work" sectionId="day-brief" minLevel="standard" title="Day brief" subtitle="Local LLM summary">
           <pre className="whitespace-pre-wrap font-mono text-[11px] text-stark">{dayBrief}</pre>
         </ExperienceAppSection>
       ) : null}
 
-      <ExperienceAppSection appId="my-work" sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Reply intent tagging · offline queue">
-        <WorkMailIndexPanel
-          rows={status?.mailIndex ?? []}
-          onTagIntent={(mailId, intent: ReplyIntent) => void action({ action: "tag_reply_intent", mailId, intent })}
-        />
-      </ExperienceAppSection>
+      {show("connector-vault") ? (
+        <ExperienceAppSection appId="my-work" sectionId="connector-vault" minLevel="expert" title="Connector vault" subtitle="SMTP · Google · Slack · Notion · Twenty · n8n">
+          <WorkConnectorVaultPanel
+            report={status?.connectorVault ?? null}
+            onRefresh={() => void loadBootstrap()}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("sync-audit") && (status?.syncLog?.length ?? 0) > 0 ? (
+        <ExperienceAppSection appId="my-work" sectionId="sync-audit" minLevel="expert" title="Sync log" subtitle="Integration audit trail">
+          <div className="space-y-1 font-mono text-[10px]">
+            {(status?.syncLog ?? []).slice(0, 20).map((entry) => (
+              <div key={entry.id} className="border border-line/60 px-2 py-1">
+                <span className="text-cursor-glow">{entry.connector}</span> · {entry.action} · {entry.detail}
+                <span className="ml-2 text-muted">{new Date(entry.createdAt).toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </ExperienceAppSection>
+      ) : null}
     </div>
   );
 }

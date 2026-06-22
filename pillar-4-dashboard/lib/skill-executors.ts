@@ -144,6 +144,22 @@ async function executeMyWorkSkill(
     const brief = await buildDayBrief();
     return { executed: true, kind: "plan", skipReason: brief };
   }
+  if (skillId === "morning_brief") {
+    const { buildMorningBrief } = await import("./work-morning-brief");
+    const brief = await buildMorningBrief();
+    return { executed: true, kind: "plan", skipReason: brief };
+  }
+  if (skillId === "prep_meeting") {
+    const { buildPrepMeetingBrief } = await import("./work-morning-brief");
+    const email = cfgStr(config, "selectedLeadEmail", "");
+    const brief = await buildPrepMeetingBrief(email || undefined);
+    return { executed: true, kind: "plan", skipReason: brief };
+  }
+  if (skillId === "slack_digest") {
+    const { sendSlackDigest } = await import("./work-slack-digest");
+    const out = await sendSlackDigest();
+    return { executed: out.ok, kind: "digital", skipReason: out.detail };
+  }
   if (skillId === "run_demo_tour") {
     const { runWorkDemoTour } = await import("./work-demo-tour");
     const tour = await runWorkDemoTour();

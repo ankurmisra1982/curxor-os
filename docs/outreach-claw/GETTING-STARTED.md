@@ -19,6 +19,18 @@ Quick start: [STARTUP-GUIDE.md](./STARTUP-GUIDE.md) · use **Run demo tour** in 
 
 When ready for live mail, configure SMTP in `/etc/curxor/digital.env` (see below).
 
+## Auto-send on activate
+
+**Activate ≠ immediate blast** unless auto-send is enabled.
+
+| Mode | Behavior |
+|------|----------|
+| Demo (no SMTP) | Default **off** — activate queues step 1; heartbeat `process_due` sends on schedule |
+| Live SMTP | Default **on** — step 1 sends when daily limit + stagger allow |
+| Expert override | Ops tab → Send policy → toggle **Auto-send step 1 on activate** |
+
+`activate_sequence` returns `{ autoSendPolicy: "immediate" \| "deferred", nextDueAt }`. Use **Send Step** skill for manual send anytime.
+
 ## Best-in-class behaviors (shipped)
 
 | Feature | What it does |

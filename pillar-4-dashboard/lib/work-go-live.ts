@@ -1,6 +1,8 @@
 import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
+import { buildWorkConnectorHealthReport } from "./work-connector-health";
+import { resolveAutoSendOnActivate } from "./work-send-policy";
 import { ensureWorkQueue, isWorkEmailBridgeConfigured } from "./work-store";
 
 export type WorkGoLiveStepStatus = "complete" | "warning" | "pending" | "optional";
@@ -24,6 +26,8 @@ export interface WorkGoLiveReport {
   ready: boolean;
   /** Day-one ready without SMTP — FRE + lead + sequence activity */
   demoReady: boolean;
+  /** SMTP verified + first real sent */
+  liveReady: boolean;
   partiallyReady: boolean;
   progress: { complete: number; total: number };
   steps: WorkGoLiveStep[];
@@ -31,10 +35,12 @@ export interface WorkGoLiveReport {
 }
 
 export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
-  const [fre, file, bridgeConfigured] = await Promise.all([
+  const [fre, file, bridgeConfigured, vault, autoSend] = await Promise.all([
     readAppFreState("my-work"),
     ensureWorkQueue(),
     isWorkEmailBridgeConfigured(),
+    buildWorkConnectorHealthReport(),
+    resolveAutoSendOnActivate(),
   ]);
 
   const steps: WorkGoLiveStep[] = [];
@@ -48,6 +54,18 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
       : "Complete Outreach Claw setup wizard",
   });
 
+  const commsReady = vault.commsPathReady;
+  steps.push({
+    id: "comms_path",
+    label: "Comms path configured",
+    status: commsReady ? "complete" : "warning",
+    detail: commsReady
+      ? bridgeConfigured
+        ? "SMTP bridge ready"
+        : "Demo mode — SMTP, Google, or IMAP when ready for live mail"
+      : "Configure SMTP, Google Workspace, or IMAP in connector vault",
+  });
+
   steps.push({
     id: "smtp",
     label: "Email bridge ready",
@@ -55,6 +73,15 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
     detail: bridgeConfigured
       ? "SMTP configured in digital.env"
       : "Demo mode OK — set SMTP_HOST + SMTP_FROM when ready for live send",
+  });
+
+  steps.push({
+    id: "auto_send_policy",
+    label: "Understand auto-send policy",
+    status: "complete",
+    detail: autoSend
+      ? "Auto-send on activate is ON — step 1 sends when policy allows"
+      : "Auto-send on activate is OFF — heartbeat process_due sends on schedule",
   });
 
   const hasLead = file.leads.length > 0;
@@ -75,6 +102,7 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
 
   const active = file.sequences.filter((s) => s.status === "active");
   const hasAnySend = file.sends.some((s) => s.status === "sent" || s.status === "simulated");
+  const hasRealSend = file.sends.some((s) => s.status === "sent");
   steps.push({
     id: "active",
     label: "Sequence activated",
@@ -101,6 +129,7 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
   const freComplete = steps.find((s) => s.id === "fre")?.status === "complete";
   const hasSequenceActivity = hasSequence && (active.length > 0 || hasAnySend);
   const demoReady = Boolean(freComplete && hasLead && hasSequenceActivity);
+  const liveReady = Boolean(bridgeConfigured && hasRealSend && freComplete);
   const ready = bridgeConfigured
     ? required.every((s) => s.status === "complete")
     : demoReady;
@@ -122,6 +151,7 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
   return {
     ready,
     demoReady,
+    liveReady,
     partiallyReady,
     progress: { complete, total: required.length },
     steps,

@@ -94,6 +94,14 @@ export interface MailIndexEntry {
   replyIntent?: ReplyIntent;
 }
 
+export interface WorkSyncLogEntry {
+  id: string;
+  connector: string;
+  action: string;
+  detail: string;
+  createdAt: string;
+}
+
 export interface WorkQueueFile {
   version: 1;
   updatedAt: string;
@@ -102,6 +110,38 @@ export interface WorkQueueFile {
   sequences: WorkSequence[];
   sends: OutboundSend[];
   mailIndex: MailIndexEntry[];
+  syncLog?: WorkSyncLogEntry[];
+}
+
+export interface WorkConnectorVaultSummary {
+  total: number;
+  live: number;
+  configured: number;
+  ready: number;
+  degraded: number;
+  authExpired: number;
+  unconfigured: number;
+  planned: number;
+}
+
+export interface WorkConnectorHealthRow {
+  id: string;
+  label: string;
+  tier: string;
+  tool: string | null;
+  configured: boolean;
+  health: "live" | "degraded" | "auth_expired" | "unconfigured" | "planned";
+  healthLabel: string;
+  missingEnvKeys: string[];
+  fixHints: string[];
+}
+
+export interface WorkConnectorVaultReport {
+  digitalEnvPath: string;
+  updatedAt: string;
+  summary: WorkConnectorVaultSummary;
+  connectors: WorkConnectorHealthRow[];
+  commsPathReady: boolean;
 }
 
 export interface WorkQueueStatus {
@@ -138,4 +178,8 @@ export interface WorkQueueStatus {
     replyRate: number | null;
     replyIntentBreakdown: Record<ReplyIntent, number>;
   };
+  connectorVault?: WorkConnectorVaultReport;
+  syncLog?: WorkSyncLogEntry[];
+  autoSendOnActivate?: boolean;
+  autoSendDefault?: boolean;
 }

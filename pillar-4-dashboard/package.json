@@ -23,6 +23,7 @@
     "verify:exit-demo-scaffold": "node scripts/verify-exit-demo-scaffold.mjs",
     "demo:capture": "node scripts/capture-demo-screenshots.mjs",
     "demo:capture:capital": "node scripts/capture-capital-demo.mjs",
+    "demo:capture:work": "node scripts/capture-work-demo.mjs",
     "demo:capture:marketing": "node scripts/capture-marketing-flows.mjs"
   },
   "dependencies": {

@@ -63,6 +63,9 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       { id: "draft_sequence", label: "Draft Sequence", description: "Local LLM multi-step cold email", kind: "plan" },
       { id: "send_sequence_step", label: "Send Step", description: "Send current sequence step via SMTP bridge", kind: "digital" },
       { id: "summarize_day", label: "Summarize Day", description: "Local LLM day brief", kind: "plan" },
+      { id: "morning_brief", label: "Morning Brief", description: "Mail + calendar + tasks summary", kind: "plan" },
+      { id: "prep_meeting", label: "Prep Meeting", description: "Attendee dossier from CRM + mail", kind: "plan" },
+      { id: "slack_digest", label: "Slack Digest", description: "Channel summary via Slack bridge", kind: "digital" },
       { id: "run_demo_tour", label: "Demo Tour", description: "Lead → sequence → simulated send (no SMTP keys)", kind: "digital" },
       { id: "sort_tray", label: "Sort Tray", description: "Claw sorts by priority labels", kind: "physical" },
       { id: "move_to_tray", label: "Move to Tray", description: "Physical move via motor_out", kind: "physical" },
@@ -110,6 +113,27 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           type: "text",
           defaultValue: "5",
           placeholder: "5",
+        },
+        {
+          id: "autoSendOnActivate",
+          label: "Auto-send step 1 on activate",
+          type: "select",
+          defaultValue: "default",
+          options: [
+            { value: "default", label: "Default (off in demo, on when SMTP live)" },
+            { value: "true", label: "Always on" },
+            { value: "false", label: "Always off — use scheduler" },
+          ],
+        },
+        {
+          id: "crmBackend",
+          label: "CRM backend",
+          type: "select",
+          defaultValue: "local",
+          options: [
+            { value: "local", label: "Local work-queue.json" },
+            { value: "twenty", label: "Twenty CRM sync" },
+          ],
         },
         {
           id: "outreachTone",

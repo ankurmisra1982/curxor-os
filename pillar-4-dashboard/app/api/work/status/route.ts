@@ -2,10 +2,18 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { requireLanAuth } from "@/lib/lan-auth";
+import { readAppFreState, writeAppFreState } from "@/lib/app-fre-state";
 import { parseDigitalReceipt } from "@/lib/digital-protocol";
+import { syncCrmBothWays, getCrmStatus } from "@/lib/work-crm-sync";
+import { fetchWorkCalendarPreview, fetchWorkMailPreview } from "@/lib/work-google-client";
 import { buildDayBrief, draftSequenceWithLlm } from "@/lib/work-inference";
+import { buildMorningBrief, buildPrepMeetingBrief } from "@/lib/work-morning-brief";
+import { pushLeadNotesToNotion } from "@/lib/work-notion-client";
+import { sendSlackDigest } from "@/lib/work-slack-digest";
+import { notifySlackInterestedReply } from "@/lib/work-slack-notify";
 import { buildWorkGoLiveReport } from "@/lib/work-go-live";
 import { handleWorkEmailReceipt } from "@/lib/work-receipt-handler";
+import { resolveAutoSendOnActivate, readWorkSendPolicy, type AutoSendPolicy } from "@/lib/work-send-policy";
 import {
   executeOutboundSend,
   processDueSequenceSteps,
@@ -13,11 +21,16 @@ import {
 } from "@/lib/work-send-executor";
 import {
   activateSequence,
+  appendWorkSyncLog,
   createSequence,
   createTask,
+  deferSequenceStepSend,
   ensureWorkQueue,
   fetchWorkStatus,
+  getLead,
+  getSequenceNextDueAt,
   importLeadsFromCsv,
+  isWorkEmailBridgeConfigured,
   markSequenceReplied,
   pauseSequence,
   scanLocalMailQueue,
@@ -57,6 +70,7 @@ export async function POST(request: Request): Promise<Response> {
     csv?: string;
     intent?: string;
     mailId?: string;
+    autoSendOnActivate?: boolean;
   };
 
   try {
@@ -152,9 +166,33 @@ export async function POST(request: Request): Promise<Response> {
         if (!body.sequenceId) {
           return Response.json({ ok: false, error: "sequenceId required" }, { status: 400 });
         }
+        const bridgeConfigured = await isWorkEmailBridgeConfigured();
+        const autoSendEnabled = await resolveAutoSendOnActivate(bridgeConfigured);
         const sequence = await activateSequence(body.sequenceId);
-        const send = await sendSequenceStep(body.sequenceId);
-        return Response.json({ ok: true, sequence, send, status: await fetchWorkStatus() });
+        let autoSendPolicy: AutoSendPolicy = "deferred";
+        let nextDueAt: string | null = null;
+        let send;
+
+        if (autoSendEnabled) {
+          const sendResult = await sendSequenceStep(body.sequenceId);
+          send = sendResult.send;
+          autoSendPolicy = sendResult.ok ? "immediate" : "deferred";
+          nextDueAt = sendResult.ok ? null : await getSequenceNextDueAt(body.sequenceId);
+        } else {
+          const policy = await readWorkSendPolicy();
+          const delayMs = policy.sendStaggerMinutes > 0 ? policy.sendStaggerMinutes * 60_000 : 0;
+          nextDueAt = await deferSequenceStepSend(body.sequenceId, delayMs);
+          autoSendPolicy = "deferred";
+        }
+
+        return Response.json({
+          ok: true,
+          sequence,
+          send,
+          autoSendPolicy,
+          nextDueAt,
+          status: await fetchWorkStatus(),
+        });
       }
 
       case "pause_sequence": {
@@ -206,6 +244,10 @@ export async function POST(request: Request): Promise<Response> {
         }
         const entry = await tagMailReplyIntent(body.mailId, body.intent as ReplyIntent);
         if (!entry) return Response.json({ ok: false, error: "Mail entry not found" }, { status: 404 });
+        if (body.intent === "interested" && entry.leadId) {
+          const lead = await getLead(entry.leadId);
+          if (lead) await notifySlackInterestedReply(lead, entry.subject);
+        }
         return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
       }
 
@@ -251,6 +293,79 @@ export async function POST(request: Request): Promise<Response> {
         if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
         const result = await executeOutboundSend(body.sendId);
         return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "update_send_policy": {
+        const fre = await readAppFreState("my-work");
+        const autoSendOnActivate =
+          typeof (body as { autoSendOnActivate?: boolean }).autoSendOnActivate === "boolean"
+            ? (body as { autoSendOnActivate: boolean }).autoSendOnActivate
+            : undefined;
+        if (autoSendOnActivate === undefined) {
+          return Response.json({ ok: false, error: "autoSendOnActivate boolean required" }, { status: 400 });
+        }
+        await writeAppFreState("my-work", {
+          ...fre,
+          config: { ...fre.config, autoSendOnActivate },
+        });
+        return Response.json({ ok: true, status: await fetchWorkStatus() });
+      }
+
+      case "google_mail_preview": {
+        const preview = await fetchWorkMailPreview();
+        return Response.json({ ok: true, ...preview, status: await fetchWorkStatus() });
+      }
+
+      case "google_calendar_preview": {
+        const preview = await fetchWorkCalendarPreview();
+        return Response.json({ ok: true, ...preview, status: await fetchWorkStatus() });
+      }
+
+      case "morning_brief": {
+        const brief = await buildMorningBrief();
+        return Response.json({ ok: true, brief, status: await fetchWorkStatus() });
+      }
+
+      case "prep_meeting": {
+        const brief = await buildPrepMeetingBrief(body.email);
+        return Response.json({ ok: true, brief, status: await fetchWorkStatus() });
+      }
+
+      case "sync_notion_lead": {
+        if (!body.leadId) return Response.json({ ok: false, error: "leadId required" }, { status: 400 });
+        const lead = await getLead(body.leadId);
+        if (!lead) return Response.json({ ok: false, error: "Lead not found" }, { status: 404 });
+        const result = await pushLeadNotesToNotion({
+          leadName: lead.name,
+          leadEmail: lead.email,
+          notes: lead.notes || `Stage: ${lead.stage}`,
+        });
+        await appendWorkSyncLog({
+          connector: "notion",
+          action: "sync_notion_lead",
+          detail: result.detail,
+        });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "slack_digest": {
+        const result = await sendSlackDigest();
+        await appendWorkSyncLog({
+          connector: "slack",
+          action: "slack_digest",
+          detail: result.detail,
+        });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "crm_status": {
+        const crm = await getCrmStatus();
+        return Response.json({ ok: true, crm, status: await fetchWorkStatus() });
+      }
+
+      case "sync_crm": {
+        const sync = await syncCrmBothWays();
+        return Response.json({ ok: true, ...sync, status: await fetchWorkStatus() });
       }
 
       default:
