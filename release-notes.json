@@ -48,5 +48,13 @@
       "Review hardening — strict wizard ok checks, Go Live until paperReady, MCP/tools parity, analytics win-rate fix",
       "120 smoke + 17 user flows — rebalance, walk-forward, wizard API sequence; tagged v0.3.3"
     ]
+  },
+  "0.3.4": {
+    "highlights": [
+      "Capital Claw polish — EXIT-DEMO guide, verify:exit-demo-scaffold (8 checks in qa:local), Go Live exit-demo CTA",
+      "Chat skill fix — create_rule, arm_rule, rebalance, portfolio_query execute via executeMyCapitalSkill (plan skills unblocked)",
+      "Broker scaffold — Webull/E*TRADE in digital.env.example; pillar-3 egress workers (Webull, E*TRADE, Robinhood MCP)",
+      "GTM refresh — 03-capital-claw.png, demo:capture:capital; 122 smoke + exit-demo scaffold; tagged v0.3.4"
+    ]
   }
 }

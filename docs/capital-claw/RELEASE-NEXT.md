@@ -25,8 +25,9 @@ Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys` 
 - **verify:exit-demo-scaffold** — 8 checks (env template, go_live, broker routes) · wired into `qa:local`
 - **Go Live panel** — inline exit-demo commands when Alpaca keys absent
 - **digital.env.example** — Webull + E*TRADE vars · `demo:capture:capital` script
-- **Chat skill parity** — `create_rule` + `arm_rule` executors (not plan-only)
+- **Chat skill parity** — `create_rule` + `arm_rule` executors; plan skills unblocked in `executeMyCapitalSkill`
 - **Docs sync** — BEST-IN-CLASS / RELEASE-NEXT deferred sections updated
+- **Tagged v0.3.4**
 
 ## Shipped (V4.6 — day-one excellence sprint)
 
