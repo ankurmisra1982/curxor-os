@@ -28,7 +28,8 @@ export type WorkFeature =
   | "mcp"
   | "executive-brief"
   | "level-up-nudge"
-  | "integrations-peek";
+  | "integrations-peek"
+  | "deliverability";
 
 const FEATURE_MIN: Record<WorkFeature, GrowthLevel> = {
   "go-live": "L1",
@@ -56,6 +57,7 @@ const FEATURE_MIN: Record<WorkFeature, GrowthLevel> = {
   "executive-brief": "L5",
   "level-up-nudge": "L1",
   "integrations-peek": "L3",
+  deliverability: "L3",
 };
 
 export function workFeatureVisible(growth: GrowthLevel, feature: WorkFeature): boolean {
@@ -111,6 +113,7 @@ export function workSectionVisibleForGrowth(
     "sync-audit": "integrations",
     "executive-brief": "start",
     "integrations-peek": "start",
+    deliverability: "ops",
   };
 
   const FEATURE_MAP: Record<string, WorkFeature | undefined> = {
@@ -136,6 +139,7 @@ export function workSectionVisibleForGrowth(
     "sync-audit": "sync-audit",
     "executive-brief": "executive-brief",
     "integrations-peek": "integrations-peek",
+    deliverability: "deliverability",
   };
 
   const tab = SECTION_TAB[sectionId];

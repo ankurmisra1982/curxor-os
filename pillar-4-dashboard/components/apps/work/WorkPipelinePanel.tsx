@@ -1,6 +1,7 @@
 "use client";
 
 import type { GrowthLevel } from "@/lib/os-growth-level";
+import { meetsGrowthLevel } from "@/lib/os-growth-level";
 import type { LeadStage, WorkLead } from "@/lib/work-queue-types";
 import { workTerm } from "@/lib/work-level-copy";
 
@@ -20,6 +21,8 @@ interface WorkPipelinePanelProps {
   onSelect: (id: string) => void;
   onStageChange: (leadId: string, stage: LeadStage) => void;
   onAddLead: () => void;
+  onEnrich?: (leadId: string) => void;
+  onBookMeeting?: (leadId: string) => void;
 }
 
 export function WorkPipelinePanel({
@@ -29,9 +32,12 @@ export function WorkPipelinePanel({
   onSelect,
   onStageChange,
   onAddLead,
+  onEnrich,
+  onBookMeeting,
 }: WorkPipelinePanelProps) {
   const singular = workTerm(growthLevel, "lead").toLowerCase();
   const plural = workTerm(growthLevel, "leadPlural").toLowerCase();
+  const showQuickActions = meetsGrowthLevel(growthLevel, "L2") && (onEnrich || onBookMeeting);
 
   return (
     <div className="space-y-2 font-mono text-xs">
@@ -46,34 +52,56 @@ export function WorkPipelinePanel({
         </p>
       ) : (
         leads.map((lead) => (
-          <button
+          <div
             key={lead.id}
-            type="button"
-            onClick={() => onSelect(lead.id)}
-            className={`grid w-full grid-cols-[1fr_auto] gap-2 border px-3 py-2 text-left ${
+            className={`border px-3 py-2 ${
               selectedLeadId === lead.id ? "border-cursor-glow bg-surface" : "border-line bg-panel"
             }`}
           >
-            <div>
-              <p className="text-stark">{lead.name}</p>
-              <p className="text-[10px] text-muted">
-                {lead.company || lead.email} · {lead.title || "—"}
-              </p>
-            </div>
-            <select
-              value={lead.stage}
-              onClick={(e) => e.stopPropagation()}
-              onChange={(e) => onStageChange(lead.id, e.target.value as LeadStage)}
-              className={`border border-line bg-panel px-1 py-0.5 text-[10px] uppercase ${stageClass(lead.stage)}`}
-              aria-label={`${singular} stage`}
-            >
-              {STAGES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </button>
+            <button type="button" onClick={() => onSelect(lead.id)} className="grid w-full grid-cols-[1fr_auto] gap-2 text-left">
+              <div>
+                <p className="text-stark">{lead.name}</p>
+                <p className="text-[10px] text-muted">
+                  {lead.company || lead.email} · {lead.title || "—"}
+                </p>
+              </div>
+              <select
+                value={lead.stage}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => onStageChange(lead.id, e.target.value as LeadStage)}
+                className={`border border-line bg-panel px-1 py-0.5 text-[10px] uppercase ${stageClass(lead.stage)}`}
+                aria-label={`${singular} stage`}
+              >
+                {STAGES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </button>
+            {showQuickActions && selectedLeadId === lead.id ? (
+              <div className="mt-2 flex flex-wrap gap-1 border-t border-line/40 pt-2">
+                {onEnrich ? (
+                  <button
+                    type="button"
+                    onClick={() => onEnrich(lead.id)}
+                    className="border border-line px-1.5 py-0.5 text-[9px] uppercase text-muted hover:text-stark"
+                  >
+                    Enrich
+                  </button>
+                ) : null}
+                {onBookMeeting ? (
+                  <button
+                    type="button"
+                    onClick={() => onBookMeeting(lead.id)}
+                    className="border border-cursor-glow/50 px-1.5 py-0.5 text-[9px] uppercase text-cursor-glow"
+                  >
+                    Book meeting
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         ))
       )}
     </div>

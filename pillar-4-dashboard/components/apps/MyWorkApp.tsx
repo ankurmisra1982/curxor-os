@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
+import { WorkDeliverabilityPanel } from "@/components/apps/work/WorkDeliverabilityPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
 import { WorkApprovalPanel } from "@/components/apps/work/WorkApprovalPanel";
@@ -107,6 +108,16 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [policyBusy, setPolicyBusy] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [draftReplyPreview, setDraftReplyPreview] = useState("");
+  const [focusMailId, setFocusMailId] = useState<string | null>(null);
+
+  const draftReplyForMail = useCallback((mailId: string, prompt?: string) => {
+    void postWork({ action: "draft_reply", mailId, prompt }).then((json) => {
+      const draft = json as { body?: string; subject?: string };
+      setDraftReplyPreview(`${draft.subject ?? ""}\n\n${draft.body ?? ""}`);
+      setFocusMailId(mailId);
+      setSignal("Reply draft ready");
+    });
+  }, []);
 
   const workspace = typeof config.workspaceName === "string" ? config.workspaceName : "Outreach Desk";
   const lane = typeof config.clawLane === "string" ? config.clawLane : "A";
@@ -213,7 +224,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         return;
       }
       if (lastSkillId === "run_demo_tour") {
-        setSignal("Demo tour complete · simulated send");
+        setSignal(
+          growthLevel === "L1"
+            ? "Explorer tour · opportunity + template + draft"
+            : growthLevel === "L2"
+              ? "Side hustle tour · mini-sequence"
+              : growthLevel === "L3"
+                ? "Operator tour · approval queue"
+                : "Demo tour complete · simulated send",
+        );
         return;
       }
       if (lastSkillId === "scan_inbox") {
@@ -234,7 +253,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         setSignal("Meeting prep ready");
       }
     })();
-  }, [skillTick, lastSkillId, loadStatus, loadBootstrap, lane]);
+  }, [skillTick, lastSkillId, loadStatus, loadBootstrap, lane, growthLevel]);
 
   const runDemoTour = () => {
     setDemoTourRunning(true);
@@ -242,7 +261,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       .then((json) => {
         if (json.status) applyStatus(json.status);
         if (json.goLive) setGoLive(json.goLive);
-        setSignal(json.ok ? "Demo tour complete · simulated send" : json.error ?? "Demo tour failed");
+        setSignal(json.ok ? (
+          growthLevel === "L1"
+            ? "Explorer tour · opportunity + template + draft"
+            : growthLevel === "L2"
+              ? "Side hustle tour · mini-sequence"
+              : growthLevel === "L3"
+                ? "Operator tour · approval queue"
+                : "Demo tour complete · simulated send"
+        ) : json.error ?? "Demo tour failed");
       })
       .finally(() => setDemoTourRunning(false));
   };
@@ -346,6 +373,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       {show("start-home") ? (
         <ExperienceAppSection
           appId="my-work"
+          skipExperienceGate
           sectionId="start-home"
           minLevel="beginner"
           title="Home"
@@ -357,6 +385,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             tasks={status?.tasks ?? []}
             templatePacks={templatePacks}
             defaultPackId={defaultPackId}
+            focusMailId={focusMailId}
             onApplyPack={async (packId) => {
               await postWork({ action: "apply_template_pack", packId });
               await loadBootstrap();
@@ -365,12 +394,29 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onToggleTask={(taskId) => void action({ action: "toggle_task", taskId })}
             showIntegrationsPeek={workFeatureVisible(growthLevel, "integrations-peek")}
             onOpenIntegrations={() => setWorkspaceTab("integrations")}
+            onSelectWaitingMail={(mailId) => {
+              setFocusMailId(mailId);
+              if (growthLevel === "L1") setWorkspaceTab("start");
+            }}
+            onDraftReply={(mailId) => draftReplyForMail(mailId)}
+            onUseTemplateInDraft={(template) => {
+              const mailId = focusMailId ?? status?.mailIndex.find((m) => !m.leadId)?.id;
+              if (mailId) {
+                draftReplyForMail(mailId, `${template.subject}\n\n${template.body}`);
+              } else {
+                setDraftReplyPreview(`${template.subject}\n\n${template.body}`);
+                setSignal("Template loaded — add a message or opportunity to send");
+              }
+            }}
           />
+          {draftReplyPreview && growthLevel === "L1" ? (
+            <pre className="mt-3 whitespace-pre-wrap border border-line/60 p-2 font-mono text-[10px] text-stark">{draftReplyPreview}</pre>
+          ) : null}
         </ExperienceAppSection>
       ) : null}
 
       {show("morning-brief") ? (
-        <ExperienceAppSection appId="my-work" sectionId="morning-brief" minLevel="beginner" title="Morning brief" subtitle="Mail + calendar + tasks on mount">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="morning-brief" minLevel="beginner" title="Morning brief" subtitle="Mail + calendar + tasks on mount">
           <WorkMorningBriefPanel />
         </ExperienceAppSection>
       ) : null}
@@ -378,6 +424,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       {show("go-live") ? (
         <ExperienceAppSection
           appId="my-work"
+          skipExperienceGate
           sectionId="go-live"
           minLevel="beginner"
           title={workTerm(growthLevel, "goLive")}
@@ -393,7 +440,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("tasks") ? (
-        <ExperienceAppSection appId="my-work" sectionId="tasks" minLevel="beginner" title="Task matrix" subtitle="P1 first · tap to complete">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="tasks" minLevel="beginner" title="Task matrix" subtitle="P1 first · tap to complete">
           <div className="space-y-2 font-mono text-xs">
             {(status?.tasks ?? []).map((t) => (
               <button
@@ -429,6 +476,16 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
               onSelect={setSelectedLeadId}
               onStageChange={(leadId, stage: LeadStage) => void action({ action: "update_lead_stage", leadId, stage })}
               onAddLead={addOpportunity}
+              onEnrich={
+                workFeatureVisible(growthLevel, "mini-sequence")
+                  ? (leadId) => void postWork({ action: "enrich_lead", leadId }).then(() => loadBootstrap())
+                  : undefined
+              }
+              onBookMeeting={
+                workFeatureVisible(growthLevel, "mini-sequence")
+                  ? (leadId) => void postWork({ action: "book_meeting", leadId }).then(() => loadBootstrap())
+                  : undefined
+              }
             />
             {workFeatureVisible(growthLevel, "kanban") ? (
               <div className="mt-3 border-t border-line/60 pt-3">
@@ -496,7 +553,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("outbound") && !show("pipeline") ? (
-        <ExperienceAppSection appId="my-work" sectionId="outbound" minLevel="standard" title="Outbound queue" subtitle={`Lane ${lane} · send log`}>
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="outbound" minLevel="standard" title="Outbound queue" subtitle={`Lane ${lane} · send log`}>
           <WorkOutboundPanel
             sends={status?.sends ?? []}
             onRetry={(sendId) => void action({ action: "send_now", sendId })}
@@ -505,7 +562,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("pipeline") && show("outbound") ? (
-        <ExperienceAppSection appId="my-work" sectionId="outbound" minLevel="standard" title="Outbound queue" subtitle={`Lane ${lane} · send log`}>
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="outbound" minLevel="standard" title="Outbound queue" subtitle={`Lane ${lane} · send log`}>
           <WorkOutboundPanel
             sends={status?.sends ?? []}
             onRetry={(sendId) => void action({ action: "send_now", sendId })}
@@ -514,25 +571,20 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("comms") ? (
-        <ExperienceAppSection appId="my-work" sectionId="comms" minLevel="standard" title="Comms desk" subtitle="Unified inbox · auto-pause sequences on reply" showCoach={false}>
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="comms" minLevel="standard" title="Comms desk" subtitle="Unified inbox · auto-pause sequences on reply" showCoach={false}>
           <UnifiedInboxPanel embedded />
         </ExperienceAppSection>
       ) : null}
 
       {show("inbox-triage") ? (
-        <ExperienceAppSection appId="my-work" sectionId="inbox-triage" minLevel="standard" title="Inbox triage" subtitle="Reply intent · assign · draft reply">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="inbox-triage" minLevel="standard" title="Inbox triage" subtitle="Reply intent · assign · draft reply">
           <WorkInboxTriagePanel
             rows={status?.mailIndex ?? []}
             leads={status?.leads ?? []}
+            highlightMailId={focusMailId}
             onAssign={(mailId, leadId) => void action({ action: "assign_mail_to_lead", mailId, leadId })}
             onTagIntent={(mailId, intent) => void action({ action: "tag_reply_intent", mailId, intent })}
-            onDraftReply={(mailId) => {
-              void postWork({ action: "draft_reply", mailId }).then((json) => {
-                const draft = json as { body?: string; subject?: string };
-                setDraftReplyPreview(`${draft.subject ?? ""}\n\n${draft.body ?? ""}`);
-                setSignal("Reply draft ready");
-              });
-            }}
+            onDraftReply={(mailId) => draftReplyForMail(mailId)}
           />
           {draftReplyPreview ? (
             <pre className="mt-3 whitespace-pre-wrap border border-line/60 p-2 font-mono text-[10px] text-stark">{draftReplyPreview}</pre>
@@ -541,7 +593,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("sync-log") ? (
-        <ExperienceAppSection appId="my-work" sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Reply intent tagging · offline queue">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="sync-log" minLevel="expert" title="Mail index" subtitle="Reply intent tagging · offline queue">
           <WorkMailIndexPanel
             rows={status?.mailIndex ?? []}
             onTagIntent={(mailId, intent: ReplyIntent) => void action({ action: "tag_reply_intent", mailId, intent })}
@@ -550,7 +602,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("analytics") && status?.analytics ? (
-        <ExperienceAppSection appId="my-work" sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
           <WorkAnalyticsPanel
             analytics={status.analytics}
             sendPolicy={status.sendPolicy}
@@ -559,8 +611,21 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </ExperienceAppSection>
       ) : null}
 
+      {show("deliverability") && status?.deliverability ? (
+        <ExperienceAppSection
+          appId="my-work"
+          skipExperienceGate
+          sectionId="deliverability"
+          minLevel="standard"
+          title="Deliverability"
+          subtitle="Domain health · failures · send reputation"
+        >
+          <WorkDeliverabilityPanel deliverability={status.deliverability} bridgeConfigured={status.bridgeConfigured} />
+        </ExperienceAppSection>
+      ) : null}
+
       {show("approval") ? (
-        <ExperienceAppSection appId="my-work" sectionId="approval" minLevel="standard" title="Send approval" subtitle="Human gate before outbound">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="approval" minLevel="standard" title="Send approval" subtitle="Human gate before outbound">
           <WorkApprovalPanel
             sends={status?.sends ?? []}
             onApprove={async (sendId) => {
@@ -577,7 +642,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("kill-switch") ? (
-        <ExperienceAppSection appId="my-work" sectionId="kill-switch" minLevel="expert" title="Outbound kill switch" subtitle="Block all sequence sends">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="kill-switch" minLevel="expert" title="Outbound kill switch" subtitle="Block all sequence sends">
           <button
             type="button"
             onClick={() =>
@@ -596,7 +661,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("send-policy") ? (
-        <ExperienceAppSection appId="my-work" sectionId="send-policy" minLevel="expert" title="Send policy" subtitle="Daily limit · stagger · auto-send on activate">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="send-policy" minLevel="expert" title="Send policy" subtitle="Daily limit · stagger · auto-send on activate">
           <WorkSendPolicyPanel
             autoSendOnActivate={status?.autoSendOnActivate ?? false}
             defaultAutoSend={status?.autoSendDefault ?? false}
@@ -613,7 +678,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("recovery") ? (
-        <ExperienceAppSection appId="my-work" sectionId="recovery" minLevel="standard" title="Send recovery" subtitle="Retry failed bridge sends">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="recovery" minLevel="standard" title="Send recovery" subtitle="Retry failed bridge sends">
           <WorkRecoveryPanel
             failed={failedSends}
             onRetry={(sendId) => void action({ action: "recovery_retry", sendId })}
@@ -623,13 +688,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("day-brief") && dayBrief ? (
-        <ExperienceAppSection appId="my-work" sectionId="day-brief" minLevel="standard" title="Day brief" subtitle="Local LLM summary">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="day-brief" minLevel="standard" title="Day brief" subtitle="Local LLM summary">
           <pre className="whitespace-pre-wrap font-mono text-[11px] text-stark">{dayBrief}</pre>
         </ExperienceAppSection>
       ) : null}
 
       {show("connector-vault") ? (
-        <ExperienceAppSection appId="my-work" sectionId="connector-vault" minLevel="expert" title="Connector vault" subtitle="SMTP · Google · Slack · Notion · Twenty · n8n">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="connector-vault" minLevel="expert" title="Connector vault" subtitle="SMTP · Google · Slack · Notion · Twenty · n8n">
           <WorkConnectorVaultPanel
             report={status?.connectorVault ?? null}
             onRefresh={() => void loadBootstrap()}
@@ -640,7 +705,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("sync-audit") && (status?.syncLog?.length ?? 0) > 0 ? (
-        <ExperienceAppSection appId="my-work" sectionId="sync-audit" minLevel="expert" title="Sync log" subtitle="Integration audit trail">
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="sync-audit" minLevel="expert" title="Sync log" subtitle="Integration audit trail">
           <div className="space-y-1 font-mono text-[10px]">
             {(status?.syncLog ?? []).slice(0, 20).map((entry) => (
               <div key={entry.id} className="border border-line/60 px-2 py-1">

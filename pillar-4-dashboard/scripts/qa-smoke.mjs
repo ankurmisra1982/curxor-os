@@ -693,7 +693,8 @@ await check("work go_live checklist", async () => {
 
 await check("work run_demo_tour", async () => {
   const { ok, json } = await postJson("/api/work/status", { action: "run_demo_tour" });
-  return ok && json.ok === true && Array.isArray(json.steps) && json.steps.length >= 4 && json.sequenceId;
+  const hasOutcome = Boolean(json.sequenceId || json.mailId || json.sendId);
+  return ok && json.ok === true && Array.isArray(json.steps) && json.steps.length >= 3 && hasOutcome;
 });
 
 await check("work draft_sequence", async () => {
@@ -748,6 +749,12 @@ await check("work tag_reply_intent", async () => {
 await check("work analytics", async () => {
   const { ok, json } = await postJson("/api/work/status", { action: "analytics" });
   return ok && typeof json.analytics?.sentCount === "number" && json.sendPolicy?.dailySendLimit > 0;
+});
+
+await check("work deliverability", async () => {
+  const json = await getJson("/api/work/status");
+  const d = json.deliverability;
+  return d != null && typeof d.reputationScore === "number" && typeof d.domainHealth === "string";
 });
 
 await check("work summarize_day", async () => {

@@ -1,6 +1,7 @@
 "use client";
 
 import type { WorkSequence } from "@/lib/work-queue-types";
+import { previewUnsubscribeUrl } from "@/lib/work-unsubscribe-preview";
 
 function statusClass(status: WorkSequence["status"]): string {
   if (status === "active") return "text-cursor-glow";
@@ -87,6 +88,14 @@ export function WorkSequencePanel({
               <p className="text-muted">
                 {step.sentAt ? `Sent ${new Date(step.sentAt).toLocaleString()}` : step.scheduledAt ? `Scheduled ${new Date(step.scheduledAt).toLocaleString()}` : "Pending"}
               </p>
+              {step.kind === "email" && step.body.includes("{{unsubscribe_url}}") ? (
+                <p className="mt-1 text-[9px] text-muted">
+                  Unsubscribe preview:{" "}
+                  <code className="text-cursor-glow">{previewUnsubscribeUrl(selected.leadId)}</code>
+                </p>
+              ) : step.kind === "email" ? (
+                <p className="mt-1 text-[9px] text-amber-400/80">Tip: add {"{{unsubscribe_url}}"} to body for compliance</p>
+              ) : null}
             </div>
           ))}
           <div className="flex flex-wrap gap-2 pt-1">

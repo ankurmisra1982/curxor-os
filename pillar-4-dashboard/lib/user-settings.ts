@@ -11,6 +11,7 @@ import {
   uiModeFromExperienceLevel,
   type ExperienceLevel,
 } from "./experience-level";
+import { isGrowthLevel } from "./os-growth-level";
 import {
   DEFAULT_USER_SETTINGS,
   getUserSettingsPath,
@@ -53,6 +54,14 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
     appearance: {
       uiMode: syncedUiMode,
       experienceLevel,
+      workGrowthLevel:
+        partial.appearance?.workGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.workGrowthLevel)
+            ? partial.appearance.workGrowthLevel
+            : isGrowthLevel(base.appearance.workGrowthLevel)
+              ? base.appearance.workGrowthLevel
+              : null,
       colorScheme: isColorScheme(partial.appearance?.colorScheme)
         ? partial.appearance.colorScheme
         : base.appearance.colorScheme,

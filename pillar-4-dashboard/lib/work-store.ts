@@ -9,6 +9,7 @@ import { buildWorkGrowthProfile } from "./work-growth";
 import { readUserSettings } from "./user-settings";
 import { loadDigitalEnv } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
+import { buildWorkDeliverabilitySummary } from "./work-deliverability";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { classifyReplyIntent } from "./work-reply-intent";
 import { isWorkImapConfigured, fetchImapMailForScan } from "./work-imap-client";
@@ -255,6 +256,11 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const policy = await readWorkSendPolicy();
   const sendsToday = countSendsToday(file.sends);
   const analytics = buildWorkAnalytics(file.sends, file.mailIndex);
+  const deliverability = await buildWorkDeliverabilitySummary(
+    file.sends,
+    file.sequences,
+    Object.keys(file.unsubscribeTokens ?? {}).length,
+  );
   const connectorVault = await buildWorkConnectorHealthReport();
   const autoSendFre = await readAutoSendOnActivateFre();
   const autoSendOnActivate = autoSendFre ?? (await resolveAutoSendOnActivate(bridgeConfigured));
@@ -289,6 +295,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
       remainingToday: Math.max(0, policy.dailySendLimit - sendsToday),
     },
     analytics,
+    deliverability,
     connectorVault,
     syncLog: file.syncLog ?? [],
     autoSendOnActivate,

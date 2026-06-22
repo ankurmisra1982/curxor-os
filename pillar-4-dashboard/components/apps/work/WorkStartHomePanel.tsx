@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { GrowthLevel } from "@/lib/os-growth-level";
 import type { MailIndexEntry, WorkTask } from "@/lib/work-queue-types";
 import { workTerm } from "@/lib/work-level-copy";
 import type { WorkTemplate, WorkTemplatePack } from "@/lib/work-template-packs-data";
+
+type InboxStrip = "unassigned" | "replied" | "all";
 
 interface WorkStartHomePanelProps {
   growthLevel: GrowthLevel;
@@ -13,11 +15,15 @@ interface WorkStartHomePanelProps {
   tasks: WorkTask[];
   templatePacks: WorkTemplatePack[];
   defaultPackId?: string | null;
+  focusMailId?: string | null;
   onApplyPack: (packId: string) => Promise<void>;
   onAddOpportunity: () => void;
   onToggleTask: (taskId: string) => void;
   onOpenIntegrations?: () => void;
   showIntegrationsPeek?: boolean;
+  onSelectWaitingMail?: (mailId: string) => void;
+  onDraftReply?: (mailId: string) => void;
+  onUseTemplateInDraft?: (template: WorkTemplate) => void;
 }
 
 export function WorkStartHomePanel({
@@ -26,16 +32,29 @@ export function WorkStartHomePanel({
   tasks,
   templatePacks,
   defaultPackId,
+  focusMailId,
   onApplyPack,
   onAddOpportunity,
   onToggleTask,
   onOpenIntegrations,
   showIntegrationsPeek,
+  onSelectWaitingMail,
+  onDraftReply,
+  onUseTemplateInDraft,
 }: WorkStartHomePanelProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<WorkTemplate | null>(null);
   const [packBusy, setPackBusy] = useState(false);
+  const [inboxStrip, setInboxStrip] = useState<InboxStrip>("unassigned");
+  const [copied, setCopied] = useState(false);
 
-  const waiting = mailIndex.filter((m) => !m.leadId && !m.matchedReply).slice(0, 8);
+  const waitingRows = useMemo(() => {
+    if (inboxStrip === "replied") {
+      return mailIndex.filter((m) => m.matchedReply || m.replyIntent === "interested").slice(0, 8);
+    }
+    if (inboxStrip === "all") return mailIndex.slice(0, 8);
+    return mailIndex.filter((m) => !m.leadId && !m.matchedReply).slice(0, 8);
+  }, [inboxStrip, mailIndex]);
+
   const openTasks = tasks.filter((t) => !t.done).slice(0, 6);
 
   const applyPack = (packId: string) => {
@@ -43,20 +62,66 @@ export function WorkStartHomePanel({
     void onApplyPack(packId).finally(() => setPackBusy(false));
   };
 
+  const copyTemplate = async (template: WorkTemplate) => {
+    const text = `${template.subject}\n\n${template.body}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <div className="space-y-4 font-mono text-xs">
       <p className="text-[11px] text-muted">{workTerm(growthLevel, "deskSubtitle")}</p>
 
       <section>
-        <h3 className="mb-2 text-[10px] uppercase tracking-widest text-cursor-glow">People waiting</h3>
-        {waiting.length === 0 ? (
-          <p className="text-[11px] text-muted">No unassigned messages — scan inbox or check comms.</p>
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-[10px] uppercase tracking-widest text-cursor-glow">People waiting</h3>
+          <div className="flex gap-1">
+            {(["unassigned", "replied", "all"] as const).map((strip) => (
+              <button
+                key={strip}
+                type="button"
+                onClick={() => setInboxStrip(strip)}
+                className={`border px-1.5 py-0.5 text-[9px] uppercase ${
+                  inboxStrip === strip ? "border-cursor-glow text-cursor-glow" : "border-line text-muted"
+                }`}
+              >
+                {strip}
+              </button>
+            ))}
+          </div>
+        </div>
+        {waitingRows.length === 0 ? (
+          <p className="text-[11px] text-muted">No messages in this strip — scan inbox or check comms.</p>
         ) : (
           <ul className="space-y-1">
-            {waiting.map((m) => (
-              <li key={m.id} className="border border-line/60 px-2 py-1">
-                <span className="text-stark">{m.from || "Message"}</span>
-                <span className="ml-2 text-[10px] text-muted">{m.subject?.slice(0, 48)}</span>
+            {waitingRows.map((m) => (
+              <li key={m.id}>
+                <button
+                  type="button"
+                  onClick={() => onSelectWaitingMail?.(m.id)}
+                  className={`w-full border px-2 py-1 text-left hover:border-cursor-glow/50 ${
+                    focusMailId === m.id ? "border-cursor-glow bg-surface" : "border-line/60"
+                  }`}
+                >
+                  <span className="text-stark">{m.from || "Message"}</span>
+                  <span className="ml-2 text-[10px] text-muted">{m.subject?.slice(0, 48)}</span>
+                </button>
+                {focusMailId === m.id ? (
+                  <div className="mt-1 flex flex-wrap gap-1 pl-1">
+                    <button
+                      type="button"
+                      onClick={() => onDraftReply?.(m.id)}
+                      className="border border-cursor-glow/60 px-1.5 py-0.5 text-[9px] uppercase text-cursor-glow"
+                    >
+                      Draft reply
+                    </button>
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>
@@ -112,13 +177,31 @@ export function WorkStartHomePanel({
           ))}
         </div>
         {selectedTemplate ? (
-          <pre className="whitespace-pre-wrap border border-line/60 p-2 text-[10px] text-stark">
-            {selectedTemplate.subject}
-            {"\n\n"}
-            {selectedTemplate.body}
-          </pre>
+          <div className="space-y-2">
+            <pre className="whitespace-pre-wrap border border-line/60 p-2 text-[10px] text-stark">
+              {selectedTemplate.subject}
+              {"\n\n"}
+              {selectedTemplate.body}
+            </pre>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => void copyTemplate(selectedTemplate)}
+                className="border border-line px-2 py-0.5 text-[10px] uppercase text-muted hover:text-stark"
+              >
+                {copied ? "Copied" : "Copy"}
+              </button>
+              <button
+                type="button"
+                onClick={() => onUseTemplateInDraft?.(selectedTemplate)}
+                className="border border-cursor-glow px-2 py-0.5 text-[10px] uppercase text-cursor-glow"
+              >
+                Use in draft
+              </button>
+            </div>
+          </div>
         ) : (
-          <p className="text-[11px] text-muted">Tap a pack to load templates — copy into your reply draft.</p>
+          <p className="text-[11px] text-muted">Tap a template below — copy or wire into a reply draft.</p>
         )}
         {templatePacks[0]?.templates.length ? (
           <div className="mt-2 flex flex-wrap gap-1">

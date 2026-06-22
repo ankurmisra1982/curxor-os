@@ -73,18 +73,21 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
-// 4. run_demo_tour → simulated send
+// 4. run_demo_tour → persona path (L1 draft · L2/L3+ send or approval)
 {
   const { ok, json } = await post("/api/work/status", { action: "run_demo_tour" });
   const tourSend =
     json.sendId && json.status?.sends
       ? json.status.sends.find((s) => s.id === json.sendId)
       : null;
-  const sendOk = tourSend?.status === "simulated" || tourSend?.status === "sent";
-  if (ok && json.ok && json.sequenceId && Array.isArray(json.steps) && json.steps.length >= 4 && sendOk) {
-    pass("run_demo_tour", `${json.sendId} · ${tourSend?.status}`);
+  const l1Ok = json.tourKind === "L1-explorer" && json.mailId && json.steps?.some((s) => s.id === "draft_reply" && s.done);
+  const l3Ok = tourSend?.status === "pending_approval";
+  const sendOk = tourSend?.status === "simulated" || tourSend?.status === "sent" || l3Ok;
+  const gtmOk = json.sequenceId && sendOk;
+  if (ok && json.ok && Array.isArray(json.steps) && json.steps.length >= 3 && (l1Ok || gtmOk)) {
+    pass("run_demo_tour", json.tourKind ?? `${json.sendId} · ${tourSend?.status ?? "L1"}`);
   } else {
-    fail("run_demo_tour", `ok=${ok} tourOk=${json.ok} send=${tourSend?.status} steps=${json.steps?.length}`);
+    fail("run_demo_tour", `ok=${ok} tourOk=${json.ok} kind=${json.tourKind} send=${tourSend?.status} steps=${json.steps?.length}`);
   }
 }
 
@@ -303,31 +306,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
-// 16. growth profile on bootstrap
-{
-  const { ok, json } = await post("/api/work/status", { action: "get_growth_profile" });
-  const gl = json.growthProfile?.growthLevel;
-  if (ok && (gl === "L1" || gl === "L2" || gl === "L3" || gl === "L4" || gl === "L5")) {
-    pass("growth_profile bootstrap", `${gl} · ${json.growthProfile?.growthLabel ?? ""}`);
-  } else {
-    fail("growth_profile bootstrap", `growthLevel=${gl}`);
-  }
-}
-
-// 17. apply_template_pack
-{
-  const { ok, json } = await post("/api/work/status", {
-    action: "apply_template_pack",
-    packId: "student_opportunities",
-  });
-  if (ok && json.ok && typeof json.tasksCreated === "number") {
-    pass("apply_template_pack", `tasks=${json.tasksCreated}`);
-  } else {
-    fail("apply_template_pack", `tasksCreated=${json.tasksCreated}`);
-  }
-}
-
-// 18. L1 opportunity path: create lead → draft_reply
+// 20. L1 opportunity path: create lead → draft_reply
 {
   const email = `l1-${Date.now()}@example.com`;
   const create = await post("/api/work/status", {
@@ -352,7 +331,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
-// 19. L2 mini sequence path
+// 21. L2 mini sequence path
 {
   const status = (await get("/api/work/status")).json;
   const leadId = status.leads?.[0]?.id;
@@ -369,6 +348,42 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
     } else {
       fail("L2 mini sequence", `sequenceId=${json.sequenceId}`);
     }
+  }
+}
+
+// 22. deliverability summary on status
+{
+  const status = (await get("/api/work/status")).json;
+  const d = status.deliverability;
+  if (d && typeof d.reputationScore === "number" && d.domainHealth) {
+    pass("deliverability summary", `${d.reputationScore} · ${d.domainHealth}`);
+  } else {
+    fail("deliverability summary", "missing deliverability block");
+  }
+}
+
+// 23. go_live domain_health step
+{
+  const { ok, json } = await post("/api/work/status", { action: "go_live" });
+  const step = json.goLive?.steps?.find((s) => s.id === "domain_health");
+  if (ok && step?.label) {
+    pass("go_live domain_health", step.status);
+  } else {
+    fail("go_live domain_health", "step missing");
+  }
+}
+
+// 24. L3 approval tour → pending send
+{
+  const { ok, json } = await post("/api/work/status", { action: "run_demo_tour", growthLevel: "L3" });
+  const pending =
+    json.sendId && json.status?.sends
+      ? json.status.sends.find((s) => s.id === json.sendId)
+      : null;
+  if (ok && json.ok && json.tourKind === "L3-operator" && pending?.status === "pending_approval") {
+    pass("L3 approval tour", pending.id);
+  } else {
+    fail("L3 approval tour", `kind=${json.tourKind} status=${pending?.status}`);
   }
 }
 

@@ -6,6 +6,7 @@ import { readUserSettings } from "./user-settings";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { resolveAutoSendOnActivate } from "./work-send-policy";
 import { ensureWorkQueue, isWorkEmailBridgeConfigured } from "./work-store";
+import { buildWorkDeliverabilitySummary } from "./work-deliverability";
 
 export type WorkGoLiveStepStatus = "complete" | "warning" | "pending" | "optional";
 
@@ -150,6 +151,27 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
         ? `${file.sends.filter((s) => s.status === "sent").length} sent via bridge`
         : `${file.sends.filter((s) => s.status === "simulated").length} simulated · demo mode`
       : "Run demo tour or Send Step on an active sequence",
+  });
+
+  const deliverability = await buildWorkDeliverabilitySummary(
+    file.sends,
+    file.sequences,
+    Object.keys(file.unsubscribeTokens ?? {}).length,
+  );
+  const domainOk = deliverability.domainHealth === "healthy";
+  steps.push({
+    id: "domain_health",
+    label: "Sending domain health",
+    status: !deliverability.domain
+      ? isExplorer
+        ? "optional"
+        : "warning"
+      : domainOk
+        ? "complete"
+        : deliverability.domainHealth === "warning"
+          ? "warning"
+          : "pending",
+    detail: deliverability.domainHealthDetail,
   });
 
   const required = steps.filter((s) => s.status !== "optional");

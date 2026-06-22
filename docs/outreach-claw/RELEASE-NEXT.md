@@ -63,4 +63,32 @@
 - [x] **WL5** — L4/L5 scaffold + level-up nudges
 - [x] **WL6** — QA per level (`qa:work-levels`) + Creator/Capital placeholders
 
+## Shipped (Growth leveling WL7 — persona polish — v0.3.9)
+
+- [x] **WL7** — Per-level demo tours (L1 opportunity + template + draft · L2 mini-sequence · L3 approval queue)
+- [x] Inbox hero — People waiting click-through · unassigned/replied/all strip · draft reply
+- [x] Template UX — copy-to-clipboard + Use in draft
+- [x] Pipeline quick actions — Enrich / book meeting on selected row (L2+)
+- [x] Dual-gate cleanup — `skipExperienceGate` on growth-gated Work sections
+
+## Shipped (W12 — deliverability — v0.3.9)
+
+- [x] Deliverability panel — domain health, reputation score, failure surfacing (Ops L3+)
+- [x] Go Live domain_health step + chip
+- [x] Sequence editor unsubscribe preview for `{{unsubscribe_url}}`
+- [x] Outbound bounce-like failure labels
+
+## Shipped (WL8 — QA matrix — v0.3.9)
+
+- [x] `qa-work-levels.mjs` L1–L5 persona fixtures
+- [x] L3 approval tour in work-checklist · checklist dedup
+- [x] Demo captures L1/L2/L3 in `capture-gtm-phase2.mjs`
+- [x] `BEST-IN-CLASS.md` refresh
+
+## Next
+
+- Live EXIT-DEMO walkthrough recording
+- Twenty conflict merge UI · Microsoft 365 OAuth
+- Claw Cafe XP (deferred)
+
 See [LEVELING-BUILD-PLAN.md](./LEVELING-BUILD-PLAN.md) and [GROWTH-LEVEL-FRAMEWORK.md](../curxor-os/GROWTH-LEVEL-FRAMEWORK.md).

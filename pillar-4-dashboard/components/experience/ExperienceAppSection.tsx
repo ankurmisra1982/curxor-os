@@ -20,6 +20,7 @@ export function ExperienceAppSection({
   action,
   showCoach = true,
   hideWhen = false,
+  skipExperienceGate = false,
 }: {
   appId: OotbAppId;
   sectionId: string;
@@ -31,12 +32,14 @@ export function ExperienceAppSection({
   action?: ReactNode;
   showCoach?: boolean;
   hideWhen?: boolean;
+  /** When true, parent already gated (e.g. growth level) — skip 3-tier experience shell. */
+  skipExperienceGate?: boolean;
 }) {
   const { meetsLevel } = useExperienceLevel();
 
   if (hideWhen) return null;
 
-  if (!meetsLevel(minLevel)) {
+  if (!skipExperienceGate && !meetsLevel(minLevel)) {
     return (
       <AppSection title={title} subtitle={subtitle} className={className} action={action}>
         <ExperienceGate minLevel={minLevel}>{null}</ExperienceGate>

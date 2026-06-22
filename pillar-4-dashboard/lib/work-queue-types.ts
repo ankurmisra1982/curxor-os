@@ -206,4 +206,19 @@ export interface WorkQueueStatus {
     defaultTemplatePack: string | null;
     organizingFirst: string | null;
   };
+  deliverability?: {
+    fromAddress: string | null;
+    domain: string | null;
+    domainHealth: "healthy" | "warning" | "unknown";
+    domainHealthDetail: string;
+    spfStatus: "ok" | "advisory" | "unknown";
+    dkimStatus: "ok" | "advisory" | "unknown";
+    failedSendCount: number;
+    bounceLikeCount: number;
+    reputationScore: number;
+    reputationLabel: "excellent" | "good" | "fair" | "at_risk";
+    unsubscribeTokensActive: number;
+    sequencesWithUnsubscribe: number;
+    recentFailures: Array<{ sendId: string; to: string; subject: string; error: string }>;
+  };
 }

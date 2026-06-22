@@ -108,8 +108,9 @@ export async function POST(request: Request): Promise<Response> {
       }
 
       case "run_demo_tour": {
-        const { runWorkDemoTour } = await import("@/lib/work-demo-tour");
-        const tour = await runWorkDemoTour();
+        const { runWorkDemoTourForLevel } = await import("@/lib/work-demo-tour");
+        const growthLevel = (body as { growthLevel?: string }).growthLevel;
+        const tour = await runWorkDemoTourForLevel(growthLevel);
         return Response.json({ ...tour, status: await fetchWorkStatus(), goLive: await buildWorkGoLiveReport() });
       }
 

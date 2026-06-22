@@ -7,6 +7,7 @@ const INTENTS: ReplyIntent[] = ["interested", "objection", "ooo", "neutral", "un
 interface WorkInboxTriagePanelProps {
   rows: MailIndexEntry[];
   leads: WorkLead[];
+  highlightMailId?: string | null;
   onAssign: (mailId: string, leadId: string) => void;
   onTagIntent: (mailId: string, intent: ReplyIntent) => void;
   onDraftReply: (mailId: string) => void;
@@ -15,6 +16,7 @@ interface WorkInboxTriagePanelProps {
 export function WorkInboxTriagePanel({
   rows,
   leads,
+  highlightMailId,
   onAssign,
   onTagIntent,
   onDraftReply,
@@ -26,7 +28,7 @@ export function WorkInboxTriagePanel({
   return (
     <div className="space-y-2 font-mono text-[10px]">
       {rows.slice(0, 30).map((row) => (
-        <div key={row.id} className="border border-line px-3 py-2">
+        <div key={row.id} className={`border px-3 py-2 ${highlightMailId === row.id ? "border-cursor-glow bg-surface" : "border-line"}`}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-stark truncate">{row.from}</span>
             <span className="text-muted">{new Date(row.receivedAt).toLocaleString()}</span>

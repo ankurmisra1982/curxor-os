@@ -72,7 +72,7 @@ CurXor wedge: **sovereign on-appliance** — one desk for mail, CRM, tasks, cale
 
 ---
 
-## Current ship state (v0.3.7)
+## Current ship state (v0.3.9)
 
 | Area | Status |
 |------|--------|
@@ -80,16 +80,38 @@ CurXor wedge: **sovereign on-appliance** — one desk for mail, CRM, tasks, cale
 | SMTP send + simulated fallback | Shipped |
 | Unified inbox (CCP) + scan_inbox | Shipped — IMAP live when configured |
 | Go Live + demo tour + work-checklist | Shipped |
-| Skill refresh-only (no double-execute) | Shipped |
-| Tier B — A/B subjects, CSV import, analytics, heartbeat `process_due` | Shipped |
+| **WL1–WL6 growth leveling** | **Shipped v0.3.8** |
+| **WL7 persona polish** — L1/L2/L3 tours, inbox hero, template copy, pipeline quick actions | **Shipped v0.3.9** |
+| **W12 deliverability** — domain health chip, failure surfacing, unsubscribe preview, reputation panel | **Shipped v0.3.9** |
+| **WL8 QA matrix** — per-level `qa-work-levels.mjs`, L3 approval tour in checklist | **Shipped v0.3.9** |
 | Workspace tabs (Start / Outreach / Comms / Ops / Integrations) | Shipped v0.3.6 |
 | Connector vault UI | Shipped v0.3.6 |
 | Google / Notion / Slack / Twenty bridges | Shipped v0.3.6 |
-| **W7 Exit demo** — EXIT-DEMO.md, IMAP fetch, setup:work-env, verify scaffold | **Shipped v0.3.7** |
-| **W8 Comms** — inbox triage, draft_reply, mail sanitizer | **Shipped v0.3.7** |
-| **W9 GTM** — enrich, branching, approval queue, kill switch, Cal.com | **Shipped v0.3.7** |
-| **W10 Agent** — work MCP, audit, n8n webhooks, Notion pull, HubSpot preview | **Shipped v0.3.7** |
-| **W11 Polish** — setup wizard, kanban, morning brief, walkthrough video | **Shipped v0.3.7** |
+| **W7–W11 Excellence arc** — exit demo, triage, GTM, MCP, wizard, kanban | Shipped v0.3.7 |
+
+### Competitive score (June 2026)
+
+| Dimension | CurXor | Notes |
+|-----------|--------|-------|
+| Sovereign / on-appliance | **Leader** | Core wedge |
+| Persona leveling L1–L3 | **Strong (~4.2/5)** | WL7 tours + gating |
+| Inbox triage | **Improving** | Inbox hero + split strip |
+| Sequences / GTM L3+ | **Strong** | Approval queue, kill switch |
+| Deliverability UX | **Improving (~3.5/5)** | W12 panel; live DNS deferred |
+| Live connector proof | Demo default | EXIT-DEMO + capture scripts |
+| Team shared inbox | Deferred | Phase 2 |
+
+---
+
+## Prior ship state (v0.3.7 reference)
+
+| Area | Status |
+|------|--------|
+| **W7 Exit demo** — EXIT-DEMO.md, IMAP fetch, setup:work-env, verify scaffold | Shipped v0.3.7 |
+| **W8 Comms** — inbox triage, draft_reply, mail sanitizer | Shipped v0.3.7 |
+| **W9 GTM** — enrich, branching, approval queue, kill switch, Cal.com | Shipped v0.3.7 |
+| **W10 Agent** — work MCP, audit, n8n webhooks, Notion pull, HubSpot preview | Shipped v0.3.7 |
+| **W11 Polish** — setup wizard, kanban, morning brief, walkthrough video | Shipped v0.3.7 |
 
 ---
 

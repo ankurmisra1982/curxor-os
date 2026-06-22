@@ -53,6 +53,7 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, demoTourRunn
 
   const { steps, progress, ready, partiallyReady, demoReady, today } = report;
   const smtpStep = steps.find((s) => s.id === "smtp");
+  const domainStep = steps.find((s) => s.id === "domain_health");
   const demoRelease = smtpStep?.status === "warning" && !ready;
 
   const label = ready
@@ -123,6 +124,15 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, demoTourRunn
           <p className="text-stark truncate">{today.nextScheduledAt ? new Date(today.nextScheduledAt).toLocaleString() : "—"}</p>
         </div>
       </div>
+      {domainStep ? (
+        <div className="border border-line/60 px-2 py-1.5">
+          <p className="text-muted uppercase">Domain health</p>
+          <p className={domainStep.status === "complete" ? "text-cursor-glow" : domainStep.status === "warning" ? "text-amber-400" : "text-stark"}>
+            {domainStep.status}
+          </p>
+          <p className="text-muted truncate">{domainStep.detail}</p>
+        </div>
+      ) : null}
       <ul className="space-y-1">
         {steps.map((step) => (
           <li key={step.id} className="grid grid-cols-[auto_1fr] gap-2 border border-line/40 px-2 py-1">

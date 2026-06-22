@@ -14,6 +14,10 @@ function statusClass(status: OutboundSend["status"]): string {
   return "text-stark";
 }
 
+function isBounceLike(error: string | null): boolean {
+  return Boolean(error && /\b(bounce|550|mailbox|user unknown)\b/i.test(error));
+}
+
 export function WorkOutboundPanel({ sends, onRetry }: WorkOutboundPanelProps) {
   const recent = sends.slice(0, 12);
   return (
@@ -31,7 +35,12 @@ export function WorkOutboundPanel({ sends, onRetry }: WorkOutboundPanelProps) {
                 {send.openedAt ? " · opened" : ""}
                 {send.repliedAt ? " · replied" : ""}
               </p>
-              {send.error ? <p className="text-[10px] text-red-400">{send.error}</p> : null}
+              {send.error ? (
+                <p className="text-[10px] text-red-400">
+                  {isBounceLike(send.error) ? "Bounce · " : ""}
+                  {send.error}
+                </p>
+              ) : null}
             </div>
             <div className="text-right">
               <p className={`text-[10px] uppercase ${statusClass(send.status)}`}>{send.status}</p>
