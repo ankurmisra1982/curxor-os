@@ -142,7 +142,7 @@ async function executeMyWorkSkill(
   if (skillId === "summarize_day") {
     const { buildDayBrief } = await import("./work-inference");
     const brief = await buildDayBrief();
-    return { executed: true, kind: "plan", skipReason: brief.split("\n")[0] ?? "Day brief ready" };
+    return { executed: true, kind: "plan", skipReason: brief };
   }
   if (skillId === "run_demo_tour") {
     const { runWorkDemoTour } = await import("./work-demo-tour");
@@ -649,32 +649,6 @@ async function buildDigitalIntent(
         const reply = await getContentReply(replyId);
         if (!reply) return null;
         return buildReplyIntent(reply);
-      }
-      break;
-
-    case "my-work":
-      if (skillId === "send_email" || skillId === "send_sequence_step") {
-        const sequenceId = cfgStr(config, "selectedSequenceId", "");
-        if (!sequenceId) return null;
-        const { ensureWorkQueue, getLead, personalizeTemplate } = await import("./work-store");
-        const file = await ensureWorkQueue();
-        const seq = file.sequences.find((s) => s.id === sequenceId);
-        if (!seq) return null;
-        const step = seq.steps[seq.currentStepIndex];
-        if (!step || step.kind !== "email") return null;
-        const lead = await getLead(seq.leadId);
-        if (!lead?.email) return null;
-        return {
-          tool: "work.email.send",
-          payload: {
-            to: lead.email,
-            subject: personalizeTemplate(step.subject, lead),
-            body: personalizeTemplate(step.body, lead),
-            sequence_id: seq.id,
-            step_id: step.id,
-            lead_id: lead.id,
-          },
-        };
       }
       break;
 

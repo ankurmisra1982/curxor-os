@@ -19,7 +19,6 @@ import type { LeadStage, OutboundSend, ReplyIntent, WorkQueueStatus } from "@/li
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { useMotorStream } from "@/hooks/useMotorStream";
-import { useVisionStream } from "@/hooks/useVisionStream";
 
 async function postWork(body: Record<string, unknown>) {
   const res = await fetch("/api/work/status", {
@@ -31,8 +30,7 @@ async function postWork(body: Record<string, unknown>) {
 }
 
 export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceContext }: AgentAppContext) {
-  const { frame, connected } = useVisionStream();
-  const { command, connected: motorUp } = useMotorStream();
+  const { connected: motorUp } = useMotorStream();
   const { level } = useExperienceLevel();
 
   const [status, setStatus] = useState<WorkQueueStatus | null>(null);
@@ -80,19 +78,27 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
   useEffect(() => {
     void loadBootstrap();
+    if (level !== "beginner") {
+      void loadRecovery();
+    }
     const id = setInterval(() => void loadStatus(), 30_000);
     return () => clearInterval(id);
-  }, [loadBootstrap, loadStatus]);
+  }, [loadBootstrap, loadRecovery, loadStatus, level]);
 
   useEffect(() => {
     const lead = status?.leads.find((l) => l.id === selectedLeadId);
     const seq = status?.sequences.find((s) => s.id === selectedSequenceId);
+    const topTask =
+      status?.tasks.find((t) => !t.done && t.priority === "P1") ??
+      status?.tasks.find((t) => !t.done);
     updateWorkspaceContext({
       selectedLeadId: lead?.id ?? "",
       selectedLeadName: lead?.name ?? "",
       selectedSequenceId: seq?.id ?? "",
       selectedSequenceName: seq?.name ?? "",
-      selectedTaskPriority: status?.tasks.find((t) => !t.done && t.priority === "P1")?.priority ?? "",
+      selectedTaskPriority: topTask?.priority ?? "",
+      selectedTaskTitle: topTask?.title ?? "",
+      selectedTaskId: topTask?.id ?? "",
     });
   }, [selectedLeadId, selectedSequenceId, status, updateWorkspaceContext]);
 
@@ -104,33 +110,41 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       "scan_inbox",
       "summarize_day",
       "draft_sequence",
-      "send_email",
       "send_sequence_step",
       "run_demo_tour",
     ]);
+    const physicalSkills = new Set(["sort_tray", "move_to_tray"]);
 
     void (async () => {
-      if (serverExecuted.has(lastSkillId)) {
-        const json = await postWork({ action: "dashboard_bootstrap" });
-        if (json.status) applyStatus(json.status);
-        if (json.goLive) setGoLive(json.goLive);
-        if (lastSkillId === "scan_inbox") {
-          setSignal("Inbox indexed · reply detection ran");
-        } else if (lastSkillId === "summarize_day") {
-          const briefJson = await postWork({ action: "summarize_day" });
-          setDayBrief((briefJson as { brief?: string }).brief ?? "");
-          setSignal("Day brief ready");
-        } else if (lastSkillId === "draft_sequence") {
-          setSignal("Sequence drafted");
-        } else if (lastSkillId === "send_email" || lastSkillId === "send_sequence_step") {
-          setSignal("Step sent · check outbound queue");
-        } else if (lastSkillId === "run_demo_tour") {
-          setSignal("Demo tour complete · simulated send");
-        }
+      if (physicalSkills.has(lastSkillId)) {
+        await loadStatus();
+        setSignal(`${lastSkillId} · lane ${lane} · ${new Date().toLocaleTimeString()}`);
         return;
       }
+
+      if (!serverExecuted.has(lastSkillId)) return;
+
+      await loadStatus();
+      if (lastSkillId === "summarize_day") {
+        const briefJson = await postWork({ action: "summarize_day" });
+        setDayBrief((briefJson as { brief?: string }).brief ?? "");
+        setSignal("Day brief ready");
+        return;
+      }
+      if (lastSkillId === "run_demo_tour") {
+        await refreshGoLive();
+        setSignal("Demo tour complete · simulated send");
+        return;
+      }
+      if (lastSkillId === "scan_inbox") {
+        setSignal("Inbox indexed · reply detection ran");
+      } else if (lastSkillId === "draft_sequence") {
+        setSignal("Sequence drafted");
+      } else if (lastSkillId === "send_sequence_step") {
+        setSignal("Step sent · check outbound queue");
+      }
     })();
-  }, [skillTick, lastSkillId, applyStatus]);
+  }, [skillTick, lastSkillId, loadStatus, refreshGoLive, lane]);
 
   const runDemoTour = () => {
     setDemoTourRunning(true);

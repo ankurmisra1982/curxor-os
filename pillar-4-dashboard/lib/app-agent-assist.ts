@@ -26,7 +26,6 @@ const LLM_CHAT_APPS: OotbAppId[] = [
   "tesla-optimus-engine",
 ];
 const LLM_PLAN_SKILLS: Partial<Record<OotbAppId, string[]>> = {
-  "my-work": ["summarize_day"],
   "my-shop": ["ingest_order"],
   "my-content-creator": ["draft_post"],
   "my-capital": ["create_rule", "arm_rule", "run_demo_tour", "execute_now", "portfolio_query", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade", "rebalance"],
@@ -122,19 +121,6 @@ async function tryLlmPlanSkill(
 ): Promise<string | null> {
   const skills = LLM_PLAN_SKILLS[appId];
   if (!skills?.includes(skillId)) return null;
-
-  if (appId === "my-work" && skillId === "summarize_day") {
-    const workspace = cfgStr(config, "workspaceName", "Outreach Desk");
-    const task = cfgStr(config, "selectedTaskTitle", "Outreach demo prep");
-    const priority = cfgStr(config, "selectedTaskPriority", "P1");
-    const prompt =
-      message.trim() ||
-      `Summarize today's local priorities for ${workspace}. Focus task: ${task} (${priority}).`;
-    return generateText(
-      "You are Outreach Claw. Output a concise day brief from local calendar, mail queue, and task matrix — no cloud sync.",
-      prompt,
-    );
-  }
 
   if (appId === "my-shop" && skillId === "ingest_order") {
     const store = cfgStr(config, "storeName", "Arbitrage Desk");

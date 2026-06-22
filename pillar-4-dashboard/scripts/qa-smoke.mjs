@@ -750,6 +750,11 @@ await check("work analytics", async () => {
   return ok && typeof json.analytics?.sentCount === "number" && json.sendPolicy?.dailySendLimit > 0;
 });
 
+await check("work summarize_day", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "summarize_day" });
+  return ok && typeof json.brief === "string" && json.brief.length > 0;
+});
+
 await check("app-agent assist (capital digital skill)", async () => {
   const { json } = await postJson("/api/app-agent/assist", {
     appId: "my-capital",
