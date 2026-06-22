@@ -33,7 +33,7 @@ import { executeCapitalTrade, previewTrade, submitTradeToBridge } from "@/lib/ca
 import type { AutonomousMode, RuleState, TradeAction } from "@/lib/capital-queue-types";
 
 export async function GET(): Promise<Response> {
-  const status = await fetchCapitalStatus();
+  const status = await fetchCapitalStatus({ sync: false });
   return Response.json(status, { headers: { "Cache-Control": "no-store" } });
 }
 
@@ -398,7 +398,7 @@ export async function POST(request: Request): Promise<Response> {
           action: (body.actionTrade as TradeAction | undefined) ?? "buy",
           brokerId: body.brokerId as import("@/lib/capital-queue-types").BrokerId | undefined,
         });
-        return Response.json({ ...result, status: await fetchCapitalStatus() });
+        return Response.json({ ...result, status: await fetchCapitalStatus({ sync: false }) });
       }
 
       case "agent_execute_trade": {

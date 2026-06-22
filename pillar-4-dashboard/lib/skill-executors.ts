@@ -236,14 +236,14 @@ async function executeMyCapitalSkill(
     const q = cfgStr(config, "lastUserMessage", "portfolio health");
     const { fetchCapitalStatus } = await import("./capital-store");
     const { answerPortfolioQuery } = await import("./capital-nl-query");
-    const status = await fetchCapitalStatus();
+    const status = await fetchCapitalStatus({ sync: false });
     const result = answerPortfolioQuery(q, status);
     return { executed: true, kind: "plan", skipReason: result.answer };
   }
   if (skillId === "rebalance") {
     const asset = cfgStr(config, "selectedAsset", "SPY");
     const { createRule, setRuleState, fetchCapitalStatus } = await import("./capital-store");
-    const status = await fetchCapitalStatus();
+    const status = await fetchCapitalStatus({ sync: false });
     const hint = status.portfolioHealth.rebalanceHints?.[0];
     const sym = hint?.symbol ?? asset;
     const target = hint?.targetWeightPct ?? 20;
@@ -284,7 +284,7 @@ async function executeMyCapitalSkill(
     const { createRule, setRuleState, fetchCapitalStatus } = await import("./capital-store");
     let id = ruleId;
     if (!id) {
-      const status = await fetchCapitalStatus();
+      const status = await fetchCapitalStatus({ sync: false });
       id = status.rules.find((r) => r.state !== "ARMED")?.id ?? status.rules[0]?.id ?? "";
     }
     if (!id) {
@@ -589,23 +589,6 @@ async function buildDigitalIntent(
         const reply = await getContentReply(replyId);
         if (!reply) return null;
         return buildReplyIntent(reply);
-      }
-      break;
-
-    case "my-capital":
-      if (skillId === "execute_trade") {
-        const asset = cfgStr(config, "selectedAsset", "BTC-USD");
-        const ruleId = cfgStr(config, "selectedRuleId", "");
-        return {
-          tool: "capital.execute_trade",
-          payload: {
-            ticker: asset,
-            qty: 1,
-            action: "buy",
-            mode: cfgStr(config, "tradingMode", "paper"),
-            rule_id: ruleId || undefined,
-          },
-        };
       }
       break;
 

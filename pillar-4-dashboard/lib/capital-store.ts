@@ -296,7 +296,15 @@ export async function syncPositionsAndPnl(): Promise<CapitalQueueFile> {
   });
 }
 
-export async function fetchCapitalStatus(): Promise<CapitalQueueStatus> {
+export type FetchCapitalStatusOptions = {
+  /** When false, skip Alpaca position sync (cheaper reads for poll/GET). Default true. */
+  sync?: boolean;
+};
+
+export async function fetchCapitalStatus(
+  options?: FetchCapitalStatusOptions,
+): Promise<CapitalQueueStatus> {
+  const shouldSync = options?.sync !== false;
   const fre = await readAppFreState("my-capital");
   const tradingMode = typeof fre.config.tradingMode === "string" ? fre.config.tradingMode : "paper";
   const riskProfile = typeof fre.config.riskProfile === "string" ? fre.config.riskProfile : "balanced";
@@ -305,13 +313,14 @@ export async function fetchCapitalStatus(): Promise<CapitalQueueStatus> {
     : ["BTC-USD", "NVDA", "SPY"];
 
   const [file, bridgeConfigured, brokers, creds] = await Promise.all([
-    syncPositionsAndPnl(),
+    shouldSync ? syncPositionsAndPnl() : ensureCapitalQueue(),
     isAlpacaBridgeConfigured(),
     buildBrokerStatus(),
     loadAlpacaCreds(),
   ]);
 
-  const account = creds ? await fetchAlpacaAccount(creds) : null;
+  const account =
+    creds && shouldSync ? await fetchAlpacaAccount(creds) : null;
   const todayStart = startOfTodayUtc();
   const filledToday = file.trades.filter(
     (t) =>
@@ -370,10 +379,10 @@ export async function fetchCapitalStatus(): Promise<CapitalQueueStatus> {
     };
   }
 
-  const demoValue = demoPortfolioValue(watchlist);
+  const demoValue = file.cachedPortfolioValue ?? demoPortfolioValue(watchlist);
   return {
     ...base,
-    source: "demo",
+    source: creds && file.cachedPortfolioValue != null ? "alpaca" : "demo",
     portfolioValue: demoValue,
     portfolioLabel: bridgeConfigured ? `${tradingMode} · offline` : `${tradingMode} · demo`,
     buyingPower: demoValue * 0.25,

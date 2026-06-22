@@ -30,7 +30,7 @@ interface CapitalRulesPanelProps {
 
   onBacktest?: (id: string) => void;
 
-  onCreate: () => void;
+  onCreate?: () => void;
 
   onCreateStructured?: (input: {
 
@@ -153,7 +153,7 @@ export function CapitalRulesPanel({
 
         <CapitalRuleBuilder defaultAsset={defaultAsset} onCreate={onCreateStructured} />
 
-      ) : (
+      ) : onCreate ? (
 
         <div className="flex justify-end">
 
@@ -165,7 +165,7 @@ export function CapitalRulesPanel({
 
         </div>
 
-      )}
+      ) : null}
 
       {rules.length === 0 ? (
         <div className="border border-line/60 bg-panel px-3 py-3 text-[10px] text-muted">

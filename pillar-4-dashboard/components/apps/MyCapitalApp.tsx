@@ -54,7 +54,6 @@ import type { FinancialSuggestion } from "@/lib/capital-pfm-types";
 import type { CapitalQueueStatus, CapitalRule, CapitalTrade } from "@/lib/capital-queue-types";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useDigitalStream } from "@/hooks/useDigitalStream";
-import { useMotorStream } from "@/hooks/useMotorStream";
 import { formatTradeReceipt } from "@/lib/digital-protocol";
 import { formatAgentPhaseMessage, formatTradeOutcomeMessage } from "@/lib/capital-trade-feedback";
 
@@ -86,7 +85,6 @@ function formatUsd(value: number | null): string {
 }
 
 export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceContext }: AgentAppContext) {
-  const { command, connected } = useMotorStream();
   const digital = useDigitalStream("capital.execute_trade");
   const { level } = useExperienceLevel();
   const mode = typeof config.tradingMode === "string" ? config.tradingMode : "paper";
@@ -177,10 +175,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
   useEffect(() => {
     if (level !== "beginner") {
-      void loadGrowthData();
       void loadAnalytics();
     }
-  }, [level, loadGrowthData, loadAnalytics]);
+  }, [level, loadAnalytics]);
 
   const scrollToTradeLog = () => {
     document.getElementById("capital-trade-log")?.scrollIntoView({ behavior: "smooth" });
@@ -199,7 +196,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   useEffect(() => {
     if (skillTick === 0 || !lastSkillId) return;
 
-    /** Already executed server-side in skill-executors — refresh desk only (avoid double trades). */
+    /** Already executed server-side in skill-executors — refresh desk only (avoid double mutations). */
     const serverExecuted = new Set([
       "execute_trade",
       "sync_pilots",
@@ -209,6 +206,12 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       "run_demo_tour",
       "execute_now",
       "portfolio_query",
+      "create_rule",
+      "arm_rule",
+      "rebalance",
+      "preview_trade",
+      "agent_execute_trade",
+      "pfm_refresh",
     ]);
 
     void (async () => {
@@ -235,30 +238,26 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             if (level !== "beginner") void loadAnalytics();
           } else if (lastSkillId === "portfolio_query") {
             setSignal("Portfolio Q&A answered in chat");
+          } else if (lastSkillId === "create_rule") {
+            setSignal("Rule created");
+          } else if (lastSkillId === "arm_rule") {
+            const armed = data.rules.find((r) => r.state === "ARMED");
+            setSignal(armed ? `${armed.id} armed` : "Rule armed");
+          } else if (lastSkillId === "rebalance") {
+            setSignal(`Rebalance simulated · ${new Date().toLocaleTimeString()}`);
+          } else if (lastSkillId === "preview_trade") {
+            setSignal("Trade preview ready — confirm in Agent & MCP panel");
+          } else if (lastSkillId === "agent_execute_trade") {
+            setSignal(formatTradeOutcomeMessage(data.trades[0], null));
+            if (level !== "beginner") void loadAnalytics();
+          } else if (lastSkillId === "pfm_refresh") {
+            setSignal("PFM snapshot refreshed");
           }
         }
         return;
       }
-
-      if (lastSkillId === "arm_rule") {
-        const json = await postCapital({ action: "arm_rule", ruleId: selectedRuleId });
-        if (json.status) applyStatus(json.status);
-        setSignal(`${selectedRuleId} armed`);
-      }
-      if (lastSkillId === "create_rule") {
-        const json = await postCapital({
-          action: "create_rule",
-          name: "Agent rule",
-          asset: status?.watchlist[0] ?? "SPY",
-        });
-        if (json.status) applyStatus(json.status);
-        setSignal("Rule created");
-      }
-      if (lastSkillId === "rebalance") {
-        setSignal(`Rebalance simulated · ${new Date().toLocaleTimeString()}`);
-      }
     })();
-  }, [skillTick, lastSkillId, selectedRuleId, status, applyStatus]);
+  }, [skillTick, lastSkillId, selectedRuleId, applyStatus, level, loadAnalytics]);
 
   useEffect(() => {
     if (!digital.latest) return;
@@ -863,7 +862,6 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               setSignal(`Dip rule created for ${sym}`);
             })
           }
-          onCreate={() => {}}
         />
       </ExperienceAppSection>
 
