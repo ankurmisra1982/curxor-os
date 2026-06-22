@@ -22,12 +22,14 @@ import zmq.asyncio
 from curxor_broker.config import BrokerConfig
 from curxor_broker.digital_protocol import DigitalIntent, DigitalReceipt
 from curxor_broker.network import resolve_mesh_bind_ip
+from curxor_broker import capital_oauth
 
 LOG = logging.getLogger("curxor.digital")
 
 DEFAULT_ENV_PATH = "/etc/curxor/digital.env"
 
 TOOL_EXECUTE_TRADE = "capital.execute_trade"
+TOOL_EXECUTE_TRADE_ROBINHOOD = "capital.execute_trade_robinhood"
 TOOL_PUBLISH_POST = "content.publish_post"
 TOOL_PUBLISH_THREADS = "content.publish_threads"
 TOOL_PUBLISH_FACEBOOK = "content.publish_facebook"
@@ -177,10 +179,69 @@ class AlpacaTradeWorker:
         self._key = os.environ.get("ALPACA_API_KEY_ID", "").strip()
         self._secret = os.environ.get("ALPACA_API_SECRET_KEY", "").strip()
         self._base = os.environ.get("ALPACA_PAPER_BASE_URL", "https://paper-api.alpaca.markets").rstrip("/")
+        self._data_base = os.environ.get("ALPACA_DATA_BASE_URL", "https://data.alpaca.markets").rstrip("/")
 
     @property
     def enabled(self) -> bool:
         return bool(self._key and self._secret)
+
+    async def _fetch_reference_price(
+        self,
+        session: Any,
+        symbol: str,
+        override: float | None = None,
+    ) -> float | None:
+        if override and override > 0:
+            return override
+        sym = symbol.replace("-", "")
+        headers = {
+            "APCA-API-KEY-ID": self._key,
+            "APCA-API-SECRET-KEY": self._secret,
+        }
+        url = f"{self._data_base}/v2/stocks/{sym}/trades/latest"
+        try:
+            async with session.get(url, headers=headers, timeout=20) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status < 400 and isinstance(data, dict):
+                    trade = data.get("trade") if isinstance(data.get("trade"), dict) else data
+                    price = trade.get("p") if isinstance(trade, dict) else None
+                    if price is not None:
+                        return float(price)
+        except Exception:
+            pass
+        return None
+
+    def _apply_bracket(
+        self,
+        body: dict[str, Any],
+        side: str,
+        symbol: str,
+        ref_price: float,
+        intent: DigitalIntent,
+    ) -> None:
+        tp_price = intent.payload.get("take_profit_price")
+        sl_price = intent.payload.get("stop_loss_price")
+        tp_pct = intent.payload.get("take_profit_pct")
+        sl_pct = intent.payload.get("stop_loss_pct")
+
+        try:
+            if tp_price is None and tp_pct is not None and float(tp_pct) > 0:
+                mult = 1 + float(tp_pct) / 100 if side == "buy" else 1 - float(tp_pct) / 100
+                tp_price = ref_price * mult
+            if sl_price is None and sl_pct is not None and float(sl_pct) > 0:
+                mult = 1 - float(sl_pct) / 100 if side == "buy" else 1 + float(sl_pct) / 100
+                sl_price = ref_price * mult
+        except (TypeError, ValueError):
+            tp_price = sl_price = None
+
+        if tp_price is None and sl_price is None:
+            return
+
+        body["order_class"] = "bracket"
+        if tp_price is not None and float(tp_price) > 0:
+            body["take_profit"] = {"limit_price": capital_oauth.round_trade_price(float(tp_price), symbol)}
+        if sl_price is not None and float(sl_price) > 0:
+            body["stop_loss"] = {"stop_price": capital_oauth.round_trade_price(float(sl_price), symbol)}
 
     async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
         if not self.enabled:
@@ -201,13 +262,16 @@ class AlpacaTradeWorker:
             return DigitalReceipt.failure(intent, "qty must be positive")
 
         side = "buy" if action == "buy" else "sell"
-        body = {
+        client_order_id = str(intent.payload.get("client_order_id") or intent.payload.get("trade_id") or "").strip()
+        body: dict[str, Any] = {
             "symbol": ticker,
             "qty": str(qty),
             "side": side,
             "type": "market",
             "time_in_force": "day",
         }
+        if client_order_id:
+            body["client_order_id"] = client_order_id[:48]
 
         try:
             import aiohttp
@@ -221,15 +285,25 @@ class AlpacaTradeWorker:
             "Content-Type": "application/json",
         }
 
+        ref_override = intent.payload.get("reference_price")
+        try:
+            ref_override_f = float(ref_override) if ref_override is not None else None
+        except (TypeError, ValueError):
+            ref_override_f = None
+
         try:
             async with aiohttp.ClientSession() as session:
+                ref_price = await self._fetch_reference_price(session, ticker, ref_override_f)
+                if ref_price:
+                    self._apply_bracket(body, side, ticker, ref_price, intent)
+
                 async with session.post(url, json=body, headers=headers, timeout=30) as resp:
                     data: dict[str, Any] = await resp.json(content_type=None)
                     if resp.status >= 400:
                         msg = data.get("message") or data.get("error") or resp.reason or str(resp.status)
                         return DigitalReceipt.failure(intent, f"Alpaca error: {msg}", {"status": resp.status})
 
-                    filled_price = data.get("filled_avg_price") or data.get("limit_price")
+                    filled_price = data.get("filled_avg_price") or data.get("limit_price") or ref_price
                     return DigitalReceipt.success(
                         intent,
                         {
@@ -240,10 +314,365 @@ class AlpacaTradeWorker:
                             "side": data.get("side", side),
                             "filled_price": filled_price,
                             "submitted_at": data.get("submitted_at"),
+                            "order_class": body.get("order_class"),
                         },
                     )
         except Exception as exc:
             LOG.exception("Alpaca trade failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+
+class WebullTradeWorker:
+    """Webull OAuth OpenAPI — capital.execute_trade broker_id=webull."""
+
+    def __init__(self) -> None:
+        self._api_base = os.environ.get("WEBULL_OAUTH_API_BASE", "https://us-oauth-open-api.uat.webullbroker.com").rstrip("/")
+
+    @property
+    def enabled(self) -> bool:
+        return bool(os.environ.get("WEBULL_CLIENT_ID", "").strip())
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        access = await capital_oauth.resolve_webull_access_token()
+        if not access:
+            return DigitalReceipt.failure(intent, "Webull not linked — POST /api/capital/webull to authorize")
+
+        ticker = str(intent.payload.get("ticker", "")).upper().strip().replace("-", "")
+        action = str(intent.payload.get("action", "")).lower().strip()
+        try:
+            qty = float(intent.payload.get("qty", 0))
+        except (TypeError, ValueError):
+            return DigitalReceipt.failure(intent, "Invalid qty")
+        if not ticker or action not in {"buy", "sell"} or qty <= 0:
+            return DigitalReceipt.failure(intent, "Invalid ticker/qty/action")
+
+        try:
+            import aiohttp
+            import uuid
+        except ImportError:
+            return DigitalReceipt.failure(intent, "aiohttp not installed")
+
+        headers = {"Authorization": f"Bearer {access}", "accept": "application/json", "Content-Type": "application/json"}
+        client_order_id = str(intent.payload.get("client_order_id") or intent.payload.get("trade_id") or uuid.uuid4().hex)
+
+        try:
+            async with aiohttp.ClientSession() as session:
+                account_id = str(intent.payload.get("account_id") or "").strip()
+                if not account_id:
+                    async with session.get(f"{self._api_base}/oauth-openapi/account/list", headers=headers, timeout=30) as resp:
+                        acct_data = await resp.json(content_type=None)
+                        if resp.status >= 400:
+                            return DigitalReceipt.failure(intent, f"Webull account list failed: {acct_data}")
+                        accounts = acct_data if isinstance(acct_data, list) else acct_data.get("data") or acct_data.get("accounts") or []
+                        if isinstance(accounts, list) and accounts:
+                            first = accounts[0]
+                            account_id = str(first.get("account_id") or first.get("accountId") or first.get("id") or "")
+                if not account_id:
+                    return DigitalReceipt.failure(intent, "Webull account_id not found")
+
+                order_body = {
+                    "new_orders": [
+                        {
+                            "combo_type": "NORMAL",
+                            "client_order_id": client_order_id[:32],
+                            "symbol": ticker,
+                            "instrument_type": "EQUITY",
+                            "market": "US",
+                            "order_type": "MARKET",
+                            "quantity": str(int(qty) if qty == int(qty) else qty),
+                            "support_trading_session": "CORE",
+                            "side": "BUY" if action == "buy" else "SELL",
+                            "time_in_force": "DAY",
+                            "entrust_type": "QTY",
+                        }
+                    ]
+                }
+                place_url = f"{self._api_base}/oauth-openapi/trade/order/place?account_id={account_id}"
+                async with session.post(place_url, json=order_body, headers=headers, timeout=30) as resp:
+                    data = await resp.json(content_type=None)
+                    if resp.status >= 400:
+                        return DigitalReceipt.failure(intent, f"Webull order failed: {data}")
+                    order_id = None
+                    if isinstance(data, dict):
+                        order_id = data.get("order_id") or data.get("orderId") or data.get("client_order_id")
+                    return DigitalReceipt.success(
+                        intent,
+                        {
+                            "order_id": order_id or client_order_id,
+                            "status": "submitted",
+                            "symbol": ticker,
+                            "qty": str(qty),
+                            "side": action,
+                            "broker": "webull",
+                        },
+                    )
+        except Exception as exc:
+            LOG.exception("Webull trade failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+
+class RobinhoodMcpTradeWorker:
+    """Robinhood Agentic Trading MCP — capital.execute_trade_robinhood."""
+
+    MCP_URL = "https://agent.robinhood.com/mcp/trading"
+
+    def __init__(self) -> None:
+        self._token = os.environ.get("ROBINHOOD_MCP_ACCESS_TOKEN", "").strip()
+        flag = os.environ.get("ROBINHOOD_MCP_ENABLED", "").strip().lower()
+        self._flag_enabled = flag in {"1", "true", "yes"}
+        self._oauth_path = Path(
+            os.environ.get("CURXOR_CAPITAL_ROBINHOOD_MCP_PATH", "/etc/curxor/capital-robinhood-mcp.json")
+        )
+
+    @property
+    def enabled(self) -> bool:
+        if self._token:
+            return True
+        return self._flag_enabled and self._oauth_path.is_file()
+
+    async def _mcp_call(self, session: Any, tool_name: str, args: dict[str, Any]) -> dict[str, Any]:
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream",
+        }
+        if self._token:
+            headers["Authorization"] = f"Bearer {self._token}"
+        body = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "tools/call",
+            "params": {"name": tool_name, "arguments": args},
+        }
+        async with session.post(self.MCP_URL, headers=headers, json=body, timeout=45) as resp:
+            text = await resp.text()
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(f"MCP non-JSON ({resp.status}): {text[:200]}") from exc
+            if resp.status >= 400 or data.get("error"):
+                err = data.get("error") or {}
+                msg = err.get("message") if isinstance(err, dict) else str(err)
+                raise RuntimeError(msg or f"MCP HTTP {resp.status}")
+            return data.get("result") if isinstance(data, dict) else {}
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        if not self.enabled:
+            return DigitalReceipt.failure(
+                intent,
+                "Robinhood MCP not linked — enable ROBINHOOD_MCP_ENABLED and mark connected",
+            )
+        ticker = str(intent.payload.get("ticker", "")).upper().strip().replace("-", "")
+        action = str(intent.payload.get("action", "")).lower().strip()
+        try:
+            qty = int(float(intent.payload.get("qty", 0)))
+        except (TypeError, ValueError):
+            return DigitalReceipt.failure(intent, "Invalid qty")
+        if not ticker or action not in {"buy", "sell"} or qty <= 0:
+            return DigitalReceipt.failure(intent, "Invalid ticker/qty/action")
+
+        side = "buy" if action == "buy" else "sell"
+        order_args = {
+            "symbol": ticker,
+            "side": side,
+            "quantity": qty,
+            "order_type": "market",
+            "time_in_force": "gfd",
+        }
+        try:
+            import aiohttp
+        except ImportError:
+            return DigitalReceipt.failure(intent, "aiohttp not installed")
+
+        try:
+            async with aiohttp.ClientSession() as session:
+                await self._mcp_call(session, "review_equity_order", order_args)
+                result = await self._mcp_call(session, "place_equity_order", order_args)
+                order_id = None
+                if isinstance(result, dict):
+                    order_id = result.get("order_id") or result.get("id")
+                    content = result.get("content")
+                    if not order_id and isinstance(content, list):
+                        for block in content:
+                            if isinstance(block, dict) and block.get("order_id"):
+                                order_id = block.get("order_id")
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "order_id": order_id or intent.payload.get("trade_id"),
+                        "status": "submitted",
+                        "symbol": ticker,
+                        "qty": str(qty),
+                        "side": action,
+                        "broker": "robinhood_mcp",
+                    },
+                )
+        except Exception as exc:
+            LOG.exception("Robinhood MCP trade failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+
+class EtradeTradeWorker:
+    """E*TRADE OAuth 1.0a — capital.execute_trade broker_id=etrade."""
+
+    def __init__(self) -> None:
+        self._consumer_key = os.environ.get("ETRADE_CONSUMER_KEY", "").strip()
+        self._consumer_secret = os.environ.get("ETRADE_CONSUMER_SECRET", "").strip()
+        sandbox = os.environ.get("ETRADE_SANDBOX", "").strip().lower() in {"1", "true", "yes"}
+        self._api_base = "https://apisb.etrade.com" if sandbox else "https://api.etrade.com"
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self._consumer_key and self._consumer_secret)
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        tokens = capital_oauth.resolve_etrade_tokens()
+        if not tokens:
+            return DigitalReceipt.failure(intent, "E*TRADE not linked — POST /api/capital/etrade to authorize")
+        access_token, access_secret = tokens
+
+        ticker = str(intent.payload.get("ticker", "")).upper().strip().replace("-", "")
+        action = str(intent.payload.get("action", "")).lower().strip()
+        try:
+            qty = int(float(intent.payload.get("qty", 0)))
+        except (TypeError, ValueError):
+            return DigitalReceipt.failure(intent, "Invalid qty")
+        if not ticker or action not in {"buy", "sell"} or qty <= 0:
+            return DigitalReceipt.failure(intent, "Invalid ticker/qty/action")
+
+        order_action = "BUY" if action == "buy" else "SELL"
+        client_order_id = str(intent.payload.get("client_order_id") or intent.payload.get("trade_id") or "curxor")[:20]
+
+        try:
+            import aiohttp
+            import xml.etree.ElementTree as ET
+        except ImportError:
+            return DigitalReceipt.failure(intent, "aiohttp not installed")
+
+        try:
+            async with aiohttp.ClientSession() as session:
+                list_url = f"{self._api_base}/v1/accounts/list.json"
+                list_auth = capital_oauth.oauth1_auth_header(
+                    "GET", list_url, self._consumer_key, self._consumer_secret, access_token, access_secret
+                )
+                async with session.get(list_url, headers={"Authorization": list_auth}, timeout=30) as resp:
+                    list_data = await resp.json(content_type=None)
+                    if resp.status >= 400:
+                        return DigitalReceipt.failure(intent, f"E*TRADE accounts failed: {list_data}")
+                accounts = (
+                    list_data.get("AccountListResponse", {}).get("Accounts", {}).get("Account", [])
+                    if isinstance(list_data, dict)
+                    else []
+                )
+                if isinstance(accounts, dict):
+                    accounts = [accounts]
+                if not accounts:
+                    return DigitalReceipt.failure(intent, "E*TRADE account not found")
+                account_id = str(accounts[0].get("accountIdKey") or accounts[0].get("accountId") or "")
+                if not account_id:
+                    return DigitalReceipt.failure(intent, "E*TRADE accountIdKey missing")
+
+                preview_xml = f"""<PreviewOrderRequest>
+  <orderType>EQ</orderType>
+  <clientOrderId>{client_order_id}</clientOrderId>
+  <Order>
+    <allOrNone>false</allOrNone>
+    <priceType>MARKET</priceType>
+    <orderTerm>GOOD_FOR_DAY</orderTerm>
+    <marketSession>REGULAR</marketSession>
+    <Instrument>
+      <Product>
+        <securityType>EQ</securityType>
+        <symbol>{ticker}</symbol>
+      </Product>
+      <orderAction>{order_action}</orderAction>
+      <quantityType>QUANTITY</quantityType>
+      <quantity>{qty}</quantity>
+    </Instrument>
+  </Order>
+</PreviewOrderRequest>"""
+
+                preview_url = f"{self._api_base}/v1/accounts/{account_id}/orders/preview.json"
+                preview_auth = capital_oauth.oauth1_auth_header(
+                    "POST", preview_url, self._consumer_key, self._consumer_secret, access_token, access_secret
+                )
+                async with session.post(
+                    preview_url,
+                    data=preview_xml,
+                    headers={"Authorization": preview_auth, "Content-Type": "application/xml"},
+                    timeout=30,
+                ) as resp:
+                    preview_text = await resp.text()
+                    if resp.status >= 400:
+                        return DigitalReceipt.failure(intent, f"E*TRADE preview failed: {preview_text[:300]}")
+
+                root = ET.fromstring(preview_text)
+                preview_id = None
+                for elem in root.iter():
+                    if elem.tag.endswith("previewId") and elem.text:
+                        preview_id = elem.text
+                        break
+                if not preview_id:
+                    return DigitalReceipt.failure(intent, "E*TRADE previewId missing")
+
+                place_xml = f"""<PlaceOrderRequest>
+  <orderType>EQ</orderType>
+  <clientOrderId>{client_order_id}</clientOrderId>
+  <PreviewIds><previewId>{preview_id}</previewId></PreviewIds>
+  <Order>
+    <allOrNone>false</allOrNone>
+    <priceType>MARKET</priceType>
+    <orderTerm>GOOD_FOR_DAY</orderTerm>
+    <marketSession>REGULAR</marketSession>
+    <Instrument>
+      <Product>
+        <securityType>EQ</securityType>
+        <symbol>{ticker}</symbol>
+      </Product>
+      <orderAction>{order_action}</orderAction>
+      <quantityType>QUANTITY</quantityType>
+      <quantity>{qty}</quantity>
+    </Instrument>
+  </Order>
+</PlaceOrderRequest>"""
+
+                place_url = f"{self._api_base}/v1/accounts/{account_id}/orders/place.json"
+                place_auth = capital_oauth.oauth1_auth_header(
+                    "POST", place_url, self._consumer_key, self._consumer_secret, access_token, access_secret
+                )
+                async with session.post(
+                    place_url,
+                    data=place_xml,
+                    headers={"Authorization": place_auth, "Content-Type": "application/xml"},
+                    timeout=30,
+                ) as resp:
+                    place_text = await resp.text()
+                    if resp.status >= 400:
+                        return DigitalReceipt.failure(intent, f"E*TRADE place failed: {place_text[:300]}")
+
+                order_id = client_order_id
+                try:
+                    place_root = ET.fromstring(place_text)
+                    for elem in place_root.iter():
+                        if elem.tag.endswith("orderId") and elem.text:
+                            order_id = elem.text
+                            break
+                except Exception:
+                    pass
+
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "order_id": order_id,
+                        "status": "submitted",
+                        "symbol": ticker,
+                        "qty": str(qty),
+                        "side": action,
+                        "broker": "etrade",
+                        "preview_id": preview_id,
+                    },
+                )
+        except Exception as exc:
+            LOG.exception("E*TRADE trade failed")
             return DigitalReceipt.failure(intent, str(exc))
 
 
@@ -2494,6 +2923,9 @@ class DigitalBridgeRuntime:
         self._topic_out = os.environ.get("CURXOR_TOPIC_DIGITAL_OUT", "telemetry/digital_out")
         self._topic_in = os.environ.get("CURXOR_TOPIC_DIGITAL_IN", "telemetry/digital_in")
         self._alpaca = AlpacaTradeWorker()
+        self._webull = WebullTradeWorker()
+        self._etrade = EtradeTradeWorker()
+        self._robinhood = RobinhoodMcpTradeWorker()
         self._x = XPublishWorker()
         self._meta = MetaPublishWorker()
         self._tiktok = TikTokPublishWorker()
@@ -2541,6 +2973,8 @@ class DigitalBridgeRuntime:
             self._topic_in,
         )
         LOG.info("Alpaca worker: %s", "enabled" if self._alpaca.enabled else "disabled (no creds)")
+        LOG.info("Webull worker: %s", "enabled" if self._webull.enabled else "disabled (no creds)")
+        LOG.info("E*TRADE worker: %s", "enabled" if self._etrade.enabled else "disabled (no creds)")
         LOG.info("X publish worker: %s", "enabled" if self._x.enabled else "disabled (no creds)")
         LOG.info(
             "Meta publish worker: %s (threads=%s fb=%s ig=%s)",
@@ -2583,7 +3017,16 @@ class DigitalBridgeRuntime:
             pub.close(linger=0)
 
     async def _dispatch(self, intent: DigitalIntent) -> DigitalReceipt:
+        if intent.tool == TOOL_EXECUTE_TRADE_ROBINHOOD:
+            return await self._robinhood.handle(intent)
         if intent.tool == TOOL_EXECUTE_TRADE:
+            broker = str(intent.payload.get("broker_id", "alpaca")).lower().strip()
+            if broker == "robinhood_mcp":
+                return await self._robinhood.handle(intent)
+            if broker == "webull":
+                return await self._webull.handle(intent)
+            if broker == "etrade":
+                return await self._etrade.handle(intent)
             return await self._alpaca.handle(intent)
         if intent.tool == TOOL_PUBLISH_POST:
             return await self._x.handle(intent)
