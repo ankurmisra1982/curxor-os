@@ -190,11 +190,11 @@ W29 → W30 → W31 → W32 → W33 → W34 → W35
 
 **Acceptance**
 
-- [ ] Worker runs `process_due` once and exits 0 in demo (no SMTP)
-- [ ] Dashboard `process_due` no-ops when `CURXOR_WORK_OUTBOUND_LOCK` set
-- [ ] `OUTBOUND-WORKER.md` updated with run + env table
-- [ ] `work-checklist.mjs`: `outbound_worker_lock_smoke`
-- [ ] No regression in `qa:local`
+- [x] Worker runs `process_due` once and exits 0 in demo (no SMTP)
+- [x] Dashboard `process_due` no-ops when `CURXOR_WORK_OUTBOUND_LOCK` set
+- [x] `OUTBOUND-WORKER.md` updated with run + env table
+- [x] `work-checklist.mjs`: `outbound_worker_lock_smoke`
+- [x] No regression in `qa:local`
 
 **Growth levels:** L4+ ops · L1–L3 unchanged (heartbeat in dashboard OK for demo).
 

@@ -736,6 +736,35 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W32 — outbound_worker_lock_smoke
+{
+  const claim = await post("/api/work/status", { action: "claim_outbound_worker_lock", workerPid: 424242 });
+  const blocked = await post("/api/work/status", { action: "process_due" });
+  const tick = await post("/api/work/status", {
+    action: "outbound_worker_tick",
+    workerPid: 424242,
+  });
+  const release = await post("/api/work/status", { action: "release_outbound_worker_lock", workerPid: 424242 });
+  const resumed = await post("/api/work/status", { action: "process_due" });
+  if (
+    claim.ok &&
+    blocked.ok &&
+    blocked.json.skipped === true &&
+    blocked.json.workerActive === true &&
+    tick.ok &&
+    release.ok &&
+    resumed.ok &&
+    resumed.json.skipped !== true
+  ) {
+    pass("outbound_worker_lock_smoke", `tick processed=${tick.json.processed ?? 0}`);
+  } else {
+    fail(
+      "outbound_worker_lock_smoke",
+      `skipped=${blocked.json?.skipped} tick=${tick.ok} resumed=${resumed.json?.skipped}`,
+    );
+  }
+}
+
 // W31 — pre_send_modal_block
 {
   const gate = await post("/api/work/status", { action: "pre_send_gate" });

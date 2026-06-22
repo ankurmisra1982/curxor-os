@@ -116,6 +116,17 @@ async function executeMyWorkSkill(
   skillId: string,
   config: Record<string, unknown>,
 ): Promise<SkillMeshResult | null> {
+  if (skillId === "process_due") {
+    const { runDashboardProcessDue } = await import("./work-outbound-tick");
+    const result = await runDashboardProcessDue();
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: result.skipped
+        ? "Outbound worker active — dashboard process_due skipped"
+        : `Due steps processed · ${result.processed} · finalized ${result.finalizedSends}`,
+    };
+  }
   if (skillId === "scan_inbox") {
     const { scanLocalMailQueue } = await import("./work-store");
     const { pauseSequencesOnReply } = await import("./work-send-executor");

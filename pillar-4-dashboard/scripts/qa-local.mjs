@@ -31,6 +31,7 @@ const env = {
   CURXOR_VITAL_STATE_PATH: path.join(DEV_QA, "vital-health.json"),
   CURXOR_CONTENT_QUEUE_PATH: path.join(DEV_QA, "content-queue.json"),
   CURXOR_WORK_QUEUE_PATH: path.join(DEV_QA, "work-queue.json"),
+  CURXOR_WORK_OUTBOUND_LOCK: path.join(DEV_QA, "work-outbound.lock"),
   CURXOR_CAPITAL_QUEUE_PATH: path.join(DEV_QA, "capital-queue.json"),
   CURXOR_CAPITAL_PFM_PATH: path.join(DEV_QA, "capital-pfm.json"),
   CURXOR_CAPITAL_INTEL_PATH: path.join(DEV_QA, "capital-intel.json"),

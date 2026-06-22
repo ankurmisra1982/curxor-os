@@ -13,8 +13,10 @@ async function tick() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "process_due" }),
     });
-    const workJson = (await workRes.json()) as { processed?: number };
-    if ((workJson.processed ?? 0) > 0) {
+    const workJson = (await workRes.json()) as { processed?: number; skipped?: boolean; workerActive?: boolean };
+    if (workJson.workerActive || workJson.skipped) {
+      // outbound sidecar holds lock — dashboard heartbeat intentionally no-ops
+    } else if ((workJson.processed ?? 0) > 0) {
       console.log(`[heartbeat] outreach processed ${workJson.processed} due sequence step(s)`);
     }
   } catch (err) {

@@ -13,6 +13,7 @@
     "qa:smoke": "node scripts/qa-smoke.mjs",
     "qa:flows": "node scripts/qa-user-flows.mjs",
     "heartbeat:daemon": "node scripts/heartbeat-daemon.mjs",
+    "work:outbound-worker": "node worker/outbound.mjs --once",
     "qa:wait": "node scripts/wait-for-server.mjs",
     "qa:local": "node scripts/qa-local.mjs",
     "qa:capital-checklist": "node scripts/capital-checklist.mjs",

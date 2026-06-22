@@ -123,16 +123,22 @@
 - [x] **W31** — Deliverability operator UI: pre-send modal gate, warmup chart, suppression unblock, trust center strip, Go Live suppression ack, bounce scan on scan_inbox
 - [x] Work checklist **63/63**
 
+## Shipped (Phase 3 excellence W32 — outbound worker v1)
+
+- [x] **W32** — Outbound sidecar: `worker/outbound.mjs`, lock file, `outbound_worker_tick` API, dashboard `process_due` skip when worker active, `npm run work:outbound-worker`, scheduler fallback job
+- [x] Work checklist **64/64**
+
 ## Next
 
-**Phase 3 excellence arc (W32–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
+**Phase 3 excellence arc (W33–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
 
 | Sprint | Focus | Target tag |
 |--------|--------|------------|
 | W29 | Live proof GTM + EXIT-DEMO video | v0.5.2 ✓ |
 | W30 | Inbox pro (live send, undo, snooze return) | v0.5.3 ✓ |
 | W31 | Deliverability operator UI | v0.5.4 ✓ |
-| W32–W33 | Outbound worker + team lite | v0.6.0 |
+| W32 | Outbound worker v1 | v0.6.0 (partial) ✓ |
+| W33 | Team inbox lite | v0.6.0 |
 | W34 | HubSpot OAuth + activity timeline | v0.6.1 |
 | W35 | OS moat + Cafe XP + governance UI | v0.6.2 |
 

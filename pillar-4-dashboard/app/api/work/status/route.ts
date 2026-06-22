@@ -29,11 +29,21 @@ import { handleWorkEmailReceipt } from "@/lib/work-receipt-handler";
 import { resolveAutoSendOnActivate, readWorkSendPolicy, type AutoSendPolicy } from "@/lib/work-send-policy";
 import {
   executeOutboundSend,
-  finalizeDueOutboundSends,
-  processDueSequenceSteps,
   sendSequenceStep,
   undoOutboundSend,
 } from "@/lib/work-send-executor";
+import {
+  claimOutboundWorkerLock,
+  isOutboundWorkerLockHeld,
+  readOutboundWorkerLock,
+  releaseOutboundWorkerLock,
+  verifyOutboundWorkerCaller,
+} from "@/lib/work-outbound-lock";
+import {
+  ensureWorkOutboundHeartbeatJob,
+  runDashboardProcessDue,
+  runOutboundWorkerTick,
+} from "@/lib/work-outbound-tick";
 import {
   activateSequence,
   appendWorkSyncLog,
@@ -53,7 +63,6 @@ import {
   markMailDone,
   markSequenceReplied,
   pauseSequence,
-  processExpiredSnoozes,
   rejectSend,
   scanLocalMailQueue,
   sendComposeReply,
@@ -97,6 +106,8 @@ export async function POST(request: Request): Promise<Response> {
     mailId?: string;
     outboundKillSwitch?: boolean;
     autoSendOnActivate?: boolean;
+    workerPid?: number;
+    scanInbox?: boolean;
   };
 
   try {
@@ -277,18 +288,49 @@ export async function POST(request: Request): Promise<Response> {
       }
 
       case "process_due": {
-        const [processed, finalizedSends, snoozeReturn] = await Promise.all([
-          processDueSequenceSteps(),
-          finalizeDueOutboundSends(),
-          processExpiredSnoozes(),
-        ]);
+        const tick = await runDashboardProcessDue();
         return Response.json({
           ok: true,
-          processed,
-          finalizedSends,
-          snoozeReturned: snoozeReturn.returned,
+          processed: tick.processed,
+          finalizedSends: tick.finalizedSends,
+          snoozeReturned: tick.snoozeReturned,
+          workerActive: tick.workerActive ?? false,
+          skipped: tick.skipped,
           status: await fetchWorkStatus(),
         });
+      }
+
+      case "outbound_worker_tick": {
+        const workerPid = typeof body.workerPid === "number" ? body.workerPid : Number(body.workerPid);
+        if (!Number.isFinite(workerPid) || !(await verifyOutboundWorkerCaller(workerPid))) {
+          return Response.json({ ok: false, error: "Outbound worker lock not held by caller" }, { status: 403 });
+        }
+        const scanInbox = body.scanInbox === true;
+        const tick = await runOutboundWorkerTick({ scanInbox });
+        return Response.json({ ok: true, ...tick, status: await fetchWorkStatus() });
+      }
+
+      case "claim_outbound_worker_lock": {
+        const workerPid = typeof body.workerPid === "number" ? body.workerPid : Number(body.workerPid);
+        const claim = await claimOutboundWorkerLock(Number.isFinite(workerPid) ? workerPid : process.pid);
+        return Response.json({ ...claim, lock: await readOutboundWorkerLock(), status: await fetchWorkStatus() });
+      }
+
+      case "release_outbound_worker_lock": {
+        const workerPid = typeof body.workerPid === "number" ? body.workerPid : Number(body.workerPid);
+        await releaseOutboundWorkerLock(Number.isFinite(workerPid) ? workerPid : process.pid);
+        return Response.json({ ok: true, held: await isOutboundWorkerLockHeld(), status: await fetchWorkStatus() });
+      }
+
+      case "outbound_worker_lock_status": {
+        const lock = await readOutboundWorkerLock();
+        const held = await isOutboundWorkerLockHeld();
+        return Response.json({ ok: true, held, lock, status: await fetchWorkStatus() });
+      }
+
+      case "ensure_outbound_heartbeat_job": {
+        await ensureWorkOutboundHeartbeatJob();
+        return Response.json({ ok: true, status: await fetchWorkStatus() });
       }
 
       case "import_leads": {
