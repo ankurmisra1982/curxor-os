@@ -683,7 +683,17 @@ await check("work status bootstrap", async () => {
 
 await check("work go_live checklist", async () => {
   const { ok, json } = await postJson("/api/work/status", { action: "go_live" });
-  return ok && json.goLive && Array.isArray(json.goLive.steps);
+  return (
+    ok &&
+    json.goLive &&
+    Array.isArray(json.goLive.steps) &&
+    typeof json.goLive.demoReady === "boolean"
+  );
+});
+
+await check("work run_demo_tour", async () => {
+  const { ok, json } = await postJson("/api/work/status", { action: "run_demo_tour" });
+  return ok && json.ok === true && Array.isArray(json.steps) && json.steps.length >= 4 && json.sequenceId;
 });
 
 await check("work draft_sequence", async () => {

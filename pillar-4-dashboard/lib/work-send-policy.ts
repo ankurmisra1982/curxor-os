@@ -44,13 +44,15 @@ function startOfLocalDayMs(): number {
 
 export function countSendsToday(sends: OutboundSend[]): number {
   const start = startOfLocalDayMs();
-  return sends.filter((s) => s.status === "sent" && s.sentAt && Date.parse(s.sentAt) >= start).length;
+  return sends.filter(
+    (s) => (s.status === "sent" || s.status === "simulated") && s.sentAt && Date.parse(s.sentAt) >= start,
+  ).length;
 }
 
 export function lastSentAtMs(sends: OutboundSend[]): number | null {
   let latest: number | null = null;
   for (const s of sends) {
-    if (s.status !== "sent" || !s.sentAt) continue;
+    if ((s.status !== "sent" && s.status !== "simulated") || !s.sentAt) continue;
     const t = Date.parse(s.sentAt);
     if (latest === null || t > latest) latest = t;
   }

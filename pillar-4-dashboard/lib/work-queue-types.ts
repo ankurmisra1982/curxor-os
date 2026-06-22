@@ -6,7 +6,7 @@ export type SequenceStatus = "draft" | "active" | "paused" | "completed" | "repl
 
 export type SequenceStepKind = "email" | "wait" | "task";
 
-export type SendStatus = "queued" | "pending_approval" | "sent" | "failed" | "skipped";
+export type SendStatus = "queued" | "pending_approval" | "sent" | "simulated" | "failed" | "skipped";
 
 export type ReplyIntent = "interested" | "objection" | "ooo" | "neutral" | "unknown";
 

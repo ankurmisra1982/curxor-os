@@ -10,7 +10,7 @@ export interface WorkAnalyticsSummary {
 }
 
 export function buildWorkAnalytics(sends: OutboundSend[], mailIndex: MailIndexEntry[]): WorkAnalyticsSummary {
-  const sent = sends.filter((s) => s.status === "sent");
+  const sent = sends.filter((s) => s.status === "sent" || s.status === "simulated");
   const openedCount = sent.filter((s) => s.openedAt).length;
   const repliedCount = sent.filter((s) => s.repliedAt).length;
   const sentCount = sent.length;

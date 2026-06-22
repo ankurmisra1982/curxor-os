@@ -82,6 +82,12 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ok: true, goLive, status: await fetchWorkStatus() });
       }
 
+      case "run_demo_tour": {
+        const { runWorkDemoTour } = await import("@/lib/work-demo-tour");
+        const tour = await runWorkDemoTour();
+        return Response.json({ ...tour, status: await fetchWorkStatus(), goLive: await buildWorkGoLiveReport() });
+      }
+
       case "create_lead": {
         if (!body.name?.trim() || !body.email?.trim()) {
           return Response.json({ ok: false, error: "name and email required" }, { status: 400 });

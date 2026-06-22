@@ -5,6 +5,7 @@ import {
   advanceSequenceStep,
   ensureWorkQueue,
   getLead,
+  isWorkEmailBridgeConfigured,
   markSequenceReplied,
   markSequenceStepSent,
   personalizeTemplate,
@@ -100,10 +101,32 @@ export async function sendSequenceStep(
   return executeOutboundSend(send.id);
 }
 
+/** Demo-mode send when SMTP bridge is not configured — local only, not sent to eno2. */
+async function simulateDemoSend(sendId: string): Promise<OutboundSend | null> {
+  const file = await ensureWorkQueue();
+  const send = file.sends.find((s) => s.id === sendId);
+  if (!send) return null;
+  const updated = await updateSendStatus(sendId, {
+    status: "simulated",
+    sentAt: new Date().toISOString(),
+    error: null,
+  });
+  if (updated) {
+    await markSequenceStepSent(send.sequenceId, send.stepId, send.subjectVariant);
+    await advanceSequenceStep(send.sequenceId);
+  }
+  return updated;
+}
+
 export async function executeOutboundSend(sendId: string): Promise<{ ok: boolean; send?: OutboundSend; error?: string }> {
   const file = await ensureWorkQueue();
   const send = file.sends.find((s) => s.id === sendId);
   if (!send) return { ok: false, error: "Send not found" };
+
+  if (!(await isWorkEmailBridgeConfigured())) {
+    const simulated = await simulateDemoSend(sendId);
+    return { ok: true, send: simulated ?? undefined };
+  }
 
   const digital = await buildEmailIntent({
     to: send.to,

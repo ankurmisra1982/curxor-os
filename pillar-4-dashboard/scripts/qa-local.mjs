@@ -157,6 +157,10 @@ async function main() {
       if (creatorExit !== 0) exitCode = creatorExit;
     }
     if (exitCode === 0) {
+      const workExit = await run("node", ["scripts/work-checklist.mjs", BASE]);
+      if (workExit !== 0) exitCode = workExit;
+    }
+    if (exitCode === 0) {
       const scaffoldExit = await run("node", ["scripts/verify-exit-demo-scaffold.mjs", BASE]);
       if (scaffoldExit !== 0) exitCode = scaffoldExit;
     }

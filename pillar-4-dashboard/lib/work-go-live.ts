@@ -22,6 +22,8 @@ export interface WorkGoLiveTodaySummary {
 
 export interface WorkGoLiveReport {
   ready: boolean;
+  /** Day-one ready without SMTP — FRE + lead + sequence activity */
+  demoReady: boolean;
   partiallyReady: boolean;
   progress: { complete: number; total: number };
   steps: WorkGoLiveStep[];
@@ -52,7 +54,7 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
     status: bridgeConfigured ? "complete" : "warning",
     detail: bridgeConfigured
       ? "SMTP configured in digital.env"
-      : "Set SMTP_HOST + SMTP_FROM in digital.env — demo mode queues locally",
+      : "Demo mode OK — set SMTP_HOST + SMTP_FROM when ready for live send",
   });
 
   const hasLead = file.leads.length > 0;
@@ -72,6 +74,7 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
   });
 
   const active = file.sequences.filter((s) => s.status === "active");
+  const hasAnySend = file.sends.some((s) => s.status === "sent" || s.status === "simulated");
   steps.push({
     id: "active",
     label: "Sequence activated",
@@ -82,9 +85,25 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
         : "Activate a draft sequence to start outbound",
   });
 
-  const complete = steps.filter((s) => s.status === "complete").length;
+  steps.push({
+    id: "first_send",
+    label: "First outbound send",
+    status: hasAnySend ? "complete" : active.length > 0 ? "warning" : "pending",
+    detail: hasAnySend
+      ? bridgeConfigured
+        ? `${file.sends.filter((s) => s.status === "sent").length} sent via bridge`
+        : `${file.sends.filter((s) => s.status === "simulated").length} simulated · demo mode`
+      : "Run demo tour or Send Step on an active sequence",
+  });
+
   const required = steps.filter((s) => s.status !== "optional");
-  const ready = required.every((s) => s.status === "complete");
+  const complete = required.filter((s) => s.status === "complete").length;
+  const freComplete = steps.find((s) => s.id === "fre")?.status === "complete";
+  const hasSequenceActivity = hasSequence && (active.length > 0 || hasAnySend);
+  const demoReady = Boolean(freComplete && hasLead && hasSequenceActivity);
+  const ready = bridgeConfigured
+    ? required.every((s) => s.status === "complete")
+    : demoReady;
   const partiallyReady = complete >= 3;
 
   let nextScheduledAt: string | null = null;
@@ -102,8 +121,9 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
 
   return {
     ready,
+    demoReady,
     partiallyReady,
-    progress: { complete, total: steps.length },
+    progress: { complete, total: required.length },
     steps,
     today: {
       nextScheduledAt,

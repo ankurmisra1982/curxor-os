@@ -8,7 +8,7 @@ interface WorkOutboundPanelProps {
 }
 
 function statusClass(status: OutboundSend["status"]): string {
-  if (status === "sent") return "text-cursor-glow";
+  if (status === "sent" || status === "simulated") return "text-cursor-glow";
   if (status === "failed") return "text-red-400";
   if (status === "pending_approval") return "text-amber-400";
   return "text-stark";

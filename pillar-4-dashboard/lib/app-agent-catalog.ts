@@ -63,6 +63,7 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       { id: "draft_sequence", label: "Draft Sequence", description: "Local LLM multi-step cold email", kind: "plan" },
       { id: "send_sequence_step", label: "Send Step", description: "Send current sequence step via SMTP bridge", kind: "digital" },
       { id: "summarize_day", label: "Summarize Day", description: "Local LLM day brief", kind: "plan" },
+      { id: "run_demo_tour", label: "Demo Tour", description: "Lead → sequence → simulated send (no SMTP keys)", kind: "digital" },
       { id: "sort_tray", label: "Sort Tray", description: "Claw sorts by priority labels", kind: "physical" },
       { id: "move_to_tray", label: "Move to Tray", description: "Physical move via motor_out", kind: "physical" },
     ],

@@ -42,6 +42,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [selectedSequenceId, setSelectedSequenceId] = useState("");
   const [dayBrief, setDayBrief] = useState("");
   const [signal, setSignal] = useState("Syncing outreach desk…");
+  const [demoTourRunning, setDemoTourRunning] = useState(false);
 
   const workspace = typeof config.workspaceName === "string" ? config.workspaceName : "Outreach Desk";
   const lane = typeof config.clawLane === "string" ? config.clawLane : "A";
@@ -97,35 +98,50 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
   useEffect(() => {
     if (skillTick === 0 || !lastSkillId) return;
+
+    /** Already executed server-side in skill-executors — refresh desk only (avoid double mutations). */
+    const serverExecuted = new Set([
+      "scan_inbox",
+      "summarize_day",
+      "draft_sequence",
+      "send_email",
+      "send_sequence_step",
+      "run_demo_tour",
+    ]);
+
     void (async () => {
-      if (lastSkillId === "scan_inbox") {
-        const json = await postWork({ action: "scan_inbox" });
+      if (serverExecuted.has(lastSkillId)) {
+        const json = await postWork({ action: "dashboard_bootstrap" });
         if (json.status) applyStatus(json.status);
-        setSignal("Inbox indexed · reply detection ran");
-      }
-      if (lastSkillId === "summarize_day") {
-        const json = await postWork({ action: "summarize_day" });
-        if (json.status) applyStatus(json.status);
-        setDayBrief((json as { brief?: string }).brief ?? "");
-        setSignal("Day brief ready");
-      }
-      if (lastSkillId === "draft_sequence") {
-        const json = await postWork({
-          action: "draft_sequence",
-          leadId: selectedLeadId || undefined,
-        });
-        if (json.status) applyStatus(json.status);
-        setSignal("Sequence drafted");
-      }
-      if (lastSkillId === "send_email" || lastSkillId === "send_sequence_step") {
-        if (selectedSequenceId) {
-          const json = await postWork({ action: "send_step", sequenceId: selectedSequenceId });
-          if (json.status) applyStatus(json.status);
-          setSignal(json.ok ? "Step queued" : "Send failed");
+        if (json.goLive) setGoLive(json.goLive);
+        if (lastSkillId === "scan_inbox") {
+          setSignal("Inbox indexed · reply detection ran");
+        } else if (lastSkillId === "summarize_day") {
+          const briefJson = await postWork({ action: "summarize_day" });
+          setDayBrief((briefJson as { brief?: string }).brief ?? "");
+          setSignal("Day brief ready");
+        } else if (lastSkillId === "draft_sequence") {
+          setSignal("Sequence drafted");
+        } else if (lastSkillId === "send_email" || lastSkillId === "send_sequence_step") {
+          setSignal("Step sent · check outbound queue");
+        } else if (lastSkillId === "run_demo_tour") {
+          setSignal("Demo tour complete · simulated send");
         }
+        return;
       }
     })();
-  }, [skillTick, lastSkillId, selectedLeadId, selectedSequenceId, applyStatus]);
+  }, [skillTick, lastSkillId, applyStatus]);
+
+  const runDemoTour = () => {
+    setDemoTourRunning(true);
+    void postWork({ action: "run_demo_tour" })
+      .then((json) => {
+        if (json.status) applyStatus(json.status);
+        if (json.goLive) setGoLive(json.goLive);
+        setSignal(json.ok ? "Demo tour complete · simulated send" : json.error ?? "Demo tour failed");
+      })
+      .finally(() => setDemoTourRunning(false));
+  };
 
   const action = async (body: Record<string, unknown>) => {
     const json = await postWork(body);
@@ -149,7 +165,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
       {level === "beginner" ? (
         <ExperienceAppSection appId="my-work" sectionId="go-live" minLevel="beginner" title="Go Live" subtitle="Checklist before first outbound send">
-          <WorkGoLivePanel report={goLive} onRefresh={() => void refreshGoLive()} />
+          <WorkGoLivePanel
+            report={goLive}
+            onRefresh={() => void refreshGoLive()}
+            onRunDemoTour={runDemoTour}
+            demoTourRunning={demoTourRunning}
+          />
         </ExperienceAppSection>
       ) : null}
 

@@ -51,6 +51,11 @@ export async function executeSkillMesh(
     if (capital) return capital;
   }
 
+  if (appId === "my-work") {
+    const work = await executeMyWorkSkill(skillId, config);
+    if (work) return work;
+  }
+
   if (skill.kind === "plan") {
     return { executed: false, kind: "plan", skipReason: "local-only skill" };
   }
@@ -91,25 +96,6 @@ export async function executeSkillMesh(
       }
       return { executed: out.result.ok, kind: "digital", digital: out.result };
     }
-    if (appId === "my-work" && (skillId === "send_sequence_step" || skillId === "send_email")) {
-      const sequenceId = cfgStr(config, "selectedSequenceId", "");
-      if (!sequenceId) {
-        return { executed: false, kind: "digital", skipReason: "select a sequence in Outreach desk first" };
-      }
-      const { sendSequenceStep, executeOutboundSend } = await import("./work-send-executor");
-      const out = await sendSequenceStep(sequenceId);
-      if (!out.ok) {
-        return { executed: false, kind: "digital", skipReason: out.error ?? "send failed" };
-      }
-      if (out.send?.status === "pending_approval") {
-        return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
-      }
-      if (out.send?.status === "queued" && out.send.id) {
-        const sent = await executeOutboundSend(out.send.id);
-        return { executed: sent.ok, kind: "digital", digital: sent.ok ? { ok: true, id: out.send.id, tool: "work.email.send" } : undefined, skipReason: sent.error };
-      }
-      return { executed: true, kind: "digital", digital: { ok: true, id: out.send?.id ?? "", tool: "work.email.send" } };
-    }
     const digital = await buildDigitalIntent(appId, skillId, config);
     if (!digital) {
       return { executed: false, kind: "digital", skipReason: "no digital mapping" };
@@ -124,6 +110,80 @@ export async function executeSkillMesh(
   }
   const result = await publishMotorCommand(motor);
   return { executed: result.ok, kind: "physical", motor: result };
+}
+
+async function executeMyWorkSkill(
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  if (skillId === "scan_inbox") {
+    const { scanLocalMailQueue } = await import("./work-store");
+    const { pauseSequencesOnReply } = await import("./work-send-executor");
+    const entries = await scanLocalMailQueue();
+    for (const entry of entries.filter((e) => e.matchedReply && e.from)) {
+      await pauseSequencesOnReply(entry.from);
+    }
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Inbox indexed · ${entries.length} entries · reply detection ran`,
+    };
+  }
+  if (skillId === "draft_sequence") {
+    const leadId = cfgStr(config, "selectedLeadId", "");
+    const { draftSequenceWithLlm } = await import("./work-inference");
+    const draft = await draftSequenceWithLlm({ leadId: leadId || undefined });
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Sequence drafted · ${draft.sequenceId} · ${draft.steps} steps`,
+    };
+  }
+  if (skillId === "summarize_day") {
+    const { buildDayBrief } = await import("./work-inference");
+    const brief = await buildDayBrief();
+    return { executed: true, kind: "plan", skipReason: brief.split("\n")[0] ?? "Day brief ready" };
+  }
+  if (skillId === "run_demo_tour") {
+    const { runWorkDemoTour } = await import("./work-demo-tour");
+    const tour = await runWorkDemoTour();
+    return {
+      executed: tour.ok,
+      kind: "digital",
+      skipReason: tour.ok
+        ? `Demo tour · ${tour.sendId ?? "send"} · ${tour.sequenceId ?? ""}`
+        : tour.error ?? "Demo tour failed",
+    };
+  }
+  if (skillId === "send_email" || skillId === "send_sequence_step") {
+    const sequenceId = cfgStr(config, "selectedSequenceId", "");
+    if (!sequenceId) {
+      return { executed: false, kind: "digital", skipReason: "select a sequence in Outreach desk first" };
+    }
+    const { sendSequenceStep, executeOutboundSend } = await import("./work-send-executor");
+    const out = await sendSequenceStep(sequenceId);
+    if (!out.ok) {
+      return { executed: false, kind: "digital", skipReason: out.error ?? "send failed" };
+    }
+    if (out.send?.status === "pending_approval") {
+      return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
+    }
+    if (out.send?.status === "queued" && out.send.id) {
+      const sent = await executeOutboundSend(out.send.id);
+      return {
+        executed: sent.ok,
+        kind: "digital",
+        digital: sent.ok ? { ok: true, id: out.send.id, tool: "work.email.send" } : undefined,
+        skipReason: sent.error,
+      };
+    }
+    return {
+      executed: true,
+      kind: "digital",
+      digital: { ok: true, id: out.send?.id ?? "", tool: "work.email.send" },
+    };
+  }
+  return null;
 }
 
 async function executeMyCapitalSkill(

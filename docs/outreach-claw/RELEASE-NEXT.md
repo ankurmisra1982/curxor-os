@@ -9,6 +9,17 @@
 - Agent skills: draft_sequence, send_sequence_step, scan_inbox, summarize_day
 - QA smoke: bootstrap, go_live, draft_sequence, scan_inbox, recovery_list
 
+## Shipped (demo hardening sprint)
+
+- [x] **Simulated send** when SMTP unconfigured (`status: simulated` — mirrors Capital/Creator demo paths)
+- [x] **Skill double-execute fix** — chat skills refresh desk only after server execution
+- [x] **`run_demo_tour`** — lead → sequence → activate → simulated send
+- [x] Go Live **`demoReady`** (FRE + lead + sequence activity; SMTP not required)
+- [x] Go Live panel demo banner + **Run demo tour** button
+- [x] `scripts/work-checklist.mjs` wired into `qa:local` + `qa:work-checklist`
+- [x] QA smoke: `run_demo_tour`, `demoReady` on go_live
+- [x] Docs: `STARTUP-GUIDE.md`, updated GETTING-STARTED
+
 ## Shipped (Tier B — week-one)
 
 - [x] A/B subject line variants per step (`subjectAlt` · variant picked per lead at send)
