@@ -5,7 +5,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
+import { WorkAuditTimelinePanel } from "@/components/apps/work/WorkAuditTimelinePanel";
+import { WorkComposeStrip } from "@/components/apps/work/WorkComposeStrip";
+import { WorkCrmConflictPanel } from "@/components/apps/work/WorkCrmConflictPanel";
 import { WorkDeliverabilityPanel } from "@/components/apps/work/WorkDeliverabilityPanel";
+import { WorkNeedsYouPanel } from "@/components/apps/work/WorkNeedsYouPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
 import { WorkApprovalPanel } from "@/components/apps/work/WorkApprovalPanel";
@@ -39,7 +43,26 @@ import { workTerm } from "@/lib/work-level-copy";
 import { workFeatureVisible } from "@/lib/work-level-gates";
 import { resolveWorkGrowthLevel } from "@/lib/work-growth";
 import { listTemplatePacksForGrowth } from "@/lib/work-template-packs-data";
-import type { LeadStage, OutboundSend, ReplyIntent, WorkQueueStatus } from "@/lib/work-queue-types";
+import type { WorkExecutiveBrief } from "@/lib/work-executive-brief";
+import type { LeadStage, OutboundSend, ReplyIntent, WorkAgentAuditEntry, WorkQueueStatus } from "@/lib/work-queue-types";
+
+interface CrmConflictRow {
+  id: string;
+  email: string;
+  field: string;
+  localValue: string;
+  remoteValue: string;
+  leadId: string;
+  resolvedAt?: string | null;
+}
+
+interface NeedsYouState {
+  total: number;
+  p1Tasks: number;
+  pendingApprovals: number;
+  interestedMail: number;
+  items: Array<{ kind: "task" | "approval" | "mail"; id: string; label: string; priority?: string }>;
+}
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -109,6 +132,11 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [wizardOpen, setWizardOpen] = useState(false);
   const [draftReplyPreview, setDraftReplyPreview] = useState("");
   const [focusMailId, setFocusMailId] = useState<string | null>(null);
+  const [crmConflicts, setCrmConflicts] = useState<CrmConflictRow[]>([]);
+  const [needsYou, setNeedsYou] = useState<NeedsYouState | null>(null);
+  const [executiveBrief, setExecutiveBrief] = useState<WorkExecutiveBrief | null>(null);
+  const [auditLog, setAuditLog] = useState<WorkAgentAuditEntry[]>([]);
+  const [syncBadges, setSyncBadges] = useState<Record<string, "synced" | "conflict" | "local_only">>({});
 
   const draftReplyForMail = useCallback((mailId: string, prompt?: string) => {
     void postWork({ action: "draft_reply", mailId, prompt }).then((json) => {
@@ -139,7 +167,32 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     const json = await postWork({ action: "dashboard_bootstrap" });
     if (json.status) applyStatus(json.status);
     if (json.goLive) setGoLive(json.goLive);
-  }, [applyStatus]);
+    if (workFeatureVisible(growthLevel, "crm-conflicts")) {
+      const conflicts = await postWork({ action: "crm_conflict_list" });
+      const cj = conflicts as { conflicts?: typeof crmConflicts };
+      if (cj.conflicts) setCrmConflicts(cj.conflicts);
+    }
+    if (growthLevel === "L5") {
+      const briefJson = await postWork({ action: "executive_brief" });
+      const bj = briefJson as { brief?: WorkExecutiveBrief };
+      if (bj.brief) setExecutiveBrief(bj.brief);
+      const ny = await postWork({ action: "needs_you" });
+      const nj = ny as { needsYou?: typeof needsYou };
+      if (nj.needsYou) setNeedsYou(nj.needsYou);
+    }
+    if (workFeatureVisible(growthLevel, "audit-timeline")) {
+      const auditJson = await postWork({ action: "audit_list" });
+      const aj = auditJson as { audit?: WorkAgentAuditEntry[] };
+      if (aj.audit) setAuditLog(aj.audit);
+    }
+    if (workFeatureVisible(growthLevel, "pipeline")) {
+      const conflicts = await postWork({ action: "crm_conflict_list" });
+      const cj = conflicts as { conflicts?: CrmConflictRow[] };
+      const badges: Record<string, "synced" | "conflict" | "local_only"> = {};
+      for (const c of cj.conflicts ?? []) badges[c.leadId] = "conflict";
+      setSyncBadges(badges);
+    }
+  }, [applyStatus, growthLevel]);
 
   const refreshGoLive = useCallback(async () => {
     const json = await postWork({ action: "go_live" });
@@ -194,6 +247,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       "run_demo_tour",
       "morning_brief",
       "prep_meeting",
+      "executive_brief",
       "slack_digest",
       "draft_reply",
       "enrich_lead",
@@ -216,11 +270,22 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         await loadStatus();
       }
 
-      if (lastSkillId === "summarize_day" || lastSkillId === "morning_brief") {
-        const action = lastSkillId === "morning_brief" ? "morning_brief" : "summarize_day";
+      if (lastSkillId === "summarize_day" || lastSkillId === "morning_brief" || lastSkillId === "executive_brief") {
+        const action =
+          lastSkillId === "morning_brief"
+            ? "morning_brief"
+            : lastSkillId === "executive_brief"
+              ? "executive_brief"
+              : "summarize_day";
         const briefJson = await postWork({ action });
-        setDayBrief((briefJson as { brief?: string }).brief ?? "");
-        setSignal(lastSkillId === "morning_brief" ? "Morning brief ready" : "Day brief ready");
+        if (lastSkillId === "executive_brief") {
+          const bj = briefJson as { brief?: WorkExecutiveBrief };
+          if (bj.brief) setExecutiveBrief(bj.brief);
+          setSignal("Executive brief ready");
+        } else {
+          setDayBrief((briefJson as { brief?: string }).brief ?? "");
+          setSignal(lastSkillId === "morning_brief" ? "Morning brief ready" : "Day brief ready");
+        }
         return;
       }
       if (lastSkillId === "run_demo_tour") {
@@ -366,8 +431,21 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <AppMetric label="Replies" value={String(status?.stats.repliesThisWeek ?? "—")} unit="this week" />
       </div>
 
-      {show("executive-brief") && status?.stats ? (
-        <WorkExecutiveBriefPanel growthLevel={growthLevel} stats={status.stats} />
+      {show("executive-brief") ? (
+        <WorkExecutiveBriefPanel
+          growthLevel={growthLevel}
+          brief={executiveBrief}
+          onRefresh={() => void postWork({ action: "executive_brief" }).then((j) => {
+            const bj = j as { brief?: WorkExecutiveBrief };
+            if (bj.brief) setExecutiveBrief(bj.brief);
+          })}
+        />
+      ) : null}
+
+      {show("needs-you") ? (
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="needs-you" minLevel="expert" title="Needs you" subtitle="P1 · approvals · interested mail">
+          <WorkNeedsYouPanel summary={needsYou} />
+        </ExperienceAppSection>
       ) : null}
 
       {show("start-home") ? (
@@ -434,6 +512,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             report={goLive}
             onRefresh={() => void refreshGoLive()}
             onRunDemoTour={runDemoTour}
+            onOpenSetupWizard={() => setWizardOpen(true)}
             demoTourRunning={demoTourRunning}
           />
         </ExperienceAppSection>
@@ -476,6 +555,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
               onSelect={setSelectedLeadId}
               onStageChange={(leadId, stage: LeadStage) => void action({ action: "update_lead_stage", leadId, stage })}
               onAddLead={addOpportunity}
+              syncBadgeForLead={(id) => syncBadges[id] ?? "synced"}
               onEnrich={
                 workFeatureVisible(growthLevel, "mini-sequence")
                   ? (leadId) => void postWork({ action: "enrich_lead", leadId }).then(() => loadBootstrap())
@@ -585,6 +665,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onAssign={(mailId, leadId) => void action({ action: "assign_mail_to_lead", mailId, leadId })}
             onTagIntent={(mailId, intent) => void action({ action: "tag_reply_intent", mailId, intent })}
             onDraftReply={(mailId) => draftReplyForMail(mailId)}
+            onSnooze={(mailId) => void action({ action: "snooze_mail", mailId })}
+          />
+          <WorkComposeStrip
+            mailId={focusMailId}
+            draftPreview={draftReplyPreview}
+            onDraftReply={(id, prompt) => draftReplyForMail(id, prompt)}
+            onClear={() => setDraftReplyPreview("")}
           />
           {draftReplyPreview ? (
             <pre className="mt-3 whitespace-pre-wrap border border-line/60 p-2 font-mono text-[10px] text-stark">{draftReplyPreview}</pre>
@@ -620,7 +707,10 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           title="Deliverability"
           subtitle="Domain health · failures · send reputation"
         >
-          <WorkDeliverabilityPanel deliverability={status.deliverability} bridgeConfigured={status.bridgeConfigured} />
+          <WorkDeliverabilityPanel
+            deliverability={status.deliverability as Parameters<typeof WorkDeliverabilityPanel>[0]["deliverability"]}
+            bridgeConfigured={status.bridgeConfigured}
+          />
         </ExperienceAppSection>
       ) : null}
 
@@ -693,6 +783,18 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </ExperienceAppSection>
       ) : null}
 
+      {show("audit-timeline") ? (
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="audit-timeline" minLevel="standard" title="Agent audit" subtitle="Last 20 agent actions">
+          <WorkAuditTimelinePanel
+            entries={auditLog}
+            onRefresh={() => void postWork({ action: "audit_list" }).then((j) => {
+              const aj = j as { audit?: WorkAgentAuditEntry[] };
+              if (aj.audit) setAuditLog(aj.audit);
+            })}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
       {show("connector-vault") ? (
         <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="connector-vault" minLevel="expert" title="Connector vault" subtitle="SMTP · Google · Slack · Notion · Twenty · n8n">
           <WorkConnectorVaultPanel
@@ -700,6 +802,22 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onRefresh={() => void loadBootstrap()}
             onLinkGoogle={() => void linkOAuth("google")}
             onLinkNotion={() => void linkOAuth("notion")}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {show("crm-conflicts") ? (
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="crm-conflicts" minLevel="expert" title="CRM conflicts" subtitle="Twenty sync merge">
+          <WorkCrmConflictPanel
+            conflicts={crmConflicts}
+            onResolve={(conflictId, resolution) =>
+              void postWork({
+                action: "resolve_crm_conflict",
+                conflictId,
+                resolution: resolution === "take_remote" ? "take_remote" : "keep_local",
+                winner: resolution === "take_remote" ? "remote" : "local",
+              }).then(() => loadBootstrap())
+            }
           />
         </ExperienceAppSection>
       ) : null}

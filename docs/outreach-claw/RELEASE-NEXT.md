@@ -85,10 +85,18 @@
 - [x] Demo captures L1/L2/L3 in `capture-gtm-phase2.mjs`
 - [x] `BEST-IN-CLASS.md` refresh
 
+## Shipped (W13–W20 — best-in-class excellence arc — v0.4.0)
+
+- [x] **W13** — `demo:capture:work:levels`, `record-work-exit-demo.mjs`, STARTUP-GUIDE persona one-liners, Go Live exit CTA
+- [x] **W14** — Mail threads, snooze→task, keyboard triage (`useWorkInboxKeys`), `WorkComposeStrip`
+- [x] **W15** — DNS SPF/DKIM/DMARC, bounce→pause sequence, warmup ramp FRE, CAN-SPAM compliance go-live step
+- [x] **W16** — Twenty conflict UI, M365 OAuth scaffold, pipeline sync badges
+- [x] **W17** — Executive brief v2, stall detection, `WorkNeedsYouPanel`, L5 default ops tab
+- [x] **W18** — MCP send preview (dry_run), approval notify demo log, `WorkAuditTimelinePanel`
+- [x] **W19** — Cross-Claw handoff API + Creator “Add to Work”, morning brief cross-claw strip
+- [x] **W20** — `work-xp-events.ts` stub (Claw Cafe consumes events)
+
 ## Next
 
-- Live EXIT-DEMO walkthrough recording
-- Twenty conflict merge UI · Microsoft 365 OAuth
-- Claw Cafe XP (deferred)
+Deferred items unchanged — see **Deferred** above. Claw Cafe UI consumes XP events when Cafe shell ships.
 
-See [LEVELING-BUILD-PLAN.md](./LEVELING-BUILD-PLAN.md) and [GROWTH-LEVEL-FRAMEWORK.md](../curxor-os/GROWTH-LEVEL-FRAMEWORK.md).

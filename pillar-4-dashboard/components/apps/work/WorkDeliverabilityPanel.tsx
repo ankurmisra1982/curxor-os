@@ -61,8 +61,22 @@ export function WorkDeliverabilityPanel({ deliverability, bridgeConfigured }: Wo
       <div className="flex flex-wrap gap-2">
         <span className="border border-line px-2 py-0.5 text-muted">SPF · {d.spfStatus}</span>
         <span className="border border-line px-2 py-0.5 text-muted">DKIM · {d.dkimStatus}</span>
+        <span className="border border-line px-2 py-0.5 text-muted">DMARC · {d.dmarcStatus ?? "unknown"}</span>
+        {d.warmupMode ? (
+          <span className="border border-amber-400/50 px-2 py-0.5 text-amber-400">
+            Warmup · {d.warmupDailyCap ?? 15}/day cap
+          </span>
+        ) : null}
         {d.fromAddress ? <span className="border border-line px-2 py-0.5 text-stark">From · {d.fromAddress}</span> : null}
       </div>
+
+      {d.dns?.recommendations?.length ? (
+        <ul className="space-y-0.5 text-muted">
+          {d.dns.recommendations.slice(0, 3).map((r) => (
+            <li key={r}>· {r}</li>
+          ))}
+        </ul>
+      ) : null}
 
       {d.recentFailures.length > 0 ? (
         <div>

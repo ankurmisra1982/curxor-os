@@ -72,34 +72,28 @@ CurXor wedge: **sovereign on-appliance** — one desk for mail, CRM, tasks, cale
 
 ---
 
-## Current ship state (v0.3.9)
+## Current ship state (v0.4.0)
 
 | Area | Status |
 |------|--------|
 | Local CRM + sequences | Shipped |
 | SMTP send + simulated fallback | Shipped |
-| Unified inbox (CCP) + scan_inbox | Shipped — IMAP live when configured |
-| Go Live + demo tour + work-checklist | Shipped |
-| **WL1–WL6 growth leveling** | **Shipped v0.3.8** |
-| **WL7 persona polish** — L1/L2/L3 tours, inbox hero, template copy, pipeline quick actions | **Shipped v0.3.9** |
-| **W12 deliverability** — domain health chip, failure surfacing, unsubscribe preview, reputation panel | **Shipped v0.3.9** |
-| **WL8 QA matrix** — per-level `qa-work-levels.mjs`, L3 approval tour in checklist | **Shipped v0.3.9** |
-| Workspace tabs (Start / Outreach / Comms / Ops / Integrations) | Shipped v0.3.6 |
-| Connector vault UI | Shipped v0.3.6 |
-| Google / Notion / Slack / Twenty bridges | Shipped v0.3.6 |
-| **W7–W11 Excellence arc** — exit demo, triage, GTM, MCP, wizard, kanban | Shipped v0.3.7 |
+| **W13–W20 excellence arc** — inbox threads, DNS deliverability, M365 scaffold, executive brief, audit, cross-claw, XP stub | **Shipped v0.4.0** |
+| **WL7 persona polish** — L1/L2/L3 tours, inbox hero, keyboard triage, compose strip | **Shipped v0.3.9+** |
+| **W12 deliverability** — domain health, reputation, warmup ramp, CAN-SPAM FRE | **Shipped v0.3.9+** |
 
 ### Competitive score (June 2026)
 
 | Dimension | CurXor | Notes |
 |-----------|--------|-------|
 | Sovereign / on-appliance | **Leader** | Core wedge |
-| Persona leveling L1–L3 | **Strong (~4.2/5)** | WL7 tours + gating |
-| Inbox triage | **Improving** | Inbox hero + split strip |
-| Sequences / GTM L3+ | **Strong** | Approval queue, kill switch |
-| Deliverability UX | **Improving (~3.5/5)** | W12 panel; live DNS deferred |
+| Persona leveling L1–L3 | **Strong (~4.5/5)** | W14 keyboard + threads |
+| Inbox triage | **Strong (~4.3/5)** | Threads, snooze, compose strip |
+| Sequences / GTM L3+ | **Strong** | Approval queue, kill switch, MCP preview |
+| Deliverability UX | **Strong (~4.0/5)** | W15 DNS + warmup + bounce pause |
+| L4/L5 professional | **Improving (~3.8/5)** | CRM conflicts, executive brief, needs-you |
+| Cross-Claw OS | **Improving** | W19 handoffs + morning brief strip |
 | Live connector proof | Demo default | EXIT-DEMO + capture scripts |
-| Team shared inbox | Deferred | Phase 2 |
 
 ---
 
@@ -295,5 +289,6 @@ Script: `npm run demo:capture:work` (new) → `docs/demo-pack/screenshots/outrea
 - [STARTUP-GUIDE.md](./STARTUP-GUIDE.md) — demo-only operator path
 - [GETTING-STARTED.md](./GETTING-STARTED.md) — day-one checklist
 - [RELEASE-NEXT.md](./RELEASE-NEXT.md) — deferred + sprint tracking
+- [BEST-IN-CLASS-BUILD-PLAN.md](./BEST-IN-CLASS-BUILD-PLAN.md) — **W13–W20 execution plan**
 - Capital: [../capital-claw/BEST-IN-CLASS.md](../capital-claw/BEST-IN-CLASS.md)
 - Creator: [../creator-claw/RELEASE-NEXT.md](../creator-claw/RELEASE-NEXT.md)

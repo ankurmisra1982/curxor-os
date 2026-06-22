@@ -4,9 +4,11 @@ import { listApprovalSlackChannelIds } from "./content-approval-slack-config";
 import { sendTelegramApprovalMessage } from "./content-approval-telegram";
 import { listApprovalTelegramChatIds } from "./content-approval-telegram-config";
 import { publishDigitalIntent } from "./mesh-publish";
+import { appendWorkSyncLog } from "./work-store";
 import type { OutboundSend } from "./work-queue-types";
+import { emitWorkXpEvent } from "./work-xp-events";
 
-export async function notifyWorkPendingApproval(send: OutboundSend): Promise<void> {
+export async function notifyWorkPendingApproval(send: OutboundSend): Promise<{ demoLogged: boolean }> {
   const text = [
     "📬 Outreach Claw — send pending approval",
     `${send.id} · ${send.to}`,
@@ -24,4 +26,14 @@ export async function notifyWorkPendingApproval(send: OutboundSend): Promise<voi
       payload: { channel, text: text.slice(0, 4000) },
     });
   }
+
+  await appendWorkSyncLog({
+    connector: "approval",
+    action: "approval_notify_demo",
+    detail: `${send.id} · ${send.to} · pending_approval`,
+  });
+
+  await emitWorkXpEvent("approval_pending", { sendId: send.id, to: send.to });
+
+  return { demoLogged: true };
 }

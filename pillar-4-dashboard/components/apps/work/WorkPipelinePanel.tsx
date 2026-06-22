@@ -3,6 +3,8 @@
 import type { GrowthLevel } from "@/lib/os-growth-level";
 import { meetsGrowthLevel } from "@/lib/os-growth-level";
 import type { LeadStage, WorkLead } from "@/lib/work-queue-types";
+
+type LeadSyncBadge = "synced" | "conflict" | "local_only";
 import { workTerm } from "@/lib/work-level-copy";
 
 const STAGES: LeadStage[] = ["new", "contacted", "replied", "qualified", "won", "lost"];
@@ -23,6 +25,19 @@ interface WorkPipelinePanelProps {
   onAddLead: () => void;
   onEnrich?: (leadId: string) => void;
   onBookMeeting?: (leadId: string) => void;
+  syncBadgeForLead?: (leadId: string) => LeadSyncBadge | undefined;
+}
+
+function badgeLabel(badge: LeadSyncBadge): string {
+  if (badge === "synced") return "synced";
+  if (badge === "conflict") return "conflict";
+  return "local";
+}
+
+function badgeClass(badge: LeadSyncBadge): string {
+  if (badge === "synced") return "text-cursor-glow";
+  if (badge === "conflict") return "text-amber-400";
+  return "text-muted";
 }
 
 export function WorkPipelinePanel({
@@ -34,6 +49,7 @@ export function WorkPipelinePanel({
   onAddLead,
   onEnrich,
   onBookMeeting,
+  syncBadgeForLead,
 }: WorkPipelinePanelProps) {
   const singular = workTerm(growthLevel, "lead").toLowerCase();
   const plural = workTerm(growthLevel, "leadPlural").toLowerCase();
@@ -63,6 +79,11 @@ export function WorkPipelinePanel({
                 <p className="text-stark">{lead.name}</p>
                 <p className="text-[10px] text-muted">
                   {lead.company || lead.email} · {lead.title || "—"}
+                  {syncBadgeForLead ? (
+                    <span className={`ml-2 uppercase ${badgeClass(syncBadgeForLead(lead.id) ?? "local_only")}`}>
+                      {badgeLabel(syncBadgeForLead(lead.id) ?? "local_only")}
+                    </span>
+                  ) : null}
                 </p>
               </div>
               <select

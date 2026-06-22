@@ -387,6 +387,125 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W14 — snooze_mail
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.[0]?.id;
+  if (!mailId) {
+    fail("snooze_mail", "no mail");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "snooze_mail", mailId, days: 1 });
+    if (ok && json.task?.dueAt) {
+      pass("snooze_mail", json.task.id);
+    } else {
+      fail("snooze_mail", `dueAt=${json.task?.dueAt}`);
+    }
+  }
+}
+
+// W14 — list_threads
+{
+  const { ok, json } = await post("/api/work/status", { action: "list_threads" });
+  if (ok && Array.isArray(json.threads) && json.threads.length >= 1) {
+    pass("list_threads", `${json.threads.length} threads`);
+  } else {
+    fail("list_threads", `threads=${json.threads?.length}`);
+  }
+}
+
+// W15 — deliverability_dns
+{
+  const status = (await get("/api/work/status")).json;
+  const d = status.deliverability;
+  if (d?.spfStatus && d?.dkimStatus && (d.dmarcStatus || d.dns)) {
+    pass("deliverability_dns", `spf=${d.spfStatus} dkim=${d.dkimStatus}`);
+  } else {
+    fail("deliverability_dns", "missing DNS fields");
+  }
+}
+
+// W15 — warmup_policy
+{
+  const status = (await get("/api/work/status")).json;
+  const sp = status.sendPolicy;
+  if (sp && typeof sp.remainingToday === "number") {
+    pass("warmup_policy", `remaining=${sp.remainingToday}`);
+  } else {
+    fail("warmup_policy", "missing sendPolicy");
+  }
+}
+
+// W16 — crm_conflict_list
+{
+  const { ok, json } = await post("/api/work/status", { action: "crm_conflict_list" });
+  if (ok && Array.isArray(json.conflicts)) {
+    pass("crm_conflict_list", `${json.conflicts.length} conflicts`);
+  } else {
+    fail("crm_conflict_list", "missing conflicts array");
+  }
+}
+
+// W16 — microsoft_status
+{
+  const { ok, json } = await post("/api/work/status", { action: "microsoft_status" });
+  if (ok && json.microsoft?.scopes) {
+    pass("microsoft_status", json.microsoft.demo ? "demo" : "live");
+  } else {
+    fail("microsoft_status", "missing microsoft block");
+  }
+}
+
+// W17 — executive_brief
+{
+  const { ok, json } = await post("/api/work/status", { action: "executive_brief" });
+  if (ok && json.brief?.headline && Array.isArray(json.brief.sections)) {
+    pass("executive_brief", json.brief.stats?.stalls ?? "ok");
+  } else {
+    fail("executive_brief", "missing brief");
+  }
+}
+
+// W17 — stall_detection
+{
+  const { ok, json } = await post("/api/work/status", { action: "stall_detection" });
+  if (ok && Array.isArray(json.stalled) || Array.isArray(json.stalls)) {
+    const list = json.stalled ?? json.stalls;
+    pass("stall_detection", `${list.length} stalled`);
+  } else {
+    fail("stall_detection", "missing stalled array");
+  }
+}
+
+// W18 — audit_timeline
+{
+  const { ok, json } = await post("/api/work/status", { action: "audit_list" });
+  if (ok && Array.isArray(json.audit)) {
+    pass("audit_timeline", `${json.audit.length} entries`);
+  } else {
+    fail("audit_timeline", "missing audit");
+  }
+}
+
+// W18 — approval_notify_demo
+{
+  const { ok, json } = await post("/api/work/status", { action: "approval_notify_demo" });
+  if (ok && typeof json.demoLogged === "boolean") {
+    pass("approval_notify_demo", String(json.demoLogged));
+  } else {
+    fail("approval_notify_demo", `demoLogged=${json.demoLogged}`);
+  }
+}
+
+// W20 — xp_event_emit
+{
+  const { ok, json } = await post("/api/work/status", { action: "xp_event_emit", kind: "draft_reply" });
+  if (ok && json.event?.kind === "draft_reply") {
+    pass("xp_event_emit", json.event.id);
+  } else {
+    fail("xp_event_emit", json.error ?? "no event");
+  }
+}
+
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

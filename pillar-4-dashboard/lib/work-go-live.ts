@@ -2,6 +2,7 @@ import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
 import { buildWorkGrowthProfile } from "./work-growth";
+import { meetsGrowthLevel } from "./os-growth-level";
 import { readUserSettings } from "./user-settings";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { resolveAutoSendOnActivate } from "./work-send-policy";
@@ -158,6 +159,18 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
     file.sequences,
     Object.keys(file.unsubscribeTokens ?? {}).length,
   );
+  const physicalAddress = typeof fre.config.physicalAddress === "string" ? fre.config.physicalAddress.trim() : "";
+  const optOutLine = typeof fre.config.optOutLine === "string" ? fre.config.optOutLine.trim() : "";
+  const complianceOk = Boolean(physicalAddress && optOutLine);
+  steps.push({
+    id: "compliance",
+    label: "CAN-SPAM compliance copy",
+    status: complianceOk ? "complete" : isExplorer ? "optional" : meetsGrowthLevel(growth, "L3") ? "warning" : "optional",
+    detail: complianceOk
+      ? "Physical address + opt-out line configured in FRE"
+      : "Set physicalAddress + optOutLine in setup wizard for live outbound",
+  });
+
   const domainOk = deliverability.domainHealth === "healthy";
   steps.push({
     id: "domain_health",

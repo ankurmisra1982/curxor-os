@@ -326,5 +326,19 @@ await check("flow: capital rebalance rule + arm", async () => {
   return armed.ok && armed.json.rule?.state === "ARMED";
 });
 
+await check("flow: cross_claw_handoff creator to work", async () => {
+  const email = `handoff-${Date.now()}@example.com`;
+  const handoff = await postJson("/api/work/status", {
+    action: "handoff_from_claw",
+    sourceClaw: "my-content",
+    name: "Creator Collab",
+    email,
+    contextLabel: "QA engage DM",
+  });
+  if (!handoff.ok || !handoff.json.lead?.id) return false;
+  const status = await getJson("/api/work/status");
+  return Array.isArray(status.leads) && status.leads.some((l) => l.email === email);
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

@@ -11,7 +11,12 @@ import { enrichLead } from "@/lib/work-lead-enrichment";
 import { bookMeeting } from "@/lib/work-calcom";
 import { hubspotPreviewContacts } from "@/lib/work-hubspot-client";
 import { pullNotionLeads } from "@/lib/work-notion-sync";
-import { appendAgentAudit } from "@/lib/work-agent-audit";
+import { listCrmConflicts, resolveCrmConflict } from "@/lib/work-crm-conflicts";
+import { buildWorkExecutiveBrief } from "@/lib/work-executive-brief";
+import { handoffToWork, type HandoffSourceClaw } from "@/lib/work-handoff";
+import { listWorkAgentAudit, appendAgentAudit } from "@/lib/work-agent-audit";
+import { detectWorkStalls } from "@/lib/work-stall-detection";
+import { emitWorkXpEvent } from "@/lib/work-xp-events";
 import { emitWorkWebhook } from "@/lib/work-webhook-emitter";
 import { buildMorningBrief, buildPrepMeetingBrief } from "@/lib/work-morning-brief";
 import { pushLeadNotesToNotion } from "@/lib/work-notion-client";
@@ -44,6 +49,8 @@ import {
   pauseSequence,
   rejectSend,
   scanLocalMailQueue,
+  snoozeMail,
+  listMailThreadsFromStore,
   tagMailReplyIntent,
   toggleTaskDone,
   trackSendOpen,
@@ -104,6 +111,14 @@ export async function POST(request: Request): Promise<Response> {
 
       case "go_live": {
         const goLive = await buildWorkGoLiveReport();
+        if (goLive.demoReady) {
+          void (async () => {
+            const { emitWorkXpEvent } = await import("@/lib/work-xp-events");
+            await emitWorkXpEvent("go_live_demo_ready", {
+              detail: `demoReady ${goLive.progress.complete}/${goLive.progress.total}`,
+            });
+          })();
+        }
         return Response.json({ ok: true, goLive, status: await fetchWorkStatus() });
       }
 
@@ -126,6 +141,7 @@ export async function POST(request: Request): Promise<Response> {
           title: body.title,
           stage: body.stage as LeadStage | undefined,
         });
+        await emitWorkXpEvent("create_lead", { leadId: lead.id, email: lead.email });
         return Response.json({ ok: true, lead, status: await fetchWorkStatus() });
       }
 
@@ -377,8 +393,14 @@ export async function POST(request: Request): Promise<Response> {
 
       case "sync_crm": {
         const sync = await syncCrmBothWays();
+        const conflicts = await listCrmConflicts();
+        await appendWorkSyncLog({
+          connector: "twenty",
+          action: "sync_crm",
+          detail: `push=${sync.push?.pushed ?? 0} pull=${sync.pull?.imported ?? 0} conflicts=${conflicts.length}`,
+        });
         await appendAgentAudit({ kind: "sync", source: "desk", note: "sync_crm" });
-        return Response.json({ ok: true, ...sync, status: await fetchWorkStatus() });
+        return Response.json({ ok: true, ...sync, conflictCount: conflicts.length, status: await fetchWorkStatus() });
       }
 
       case "assign_mail_to_lead": {
@@ -396,6 +418,9 @@ export async function POST(request: Request): Promise<Response> {
           leadId: body.leadId,
           prompt: body.prompt,
         });
+        if (body.mailId) {
+          await emitWorkXpEvent("draft_reply", { mailId: body.mailId, leadId: body.leadId ?? "" });
+        }
         return Response.json({ ok: true, ...draft, status: await fetchWorkStatus() });
       }
 
@@ -516,6 +541,129 @@ export async function POST(request: Request): Promise<Response> {
           })),
         });
         return Response.json({ ok: true, sequenceId: seq.id, status: await fetchWorkStatus() });
+      }
+
+      case "snooze_mail": {
+        if (!body.mailId) return Response.json({ ok: false, error: "mailId required" }, { status: 400 });
+        const days = typeof (body as { days?: number }).days === "number" ? (body as { days: number }).days : 1;
+        const result = await snoozeMail(body.mailId, days);
+        return Response.json({ ok: true, ...result, status: await fetchWorkStatus() });
+      }
+
+      case "list_threads": {
+        const threads = await listMailThreadsFromStore();
+        return Response.json({ ok: true, threads, status: await fetchWorkStatus() });
+      }
+
+      case "crm_conflict_list": {
+        const conflicts = await listCrmConflicts();
+        return Response.json({ ok: true, conflicts, status: await fetchWorkStatus() });
+      }
+
+      case "resolve_crm_conflict": {
+        const conflictId = typeof (body as { conflictId?: string }).conflictId === "string"
+          ? (body as { conflictId: string }).conflictId
+          : "";
+        const resolution = (body as { resolution?: string }).resolution;
+        const winner =
+          resolution === "take_remote" || (body as { winner?: string }).winner === "remote" ? "remote" : "local";
+        if (!conflictId) return Response.json({ ok: false, error: "conflictId required" }, { status: 400 });
+        const result = await resolveCrmConflict(conflictId, winner);
+        if (!result.ok) return Response.json({ ok: false, error: "conflict not found" }, { status: 404 });
+        return Response.json({ ok: true, lead: result.lead, status: await fetchWorkStatus() });
+      }
+
+      case "microsoft_status": {
+        const { getWorkMicrosoftStatus } = await import("@/lib/work-microsoft-client");
+        const m365 = await getWorkMicrosoftStatus();
+        return Response.json({ ok: true, microsoft: m365, status: await fetchWorkStatus() });
+      }
+
+      case "executive_brief": {
+        const brief = await buildWorkExecutiveBrief();
+        return Response.json({ ok: true, brief, status: await fetchWorkStatus() });
+      }
+
+      case "stall_detection":
+      case "list_stalls": {
+        const stalls = await detectWorkStalls();
+        return Response.json({ ok: true, stalls, stalled: stalls, status: await fetchWorkStatus() });
+      }
+
+      case "needs_you": {
+        const { buildNeedsYouSummary } = await import("@/lib/work-needs-you");
+        const needsYou = await buildNeedsYouSummary();
+        return Response.json({ ok: true, needsYou, status: await fetchWorkStatus() });
+      }
+
+      case "audit_list":
+      case "list_agent_audit": {
+        const audit = await listWorkAgentAudit(20);
+        return Response.json({ ok: true, audit, status: await fetchWorkStatus() });
+      }
+
+      case "approval_notify_demo": {
+        const status = await fetchWorkStatus();
+        const pending = status.sends.find((s) => s.status === "pending_approval");
+        if (!pending) {
+          return Response.json({ ok: true, demoLogged: false, detail: "no pending approval" });
+        }
+        const { notifyWorkPendingApproval } = await import("@/lib/work-approval-notify");
+        const result = await notifyWorkPendingApproval(pending);
+        return Response.json({ ok: true, ...result, sendId: pending.id, status: await fetchWorkStatus() });
+      }
+
+      case "handoff_from_claw": {
+        const payload = body as {
+          sourceClaw?: string;
+          source?: HandoffSourceClaw;
+          name?: string;
+          email?: string;
+          company?: string;
+          title?: string;
+          notes?: string;
+          contextLabel?: string;
+        };
+        const sourceRaw = payload.source ?? payload.sourceClaw ?? "mesh";
+        const source: HandoffSourceClaw =
+          sourceRaw === "my-content" || sourceRaw === "my-capital" || sourceRaw === "mesh"
+            ? sourceRaw
+            : "mesh";
+        const result = await handoffToWork({
+          source,
+          name: payload.name ?? "",
+          email: payload.email ?? "",
+          company: payload.company,
+          title: payload.title,
+          notes: payload.notes,
+          contextLabel: payload.contextLabel,
+        });
+        if (!result.ok) return Response.json({ ok: false, error: result.error }, { status: 400 });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "xp_event_emit": {
+        const kind = typeof (body as { kind?: string }).kind === "string"
+          ? (body as { kind: string }).kind
+          : "create_lead";
+        const valid = [
+          "create_lead",
+          "draft_reply",
+          "go_live_demo_ready",
+          "connector_linked",
+          "handoff_received",
+          "sequence_activated",
+          "approval_pending",
+        ];
+        if (!valid.includes(kind)) {
+          return Response.json({ ok: false, error: "invalid xp kind" }, { status: 400 });
+        }
+        const event = await emitWorkXpEvent(kind as Parameters<typeof emitWorkXpEvent>[0], {
+          source: "checklist",
+        });
+        const { listWorkXpEvents } = await import("@/lib/work-xp-events");
+        const events = await listWorkXpEvents(5);
+        return Response.json({ ok: true, event, events, status: await fetchWorkStatus() });
       }
 
       default:

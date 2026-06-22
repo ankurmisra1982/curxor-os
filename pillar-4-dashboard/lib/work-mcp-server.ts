@@ -5,7 +5,8 @@ import { buildWorkGoLiveReport } from "./work-go-live";
 import { draftSequenceWithLlm } from "./work-inference";
 import { buildMorningBrief } from "./work-morning-brief";
 import { getCrmStatus, syncCrmBothWays } from "./work-crm-sync";
-import { ensureWorkQueue, fetchWorkStatus } from "./work-store";
+import { ensureWorkQueue, fetchWorkStatus, getLead, resolveStepSubject } from "./work-store";
+import { buildEmailIntent } from "./work-send-executor";
 
 export interface McpToolDef {
   name: string;
@@ -50,6 +51,16 @@ export const WORK_MCP_TOOLS: McpToolDef[] = [
     description: "CRM backend status — local or Twenty",
     safety: "read",
     inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "send_sequence_preview",
+    description: "Preview outbound send for a sequence step (dry_run default — no send)",
+    safety: "execute",
+    inputSchema: {
+      type: "object",
+      properties: { sequenceId: { type: "string" }, dry_run: { type: "boolean" } },
+      required: ["sequenceId"],
+    },
   },
   {
     name: "sync_crm",
@@ -111,6 +122,46 @@ export async function invokeWorkMcpTool(
       }
       case "crm_status": {
         return { ok: true, content: await getCrmStatus() };
+      }
+      case "send_sequence_preview": {
+        const sequenceId = typeof args.sequenceId === "string" ? args.sequenceId : "";
+        const dryRun = args.dry_run !== false;
+        const file = await ensureWorkQueue();
+        const seq = file.sequences.find((s) => s.id === sequenceId);
+        if (!seq) return { ok: false, content: null, error: "Sequence not found" };
+        const lead = await getLead(seq.leadId);
+        if (!lead) return { ok: false, content: null, error: "Lead not found" };
+        const step = seq.steps[seq.currentStepIndex];
+        if (!step) return { ok: false, content: null, error: "No current step" };
+        const { subject } = resolveStepSubject(step, lead);
+        const intent = await buildEmailIntent({
+          to: lead.email,
+          subject,
+          body: step.body,
+          sequenceId: seq.id,
+          stepId: step.id,
+          leadId: lead.id,
+        });
+        if (dryRun) {
+          return {
+            ok: true,
+            content: {
+              preview: true,
+              dry_run: true,
+              to: lead.email,
+              subject,
+              body: step.body.slice(0, 500),
+              intent,
+              confirmRequired: "Set dry_run:false and confirm:true to execute",
+            },
+          };
+        }
+        if (args.confirm !== true) {
+          return { ok: false, content: null, error: "Destructive send requires confirm:true with dry_run:false" };
+        }
+        const { sendSequenceStep } = await import("./work-send-executor");
+        const result = await sendSequenceStep(sequenceId);
+        return { ok: result.ok, content: result };
       }
       case "sync_crm": {
         if (args.confirm !== true) {

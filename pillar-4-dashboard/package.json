@@ -27,8 +27,11 @@
     "demo:capture": "node scripts/capture-demo-screenshots.mjs",
     "demo:capture:capital": "node scripts/capture-capital-demo.mjs",
     "demo:capture:work": "node scripts/capture-work-demo.mjs",
+    "demo:capture:work:levels": "node scripts/capture-gtm-phase2.mjs",
+    "demo:record:work:exit": "node scripts/record-work-exit-demo.mjs",
     "demo:record:work": "node scripts/record-outreach-walkthrough.mjs",
-    "demo:capture:marketing": "node scripts/capture-marketing-flows.mjs"
+    "demo:capture:marketing": "node scripts/capture-marketing-flows.mjs",
+    "qa:work-excellence": "node scripts/work-checklist.mjs && node scripts/qa-work-levels.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.0",

@@ -100,12 +100,18 @@ export interface MailIndexEntry {
 export interface WorkAgentAuditEntry {
   id: string;
   at: string;
-  kind: "send" | "sync" | "approval" | "mcp" | "kill_switch";
+  kind: "send" | "sync" | "approval" | "mcp" | "kill_switch" | "handoff";
   source: string;
   tool?: string;
   note: string;
   sendId?: string | null;
   leadId?: string | null;
+}
+
+export interface CrmConflictResolution {
+  id: string;
+  winner: "local" | "remote";
+  at: string;
 }
 
 export interface WorkSyncLogEntry {
@@ -127,6 +133,7 @@ export interface WorkQueueFile {
   syncLog?: WorkSyncLogEntry[];
   agentAuditLog?: WorkAgentAuditEntry[];
   unsubscribeTokens?: Record<string, string>;
+  crmConflictResolutions?: CrmConflictResolution[];
 }
 
 export interface WorkConnectorVaultSummary {
@@ -185,6 +192,9 @@ export interface WorkQueueStatus {
     sendStaggerMinutes: number;
     sendsToday: number;
     remainingToday: number;
+    warmupMode?: boolean;
+    warmupDailyCap?: number;
+    effectiveDailyLimit?: number;
   };
   analytics: {
     sentCount: number;
@@ -211,8 +221,12 @@ export interface WorkQueueStatus {
     domain: string | null;
     domainHealth: "healthy" | "warning" | "unknown";
     domainHealthDetail: string;
-    spfStatus: "ok" | "advisory" | "unknown";
-    dkimStatus: "ok" | "advisory" | "unknown";
+    spfStatus: "ok" | "advisory" | "unknown" | "missing";
+    dkimStatus: "ok" | "advisory" | "unknown" | "missing";
+    dmarcStatus?: "ok" | "advisory" | "unknown" | "missing";
+    warmupMode?: boolean;
+    warmupDailyCap?: number | null;
+    dns?: unknown;
     failedSendCount: number;
     bounceLikeCount: number;
     reputationScore: number;

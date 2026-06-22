@@ -2251,6 +2251,33 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         {!anchorPostId ? (
           <p className="font-mono text-[10px] text-muted">Publish at least one post to enable thread replies from engage inbox.</p>
         ) : null}
+        <div className="mb-2">
+          <button
+            type="button"
+            onClick={() => {
+              const name = prompt("Contact name for Work Claw");
+              const email = prompt("Email");
+              if (!name?.trim() || !email?.trim()) return;
+              void fetch("/api/work/status", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  action: "handoff_from_claw",
+                  sourceClaw: "my-content",
+                  name: name.trim(),
+                  email: email.trim(),
+                  contextLabel: engageSuggestions[0]?.text?.slice(0, 60) ?? "Creator engage inbox",
+                  notes: "Handoff from Creator Claw engage context",
+                }),
+              }).then((res) => res.json()).then((json) => {
+                pushToast(json.ok ? `Added to Work · ${json.lead?.id ?? "lead"}` : json.error ?? "Handoff failed", json.ok ? "success" : "error");
+              });
+            }}
+            className="border border-cursor-glow px-2 py-0.5 font-mono text-[10px] uppercase text-cursor-glow"
+          >
+            Add to Work
+          </button>
+        </div>
         <EngageInboxPanel
           suggestions={engageSuggestions}
           anchorPostId={anchorPostId}

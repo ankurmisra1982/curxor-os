@@ -9,17 +9,25 @@ export type AutoSendPolicy = "immediate" | "deferred";
 export interface WorkSendPolicy {
   dailySendLimit: number;
   sendStaggerMinutes: number;
+  warmupMode: boolean;
+  warmupDailyCap: number;
+  effectiveDailyLimit: number;
 }
 
 const DEFAULT_POLICY: WorkSendPolicy = {
   dailySendLimit: 50,
   sendStaggerMinutes: 5,
+  warmupMode: false,
+  warmupDailyCap: 15,
+  effectiveDailyLimit: 50,
 };
 
 export async function readWorkSendPolicy(): Promise<WorkSendPolicy> {
   const fre = await readAppFreState("my-work");
   const dailyRaw = fre.config.dailySendLimit;
   const staggerRaw = fre.config.sendStaggerMinutes;
+  const warmupMode = fre.config.warmupMode === true || fre.config.warmupMode === "true";
+  const warmupCapRaw = fre.config.warmupDailyCap;
   const daily =
     typeof dailyRaw === "number"
       ? dailyRaw
@@ -32,10 +40,21 @@ export async function readWorkSendPolicy(): Promise<WorkSendPolicy> {
       : typeof staggerRaw === "string"
         ? Number.parseInt(staggerRaw, 10)
         : DEFAULT_POLICY.sendStaggerMinutes;
+  const warmupDailyCap =
+    typeof warmupCapRaw === "number"
+      ? warmupCapRaw
+      : typeof warmupCapRaw === "string"
+        ? Number.parseInt(warmupCapRaw, 10)
+        : 15;
+  const baseDaily = Number.isFinite(daily) && daily > 0 ? daily : DEFAULT_POLICY.dailySendLimit;
+  const cap = Number.isFinite(warmupDailyCap) && warmupDailyCap > 0 ? warmupDailyCap : 15;
   return {
-    dailySendLimit: Number.isFinite(daily) && daily > 0 ? daily : DEFAULT_POLICY.dailySendLimit,
+    dailySendLimit: baseDaily,
     sendStaggerMinutes:
       Number.isFinite(stagger) && stagger >= 0 ? stagger : DEFAULT_POLICY.sendStaggerMinutes,
+    warmupMode,
+    warmupDailyCap: cap,
+    effectiveDailyLimit: warmupMode ? Math.min(baseDaily, cap) : baseDaily,
   };
 }
 
@@ -67,10 +86,13 @@ export function evaluateSendPolicy(
   policy: WorkSendPolicy,
 ): { ok: true } | { ok: false; reason: string; retryAfter: string | null } {
   const today = countSendsToday(file.sends);
-  if (today >= policy.dailySendLimit) {
+  const limit = policy.effectiveDailyLimit ?? policy.dailySendLimit;
+  if (today >= limit) {
     return {
       ok: false,
-      reason: `Daily send limit reached (${policy.dailySendLimit}/day)`,
+      reason: policy.warmupMode
+        ? `Warmup daily cap reached (${limit}/day)`
+        : `Daily send limit reached (${limit}/day)`,
       retryAfter: null,
     };
   }

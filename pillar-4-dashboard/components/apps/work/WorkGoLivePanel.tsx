@@ -43,10 +43,11 @@ interface WorkGoLivePanelProps {
   report: WorkGoLiveReportRow | null;
   onRefresh: () => void;
   onRunDemoTour?: () => void;
+  onOpenSetupWizard?: () => void;
   demoTourRunning?: boolean;
 }
 
-export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, demoTourRunning }: WorkGoLivePanelProps) {
+export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, onOpenSetupWizard, demoTourRunning }: WorkGoLivePanelProps) {
   if (!report) {
     return <p className="font-mono text-[10px] text-muted">Loading go-live checklist…</p>;
   }
@@ -86,7 +87,26 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, demoTourRunn
               (and optional <code className="text-cursor-glow">IMAP_*</code> / Google OAuth), restart dev, and refresh.
               Verify scaffold: <code className="text-cursor-glow">npm run verify:work-exit-demo-scaffold</code>.
             </p>
-            <p className="mt-1">Full guide: docs/outreach-claw/EXIT-DEMO.md</p>
+            <p className="mt-1">Full guide: docs/outreach-claw/EXIT-DEMO.md#live-ready</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {onOpenSetupWizard ? (
+                <button
+                  type="button"
+                  onClick={onOpenSetupWizard}
+                  className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow"
+                >
+                  Open setup wizard
+                </button>
+              ) : null}
+              <a
+                href="https://github.com/curxor-os/curxor-os/blob/main/docs/outreach-claw/EXIT-DEMO.md#live-ready"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border border-line px-2 py-0.5 uppercase text-muted hover:text-stark"
+              >
+                EXIT-DEMO steps
+              </a>
+            </div>
           </div>
         </div>
       ) : null}

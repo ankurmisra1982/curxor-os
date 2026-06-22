@@ -55,10 +55,10 @@ export const CONNECTOR_CATALOG: WorkConnectorDefinition[] = [
   {
     id: "microsoft_365",
     label: "Microsoft 365",
-    tier: "planned",
+    tier: "oauth",
     envKeys: ["MICROSOFT_CLIENT_ID", "MICROSOFT_CLIENT_SECRET"],
     docsUrl: "https://learn.microsoft.com/graph/",
-    detail: "Graph API mail + calendar — planned OAuth lane",
+    detail: "Graph API mail + calendar — OAuth scaffold (demo when unconfigured)",
   },
   {
     id: "slack",

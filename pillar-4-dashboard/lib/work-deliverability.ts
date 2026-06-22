@@ -1,6 +1,7 @@
 import "server-only";
 
 import { loadDigitalEnv } from "./digital-env";
+import { checkDnsDeliverability, type DnsDeliverabilityReport } from "./work-dns-deliverability";
 import type { OutboundSend, WorkSequence } from "./work-queue-types";
 
 const BOUNCE_RE = /\b(bounce|550|551|552|553|mailbox unavailable|user unknown|does not exist|rejected)\b/i;
@@ -10,8 +11,12 @@ export interface WorkDeliverabilitySummary {
   domain: string | null;
   domainHealth: "healthy" | "warning" | "unknown";
   domainHealthDetail: string;
-  spfStatus: "ok" | "advisory" | "unknown";
-  dkimStatus: "ok" | "advisory" | "unknown";
+  spfStatus: "ok" | "advisory" | "unknown" | "missing";
+  dkimStatus: "ok" | "advisory" | "unknown" | "missing";
+  dmarcStatus: "ok" | "advisory" | "unknown" | "missing";
+  dns: DnsDeliverabilityReport | null;
+  warmupMode: boolean;
+  warmupDailyCap: number | null;
   failedSendCount: number;
   bounceLikeCount: number;
   recentFailures: Array<{ sendId: string; to: string; subject: string; error: string }>;
@@ -65,27 +70,52 @@ export async function buildWorkDeliverabilitySummary(
   let domainHealthDetail = "Configure SMTP_FROM to assess sending domain";
   let spfStatus: WorkDeliverabilitySummary["spfStatus"] = "unknown";
   let dkimStatus: WorkDeliverabilitySummary["dkimStatus"] = "unknown";
+  let dmarcStatus: WorkDeliverabilitySummary["dmarcStatus"] = "unknown";
+  let dns: DnsDeliverabilityReport | null = null;
 
   if (domain) {
+    dns = await checkDnsDeliverability(domain);
+    spfStatus = dns.spf.status === "ok" ? "ok" : dns.spf.status === "missing" ? "missing" : "advisory";
+    dkimStatus = dns.dkim.status === "ok" ? "ok" : dns.dkim.status === "missing" ? "missing" : "advisory";
+    dmarcStatus = dns.dmarc.status === "ok" ? "ok" : dns.dmarc.status === "missing" ? "missing" : "advisory";
+    if (dns.demoSeeded && !bridgeConfigured) {
+      domainHealthDetail = `${domain} · demo DNS seeded — verify TXT when SMTP live`;
+    } else if (dns.recommendations.length > 0 && bounceLike.length === 0) {
+      domainHealthDetail = dns.recommendations[0] ?? domainHealthDetail;
+    }
+  }
+
+  const fre = await (async () => {
+    const { readAppFreState } = await import("./app-fre-state");
+    return readAppFreState("my-work");
+  })();
+  const warmupMode = fre.config.warmupMode === true || fre.config.warmupMode === "true";
+  const warmupCapRaw = fre.config.warmupDailyCap;
+  const warmupDailyCap =
+    typeof warmupCapRaw === "number"
+      ? warmupCapRaw
+      : typeof warmupCapRaw === "string"
+        ? Number.parseInt(warmupCapRaw, 10)
+        : null;
+
+  if (domain && dns) {
     const isPublicMailbox = /@(gmail|yahoo|hotmail|outlook|icloud)\./i.test(fromAddress ?? "");
+    const dnsOk = dns.spf.status === "ok" && dns.dkim.status === "ok" && dns.dmarc.status === "ok";
     if (isPublicMailbox) {
       domainHealth = "warning";
       domainHealthDetail = `${domain} — public mailbox; use a owned domain for cold outbound`;
-      spfStatus = "advisory";
-      dkimStatus = "advisory";
-    } else if (bridgeConfigured) {
-      domainHealth = bounceLike.length > 2 ? "warning" : "healthy";
-      domainHealthDetail =
-        bounceLike.length > 0
-          ? `${domain} · ${bounceLike.length} bounce-like failure(s) — review list hygiene`
-          : `${domain} · bridge configured · demo SPF/DKIM advisory only`;
-      spfStatus = "advisory";
-      dkimStatus = "advisory";
-    } else {
+    } else if (bounceLike.length > 2) {
       domainHealth = "warning";
-      domainHealthDetail = `${domain} parsed from SMTP_FROM — bridge not live yet`;
-      spfStatus = "advisory";
-      dkimStatus = "advisory";
+      domainHealthDetail = `${domain} · ${bounceLike.length} bounce-like failure(s) — review list hygiene`;
+    } else if (dnsOk && bridgeConfigured) {
+      domainHealth = "healthy";
+      domainHealthDetail = `${domain} · SPF/DKIM/DMARC verified`;
+    } else if (dns.demoSeeded) {
+      domainHealth = "warning";
+      domainHealthDetail = `${domain} · demo DNS seeded — verify TXT when SMTP live`;
+    } else {
+      domainHealth = dns.recommendations.length > 0 ? "warning" : "healthy";
+      domainHealthDetail = dns.recommendations[0] ?? `${domain} · DNS check complete`;
     }
   }
 
@@ -100,6 +130,10 @@ export async function buildWorkDeliverabilitySummary(
     domainHealthDetail,
     spfStatus,
     dkimStatus,
+    dmarcStatus,
+    dns,
+    warmupMode,
+    warmupDailyCap: warmupDailyCap && Number.isFinite(warmupDailyCap) ? warmupDailyCap : warmupMode ? 15 : null,
     failedSendCount: failed.length,
     bounceLikeCount: bounceLike.length,
     recentFailures: failed.slice(0, 8).map((s) => ({

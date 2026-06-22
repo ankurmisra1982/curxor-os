@@ -12,6 +12,7 @@ import { buildWorkAnalytics } from "./work-analytics";
 import { buildWorkDeliverabilitySummary } from "./work-deliverability";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { classifyReplyIntent } from "./work-reply-intent";
+import { groupMailIntoThreads, type MailThread } from "./work-mail-threads";
 import { isWorkImapConfigured, fetchImapMailForScan } from "./work-imap-client";
 import { emitWorkWebhook } from "./work-webhook-emitter";
 import { countSendsToday, readAutoSendOnActivateFre, readWorkSendPolicy, resolveAutoSendOnActivate } from "./work-send-policy";
@@ -69,6 +70,9 @@ export async function ensureWorkQueue(): Promise<WorkQueueFile> {
         parsed.unsubscribeTokens && typeof parsed.unsubscribeTokens === "object"
           ? (parsed.unsubscribeTokens as Record<string, string>)
           : {},
+      crmConflictResolutions: Array.isArray(parsed.crmConflictResolutions)
+        ? (parsed.crmConflictResolutions as WorkQueueFile["crmConflictResolutions"])
+        : [],
     };
   } catch {
     const seeded = seedDemoQueue();
@@ -292,7 +296,10 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
       dailySendLimit: policy.dailySendLimit,
       sendStaggerMinutes: policy.sendStaggerMinutes,
       sendsToday,
-      remainingToday: Math.max(0, policy.dailySendLimit - sendsToday),
+      remainingToday: Math.max(0, policy.effectiveDailyLimit - sendsToday),
+      warmupMode: policy.warmupMode,
+      warmupDailyCap: policy.warmupDailyCap,
+      effectiveDailyLimit: policy.effectiveDailyLimit,
     },
     analytics,
     deliverability,
@@ -338,6 +345,10 @@ export async function upsertLead(input: Partial<WorkLead> & { name: string; emai
     Object.assign(existing, lead);
   } else {
     file.leads.push(lead);
+    void (async () => {
+      const { emitWorkXpEvent } = await import("./work-xp-events");
+      await emitWorkXpEvent("create_lead", { leadId: lead.id, name: lead.name, email: lead.email });
+    })();
   }
   await writeWorkFile(file);
   return lead;
@@ -869,6 +880,58 @@ export function personalizeTemplate(text: string, lead: WorkLead, extra?: { unsu
     .replace(/\{\{email\}\}/gi, lead.email)
     .replace(/\{\{title\}\}/gi, lead.title || "there")
     .replace(/\{\{unsubscribe_url\}\}/gi, unsub);
+}
+
+export async function snoozeMail(mailId: string, days = 1): Promise<{ task: WorkTask; entry: MailIndexEntry | null }> {
+  const file = await ensureWorkQueue();
+  const idx = file.mailIndex.findIndex((m) => m.id === mailId);
+  const entry = idx >= 0 ? file.mailIndex[idx]! : null;
+  const dueAt = new Date(Date.now() + days * 86400000).toISOString();
+  const now = new Date().toISOString();
+  const task: WorkTask = {
+    id: `TASK-${String(file.tasks.length + 1).padStart(3, "0")}`,
+    title: entry ? `Snoozed: ${entry.subject.slice(0, 60)}` : `Snoozed mail ${mailId}`,
+    priority: "P2",
+    done: false,
+    leadId: entry?.leadId ?? null,
+    dueAt,
+    createdAt: now,
+    updatedAt: now,
+  };
+  file.tasks.push(task);
+  await writeWorkFile(file);
+  return { task, entry };
+}
+
+export async function handleBounceForLead(leadId: string, error: string): Promise<{ paused: number }> {
+  const file = await ensureWorkQueue();
+  let paused = 0;
+  for (const seq of file.sequences) {
+    if (seq.leadId !== leadId || seq.status !== "active") continue;
+    seq.status = "paused";
+    seq.lastError = error.slice(0, 200);
+    seq.updatedAt = new Date().toISOString();
+    paused += 1;
+  }
+  const leadIdx = file.leads.findIndex((l) => l.id === leadId);
+  if (leadIdx >= 0 && file.leads[leadIdx]!.stage === "contacted") {
+    file.leads[leadIdx] = {
+      ...file.leads[leadIdx]!,
+      tags: [...new Set([...(file.leads[leadIdx]!.tags ?? []), "bounce-risk"])],
+      updatedAt: new Date().toISOString(),
+    };
+  }
+  if (paused > 0 || leadIdx >= 0) await writeWorkFile(file);
+  return { paused };
+}
+
+export function listMailThreads(entries?: MailIndexEntry[]): MailThread[] {
+  return groupMailIntoThreads(entries ?? []);
+}
+
+export async function listMailThreadsFromStore(): Promise<MailThread[]> {
+  const file = await ensureWorkQueue();
+  return groupMailIntoThreads(file.mailIndex);
 }
 
 export async function personalizeTemplateForLead(text: string, lead: WorkLead): Promise<string> {

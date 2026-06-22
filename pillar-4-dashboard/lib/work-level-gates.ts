@@ -29,7 +29,10 @@ export type WorkFeature =
   | "executive-brief"
   | "level-up-nudge"
   | "integrations-peek"
-  | "deliverability";
+  | "deliverability"
+  | "needs-you"
+  | "crm-conflicts"
+  | "audit-timeline";
 
 const FEATURE_MIN: Record<WorkFeature, GrowthLevel> = {
   "go-live": "L1",
@@ -58,6 +61,9 @@ const FEATURE_MIN: Record<WorkFeature, GrowthLevel> = {
   "level-up-nudge": "L1",
   "integrations-peek": "L3",
   deliverability: "L3",
+  "needs-you": "L5",
+  "crm-conflicts": "L4",
+  "audit-timeline": "L3",
 };
 
 export function workFeatureVisible(growth: GrowthLevel, feature: WorkFeature): boolean {
@@ -81,6 +87,7 @@ export function defaultWorkTabForGrowth(growth: GrowthLevel): WorkWorkspaceTab {
   if (growth === "L1") return "start";
   if (growth === "L2") return "outreach";
   if (growth === "L3" || growth === "L4") return "comms";
+  if (growth === "L5") return "ops";
   return "start";
 }
 
@@ -114,6 +121,9 @@ export function workSectionVisibleForGrowth(
     "executive-brief": "start",
     "integrations-peek": "start",
     deliverability: "ops",
+    "needs-you": "ops",
+    "crm-conflicts": "integrations",
+    "audit-timeline": "ops",
   };
 
   const FEATURE_MAP: Record<string, WorkFeature | undefined> = {
@@ -140,6 +150,9 @@ export function workSectionVisibleForGrowth(
     "executive-brief": "executive-brief",
     "integrations-peek": "integrations-peek",
     deliverability: "deliverability",
+    "needs-you": "needs-you",
+    "crm-conflicts": "crm-conflicts",
+    "audit-timeline": "audit-timeline",
   };
 
   const tab = SECTION_TAB[sectionId];
@@ -167,6 +180,7 @@ export const WORK_SKILL_MIN_GROWTH: Record<string, GrowthLevel> = {
   send_sequence_step: "L2",
   enrich_lead: "L2",
   book_meeting: "L2",
+  executive_brief: "L5",
   slack_digest: "L3",
   sync_crm: "L4",
 };

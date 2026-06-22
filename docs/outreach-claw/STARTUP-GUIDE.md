@@ -40,6 +40,18 @@ Full operator checklist: [GETTING-STARTED.md](./GETTING-STARTED.md).
 
 ---
 
+## Persona one-liners (L1–L3)
+
+| Level | Persona | One-liner |
+|-------|---------|-----------|
+| **L1 Explorer** | Student / hobby | Reply desk first — opportunities, templates, draft without CRM jargon. |
+| **L2 Side Hustle** | Etsy / freelance | Mini-sequences and hustle packs — polite follow-up without a SaaS stack. |
+| **L3 Operator** | Nonprofit / advocacy | Approvals, deliverability, and send policy — sovereign outbound with human gates. |
+
+Capture persona screenshots: `npm run demo:capture:work:levels` (requires dev server). EXIT-DEMO recording: `npm run demo:record:work:exit`.
+
+---
+
 ## QA (local)
 
 ```bash
