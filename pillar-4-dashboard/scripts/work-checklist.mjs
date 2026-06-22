@@ -971,6 +971,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   if (!leadId) {
     fail("lead_activity_timeline", "no lead");
   } else {
+    await post("/api/work/status", { action: "update_lead_stage", leadId, stage: "qualified" });
     const { ok, json } = await post("/api/work/status", { action: "lead_activity_timeline", leadId });
     const kinds = json.kinds ?? [...new Set((json.events ?? []).map((e) => e.kind))];
     if (ok && Array.isArray(json.events) && kinds.length >= 3) {
@@ -978,6 +979,54 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
     } else {
       fail("lead_activity_timeline", `kinds=${kinds.length} events=${json.events?.length}`);
     }
+  }
+}
+
+// W35 — os_brief_live_counts
+{
+  const { ok, json } = await post("/api/work/status", { action: "os_morning_brief" });
+  const counts = json.counts;
+  if (
+    ok &&
+    counts &&
+    typeof counts.creatorOpenPosts === "number" &&
+    counts.creatorOpenPosts > 0 &&
+    typeof counts.capitalOpenAlerts === "number" &&
+    counts.capitalOpenAlerts > 0
+  ) {
+    pass("os_brief_live_counts", `creator=${counts.creatorOpenPosts} capital=${counts.capitalOpenAlerts}`);
+  } else {
+    fail("os_brief_live_counts", `creator=${counts?.creatorOpenPosts} capital=${counts?.capitalOpenAlerts}`);
+  }
+}
+
+// W35 — mcp_confirm_ui
+{
+  const status = (await get("/api/work/status")).json;
+  const sequenceId = status.sequences?.find((s) => s.status === "active" || s.status === "draft")?.id;
+  if (!sequenceId) {
+    fail("mcp_confirm_ui", "no sequence");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "mcp_confirm_preview", sequenceId });
+    if (ok && json.confirmRequired === true && json.preview) {
+      pass("mcp_confirm_ui", sequenceId);
+    } else {
+      fail("mcp_confirm_ui", `confirmRequired=${json.confirmRequired}`);
+    }
+  }
+}
+
+// W35 — sla_chips_smoke
+{
+  const { ok, json } = await post("/api/work/status", { action: "sla_chips_smoke" });
+  const hasLevels =
+    Array.isArray(json.chips) &&
+    json.chips.length > 0 &&
+    (json.needsYou?.items?.some((i) => i.slaLevel) || json.stalls?.some((s) => s.slaLevel));
+  if (ok && hasLevels) {
+    pass("sla_chips_smoke", `chips=${json.chips.join(",")}`);
+  } else {
+    fail("sla_chips_smoke", `chips=${json.chips?.length}`);
   }
 }
 

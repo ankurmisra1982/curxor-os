@@ -965,9 +965,49 @@ export async function POST(request: Request): Promise<Response> {
       }
 
       case "os_morning_brief": {
-        const { buildOsMorningBrief } = await import("@/lib/os-morning-brief");
-        const brief = await buildOsMorningBrief();
-        return Response.json({ ok: true, brief, status: await fetchWorkStatus() });
+        const { buildOsMorningBrief, readOsBriefCounts } = await import("@/lib/os-morning-brief");
+        const [brief, counts] = await Promise.all([buildOsMorningBrief(), readOsBriefCounts()]);
+        return Response.json({ ok: true, brief, counts, status: await fetchWorkStatus() });
+      }
+
+      case "run_os_playbook": {
+        const playbookId = (body as { playbookId?: string }).playbookId?.trim();
+        if (!playbookId) return Response.json({ ok: false, error: "playbookId required" }, { status: 400 });
+        const { runOsPlaybook } = await import("@/lib/os-playbooks");
+        const result = await runOsPlaybook(playbookId);
+        if (!result.ok) return Response.json({ ok: false, error: result.error }, { status: 400 });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "mcp_confirm_preview": {
+        const sequenceId = (body as { sequenceId?: string }).sequenceId?.trim();
+        if (!sequenceId) return Response.json({ ok: false, error: "sequenceId required" }, { status: 400 });
+        const { invokeWorkMcpTool } = await import("@/lib/work-mcp-server");
+        const out = await invokeWorkMcpTool("send_sequence_preview", { sequenceId, dry_run: true });
+        const preview = out.content as { confirmRequired?: string } | null;
+        return Response.json({
+          ok: out.ok,
+          preview: out.content,
+          confirmRequired: Boolean(preview?.confirmRequired ?? out.ok),
+          error: out.error,
+        });
+      }
+
+      case "sla_chips_smoke": {
+        const { buildNeedsYouSummary } = await import("@/lib/work-needs-you");
+        const stalls = await detectWorkStalls();
+        const needsYou = await buildNeedsYouSummary();
+        const chips = [
+          ...needsYou.items.map((i) => i.slaLevel),
+          ...stalls.map((s) => s.slaLevel),
+        ];
+        return Response.json({
+          ok: true,
+          chips,
+          hasAmberOrRed: chips.some((c) => c === "amber" || c === "red"),
+          needsYou,
+          stalls,
+        });
       }
 
       case "xp_list": {

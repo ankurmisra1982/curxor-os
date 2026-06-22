@@ -364,5 +364,21 @@ await check("flow: signal_to_opportunity", async () => {
   return conv.ok && Boolean(conv.json.lead?.id) && Boolean(conv.json.sequenceId);
 });
 
+await check("flow: os_playbook_capital_work", async () => {
+  const result = await postJson("/api/work/status", {
+    action: "run_os_playbook",
+    playbookId: "capital-alert",
+  });
+  if (!result.ok || !result.json.lead?.id) return false;
+  const tags = result.json.tags ?? result.json.lead?.tags ?? [];
+  return tags.some((t) => String(t).includes("playbook:capital-alert"));
+});
+
+await check("flow: cafe_work_xp_smoke", async () => {
+  await postJson("/api/work/status", { action: "xp_event_emit", kind: "sequence_activated" });
+  const xp = await getJson("/api/work/xp");
+  return xp.ok !== false && Array.isArray(xp.events) && xp.events.length >= 1 && xp.optOut !== true;
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

@@ -1,12 +1,12 @@
 import "server-only";
 
 import { listApprovalSlackChannelIds } from "./content-approval-slack-config";
-import { sendTelegramApprovalMessage } from "./content-approval-telegram";
 import { listApprovalTelegramChatIds } from "./content-approval-telegram-config";
 import { publishDigitalIntent } from "./mesh-publish";
 import { appendWorkSyncLog } from "./work-store";
 import type { OutboundSend } from "./work-queue-types";
 import { emitWorkXpEvent } from "./work-xp-events";
+import { notifyWorkApprovalTelegram } from "./work-approval-telegram";
 
 export async function notifyWorkPendingApproval(send: OutboundSend): Promise<{ demoLogged: boolean }> {
   const text = [
@@ -18,7 +18,7 @@ export async function notifyWorkPendingApproval(send: OutboundSend): Promise<{ d
   ].join("\n");
 
   for (const chatId of await listApprovalTelegramChatIds()) {
-    await sendTelegramApprovalMessage(chatId, text);
+    await notifyWorkApprovalTelegram(chatId, send);
   }
   for (const channel of await listApprovalSlackChannelIds()) {
     await publishDigitalIntent({

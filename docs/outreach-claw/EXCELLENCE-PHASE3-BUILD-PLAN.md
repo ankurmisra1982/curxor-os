@@ -266,12 +266,12 @@ W29 → W30 → W31 → W32 → W33 → W34 → W35
 
 **Acceptance**
 
-- [ ] `os_morning_brief` includes non-zero Creator/Capital counts from status APIs
-- [ ] `run_os_playbook` demo creates lead + tags `playbook:capital-alert`
-- [ ] Cafe shows ≥1 work XP event when gamification enabled
-- [ ] SLA chips visible on stalled items in Needs-you panel
-- [ ] `qa-user-flows.mjs`: `os_playbook_capital_work`, `cafe_work_xp_smoke`
-- [ ] `work-checklist.mjs`: `os_brief_live_counts`, `mcp_confirm_ui`, `sla_chips_smoke`
+- [x] `os_morning_brief` includes non-zero Creator/Capital counts from status APIs
+- [x] `run_os_playbook` demo creates lead + tags `playbook:capital-alert`
+- [x] Cafe shows ≥1 work XP event when gamification enabled
+- [x] SLA chips visible on stalled items in Needs-you panel
+- [x] `qa-user-flows.mjs`: `os_playbook_capital_work`, `cafe_work_xp_smoke`
+- [x] `work-checklist.mjs`: `os_brief_live_counts`, `mcp_confirm_ui`, `sla_chips_smoke`
 
 **Growth levels:** L5 primary · L2–L4 playbooks opt-in.
 

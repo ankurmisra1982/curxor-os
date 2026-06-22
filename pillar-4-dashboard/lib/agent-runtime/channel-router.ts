@@ -27,6 +27,7 @@ import {
   tryHandleApprovalTelegramCallback,
   tryHandleApprovalTelegramMessage,
 } from "../content-approval-telegram";
+import { tryHandleWorkApprovalTelegramCallback } from "../work-approval-telegram";
 import { tryHandleApprovalSlackMessage } from "../content-approval-slack";
 
 export interface InboundChannelMessage {
@@ -279,6 +280,18 @@ export async function handleTelegramUpdate(update: Record<string, unknown>): Pro
     const chat = from?.chat as Record<string, unknown> | undefined;
     const chatId = chat ? String(chat.id ?? "") : "";
     if (data && cqId && chatId) {
+      const workApproval = await tryHandleWorkApprovalTelegramCallback(cqId, chatId, data);
+      if (workApproval.handled && workApproval.text) {
+        await sendTelegramApprovalMessage(chatId, workApproval.text);
+        return {
+          text: workApproval.text,
+          appId: "my-work",
+          sessionId: `telegram:${chatId}`,
+          profileId: null,
+          activity: "[Approval] work telegram callback",
+        };
+      }
+
       const approval = await tryHandleApprovalTelegramCallback(cqId, chatId, data);
       if (approval.handled && approval.text) {
         await sendTelegramApprovalMessage(chatId, approval.text);

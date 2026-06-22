@@ -24,6 +24,7 @@ import { WorkLevelBadge } from "@/components/apps/work/WorkLevelBadge";
 import { WorkLevelUpNudge } from "@/components/apps/work/WorkLevelUpNudge";
 import { WorkMailIndexPanel } from "@/components/apps/work/WorkMailIndexPanel";
 import { WorkMiniSequenceWizard } from "@/components/apps/work/WorkMiniSequenceWizard";
+import { WorkMcpConfirmModal } from "@/components/apps/work/WorkMcpConfirmModal";
 import { WorkMorningBriefPanel } from "@/components/apps/work/WorkMorningBriefPanel";
 import { WorkOutboundPanel } from "@/components/apps/work/WorkOutboundPanel";
 import { WorkPipelineKanban } from "@/components/apps/work/WorkPipelineKanban";
@@ -67,7 +68,28 @@ interface NeedsYouState {
   pendingApprovals: number;
   interestedMail: number;
   operatorId?: string;
-  items: Array<{ kind: "task" | "approval" | "mail"; id: string; label: string; priority?: string }>;
+  items: Array<{
+    kind: "task" | "approval" | "mail";
+    id: string;
+    label: string;
+    priority?: string;
+    at?: string;
+    slaLevel?: "ok" | "amber" | "red";
+  }>;
+}
+
+interface StallItemState {
+  id: string;
+  kind: string;
+  title: string;
+  detail: string;
+  leadId: string | null;
+  sequenceId: string | null;
+  sendId: string | null;
+  severity: "high" | "medium" | "low";
+  stalledSince: string;
+  slaLevel?: "ok" | "amber" | "red";
+  slaHours?: number;
 }
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
@@ -159,6 +181,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [suppressionBusy, setSuppressionBusy] = useState(false);
   const [leadActivity, setLeadActivity] = useState<LeadActivityEvent[]>([]);
   const [leadActivityLoading, setLeadActivityLoading] = useState(false);
+  const [stallItems, setStallItems] = useState<StallItemState[]>([]);
+  const [mcpConfirm, setMcpConfirm] = useState<{
+    sequenceId: string;
+    preview: Record<string, unknown> | null;
+    loading: boolean;
+    error: string | null;
+  } | null>(null);
 
   const deskPerms = status?.deskPermissions;
   const canSend = deskPerms?.canSend ?? true;
@@ -207,6 +236,9 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       const ny = await postWork({ action: "needs_you" });
       const nj = ny as { needsYou?: typeof needsYou };
       if (nj.needsYou) setNeedsYou(nj.needsYou);
+      const stallsJson = await postWork({ action: "stall_detection" });
+      const sj = stallsJson as { stalls?: StallItemState[] };
+      if (sj.stalls) setStallItems(sj.stalls);
     }
     if (workFeatureVisible(growthLevel, "audit-timeline")) {
       const auditJson = await postWork({ action: "audit_list" });
@@ -240,6 +272,23 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     } finally {
       setLeadActivityLoading(false);
     }
+  }, []);
+
+  const openMcpConfirm = useCallback(async (sequenceId: string) => {
+    setMcpConfirm({ sequenceId, preview: null, loading: true, error: null });
+    const json = await postWork({ action: "mcp_confirm_preview", sequenceId });
+    const payload = json as {
+      ok?: boolean;
+      preview?: Record<string, unknown>;
+      error?: string;
+      confirmRequired?: boolean;
+    };
+    setMcpConfirm({
+      sequenceId,
+      preview: payload.preview ?? null,
+      loading: false,
+      error: payload.ok ? null : payload.error ?? "Preview failed",
+    });
   }, []);
 
   const undoComposeSend = useCallback(
@@ -551,8 +600,8 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("needs-you") ? (
-        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="needs-you" minLevel="expert" title="Needs you" subtitle="P1 · approvals · interested mail">
-          <WorkNeedsYouPanel summary={needsYou} />
+        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="needs-you" minLevel="expert" title="Needs you" subtitle="P1 · approvals · interested mail · SLA chips">
+          <WorkNeedsYouPanel summary={needsYou} items={stallItems} />
         </ExperienceAppSection>
       ) : null}
 
@@ -766,6 +815,11 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
                 onPause={(id) => void action({ action: "pause_sequence", sequenceId: id })}
                 onMarkReplied={(id) => void action({ action: "mark_replied", sequenceId: id })}
                 onDraft={() => void action({ action: "draft_sequence", leadId: selectedLeadId || undefined })}
+                onMcpPreview={
+                  workFeatureVisible(growthLevel, "mcp")
+                    ? (id) => void openMcpConfirm(id)
+                    : undefined
+                }
               />
             </ExperienceAppSection>
           ) : null}
@@ -1091,6 +1145,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         missing={preSendModal?.missing ?? []}
         onClose={() => setPreSendModal(null)}
         onOpenSetupWizard={() => setWizardOpen(true)}
+      />
+      <WorkMcpConfirmModal
+        open={Boolean(mcpConfirm)}
+        sequenceId={mcpConfirm?.sequenceId ?? null}
+        preview={(mcpConfirm?.preview as { to?: string; subject?: string; body?: string; confirmRequired?: string }) ?? null}
+        loading={mcpConfirm?.loading}
+        error={mcpConfirm?.error}
+        onClose={() => setMcpConfirm(null)}
+        onConfirm={() => setMcpConfirm(null)}
       />
     </div>
   );

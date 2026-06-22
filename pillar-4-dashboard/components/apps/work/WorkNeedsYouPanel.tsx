@@ -1,10 +1,15 @@
 "use client";
 
+import type { SlaChipLevel } from "@/lib/work-sla";
+import { slaChipLabel } from "@/lib/work-sla";
+
 interface NeedsYouItem {
   kind: "task" | "approval" | "mail";
   id: string;
   label: string;
   priority?: string;
+  at?: string;
+  slaLevel?: SlaChipLevel;
 }
 
 interface NeedsYouSummaryView {
@@ -26,6 +31,8 @@ interface StallItemView {
   sendId: string | null;
   severity: "high" | "medium" | "low";
   stalledSince: string;
+  slaLevel?: SlaChipLevel;
+  slaHours?: number;
 }
 
 interface WorkNeedsYouPanelProps {
@@ -42,6 +49,21 @@ function severityClass(severity: StallItemView["severity"]): string {
   return "border-line text-muted";
 }
 
+function slaChipClass(level: SlaChipLevel | undefined): string {
+  if (level === "red") return "border-red-400/60 text-red-400";
+  if (level === "amber") return "border-amber-400/60 text-amber-400";
+  return "border-line/60 text-muted";
+}
+
+function SlaChip({ level }: { level?: SlaChipLevel }) {
+  if (!level || level === "ok") return null;
+  return (
+    <span className={`border px-1.5 py-0.5 uppercase ${slaChipClass(level)}`}>
+      SLA {slaChipLabel(level)}
+    </span>
+  );
+}
+
 export function WorkNeedsYouPanel({ items, summary, onOpenSend, onOpenSequence, onOpenLead }: WorkNeedsYouPanelProps) {
   if (summary && summary.total > 0) {
     return (
@@ -52,7 +74,10 @@ export function WorkNeedsYouPanel({ items, summary, onOpenSend, onOpenSequence, 
         </p>
         {summary.items.map((item) => (
           <div key={`${item.kind}-${item.id}`} className="border border-line px-3 py-2">
-            <span className="uppercase text-cursor-glow">{item.kind}</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="uppercase text-cursor-glow">{item.kind}</span>
+              <SlaChip level={item.slaLevel} />
+            </div>
             <p className="mt-1 text-stark">{item.label}</p>
           </div>
         ))}
@@ -74,7 +99,10 @@ export function WorkNeedsYouPanel({ items, summary, onOpenSend, onOpenSequence, 
         <div key={item.id} className={`border px-3 py-2 ${severityClass(item.severity)}`}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="uppercase tracking-widest">{item.kind.replace(/_/g, " ")}</span>
-            <span className="text-muted">{new Date(item.stalledSince).toLocaleDateString()}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <SlaChip level={item.slaLevel} />
+              <span className="text-muted">{new Date(item.stalledSince).toLocaleDateString()}</span>
+            </div>
           </div>
           <p className="mt-1 text-stark">{item.title}</p>
           <p className="mt-0.5 text-muted">{item.detail}</p>

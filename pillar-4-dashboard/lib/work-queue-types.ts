@@ -236,6 +236,14 @@ export interface WorkQueueStatus {
     openRate: number | null;
     replyRate: number | null;
     replyIntentBreakdown: Record<ReplyIntent, number>;
+    stepStats: Array<{
+      stepIndex: number;
+      sent: number;
+      opened: number;
+      replied: number;
+      openRate: number | null;
+      replyRate: number | null;
+    }>;
   };
   connectorVault?: WorkConnectorVaultReport;
   syncLog?: WorkSyncLogEntry[];

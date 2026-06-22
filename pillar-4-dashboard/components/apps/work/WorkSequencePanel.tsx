@@ -21,6 +21,7 @@ interface WorkSequencePanelProps {
   onPause: (id: string) => void;
   onMarkReplied: (id: string) => void;
   onDraft: () => void;
+  onMcpPreview?: (id: string) => void;
 }
 
 export function WorkSequencePanel({
@@ -33,6 +34,7 @@ export function WorkSequencePanel({
   onPause,
   onMarkReplied,
   onDraft,
+  onMcpPreview,
 }: WorkSequencePanelProps) {
   const selected = sequences.find((s) => s.id === selectedSequenceId);
 
@@ -112,6 +114,15 @@ export function WorkSequencePanel({
                 <button type="button" onClick={() => onMarkReplied(selected.id)} className="border border-line px-2 py-0.5 text-[10px] uppercase text-emerald-400">
                   Mark replied
                 </button>
+                {onMcpPreview ? (
+                  <button
+                    type="button"
+                    onClick={() => onMcpPreview(selected.id)}
+                    className="border border-line px-2 py-0.5 text-[10px] uppercase text-muted hover:text-cursor-glow"
+                  >
+                    MCP preview
+                  </button>
+                ) : null}
               </>
             ) : null}
           </div>

@@ -91,10 +91,12 @@ CurXor wedge: **sovereign on-appliance** — one desk for mail, CRM, tasks, cale
 | Inbox triage | **Strong (~4.3/5)** | Threads, snooze, compose strip |
 | Sequences / GTM L3+ | **Strong** | Approval queue, kill switch, MCP preview |
 | Deliverability UX | **Strong (~4.0/5)** | W15 DNS + warmup + bounce pause |
-| L4/L5 professional | **Improving (~3.8/5)** | CRM conflicts, executive brief, needs-you |
-| Cross-Claw OS | **Improving** | W19 handoffs + morning brief strip |
+| L4/L5 professional | **Strong (~4.2/5)** | HubSpot OAuth, activity timeline, team permissions |
+| Cross-Claw OS | **Strong (~4.3/5)** | Live OS brief counts, playbooks, Cafe XP (v0.6.2) |
 
-**Phase 2 plan:** [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) (W21–W28) — live proof, inbox send, deliverability ops, CRM live, signals, governance v2, OS brief.
+**Phase 2 plan:** [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) (W21–W28, complete v0.5.1).
+
+**Phase 3 plan:** [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md) (W29–W35, complete **v0.6.2**).
 
 ---
 
@@ -291,6 +293,7 @@ Script: `npm run demo:capture:work` (new) → `docs/demo-pack/screenshots/outrea
 - [GETTING-STARTED.md](./GETTING-STARTED.md) — day-one checklist
 - [RELEASE-NEXT.md](./RELEASE-NEXT.md) — deferred + sprint tracking
 - [BEST-IN-CLASS-BUILD-PLAN.md](./BEST-IN-CLASS-BUILD-PLAN.md) — **W13–W20 execution plan (complete)**
-- [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) — **W21–W28 Phase 2 plan**
+- [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) — W21–W28 (complete)
+- [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md) — **W29–W35 Phase 3 plan**
 - Capital: [../capital-claw/BEST-IN-CLASS.md](../capital-claw/BEST-IN-CLASS.md)
 - Creator: [../creator-claw/RELEASE-NEXT.md](../creator-claw/RELEASE-NEXT.md)

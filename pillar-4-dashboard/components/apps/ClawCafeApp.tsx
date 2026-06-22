@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
 import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
+import { WorkCafeXpPanel } from "@/components/apps/work/WorkCafeXpPanel";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -25,6 +26,34 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
   const [guestQueue, setGuestQueue] = useState<string[]>([]);
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [lastDrop, setLastDrop] = useState<string | null>(null);
+  const [xpEvents, setXpEvents] = useState<Array<{ id: string; kind: string; at: string }>>([]);
+  const [xpStreak, setXpStreak] = useState(0);
+  const [xpOptOut, setXpOptOut] = useState(false);
+  const [xpBonus, setXpBonus] = useState("");
+  const [xpLoading, setXpLoading] = useState(false);
+
+  const loadWorkXp = useCallback(async () => {
+    setXpLoading(true);
+    try {
+      const res = await fetch("/api/work/xp", { cache: "no-store" });
+      const json = (await res.json()) as {
+        events?: Array<{ id: string; kind: string; at: string }>;
+        streak?: number;
+        optOut?: boolean;
+        bonus?: { reason?: string; eligible?: boolean };
+      };
+      setXpEvents(json.events ?? []);
+      setXpStreak(json.streak ?? 0);
+      setXpOptOut(json.optOut === true);
+      setXpBonus(json.bonus?.eligible ? json.bonus.reason ?? "" : "");
+    } finally {
+      setXpLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadWorkXp();
+  }, [loadWorkXp]);
 
   const preview =
     frame?.previewBase64 && frame.encoding === 1 ? `data:image/jpeg;base64,${frame.previewBase64}` : null;
@@ -122,6 +151,23 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
           </ul>
         </ExperienceAppSection>
       ) : null}
+
+      <ExperienceAppSection
+        appId="claw-cafe"
+        sectionId="work-xp"
+        minLevel="standard"
+        title="Work desk XP"
+        subtitle="Cross-Claw streak from Work Claw events"
+      >
+        <WorkCafeXpPanel
+          events={xpEvents}
+          streak={xpStreak}
+          optOut={xpOptOut}
+          bonusReason={xpBonus}
+          loading={xpLoading}
+          onRefresh={() => void loadWorkXp()}
+        />
+      </ExperienceAppSection>
     </div>
   );
 }

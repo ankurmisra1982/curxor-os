@@ -44,6 +44,21 @@ export function WorkAnalyticsPanel({ analytics, sendPolicy, lite }: WorkAnalytic
           </div>
         </div>
       ) : null}
+      {!lite && analytics.stepStats?.length ? (
+        <div className="border border-line bg-panel/40 p-3 md:col-span-2">
+          <p className="uppercase tracking-widest text-muted">Sequence step analytics</p>
+          <div className="mt-2 space-y-1">
+            {analytics.stepStats.map((row) => (
+              <div key={row.stepIndex} className="flex flex-wrap gap-3 text-stark">
+                <span>Step {row.stepIndex + 1}</span>
+                <span className="text-muted">
+                  sent {row.sent} · open {row.openRate ?? 0}% · reply {row.replyRate ?? 0}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

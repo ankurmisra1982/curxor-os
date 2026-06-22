@@ -263,7 +263,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const weekAgo = Date.now() - 7 * 86400000;
   const policy = await readWorkSendPolicy();
   const sendsToday = countSendsToday(file.sends);
-  const analytics = buildWorkAnalytics(file.sends, file.mailIndex);
+  const analytics = buildWorkAnalytics(file.sends, file.mailIndex, file.sequences);
   const deliverability = await buildWorkDeliverabilitySummary(
     file.sends,
     file.sequences,
