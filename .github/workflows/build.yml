@@ -16,8 +16,8 @@ jobs:
       run:
         working-directory: pillar-2-engine
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -35,8 +35,8 @@ jobs:
       run:
         working-directory: pillar-4-dashboard
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -82,11 +82,13 @@ jobs:
       CURXOR_CHANNELS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/channels
       CURXOR_CCP_CONSENT_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/ccp-consent.json
       CURXOR_GARMIN_OAUTH_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/garmin-oauth.json
+      CURXOR_CONTENT_AUDIT_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/content-audit.json
+      CURXOR_BRIDGE_HEALTH_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/content-bridge-health.json
       PORT: "3080"
       HOSTNAME: 127.0.0.1
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm

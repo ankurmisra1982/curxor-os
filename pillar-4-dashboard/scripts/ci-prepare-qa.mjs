@@ -22,7 +22,6 @@ const optionalFiles = [
   ["ccp-consent.json", "{}"],
   ["garmin-oauth.json", "{}"],
   ["llm-credentials.json", "{}"],
-  ["vital-health.json", '{"version":1,"readings":[],"protocols":[]}'],
 ];
 
 for (const [name, fallback] of optionalFiles) {
