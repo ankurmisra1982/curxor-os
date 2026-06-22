@@ -46,24 +46,32 @@ console.log(`==> Capital checklist · base=${BASE}\n`);
   }
 }
 
-// 2. Arm + execute → single simulated trade
+// 2. Arm + execute → single simulated trade (fresh rule — trade log length is unreliable after smoke)
 {
-  const status = (await get("/api/capital/status")).json;
-  const rule = status.rules?.find((r) => r.state === "ARMED") ?? status.rules?.[0];
-  if (!rule?.id) {
-    fail("arm + execute", "no rule");
+  const stamp = Date.now();
+  const { ok: createdOk, json: created } = await post("/api/capital/status", {
+    action: "create_rule",
+    name: `Checklist execute ${stamp}`,
+    asset: "SPY",
+    conditionType: "manual_trigger",
+    conditionParams: {},
+    actionTrade: "buy",
+    qty: 1,
+  });
+  const ruleId = created.rule?.id;
+  if (!createdOk || !ruleId) {
+    fail("arm + execute", "create_rule failed");
   } else {
-    if (rule.state !== "ARMED") {
-      await post("/api/capital/status", { action: "arm_rule", ruleId: rule.id });
-    }
-    const before = (await get("/api/capital/status")).json.trades?.length ?? 0;
-    const { ok, json } = await post("/api/capital/status", { action: "execute_trade", ruleId: rule.id });
-    const after = (await get("/api/capital/status")).json.trades?.length ?? 0;
+    await post("/api/capital/status", { action: "arm_rule", ruleId });
+    const beforeIds = new Set(((await get("/api/capital/status")).json.trades ?? []).map((t) => t.id));
+    const { ok, json } = await post("/api/capital/status", { action: "execute_trade", ruleId });
     const st = json.trade?.status;
-    if (ok && after === before + 1 && (st === "simulated" || st === "queued" || st === "submitted" || st === "pending_approval")) {
+    const tradeId = json.trade?.id;
+    const isNew = Boolean(tradeId && !beforeIds.has(tradeId));
+    if (ok && isNew && (st === "simulated" || st === "queued" || st === "submitted" || st === "pending_approval")) {
       pass("arm + execute → one trade", st);
     } else {
-      fail("arm + execute → one trade", `added=${after - before} status=${st}`);
+      fail("arm + execute → one trade", `new=${isNew} status=${st}`);
     }
   }
 }
