@@ -7,6 +7,7 @@ import { randomUUID } from "node:crypto";
 import { readAppFreState } from "./app-fre-state";
 import { getOotbApp } from "./ootb-apps";
 import { buildWorkGrowthProfile } from "./work-growth";
+import { readWorkDeskPermissions } from "./work-permissions";
 import { readUserSettings } from "./user-settings";
 import { loadDigitalEnv } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
@@ -272,6 +273,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const autoSendFre = await readAutoSendOnActivateFre();
   const autoSendOnActivate = autoSendFre ?? (await resolveAutoSendOnActivate(bridgeConfigured));
   const outboundKillSwitch = await readOutboundKillSwitch();
+  const deskPermissions = await readWorkDeskPermissions();
 
   return {
     source: bridgeConfigured ? "live" : "demo",
@@ -320,6 +322,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
       defaultTemplatePack: growthProfile.defaultTemplatePack,
       organizingFirst: growthProfile.organizingFirst,
     },
+    deskPermissions,
   };
 }
 
@@ -815,19 +818,34 @@ export async function tagMailReplyIntent(mailId: string, intent: ReplyIntent): P
 export async function assignMailToLead(
   mailId: string,
   leadId: string,
-  assignedTo?: string,
-): Promise<MailIndexEntry | null> {
+  opts?: { assignedTo?: string; force?: boolean },
+): Promise<{ entry: MailIndexEntry | null; collision?: { assignedTo: string } }> {
   const file = await ensureWorkQueue();
   const idx = file.mailIndex.findIndex((m) => m.id === mailId);
-  if (idx < 0) return null;
+  if (idx < 0) return { entry: null };
+  const perms = await readWorkDeskPermissions();
+  const assignee = opts?.assignedTo?.trim() || perms.operatorId;
+  const current = file.mailIndex[idx]!.assignedTo;
+  if (current && current !== assignee && !opts?.force) {
+    return { entry: file.mailIndex[idx]!, collision: { assignedTo: current } };
+  }
+  const previousAssignee = current;
   file.mailIndex[idx] = {
     ...file.mailIndex[idx]!,
     leadId,
-    assignedTo: assignedTo ?? leadId,
+    assignedTo: assignee,
     matchedReply: true,
   };
   await writeWorkFile(file);
-  return file.mailIndex[idx]!;
+  if (previousAssignee !== assignee) {
+    void emitWorkWebhook("mail.assigned", {
+      mailId,
+      leadId,
+      assignedTo: assignee,
+      previousAssignee: previousAssignee ?? null,
+    });
+  }
+  return { entry: file.mailIndex[idx]! };
 }
 
 export function getUnsubscribeUrl(leadId: string, file?: WorkQueueFile): string {

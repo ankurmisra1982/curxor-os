@@ -193,6 +193,26 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           help: "When on, blocks all sequence sends until cleared on desk",
         },
         {
+          id: "deskRole",
+          label: "Desk role",
+          type: "select",
+          defaultValue: "operator",
+          options: [
+            { value: "viewer", label: "Viewer — read-only triage" },
+            { value: "operator", label: "Operator — send + approve" },
+            { value: "admin", label: "Admin — configure desk + roles" },
+          ],
+          help: "Team lite permissions — enforced on send/approve/assign (W33).",
+        },
+        {
+          id: "deskOperatorId",
+          label: "Operator handle",
+          type: "text",
+          defaultValue: "operator",
+          placeholder: "alex",
+          help: "Shown on assignee collision + Needs-you filter for shared inbox.",
+        },
+        {
           id: "warmupMode",
           label: "Warmup mode",
           type: "toggle",

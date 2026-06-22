@@ -6,12 +6,13 @@ import type { OutboundSend } from "@/lib/work-queue-types";
 
 interface WorkApprovalPanelProps {
   sends: OutboundSend[];
+  canApprove?: boolean;
   onApprove: (sendId: string) => Promise<void>;
   onReject: (sendId: string) => Promise<void>;
   onRefresh: () => void;
 }
 
-export function WorkApprovalPanel({ sends, onApprove, onReject, onRefresh }: WorkApprovalPanelProps) {
+export function WorkApprovalPanel({ sends, canApprove = true, onApprove, onReject, onRefresh }: WorkApprovalPanelProps) {
   const pending = sends.filter((s) => s.status === "pending_approval");
   const [busyId, setBusyId] = useState<string | null>(null);
 
@@ -29,6 +30,14 @@ export function WorkApprovalPanel({ sends, onApprove, onReject, onRefresh }: Wor
     return (
       <p className="font-mono text-[10px] text-muted">
         No pending approvals — enable CURXOR_WORK_REQUIRE_APPROVAL=1 or use approval gate.
+      </p>
+    );
+  }
+
+  if (!canApprove) {
+    return (
+      <p className="font-mono text-[10px] text-amber-400">
+        Viewer role — approvals are read-only. Ask an operator or admin to approve sends.
       </p>
     );
   }

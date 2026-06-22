@@ -26,6 +26,14 @@ import { notifySlackInterestedReply } from "@/lib/work-slack-notify";
 import { buildWorkGoLiveReport } from "@/lib/work-go-live";
 import { applyTemplatePack, MINI_SEQUENCE_PRESETS } from "@/lib/work-template-packs";
 import { handleWorkEmailReceipt } from "@/lib/work-receipt-handler";
+import {
+  isWorkActionAllowed,
+  readWorkDeskPermissions,
+  resolveWorkDeskRole,
+  workPermissionDeniedMessage,
+  type WorkPermissionAction,
+} from "@/lib/work-permissions";
+import { setMailInternalNote } from "@/lib/work-mail-notes";
 import { resolveAutoSendOnActivate, readWorkSendPolicy, type AutoSendPolicy } from "@/lib/work-send-policy";
 import {
   executeOutboundSend,
@@ -108,6 +116,11 @@ export async function POST(request: Request): Promise<Response> {
     autoSendOnActivate?: boolean;
     workerPid?: number;
     scanInbox?: boolean;
+    deskRole?: string;
+    deskOperatorId?: string;
+    force?: boolean;
+    assignedTo?: string;
+    note?: string;
   };
 
   try {
@@ -117,6 +130,22 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const action = body.action ?? "";
+
+  async function denyUnlessWorkPermission(perm: WorkPermissionAction): Promise<Response | null> {
+    const perms = await readWorkDeskPermissions();
+    if (!isWorkActionAllowed(perms, perm)) {
+      return Response.json(
+        {
+          ok: false,
+          code: "WORK_PERMISSION_DENIED",
+          error: workPermissionDeniedMessage(perm, perms.role),
+          role: perms.role,
+        },
+        { status: 403 },
+      );
+    }
+    return null;
+  }
 
   try {
     switch (action) {
@@ -217,6 +246,10 @@ export async function POST(request: Request): Promise<Response> {
       case "activate_sequence": {
         if (!body.sequenceId) {
           return Response.json({ ok: false, error: "sequenceId required" }, { status: 400 });
+        }
+        {
+          const denied = await denyUnlessWorkPermission("send");
+          if (denied) return denied;
         }
         const bridgeConfigured = await isWorkEmailBridgeConfigured();
         if (bridgeConfigured) {
@@ -497,9 +530,61 @@ export async function POST(request: Request): Promise<Response> {
         if (!body.mailId || !body.leadId) {
           return Response.json({ ok: false, error: "mailId and leadId required" }, { status: 400 });
         }
-        const entry = await assignMailToLead(body.mailId, body.leadId);
+        {
+          const denied = await denyUnlessWorkPermission("assign");
+          if (denied) return denied;
+        }
+        const result = await assignMailToLead(body.mailId, body.leadId, {
+          assignedTo: body.assignedTo,
+          force: body.force === true,
+        });
+        if (!result.entry) return Response.json({ ok: false, error: "Mail entry not found" }, { status: 404 });
+        if (result.collision) {
+          return Response.json(
+            {
+              ok: false,
+              collision: true,
+              assignedTo: result.collision.assignedTo,
+              entry: result.entry,
+              error: `Mail assigned to ${result.collision.assignedTo}`,
+              status: await fetchWorkStatus(),
+            },
+            { status: 409 },
+          );
+        }
+        return Response.json({ ok: true, entry: result.entry, status: await fetchWorkStatus() });
+      }
+
+      case "set_mail_internal_note": {
+        if (!body.mailId) return Response.json({ ok: false, error: "mailId required" }, { status: 400 });
+        {
+          const denied = await denyUnlessWorkPermission("assign");
+          if (denied) return denied;
+        }
+        const entry = await setMailInternalNote(body.mailId, body.note ?? "");
         if (!entry) return Response.json({ ok: false, error: "Mail entry not found" }, { status: 404 });
         return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "set_desk_role": {
+        const perms = await readWorkDeskPermissions();
+        if (!perms.canConfigure && body.force !== true) {
+          return Response.json({ ok: false, error: "admin desk role required" }, { status: 403 });
+        }
+        if (!body.deskRole) {
+          return Response.json({ ok: false, error: "deskRole required" }, { status: 400 });
+        }
+        const fre = await readAppFreState("my-work");
+        fre.config.deskRole = resolveWorkDeskRole(body.deskRole);
+        if (typeof body.deskOperatorId === "string" && body.deskOperatorId.trim()) {
+          fre.config.deskOperatorId = body.deskOperatorId.trim();
+        }
+        await writeAppFreState("my-work", fre);
+        return Response.json({
+          ok: true,
+          deskPermissions: await readWorkDeskPermissions(),
+          status: await fetchWorkStatus(),
+        });
       }
 
       case "draft_reply": {
@@ -533,6 +618,10 @@ export async function POST(request: Request): Promise<Response> {
 
       case "approve_send": {
         if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        {
+          const denied = await denyUnlessWorkPermission("approve");
+          if (denied) return denied;
+        }
         const approved = await approveSend(body.sendId);
         if (!approved) return Response.json({ ok: false, error: "Send not pending approval" }, { status: 404 });
         const result = await executeOutboundSend(body.sendId);
@@ -547,6 +636,10 @@ export async function POST(request: Request): Promise<Response> {
 
       case "reject_send": {
         if (!body.sendId) return Response.json({ ok: false, error: "sendId required" }, { status: 400 });
+        {
+          const denied = await denyUnlessWorkPermission("approve");
+          if (denied) return denied;
+        }
         const rejected = await rejectSend(body.sendId);
         if (!rejected) return Response.json({ ok: false, error: "Send not found" }, { status: 404 });
         await appendAgentAudit({
@@ -684,6 +777,10 @@ export async function POST(request: Request): Promise<Response> {
 
       case "compose_send":
       case "send_compose_reply": {
+        {
+          const denied = await denyUnlessWorkPermission("send");
+          if (denied) return denied;
+        }
         const mailId = body.mailId ?? "";
         const subject = typeof (body as { subject?: string }).subject === "string" ? (body as { subject: string }).subject : "Re:";
         const replyBody = typeof (body as { body?: string }).body === "string" ? (body as { body: string }).body : "";

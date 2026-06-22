@@ -12,6 +12,7 @@ interface NeedsYouSummaryView {
   p1Tasks: number;
   pendingApprovals: number;
   interestedMail: number;
+  operatorId?: string;
   items: NeedsYouItem[];
 }
 
@@ -46,6 +47,7 @@ export function WorkNeedsYouPanel({ items, summary, onOpenSend, onOpenSequence, 
     return (
       <div className="space-y-2 font-mono text-[10px]">
         <p className="text-muted">
+          {summary.operatorId ? `Operator ${summary.operatorId} · ` : ""}
           {summary.p1Tasks} P1 tasks · {summary.pendingApprovals} approvals · {summary.interestedMail} interested
         </p>
         {summary.items.map((item) => (

@@ -872,6 +872,76 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W33 — permissions_viewer_block
+{
+  await post("/api/work/status", { action: "set_desk_role", deskRole: "operator", force: true });
+  const status = (await get("/api/work/status")).json;
+  const pending = status.sends?.find((s) => s.status === "pending_approval");
+  if (!pending) {
+    pass("permissions_viewer_block", "no pending approval — skip");
+  } else {
+    await post("/api/work/status", { action: "set_desk_role", deskRole: "viewer", force: true });
+    const blocked = await post("/api/work/status", { action: "approve_send", sendId: pending.id });
+    await post("/api/work/status", { action: "set_desk_role", deskRole: "operator", force: true });
+    if (blocked.status === 403 && blocked.json.code === "WORK_PERMISSION_DENIED") {
+      pass("permissions_viewer_block", pending.id);
+    } else {
+      fail("permissions_viewer_block", `status=${blocked.status}`);
+    }
+  }
+}
+
+// W33 — assign_collision_smoke
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId =
+    status.mailIndex?.find((m) => !m.archivedAt && !m.doneAt)?.id ?? status.mailIndex?.[status.mailIndex.length - 1]?.id;
+  const leadId = status.leads?.[0]?.id;
+  if (!mailId || !leadId) {
+    fail("assign_collision_smoke", "missing mail/lead");
+  } else {
+    await post("/api/work/status", {
+      action: "assign_mail_to_lead",
+      mailId,
+      leadId,
+      assignedTo: "operator-alpha",
+      force: true,
+    });
+    const collision = await post("/api/work/status", {
+      action: "assign_mail_to_lead",
+      mailId,
+      leadId,
+      assignedTo: "operator-beta",
+    });
+    const note = await post("/api/work/status", {
+      action: "set_mail_internal_note",
+      mailId,
+      note: "QA internal team note",
+    });
+    const takeover = await post("/api/work/status", {
+      action: "assign_mail_to_lead",
+      mailId,
+      leadId,
+      assignedTo: "operator-beta",
+      force: true,
+    });
+    if (
+      collision.status === 409 &&
+      collision.json.collision === true &&
+      note.ok &&
+      note.json.entry?.internalNote === "QA internal team note" &&
+      takeover.ok
+    ) {
+      pass("assign_collision_smoke", collision.json.assignedTo ?? "collision");
+    } else {
+      fail(
+        "assign_collision_smoke",
+        `collision=${collision.json?.collision} note=${note.json?.entry?.internalNote}`,
+      );
+    }
+  }
+}
+
 // W29 — live_proof_scaffold
 {
   const { ok, json } = await post("/api/work/status", { action: "live_proof" });

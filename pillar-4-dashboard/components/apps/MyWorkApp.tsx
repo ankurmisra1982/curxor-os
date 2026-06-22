@@ -64,6 +64,7 @@ interface NeedsYouState {
   p1Tasks: number;
   pendingApprovals: number;
   interestedMail: number;
+  operatorId?: string;
   items: Array<{ kind: "task" | "approval" | "mail"; id: string; label: string; priority?: string }>;
 }
 import { getOotbApp } from "@/lib/ootb-apps";
@@ -154,6 +155,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [syncBadges, setSyncBadges] = useState<Record<string, "synced" | "conflict" | "local_only">>({});
   const [preSendModal, setPreSendModal] = useState<{ sequenceId: string; missing: string[] } | null>(null);
   const [suppressionBusy, setSuppressionBusy] = useState(false);
+
+  const deskPerms = status?.deskPermissions;
+  const canSend = deskPerms?.canSend ?? true;
+  const canApprove = deskPerms?.canApprove ?? true;
+  const canAssign = deskPerms?.canAssign ?? true;
+  const operatorId = deskPerms?.operatorId ?? "operator";
 
   const draftReplyForMail = useCallback((mailId: string, prompt?: string) => {
     void postWork({ action: "draft_reply", mailId, prompt }).then((json) => {
@@ -742,7 +749,31 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             tasks={status?.tasks ?? []}
             leads={status?.leads ?? []}
             highlightMailId={focusMailId}
-            onAssign={(mailId, leadId) => void action({ action: "assign_mail_to_lead", mailId, leadId })}
+            currentOperatorId={operatorId}
+            canAssign={canAssign}
+            onAssign={(mailId, leadId, opts) => {
+              void postWork({
+                action: "assign_mail_to_lead",
+                mailId,
+                leadId,
+                assignedTo: operatorId,
+                force: opts?.force,
+              }).then((json) => {
+                const aj = json as { collision?: boolean; assignedTo?: string; error?: string };
+                if (aj.collision) {
+                  setSignal(`Assign collision — mail held by ${aj.assignedTo ?? "another operator"}`);
+                  return;
+                }
+                if (json.error) {
+                  setSignal(json.error);
+                  return;
+                }
+                void loadBootstrap();
+              });
+            }}
+            onSetInternalNote={(mailId, note) => {
+              void postWork({ action: "set_mail_internal_note", mailId, note }).then(() => loadBootstrap());
+            }}
             onTagIntent={(mailId, intent) => void action({ action: "tag_reply_intent", mailId, intent })}
             onDraftReply={(mailId) => draftReplyForMail(mailId)}
             onSnooze={(mailId) => void action({ action: "snooze_mail", mailId })}
@@ -793,6 +824,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             }}
             sendBusy={composeSendBusy}
             sendFeedback={composeSendFeedback}
+            canSend={canSend}
             onUndoSend={undoComposeSend}
             onOpenOutbound={() => setWorkspaceTab("outreach")}
             onClear={() => {
@@ -868,6 +900,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="approval" minLevel="standard" title="Send approval" subtitle="Human gate before outbound">
           <WorkApprovalPanel
             sends={status?.sends ?? []}
+            canApprove={canApprove}
             onApprove={async (sendId) => {
               await postWork({ action: "approve_send", sendId });
               await loadBootstrap();

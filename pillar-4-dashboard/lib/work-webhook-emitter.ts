@@ -5,7 +5,8 @@ import { loadDigitalEnv } from "./digital-env";
 export type WorkWebhookEvent =
   | "lead.stage_changed"
   | "sequence.first_send"
-  | "mail.interested";
+  | "mail.interested"
+  | "mail.assigned";
 
 export async function emitWorkWebhook(
   event: WorkWebhookEvent,

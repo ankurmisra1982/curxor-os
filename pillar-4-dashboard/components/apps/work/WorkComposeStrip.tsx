@@ -18,6 +18,7 @@ interface WorkComposeStripSimpleProps {
   } | null;
   onUndoSend?: (sendId: string) => void;
   onOpenOutbound?: () => void;
+  canSend?: boolean;
 }
 
 interface WorkComposeStripEditorProps {
@@ -37,7 +38,7 @@ function isSimple(props: WorkComposeStripProps): props is WorkComposeStripSimple
 
 export function WorkComposeStrip(props: WorkComposeStripProps) {
   if (isSimple(props)) {
-    const { mailId, draftPreview, onDraftReply, onSendReply, onClear, sendBusy, sendFeedback, onUndoSend, onOpenOutbound } = props;
+    const { mailId, draftPreview, onDraftReply, onSendReply, onClear, sendBusy, sendFeedback, onUndoSend, onOpenOutbound, canSend = true } = props;
     const [prompt, setPrompt] = useState("");
     const lines = draftPreview.split("\n");
     const subject = lines[0] ?? "";
@@ -64,7 +65,7 @@ export function WorkComposeStrip(props: WorkComposeStripProps) {
             {onSendReply && draftPreview ? (
               <button
                 type="button"
-                disabled={!mailId || sendBusy}
+                disabled={!mailId || sendBusy || !canSend}
                 onClick={() => {
                   if (!mailId) return;
                   const lines = draftPreview.split("\n");
@@ -93,6 +94,9 @@ export function WorkComposeStrip(props: WorkComposeStripProps) {
         ) : (
           <p className="text-muted">Select mail and draft — or use templates from Home.</p>
         )}
+        {!canSend ? (
+          <p className="text-amber-400">Viewer role — send is disabled. Switch desk role to operator in setup.</p>
+        ) : null}
         {sendFeedback ? (
           <div
             className={`border px-2 py-1 ${

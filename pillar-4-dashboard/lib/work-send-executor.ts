@@ -19,6 +19,7 @@ import {
 import type { OutboundSend, ReplyIntent, WorkSequence } from "./work-queue-types";
 import { notifyWorkSendFailure } from "./work-publish-failure-notify";
 import { notifyWorkPendingApproval } from "./work-approval-notify";
+import { readWorkDeskPermissions, workPermissionDeniedMessage } from "./work-permissions";
 import { evaluateSendPolicy, readWorkSendPolicy } from "./work-send-policy";
 import { addSuppression, isEmailSuppressed } from "./work-suppression";
 
@@ -66,6 +67,10 @@ export async function sendSequenceStep(
   sequenceId: string,
   stepIndex?: number,
 ): Promise<{ ok: boolean; send?: OutboundSend; error?: string }> {
+  const perms = await readWorkDeskPermissions();
+  if (!perms.canSend) {
+    return { ok: false, error: workPermissionDeniedMessage("send", perms.role) };
+  }
   if (await readOutboundKillSwitch()) {
     return { ok: false, error: "Outbound kill switch is ON — sends blocked" };
   }
@@ -130,6 +135,10 @@ export async function executeOutboundSend(
   sendId: string,
   opts?: { skipUndo?: boolean },
 ): Promise<{ ok: boolean; send?: OutboundSend; error?: string; undoPending?: boolean }> {
+  const perms = await readWorkDeskPermissions();
+  if (!perms.canSend) {
+    return { ok: false, error: workPermissionDeniedMessage("send", perms.role) };
+  }
   const file = await ensureWorkQueue();
   const send = file.sends.find((s) => s.id === sendId);
   if (!send) return { ok: false, error: "Send not found" };

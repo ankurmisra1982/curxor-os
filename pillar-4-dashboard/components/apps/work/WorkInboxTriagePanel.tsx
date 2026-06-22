@@ -15,9 +15,12 @@ interface WorkInboxTriagePanelProps {
   leads: WorkLead[];
   highlightMailId?: string | null;
   threadView?: boolean;
-  onAssign: (mailId: string, leadId: string) => void;
+  currentOperatorId?: string;
+  canAssign?: boolean;
+  onAssign: (mailId: string, leadId: string, opts?: { force?: boolean }) => void;
   onTagIntent: (mailId: string, intent: ReplyIntent) => void;
   onDraftReply: (mailId: string) => void;
+  onSetInternalNote?: (mailId: string, note: string) => void;
   onSnooze?: (mailId: string) => void;
   onArchive?: (mailId: string) => void;
   onMarkDone?: (mailId: string) => void;
@@ -35,9 +38,12 @@ export function WorkInboxTriagePanel({
   leads,
   highlightMailId,
   threadView = true,
+  currentOperatorId = "operator",
+  canAssign = true,
   onAssign,
   onTagIntent,
   onDraftReply,
+  onSetInternalNote,
   onSnooze,
   onArchive,
   onMarkDone,
@@ -46,6 +52,8 @@ export function WorkInboxTriagePanel({
 }: WorkInboxTriagePanelProps) {
   const [split, setSplit] = useState<InboxSplit>("waiting");
   const [expandedThreadId, setExpandedThreadId] = useState<string | null>(null);
+  const [collisionMailId, setCollisionMailId] = useState<string | null>(null);
+  const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const filtered = useMemo(() => filterBySplit(rows, tasks, split), [rows, tasks, split]);
   const threads = useMemo(() => (threadView ? groupMailIntoThreads(filtered) : []), [filtered, threadView]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -118,6 +126,19 @@ export function WorkInboxTriagePanel({
             </div>
             <p className="mt-1 text-stark">{row.subject}</p>
             <p className="mt-0.5 text-muted line-clamp-2">{row.snippet}</p>
+            {row.internalNote ? (
+              <p className="mt-1 border border-cursor-glow/30 px-2 py-1 text-cursor-glow">
+                Note · {row.internalNote}
+              </p>
+            ) : null}
+            {collisionMailId === row.id ? (
+              <p className="mt-1 border border-amber-500/50 px-2 py-1 text-amber-400">
+                Assigned to another operator — use force assign from desk or pick a different thread.
+              </p>
+            ) : null}
+            {row.assignedTo && row.assignedTo !== currentOperatorId ? (
+              <p className="mt-1 text-amber-400">Assigned to {row.assignedTo}</p>
+            ) : null}
             {expanded && thread && thread.messages.length > 1 ? (
               <ul className="mt-2 space-y-1 border-t border-line/40 pt-2">
                 {thread.messages.map((m) => (
@@ -169,10 +190,17 @@ export function WorkInboxTriagePanel({
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <label className="text-muted uppercase">Assign (a)</label>
               <select
-                className="border border-line bg-panel px-2 py-0.5 text-stark"
+                className="border border-line bg-panel px-2 py-0.5 text-stark disabled:opacity-40"
                 value={row.leadId ?? ""}
+                disabled={!canAssign}
                 onChange={(e) => {
-                  if (e.target.value) onAssign(row.id, e.target.value);
+                  if (!e.target.value) return;
+                  if (row.assignedTo && row.assignedTo !== currentOperatorId) {
+                    setCollisionMailId(row.id);
+                    return;
+                  }
+                  setCollisionMailId(null);
+                  onAssign(row.id, e.target.value);
                 }}
               >
                 <option value="">— lead —</option>
@@ -182,8 +210,44 @@ export function WorkInboxTriagePanel({
                   </option>
                 ))}
               </select>
-              {row.assignedTo ? <span className="text-cursor-glow">assigned</span> : null}
+              {row.assignedTo ? (
+                <span className="text-cursor-glow">
+                  {row.assignedTo === currentOperatorId ? "you" : row.assignedTo}
+                </span>
+              ) : null}
+              {row.assignedTo && row.assignedTo !== currentOperatorId && canAssign ? (
+                <button
+                  type="button"
+                  className="border border-amber-500/50 px-1.5 py-0.5 uppercase text-amber-400"
+                  onClick={() => {
+                    if (row.leadId) {
+                      setCollisionMailId(null);
+                      onAssign(row.id, row.leadId, { force: true });
+                    }
+                  }}
+                >
+                  Take over
+                </button>
+              ) : null}
             </div>
+            {onSetInternalNote && canAssign ? (
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <label className="text-muted uppercase">Internal note</label>
+                <input
+                  className="min-w-[12rem] flex-1 border border-line bg-panel px-2 py-0.5 text-stark"
+                  value={noteDrafts[row.id] ?? row.internalNote ?? ""}
+                  placeholder="Team-only — not sent as email"
+                  onChange={(e) => setNoteDrafts((prev) => ({ ...prev, [row.id]: e.target.value }))}
+                />
+                <button
+                  type="button"
+                  className="border border-line px-1.5 py-0.5 uppercase text-muted hover:text-stark"
+                  onClick={() => onSetInternalNote(row.id, noteDrafts[row.id] ?? row.internalNote ?? "")}
+                >
+                  Save note
+                </button>
+              </div>
+            ) : null}
           </div>
         );
       })}

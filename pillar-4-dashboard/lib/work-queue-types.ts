@@ -110,6 +110,7 @@ export interface MailIndexEntry {
   receivedAt: string;
   leadId: string | null;
   assignedTo?: string | null;
+  internalNote?: string | null;
   matchedReply: boolean;
   replyIntent?: ReplyIntent;
   archivedAt?: string | null;
@@ -245,6 +246,14 @@ export interface WorkQueueStatus {
     growthIntent: string | null;
     defaultTemplatePack: string | null;
     organizingFirst: string | null;
+  };
+  deskPermissions?: {
+    role: string;
+    operatorId: string;
+    canSend: boolean;
+    canApprove: boolean;
+    canAssign: boolean;
+    canConfigure: boolean;
   };
   deliverability?: {
     fromAddress: string | null;

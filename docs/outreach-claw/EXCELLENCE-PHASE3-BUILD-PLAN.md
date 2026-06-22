@@ -215,10 +215,10 @@ W29 → W30 → W31 → W32 → W33 → W34 → W35
 
 **Acceptance**
 
-- [ ] Viewer role: send/approve actions return 403 or UI disabled
-- [ ] Assign shows collision warning when `assignedTo` differs
-- [ ] Internal note persists on mail row
-- [ ] `work-checklist.mjs`: `permissions_viewer_block`, `assign_collision_smoke`
+- [x] Viewer role: send/approve actions return 403 or UI disabled
+- [x] Assign shows collision warning when `assignedTo` differs
+- [x] Internal note persists on mail row
+- [x] `work-checklist.mjs`: `permissions_viewer_block`, `assign_collision_smoke`
 
 **Growth levels:** L4 team · L5 full.
 
