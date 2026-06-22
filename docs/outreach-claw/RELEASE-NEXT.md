@@ -50,9 +50,9 @@
 
 - LinkedIn automation
 - Multi-mailbox rotation at scale
-- Salesforce live sync (HubSpot read-only preview shipped)
-- Dedicated outbound job worker process
-- Full UnInbox-style shared team inbox
+- Salesforce live sync (HubSpot OAuth two-way shipped W34)
+- Full UnInbox-style shared team inbox (team inbox lite shipped W33)
+- Outbound worker scale-out beyond v1 sidecar (`worker/outbound.mjs`, W32)
 
 ## Shipped (Growth leveling WL1–WL6 — v0.3.8)
 
@@ -145,7 +145,7 @@
 
 ## Next
 
-Phase 3 excellence arc **complete (W29–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md) for deferred items.
+Phase 3 excellence arc **complete (W29–W35)** — tagged **v0.6.2** (Work Claw day-one release).
 
 | Sprint | Focus | Target tag |
 |--------|--------|------------|

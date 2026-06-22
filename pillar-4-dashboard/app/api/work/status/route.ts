@@ -1031,9 +1031,11 @@ export async function POST(request: Request): Promise<Response> {
       }
 
       case "won_pauses_sequences": {
-        const status = await fetchWorkStatus();
-        const lead = status.leads.find((l) => !["won", "lost"].includes(l.stage));
-        if (!lead) return Response.json({ ok: false, error: "no lead" }, { status: 400 });
+        const lead = await upsertLead({
+          name: "Won pause QA",
+          email: `won-pause-qa-${Date.now()}@example.com`,
+          stage: "qualified",
+        });
         const seq = await createSequence({
           name: "Won test seq",
           leadId: lead.id,
@@ -1043,7 +1045,7 @@ export async function POST(request: Request): Promise<Response> {
         await updateLeadStage(lead.id, "won");
         const after = await fetchWorkStatus();
         const paused = after.sequences.find((s) => s.id === seq.id)?.status === "paused";
-        return Response.json({ ok: paused, sequenceId: seq.id, status: after });
+        return Response.json({ ok: paused, sequenceId: seq.id, leadId: lead.id, status: after });
       }
 
       case "crm_conflict_list": {

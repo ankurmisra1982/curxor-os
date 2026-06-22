@@ -80,5 +80,13 @@
       "Comms hardening — draft_reply + mail sanitizer, assign_mail_to_lead, sequence onReplyIntent branching",
       "140+ smoke + work exit-demo scaffold in qa:local; tagged v0.3.7"
     ]
+  },
+  "0.6.2": {
+    "highlights": [
+      "Work Claw day-one release — sovereign professional desk: CRM, sequences, inbox triage, deliverability, connector vault, and agent skills on-appliance",
+      "Persona growth L1–L5 — Explorer through Operator tours, level-gated UI, template packs, and qa:work-levels matrix",
+      "Excellence arc W13–W35 — threads/compose undo, HubSpot OAuth + activity timeline, outbound worker v1, team inbox lite, MCP confirm, OS brief + Cafe XP",
+      "Demo + live paths — demoReady without SMTP, EXIT-DEMO + live-proof verifiers, 71-check work checklist in qa:local; tagged v0.6.2"
+    ]
   }
 }

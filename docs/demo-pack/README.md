@@ -95,7 +95,7 @@ npm run demo:capture:capital
 
 Set `experienceLevel` to `standard` in `user-settings.json` before capture if Analytics tab is gated.
 
-### Outreach Claw flows (screenshots/outreach/)
+### Work Claw flows (screenshots/outreach/)
 
 | File | Focus | Use |
 |------|-------|-----|
@@ -103,15 +103,37 @@ Set `experienceLevel` to `standard` in `user-settings.json` before capture if An
 | `21-pipeline.png` | Lead pipeline | Outreach tab |
 | `22-sequences.png` | Sequences panel | Outreach tab |
 | `23-analytics.png` | Analytics | Ops tab (Standard+) |
+| `24-l1-start-home.png` | L1 Start home | People waiting · Explorer persona |
+| `25-l1-templates.png` | L1 Message templates | Template packs · copy-to-draft |
+| `26-l2-mini-sequence.png` | L2 Mini-sequence | Side Hustler persona |
+| `27-l3-deliverability.png` | L3 Deliverability | Ops · domain health · warmup |
+| `28-l3-approval.png` | L3 Send approval | Operator approval queue |
+| `29-live-proof.png` | Live proof panel | Integrations · exit-demo path |
 
-Capture Outreach-only assets:
+Capture core Work desk (20–23):
 
 ```bash
 npm run demo:capture:work
 # or: node scripts/capture-work-demo.mjs --base http://127.0.0.1:3080
 ```
 
+Capture persona + live-proof assets (24–29, patches `workGrowthLevel` per level):
+
+```bash
+npm run demo:capture:work:levels
+# or: node scripts/capture-gtm-phase2.mjs --base http://127.0.0.1:3080
+```
+
 Set `experienceLevel` to `expert` for Integrations connector vault screenshot.
+
+Record exit-demo walkthrough (SMTP/OAuth live-ready runbook):
+
+```bash
+npm run demo:record:work:exit
+# or: node scripts/record-work-exit-demo.mjs --base http://127.0.0.1:3080
+```
+
+Output: `docs/demo-pack/work-exit-walkthrough.webm`
 
 ## Walkthrough video (~90s)
 
@@ -131,6 +153,15 @@ node scripts/record-capital-walkthrough.mjs
 ```
 
 Output: `docs/demo-pack/capital-walkthrough.webm` → auto-copied to `curxor storefront/public/demo/capital-walkthrough.webm`
+
+Record Work Claw scroll tour for storefront `/work` (Outreach desk):
+
+```bash
+npm run demo:record:work
+# or: node scripts/record-outreach-walkthrough.mjs --base http://127.0.0.1:3080
+```
+
+Output: `docs/demo-pack/outreach-walkthrough.webm` → copy to `curxor storefront/public/demo/outreach-walkthrough.webm`
 
 Capture Capital + Outreach phase-2 assets (screenshots → storefront `public/demo/`):
 
