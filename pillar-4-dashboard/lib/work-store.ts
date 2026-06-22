@@ -5,6 +5,8 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 
 import { readAppFreState } from "./app-fre-state";
+import { buildWorkGrowthProfile } from "./work-growth";
+import { readUserSettings } from "./user-settings";
 import { loadDigitalEnv } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
@@ -241,6 +243,12 @@ export async function isWorkEmailBridgeConfigured(): Promise<boolean> {
 
 export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const fre = await readAppFreState("my-work");
+  const settings = await readUserSettings();
+  const growthProfile = buildWorkGrowthProfile(
+    fre.config,
+    settings.appearance.experienceLevel,
+    settings.appearance.workGrowthLevel ?? null,
+  );
   const file = await ensureWorkQueue();
   const bridgeConfigured = await isWorkEmailBridgeConfigured();
   const weekAgo = Date.now() - 7 * 86400000;
@@ -286,6 +294,13 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
     autoSendOnActivate,
     autoSendDefault: bridgeConfigured,
     outboundKillSwitch,
+    growthProfile: {
+      growthLevel: growthProfile.growthLevel,
+      growthLabel: growthProfile.growthLabel,
+      growthIntent: growthProfile.growthIntent,
+      defaultTemplatePack: growthProfile.defaultTemplatePack,
+      organizingFirst: growthProfile.organizingFirst,
+    },
   };
 }
 

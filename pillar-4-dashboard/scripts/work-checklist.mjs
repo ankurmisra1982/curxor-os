@@ -249,6 +249,129 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// 16. growth profile on bootstrap
+{
+  const { ok, json } = await post("/api/work/status", { action: "dashboard_bootstrap" });
+  const gp = json.status?.growthProfile;
+  if (ok && gp?.growthLevel && gp?.growthLabel) {
+    pass("growth_profile bootstrap", `${gp.growthLevel} · ${gp.growthLabel}`);
+  } else {
+    fail("growth_profile bootstrap", `level=${gp?.growthLevel}`);
+  }
+}
+
+// 17. get_growth_profile
+{
+  const { ok, json } = await post("/api/work/status", { action: "get_growth_profile" });
+  if (ok && json.growthProfile?.growthLevel) {
+    pass("get_growth_profile", json.growthProfile.growthLevel);
+  } else {
+    fail("get_growth_profile", `ok=${ok}`);
+  }
+}
+
+// 18. apply_template_pack
+{
+  const { ok, json } = await post("/api/work/status", {
+    action: "apply_template_pack",
+    packId: "student_opportunities",
+  });
+  if (ok && typeof json.packId === "string") {
+    pass("apply_template_pack", `tasksCreated=${json.tasksCreated ?? 0}`);
+  } else {
+    fail("apply_template_pack", json.error ?? "failed");
+  }
+}
+
+// 19. L2 mini sequence
+{
+  const status = (await get("/api/work/status")).json;
+  const leadId = status.leads?.[0]?.id;
+  if (!leadId) {
+    fail("create_mini_sequence", "no lead");
+  } else {
+    const { ok, json } = await post("/api/work/status", {
+      action: "create_mini_sequence",
+      leadId,
+      presetId: "polite_followup",
+    });
+    if (ok && typeof json.sequenceId === "string") {
+      pass("create_mini_sequence", json.sequenceId);
+    } else {
+      fail("create_mini_sequence", json.error ?? "no sequenceId");
+    }
+  }
+}
+
+// 16. growth profile on bootstrap
+{
+  const { ok, json } = await post("/api/work/status", { action: "get_growth_profile" });
+  const gl = json.growthProfile?.growthLevel;
+  if (ok && (gl === "L1" || gl === "L2" || gl === "L3" || gl === "L4" || gl === "L5")) {
+    pass("growth_profile bootstrap", `${gl} · ${json.growthProfile?.growthLabel ?? ""}`);
+  } else {
+    fail("growth_profile bootstrap", `growthLevel=${gl}`);
+  }
+}
+
+// 17. apply_template_pack
+{
+  const { ok, json } = await post("/api/work/status", {
+    action: "apply_template_pack",
+    packId: "student_opportunities",
+  });
+  if (ok && json.ok && typeof json.tasksCreated === "number") {
+    pass("apply_template_pack", `tasks=${json.tasksCreated}`);
+  } else {
+    fail("apply_template_pack", `tasksCreated=${json.tasksCreated}`);
+  }
+}
+
+// 18. L1 opportunity path: create lead → draft_reply
+{
+  const email = `l1-${Date.now()}@example.com`;
+  const create = await post("/api/work/status", {
+    action: "create_lead",
+    name: "L1 Opportunity",
+    email,
+  });
+  const leadId = create.json.lead?.id;
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.[0]?.id;
+  if (!create.ok || !leadId) {
+    fail("L1 opportunity path", "create_lead");
+  } else if (!mailId) {
+    pass("L1 opportunity path", `lead=${leadId} · no mail to draft`);
+  } else {
+    const draft = await post("/api/work/status", { action: "draft_reply", mailId, leadId });
+    if (draft.ok && typeof draft.json.body === "string") {
+      pass("L1 opportunity path", `lead + draft_reply`);
+    } else {
+      fail("L1 opportunity path", "draft_reply");
+    }
+  }
+}
+
+// 19. L2 mini sequence path
+{
+  const status = (await get("/api/work/status")).json;
+  const leadId = status.leads?.[0]?.id;
+  if (!leadId) {
+    fail("L2 mini sequence", "no lead");
+  } else {
+    const { ok, json } = await post("/api/work/status", {
+      action: "create_mini_sequence",
+      leadId,
+      presetId: "polite_followup",
+    });
+    if (ok && json.sequenceId) {
+      pass("L2 mini sequence", json.sequenceId);
+    } else {
+      fail("L2 mini sequence", `sequenceId=${json.sequenceId}`);
+    }
+  }
+}
+
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

@@ -1,77 +1,53 @@
 "use client";
 
-import type { ExperienceLevel } from "@/lib/experience-level";
+import type { GrowthLevel } from "@/lib/os-growth-level";
+import {
+  defaultWorkTabForGrowth,
+  workTabsForGrowth,
+  type WorkWorkspaceTab,
+} from "@/lib/work-level-gates";
 
-export type WorkWorkspaceTab = "start" | "outreach" | "comms" | "ops" | "integrations";
+export type { WorkWorkspaceTab };
 
-const TABS: { id: WorkWorkspaceTab; label: string; minLevel: ExperienceLevel }[] = [
-  { id: "start", label: "Start", minLevel: "beginner" },
-  { id: "outreach", label: "Outreach", minLevel: "beginner" },
-  { id: "comms", label: "Comms", minLevel: "standard" },
-  { id: "ops", label: "Ops", minLevel: "standard" },
-  { id: "integrations", label: "Integrations", minLevel: "expert" },
-];
-
-function meetsLevel(current: ExperienceLevel, required: ExperienceLevel): boolean {
-  const order: ExperienceLevel[] = ["beginner", "standard", "expert"];
-  return order.indexOf(current) >= order.indexOf(required);
-}
+const TAB_LABELS: Record<WorkWorkspaceTab, string> = {
+  start: "Start",
+  outreach: "Outreach",
+  comms: "Comms",
+  ops: "Ops",
+  integrations: "Integrations",
+};
 
 interface WorkWorkspaceTabsProps {
   active: WorkWorkspaceTab;
   onChange: (tab: WorkWorkspaceTab) => void;
-  experienceLevel: ExperienceLevel;
+  growthLevel: GrowthLevel;
 }
 
-export function WorkWorkspaceTabs({ active, onChange, experienceLevel }: WorkWorkspaceTabsProps) {
-  const visible = TABS.filter((t) => meetsLevel(experienceLevel, t.minLevel));
+export function WorkWorkspaceTabs({ active, onChange, growthLevel }: WorkWorkspaceTabsProps) {
+  const visible = workTabsForGrowth(growthLevel);
 
   return (
     <nav className="flex flex-wrap gap-1 border border-line bg-panel px-2 py-2 font-mono text-[10px]">
       {visible.map((tab) => (
         <button
-          key={tab.id}
+          key={tab}
           type="button"
-          onClick={() => onChange(tab.id)}
+          onClick={() => onChange(tab)}
           className={`px-3 py-1 uppercase tracking-widest ${
-            active === tab.id
+            active === tab
               ? "border border-cursor-glow text-cursor-glow"
               : "border border-transparent text-muted hover:border-line hover:text-stark"
           }`}
         >
-          {tab.label}
+          {TAB_LABELS[tab]}
         </button>
       ))}
     </nav>
   );
 }
 
-export function defaultWorkTab(level: ExperienceLevel): WorkWorkspaceTab {
-  return level === "beginner" ? "start" : "outreach";
+export function defaultWorkTab(growthLevel: GrowthLevel): WorkWorkspaceTab {
+  return defaultWorkTabForGrowth(growthLevel);
 }
 
-export const WORK_SECTION_TAB: Record<string, WorkWorkspaceTab> = {
-  "go-live": "start",
-  tasks: "start",
-  pipeline: "outreach",
-  sequences: "outreach",
-  import: "outreach",
-  outbound: "outreach",
-  comms: "comms",
-  "sync-log": "comms",
-  analytics: "ops",
-  recovery: "ops",
-  "send-policy": "ops",
-  "inbox-triage": "comms",
-  "morning-brief": "start",
-  "day-brief": "ops",
-  "approval": "ops",
-  "kanban": "outreach",
-  "kill-switch": "ops",
-  "connector-vault": "integrations",
-  "sync-audit": "integrations",
-};
-
-export function workSectionVisible(sectionId: string, active: WorkWorkspaceTab): boolean {
-  return WORK_SECTION_TAB[sectionId] === active;
-}
+export { workSectionVisibleForGrowth as workSectionVisible } from "@/lib/work-level-gates";

@@ -18,6 +18,7 @@
     "qa:capital-checklist": "node scripts/capital-checklist.mjs",
     "qa:creator-checklist": "node scripts/creator-checklist.mjs",
     "qa:work-checklist": "node scripts/work-checklist.mjs",
+    "qa:work-levels": "node scripts/qa-work-levels.mjs",
     "setup:capital-env": "node scripts/setup-capital-env.mjs",
     "setup:work-env": "node scripts/setup-work-env.mjs",
     "configure:capital-keys": "node scripts/configure-capital-keys.mjs --open-signup-pages",

@@ -6,10 +6,11 @@ import { REPLY_INTENT_LABELS } from "@/lib/work-reply-intent";
 interface WorkAnalyticsPanelProps {
   analytics: WorkQueueStatus["analytics"];
   sendPolicy: WorkQueueStatus["sendPolicy"];
+  lite?: boolean;
 }
 
-export function WorkAnalyticsPanel({ analytics, sendPolicy }: WorkAnalyticsPanelProps) {
-  const intents = Object.entries(analytics.replyIntentBreakdown).filter(([, n]) => n > 0);
+export function WorkAnalyticsPanel({ analytics, sendPolicy, lite }: WorkAnalyticsPanelProps) {
+  const intents = lite ? [] : Object.entries(analytics.replyIntentBreakdown).filter(([, n]) => n > 0);
 
   return (
     <div className="grid gap-3 font-mono text-[10px] md:grid-cols-2">

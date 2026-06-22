@@ -81,6 +81,34 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       fields: [
         { id: "workspaceName", label: "Workspace name", type: "text", defaultValue: "Outreach Desk", required: true },
         {
+          id: "growthIntent",
+          label: "What best describes you right now?",
+          type: "select",
+          defaultValue: "student_hobbies",
+          required: true,
+          options: [
+            { value: "student_hobbies", label: "Student, gamer, or hobby projects" },
+            { value: "side_hustle", label: "Etsy, eBay, freelance, or creator side income" },
+            { value: "nonprofit_advocacy", label: "Nonprofit, advocacy, or community operations" },
+            { value: "solo_business", label: "Solo business or client acquisition" },
+            { value: "executive_team", label: "Founder or executive team lead" },
+          ],
+        },
+        {
+          id: "organizingFirst",
+          label: "What are you organizing first? (optional)",
+          type: "select",
+          defaultValue: "",
+          options: [
+            { value: "", label: "— pick later —" },
+            { value: "school_applications", label: "School / applications" },
+            { value: "shop_orders", label: "Shop or orders (Etsy, eBay)" },
+            { value: "gaming_community", label: "Gaming / community" },
+            { value: "creator_collabs", label: "Creator collabs" },
+          ],
+          help: "Sets your default message template pack for L1–L2.",
+        },
+        {
           id: "focusAreas",
           label: "Focus areas",
           type: "multiselect",

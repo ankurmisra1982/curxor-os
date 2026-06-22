@@ -5,8 +5,10 @@ import { mkdirSync } from "node:fs";
 
 import { getAppFreDir, markAppFreComplete, readAppFreState } from "@/lib/app-fre-state";
 import { defaultFreConfig } from "@/lib/app-agent-catalog";
+import { applyGrowthFromFre } from "@/lib/work-growth";
 import { ensureBeginnerExperienceAfterCapitalFre } from "@/lib/capital-onboarding";
 import { ensureBeginnerExperienceAfterCreatorFre } from "@/lib/content-creator-onboarding";
+import { bootstrapWorkGrowthDesk, syncExperienceAfterWorkFre } from "@/lib/work-onboarding";
 import { requireLanAuth } from "@/lib/lan-auth";
 import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
 
@@ -41,7 +43,8 @@ export async function POST(
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const config = body.config && typeof body.config === "object" ? body.config : defaultFreConfig(appId);
+  const rawConfig = body.config && typeof body.config === "object" ? body.config : defaultFreConfig(appId);
+  const config = appId === "my-work" ? applyGrowthFromFre(rawConfig) : rawConfig;
 
   try {
     try {
@@ -59,6 +62,14 @@ export async function POST(
     if (appId === "my-capital") {
       await ensureBeginnerExperienceAfterCapitalFre().catch((err) => {
         console.warn("[app-fre] Capital beginner experience nudge failed:", err);
+      });
+    }
+    if (appId === "my-work") {
+      await syncExperienceAfterWorkFre(config).catch((err) => {
+        console.warn("[app-fre] Work experience sync failed:", err);
+      });
+      await bootstrapWorkGrowthDesk(config).catch((err) => {
+        console.warn("[app-fre] Work growth desk bootstrap failed:", err);
       });
     }
     return Response.json({ ok: true, state });

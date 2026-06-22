@@ -18,6 +18,7 @@ import { pushLeadNotesToNotion } from "@/lib/work-notion-client";
 import { sendSlackDigest } from "@/lib/work-slack-digest";
 import { notifySlackInterestedReply } from "@/lib/work-slack-notify";
 import { buildWorkGoLiveReport } from "@/lib/work-go-live";
+import { applyTemplatePack, MINI_SEQUENCE_PRESETS } from "@/lib/work-template-packs";
 import { handleWorkEmailReceipt } from "@/lib/work-receipt-handler";
 import { resolveAutoSendOnActivate, readWorkSendPolicy, type AutoSendPolicy } from "@/lib/work-send-policy";
 import {
@@ -474,6 +475,46 @@ export async function POST(request: Request): Promise<Response> {
       case "webhook_test": {
         const result = await emitWorkWebhook("lead.stage_changed", { test: true, leadId: body.leadId ?? "test" });
         return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "get_growth_profile": {
+        const status = await fetchWorkStatus();
+        return Response.json({ ok: true, growthProfile: status.growthProfile, status });
+      }
+
+      case "apply_template_pack": {
+        const packId = typeof (body as { packId?: string }).packId === "string"
+          ? (body as { packId: string }).packId
+          : "";
+        try {
+          const result = await applyTemplatePack(packId);
+          return Response.json({ ok: true, ...result, status: await fetchWorkStatus() });
+        } catch (err) {
+          const message = err instanceof Error ? err.message : "apply_template_pack failed";
+          return Response.json({ ok: false, error: message }, { status: 400 });
+        }
+      }
+
+      case "create_mini_sequence": {
+        const leadId = body.leadId ?? "";
+        const presetId = typeof (body as { presetId?: string }).presetId === "string"
+          ? (body as { presetId: string }).presetId
+          : MINI_SEQUENCE_PRESETS[0]?.id ?? "";
+        const lead = leadId ? await getLead(leadId) : null;
+        if (!lead) {
+          return Response.json({ ok: false, error: "Lead not found" }, { status: 400 });
+        }
+        const preset = MINI_SEQUENCE_PRESETS.find((p) => p.id === presetId) ?? MINI_SEQUENCE_PRESETS[0];
+        const seq = await createSequence({
+          name: `${preset.label} · ${lead.name}`,
+          leadId: lead.id,
+          steps: preset.steps.map((s) => ({
+            subject: s.subject,
+            body: s.body,
+            delayDays: s.delayDays,
+          })),
+        });
+        return Response.json({ ok: true, sequenceId: seq.id, status: await fetchWorkStatus() });
       }
 
       default:

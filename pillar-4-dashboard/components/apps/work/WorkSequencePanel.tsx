@@ -13,6 +13,8 @@ function statusClass(status: WorkSequence["status"]): string {
 interface WorkSequencePanelProps {
   sequences: WorkSequence[];
   selectedSequenceId: string;
+  showBranchingHint?: boolean;
+  sequenceLabel?: string;
   onSelect: (id: string) => void;
   onActivate: (id: string) => void;
   onPause: (id: string) => void;
@@ -23,6 +25,8 @@ interface WorkSequencePanelProps {
 export function WorkSequencePanel({
   sequences,
   selectedSequenceId,
+  showBranchingHint,
+  sequenceLabel = "Sequence",
   onSelect,
   onActivate,
   onPause,
@@ -35,11 +39,14 @@ export function WorkSequencePanel({
     <div className="space-y-2 font-mono text-xs">
       <div className="flex flex-wrap gap-2">
         <button type="button" onClick={onDraft} className="border border-cursor-glow px-2 py-0.5 text-[10px] uppercase text-cursor-glow">
-          Draft sequence
+          Draft {sequenceLabel.toLowerCase()}
         </button>
       </div>
+      {showBranchingHint ? (
+        <p className="text-[10px] text-muted">Reply intent tagging can branch follow-ups — tag in inbox triage.</p>
+      ) : null}
       {sequences.length === 0 ? (
-        <p className="text-[11px] text-muted">No sequences — draft one with the agent or tap Draft sequence.</p>
+        <p className="text-[11px] text-muted">No {sequenceLabel.toLowerCase()}s — draft one with the agent or tap Draft.</p>
       ) : (
         sequences.map((seq) => (
           <button

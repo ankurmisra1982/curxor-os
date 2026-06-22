@@ -1,5 +1,6 @@
 import type { OotbAppId } from "./ootb-apps";
 import type { ExperienceLevel } from "./experience-level";
+import type { GrowthLevel } from "./os-growth-level";
 
 /** @deprecated use ExperienceLevel from experience-level.ts */
 export type UiMode = "simple" | "expert";
@@ -24,6 +25,8 @@ export interface UserSettings {
     uiMode: UiMode;
     /** Canonical UX tier — drives progressive disclosure across all Claw apps. */
     experienceLevel: ExperienceLevel;
+    /** Optional Work Claw growth override (L1–L5). */
+    workGrowthLevel?: GrowthLevel | null;
     colorScheme: ColorScheme;
     themeMode: ThemeMode;
   };

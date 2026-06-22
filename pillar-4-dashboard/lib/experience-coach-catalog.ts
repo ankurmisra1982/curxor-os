@@ -46,7 +46,7 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "cc-studio-beginner",
           minLevel: "beginner",
           title: "Start with one post",
-          body: "Pick a channel, write a draft, generate a thumbnail, then schedule. Use the wizard button for a step-by-step flow.",
+          body: "Pick a channel, write a draft, generate a thumbnail, then schedule. Growth level: Maker (full leveling UX coming).",
         },
         {
           id: "cc-studio-standard",
@@ -345,8 +345,25 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "work-go-live-beginner",
           minLevel: "beginner",
-          title: "Go live checklist",
-          body: "Configure SMTP in digital.env, add a lead, create a sequence, then activate. Sequences auto-pause when a reply is detected.",
+          title: "Get set up",
+          body: "Complete the checklist: add an opportunity, try a message template, and run the demo tour. Email setup is optional at Explorer level.",
+        },
+        {
+          id: "work-go-live-l1",
+          minLevel: "beginner",
+          title: "Explorer desk",
+          body: "Focus on people waiting, tasks, and templates. No CRM jargon — simulated sends are safe without SMTP.",
+        },
+      ],
+    },
+    {
+      sectionId: "start-home",
+      tips: [
+        {
+          id: "work-start-home-l1",
+          minLevel: "beginner",
+          title: "Start home",
+          body: "People waiting shows unassigned mail. Pick a template pack for polished replies — templates also seed reminder tasks.",
         },
       ],
     },
@@ -356,8 +373,8 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "work-pipeline-beginner",
           minLevel: "beginner",
-          title: "Lead pipeline",
-          body: "Track stages from new → contacted → replied → qualified. All CRM data stays in /etc/curxor/work-queue.json on-appliance.",
+          title: "Opportunities",
+          body: "Track who you're talking to from new → contacted → replied. All data stays on-appliance in work-queue.json.",
         },
       ],
     },
@@ -599,7 +616,7 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "cap-go-live-beginner",
           minLevel: "beginner",
           title: "Go live checklist",
-          body: "Demo mode is fine without Alpaca keys — create a rule, arm it, execute locally. Add digital.env keys later for paper bridge fills.",
+          body: "Demo mode is fine without Alpaca keys — create a rule, arm it, execute locally. Growth level: Learner (full leveling UX coming).",
         },
         {
           id: "cap-demo-release",

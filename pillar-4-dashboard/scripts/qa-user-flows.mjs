@@ -155,6 +155,39 @@ await check("flow: work enrich mcp draft_reply", async () => {
   return draft.ok && typeof draft.json.body === "string";
 });
 
+await check("flow: work L1 opportunity draft_reply", async () => {
+  const email = `flow-l1-${Date.now()}@example.com`;
+  const create = await postJson("/api/work/status", {
+    action: "create_lead",
+    name: "Flow L1 Opportunity",
+    email,
+  });
+  if (!create.ok) return false;
+  const status = await getJson("/api/work/status");
+  const mailId = status.mailIndex?.[0]?.id;
+  if (!mailId) return true;
+  const draft = await postJson("/api/work/status", { action: "draft_reply", mailId });
+  return draft.ok && typeof draft.json.body === "string";
+});
+
+await check("flow: work L2 mini sequence", async () => {
+  const status = await getJson("/api/work/status");
+  const leadId = status.leads?.[0]?.id;
+  if (!leadId) return false;
+  const seq = await postJson("/api/work/status", {
+    action: "create_mini_sequence",
+    leadId,
+    presetId: "polite_followup",
+  });
+  return seq.ok && typeof seq.json.sequenceId === "string";
+});
+
+await check("flow: work growth profile", async () => {
+  const res = await postJson("/api/work/status", { action: "get_growth_profile" });
+  const gl = res.json.growthProfile?.growthLevel;
+  return res.ok && (gl === "L1" || gl === "L2" || gl === "L3" || gl === "L4" || gl === "L5");
+});
+
 await check("flow: vital status + webchat same app", async () => {
   const vital = await getJson("/api/vital/status");
   const chat = await postJson("/api/channels/webchat", {

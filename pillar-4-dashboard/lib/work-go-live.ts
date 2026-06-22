@@ -1,6 +1,8 @@
 import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
+import { buildWorkGrowthProfile } from "./work-growth";
+import { readUserSettings } from "./user-settings";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
 import { resolveAutoSendOnActivate } from "./work-send-policy";
 import { ensureWorkQueue, isWorkEmailBridgeConfigured } from "./work-store";
@@ -35,44 +37,60 @@ export interface WorkGoLiveReport {
 }
 
 export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
-  const [fre, file, bridgeConfigured, vault, autoSend] = await Promise.all([
+  const [fre, file, bridgeConfigured, vault, autoSend, settings] = await Promise.all([
     readAppFreState("my-work"),
     ensureWorkQueue(),
     isWorkEmailBridgeConfigured(),
     buildWorkConnectorHealthReport(),
     resolveAutoSendOnActivate(),
+    readUserSettings(),
   ]);
+
+  const growthProfile = buildWorkGrowthProfile(
+    fre.config,
+    settings.appearance.experienceLevel,
+    settings.appearance.workGrowthLevel ?? null,
+  );
+  const growth = growthProfile.growthLevel;
+  const isExplorer = growth === "L1";
+  const isProfessionalPlus = growth === "L4" || growth === "L5";
 
   const steps: WorkGoLiveStep[] = [];
 
   steps.push({
     id: "fre",
-    label: "Outreach desk configured",
+    label: isExplorer ? "Desk configured" : "Outreach desk configured",
     status: fre.initialized ? "complete" : "pending",
     detail: fre.initialized
       ? String(fre.config.workspaceName ?? "Outreach Desk")
-      : "Complete Outreach Claw setup wizard",
+      : isExplorer ? "Complete setup wizard" : "Complete Outreach Claw setup wizard",
   });
 
   const commsReady = vault.commsPathReady;
   steps.push({
     id: "comms_path",
-    label: "Comms path configured",
-    status: commsReady ? "complete" : "warning",
+    label: isExplorer ? "Messages connected (optional)" : "Comms path configured",
+    status: commsReady ? "complete" : isExplorer ? "optional" : "warning",
     detail: commsReady
       ? bridgeConfigured
         ? "SMTP bridge ready"
-        : "Demo mode — SMTP, Google, or IMAP when ready for live mail"
-      : "Configure SMTP, Google Workspace, or IMAP in connector vault",
+        : isExplorer
+          ? "Demo mode — connect email when ready"
+          : "Demo mode — SMTP, Google, or IMAP when ready for live mail"
+      : isExplorer
+        ? "Optional — add email in connector vault later"
+        : "Configure SMTP, Google Workspace, or IMAP in connector vault",
   });
 
   steps.push({
     id: "smtp",
-    label: "Email bridge ready",
-    status: bridgeConfigured ? "complete" : "warning",
+    label: isExplorer ? "Email setup (optional)" : "Email bridge ready",
+    status: bridgeConfigured ? "complete" : isExplorer ? "optional" : "warning",
     detail: bridgeConfigured
       ? "SMTP configured in digital.env"
-      : "Demo mode OK — set SMTP_HOST + SMTP_FROM when ready for live send",
+      : isExplorer
+        ? "Simulated sends work without SMTP"
+        : "Demo mode OK — set SMTP_HOST + SMTP_FROM when ready for live send",
   });
 
   steps.push({
@@ -87,17 +105,27 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
   const hasLead = file.leads.length > 0;
   steps.push({
     id: "lead",
-    label: "First lead in pipeline",
+    label: isExplorer ? "First opportunity added" : "First lead in pipeline",
     status: hasLead ? "complete" : "pending",
-    detail: hasLead ? `${file.leads.length} lead(s)` : "Add a lead or import prospects",
+    detail: hasLead
+      ? isExplorer
+        ? `${file.leads.length} ${file.leads.length === 1 ? "opportunity" : "opportunities"}`
+        : `${file.leads.length} lead(s)`
+      : isExplorer
+        ? "Add an opportunity or contact"
+        : "Add a lead or import prospects",
   });
 
   const hasSequence = file.sequences.length > 0;
   steps.push({
     id: "sequence",
-    label: "Sequence created",
-    status: hasSequence ? "complete" : "pending",
-    detail: hasSequence ? `${file.sequences.length} sequence(s)` : "Create a multi-step cold sequence",
+    label: isExplorer ? "Follow-up plan (optional)" : "Sequence created",
+    status: hasSequence ? "complete" : isExplorer ? "optional" : "pending",
+    detail: hasSequence
+      ? `${file.sequences.length} ${isExplorer ? "plan" : "sequence"}(s)`
+      : isExplorer
+        ? "Optional at Explorer level — use templates first"
+        : "Create a multi-step cold sequence",
   });
 
   const active = file.sequences.filter((s) => s.status === "active");
@@ -128,8 +156,8 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
   const complete = required.filter((s) => s.status === "complete").length;
   const freComplete = steps.find((s) => s.id === "fre")?.status === "complete";
   const hasSequenceActivity = hasSequence && (active.length > 0 || hasAnySend);
-  const demoReady = Boolean(freComplete && hasLead && hasSequenceActivity);
-  const liveReady = Boolean(bridgeConfigured && hasRealSend && freComplete);
+  const demoReady = Boolean(freComplete && hasLead && (isExplorer || hasSequenceActivity));
+  const liveReady = Boolean(bridgeConfigured && hasRealSend && freComplete && (isProfessionalPlus || !isExplorer));
   const ready = bridgeConfigured
     ? required.every((s) => s.status === "complete")
     : demoReady;

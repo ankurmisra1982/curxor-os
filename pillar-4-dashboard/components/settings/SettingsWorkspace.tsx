@@ -13,6 +13,7 @@ import {
   EXPERIENCE_LEVEL_LABELS,
   type ExperienceLevel,
 } from "@/lib/experience-level";
+import { GROWTH_LABELS, type GrowthLevel } from "@/lib/os-growth-level";
 import type { FrontierProvider } from "@/lib/frontier-providers";
 import { THEME_PRESETS } from "@/lib/theme-presets";
 import type { OotbAppId } from "@/lib/ootb-apps";
@@ -80,6 +81,7 @@ export function SettingsWorkspace() {
   const [codingProviderId, setCodingProviderId] = useState<string | null>(null);
   const [longContextProviderId, setLongContextProviderId] = useState<string | null>(null);
   const [apiKeyDraft, setApiKeyDraft] = useState("");
+  const [workGrowthLevel, setWorkGrowthLevel] = useState<GrowthLevel | "">("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -102,6 +104,7 @@ export function SettingsWorkspace() {
       setPlanningProviderId(data.settings.multiModel.planningProviderId);
       setCodingProviderId(data.settings.multiModel.codingProviderId);
       setLongContextProviderId(data.settings.multiModel.longContextProviderId);
+      setWorkGrowthLevel(data.settings.appearance.workGrowthLevel ?? "");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Load failed");
     } finally {
@@ -212,7 +215,13 @@ export function SettingsWorkspace() {
     setMessage(null);
     try {
       const data = await postJson<SettingsPayload>("/api/settings", {
-        appearance: { experienceLevel: level, uiMode: level === "expert" ? "expert" : "simple", colorScheme, themeMode },
+        appearance: {
+          experienceLevel: level,
+          uiMode: level === "expert" ? "expert" : "simple",
+          colorScheme,
+          themeMode,
+          workGrowthLevel: workGrowthLevel || null,
+        },
       });
       setSettings(data.settings);
       setMessage("Appearance saved.");
@@ -221,7 +230,7 @@ export function SettingsWorkspace() {
     } finally {
       setSaving(false);
     }
-  }, [level, colorScheme, themeMode]);
+  }, [level, colorScheme, themeMode, workGrowthLevel]);
 
   const connectProvider = useCallback(async () => {
     if (!frontierProviderId) {
@@ -648,6 +657,25 @@ export function SettingsWorkspace() {
                   Current: {levelLabel} — {levelDescription}
                   {isExpert ? " · Mesh telemetry visible." : ""}
                 </p>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Work Claw growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Outreach desk persona (Explorer → Executive). Leave default to use FRE persona.
+                </p>
+                <select
+                  value={workGrowthLevel}
+                  onChange={(e) => setWorkGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {GROWTH_LABELS["my-work"][g]}
+                    </option>
+                  ))}
+                </select>
               </section>
 
               <section>

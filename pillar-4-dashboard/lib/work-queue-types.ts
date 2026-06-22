@@ -199,4 +199,11 @@ export interface WorkQueueStatus {
   autoSendOnActivate?: boolean;
   autoSendDefault?: boolean;
   outboundKillSwitch?: boolean;
+  growthProfile?: {
+    growthLevel: string;
+    growthLabel: string;
+    growthIntent: string | null;
+    defaultTemplatePack: string | null;
+    organizingFirst: string | null;
+  };
 }

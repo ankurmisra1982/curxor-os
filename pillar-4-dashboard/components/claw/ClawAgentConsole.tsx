@@ -2,7 +2,7 @@
 
 
 
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 
 
@@ -11,6 +11,8 @@ import { useForgeAssistOptional } from "@/components/claw/ForgeAssistProvider";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 
 import { getAppAgent } from "@/lib/app-agent-catalog";
+import { resolveWorkGrowthLevel } from "@/lib/work-growth";
+import { workSkillVisible } from "@/lib/work-level-gates";
 
 import { skillActivityLine } from "@/lib/app-agent-types";
 
@@ -44,9 +46,18 @@ export interface ClawAgentConsoleProps {
 
 export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsoleProps) {
 
-  const agent = getAppAgent(appId);
+  const agentDef = getAppAgent(appId);
 
-  const { isExpert, isBeginner } = useExperienceLevel();
+  const { isExpert, isBeginner, level } = useExperienceLevel();
+
+  const agent = useMemo(() => {
+    if (appId !== "my-work") return agentDef;
+    const growth = resolveWorkGrowthLevel(config, level);
+    return {
+      ...agentDef,
+      skills: agentDef.skills.filter((s) => workSkillVisible(growth, s.id)),
+    };
+  }, [appId, agentDef, config, level]);
 
   const forge = useForgeAssistOptional();
 

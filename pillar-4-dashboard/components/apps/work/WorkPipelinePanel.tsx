@@ -1,6 +1,8 @@
 "use client";
 
+import type { GrowthLevel } from "@/lib/os-growth-level";
 import type { LeadStage, WorkLead } from "@/lib/work-queue-types";
+import { workTerm } from "@/lib/work-level-copy";
 
 const STAGES: LeadStage[] = ["new", "contacted", "replied", "qualified", "won", "lost"];
 
@@ -14,6 +16,7 @@ function stageClass(stage: LeadStage): string {
 interface WorkPipelinePanelProps {
   leads: WorkLead[];
   selectedLeadId: string;
+  growthLevel: GrowthLevel;
   onSelect: (id: string) => void;
   onStageChange: (leadId: string, stage: LeadStage) => void;
   onAddLead: () => void;
@@ -22,19 +25,25 @@ interface WorkPipelinePanelProps {
 export function WorkPipelinePanel({
   leads,
   selectedLeadId,
+  growthLevel,
   onSelect,
   onStageChange,
   onAddLead,
 }: WorkPipelinePanelProps) {
+  const singular = workTerm(growthLevel, "lead").toLowerCase();
+  const plural = workTerm(growthLevel, "leadPlural").toLowerCase();
+
   return (
     <div className="space-y-2 font-mono text-xs">
       <div className="flex justify-end">
         <button type="button" onClick={onAddLead} className="border border-cursor-glow px-2 py-0.5 text-[10px] uppercase text-cursor-glow">
-          + Lead
+          {workTerm(growthLevel, "addLead")}
         </button>
       </div>
       {leads.length === 0 ? (
-        <p className="text-[11px] text-muted">No leads yet — add one or ask Outreach Claw to draft a sequence.</p>
+        <p className="text-[11px] text-muted">
+          No {plural} yet — add one or ask Outreach Claw to draft a {workTerm(growthLevel, "sequence").toLowerCase()}.
+        </p>
       ) : (
         leads.map((lead) => (
           <button
@@ -56,6 +65,7 @@ export function WorkPipelinePanel({
               onClick={(e) => e.stopPropagation()}
               onChange={(e) => onStageChange(lead.id, e.target.value as LeadStage)}
               className={`border border-line bg-panel px-1 py-0.5 text-[10px] uppercase ${stageClass(lead.stage)}`}
+              aria-label={`${singular} stage`}
             >
               {STAGES.map((s) => (
                 <option key={s} value={s}>

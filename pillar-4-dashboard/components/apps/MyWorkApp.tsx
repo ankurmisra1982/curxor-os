@@ -1,18 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
-import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
 import { WorkApprovalPanel } from "@/components/apps/work/WorkApprovalPanel";
 import { WorkConnectorVaultPanel } from "@/components/apps/work/WorkConnectorVaultPanel";
+import { WorkExecutiveBriefPanel } from "@/components/apps/work/WorkExecutiveBriefPanel";
 import { WorkImportPanel } from "@/components/apps/work/WorkImportPanel";
 import { WorkInboxTriagePanel } from "@/components/apps/work/WorkInboxTriagePanel";
+import { WorkLevelBadge } from "@/components/apps/work/WorkLevelBadge";
+import { WorkLevelUpNudge } from "@/components/apps/work/WorkLevelUpNudge";
 import { WorkMailIndexPanel } from "@/components/apps/work/WorkMailIndexPanel";
+import { WorkMiniSequenceWizard } from "@/components/apps/work/WorkMiniSequenceWizard";
 import { WorkMorningBriefPanel } from "@/components/apps/work/WorkMorningBriefPanel";
 import { WorkOutboundPanel } from "@/components/apps/work/WorkOutboundPanel";
 import { WorkPipelineKanban } from "@/components/apps/work/WorkPipelineKanban";
@@ -21,6 +24,7 @@ import { WorkRecoveryPanel } from "@/components/apps/work/WorkRecoveryPanel";
 import { WorkSendPolicyPanel } from "@/components/apps/work/WorkSendPolicyPanel";
 import { WorkSequencePanel } from "@/components/apps/work/WorkSequencePanel";
 import { WorkSetupWizard } from "@/components/apps/work/WorkSetupWizard";
+import { WorkStartHomePanel } from "@/components/apps/work/WorkStartHomePanel";
 import {
   WorkWorkspaceTabs,
   defaultWorkTab,
@@ -28,6 +32,12 @@ import {
   type WorkWorkspaceTab,
 } from "@/components/apps/work/WorkWorkspaceTabs";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
+import type { GrowthLevel } from "@/lib/os-growth-level";
+import { isGrowthLevel } from "@/lib/os-growth-level";
+import { workTerm } from "@/lib/work-level-copy";
+import { workFeatureVisible } from "@/lib/work-level-gates";
+import { resolveWorkGrowthLevel } from "@/lib/work-growth";
+import { listTemplatePacksForGrowth } from "@/lib/work-template-packs-data";
 import type { LeadStage, OutboundSend, ReplyIntent, WorkQueueStatus } from "@/lib/work-queue-types";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
@@ -48,7 +58,8 @@ const BOOTSTRAP_ACTIONS = new Set([
   "slack_digest",
   "approve_send",
   "reject_send",
-  "enrich_lead",
+  "apply_template_pack",
+  "create_mini_sequence",
 ]);
 
 async function postWork(body: Record<string, unknown>) {
@@ -70,8 +81,22 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const { connected: motorUp } = useMotorStream();
   const { level } = useExperienceLevel();
 
-  const [workspaceTab, setWorkspaceTab] = useState<WorkWorkspaceTab>(() => defaultWorkTab(level));
+  const [workspaceTab, setWorkspaceTab] = useState<WorkWorkspaceTab>(() =>
+    defaultWorkTab(resolveWorkGrowthLevel(config, level)),
+  );
   const [status, setStatus] = useState<WorkQueueStatus | null>(null);
+
+  const growthLevel = useMemo((): GrowthLevel => {
+    const fromStatus = status?.growthProfile?.growthLevel;
+    if (fromStatus && isGrowthLevel(fromStatus)) return fromStatus;
+    return resolveWorkGrowthLevel(config, level);
+  }, [config, level, status?.growthProfile?.growthLevel]);
+
+  const templatePacks = useMemo(() => listTemplatePacksForGrowth(growthLevel), [growthLevel]);
+  const defaultPackId =
+    typeof config.defaultTemplatePack === "string"
+      ? config.defaultTemplatePack
+      : status?.growthProfile?.defaultTemplatePack ?? null;
   const [goLive, setGoLive] = useState<WorkGoLiveReportRow | null>(null);
   const [failedSends, setFailedSends] = useState<OutboundSend[]>([]);
   const [selectedLeadId, setSelectedLeadId] = useState("");
@@ -118,17 +143,17 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   }, [applyStatus]);
 
   useEffect(() => {
-    setWorkspaceTab(defaultWorkTab(level));
-  }, [level]);
+    setWorkspaceTab(defaultWorkTab(growthLevel));
+  }, [growthLevel]);
 
   useEffect(() => {
     void loadBootstrap();
-    if (level !== "beginner") {
+    if (workFeatureVisible(growthLevel, "recovery")) {
       void loadRecovery();
     }
     const id = setInterval(() => void loadStatus(), 30_000);
     return () => clearInterval(id);
-  }, [loadBootstrap, loadRecovery, loadStatus, level]);
+  }, [loadBootstrap, loadRecovery, loadStatus, growthLevel]);
 
   useEffect(() => {
     const lead = status?.leads.find((l) => l.id === selectedLeadId);
@@ -249,7 +274,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     }
   };
 
-  const show = (sectionId: string) => workSectionVisible(sectionId, workspaceTab);
+  const show = (sectionId: string) => workSectionVisible(sectionId, workspaceTab, growthLevel);
+  const addOpportunity = () => {
+    const name = prompt(`${workTerm(growthLevel, "lead")} name`);
+    const email = prompt("Email");
+    if (name && email) void action({ action: "create_lead", name, email });
+  };
   const goLiveChip =
     workspaceTab !== "start" && goLive
       ? goLive.liveReady
@@ -274,7 +304,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           {status?.outboundKillSwitch ? (
             <span className="ml-2 border border-red-400/50 px-1 uppercase text-red-400">kill switch</span>
           ) : null}
-          <ExperienceLevelBadge />
+          <WorkLevelBadge growthLevel={growthLevel} />
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
           <button
@@ -287,10 +317,19 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </div>
       </header>
 
-      <WorkWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} experienceLevel={level} />
+      <WorkWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} growthLevel={growthLevel} />
+
+      {workFeatureVisible(growthLevel, "level-up-nudge") && status?.stats ? (
+        <WorkLevelUpNudge growthLevel={growthLevel} stats={status.stats} />
+      ) : null}
 
       <div className="grid gap-4 md:grid-cols-4">
-        <AppMetric label="Pipeline" value={String(status?.stats.leadsInPipeline ?? "—")} unit="leads" highlight />
+        <AppMetric
+          label={workTerm(growthLevel, "pipeline")}
+          value={String(status?.stats.leadsInPipeline ?? "—")}
+          unit={workTerm(growthLevel, "leadPlural").toLowerCase()}
+          highlight
+        />
         <AppMetric label="Active Seq" value={String(status?.stats.activeSequences ?? "—")} unit="running" />
         <AppMetric
           label="Sends today"
@@ -300,6 +339,36 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <AppMetric label="Replies" value={String(status?.stats.repliesThisWeek ?? "—")} unit="this week" />
       </div>
 
+      {show("executive-brief") && status?.stats ? (
+        <WorkExecutiveBriefPanel growthLevel={growthLevel} stats={status.stats} />
+      ) : null}
+
+      {show("start-home") ? (
+        <ExperienceAppSection
+          appId="my-work"
+          sectionId="start-home"
+          minLevel="beginner"
+          title="Home"
+          subtitle={workTerm(growthLevel, "deskSubtitle")}
+        >
+          <WorkStartHomePanel
+            growthLevel={growthLevel}
+            mailIndex={status?.mailIndex ?? []}
+            tasks={status?.tasks ?? []}
+            templatePacks={templatePacks}
+            defaultPackId={defaultPackId}
+            onApplyPack={async (packId) => {
+              await postWork({ action: "apply_template_pack", packId });
+              await loadBootstrap();
+            }}
+            onAddOpportunity={addOpportunity}
+            onToggleTask={(taskId) => void action({ action: "toggle_task", taskId })}
+            showIntegrationsPeek={workFeatureVisible(growthLevel, "integrations-peek")}
+            onOpenIntegrations={() => setWorkspaceTab("integrations")}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
       {show("morning-brief") ? (
         <ExperienceAppSection appId="my-work" sectionId="morning-brief" minLevel="beginner" title="Morning brief" subtitle="Mail + calendar + tasks on mount">
           <WorkMorningBriefPanel />
@@ -307,7 +376,13 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("go-live") ? (
-        <ExperienceAppSection appId="my-work" sectionId="go-live" minLevel="beginner" title="Go Live" subtitle="Checklist before first outbound send">
+        <ExperienceAppSection
+          appId="my-work"
+          sectionId="go-live"
+          minLevel="beginner"
+          title={workTerm(growthLevel, "goLive")}
+          subtitle="Checklist before first outbound send"
+        >
           <WorkGoLivePanel
             report={goLive}
             onRefresh={() => void refreshGoLive()}
@@ -340,47 +415,75 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
       {show("pipeline") ? (
         <div className="grid gap-4 lg:grid-cols-2">
-          <ExperienceAppSection appId="my-work" sectionId="pipeline" minLevel="beginner" title="Lead pipeline" subtitle="CRM stages · local store">
+          <ExperienceAppSection
+            appId="my-work"
+            sectionId="pipeline"
+            minLevel="beginner"
+            title={workTerm(growthLevel, "pipeline")}
+            subtitle={`${workTerm(growthLevel, "crm")} · local store`}
+          >
             <WorkPipelinePanel
               leads={status?.leads ?? []}
               selectedLeadId={selectedLeadId}
+              growthLevel={growthLevel}
               onSelect={setSelectedLeadId}
               onStageChange={(leadId, stage: LeadStage) => void action({ action: "update_lead_stage", leadId, stage })}
-              onAddLead={() => {
-                const name = prompt("Lead name");
-                const email = prompt("Email");
-                if (name && email) void action({ action: "create_lead", name, email });
-              }}
+              onAddLead={addOpportunity}
             />
-            <div className="mt-3 border-t border-line/60 pt-3">
-              <p className="mb-2 font-mono text-[10px] uppercase text-muted">Kanban · drag to stage</p>
-              <WorkPipelineKanban
-                leads={status?.leads ?? []}
-                selectedLeadId={selectedLeadId}
-                onSelect={setSelectedLeadId}
-                onStageChange={(leadId, stage) => void action({ action: "update_lead_stage", leadId, stage })}
-              />
-            </div>
-            <div className="mt-3 border-t border-line/60 pt-3">
-              <WorkImportPanel
-                onImport={async (csv) => {
-                  const json = await postWork({ action: "import_leads", csv });
-                  await loadBootstrap();
-                  return {
-                    imported: (json as { imported?: number }).imported,
-                    skipped: (json as { skipped?: number }).skipped,
-                    error: json.error,
-                  };
-                }}
-              />
-            </div>
+            {workFeatureVisible(growthLevel, "kanban") ? (
+              <div className="mt-3 border-t border-line/60 pt-3">
+                <p className="mb-2 font-mono text-[10px] uppercase text-muted">Kanban · drag to stage</p>
+                <WorkPipelineKanban
+                  leads={status?.leads ?? []}
+                  selectedLeadId={selectedLeadId}
+                  onSelect={setSelectedLeadId}
+                  onStageChange={(leadId, stage) => void action({ action: "update_lead_stage", leadId, stage })}
+                />
+              </div>
+            ) : null}
+            {workFeatureVisible(growthLevel, "import") ? (
+              <div className="mt-3 border-t border-line/60 pt-3">
+                <WorkImportPanel
+                  onImport={async (csv) => {
+                    const json = await postWork({ action: "import_leads", csv });
+                    await loadBootstrap();
+                    return {
+                      imported: (json as { imported?: number }).imported,
+                      skipped: (json as { skipped?: number }).skipped,
+                      error: json.error,
+                    };
+                  }}
+                />
+              </div>
+            ) : null}
+            {workFeatureVisible(growthLevel, "mini-sequence") ? (
+              <div className="mt-3 border-t border-line/60 pt-3">
+                <p className="mb-2 font-mono text-[10px] uppercase text-muted">Mini-sequence wizard</p>
+                <WorkMiniSequenceWizard
+                  leadId={selectedLeadId}
+                  leadName={status?.leads.find((l) => l.id === selectedLeadId)?.name}
+                  onCreate={async (presetId) => {
+                    await postWork({ action: "create_mini_sequence", leadId: selectedLeadId, presetId });
+                    await loadBootstrap();
+                  }}
+                />
+              </div>
+            ) : null}
           </ExperienceAppSection>
 
           {show("sequences") ? (
-            <ExperienceAppSection appId="my-work" sectionId="sequences" minLevel="standard" title="Sequences" subtitle="Multi-step outbound · pause on reply">
+            <ExperienceAppSection
+              appId="my-work"
+              sectionId="sequences"
+              minLevel="standard"
+              title={workTerm(growthLevel, "sequence") + "s"}
+              subtitle="Multi-step outbound · pause on reply"
+            >
               <WorkSequencePanel
                 sequences={status?.sequences ?? []}
                 selectedSequenceId={selectedSequenceId}
+                sequenceLabel={workTerm(growthLevel, "sequence")}
+                showBranchingHint={workFeatureVisible(growthLevel, "reply-intent")}
                 onSelect={setSelectedSequenceId}
                 onActivate={(id) => void action({ action: "activate_sequence", sequenceId: id })}
                 onPause={(id) => void action({ action: "pause_sequence", sequenceId: id })}
@@ -448,7 +551,11 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
       {show("analytics") && status?.analytics ? (
         <ExperienceAppSection appId="my-work" sectionId="analytics" minLevel="standard" title="Outreach analytics" subtitle="Opens · replies · send limits · reply intent">
-          <WorkAnalyticsPanel analytics={status.analytics} sendPolicy={status.sendPolicy} />
+          <WorkAnalyticsPanel
+            analytics={status.analytics}
+            sendPolicy={status.sendPolicy}
+            lite={growthLevel === "L2"}
+          />
         </ExperienceAppSection>
       ) : null}
 
@@ -505,7 +612,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </ExperienceAppSection>
       ) : null}
 
-      {show("recovery") && level !== "beginner" ? (
+      {show("recovery") ? (
         <ExperienceAppSection appId="my-work" sectionId="recovery" minLevel="standard" title="Send recovery" subtitle="Retry failed bridge sends">
           <WorkRecoveryPanel
             failed={failedSends}
