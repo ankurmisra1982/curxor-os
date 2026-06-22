@@ -31,6 +31,8 @@ export interface GoLiveTodaySummary {
 export interface GoLiveReport {
   /** All required checklist steps complete — safe to publish on every FRE channel. */
   ready: boolean;
+  /** Day-one ready without bridge keys — FRE + scheduled or published post */
+  demoReady: boolean;
   /** FRE + first post done; bridges or public base may still need work. */
   partiallyReady: boolean;
   progress: { complete: number; total: number };
@@ -88,15 +90,17 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
           ? "complete"
           : readyCount > 0
             ? "warning"
-            : "pending",
+            : "warning",
     detail:
       enabledPlatforms.length === 0
         ? "No FRE channels to check"
         : bridgesAllReady
           ? `${readyCount}/${enabledPlatforms.length} ready`
-          : blocked.length > 0
-            ? `Fix: ${blocked.map((b) => platformLabel(b.platform)).join(", ")} — see Bridge Health`
-            : `${readyCount}/${enabledPlatforms.length} ready`,
+          : readyCount === 0
+            ? "Demo mode OK — add digital.env credentials when ready for live publish"
+            : blocked.length > 0
+              ? `Fix: ${blocked.map((b) => platformLabel(b.platform)).join(", ")} — see Bridge Health`
+              : `${readyCount}/${enabledPlatforms.length} ready`,
   });
 
   const needsPublicBase = channels.some((c) => MEDIA_PLATFORMS.has(c));
@@ -170,6 +174,8 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
       enabledPlatforms.length > 0,
   );
 
+  const demoReady = Boolean(freComplete && channels.length > 0 && firstPostComplete);
+
   const partiallyReady = Boolean(freComplete && firstPostComplete && !ready);
 
   const scheduled = queue.posts
@@ -182,6 +188,7 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
 
   return {
     ready,
+    demoReady,
     partiallyReady,
     progress: { complete, total: requiredSteps.length },
     steps,

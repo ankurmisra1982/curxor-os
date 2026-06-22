@@ -16,6 +16,7 @@
     "qa:wait": "node scripts/wait-for-server.mjs",
     "qa:local": "node scripts/qa-local.mjs",
     "qa:capital-checklist": "node scripts/capital-checklist.mjs",
+    "qa:creator-checklist": "node scripts/creator-checklist.mjs",
     "setup:capital-env": "node scripts/setup-capital-env.mjs",
     "configure:capital-keys": "node scripts/configure-capital-keys.mjs --open-signup-pages",
     "verify:exit-demo-scaffold": "node scripts/verify-exit-demo-scaffold.mjs",

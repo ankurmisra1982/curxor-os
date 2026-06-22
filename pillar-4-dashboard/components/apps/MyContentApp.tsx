@@ -156,6 +156,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [contentPlan, setContentPlan] = useState<ContentPlanReportRow | null>(null);
   const [signalItems, setSignalItems] = useState<SignalFeedItemRow[]>([]);
   const [goLive, setGoLive] = useState<GoLiveReportRow | null>(null);
+  const [demoTourRunning, setDemoTourRunning] = useState(false);
   const [growthBusy, setGrowthBusy] = useState(false);
   const [useDataDrivenSchedule, setUseDataDrivenSchedule] = useState(true);
   const [brandKitForm, setBrandKitForm] = useState<BrandKitFormState>({
@@ -688,6 +689,24 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     loadOps,
     loadExperiments,
   ]);
+
+  const runDemoTour = useCallback(() => {
+    setDemoTourRunning(true);
+    void fetch("/api/content/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "run_demo_tour" }),
+    })
+      .then(async (res) => {
+        const data = (await res.json()) as { ok?: boolean; postId?: string; error?: string; steps?: string[] };
+        if (data.postId) setSelected(data.postId);
+        pushToast(
+          data.ok ? "Demo tour complete · draft → schedule → simulated publish" : data.error ?? "Demo tour failed",
+        );
+        await loadBootstrap({ postId: data.postId });
+      })
+      .finally(() => setDemoTourRunning(false));
+  }, [loadBootstrap, pushToast]);
 
   /** Lightweight queue refresh — avoids ~12 API calls on the 30s poll. */
   const refreshQueue = useCallback(async () => {
@@ -1267,6 +1286,8 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             void loadStatus();
           }}
           onOpenWizard={() => setWizardOpen(true)}
+          onRunDemoTour={runDemoTour}
+          demoTourRunning={demoTourRunning}
         />
       </ExperienceAppSection>
 

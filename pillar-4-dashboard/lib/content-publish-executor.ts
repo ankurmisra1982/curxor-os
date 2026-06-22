@@ -2,13 +2,26 @@ import "server-only";
 
 import type { DigitalPublishResult } from "./mesh-publish";
 import { publishDigitalIntent } from "./mesh-publish";
-import { markPostSubmitted } from "./content-queue-store";
+import { markPostPublished, markPostSubmitted, getContentPost } from "./content-queue-store";
 import { markReplySubmitted } from "./content-replies-store";
 import { buildDigitalIntentForPost, buildDigitalIntentForReply } from "./content-publish-intents";
 import { recordBridgeFailure } from "./content-bridge-health-store";
-import { getContentPost } from "./content-queue-store";
 import { getContentReply } from "./content-replies-store";
 import { isPublishingPaused } from "./content-ops-controls";
+import { isPlatformBridgeConfigured } from "./content-channels-status";
+import type { SocialPlatformId } from "./social-channels";
+
+/** Demo-mode publish when platform bridge is not configured — local only, not sent to eno2. */
+async function simulateDemoPublish(postId: string): Promise<DigitalPublishResult & { postId: string }> {
+  const simId = `SIM-${postId.slice(-6)}`;
+  await markPostPublished(postId, "demo://local", simId);
+  return {
+    ok: true,
+    id: simId,
+    tool: "content.publish",
+    postId,
+  };
+}
 
 export async function publishPostToBridge(
   postId: string,
@@ -23,6 +36,11 @@ export async function publishPostToBridge(
       postId,
     };
   }
+  const post = await getContentPost(postId);
+  if (post && !(await isPlatformBridgeConfigured(post.platform as SocialPlatformId))) {
+    return simulateDemoPublish(postId);
+  }
+
   const digital = await buildDigitalIntentForPost(postId, config);
   if (!digital) {
     return {

@@ -1330,6 +1330,13 @@ export async function POST(request: Request): Promise<Response> {
       return Response.json({ ok: true, goLive: report });
     }
 
+    case "run_demo_tour": {
+      const { runContentDemoTour } = await import("@/lib/content-demo-tour");
+      const tour = await runContentDemoTour();
+      const status = await fetchContentStatus();
+      return Response.json({ ...tour, status });
+    }
+
     case "dashboard_bootstrap": {
       const { buildContentDashboardBootstrap } = await import("@/lib/content-dashboard-bootstrap");
       const anchor = typeof body.week === "string" ? new Date(body.week) : new Date();

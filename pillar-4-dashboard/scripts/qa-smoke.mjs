@@ -594,9 +594,15 @@ await check("content go_live checklist", async () => {
     ok &&
     json.goLive?.steps?.length >= 4 &&
     typeof json.goLive?.ready === "boolean" &&
+    typeof json.goLive?.demoReady === "boolean" &&
     typeof json.goLive?.partiallyReady === "boolean" &&
     json.goLive?.today?.recoveryCount !== undefined
   );
+});
+
+await check("content run_demo_tour", async () => {
+  const { ok, json } = await postJson("/api/content/status", { action: "run_demo_tour" });
+  return ok && json.ok === true && Array.isArray(json.steps) && json.steps.length >= 4 && json.postId;
 });
 
 await check("content recovery_list", async () => {

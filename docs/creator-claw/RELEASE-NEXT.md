@@ -127,7 +127,17 @@
 - **QA** — create · preflight · schedule · bootstrap smoke + creator user flow
 - **Operator guide** — [GETTING-STARTED.md](./GETTING-STARTED.md) · [DAY-ONE-SPRINT.md](./DAY-ONE-SPRINT.md)
 
-**New API actions:** `dashboard_bootstrap` · `recovery_list` · `recovery_retry` · `recovery_clear` · `content_plan` · `hashtag_intel` · `alt_text` · `signal_feed` · `go_live` · `POST /api/content/upload`
+**New API actions (v0.3.0):** `dashboard_bootstrap` · `recovery_list` · `recovery_retry` · `recovery_clear` · `content_plan` · `hashtag_intel` · `alt_text` · `signal_feed` · `go_live` · `POST /api/content/upload`
+
+**Creator Claw demo sprint (v0.3.1 — shipped)**
+- **Run demo tour** — `POST /api/content/status` `action: run_demo_tour` · `lib/content-demo-tour.ts`
+- **Simulated publish** — when bridge is unconfigured, `publish_now` marks `PUBLISHED` with `demo://local` (mirrors Capital simulated fill)
+- **Go Live `demoReady`** — FRE + scheduled/published post; bridges not required
+- **Go Live panel** — demo mode banner · **Run demo tour** button (mirrors Capital Claw)
+- **QA** — `scripts/creator-checklist.mjs` wired into `npm run qa:local` · `npm run qa:creator-checklist`
+- **Docs** — [STARTUP-GUIDE.md](./STARTUP-GUIDE.md) demo-first quick start
+
+**New API actions:** `run_demo_tour`
 
 ### Previously shipped (tier 1 + 2)
 - Metrics ingest, live + scheduled pull, reply bridges, campaigns entity, creation studio, calendar, webhooks, jobs worker, etc.

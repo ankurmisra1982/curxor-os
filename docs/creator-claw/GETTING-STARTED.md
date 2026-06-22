@@ -18,9 +18,13 @@ The **Go Live** panel at the top tracks:
 | Publish bridges ready | Add OAuth tokens to `/etc/curxor/digital.env` (see Bridge Health panel for missing keys) |
 | Public media URL | Set `CURXOR_CONTENT_PUBLIC_BASE` in `dashboard.env` if you publish to Instagram, Pinterest, or TikTok with local images |
 | Operator notifications | Optional but recommended: `CURXOR_APPROVAL_TELEGRAM_CHAT_IDS` for `/approve` and publish-failure alerts |
-| First post scheduled | Run **Creation Wizard** — Channel → Draft → Media → Pre-flight → Schedule |
+| First post scheduled | Run **Run demo tour**, **Creation Wizard**, or draft → schedule your first post |
+
+**Demo ready** (no bridge keys required): FRE complete + at least one post **scheduled or published**. Use **Run demo tour** in Go Live for a one-click path — draft → preflight → schedule → simulated publish (`demo://local`).
 
 **Ready to publish** requires every FRE-enabled bridge to be **ready** (not merely warning). **Partially ready** means your first post is scheduled but bridges or public media URL still need attention.
+
+See **[STARTUP-GUIDE.md](./STARTUP-GUIDE.md)** for demo-only policy and day-one quick start.
 
 The **Today** strip shows next scheduled post, pending approvals, failed publishes, and crisis pause state.
 
@@ -110,7 +114,8 @@ node scripts/capture-demo-screenshots.mjs
 All actions are available via `POST /api/content/status` with an `action` field. Examples:
 
 - `dashboard_bootstrap` — single load for Creator workspace (queue, Go Live, bridge health, calendar, approval)
-- `go_live` — checklist report
+- `go_live` — checklist report (`demoReady` · `ready` · `partiallyReady`)
+- `run_demo_tour` — one-click demo: create X post → preflight → schedule → simulated publish when bridges unconfigured
 - `create`, `update_draft`, `preflight_check`, `schedule`, `publish_now`, `publish`
 - `recovery_list`, `recovery_retry`
 - `attach` via `POST /api/content/upload` (multipart: `postId`, `kind`, `file`)

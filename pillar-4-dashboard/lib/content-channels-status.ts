@@ -75,3 +75,12 @@ export function resolvePublishTool(platform: SocialPlatformId): {
   if (!ch?.bridgeTool) return { tool: "content.publish_post", tier: "draft_only" };
   return { tool: ch.bridgeTool, tier: ch.bridgeTier };
 }
+
+/** True when live-bridge env keys for the platform are present in digital.env. */
+export async function isPlatformBridgeConfigured(platform: SocialPlatformId): Promise<boolean> {
+  const env = await loadDigitalEnv();
+  const ch = SOCIAL_CHANNELS.find((c) => c.id === platform);
+  if (!ch || ch.bridgeTier !== "live") return false;
+  if (ch.envKeys.length === 0) return false;
+  return ch.envKeys.every((k) => Boolean(env[k]?.trim()));
+}
