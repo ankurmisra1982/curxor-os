@@ -56,5 +56,13 @@
       "Broker scaffold — Webull/E*TRADE in digital.env.example; pillar-3 egress workers (Webull, E*TRADE, Robinhood MCP)",
       "GTM refresh — 03-capital-claw.png, demo:capture:capital; 122 smoke + exit-demo scaffold; tagged v0.3.4"
     ]
+  },
+  "0.3.5": {
+    "highlights": [
+      "Creator Claw demo sprint — run_demo_tour, demoReady Go Live, demo://local publish fallback, creator-checklist in qa:local",
+      "Outreach Claw demo parity — simulated SMTP send, skill refresh-only fix, work-checklist, STARTUP-GUIDE",
+      "Three-claw demo bar — Capital, Creator, Outreach share demo tour + checklist + STARTUP-GUIDE pattern",
+      "124 smoke + capital/creator/work checklists in qa:local; tagged v0.3.5"
+    ]
   }
 }
