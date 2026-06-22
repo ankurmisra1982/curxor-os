@@ -88,5 +88,13 @@
       "Excellence arc W13–W35 — threads/compose undo, HubSpot OAuth + activity timeline, outbound worker v1, team inbox lite, MCP confirm, OS brief + Cafe XP",
       "Demo + live paths — demoReady without SMTP, EXIT-DEMO + live-proof verifiers, 71-check work checklist in qa:local; tagged v0.6.2"
     ]
+  },
+  "0.6.3": {
+    "highlights": [
+      "The Forge day-one release — forged work-desk v2 with local lead pipeline, server-executed create_lead and draft_sequence skills, and per-desk work-queue on appliance",
+      "Persona demo tours L1/L4/L5 — Fabricator work-desk mint, ForgeLevelUpNudge, verify-forge-exit-demo-scaffold in qa:local",
+      "GTM assets — demo:capture:forge (30–32), forge-exit-walkthrough.webm, expanded forge-checklist and user flows",
+      "140+ smoke + forge excellence QA — forged desk E2E mint → lead → sequence; tagged v0.6.3"
+    ]
   }
 }

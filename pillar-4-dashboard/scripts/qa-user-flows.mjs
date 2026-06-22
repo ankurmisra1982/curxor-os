@@ -3,7 +3,10 @@
  * End-to-end user flow tests (API-level).
  * Usage: node scripts/qa-user-flows.mjs [baseUrl]
  */
+import { createQaHttp } from "./qa-http.mjs";
+
 const BASE = process.argv[2] ?? "http://127.0.0.1:3080";
+const { getJson, postJson } = createQaHttp(BASE);
 
 let pass = 0;
 let fail = 0;
@@ -21,23 +24,6 @@ async function check(name, fn) {
     console.log(`FAIL · ${name} (${err instanceof Error ? err.message : String(err)})`);
     fail++;
   }
-}
-
-async function postJson(path, body) {
-  const res = await fetch(`${BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
-  const json = await res.json().catch(() => ({}));
-  return { ok: res.ok, status: res.status, json };
-}
-
-async function getJson(path) {
-  const res = await fetch(`${BASE}${path}`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
 }
 
 console.log(`==> User flow QA · base=${BASE}\n`);
@@ -378,6 +364,45 @@ await check("flow: cafe_work_xp_smoke", async () => {
   await postJson("/api/work/status", { action: "xp_event_emit", kind: "sequence_activated" });
   const xp = await getJson("/api/work/xp");
   return xp.ok !== false && Array.isArray(xp.events) && xp.events.length >= 1 && xp.optOut !== true;
+});
+
+await check("flow: forge demo tour → go_live", async () => {
+  const tour = await postJson("/api/forge/status", { action: "run_demo_tour" });
+  if (!tour.ok || !tour.json.tour?.ok) return false;
+  const status = await getJson("/api/forge/status");
+  return status.goLive?.demoReady === true;
+});
+
+await check("flow: forge work desk mint lead sequence", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "User flow forged work desk",
+    templateId: "work-desk",
+    name: "Flow Forged Work",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const create = await postJson(`/api/forged/${appId}/status`, {
+    action: "create_lead",
+    name: "Flow Lead",
+    email: `flow-forge-${Date.now()}@example.com`,
+  });
+  if (!create.ok || !create.json.lead?.id) return false;
+  const draft = await postJson(`/api/forged/${appId}/status`, {
+    action: "draft_sequence",
+    leadId: create.json.lead.id,
+  });
+  return draft.ok && typeof draft.json.sequence?.id === "string";
+});
+
+await check("flow: forge L4 persona work desk tour", async () => {
+  const tour = await postJson("/api/forge/status", { action: "run_demo_tour", persona: "L4" });
+  return (
+    tour.ok &&
+    tour.json.tour?.ok === true &&
+    typeof tour.json.tour?.forgedHref === "string" &&
+    tour.json.tour.forgedHref.includes("/my-claw/")
+  );
 });
 
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);

@@ -4,15 +4,45 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+
+
 import { useRouter, useSearchParams } from "next/navigation";
 
 
 
-import { AppMetric, AppSection } from "@/components/app-shared/AppLayout";
+import { AppMetric } from "@/components/app-shared/AppLayout";
+
+import { ForgeFleetPanel } from "@/components/apps/forge/ForgeFleetPanel";
+
+import { ForgeGoLivePanel, type ForgeGoLiveReportRow } from "@/components/apps/forge/ForgeGoLivePanel";
+
+import { ForgeImportPanel } from "@/components/apps/forge/ForgeImportPanel";
+
+import { ForgeIntentPanel } from "@/components/apps/forge/ForgeIntentPanel";
+
+import { ForgeLevelBadge } from "@/components/apps/forge/ForgeLevelBadge";
+
+import { ForgeLevelUpNudge } from "@/components/apps/forge/ForgeLevelUpNudge";
+
+import { ForgeOpsPanel } from "@/components/apps/forge/ForgeOpsPanel";
+
+import { ForgeStacksPanel } from "@/components/apps/forge/ForgeStacksPanel";
+
+import { ForgeTemplatesPanel } from "@/components/apps/forge/ForgeTemplatesPanel";
+
+import {
+
+  ForgeWorkspaceTabs,
+
+  defaultForgeTab,
+
+  forgeTabsForGrowth,
+
+  type ForgeWorkspaceTab,
+
+} from "@/components/apps/forge/ForgeWorkspaceTabs";
 
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
-
-import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 
@@ -20,13 +50,41 @@ import { useForgeAssist } from "@/components/claw/ForgeAssistProvider";
 
 import { NewClawWizard } from "@/components/claw/NewClawWizard";
 
+import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+
 import { useVisionStream } from "@/hooks/useVisionStream";
 
 import type { ClawProfilesState } from "@/lib/claw-recommend";
 
+import type { ForgeFleetCounts, ForgeFleetEntry } from "@/lib/forge-fleet";
+
+import { resolveForgeGrowthLevel } from "@/lib/forge-growth";
+
+import type { ForgedAppRecord } from "@/lib/forged-apps-types";
+
+import type { GrowthLevel } from "@/lib/os-growth-level";
+
 import type { BudgetTier } from "@/lib/local-llm-catalog";
 
 import { getOotbApp } from "@/lib/ootb-apps";
+
+
+
+const EMPTY_COUNTS: ForgeFleetCounts = {
+
+  total: 0,
+
+  profiles: 0,
+
+  forgedApps: 0,
+
+  island: 0,
+
+  framework: 0,
+
+  imported: 0,
+
+};
 
 
 
@@ -42,25 +100,99 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
   const { frame, connected } = useVisionStream();
 
-  const fileRef = useRef<HTMLInputElement>(null);
+  const { level } = useExperienceLevel();
 
   const forge = useForgeAssist();
 
+
+
+  const [settingsGrowth, setSettingsGrowth] = useState<GrowthLevel | null>(null);
+
+  const growthLevel = resolveForgeGrowthLevel(config, level, settingsGrowth);
+
+  const [workspaceTab, setWorkspaceTab] = useState<ForgeWorkspaceTab>(() => defaultForgeTab(growthLevel));
+
   const [profiles, setProfiles] = useState<ClawProfilesState>({ claws: [], activeClawId: null });
 
-  const [budgetTier, setBudgetTier] = useState<BudgetTier>(
+  const [forgedApps, setForgedApps] = useState<ForgedAppRecord[]>([]);
 
-    (config.defaultBudget as BudgetTier) ?? "balanced",
+  const [fleet, setFleet] = useState<ForgeFleetEntry[]>([]);
 
-  );
+  const [fleetCounts, setFleetCounts] = useState<ForgeFleetCounts>(EMPTY_COUNTS);
+
+  const [goLive, setGoLive] = useState<ForgeGoLiveReportRow | null>(null);
+
+  const [cafeEventCount, setCafeEventCount] = useState(0);
+
+  const [inferenceBackend, setInferenceBackend] = useState("unknown");
+
+  const [demoTourRunning, setDemoTourRunning] = useState(false);
+
+  const [budgetTier, setBudgetTier] = useState<BudgetTier>((config.defaultBudget as BudgetTier) ?? "balanced");
+
+  const [embeddedWizardKey, setEmbeddedWizardKey] = useState(0);
 
 
 
-  const loadProfiles = useCallback(async () => {
+  useEffect(() => {
 
-    const res = await fetch("/api/claw/profiles", { cache: "no-store" });
+    void fetch("/api/settings", { cache: "no-store" })
 
-    if (res.ok) setProfiles((await res.json()) as ClawProfilesState);
+      .then((r) => (r.ok ? r.json() : null))
+
+      .then((data) => {
+
+        const g = data?.settings?.appearance?.forgeGrowthLevel;
+
+        if (g === "L1" || g === "L2" || g === "L3" || g === "L4" || g === "L5") {
+
+          setSettingsGrowth(g);
+
+        }
+
+      })
+
+      .catch(() => undefined);
+
+  }, []);
+
+
+
+  const loadForgeStatus = useCallback(async () => {
+
+    const res = await fetch("/api/forge/status", { cache: "no-store" });
+
+    if (!res.ok) return;
+
+    const data = (await res.json()) as {
+
+      profiles: ClawProfilesState;
+
+      forgedApps: ForgedAppRecord[];
+
+      fleet: ForgeFleetEntry[];
+
+      counts: ForgeFleetCounts;
+
+      goLive?: ForgeGoLiveReportRow;
+
+      cafeEvents?: unknown[];
+
+    };
+
+    setProfiles(data.profiles);
+
+    setForgedApps(data.forgedApps);
+
+    setFleet(data.fleet);
+
+    setFleetCounts(data.counts);
+
+    if (data.goLive) setGoLive(data.goLive);
+
+    setCafeEventCount(Array.isArray(data.cafeEvents) ? data.cafeEvents.length : 0);
+
+    setInferenceBackend(data.goLive?.inferenceBackend ?? "unknown");
 
   }, []);
 
@@ -68,9 +200,23 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
   useEffect(() => {
 
-    void loadProfiles();
+    void loadForgeStatus();
 
-  }, [loadProfiles]);
+  }, [loadForgeStatus]);
+
+
+
+  useEffect(() => {
+
+    setWorkspaceTab((prev) => {
+
+      const visible = forgeTabsForGrowth(growthLevel);
+
+      return visible.includes(prev) ? prev : defaultForgeTab(growthLevel);
+
+    });
+
+  }, [growthLevel]);
 
 
 
@@ -80,11 +226,43 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
     openedFromQuery.current = true;
 
+    setWorkspaceTab("mint");
+
     forge.openWizard();
 
     router.replace("/claw-forge", { scroll: false });
 
   }, [searchParams, forge.openWizard, router]);
+
+
+
+  const runDemoTour = useCallback(async () => {
+
+    setDemoTourRunning(true);
+
+    try {
+
+      await fetch("/api/forge/status", {
+
+        method: "POST",
+
+        headers: { "Content-Type": "application/json" },
+
+        body: JSON.stringify({ action: "run_demo_tour" }),
+
+      });
+
+      await loadForgeStatus();
+
+      setWorkspaceTab("fleet");
+
+    } finally {
+
+      setDemoTourRunning(false);
+
+    }
+
+  }, [loadForgeStatus]);
 
 
 
@@ -98,13 +276,25 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
     if (lastSkillId === "list_fleet") {
 
-      void loadProfiles();
+      setWorkspaceTab("fleet");
+
+      void loadForgeStatus();
+
+      return;
+
+    }
+
+    if (lastSkillId === "run_forge_demo_tour") {
+
+      void runDemoTour();
 
       return;
 
     }
 
     if (lastSkillId === "attach_vision") {
+
+      setWorkspaceTab("mint");
 
       forge.setLiveVision(true);
 
@@ -116,7 +306,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
     }
 
-  }, [skillTick, lastSkillId, loadProfiles, forge, frame?.previewBase64]);
+  }, [skillTick, lastSkillId, loadForgeStatus, forge, frame?.previewBase64, runDemoTour]);
 
 
 
@@ -142,6 +332,62 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
 
 
+  const onProvisioned = useCallback(() => {
+
+    forge.closeWizard();
+
+    forge.setIntent("");
+
+    void loadForgeStatus();
+
+    setWorkspaceTab("fleet");
+
+    setEmbeddedWizardKey((k) => k + 1);
+
+  }, [forge, loadForgeStatus]);
+
+
+
+  const exportFirstForged = useCallback(async () => {
+
+    const target = forgedApps[0]?.id ?? fleet.find((r) => r.forgedAppId)?.forgedAppId;
+
+    if (!target) return;
+
+    const res = await fetch("/api/claw/export", {
+
+      method: "POST",
+
+      headers: { "Content-Type": "application/json" },
+
+      body: JSON.stringify({ forgedAppId: target }),
+
+    });
+
+    if (!res.ok) return;
+
+    const data = (await res.json()) as { bundle?: unknown };
+
+    if (!data.bundle) return;
+
+    const blob = new Blob([JSON.stringify(data.bundle, null, 2)], { type: "application/json" });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = "forged-claw-export.json";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+  }, [forgedApps, fleet]);
+
+
+
   return (
 
     <div className="space-y-4 p-4">
@@ -151,15 +397,22 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
         <div>
 
           <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
+
             OOTB · {getOotbApp("claw-forge").name}
+
           </p>
 
           <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">Agent Factory</h1>
 
-          <p className="mt-1 font-mono text-[10px] text-muted">
+          <p className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10px] text-muted">
 
-            Forge Master · chat in agent panel · {profiles.claws.length} claws provisioned
-            <ExperienceLevelBadge />
+            <span>
+
+              Forge Master · {fleetCounts.total} fleet · {forgedApps.length} desks
+
+            </span>
+
+            <ForgeLevelBadge growthLevel={growthLevel} />
 
           </p>
 
@@ -169,7 +422,13 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
           type="button"
 
-          onClick={() => forge.openWizard({ intent: forge.intent, budgetTier })}
+          onClick={() => {
+
+            setWorkspaceTab("mint");
+
+            forge.openWizard({ intent: forge.intent, budgetTier, provisioningMode: forge.provisioningMode });
+
+          }}
 
           className="flex items-center gap-2 border border-cursor-glow bg-surface px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-cursor-glow shadow-cursor"
 
@@ -187,7 +446,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
       <div className="grid gap-4 md:grid-cols-3">
 
-        <AppMetric label="Fleet Size" value={String(profiles.claws.length)} unit="profiles" highlight />
+        <AppMetric label="Fleet Size" value={String(fleetCounts.total)} unit="entries" highlight />
 
         <AppMetric label="Active" value={profiles.activeClawId ?? "—"} unit="engine profile" />
 
@@ -197,161 +456,163 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
 
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <ExperienceAppSection
 
-        <ExperienceAppSection
-          appId="claw-forge"
-          sectionId="intent"
-          minLevel="beginner"
-          title="Intent Brief"
-          subtitle="Type mission · attach photo · or enable live vision before forging"
-        >
+        appId="claw-forge"
 
-          <textarea
+        sectionId="go-live"
 
-            value={forge.intent}
+        minLevel="beginner"
 
-            onChange={(e) => forge.setIntent(e.target.value)}
+        title="Go Live"
 
-            rows={4}
+        subtitle="Demo-ready checklist — mint on bare metal without cloud rent"
 
-            placeholder="> e.g. Sort retail packages on lane B with fast vision…"
+      >
 
-            className="w-full border border-line bg-void px-3 py-2 font-mono text-xs text-stark outline-none focus:border-cursor-glow"
+        <ForgeGoLivePanel
 
-          />
+          report={goLive}
 
-          <div className="mt-3 flex flex-wrap gap-2">
+          onRefresh={() => void loadForgeStatus()}
 
-            <button
+          onRunDemoTour={() => void runDemoTour()}
 
-              type="button"
+          demoTourRunning={demoTourRunning}
 
-              onClick={() => fileRef.current?.click()}
+        />
 
-              className="border border-line px-3 py-1.5 font-mono text-[10px] uppercase text-muted hover:text-cursor-glow"
+      </ExperienceAppSection>
 
-            >
 
-              Photo
 
-            </button>
+      <ForgeLevelUpNudge growthLevel={growthLevel} counts={fleetCounts} forgedDesks={forgedApps.length} />
 
-            <button
 
-              type="button"
 
-              onClick={() => {
+      <ForgeWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} growthLevel={growthLevel} />
 
-                const next = !forge.liveVision;
 
-                forge.setLiveVision(next);
 
-                if (next && frame?.previewBase64) {
+      {workspaceTab === "mint" ? (
 
-                  forge.setImagePreview(`data:image/jpeg;base64,${frame.previewBase64}`);
+        <div className="space-y-4">
 
-                }
+          <ForgeIntentPanel />
 
-              }}
+          <div className="min-h-[420px]">
 
-              className={`border px-3 py-1.5 font-mono text-[10px] uppercase ${
+            <NewClawWizard
 
-                forge.liveVision ? "border-cursor-glow text-cursor-glow" : "border-line text-muted"
+              key={embeddedWizardKey}
 
-              }`}
+              variant="embedded"
 
-            >
+              initialIntent={forge.wizardPrefill.intent ?? forge.intent}
 
-              Live vision
+              initialBudgetTier={forge.wizardPrefill.budgetTier ?? budgetTier}
 
-            </button>
+              initialImagePreview={forge.imagePreview}
 
-            <input
+              initialLiveVision={forge.liveVision}
 
-              ref={fileRef}
+              initialImageHint={forge.wizardPrefill.imageHint ?? null}
 
-              type="file"
+              onClose={() => {}}
 
-              accept="image/*"
-
-              className="hidden"
-
-              onChange={(e) => {
-
-                const f = e.target.files?.[0];
-
-                if (!f) return;
-
-                const r = new FileReader();
-
-                r.onload = () => forge.setImagePreview(r.result as string);
-
-                r.readAsDataURL(f);
-
-              }}
+              onCreated={onProvisioned}
 
             />
 
           </div>
 
-          {forge.imagePreview ? (
+        </div>
 
-            // eslint-disable-next-line @next/next/no-img-element
-
-            <img src={forge.imagePreview} alt="" className="mt-3 aspect-video w-full max-w-sm border border-line object-cover" />
-
-          ) : null}
-
-        </ExperienceAppSection>
+      ) : null}
 
 
 
-        <ExperienceAppSection
-          appId="claw-forge"
-          sectionId="fleet"
-          minLevel="standard"
-          title="Claw Fleet Registry"
-          subtitle="Provisioned bots · tap + to add another"
-        >
+      {workspaceTab === "fleet" ? (
 
-          {profiles.claws.length === 0 ? (
+        <ForgeFleetPanel
 
-            <p className="font-mono text-[11px] text-muted">No claws yet. Chat your intent or tap Forge Claw.</p>
+          fleet={fleet}
 
-          ) : (
+          counts={fleetCounts}
 
-            <ul className="space-y-2 font-mono text-xs">
+          activeClawId={profiles.activeClawId}
 
-              {profiles.claws.map((c) => (
+          onRefresh={() => void loadForgeStatus()}
 
-                <li
+          onMintAgain={() => setWorkspaceTab("mint")}
 
-                  key={c.id}
+        />
 
-                  className={`border px-3 py-2 ${profiles.activeClawId === c.id ? "border-cursor-glow bg-surface" : "border-line"}`}
+      ) : null}
 
-                >
 
-                  <div className="text-stark">{c.name}</div>
 
-                  <div className="text-[10px] text-muted">
+      {workspaceTab === "stacks" ? (
 
-                    {c.models.vision} · {c.budgetTier}
+        <ForgeStacksPanel budgetTier={budgetTier} onBudgetTierChange={setBudgetTier} />
 
-                  </div>
+      ) : null}
 
-                </li>
 
-              ))}
 
-            </ul>
+      {workspaceTab === "templates" ? (
 
-          )}
+        <ForgeTemplatesPanel
 
-        </ExperienceAppSection>
+          onSelectTemplate={(templateId) => {
 
-      </div>
+            forge.setProvisioningMode("framework");
+
+            forge.setTemplateId(templateId);
+
+            if (!forge.intent.trim()) {
+
+              forge.setIntent("Custom desk from template — describe your mission");
+
+            }
+
+            setWorkspaceTab("mint");
+
+            setEmbeddedWizardKey((k) => k + 1);
+
+          }}
+
+        />
+
+      ) : null}
+
+
+
+      {workspaceTab === "import" ? <ForgeImportPanel onImported={() => onProvisioned()} /> : null}
+
+
+
+      {workspaceTab === "ops" ? (
+
+        <ForgeOpsPanel
+
+          fleet={fleet}
+
+          counts={fleetCounts}
+
+          activeClawId={profiles.activeClawId}
+
+          inferenceBackend={inferenceBackend}
+
+          cafeEventCount={cafeEventCount}
+
+          onRefresh={() => void loadForgeStatus()}
+
+          onExportFleet={() => void exportFirstForged()}
+
+        />
+
+      ) : null}
 
 
 
@@ -373,15 +634,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
           onClose={() => forge.closeWizard()}
 
-          onCreated={() => {
-
-            forge.closeWizard();
-
-            forge.setIntent("");
-
-            void loadProfiles();
-
-          }}
+          onCreated={onProvisioned}
 
         />
 

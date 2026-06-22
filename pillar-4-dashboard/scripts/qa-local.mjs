@@ -7,7 +7,7 @@
  */
 import { spawn } from "node:child_process";
 import net from "node:net";
-import { rmSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,6 +28,7 @@ const env = {
   CURXOR_LLM_CREDENTIALS_PATH: path.join(DEV_QA, "llm-credentials.json"),
   CURXOR_CLAW_CONTEXT_PATH: path.join(DEV_QA, "claw-context.json"),
   CURXOR_FAMILY_PROFILES_PATH: path.join(DEV_QA, "family-profiles.json"),
+  CURXOR_HUMANOID_HUB_PATH: path.join(DEV_QA, "humanoid-hub.json"),
   CURXOR_VITAL_STATE_PATH: path.join(DEV_QA, "vital-health.json"),
   CURXOR_CONTENT_QUEUE_PATH: path.join(DEV_QA, "content-queue.json"),
   CURXOR_WORK_QUEUE_PATH: path.join(DEV_QA, "work-queue.json"),
@@ -42,6 +43,7 @@ const env = {
   CURXOR_CLAW_PROFILES_PATH: path.join(DEV_QA, "claw-profiles.json"),
   CURXOR_APP_FRE_DIR: path.join(DEV_QA, "app-fre"),
   CURXOR_AGENT_WORKSPACE_PATH: path.join(DEV_QA, "agent-workspace"),
+  CURXOR_FORGED_APPS_PATH: path.join(DEV_QA, "forged-apps.json"),
   CURXOR_SCHEDULER_PATH: path.join(DEV_QA, "scheduler", "jobs.json"),
   CURXOR_CHANNELS_PATH: path.join(DEV_QA, "channels"),
   CURXOR_CCP_CONSENT_PATH: path.join(DEV_QA, "ccp-consent.json"),
@@ -109,9 +111,16 @@ async function waitForServer(timeoutMs = 90_000) {
 async function main() {
   console.log(`==> CurXor local QA · port=${PORT}\n`);
 
+  const buildId = path.join(DASHBOARD, ".next", "BUILD_ID");
   if (rebuild) {
     console.log("==> Clean rebuild (.next)\n");
     rmSync(path.join(DASHBOARD, ".next"), { recursive: true, force: true });
+  }
+
+  if (rebuild || !existsSync(buildId)) {
+    console.log("==> Building production bundle (same as CI pillar-4-qa-smoke)\n");
+    const prepCode = await run("node", ["scripts/ci-prepare-qa.mjs"]);
+    if (prepCode !== 0) process.exit(prepCode);
     const buildCode = await run("npm", ["run", "build"]);
     if (buildCode !== 0) process.exit(buildCode);
   }
@@ -124,10 +133,9 @@ async function main() {
   }
 
   const npmCmd = process.platform === "win32" ? "npx.cmd" : "npx";
-  // Dev server — reliable for API smoke on Windows; CI uses production `next start` on Linux.
   const server = spawn(
     npmCmd,
-    ["next", "dev", "--hostname", "127.0.0.1", "--port", PORT],
+    ["next", "start", "--hostname", "127.0.0.1", "--port", PORT],
     {
       cwd: DASHBOARD,
       env,
@@ -162,6 +170,14 @@ async function main() {
       if (workExit !== 0) exitCode = workExit;
     }
     if (exitCode === 0) {
+      const forgeLevelsExit = await run("node", ["scripts/qa-forge-levels.mjs"]);
+      if (forgeLevelsExit !== 0) exitCode = forgeLevelsExit;
+    }
+    if (exitCode === 0) {
+      const forgeExit = await run("node", ["scripts/forge-checklist.mjs", BASE]);
+      if (forgeExit !== 0) exitCode = forgeExit;
+    }
+    if (exitCode === 0) {
       const levelsExit = await run("node", ["scripts/qa-work-levels.mjs", BASE]);
       if (levelsExit !== 0) exitCode = levelsExit;
     }
@@ -176,6 +192,10 @@ async function main() {
     if (exitCode === 0) {
       const workLiveProofExit = await run("node", ["scripts/verify-work-live-proof.mjs", BASE]);
       if (workLiveProofExit !== 0) exitCode = workLiveProofExit;
+    }
+    if (exitCode === 0) {
+      const forgeScaffoldExit = await run("node", ["scripts/verify-forge-exit-demo-scaffold.mjs", BASE]);
+      if (forgeScaffoldExit !== 0) exitCode = forgeScaffoldExit;
     }
     if (exitCode === 0) {
       const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);

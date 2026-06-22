@@ -1,7 +1,10 @@
 import "server-only";
 
 import { getAppAgent, type AgentSkill, type AppAgentDefinition } from "./app-agent-catalog";
-import type { AgentAssistRequest, AgentAssistResult } from "./app-agent-types";
+import { resolveAppAgent } from "./forged-agent-resolve";
+import type { ResolvedAppAgent } from "./forged-agent-catalog";
+import { isValidAppId, type OotbAppId } from "./ootb-apps";
+import { isForgedAppId, isWorkspaceAppId, type WorkspaceAppId } from "./workspace-app-id";
 import {
   chatCompletion,
   generateText,
@@ -9,10 +12,12 @@ import {
   parseJsonLoose,
 } from "./local-inference";
 import { chatCompletionRouted } from "./inference-router";
-import type { OotbAppId } from "./ootb-apps";
+import type { AgentAssistRequest, AgentAssistResult } from "./app-agent-types";
 import { appendMemory, buildWorkspacePromptBlock } from "./agent-runtime/workspace-store";
 import { buildSkillsPromptBlock, getResolvedAgent } from "./agent-runtime/skills-loader";
 import { buildContextPromptBlock } from "./claw-context-service";
+import { isPreviewApp, previewAgentPromptBlock } from "./claw-preview-apps";
+import { longevityPreviewReply, VITAL_LONGEVITY_DISCLAIMER } from "./vital-longevity-knowledge";
 
 export type { AgentAssistRequest, AgentAssistResult, AgentChatTurn } from "./app-agent-types";
 
@@ -29,6 +34,7 @@ const LLM_PLAN_SKILLS: Partial<Record<OotbAppId, string[]>> = {
   "my-shop": ["ingest_order"],
   "my-content-creator": ["draft_post"],
   "my-capital": ["create_rule", "arm_rule", "run_demo_tour", "execute_now", "portfolio_query", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade", "rebalance"],
+  "my-vital": ["update_protocol"],
 };
 
 function cfgStr(config: Record<string, unknown>, key: string, fallback: string): string {
@@ -40,14 +46,20 @@ function skillById(appId: OotbAppId, id: string, skills: AgentSkill[]): AgentSki
   return skills.find((s) => s.id === id);
 }
 
-async function buildAgentSystemPrompt(agent: AppAgentDefinition, appId: OotbAppId): Promise<string> {
+async function buildAgentSystemPrompt(
+  agent: AppAgentDefinition | ResolvedAppAgent,
+  appId: WorkspaceAppId,
+): Promise<string> {
   const resolved = await getResolvedAgent(appId);
   const skills = resolved.skills.map((s) => `${s.id}: ${s.label} — ${s.description}`).join("\n");
   const workspaceBlock = await buildWorkspacePromptBlock(appId);
   const skillsBlock = await buildSkillsPromptBlock(appId);
+  const previewBlock =
+    isValidAppId(appId) && isPreviewApp(appId) ? previewAgentPromptBlock(agent.agentName) : "";
   return `You are ${agent.agentName} on a sovereign CurXor appliance. ${agent.tagline}
 Purpose:
 ${agent.purpose.map((p) => `- ${p}`).join("\n")}
+${previewBlock}
 ${workspaceBlock}
 ${skillsBlock}
 Available skills (the operator must tap a skill button to execute — you cannot trade, publish, or call external APIs directly):
@@ -58,7 +70,7 @@ Rules:
 - Respond with JSON only: {"reply":"string","suggestedSkill":"skill_id_or_null"}`;
 }
 
-function isValidSuggestedSkill(agent: AppAgentDefinition, skillId: string | null | undefined): skillId is string {
+function isValidSuggestedSkill(agent: AppAgentDefinition | ResolvedAppAgent, skillId: string | null | undefined): skillId is string {
   if (!skillId) return false;
   return agent.skills.some((s) => s.id === skillId);
 }
@@ -67,13 +79,15 @@ async function tryLlmAgentChat(
   req: AgentAssistRequest,
   fallback: AgentAssistResult,
 ): Promise<AgentAssistResult | null> {
-  if (!LLM_CHAT_APPS.includes(req.appId)) return null;
+  if (!LLM_CHAT_APPS.includes(req.appId as OotbAppId) && !isForgedAppId(req.appId)) return null;
   if (!(await isLocalInferenceAvailable())) return null;
 
-  const agent = getAppAgent(req.appId);
-  const resolved = await getResolvedAgent(req.appId);
+  const agent = isForgedAppId(req.appId)
+    ? await resolveAppAgent(req.appId)
+    : getAppAgent(req.appId as OotbAppId);
+  const resolved = isWorkspaceAppId(req.appId) ? await getResolvedAgent(req.appId) : null;
   const message = req.message.trim();
-  if (!message) return null;
+  if (!message || !resolved) return null;
 
   const history = (req.history ?? []).slice(-8).map((t) => ({
     role: t.role,
@@ -84,8 +98,9 @@ async function tryLlmAgentChat(
   const profileId =
     req.profileId ??
     (typeof req.config?.selectedProfileId === "string" ? req.config.selectedProfileId : null);
-  const contextBlock = await buildContextPromptBlock(req.appId, profileId);
-  const systemContent = (await buildAgentSystemPrompt(agent, req.appId)) + contextBlock;
+  const contextBlock =
+    isValidAppId(req.appId) ? await buildContextPromptBlock(req.appId, profileId) : "";
+  const systemContent = (await buildAgentSystemPrompt(agent, req.appId as WorkspaceAppId)) + contextBlock;
   const messages = [
     { role: "system" as const, content: systemContent },
     ...history,
@@ -163,14 +178,40 @@ async function tryLlmPlanSkill(
     );
   }
 
+  if (appId === "my-vital" && skillId === "update_protocol") {
+    const focus = cfgStr(config, "longevityFocus", "metabolic");
+    const prompt =
+      message.trim() ||
+      `Suggest 3–4 longevity protocol steps for ${focus} focus — sleep, movement, nutrition, optional labs. Educational only.`;
+    return generateText(
+      "You are Vital Claw. Output concise protocol steps for local review — not medical advice. Reference evidence-based habits (sleep window, Zone 2, protein-forward meals).",
+      prompt,
+    );
+  }
+
   return null;
 }
 
-function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
-  const agent = getAppAgent(req.appId);
+function ruleBasedReply(req: AgentAssistRequest, agent: AppAgentDefinition | ResolvedAppAgent): AgentAssistResult {
   const config = req.config ?? {};
   const msg = req.message.trim().toLowerCase();
   const history = req.history ?? [];
+
+  if (isForgedAppId(req.appId)) {
+    if (!msg) {
+      return {
+        reply: `${agent.agentName} listening on your forged desk. Tap a skill or describe the next move.`,
+      };
+    }
+    const combined = `${history.map((h) => h.text).join(" ")} ${msg}`.toLowerCase();
+    const skill = agent.skills.find((s) => combined.includes(s.id.replace(/_/g, " ")));
+    if (skill) {
+      return { reply: `Ready to run **${skill.label}**. Tap the skill button to execute.`, suggestedSkill: skill.id };
+    }
+    return {
+      reply: `${agent.agentName}: noted. Use skills for explicit actions — chat stays local on your metal.`,
+    };
+  }
 
   if (!msg) {
     return {
@@ -203,30 +244,77 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
     case "my-shop":
       if (/margin|spread|sku|price|ord/.test(combined)) {
         return {
-          reply: "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
-          suggestedSkill: "sort_sku",
-          activity: "Arbitrage lane planned",
+          reply:
+            "Preview margin watch — local spread demo only. Tap Ingest Order for a brief or unlock Sort SKU at Flipper level.",
+          suggestedSkill: "ingest_order",
+          activity: "Margin watch (preview)",
         };
       }
       if (/ship|bin|ready|fulfill/.test(combined)) {
-        return { reply: "Marking order ready for eno2 fulfillment bridge. Tap Ship Bin to complete the pipeline.", suggestedSkill: "ship_bin" };
+        return {
+          reply: "Ship Bin is preview-only until L3 Operator — demo pipeline, no eno2 fulfillment egress yet.",
+          suggestedSkill: "ingest_order",
+        };
       }
       return {
-        reply: `${cfgStr(config, "storeName", "Arbitrage Desk")} pipeline idle. Ingest an order or name an ORD id to watch spread.`,
+        reply: `${cfgStr(config, "storeName", "Arbitrage Desk")} preview idle. Ingest Order is the demo skill at Scout level — no live marketplace.`,
         suggestedSkill: "ingest_order",
       };
 
     case "tesla-optimus-engine":
-      if (/feed|signal|alert|trigger|mention/.test(combined)) {
-        return { reply: "Signal feed armed. Tap Home Position to reset alert baselines.", suggestedSkill: "home_position" };
+      if (/pair|fleet|rover|mobile|arm|bluetooth|mesh|discover|wizard/.test(combined)) {
+        return {
+          reply: "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
+          suggestedSkill: "push_knowledge",
+        };
       }
-      if (/grip|grasp|hand/.test(combined)) {
-        return { reply: "Grip test uses current torque envelope. Tap Test Grip when ready.", suggestedSkill: "test_grip" };
+      if (/rule|teach|know|learn|house|guest|family|kin|remember|instruction/.test(combined)) {
+        return {
+          reply:
+            "Knowledge tab — add house rules, then tap Push Knowledge or the Push to mesh skill. Kin profiles teach who lives here.",
+          suggestedSkill: "push_knowledge",
+        };
       }
-      if (/torque|joint|slider/.test(combined)) {
-        return { reply: "Apply slider values to mesh with Tune Joint. Safety profile limits enforced locally.", suggestedSkill: "tune_joint" };
+      if (/routine|morning|quiet|welcome|schedule|daily/.test(combined)) {
+        return {
+          reply: "Routines tab — arm templates like morning welcome and guest arrival. They execute on pair day.",
+          suggestedSkill: "push_knowledge",
+        };
       }
-      return { reply: `Signal unit ${cfgStr(config, "unitId", "SIG-01")} linked. Adjust thresholds or run RL step.`, suggestedSkill: "rl_step" };
+      if (/name|call me|relationship|intro/.test(combined)) {
+        return {
+          reply: "Home tab — set robot name and what it calls you. Save relationship, then push knowledge to mesh.",
+          suggestedSkill: "push_knowledge",
+        };
+      }
+      if (/optimus|motor|mesh|grip|torque|joint|hardware|robot|control|move/.test(combined)) {
+        if (/grip|grasp|hand/.test(combined)) {
+          return {
+            reply: "Control tab · mesh preview. Grip test uses torque envelope — not live hardware until paired.",
+            suggestedSkill: "test_grip",
+          };
+        }
+        if (/torque|joint|slider/.test(combined)) {
+          return {
+            reply: "Control tab · tune sliders then Tune Joint. Preview only until your humanoid connects.",
+            suggestedSkill: "tune_joint",
+          };
+        }
+        return {
+          reply: "Control tab · Home Position is the safe preview homing skill. Pair day enables real motion.",
+          suggestedSkill: "home_position",
+        };
+      }
+      if (/sleep|health|vital|context|ccp|mesh|who/.test(combined)) {
+        return {
+          reply: "I read Kin + Vital from CCP locally. Push Knowledge packages that for robot memory on pair day.",
+          suggestedSkill: "sync_context",
+        };
+      }
+      return {
+        reply: `Humanoid Home Hub preview · ${cfgStr(config, "unitId", "Home Humanoid")}. Start on Home — teach rules in Knowledge — arm Routines.`,
+        suggestedSkill: "push_knowledge",
+      };
 
     case "robotaxi-fleet-manager":
       if (/assign|dispatch|send|route|workload/.test(combined)) {
@@ -239,7 +327,10 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
         return { reply: `Recalling to depot ${cfgStr(config, "depotGrid", "A1")}.`, suggestedSkill: "recall_vehicle" };
       }
       if (/latency|ping|health|uptime/.test(combined)) {
-        return { reply: "Ping Unit checks mesh RTT. RX-03 lowest latency in mock swarm.", suggestedSkill: "ping_unit" };
+        return { reply: "Ping Unit checks mesh RTT on the selected Claw.", suggestedSkill: "ping_unit" };
+      }
+      if (/forge|profile|mint|list/.test(combined)) {
+        return { reply: "Forge roster loads from claw-profiles.json — mint Claws in The Forge first.", suggestedSkill: "rebalance" };
       }
       return { reply: "Swarm grid active. Select a Claw unit or ask for rebalance.", suggestedSkill: "rebalance" };
 
@@ -371,6 +462,50 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
       }
       return { reply: "Capital Claw in paper mode. Ask about watchlist or create a new rule.", suggestedSkill: "create_rule" };
 
+    case "my-vital": {
+      const preview = longevityPreviewReply(combined);
+      if (preview) {
+        return {
+          reply: `${preview}\n\nOpen the Ask / Lab tab for more preview Q&A. ${VITAL_LONGEVITY_DISCLAIMER}`,
+          suggestedSkill: "ask_longevity",
+        };
+      }
+      if (/sync|wearable|oura|garmin|samsung|fitbit|whoop/.test(combined)) {
+        return {
+          reply: "Connect bridges on the Bridges tab, then tap Sync Wearables. Live pulls ship with eno2 health sync.",
+          suggestedSkill: "sync_wearables",
+        };
+      }
+      if (/protocol|update|sleep window|zone 2|nutrition step/.test(combined)) {
+        return {
+          reply: "Review Protocol tab or tap Update Protocol to regenerate steps locally from your FRE focus.",
+          suggestedSkill: "update_protocol",
+        };
+      }
+      if (/report|lab result|pdf|ingest/.test(combined)) {
+        return {
+          reply: "Medical reports stay in your on-box vault — use Ingest Report or the Reports tab at Optimizer level.",
+          suggestedSkill: "ingest_report",
+        };
+      }
+      if (/mesh|ccp|publish|optimus|kin|share health/.test(combined)) {
+        return {
+          reply: "Health context publishes to Claw Context only when you tap Publish — never auto-egress.",
+          suggestedSkill: "publish_context",
+        };
+      }
+      if (/sinclair|johnson|blueprint|don'?t die|attia|huberman|longevity|aging|nad|healthspan/.test(combined)) {
+        return {
+          reply: `Longevity Lab preview — ask about Sinclair, Blueprint / Don't Die, Attia, or general habits. Tap Ask Longevity or open the Lab tab. ${VITAL_LONGEVITY_DISCLAIMER}`,
+          suggestedSkill: "ask_longevity",
+        };
+      }
+      return {
+        reply: "Vital Claw preview — open Ask / Lab for longevity science, or ask about vitals, protocol, and bridges.",
+        suggestedSkill: "ask_longevity",
+      };
+    }
+
     case "claw-forge":
       if (/forge|create|deploy|provision|add/.test(combined)) {
         return { reply: "Intent captured. Tap + Forge Claw to open the provisioning wizard.", suggestedSkill: "forge_claw" };
@@ -390,15 +525,46 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
 
 export async function assistAppAgent(req: AgentAssistRequest): Promise<AgentAssistResult> {
   const config = req.config ?? {};
+  const agent = isForgedAppId(req.appId)
+    ? await resolveAppAgent(req.appId)
+    : getAppAgent(req.appId as OotbAppId);
 
   if (req.skillId) {
+    if (!isWorkspaceAppId(req.appId)) {
+      return { reply: "Unknown app.", activity: undefined };
+    }
     const resolved = await getResolvedAgent(req.appId);
-    const skill = skillById(req.appId, req.skillId, resolved.skills);
+    const skill = resolved.skills.find((s) => s.id === req.skillId);
     if (!skill) return { reply: "Unknown skill.", activity: undefined };
-    return runSkillReply(req.appId, req.skillId, config, skill, req.message);
+    if (isForgedAppId(req.appId)) {
+      return {
+        reply: `**${skill.label}** staged. Skill recorded locally on your forged desk.`,
+        suggestedSkill: skill.id,
+        activity: `Forged skill · ${skill.id}`,
+      };
+    }
+    return runSkillReply(req.appId as OotbAppId, req.skillId, config, skill, req.message);
   }
 
-  const fallback = ruleBasedReply(req);
+  if (req.appId === "robotaxi-fleet-manager" && req.message.trim()) {
+    const { readClawProfiles } = await import("./claw-profiles");
+    const { buildSwarmFleet } = await import("./swarm-fleet");
+    const { resolveSwarmDispatchPlan } = await import("./swarm-dispatch");
+    const profiles = await readClawProfiles();
+    const fleet = buildSwarmFleet(profiles.claws, config);
+    const plan = resolveSwarmDispatchPlan(req.message, config, fleet);
+    if (plan) {
+      return {
+        reply: plan.reply,
+        suggestedSkill: plan.skillId,
+        autoDispatchSkill: plan.autoDispatch,
+        dispatchHints: { ...plan.hints } as Record<string, unknown>,
+        activity: `[Swarm] ${plan.skillId}`,
+      };
+    }
+  }
+
+  const fallback = ruleBasedReply(req, agent);
 
   try {
     const llm = await tryLlmAgentChat(req, fallback);
@@ -417,6 +583,19 @@ async function runSkillReply(
   skill: AgentSkill,
   message: string,
 ): Promise<AgentAssistResult> {
+  if (appId === "my-vital" && skillId === "ask_longevity") {
+    const q = message.trim() || "What should I prioritize for longevity?";
+    const preview =
+      longevityPreviewReply(q) ??
+      longevityPreviewReply("longevity priority") ??
+      "Longevity Lab preview — personalized answers against your vitals ship soon. Try asking about Sinclair, Blueprint habits, or Zone 2 cardio.";
+    return {
+      reply: `${preview}\n\n${VITAL_LONGEVITY_DISCLAIMER}`,
+      activity: `[${skill.label}] preview Q&A`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
   if (appId === "my-content-creator" && skillId === "schedule_post") {
     const postId = cfgStr(config, "selectedPostId", "");
     if (!postId) {
@@ -602,6 +781,21 @@ async function runSkillReply(
       const msg = err instanceof Error ? err.message : String(err);
       return { reply: msg, activity: `[${skill.label}] error`, mesh: { kind: "plan", ok: false, error: msg } };
     }
+  }
+
+  if (appId === "robotaxi-fleet-manager" && skillId === "ping_unit") {
+    const unitId = cfgStr(config, "selectedUnitId", "");
+    if (!unitId) {
+      return { reply: "Select a unit in the fleet table before ping.", activity: "[Ping] no unit selected" };
+    }
+    const { pingSwarmUnitLatency } = await import("./swarm-mesh-ping");
+    const ping = await pingSwarmUnitLatency(unitId);
+    return {
+      reply: `Mesh RTT ${ping.rttMs}ms · source ${ping.source}${ping.motorSeq ? ` · motor seq ${ping.motorSeq}` : ""}.`,
+      activity: `[${skill.label}] ${ping.rttMs}ms (${ping.source})`,
+      mesh: { kind: "plan", ok: true },
+      dispatchHints: { selectedUnitId: unitId, lastPingRttMs: ping.rttMs, lastPingSource: ping.source },
+    };
   }
 
   if (skill.kind === "plan") {

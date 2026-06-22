@@ -2,7 +2,9 @@ import "server-only";
 
 import { getResolvedAgent } from "./agent-runtime/skills-loader";
 import { publishDigitalIntent, publishMotorCommand, type DigitalPublishResult, type MotorPublishResult } from "./mesh-publish";
+import { getForgedAppById } from "./forged-apps-store";
 import type { OotbAppId } from "./ootb-apps";
+import { isForgedAppId, type WorkspaceAppId } from "./workspace-app-id";
 
 export interface SkillMeshResult {
   executed: boolean;
@@ -34,7 +36,7 @@ function laneCoords(lane: string): { x: number; y: number; z: number } {
 }
 
 export async function executeSkillMesh(
-  appId: OotbAppId,
+  appId: WorkspaceAppId,
   skillId: string,
   config: Record<string, unknown>,
 ): Promise<SkillMeshResult> {
@@ -42,8 +44,19 @@ export async function executeSkillMesh(
   const skill = agent.skills.find((s) => s.id === skillId);
   if (!skill) return { executed: false, kind: "none", skipReason: "unknown skill" };
 
-  if (appId === "tesla-optimus-engine" && skillId === "sync_context") {
-    return { executed: false, kind: "plan", skipReason: "context sync via workspace or /api/mesh/context" };
+  if (isForgedAppId(appId)) {
+    const forged = await executeForgedAppSkill(appId, skillId, config);
+    if (forged) return forged;
+  }
+
+  if (appId === "tesla-optimus-engine" && (skillId === "sync_context" || skillId === "push_knowledge")) {
+    const { syncHumanoidKnowledgeToMesh } = await import("./humanoid-hub-store");
+    await syncHumanoidKnowledgeToMesh();
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: "Humanoid knowledge pushed to CCP hardware scope",
+    };
   }
 
   if (appId === "my-capital") {
@@ -54,6 +67,19 @@ export async function executeSkillMesh(
   if (appId === "my-work") {
     const work = await executeMyWorkSkill(skillId, config);
     if (work) return work;
+  }
+
+  if (appId === "claw-forge") {
+    const forge = await executeClawForgeSkill(skillId, config);
+    if (forge) return forge;
+  }
+
+  if (isForgedAppId(appId)) {
+    return {
+      executed: false,
+      kind: skill.kind === "plan" ? "plan" : "none",
+      skipReason: skill.kind === "plan" ? "local-only skill" : "forged desk — no mesh mapping",
+    };
   }
 
   if (skill.kind === "plan") {
@@ -232,6 +258,101 @@ async function executeMyWorkSkill(
       executed: true,
       kind: "digital",
       digital: { ok: true, id: out.send?.id ?? "", tool: "work.email.send" },
+    };
+  }
+  return null;
+}
+
+async function executeForgedAppSkill(
+  forgedAppId: string,
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  const record = await getForgedAppById(forgedAppId);
+  if (!record) return null;
+
+  if (record.templateId === "work-desk") {
+    const work = await executeForgedWorkSkill(forgedAppId, skillId, config);
+    if (work) return work;
+  }
+
+  if (skillId === "plan_day") {
+    return { executed: true, kind: "plan", skipReason: "Day priorities captured on forged desk." };
+  }
+  if (skillId === "publish_context") {
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: record.meshConnected
+        ? "Context publish noted — mesh opt-in active in FRE."
+        : "Enable mesh publish in FRE to share context with Master AI.",
+    };
+  }
+  return null;
+}
+
+async function executeForgedWorkSkill(
+  forgedAppId: string,
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  const {
+    upsertForgedLead,
+    createForgedSequence,
+    fetchForgedWorkStatus,
+  } = await import("./forged-work-store");
+
+  if (skillId === "create_lead") {
+    const name =
+      cfgStr(config, "selectedLeadName", "") ||
+      cfgStr(config, "leadName", "") ||
+      cfgStr(config, "name", "") ||
+      "New lead";
+    const email =
+      cfgStr(config, "selectedLeadEmail", "") ||
+      cfgStr(config, "leadEmail", "") ||
+      cfgStr(config, "email", "") ||
+      `lead-${Date.now()}@forged.local`;
+    const lead = await upsertForgedLead(forgedAppId, { name, email });
+    return { executed: true, kind: "plan", skipReason: `Lead created · ${lead.id} · ${lead.name}` };
+  }
+
+  if (skillId === "draft_sequence") {
+    let leadId = cfgStr(config, "selectedLeadId", "");
+    if (!leadId) {
+      const status = await fetchForgedWorkStatus(forgedAppId);
+      leadId = status.leads[0]?.id ?? "";
+    }
+    if (!leadId) {
+      return { executed: false, kind: "plan", skipReason: "Create a lead first — use panel or Create Lead skill." };
+    }
+    const seq = await createForgedSequence(forgedAppId, { leadId });
+    if (!seq) {
+      return { executed: false, kind: "plan", skipReason: "Lead not found for sequence draft." };
+    }
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Sequence drafted · ${seq.id} · ${seq.steps.length} steps`,
+    };
+  }
+
+  return null;
+}
+
+async function executeClawForgeSkill(
+  skillId: string,
+  _config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  if (skillId === "run_forge_demo_tour") {
+    const { runForgeDemoTour } = await import("./forge-demo-tour");
+    const tour = await runForgeDemoTour();
+    return {
+      executed: tour.ok,
+      kind: "plan",
+      skipReason: tour.ok
+        ? `Demo tour · ${tour.forgedHref ?? tour.profileId ?? "complete"} · ${tour.steps.join(" · ")}`
+        : tour.error ?? "Demo tour failed",
     };
   }
   return null;
@@ -639,7 +760,7 @@ async function buildDigitalIntent(
         return {
           tool: "health.sync_wearables",
           payload: {
-            sources: ["oura", "garmin", "apple_health"],
+            sources: ["oura", "garmin", "apple_health", "samsung_health"],
             profile_id: cfgStr(config, "selectedProfileId", ""),
           },
         };

@@ -57,11 +57,33 @@ Output: `docs/demo-pack/screenshots/` (+ `screenshots/creator/` for Creator Claw
 | `01-home.png` | `/home` | Landing hero, day-one story (includes recent conversations) |
 | `02-settings.png` | `/settings` | User freedom — Claws, intelligence, appearance |
 | `03-capital-claw.png` | `/my-capital` | Capital Claw desk (Setup Wizard · Analytics · Go Live) |
-| `04-forge.png` | `/claw-forge` | Create-to-earn |
+| `04-forge.png` | `/claw-forge` | Create-to-earn · Agent Factory |
 | `05-vital-claw.png` | `/my-vital` | Life & family — longevity desk |
 | `06-kin-claw.png` | `/my-family` | Life & family — household profiles |
 | `07-unified-inbox.png` | `/my-work` | Unified comms — Outreach Claw comms desk |
 | `08-creator-claw.png` | `/my-content` | Creator Claw — Go Live checklist + queue |
+
+### The Forge flows (screenshots/forge/)
+
+| File | Focus | Use |
+|------|-------|-----|
+| `30-forge-fleet.png` | Fleet registry | L2 Builder · unified profiles + desks |
+| `31-forge-templates.png` | Template catalog | L4 Fabricator · work-desk mint |
+| `32-forge-ops.png` | Foundry ops | L5 governance · inference + export |
+
+Capture Forge assets:
+
+```bash
+npm run demo:capture:forge
+# or: node scripts/capture-forge-demo.mjs --base http://127.0.0.1:3080
+```
+
+Record exit-demo walkthrough:
+
+```bash
+npm run demo:record:forge:exit
+# Output: pillar-4-dashboard/docs/demo-pack/forge-exit-walkthrough.webm
+```
 
 ### Creator Claw flows (screenshots/creator/)
 

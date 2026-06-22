@@ -3,7 +3,10 @@
  * Cross-platform dashboard QA smoke tests.
  * Usage: node scripts/qa-smoke.mjs [baseUrl]
  */
+import { createQaHttp } from "./qa-http.mjs";
+
 const BASE = process.argv[2] ?? "http://127.0.0.1:3080";
+const { getJson, postJson } = createQaHttp(BASE);
 
 let pass = 0;
 let fail = 0;
@@ -21,29 +24,6 @@ async function check(name, fn) {
     console.log(`FAIL · ${name} (${err instanceof Error ? err.message : String(err)})`);
     fail++;
   }
-}
-
-async function getJson(path) {
-  const res = await fetch(`${BASE}${path}`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
-
-async function postJson(path, body) {
-  const res = await fetch(`${BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
-  const text = await res.text();
-  let json;
-  try {
-    json = JSON.parse(text);
-  } catch {
-    json = { raw: text };
-  }
-  return { ok: res.ok, status: res.status, json, text };
 }
 
 console.log(`==> QA smoke · base=${BASE}\n`);
@@ -362,7 +342,34 @@ await check("capital plaid status", async () => {
 
 await check("capital intel meta providers", async () => {
   const data = await getJson("/api/capital/intel?meta=1");
-  return data.ok === true && Array.isArray(data.providers) && data.providers.length >= 5;
+  return (
+    data.ok === true &&
+    Array.isArray(data.providers) &&
+    data.providers.length >= 5 &&
+    typeof data.preferences?.moverSpikePct === "number"
+  );
+});
+
+await check("capital alpha feed", async () => {
+  const { ok, json } = await postJson("/api/capital/intel", { action: "alpha_feed" });
+  return ok && Array.isArray(json.feed);
+});
+
+await check("capital thesis journal", async () => {
+  const { ok, json } = await postJson("/api/capital/intel", {
+    action: "add_thesis",
+    ticker: "SPY",
+    body: "QA sovereign alpha thesis entry",
+  });
+  return ok && json.entry?.symbol === "SPY";
+});
+
+await check("capital pilot leaderboard", async () => {
+  const { ok, json } = await postJson("/api/capital/intel", {
+    action: "pilot_leaderboard",
+    window: "m1",
+  });
+  return ok && Array.isArray(json.rows) && json.rows.length >= 1;
 });
 
 await check("capital create_dip_rule", async () => {
@@ -647,6 +654,8 @@ await check("content dashboard_bootstrap", async () => {
     json.status?.posts &&
     json.goLive?.steps?.length >= 4 &&
     typeof json.goLive?.partiallyReady === "boolean" &&
+    json.growthProfile?.growthLevel &&
+    json.growthProfile?.growthLabel &&
     json.bridgeHealth?.platforms &&
     json.calendar?.days?.length === 7 &&
     json.studio
@@ -850,6 +859,105 @@ await check("claw assist", async () => {
   return typeof json.reply === "string" && json.reply.length > 0;
 });
 
+await check("forge workspace tab gates", async () => {
+  const order = { L1: 0, L2: 1, L3: 2, L4: 3 };
+  const meets = (user, req) => order[user] >= order[req];
+  const tabs = (g) => {
+    const out = ["mint"];
+    if (meets(g, "L2")) out.push("fleet");
+    if (meets(g, "L3")) out.push("stacks");
+    if (meets(g, "L4")) out.push("templates", "import");
+    return out;
+  };
+  return (
+    tabs("L1").length === 1 &&
+    tabs("L3").length === 3 &&
+    tabs("L4").length === 5 &&
+    tabs("L2").includes("fleet")
+  );
+});
+
+await check("cafe workspace tab gates", async () => {
+  const order = { L1: 0, L2: 1, L3: 2, L4: 3, L5: 4 };
+  const meets = (user, req) => order[user] >= order[req];
+  const tabs = (g) => {
+    const out = ["play", "progress"];
+    if (meets(g, "L2")) out.push("host");
+    return out;
+  };
+  return (
+    tabs("L1").length === 2 &&
+    tabs("L2").length === 3 &&
+    tabs("L2").includes("host") &&
+    !tabs("L1").includes("host")
+  );
+});
+
+await check("work xp route", async () => {
+  const data = await getJson("/api/work/xp");
+  return data.ok === true && Array.isArray(data.events);
+});
+
+await check("forged apps registry GET", async () => {
+  const data = await getJson("/api/claw/forged-apps");
+  return data.ok === true && Array.isArray(data.apps);
+});
+
+await check("forge status bootstrap", async () => {
+  const data = await getJson("/api/forge/status");
+  return (
+    data.ok === true &&
+    Array.isArray(data.fleet) &&
+    data.counts &&
+    typeof data.counts.total === "number" &&
+    Array.isArray(data.forgedApps)
+  );
+});
+
+await check("forge import rejects invalid bundle", async () => {
+  const { status, json } = await postJson("/api/claw/import", { bundle: { soul: "x" } });
+  return status === 400 && typeof json.error === "string";
+});
+
+await check("forge provision-app mints framework desk", async () => {
+  const { status, json } = await postJson("/api/claw/provision-app", {
+    intent: "QA smoke framework desk for sorting pipeline",
+    templateId: "blank-desk",
+    budgetTier: "balanced",
+  });
+  return status === 200 && json.ok === true && typeof json.href === "string" && json.forgedApp?.slug;
+});
+
+await check("forge create rejects framework mode", async () => {
+  const { status, json } = await postJson("/api/claw/create", {
+    intent: "test framework claw intent string",
+    provisioningMode: "framework",
+  });
+  return status === 400 && typeof json.error === "string" && /not available/i.test(json.error);
+});
+
+await check("forged work desk lead + sequence", async () => {
+  const { status, json } = await postJson("/api/claw/provision-app", {
+    intent: "QA smoke forged work desk pipeline",
+    templateId: "work-desk",
+    name: "QA Smoke Work Desk",
+    budgetTier: "balanced",
+  });
+  if (status !== 200 || !json.forgedApp?.id) return false;
+  const appId = json.forgedApp.id;
+  const create = await postJson(`/api/forged/${appId}/status`, {
+    action: "create_lead",
+    name: "Smoke Lead",
+    email: `smoke-${Date.now()}@forged.local`,
+  });
+  if (create.status !== 200 || !create.json.lead?.id) return false;
+  const draft = await postJson(`/api/forged/${appId}/status`, {
+    action: "draft_sequence",
+    leadId: create.json.lead.id,
+  });
+  return draft.status === 200 && draft.json.sequence?.id;
+});
+
 await check("mesh motor route", async () => {
   const { json } = await postJson("/api/mesh/motor", { x: 0.1, y: 0, z: 0.2 });
   return typeof json.ok === "boolean";
@@ -875,7 +983,12 @@ await check("claw profiles", async () => {
 
 await check("vital status", async () => {
   const data = await getJson("/api/vital/status");
-  return data.version === 1 && Array.isArray(data.protocol);
+  return (
+    data.version === 1 &&
+    Array.isArray(data.protocol) &&
+    data.growthProfile?.growthLevel &&
+    Array.isArray(data.reports)
+  );
 });
 
 await check("family profiles GET", async () => {
@@ -893,6 +1006,49 @@ await check("mesh context for optimus", async () => {
   return data.ok === true && typeof data.context === "object";
 });
 
+await check("humanoid fleet add unit", async () => {
+  const { ok, json } = await postJson("/api/humanoid/hub", {
+    action: "add_unit",
+    kind: "mobile",
+    displayName: "QA Rover",
+  });
+  return ok && json.fleetSummary?.total >= 2;
+});
+
+await check("humanoid pair wizard preview", async () => {
+  const hub = await getJson("/api/humanoid/hub");
+  const unitId = hub.primaryUnit?.id ?? hub.hub?.units?.[0]?.id;
+  if (!unitId) return false;
+  const start = await postJson("/api/humanoid/hub", { action: "start_pair", unitId });
+  if (!start.ok) return false;
+  for (let i = 0; i < 4; i++) {
+    const adv = await postJson("/api/humanoid/hub", { action: "advance_pair", unitId });
+    if (!adv.ok) return false;
+  }
+  const done = await postJson("/api/humanoid/hub", { action: "complete_pair", unitId });
+  return done.ok && done.json.hub?.units?.some((u) => u.id === unitId && u.pairedAt);
+});
+
+await check("humanoid hub GET", async () => {
+  const data = await getJson("/api/humanoid/hub");
+  return data.ok === true && data.readiness && Array.isArray(data.readiness.steps);
+});
+
+await check("humanoid hub push knowledge", async () => {
+  const { ok, json } = await postJson("/api/humanoid/hub", { action: "sync_knowledge" });
+  return ok && typeof json.hub?.lastKnowledgeSyncAt === "string";
+});
+
+await check("signal unified feed GET", async () => {
+  const data = await getJson("/api/signal/status");
+  return data.ok === true && Array.isArray(data.signals) && data.signals.length >= 1;
+});
+
+await check("signal unified feed list POST", async () => {
+  const { ok, json } = await postJson("/api/signal/status", { action: "list" });
+  return ok && Array.isArray(json.signals);
+});
+
 await check("mesh consent registry", async () => {
   const data = await getJson("/api/mesh/consent");
   return Array.isArray(data.consent?.entries) && data.consent.entries.length >= 1;
@@ -901,6 +1057,12 @@ await check("mesh consent registry", async () => {
 await check("agent workspace (capital)", async () => {
   const data = await getJson("/api/agent-workspace/my-capital");
   return data.ok === true && data.workspace?.app?.["SOUL.md"];
+});
+
+await check("agent workspace (creator)", async () => {
+  const data = await getJson("/api/agent-workspace/my-content-creator");
+  const soul = data.workspace?.app?.["SOUL.md"];
+  return data.ok === true && typeof soul === "string" && soul.includes("Creator Claw");
 });
 
 await check("scheduler GET", async () => {
@@ -950,13 +1112,11 @@ await check("settings multi-model POST", async () => {
 });
 
 await check("slack events url_verification", async () => {
-  const res = await fetch(`${BASE}/api/channels/slack/events`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type: "url_verification", challenge: "qa-challenge" }),
+  const { ok, json } = await postJson("/api/channels/slack/events", {
+    type: "url_verification",
+    challenge: "qa-challenge",
   });
-  const json = await res.json();
-  return json.challenge === "qa-challenge";
+  return ok && json.challenge === "qa-challenge";
 });
 
 await check("whatsapp webhook verify (GET)", async () => {
