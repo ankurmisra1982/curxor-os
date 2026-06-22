@@ -171,6 +171,24 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
       : "Set physicalAddress + optOutLine in setup wizard for live outbound",
   });
 
+  const suppressionCount = file.suppressionList?.length ?? 0;
+  const suppressionAck =
+    fre.config.suppressionAcknowledged === true || fre.config.suppressionAcknowledged === "true";
+  steps.push({
+    id: "suppression_ack",
+    label: "Suppression list reviewed",
+    status:
+      suppressionAck || suppressionCount === 0
+        ? "complete"
+        : meetsGrowthLevel(growth, "L4")
+          ? "warning"
+          : "optional",
+    detail:
+      suppressionCount > 0
+        ? `${suppressionCount} suppressed — acknowledge in Go Live or unblock in Deliverability`
+        : "No suppressions on file",
+  });
+
   const domainOk = deliverability.domainHealth === "healthy";
   steps.push({
     id: "domain_health",

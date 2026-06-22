@@ -166,10 +166,10 @@ W29 → W30 → W31 → W32 → W33 → W34 → W35
 
 **Acceptance**
 
-- [ ] Pre-send modal blocks activate when `physicalAddress` / `optOutLine` missing (L3+ live)
-- [ ] Warmup chart shows cap vs `sendsToday`
-- [ ] Operator can unblock suppressed email in UI
-- [ ] `work-checklist.mjs`: `pre_send_modal_block`, `suppression_unblock`, `warmup_chart_smoke`
+- [x] Pre-send modal blocks activate when `physicalAddress` / `optOutLine` missing (L3+ live)
+- [x] Warmup chart shows cap vs `sendsToday`
+- [x] Operator can unblock suppressed email in UI
+- [x] `work-checklist.mjs`: `pre_send_modal_block`, `suppression_unblock`, `warmup_chart_smoke`
 
 **Growth levels:** L3 summary · L4+ full panel.
 

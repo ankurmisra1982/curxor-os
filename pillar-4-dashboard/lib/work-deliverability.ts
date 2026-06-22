@@ -2,6 +2,7 @@ import "server-only";
 
 import { loadDigitalEnv } from "./digital-env";
 import { checkDnsDeliverability, type DnsDeliverabilityReport } from "./work-dns-deliverability";
+import { buildWarmupChartSeries, type WarmupChartDay } from "./work-warmup-chart";
 import type { OutboundSend, WorkSequence } from "./work-queue-types";
 
 const BOUNCE_RE = /\b(bounce|550|551|552|553|mailbox unavailable|user unknown|does not exist|rejected)\b/i;
@@ -24,6 +25,8 @@ export interface WorkDeliverabilitySummary {
   reputationLabel: "excellent" | "good" | "fair" | "at_risk";
   unsubscribeTokensActive: number;
   sequencesWithUnsubscribe: number;
+  warmupChart: WarmupChartDay[];
+  sendsToday: number;
 }
 
 function parseDomain(from: string | undefined): string | null {
@@ -123,6 +126,15 @@ export async function buildWorkDeliverabilitySummary(
     seq.steps.some((step) => step.body.includes("{{unsubscribe_url}}")),
   ).length;
 
+  const cap = warmupDailyCap && Number.isFinite(warmupDailyCap) ? warmupDailyCap : warmupMode ? 15 : null;
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const sendsToday = sends.filter((s) => {
+    if (s.status !== "sent" && s.status !== "simulated") return false;
+    const t = Date.parse(s.sentAt ?? s.createdAt);
+    return t >= todayStart.getTime();
+  }).length;
+
   return {
     fromAddress,
     domain,
@@ -146,5 +158,7 @@ export async function buildWorkDeliverabilitySummary(
     reputationLabel,
     unsubscribeTokensActive: unsubscribeTokenCount,
     sequencesWithUnsubscribe,
+    warmupChart: buildWarmupChartSeries(sends, cap, warmupMode),
+    sendsToday,
   };
 }

@@ -312,6 +312,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
     autoSendOnActivate,
     autoSendDefault: bridgeConfigured,
     outboundKillSwitch,
+    suppressionList: (file.suppressionList ?? []).slice(0, 25),
     growthProfile: {
       growthLevel: growthProfile.growthLevel,
       growthLabel: growthProfile.growthLabel,
@@ -698,6 +699,12 @@ export async function scanLocalMailQueue(): Promise<MailIndexEntry[]> {
       from: "notifications@calendar.local",
       subject: "Out of office until Monday",
       body: "I am away from email — automatic reply",
+      leadId: null,
+    },
+    {
+      from: "mailer-daemon@edgecompute.ai",
+      subject: "Undeliverable: CurXor pricing",
+      body: "Delivery failed for <bounce-probe@example.com> — 550 mailbox unavailable",
       leadId: null,
     },
   ];

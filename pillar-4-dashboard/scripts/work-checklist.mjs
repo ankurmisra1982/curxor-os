@@ -736,6 +736,42 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W31 — pre_send_modal_block
+{
+  const gate = await post("/api/work/status", { action: "pre_send_gate" });
+  const probe = await post("/api/work/status", { action: "check_activate_gate", assumeLive: true });
+  if (gate.ok && probe.ok && !gate.json.gate?.ok && probe.json.blocked === true) {
+    pass("pre_send_modal_block", probe.json.gate.missing?.join(",") ?? "blocked");
+  } else if (gate.ok && gate.json.gate?.ok) {
+    pass("pre_send_modal_block", "compliance ok — skip");
+  } else {
+    fail("pre_send_modal_block", `blocked=${probe.json?.blocked}`);
+  }
+}
+
+// W31 — suppression_unblock
+{
+  const email = `unblock-test-${Date.now()}@example.com`;
+  const add = await post("/api/work/status", { action: "add_suppression", email });
+  const remove = await post("/api/work/status", { action: "remove_suppression", email });
+  if (add.ok && remove.ok && remove.json.ok === true) {
+    pass("suppression_unblock", email);
+  } else {
+    fail("suppression_unblock", `removed=${remove.json?.ok}`);
+  }
+}
+
+// W31 — warmup_chart_smoke
+{
+  const { ok, json } = await post("/api/work/status", { action: "warmup_chart" });
+  if (ok && Array.isArray(json.series) && json.series.length === 14 && typeof json.sendsToday === "number") {
+    const today = json.series.find((row) => row.isToday);
+    pass("warmup_chart_smoke", `today ${today?.sent ?? 0}/${today?.cap ?? "—"}`);
+  } else {
+    fail("warmup_chart_smoke", `series=${json.series?.length}`);
+  }
+}
+
 // W30 — compose_send_live_status
 {
   const status = (await get("/api/work/status")).json;

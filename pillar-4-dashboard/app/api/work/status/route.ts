@@ -208,6 +208,16 @@ export async function POST(request: Request): Promise<Response> {
           return Response.json({ ok: false, error: "sequenceId required" }, { status: 400 });
         }
         const bridgeConfigured = await isWorkEmailBridgeConfigured();
+        if (bridgeConfigured) {
+          const { checkPreSendGate } = await import("@/lib/work-go-live");
+          const gate = await checkPreSendGate();
+          if (!gate.ok) {
+            return Response.json(
+              { ok: false, preSendBlocked: true, gate, error: `Pre-send gate: missing ${gate.missing.join(", ")}` },
+              { status: 422 },
+            );
+          }
+        }
         const autoSendEnabled = await resolveAutoSendOnActivate(bridgeConfigured);
         const sequence = await activateSequence(body.sequenceId);
         let autoSendPolicy: AutoSendPolicy = "deferred";
@@ -317,10 +327,19 @@ export async function POST(request: Request): Promise<Response> {
       case "scan_inbox": {
         const entries = await scanLocalMailQueue();
         const { pauseSequencesOnReply } = await import("@/lib/work-send-executor");
+        const { scanMailIndexForBounces, scanFailedSendsForSuppression } = await import("@/lib/work-suppression");
         for (const entry of entries.filter((e) => e.matchedReply && e.from)) {
           await pauseSequencesOnReply(entry.from, entry.replyIntent);
         }
-        return Response.json({ ok: true, indexed: entries.length, status: await fetchWorkStatus() });
+        const bounceSuppressed = await scanMailIndexForBounces(entries);
+        const failedSuppressed = await scanFailedSendsForSuppression();
+        return Response.json({
+          ok: true,
+          indexed: entries.length,
+          bounceSuppressed,
+          failedSuppressed,
+          status: await fetchWorkStatus(),
+        });
       }
 
       case "summarize_day": {
@@ -671,6 +690,36 @@ export async function POST(request: Request): Promise<Response> {
         const { checkPreSendGate } = await import("@/lib/work-go-live");
         const gate = await checkPreSendGate();
         return Response.json({ ok: true, gate, status: await fetchWorkStatus() });
+      }
+
+      case "check_activate_gate": {
+        const assumeLive = (body as { assumeLive?: boolean }).assumeLive === true;
+        const bridgeConfigured = assumeLive || (await isWorkEmailBridgeConfigured());
+        if (!bridgeConfigured) {
+          return Response.json({ ok: true, blocked: false, reason: "demo", status: await fetchWorkStatus() });
+        }
+        const { checkPreSendGate } = await import("@/lib/work-go-live");
+        const gate = await checkPreSendGate();
+        return Response.json({ ok: true, blocked: !gate.ok, gate, status: await fetchWorkStatus() });
+      }
+
+      case "warmup_chart": {
+        const status = await fetchWorkStatus();
+        const chart = status.deliverability?.warmupChart ?? [];
+        return Response.json({
+          ok: true,
+          series: chart,
+          sendsToday: status.deliverability?.sendsToday ?? status.sendPolicy.sendsToday,
+          cap: status.sendPolicy.effectiveDailyLimit,
+          status,
+        });
+      }
+
+      case "ack_suppression_review": {
+        const fre = await readAppFreState("my-work");
+        fre.config.suppressionAcknowledged = true;
+        await writeAppFreState("my-work", fre);
+        return Response.json({ ok: true, goLive: await buildWorkGoLiveReport(), status: await fetchWorkStatus() });
       }
 
       case "sync_hubspot": {

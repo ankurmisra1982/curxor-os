@@ -9,6 +9,8 @@ import { WorkAuditTimelinePanel } from "@/components/apps/work/WorkAuditTimeline
 import { WorkComposeStrip } from "@/components/apps/work/WorkComposeStrip";
 import { WorkCrmConflictPanel } from "@/components/apps/work/WorkCrmConflictPanel";
 import { WorkDeliverabilityPanel } from "@/components/apps/work/WorkDeliverabilityPanel";
+import { WorkPreSendModal } from "@/components/apps/work/WorkPreSendModal";
+import { WorkTrustCenterStrip } from "@/components/apps/work/WorkTrustCenterStrip";
 import { WorkNeedsYouPanel } from "@/components/apps/work/WorkNeedsYouPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
@@ -99,6 +101,8 @@ async function postWork(body: Record<string, unknown>) {
     goLive?: WorkGoLiveReportRow;
     failed?: OutboundSend[];
     error?: string;
+    preSendBlocked?: boolean;
+    gate?: { ok?: boolean; missing?: string[] };
   }>;
 }
 
@@ -148,6 +152,8 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [executiveBrief, setExecutiveBrief] = useState<WorkExecutiveBrief | null>(null);
   const [auditLog, setAuditLog] = useState<WorkAgentAuditEntry[]>([]);
   const [syncBadges, setSyncBadges] = useState<Record<string, "synced" | "conflict" | "local_only">>({});
+  const [preSendModal, setPreSendModal] = useState<{ sequenceId: string; missing: string[] } | null>(null);
+  const [suppressionBusy, setSuppressionBusy] = useState(false);
 
   const draftReplyForMail = useCallback((mailId: string, prompt?: string) => {
     void postWork({ action: "draft_reply", mailId, prompt }).then((json) => {
@@ -388,6 +394,20 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     return json;
   };
 
+  const activateSequence = async (sequenceId: string) => {
+    const json = await postWork({ action: "activate_sequence", sequenceId });
+    if (json.preSendBlocked) {
+      setPreSendModal({ sequenceId, missing: json.gate?.missing ?? [] });
+      setSignal("Pre-send gate — complete compliance in setup wizard");
+      return json;
+    }
+    if (json.status) applyStatus(json.status);
+    if (json.goLive) setGoLive(json.goLive);
+    await loadBootstrap();
+    setSignal("Sequence activated");
+    return json;
+  };
+
   const linkOAuth = async (provider: "google" | "notion" | "microsoft") => {
     const res = await fetch(`/api/work/${provider}`, {
       method: "POST",
@@ -564,6 +584,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onRefresh={() => void refreshGoLive()}
             onRunDemoTour={runDemoTour}
             onOpenSetupWizard={() => setWizardOpen(true)}
+            onAckSuppression={() =>
+              void postWork({ action: "ack_suppression_review" }).then((json) => {
+                if (json.goLive) setGoLive(json.goLive);
+                void loadBootstrap();
+              })
+            }
             demoTourRunning={demoTourRunning}
           />
         </ExperienceAppSection>
@@ -673,7 +699,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
                 sequenceLabel={workTerm(growthLevel, "sequence")}
                 showBranchingHint={workFeatureVisible(growthLevel, "reply-intent")}
                 onSelect={setSelectedSequenceId}
-                onActivate={(id) => void action({ action: "activate_sequence", sequenceId: id })}
+                onActivate={(id) => void activateSequence(id)}
                 onPause={(id) => void action({ action: "pause_sequence", sequenceId: id })}
                 onMarkReplied={(id) => void action({ action: "mark_replied", sequenceId: id })}
                 onDraft={() => void action({ action: "draft_sequence", leadId: selectedLeadId || undefined })}
@@ -808,10 +834,33 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           title="Deliverability"
           subtitle="Domain health · failures · send reputation"
         >
-          <WorkDeliverabilityPanel
-            deliverability={status.deliverability as Parameters<typeof WorkDeliverabilityPanel>[0]["deliverability"]}
+          <WorkTrustCenterStrip
+            outboundKillSwitch={status.outboundKillSwitch}
+            suppressionCount={status.suppressionList?.length ?? 0}
             bridgeConfigured={status.bridgeConfigured}
+            onToggleKillSwitch={() =>
+              void action({
+                action: "set_outbound_kill_switch",
+                outboundKillSwitch: !status.outboundKillSwitch,
+              })
+            }
           />
+          <div className="mt-3">
+            <WorkDeliverabilityPanel
+              deliverability={status.deliverability as Parameters<typeof WorkDeliverabilityPanel>[0]["deliverability"]}
+              bridgeConfigured={status.bridgeConfigured}
+              sendsToday={status.sendPolicy?.sendsToday}
+              effectiveDailyLimit={status.sendPolicy?.effectiveDailyLimit}
+              suppressed={status.suppressionList ?? []}
+              unblockBusy={suppressionBusy}
+              onUnblock={(email) => {
+                setSuppressionBusy(true);
+                void postWork({ action: "remove_suppression", email })
+                  .then(() => loadBootstrap())
+                  .finally(() => setSuppressionBusy(false));
+              }}
+            />
+          </div>
         </ExperienceAppSection>
       ) : null}
 
@@ -945,6 +994,12 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           void loadBootstrap();
           setSignal("Setup wizard complete");
         }}
+      />
+      <WorkPreSendModal
+        open={Boolean(preSendModal)}
+        missing={preSendModal?.missing ?? []}
+        onClose={() => setPreSendModal(null)}
+        onOpenSetupWizard={() => setWizardOpen(true)}
       />
     </div>
   );

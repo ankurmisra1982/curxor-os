@@ -52,6 +52,36 @@ export async function removeSuppression(email: string): Promise<boolean> {
   return true;
 }
 
+const BOUNCE_MAIL_RE =
+  /\b(undeliverable|delivery failed|mail delivery failed|returned mail|failure notice|delivery status notification|550 |553 |mailbox unavailable|user unknown)\b/i;
+
+function extractBounceRecipient(subject: string, snippet: string, from: string): string | null {
+  const text = `${subject} ${snippet}`;
+  const angle = text.match(/<([^>\s]+@[^>\s]+)>/);
+  if (angle?.[1]) return angle[1].toLowerCase();
+  const bare = text.match(/\b([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})\b/i);
+  if (bare?.[1] && !bare[1].includes("mailer-daemon")) return bare[1].toLowerCase();
+  if (from.includes("@") && !from.includes("mailer-daemon")) return from.trim().toLowerCase();
+  return null;
+}
+
+export async function scanMailIndexForBounces(
+  entries: Array<{ from: string; subject: string; snippet: string }>,
+): Promise<number> {
+  let added = 0;
+  for (const entry of entries) {
+    const text = `${entry.subject} ${entry.snippet}`;
+    if (!BOUNCE_MAIL_RE.test(text)) continue;
+    const email = extractBounceRecipient(entry.subject, entry.snippet, entry.from);
+    if (!email) continue;
+    const prior = await isEmailSuppressed(email);
+    if (prior) continue;
+    await addSuppression(email, entry.subject.slice(0, 120), "bounce");
+    added += 1;
+  }
+  return added;
+}
+
 export async function scanFailedSendsForSuppression(): Promise<number> {
   const file = await ensureWorkQueue();
   let added = 0;

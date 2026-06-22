@@ -118,15 +118,20 @@
 - [x] **W30** — Inbox pro: compose undo window, snooze return, reply parser, home/triage strip alignment, `undo_send` / `clear_snooze` / `finalize_send`
 - [x] Work checklist **60/60**
 
+## Shipped (Phase 3 excellence W31 — v0.5.4)
+
+- [x] **W31** — Deliverability operator UI: pre-send modal gate, warmup chart, suppression unblock, trust center strip, Go Live suppression ack, bounce scan on scan_inbox
+- [x] Work checklist **63/63**
+
 ## Next
 
-**Phase 3 excellence arc (W31–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
+**Phase 3 excellence arc (W32–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
 
 | Sprint | Focus | Target tag |
 |--------|--------|------------|
 | W29 | Live proof GTM + EXIT-DEMO video | v0.5.2 ✓ |
 | W30 | Inbox pro (live send, undo, snooze return) | v0.5.3 ✓ |
-| W31 | Deliverability operator UI | v0.5.4 |
+| W31 | Deliverability operator UI | v0.5.4 ✓ |
 | W32–W33 | Outbound worker + team lite | v0.6.0 |
 | W34 | HubSpot OAuth + activity timeline | v0.6.1 |
 | W35 | OS moat + Cafe XP + governance UI | v0.6.2 |

@@ -44,10 +44,18 @@ interface WorkGoLivePanelProps {
   onRefresh: () => void;
   onRunDemoTour?: () => void;
   onOpenSetupWizard?: () => void;
+  onAckSuppression?: () => void;
   demoTourRunning?: boolean;
 }
 
-export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, onOpenSetupWizard, demoTourRunning }: WorkGoLivePanelProps) {
+export function WorkGoLivePanel({
+  report,
+  onRefresh,
+  onRunDemoTour,
+  onOpenSetupWizard,
+  onAckSuppression,
+  demoTourRunning,
+}: WorkGoLivePanelProps) {
   if (!report) {
     return <p className="font-mono text-[10px] text-muted">Loading go-live checklist…</p>;
   }
@@ -55,6 +63,7 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, onOpenSetupW
   const { steps, progress, ready, partiallyReady, demoReady, liveReady, today } = report;
   const smtpStep = steps.find((s) => s.id === "smtp");
   const domainStep = steps.find((s) => s.id === "domain_health");
+  const suppressionStep = steps.find((s) => s.id === "suppression_ack");
   const demoRelease = smtpStep?.status === "warning" && !ready;
 
   const label = ready
@@ -167,6 +176,19 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, onOpenSetupW
             {domainStep.status}
           </p>
           <p className="text-muted truncate">{domainStep.detail}</p>
+        </div>
+      ) : null}
+      {suppressionStep?.status === "warning" && onAckSuppression ? (
+        <div className="border border-amber-400/40 px-2 py-2">
+          <p className="text-amber-400 uppercase">Suppression review</p>
+          <p className="mt-1 text-muted">{suppressionStep.detail}</p>
+          <button
+            type="button"
+            onClick={onAckSuppression}
+            className="mt-2 border border-line px-2 py-0.5 uppercase text-muted hover:text-stark"
+          >
+            Acknowledge suppression list reviewed
+          </button>
         </div>
       ) : null}
       <ul className="space-y-1">

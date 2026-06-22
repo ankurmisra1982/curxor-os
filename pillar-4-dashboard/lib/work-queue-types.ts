@@ -238,6 +238,7 @@ export interface WorkQueueStatus {
   autoSendOnActivate?: boolean;
   autoSendDefault?: boolean;
   outboundKillSwitch?: boolean;
+  suppressionList?: Array<{ email: string; reason: string; at: string; source: "bounce" | "failed" | "manual" }>;
   growthProfile?: {
     growthLevel: string;
     growthLabel: string;
@@ -263,5 +264,7 @@ export interface WorkQueueStatus {
     unsubscribeTokensActive: number;
     sequencesWithUnsubscribe: number;
     recentFailures: Array<{ sendId: string; to: string; subject: string; error: string }>;
+    warmupChart?: Array<{ dayIndex: number; label: string; cap: number; sent: number; isToday: boolean }>;
+    sendsToday?: number;
   };
 }
