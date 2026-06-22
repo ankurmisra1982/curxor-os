@@ -103,6 +103,32 @@ export const CAPITAL_MCP_TOOLS: McpToolDef[] = [
     safety: "read",
     inputSchema: { type: "object", properties: {} },
   },
+  {
+    name: "query_portfolio",
+    description: "Natural-language portfolio Q&A — exposure, health, armed rules, pending",
+    safety: "read",
+    inputSchema: {
+      type: "object",
+      properties: { query: { type: "string" } },
+      required: ["query"],
+    },
+  },
+  {
+    name: "get_go_live_report",
+    description: "Go Live checklist — demoReady, paperReady, step progress",
+    safety: "read",
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
+    name: "walk_forward_backtest",
+    description: "Walk-forward backtest for a rule by id",
+    safety: "read",
+    inputSchema: {
+      type: "object",
+      properties: { ruleId: { type: "string" } },
+      required: ["ruleId"],
+    },
+  },
 ];
 
 export async function invokeCapitalMcpTool(
@@ -191,6 +217,26 @@ export async function invokeCapitalMcpTool(
       }
       case "get_plaid_status": {
         return { ok: true, content: await getPlaidStatus() };
+      }
+      case "query_portfolio": {
+        const query = String(args.query ?? "").trim();
+        if (!query) return { ok: false, content: null, error: "query required" };
+        const status = await fetchCapitalStatus();
+        const { answerPortfolioQuery } = await import("./capital-nl-query");
+        return { ok: true, content: answerPortfolioQuery(query, status) };
+      }
+      case "get_go_live_report": {
+        const { buildCapitalGoLiveReport } = await import("./capital-go-live");
+        return { ok: true, content: await buildCapitalGoLiveReport() };
+      }
+      case "walk_forward_backtest": {
+        const ruleId = String(args.ruleId ?? "").trim();
+        if (!ruleId) return { ok: false, content: null, error: "ruleId required" };
+        const file = await ensureCapitalQueue();
+        const rule = file.rules.find((r) => r.id === ruleId);
+        if (!rule) return { ok: false, content: null, error: "Rule not found" };
+        const { walkForwardBacktest } = await import("./capital-walk-forward");
+        return { ok: true, content: await walkForwardBacktest(rule) };
       }
       default:
         return { ok: false, content: null, error: `Unknown tool: ${name}` };

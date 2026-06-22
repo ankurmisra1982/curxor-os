@@ -4,9 +4,10 @@ import type { PortfolioHealthReport } from "@/lib/capital-queue-types";
 
 interface CapitalPortfolioHealthPanelProps {
   health: PortfolioHealthReport;
+  onCreateRebalanceRule?: (symbol: string, targetWeightPct: number) => void;
 }
 
-export function CapitalPortfolioHealthPanel({ health }: CapitalPortfolioHealthPanelProps) {
+export function CapitalPortfolioHealthPanel({ health, onCreateRebalanceRule }: CapitalPortfolioHealthPanelProps) {
   const labelColor =
     health.label === "healthy"
       ? "text-cursor-glow"
@@ -41,6 +42,28 @@ export function CapitalPortfolioHealthPanel({ health }: CapitalPortfolioHealthPa
           <p className="mt-1 text-[10px] text-muted">
             Largest position: {health.concentrationPct}% concentration
           </p>
+        </div>
+      ) : null}
+
+      {health.rebalanceHints && health.rebalanceHints.length > 0 ? (
+        <div>
+          <p className="mb-1 text-[10px] uppercase tracking-widest text-muted">Rebalance actions</p>
+          {health.rebalanceHints.map((hint) => (
+            <div key={hint.symbol} className="mb-2 flex flex-wrap items-center gap-2 border border-line/40 px-2 py-1.5">
+              <span className="text-stark">
+                {hint.symbol} · {hint.currentWeightPct}% → target {hint.targetWeightPct}%
+              </span>
+              {onCreateRebalanceRule ? (
+                <button
+                  type="button"
+                  onClick={() => onCreateRebalanceRule(hint.symbol, hint.targetWeightPct)}
+                  className="border border-cursor-glow px-2 py-0.5 text-[9px] uppercase text-cursor-glow"
+                >
+                  Create rebalance rule
+                </button>
+              ) : null}
+            </div>
+          ))}
         </div>
       ) : null}
 

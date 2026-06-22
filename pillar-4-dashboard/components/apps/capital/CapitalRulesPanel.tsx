@@ -50,6 +50,12 @@ interface CapitalRulesPanelProps {
 
     stopLossPct?: number;
 
+    kind?: "signal" | "rebalance";
+
+    targetWeight?: number;
+
+    driftThresholdPct?: number;
+
   }) => void;
 
   defaultAsset?: string;

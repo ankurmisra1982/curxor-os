@@ -74,6 +74,10 @@ export async function POST(request: Request): Promise<Response> {
     limit?: number;
     secret?: string | null;
     mode?: string;
+    kind?: string;
+    targetWeight?: number;
+    driftThresholdPct?: number;
+    query?: string;
   };
 
   try {
@@ -125,6 +129,9 @@ export async function POST(request: Request): Promise<Response> {
           takeProfitPct: typeof body.takeProfitPct === "number" ? body.takeProfitPct : undefined,
           stopLossPct: typeof body.stopLossPct === "number" ? body.stopLossPct : undefined,
           brokerId: body.brokerId as import("@/lib/capital-queue-types").BrokerId | undefined,
+          kind: body.kind as import("@/lib/capital-queue-types").RuleKind | undefined,
+          targetWeight: typeof body.targetWeight === "number" ? body.targetWeight : undefined,
+          driftThresholdPct: typeof body.driftThresholdPct === "number" ? body.driftThresholdPct : undefined,
         });
         const backtested = await runRuleBacktest(rule.id);
         return Response.json({ ok: true, rule: backtested ?? rule, status: await fetchCapitalStatus() });
@@ -494,6 +501,50 @@ export async function POST(request: Request): Promise<Response> {
           error: json.error,
           status: await fetchCapitalStatus(),
         });
+      }
+
+      case "analytics": {
+        const status = await fetchCapitalStatus();
+        const {
+          buildCapitalTradeAnalytics,
+          buildRuleScorecards,
+          buildPortfolioBenchmark,
+        } = await import("@/lib/capital-analytics");
+        const spyDaily =
+          status.movers.find((m) => m.symbol === "SPY")?.changePct1d ??
+          status.movers.find((m) => m.symbol.startsWith("SPY"))?.changePct1d ??
+          null;
+        return Response.json({
+          ok: true,
+          analytics: buildCapitalTradeAnalytics(status.trades, status.dailyPnlPct),
+          scorecards: buildRuleScorecards(status.rules, status.trades),
+          benchmark: buildPortfolioBenchmark(status.trades, status.positions, status.dailyPnlPct, spyDaily),
+          status,
+        });
+      }
+
+      case "walk_forward_backtest": {
+        if (!body.ruleId) return Response.json({ ok: false, error: "ruleId required" }, { status: 400 });
+        const file = await ensureCapitalQueue();
+        const rule = file.rules.find((r) => r.id === body.ruleId);
+        if (!rule) return Response.json({ ok: false, error: "Rule not found" }, { status: 404 });
+        const { walkForwardBacktest } = await import("@/lib/capital-walk-forward");
+        const wf = await walkForwardBacktest(rule);
+        return Response.json({ ok: true, walkForward: wf, status: await fetchCapitalStatus() });
+      }
+
+      case "nl_portfolio_query": {
+        if (!body.query?.trim()) return Response.json({ ok: false, error: "query required" }, { status: 400 });
+        const status = await fetchCapitalStatus();
+        const { answerPortfolioQuery } = await import("@/lib/capital-nl-query");
+        const result = answerPortfolioQuery(body.query, status);
+        return Response.json({ ok: true, ...result, status });
+      }
+
+      case "desk_health_alerts": {
+        const { evaluateDeskHealthAlerts } = await import("@/lib/capital-desk-alerts");
+        const out = await evaluateDeskHealthAlerts();
+        return Response.json({ ok: true, ...out, status: await fetchCapitalStatus() });
       }
 
       default:

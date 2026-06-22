@@ -77,8 +77,8 @@ export const CCP_REGISTRY: {
     {
       appId: "my-capital",
       scopes: ["finance"],
-      keys: ["portfolio.*", "rules.*", "risk.*"],
-      description: "Portfolio and trading context",
+      keys: ["portfolio.*", "rules.*", "risk.*", "intel.*"],
+      description: "Portfolio, trading rules, risk guard, market intel",
     },
     {
       appId: "my-work",

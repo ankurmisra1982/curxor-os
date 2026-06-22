@@ -120,6 +120,7 @@ export interface PortfolioHealthReport {
   topHoldings: Array<{ symbol: string; weightPct: number; unrealizedPlPct: number }>;
   sectorNotes: string[];
   suggestions: string[];
+  rebalanceHints?: Array<{ symbol: string; currentWeightPct: number; targetWeightPct: number }>;
   costBasisBeta?: TaxLotSummary[];
 }
 

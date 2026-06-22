@@ -105,6 +105,55 @@ await check("capital execute_now", async () => {
   return ok && json.ok !== false;
 });
 
+await check("capital analytics", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "analytics" });
+  return ok && json.analytics && Array.isArray(json.scorecards) && json.benchmark;
+});
+
+await check("capital nl_portfolio_query", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "nl_portfolio_query",
+    query: "armed rules",
+  });
+  return ok && typeof json.answer === "string" && json.intent === "armed_rules";
+});
+
+await check("capital desk_health_alerts", async () => {
+  const { ok, json } = await postJson("/api/capital/status", { action: "desk_health_alerts" });
+  return ok && Array.isArray(json.alerts);
+});
+
+await check("capital rebalance rule", async () => {
+  const { ok, json } = await postJson("/api/capital/status", {
+    action: "create_rule",
+    name: "QA rebalance",
+    asset: "SPY",
+    kind: "rebalance",
+    targetWeight: 20,
+    driftThresholdPct: 10,
+    actionTrade: "sell",
+    conditionType: "manual_trigger",
+  });
+  return ok && json.rule?.kind === "rebalance" && json.rule?.id;
+});
+
+await check("capital walk_forward_backtest", async () => {
+  const status = await postJson("/api/capital/status", { action: "dashboard_bootstrap" });
+  const ruleId = status.json?.status?.rules?.[0]?.id ?? "RULE-01";
+  const { ok, json } = await postJson("/api/capital/status", { action: "walk_forward_backtest", ruleId });
+  return ok && json.walkForward && typeof json.walkForward.note === "string";
+});
+
+await check("capital tools query_portfolio", async () => {
+  const json = await getJson("/api/capital/tools?tool=query_portfolio&query=armed%20rules");
+  return json.ok && typeof json.answer === "string";
+});
+
+await check("capital tools get_go_live_report", async () => {
+  const json = await getJson("/api/capital/tools?tool=get_go_live_report");
+  return json.ok && json.goLive && Array.isArray(json.goLive.steps);
+});
+
 await check("capital dashboard_bootstrap", async () => {
   const { ok, json } = await postJson("/api/capital/status", { action: "dashboard_bootstrap" });
   return ok && json.status && Array.isArray(json.status.rules);

@@ -67,6 +67,15 @@ export function computePortfolioHealth(
   if (concentrationPct > 40) {
     suggestions.push(`${top?.symbol} is ${concentrationPct.toFixed(0)}% of portfolio — consider trimming or adding uncorrelated assets.`);
   }
+  const rebalanceHints: PortfolioHealthReport["rebalanceHints"] = [];
+  if (concentrationPct > 30 && top) {
+    const target = Math.min(25, Math.max(15, Math.round(concentrationPct / 2)));
+    rebalanceHints.push({
+      symbol: top.symbol,
+      currentWeightPct: Math.round(concentrationPct * 10) / 10,
+      targetWeightPct: target,
+    });
+  }
   const techPct = sectorWeights.get("Technology") ?? 0;
   if (techPct > 60) {
     suggestions.push(`Technology sector at ${techPct.toFixed(0)}% — add SPY or a value pilot for balance.`);
@@ -99,5 +108,6 @@ export function computePortfolioHealth(
     })),
     sectorNotes,
     suggestions,
+    rebalanceHints: rebalanceHints.length > 0 ? rebalanceHints : undefined,
   };
 }

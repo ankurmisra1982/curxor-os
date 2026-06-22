@@ -104,6 +104,89 @@ async function tick() {
   }
 
   try {
+    const capitalRes = await fetch(`${BASE}/api/capital/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "refresh_quotes" }),
+    });
+    await capitalRes.json();
+    const evalRes = await fetch(`${BASE}/api/capital/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "evaluate_rules" }),
+    });
+    const evalJson = (await evalRes.json()) as { fired?: number };
+    if ((evalJson.fired ?? 0) > 0) {
+      console.log(`[heartbeat] capital fired ${evalJson.fired} rule trade(s)`);
+    }
+    const pilotRes = await fetch(`${BASE}/api/capital/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "sync_pilot_subscriptions" }),
+    });
+    const pilotJson = (await pilotRes.json()) as { trades?: number };
+    if ((pilotJson.trades ?? 0) > 0) {
+      console.log(`[heartbeat] capital pilot sync placed ${pilotJson.trades} trade(s)`);
+    }
+    const intelRes = await fetch(`${BASE}/api/capital/intel?refresh=1`, { cache: "no-store" });
+    const intelJson = (await intelRes.json()) as { digest?: { digest?: unknown[] } };
+    const digestCount = Array.isArray(intelJson.digest?.digest) ? intelJson.digest.digest.length : 0;
+    if (digestCount > 0) {
+      console.log(`[heartbeat] capital intel digest refreshed (${digestCount} item(s))`);
+    }
+    const hourKey = new Date().toISOString().slice(0, 13);
+    if (globalThis.__curxorPilotFeedHour !== hourKey) {
+      globalThis.__curxorPilotFeedHour = hourKey;
+      const feedRes = await fetch(`${BASE}/api/capital/status`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "refresh_pilot_feeds" }),
+      });
+      const feedJson = (await feedRes.json()) as { updated?: string[] };
+      if ((feedJson.updated ?? []).length > 0) {
+        console.log(`[heartbeat] pilot SEC feeds refreshed: ${feedJson.updated?.join(", ")}`);
+      }
+    }
+    const alertRes = await fetch(`${BASE}/api/capital/intel`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "evaluate_alerts" }),
+    });
+    const alertJson = (await alertRes.json()) as { fired?: number };
+    if ((alertJson.fired ?? 0) > 0) {
+      console.log(`[heartbeat] capital intel fired ${alertJson.fired} alert(s)`);
+    }
+    const pfmHourKey = new Date().toISOString().slice(0, 13);
+    if (globalThis.__curxorPfmRefreshHour !== pfmHourKey) {
+      globalThis.__curxorPfmRefreshHour = pfmHourKey;
+      const pfmRes = await fetch(`${BASE}/api/capital/pfm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "refresh" }),
+      });
+      const pfmJson = (await pfmRes.json()) as { ok?: boolean; snapshot?: { updatedAt?: string } };
+      if (pfmJson.ok && pfmJson.snapshot?.updatedAt) {
+        console.log(`[heartbeat] capital PFM refreshed (${pfmJson.snapshot.updatedAt})`);
+      }
+    }
+    const deskRes = await fetch(`${BASE}/api/capital/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "desk_health_alerts" }),
+    });
+    const deskJson = (await deskRes.json()) as { alerts?: Array<{ title: string; severity: string }>; notified?: number };
+    const critical = (deskJson.alerts ?? []).filter((a) => a.severity === "critical" || a.severity === "warning");
+    if (critical.length > 0) {
+      console.log(`[heartbeat] capital desk alerts: ${critical.map((a) => a.title).join("; ")}`);
+    }
+    if ((deskJson.notified ?? 0) > 0) {
+      console.log(`[heartbeat] capital resent ${deskJson.notified} pending approval nudge(s)`);
+    }
+  } catch (err) {
+    console.error("[heartbeat] capital rules failed:", err instanceof Error ? err.message : String(err));
+  }
+
+  try {
     const digestRes = await fetch(`${BASE}/api/content/status`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

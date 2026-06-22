@@ -2,11 +2,12 @@
 
 import type { ExperienceLevel } from "@/lib/experience-level";
 
-export type CapitalWorkspaceTab = "trade" | "research" | "risk" | "agents";
+export type CapitalWorkspaceTab = "trade" | "research" | "risk" | "agents" | "analytics";
 
 const TABS: { id: CapitalWorkspaceTab; label: string; minLevel: ExperienceLevel }[] = [
   { id: "trade", label: "Trade", minLevel: "beginner" },
   { id: "research", label: "Research", minLevel: "beginner" },
+  { id: "analytics", label: "Analytics", minLevel: "standard" },
   { id: "risk", label: "Risk", minLevel: "beginner" },
   { id: "agents", label: "Agents", minLevel: "beginner" },
 ];
@@ -45,8 +46,8 @@ export function CapitalWorkspaceTabs({ active, onChange, experienceLevel }: Capi
   );
 }
 
-export function defaultCapitalTab(_level: ExperienceLevel): CapitalWorkspaceTab {
-  return "trade";
+export function defaultCapitalTab(level: ExperienceLevel): CapitalWorkspaceTab {
+  return level === "beginner" ? "trade" : "trade";
 }
 
 /** Maps Capital desk section ids → workspace tab. */
@@ -68,6 +69,10 @@ export const CAPITAL_SECTION_TAB: Record<string, CapitalWorkspaceTab> = {
   subscriptions: "agents",
   "agent-trading": "agents",
   pfm: "agents",
+  analytics: "analytics",
+  scorecard: "analytics",
+  "tax-lots": "analytics",
+  "nl-query": "analytics",
 };
 
 export function capitalSectionVisible(sectionId: string, active: CapitalWorkspaceTab): boolean {

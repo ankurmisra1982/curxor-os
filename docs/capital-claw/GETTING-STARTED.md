@@ -7,10 +7,11 @@ Capital Claw (`/my-capital`) is your on-appliance rule engine for paper trading 
 ## Day-one checklist (demo)
 
 1. **Complete FRE setup** — risk profile, **Paper only** mode, seed watchlist.
-2. Open **Go Live** — Alpaca warning is OK without keys; demo portfolio is seeded.
-3. **Create & arm a rule** — visual WHEN/THEN builder in Rule engine.
+2. Open **Setup Wizard** (header) or **Go Live** — Alpaca warning is OK without keys; demo portfolio is seeded.
+3. **Create & arm a rule** — visual WHEN/THEN builder in Rule engine, or rebalance rule from Portfolio health hints.
 4. **Preview & execute** — trades log locally; bridge fills when Alpaca keys are added later.
-5. Explore **research**, **pilots**, **PFM** (Mint-style demo data), **agent/MCP** preview flows.
+5. **Standard+**: Analytics tab (scorecard, walk-forward, NL Q&A), full trade log, pending-approval banner.
+6. Explore **research**, **pilots**, **PFM** (Mint-style demo data), **agent/MCP** preview flows.
 
 Skip [Broker & live rails](#broker--live-rails) until you exit demo mode.
 

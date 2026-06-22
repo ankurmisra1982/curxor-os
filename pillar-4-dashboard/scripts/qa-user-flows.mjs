@@ -209,5 +209,48 @@ await check("flow: capital execute_now armed rule", async () => {
   return exec.ok && exec.json.ok !== false;
 });
 
+await check("flow: capital analytics + portfolio Q&A", async () => {
+  const analytics = await postJson("/api/capital/status", { action: "analytics" });
+  if (!analytics.ok || !analytics.json.analytics) return false;
+  const qa = await postJson("/api/capital/status", {
+    action: "nl_portfolio_query",
+    query: "portfolio health",
+  });
+  return qa.ok && typeof qa.json.answer === "string";
+});
+
+await check("flow: capital setup wizard API sequence", async () => {
+  await postJson("/api/capital/status", { action: "dashboard_bootstrap" });
+  const rule = await postJson("/api/capital/status", {
+    action: "create_dip_rule",
+    ticker: "SPY",
+    dropPct: 5,
+  });
+  if (!rule.ok || !rule.json.rule?.id) return false;
+  const ruleId = rule.json.rule.id;
+  const armed = await postJson("/api/capital/status", { action: "arm_rule", ruleId });
+  if (!armed.ok) return false;
+  const exec = await postJson("/api/capital/status", { action: "execute_now", ruleId });
+  if (!exec.ok || exec.json.ok === false) return false;
+  const goLive = await postJson("/api/capital/status", { action: "go_live" });
+  return goLive.ok && (goLive.json.goLive?.demoReady === true || goLive.json.goLive?.progress?.complete >= 4);
+});
+
+await check("flow: capital rebalance rule + arm", async () => {
+  const created = await postJson("/api/capital/status", {
+    action: "create_rule",
+    name: "Flow rebalance",
+    asset: "NVDA",
+    kind: "rebalance",
+    targetWeight: 15,
+    driftThresholdPct: 8,
+    actionTrade: "sell",
+    conditionType: "manual_trigger",
+  });
+  if (!created.ok || created.json.rule?.kind !== "rebalance") return false;
+  const armed = await postJson("/api/capital/status", { action: "arm_rule", ruleId: created.json.rule.id });
+  return armed.ok && armed.json.rule?.state === "ARMED";
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

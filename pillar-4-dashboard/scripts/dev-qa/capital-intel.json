@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-06-21T22:23:43.138Z",
+  "updatedAt": "2026-06-21T22:53:20.237Z",
   "digest": {
     "digest": [
       {
@@ -545,15 +545,15 @@
       ],
       "news": [
         {
-          "id": "a814f775699b75",
+          "id": "2e76d7bc14548d",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Stock futures fall as investors await key reading on inflation: Live updates",
+          "title": "Stock futures fall as oil prices rise; investors await key reading on inflation: Live updates",
           "excerpt": "U.S. equity futures were lower on Sunday as Wall Street awaited the release of inflation data that is closely watched by the Federal Reserve.",
           "url": "https://www.cnbc.com/2026/06/21/stock-market-today-live-updates.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-21T22:10:12.000Z"
+          "publishedAt": "2026-06-21T22:46:28.000Z"
         },
         {
           "id": "a5fcadb1a6beac",
@@ -687,7 +687,7 @@
           "url": null,
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-21T22:23:42.807Z"
+          "publishedAt": "2026-06-21T22:53:19.943Z"
         }
       ],
       "sentiment": {
@@ -697,15 +697,15 @@
         "bearishPct": 0,
         "sampleSize": 17
       },
-      "smartTake": "SPY price updating · Chatter skews mixed (6% bull / 0% bear). CNBC: Stock futures fall as investors await key reading on inflation: Live updates",
+      "smartTake": "SPY price updating · Chatter skews mixed (6% bull / 0% bear). CNBC: Stock futures fall as oil prices rise; investors await key reading on inflation:",
       "citations": [
-        "CNBC: Stock futures fall as investors await key reading on inflation: Live updates",
+        "CNBC: Stock futures fall as oil prices rise; investors await key reading on inflation:",
         "CNBC: Trump threatens Iran with fresh strikes as Vance leads peace talks in Switzerlan",
         "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
       ],
       "nextEarningsDate": null,
       "contradictionNote": null,
-      "updatedAt": "2026-06-21T22:23:43.136Z"
+      "updatedAt": "2026-06-21T22:53:20.235Z"
     }
   },
   "alertRules": [],

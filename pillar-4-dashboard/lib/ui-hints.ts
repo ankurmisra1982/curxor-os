@@ -25,7 +25,7 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   "/my-capital": {
     id: "capital-intro",
     title: "Paper trading first",
-    body: "Portfolio loads from your FRE watchlist — live when Alpaca paper creds are in digital.env. Optional frontier models for planning: Settings → Intelligence (API key or OAuth). Trades egress only through eno2.",
+    body: "Research any ticker for price + headlines (Beginner). Standard unlocks charts, WSB chatter, and the market digest. Trades egress only through eno2.",
   },
   "/my-content": {
     id: "content-intro",

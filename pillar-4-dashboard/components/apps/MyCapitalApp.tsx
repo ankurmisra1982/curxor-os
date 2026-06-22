@@ -27,6 +27,16 @@ import { CapitalTradeLogPanel } from "@/components/apps/capital/CapitalTradeLogP
 import { CapitalTickerIntelPanel } from "@/components/apps/capital/CapitalTickerIntelPanel";
 import { CapitalWatchlistIntelStrip } from "@/components/apps/capital/CapitalWatchlistIntelStrip";
 import {
+  CapitalAnalyticsPanel,
+  CapitalBenchmarkStrip,
+  CapitalCoachBanner,
+  CapitalNlQueryPanel,
+  CapitalRuleScorecardPanel,
+  CapitalUnlockNudge,
+} from "@/components/apps/capital/CapitalAnalyticsPanel";
+import { CapitalSetupWizard } from "@/components/apps/capital/CapitalSetupWizard";
+import { CapitalTaxLotsPanel } from "@/components/apps/capital/CapitalTaxLotsPanel";
+import {
   CapitalWorkspaceTabs,
   capitalSectionVisible,
   defaultCapitalTab,
@@ -34,9 +44,14 @@ import {
 } from "@/components/apps/capital/CapitalWorkspaceTabs";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+import type {
+  CapitalTradeAnalytics,
+  PortfolioBenchmark,
+  RuleScorecard,
+} from "@/lib/capital-analytics-types";
 import { defaultAutoApprovalPolicy } from "@/lib/capital-auto-approval-types";
 import type { FinancialSuggestion } from "@/lib/capital-pfm-types";
-import type { CapitalQueueStatus, CapitalTrade } from "@/lib/capital-queue-types";
+import type { CapitalQueueStatus, CapitalRule, CapitalTrade } from "@/lib/capital-queue-types";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useDigitalStream } from "@/hooks/useDigitalStream";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -55,6 +70,7 @@ async function postCapital(body: Record<string, unknown>) {
     goLive?: CapitalGoLiveReportRow;
     failed?: CapitalTrade[];
     error?: string;
+    rule?: CapitalRule;
   };
   if (!res.ok && !json.error) {
     return { ...json, ok: false, error: `Request failed (${res.status})` };
@@ -87,6 +103,14 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [demoTourRunning, setDemoTourRunning] = useState(false);
   const [executeRunning, setExecuteRunning] = useState(false);
   const [workspaceTab, setWorkspaceTab] = useState<CapitalWorkspaceTab>(() => defaultCapitalTab(level));
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [coachDismissed, setCoachDismissed] = useState(false);
+  const [analytics, setAnalytics] = useState<CapitalTradeAnalytics | null>(null);
+  const [scorecards, setScorecards] = useState<RuleScorecard[]>([]);
+  const [benchmark, setBenchmark] = useState<PortfolioBenchmark | null>(null);
+  const [nlAnswer, setNlAnswer] = useState<string | null>(null);
+  const [walkForwardNote, setWalkForwardNote] = useState<string | null>(null);
+  const [unlockDismissed, setUnlockDismissed] = useState(false);
 
   const hideCapitalSection = (sectionId: string) => !capitalSectionVisible(sectionId, workspaceTab);
   const armedRuleId = status?.rules.find((r) => r.state === "ARMED")?.id ?? null;
@@ -128,6 +152,19 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     if (json.status) applyStatus(json.status);
   }, [applyStatus]);
 
+  const loadAnalytics = useCallback(async () => {
+    const json = (await postCapital({ action: "analytics" })) as {
+      analytics?: CapitalTradeAnalytics;
+      scorecards?: RuleScorecard[];
+      benchmark?: PortfolioBenchmark;
+      status?: CapitalQueueStatus;
+    };
+    if (json.analytics) setAnalytics(json.analytics);
+    if (json.scorecards) setScorecards(json.scorecards);
+    if (json.benchmark) setBenchmark(json.benchmark);
+    if (json.status) applyStatus(json.status);
+  }, [applyStatus]);
+
   useEffect(() => {
     void loadBootstrap();
     if (level !== "beginner") {
@@ -139,8 +176,15 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   }, [loadBootstrap, loadRecovery, loadGrowthData, loadStatus, level]);
 
   useEffect(() => {
-    if (level !== "beginner") void loadGrowthData();
-  }, [level, loadGrowthData]);
+    if (level !== "beginner") {
+      void loadGrowthData();
+      void loadAnalytics();
+    }
+  }, [level, loadGrowthData, loadAnalytics]);
+
+  const scrollToTradeLog = () => {
+    document.getElementById("capital-trade-log")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     const rule = status?.rules.find((r) => r.id === selectedRuleId);
@@ -162,6 +206,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       "create_rule_from_thesis",
       "subscribe_pilot",
       "research_ticker",
+      "run_demo_tour",
+      "execute_now",
+      "portfolio_query",
     ]);
 
     void (async () => {
@@ -183,6 +230,11 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               data.rules.find((r) => r.id === selectedRuleId)?.asset ?? data.watchlist[0] ?? "SPY";
             setResearchTicker(sym);
             setSignal(`Researching ${sym}`);
+          } else if (lastSkillId === "run_demo_tour" || lastSkillId === "execute_now") {
+            setSignal(lastSkillId === "run_demo_tour" ? "Demo tour complete" : "Execute now complete");
+            if (level !== "beginner") void loadAnalytics();
+          } else if (lastSkillId === "portfolio_query") {
+            setSignal("Portfolio Q&A answered in chat");
           }
         }
         return;
@@ -289,6 +341,8 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         if (t.tradeId) setSelectedTradeId(t.tradeId);
         setSignal(t.ok ? "Demo tour complete · simulated fill" : t.error ?? "Demo tour failed");
         void postCapital({ action: "go_live" }).then((gl) => gl.goLive && setGoLive(gl.goLive));
+        if (t.tradeId) scrollToTradeLog();
+        if (level !== "beginner") void loadAnalytics();
       })
       .finally(() => setDemoTourRunning(false));
   };
@@ -302,9 +356,27 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         setSignal(
           formatTradeOutcomeMessage(t.trade, typeof j.error === "string" ? j.error : t.ok ? null : "Execute failed"),
         );
+        if (t.trade?.id) {
+          setSelectedTradeId(t.trade.id);
+          scrollToTradeLog();
+        }
+        if (level !== "beginner") void loadAnalytics();
       })
       .finally(() => setExecuteRunning(false));
   };
+
+  const hasFill = (status?.trades ?? []).some((t) => t.status === "simulated" || t.status === "filled");
+  const coachTip =
+    !coachDismissed && (status?.rules.length ?? 0) === 0
+      ? { tip: "New here? Setup Wizard walks you through risk → rule → arm → first fill in under a minute.", action: "Setup Wizard", onAction: () => setWizardOpen(true) }
+      : !coachDismissed && !armedRuleId
+        ? { tip: "Arm a rule (toggle in Rule engine) to unlock Execute now on Go Live.", action: undefined, onAction: undefined }
+        : !coachDismissed && !hasFill
+          ? { tip: "Run demo tour or Execute now to log your first simulated fill — counts toward Go Live.", action: "Demo tour", onAction: runDemoTour }
+          : null;
+
+  const showUnlock =
+    level === "beginner" && hasFill && !unlockDismissed && (status?.trades.length ?? 0) > 0;
 
   return (
     <div className="space-y-4 p-4">
@@ -323,12 +395,65 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           · {signal}
           <ExperienceLevelBadge />
         </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setWizardOpen(true)}
+            className="border border-cursor-glow px-2 py-0.5 font-mono text-[9px] uppercase text-cursor-glow"
+          >
+            Setup Wizard
+          </button>
+          {goLive?.demoReady ? (
+            <span className="font-mono text-[9px] uppercase text-cursor-glow">Demo ready</span>
+          ) : null}
+        </div>
       </header>
+
+      <CapitalSetupWizard
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        defaultAsset={status?.watchlist[0] ?? "SPY"}
+        onComplete={(r) => {
+          setWizardOpen(false);
+          if (r.ruleId) setSelectedRuleId(r.ruleId);
+          if (r.tradeId) setSelectedTradeId(r.tradeId);
+          void loadStatus();
+          void postCapital({ action: "go_live" }).then((j) => j.goLive && setGoLive(j.goLive));
+          setSignal("Setup wizard complete");
+        }}
+      />
+
+      {coachTip ? (
+        <CapitalCoachBanner
+          tip={coachTip.tip}
+          actionLabel={coachTip.action}
+          onAction={coachTip.onAction}
+          onDismiss={() => setCoachDismissed(true)}
+        />
+      ) : null}
+
+      {showUnlock ? (
+        <CapitalUnlockNudge
+          message="First fill logged — unlock Standard for full trade log, analytics, and walk-forward backtests."
+          onUpgrade={() => {
+            setUnlockDismissed(true);
+            void fetch("/api/settings", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                appearance: { experienceLevel: "standard", uiMode: "standard" },
+              }),
+            }).then(() => window.location.reload());
+          }}
+        />
+      ) : null}
+
+      {benchmark && level !== "beginner" ? <CapitalBenchmarkStrip benchmark={benchmark} /> : null}
 
       <CapitalWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} experienceLevel={level} />
 
       <CapitalPendingTradesBanner
-        trades={status?.trades ?? []}
+        trades={level !== "beginner" ? (status?.trades ?? []) : []}
         onApprove={(tradeId) =>
           void action({ action: "submit_trade", tradeId }).then((j) =>
             setSignal(
@@ -371,7 +496,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </ExperienceAppSection>
       ) : null}
 
-      {level === "beginner" || (goLive && !goLive.ready) ? (
+      {level === "beginner" || !goLive?.paperReady ? (
         <ExperienceAppSection
           appId="my-capital"
           sectionId="go-live"
@@ -555,7 +680,30 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
       {level !== "beginner" ? (
         <ExperienceAppSection appId="my-capital" sectionId="portfolio-health" minLevel="standard" title="Portfolio health" subtitle="Concentration · sector mix · rebalance hints" hideWhen={hideCapitalSection("portfolio-health")}>
-          <CapitalPortfolioHealthPanel health={portfolioHealth} />
+          <CapitalPortfolioHealthPanel
+            health={portfolioHealth}
+            onCreateRebalanceRule={(symbol, targetWeightPct) =>
+              void action({
+                action: "create_rule",
+                name: `${symbol} rebalance`,
+                asset: symbol,
+                kind: "rebalance",
+                targetWeight: targetWeightPct,
+                driftThresholdPct: 10,
+                actionTrade: "sell",
+                conditionType: "manual_trigger",
+              }).then(async (j) => {
+                if (!j.ok || !j.rule?.id) {
+                  setSignal(typeof j.error === "string" ? j.error : "Rebalance rule failed");
+                  return;
+                }
+                await action({ action: "arm_rule", ruleId: j.rule.id });
+                if (j.status) applyStatus(j.status);
+                setSelectedRuleId(j.rule.id);
+                setSignal(`Rebalance rule ${j.rule.id} armed · ${symbol} target ${targetWeightPct}%`);
+              })
+            }
+          />
         </ExperienceAppSection>
       ) : null}
 
@@ -703,6 +851,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               qty: input.qty,
               takeProfitPct: input.takeProfitPct,
               stopLossPct: input.stopLossPct,
+              kind: input.kind,
+              targetWeight: input.targetWeight,
+              driftThresholdPct: input.driftThresholdPct,
             }).then(() => setSignal(`Rule created · ${input.name}`))
           }
           onRunDemoTour={runDemoTour}
@@ -741,6 +892,115 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             onRefresh={() => void loadRecovery()}
           />
         </ExperienceAppSection>
+      ) : null}
+
+      {level !== "beginner" ? (
+        <>
+          <ExperienceAppSection
+            appId="my-capital"
+            sectionId="analytics"
+            minLevel="standard"
+            title="Desk analytics"
+            subtitle="Fills · approval paths · daily P&L · vs SPY"
+            hideWhen={hideCapitalSection("analytics")}
+          >
+            <CapitalAnalyticsPanel
+              analytics={
+                analytics ?? {
+                  filledToday: 0,
+                  filledTotal: 0,
+                  simulatedTotal: 0,
+                  pendingApproval: 0,
+                  failedTotal: 0,
+                  winRatePct: null,
+                  avgNotionalUsd: null,
+                  bySource: {},
+                  byStatus: {},
+                  dailyPnlPct: status?.dailyPnlPct ?? null,
+                }
+              }
+              benchmark={
+                benchmark ?? {
+                  portfolioReturnPct: null,
+                  spyReturnPct: null,
+                  alphaPct: null,
+                  label: "Loading…",
+                  asOf: new Date().toISOString(),
+                }
+              }
+              onRefresh={() => void loadAnalytics()}
+            />
+          </ExperienceAppSection>
+
+          <ExperienceAppSection
+            appId="my-capital"
+            sectionId="scorecard"
+            minLevel="standard"
+            title="Rule scorecard"
+            subtitle="Backtest vs live fills · walk-forward (WF)"
+            hideWhen={hideCapitalSection("scorecard")}
+          >
+            <CapitalRuleScorecardPanel
+              scorecards={scorecards.length > 0 ? scorecards : []}
+              walkForwardNote={walkForwardNote}
+              onSelectRule={(id) => {
+                setSelectedRuleId(id);
+                setWorkspaceTab("trade");
+              }}
+              onWalkForward={(ruleId) =>
+                void postCapital({ action: "walk_forward_backtest", ruleId }).then((j) => {
+                  const wf = (j as { walkForward?: { note?: string; overfitRisk?: string; oosReturnPct?: number } })
+                    .walkForward;
+                  if (wf) {
+                    setWalkForwardNote(
+                      `${wf.note ?? "Done"} · OOS ${wf.oosReturnPct ?? "—"}% · overfit ${wf.overfitRisk ?? "—"}`,
+                    );
+                  }
+                })
+              }
+            />
+          </ExperienceAppSection>
+
+          <ExperienceAppSection
+            appId="my-capital"
+            sectionId="tax-lots"
+            minLevel="standard"
+            title="Tax lots"
+            subtitle="FIFO cost basis beta · wash-sale hints"
+            hideWhen={hideCapitalSection("tax-lots")}
+          >
+            <CapitalTaxLotsPanel
+              lots={portfolioHealth.costBasisBeta ?? []}
+              onExport={() => {
+                const text = (portfolioHealth.costBasisBeta ?? [])
+                  .map((l) => `${l.symbol}\t${l.qty}\t${l.costBasisUsd ?? ""}\t${l.unrealizedPlUsd ?? ""}`)
+                  .join("\n");
+                void navigator.clipboard.writeText(text);
+                setSignal("Tax lot summary copied");
+              }}
+            />
+          </ExperienceAppSection>
+
+          <ExperienceAppSection
+            appId="my-capital"
+            sectionId="nl-query"
+            minLevel="standard"
+            title="Portfolio Q&A"
+            subtitle="Natural-language desk queries · agent tool parity"
+            hideWhen={hideCapitalSection("nl-query")}
+          >
+            <CapitalNlQueryPanel
+              lastAnswer={nlAnswer}
+              onQuery={async (q) => {
+                const j = (await postCapital({ action: "nl_portfolio_query", query: q })) as {
+                  answer?: string;
+                };
+                if (j.answer) setNlAnswer(j.answer);
+                return j.answer ? { answer: j.answer, intent: "query" } : null;
+              }}
+            />
+          </ExperienceAppSection>
+        </>
       ) : null}
 
       <DigitalReceiptPanel

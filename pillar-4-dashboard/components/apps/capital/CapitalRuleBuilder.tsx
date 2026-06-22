@@ -27,18 +27,24 @@ interface CapitalRuleBuilderProps {
     qty: number;
     takeProfitPct?: number;
     stopLossPct?: number;
+    kind?: "signal" | "rebalance";
+    targetWeight?: number;
+    driftThresholdPct?: number;
   }) => void;
 }
 
 export function CapitalRuleBuilder({ defaultAsset = "NVDA", onCreate }: CapitalRuleBuilderProps) {
   const [name, setName] = useState("");
   const [asset, setAsset] = useState(defaultAsset);
+  const [ruleKind, setRuleKind] = useState<"signal" | "rebalance">("signal");
   const [conditionType, setConditionType] = useState<ConditionType>("price_drop_pct");
   const [pct, setPct] = useState("5");
   const [action, setAction] = useState<TradeAction>("buy");
   const [qty, setQty] = useState("1");
   const [takeProfitPct, setTakeProfitPct] = useState("");
   const [stopLossPct, setStopLossPct] = useState("");
+  const [targetWeight, setTargetWeight] = useState("25");
+  const [driftThreshold, setDriftThreshold] = useState("10");
 
   const cond = CONDITIONS.find((c) => c.id === conditionType);
 
@@ -49,14 +55,17 @@ export function CapitalRuleBuilder({ defaultAsset = "NVDA", onCreate }: CapitalR
     if (cond?.params?.includes("period")) conditionParams.period = Number.parseInt(pct, 10) || 50;
 
     onCreate({
-      name: name.trim() || `${asset} ${cond?.label ?? conditionType}`,
+      name: name.trim() || `${asset} ${ruleKind === "rebalance" ? "rebalance" : (cond?.label ?? conditionType)}`,
       asset: asset.trim().toUpperCase(),
-      conditionType,
-      conditionParams,
+      conditionType: ruleKind === "rebalance" ? "manual_trigger" : conditionType,
+      conditionParams: ruleKind === "rebalance" ? {} : conditionParams,
       action,
       qty: Number.parseFloat(qty) || 1,
       takeProfitPct: takeProfitPct ? Number.parseFloat(takeProfitPct) : undefined,
       stopLossPct: stopLossPct ? Number.parseFloat(stopLossPct) : undefined,
+      kind: ruleKind,
+      targetWeight: ruleKind === "rebalance" ? Number.parseFloat(targetWeight) || 25 : undefined,
+      driftThresholdPct: ruleKind === "rebalance" ? Number.parseFloat(driftThreshold) || 10 : undefined,
     });
     setName("");
   };
@@ -64,6 +73,22 @@ export function CapitalRuleBuilder({ defaultAsset = "NVDA", onCreate }: CapitalR
   return (
     <div className="border border-line bg-panel/30 p-3 font-mono text-[10px] space-y-2">
       <p className="text-[9px] uppercase tracking-widest text-muted">Visual rule builder</p>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => setRuleKind("signal")}
+          className={`px-2 py-0.5 text-[9px] uppercase ${ruleKind === "signal" ? "border border-cursor-glow text-cursor-glow" : "border border-line text-muted"}`}
+        >
+          Signal
+        </button>
+        <button
+          type="button"
+          onClick={() => setRuleKind("rebalance")}
+          className={`px-2 py-0.5 text-[9px] uppercase ${ruleKind === "rebalance" ? "border border-cursor-glow text-cursor-glow" : "border border-line text-muted"}`}
+        >
+          Rebalance
+        </button>
+      </div>
       <div className="grid gap-2 md:grid-cols-2">
         <label className="space-y-1">
           <span className="text-muted">Name</span>
@@ -84,6 +109,28 @@ export function CapitalRuleBuilder({ defaultAsset = "NVDA", onCreate }: CapitalR
         </label>
       </div>
       <div className="flex flex-wrap items-end gap-2">
+        {ruleKind === "rebalance" ? (
+          <>
+            <label className="space-y-1">
+              <span className="text-muted">Target weight %</span>
+              <input
+                value={targetWeight}
+                onChange={(e) => setTargetWeight(e.target.value)}
+                className="w-20 border border-line bg-transparent px-2 py-1 text-stark"
+              />
+            </label>
+            <label className="space-y-1">
+              <span className="text-muted">Drift threshold %</span>
+              <input
+                value={driftThreshold}
+                onChange={(e) => setDriftThreshold(e.target.value)}
+                className="w-20 border border-line bg-transparent px-2 py-1 text-stark"
+              />
+            </label>
+            <p className="text-[9px] text-muted pb-1">Rebalance rules evaluate on heartbeat when armed</p>
+          </>
+        ) : (
+          <>
         <label className="space-y-1">
           <span className="text-muted">WHEN</span>
           <select
@@ -127,6 +174,8 @@ export function CapitalRuleBuilder({ defaultAsset = "NVDA", onCreate }: CapitalR
             className="w-16 border border-line bg-transparent px-2 py-1 text-stark"
           />
         </label>
+          </>
+        )}
       </div>
       <div className="flex flex-wrap gap-2">
         <label className="space-y-1">

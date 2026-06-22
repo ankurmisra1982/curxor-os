@@ -182,6 +182,66 @@ export async function executeSkillMesh(
         skipReason: `PFM · net worth $${snapshot.netWorthUsd} · ${snapshot.dataSource}`,
       };
     }
+    if (appId === "my-capital" && skillId === "run_demo_tour") {
+      const { runCapitalDemoTour } = await import("./capital-demo-tour");
+      const tour = await runCapitalDemoTour();
+      return {
+        executed: tour.ok,
+        kind: "digital",
+        skipReason: tour.ok
+          ? `Demo tour · ${tour.tradeId ?? "fill"} · rule ${tour.ruleId ?? ""}`
+          : tour.error ?? "Demo tour failed",
+      };
+    }
+    if (appId === "my-capital" && skillId === "execute_now") {
+      const ruleId = cfgStr(config, "selectedRuleId", "");
+      const { executeCapitalTrade } = await import("./capital-trade-executor");
+      const { ensureCapitalQueue } = await import("./capital-store");
+      const file = await ensureCapitalQueue();
+      const rid = ruleId || file.rules.find((r) => r.state === "ARMED")?.id;
+      if (!rid) {
+        return { executed: false, kind: "plan", skipReason: "No armed rule — arm a rule first" };
+      }
+      const out = await executeCapitalTrade({ ruleId: rid, source: "manual" });
+      return {
+        executed: out.ok,
+        kind: "digital",
+        skipReason: out.ok
+          ? `Execute now · ${out.trade?.status ?? "ok"} · ${out.trade?.id ?? ""}`
+          : out.error ?? "Execute failed",
+      };
+    }
+    if (appId === "my-capital" && skillId === "portfolio_query") {
+      const q = cfgStr(config, "lastUserMessage", "portfolio health");
+      const { fetchCapitalStatus } = await import("./capital-store");
+      const { answerPortfolioQuery } = await import("./capital-nl-query");
+      const status = await fetchCapitalStatus();
+      const result = answerPortfolioQuery(q, status);
+      return { executed: true, kind: "plan", skipReason: result.answer };
+    }
+    if (appId === "my-capital" && skillId === "rebalance") {
+      const asset = cfgStr(config, "selectedAsset", "SPY");
+      const { createRule, setRuleState, fetchCapitalStatus } = await import("./capital-store");
+      const status = await fetchCapitalStatus();
+      const hint = status.portfolioHealth.rebalanceHints?.[0];
+      const sym = hint?.symbol ?? asset;
+      const target = hint?.targetWeightPct ?? 20;
+      const rule = await createRule({
+        name: `${sym} rebalance`,
+        asset: sym,
+        kind: "rebalance",
+        targetWeight: target,
+        driftThresholdPct: 10,
+        action: "sell",
+        conditionType: "manual_trigger",
+      });
+      await setRuleState(rule.id, "ARMED");
+      return {
+        executed: true,
+        kind: "plan",
+        skipReason: `Rebalance rule ${rule.id} armed · ${sym} target ${target}%`,
+      };
+    }
     if (appId === "my-capital" && skillId === "agent_execute_trade") {
       const asset = cfgStr(config, "selectedAsset", "SPY");
       const { agentExecuteTrade } = await import("./capital-agent-executor");

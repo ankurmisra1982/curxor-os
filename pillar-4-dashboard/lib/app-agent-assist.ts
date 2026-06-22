@@ -29,7 +29,7 @@ const LLM_PLAN_SKILLS: Partial<Record<OotbAppId, string[]>> = {
   "my-work": ["summarize_day"],
   "my-shop": ["ingest_order"],
   "my-content-creator": ["draft_post"],
-  "my-capital": ["create_rule", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade"],
+  "my-capital": ["create_rule", "run_demo_tour", "execute_now", "portfolio_query", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade", "rebalance"],
 };
 
 function cfgStr(config: Record<string, unknown>, key: string, fallback: string): string {
@@ -321,6 +321,24 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
       return { reply: "Select a post in the queue or ask me to draft for a channel.", suggestedSkill: "draft_post" };
 
     case "my-capital":
+      if (/demo tour|first fill|setup wizard|getting started/.test(combined)) {
+        return {
+          reply: "Demo tour creates a rule, arms it, and logs a simulated fill — no broker keys required.",
+          suggestedSkill: "run_demo_tour",
+        };
+      }
+      if (/execute now|fire now|execute armed/.test(combined)) {
+        return {
+          reply: "Execute now fires the first armed rule through the local risk guard.",
+          suggestedSkill: "execute_now",
+        };
+      }
+      if (/exposure|portfolio health|how many trades|pending approval|armed rule|buying power|portfolio value/.test(combined)) {
+        return {
+          reply: "Portfolio Q&A reads desk state — exposure, health, rules, and pending trades.",
+          suggestedSkill: "portfolio_query",
+        };
+      }
       if (/thesis|smart take|dip rule|from intel/.test(combined)) {
         const sym = cfgStr(config, "selectedAsset", "SPY");
         return {
@@ -359,8 +377,11 @@ function ruleBasedReply(req: AgentAssistRequest): AgentAssistResult {
       if (/arm|enable|rule/.test(combined)) {
         return { reply: "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance.", suggestedSkill: "arm_rule" };
       }
-      if (/rebalance|alloc/.test(combined)) {
-        return { reply: "Rebalance simulates drift correction against target allocation.", suggestedSkill: "rebalance" };
+      if (/rebalance|alloc|drift|concentration/.test(combined)) {
+        return {
+          reply: "Creating an armed rebalance rule from portfolio health hints — evaluates on heartbeat when drift exceeds threshold.",
+          suggestedSkill: "rebalance",
+        };
       }
       return { reply: "Capital Claw in paper mode. Ask about watchlist or create a new rule.", suggestedSkill: "create_rule" };
 

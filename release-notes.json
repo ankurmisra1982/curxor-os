@@ -40,5 +40,13 @@
       "dashboard_bootstrap + heartbeat docs — evaluate_rules, pilot sync, intel digest, PFM refresh on daemon tick",
       "Capital QA seeds + user flows — demo tour → go_live, execute_now armed rule; tagged v0.3.2"
     ]
+  },
+  "0.3.3": {
+    "highlights": [
+      "Capital Claw excellence sprint — Setup Wizard, Analytics tab, walk-forward backtest, NL portfolio Q&A, tax lots beta",
+      "Rebalance end-to-end — portfolio health CTAs, chat rebalance skill, Signal/Rebalance rule builder",
+      "Review hardening — strict wizard ok checks, Go Live until paperReady, MCP/tools parity, analytics win-rate fix",
+      "120 smoke + 17 user flows — rebalance, walk-forward, wizard API sequence; tagged v0.3.3"
+    ]
   }
 }

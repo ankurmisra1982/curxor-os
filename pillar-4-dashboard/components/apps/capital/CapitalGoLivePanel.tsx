@@ -11,6 +11,8 @@ export interface CapitalGoLiveStepRow {
 
 export interface CapitalGoLiveReportRow {
   ready: boolean;
+  demoReady?: boolean;
+  paperReady?: boolean;
   partiallyReady?: boolean;
   progress: { complete: number; total: number };
   steps: CapitalGoLiveStepRow[];
@@ -59,12 +61,18 @@ export function CapitalGoLivePanel({
   const demoRelease = alpacaStep?.status === "warning";
 
   const label = report.ready
-    ? report.steps.some((s) => s.id === "live_money" && s.status === "complete" && report.steps.find((x) => x.id === "paper")?.detail?.includes("live"))
-      ? "Ready to trade (live)"
-      : "Ready to trade (paper)"
-    : report.partiallyReady
-      ? `Partially ready · ${report.progress.complete}/${report.progress.total}`
-      : `Go live · ${report.progress.complete}/${report.progress.total}`;
+    ? report.paperReady
+      ? "Ready to trade (paper bridge)"
+      : report.demoReady
+        ? "Demo ready — sovereign desk live"
+        : report.steps.some((s) => s.id === "live_money" && s.status === "complete" && report.steps.find((x) => x.id === "paper")?.detail?.includes("live"))
+          ? "Ready to trade (live)"
+          : "Ready to trade (paper)"
+    : report.demoReady
+      ? `Demo ready · ${report.progress.complete}/${report.progress.total} full checklist`
+      : report.partiallyReady
+        ? `Partially ready · ${report.progress.complete}/${report.progress.total}`
+        : `Go live · ${report.progress.complete}/${report.progress.total}`;
 
   return (
     <div className="space-y-3 font-mono text-[10px]">

@@ -17,6 +17,28 @@ See [STARTUP-GUIDE.md](./STARTUP-GUIDE.md) for the day-one operator path.
 
 Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys`
 
+## Shipped (V4.6 — day-one excellence sprint)
+
+- **Setup Wizard** — 5-step risk → rule → arm → execute → Go Live (`CapitalSetupWizard.tsx`)
+- **Analytics tab** — desk analytics, rule scorecard, tax lots, portfolio Q&A (Standard+)
+- **Go Live semantics** — `demoReady` / `paperReady` without requiring Alpaca in demo mode
+- **Walk-forward backtest** — `walk_forward_backtest` action with overfit risk label
+- **Rebalance rule builder** — Signal / Rebalance toggle in visual rule builder
+- **Heartbeat desk alerts** — portfolio health, stale pending approval, dormant armed rules
+- **NL portfolio queries** — `nl_portfolio_query` + MCP `query_portfolio` + chat skill
+- **Chat skills** — `run_demo_tour`, `execute_now`, `portfolio_query`
+- **UX polish** — coach banner, benchmark strip, post-execute scroll, Beginner unlock nudge
+
+## Shipped (V4.6.1 — review hardening)
+
+- **Rebalance end-to-end** — portfolio health CTAs create + arm rules; chat `rebalance` skill executes
+- **Setup Wizard** — strict `ok` checks; finish blocked until `demoReady` or `paperReady`
+- **Go Live persistence** — Standard+ panel stays until `paperReady`
+- **Pending banner** — gated to Standard+ (Beginner sees recent trades strip only)
+- **Tools/MCP parity** — `query_portfolio`, `get_go_live_report`, `walk_forward_backtest`
+- **Analytics fix** — sell win-rate from avg-cost pairing; SPY benchmark from movers feed
+- **QA** — rebalance rule, walk-forward, wizard API sequence, tools smoke
+
 ## Shipped (V4.5 — demo excellence)
 
 - **Simulated fills** — no broker keys → `simulated` status at quote price (not failed)
