@@ -56,7 +56,7 @@ Output: `docs/demo-pack/screenshots/` (+ `screenshots/creator/` for Creator Claw
 |------|-------|-----|
 | `01-home.png` | `/home` | Landing hero, day-one story (includes recent conversations) |
 | `02-settings.png` | `/settings` | User freedom — Claws, intelligence, appearance |
-| `03-capital-claw.png` | `/my-capital` | Wealth Claw workspace |
+| `03-capital-claw.png` | `/my-capital` | Capital Claw desk (Setup Wizard · Analytics · Go Live) |
 | `04-forge.png` | `/claw-forge` | Create-to-earn |
 | `05-vital-claw.png` | `/my-vital` | Life & family — longevity desk |
 | `06-kin-claw.png` | `/my-family` | Life & family — household profiles |
@@ -77,6 +77,23 @@ Output: `docs/demo-pack/screenshots/` (+ `screenshots/creator/` for Creator Claw
 | `16-content-planner.png` | Content Planner | Gap detection · fill week |
 
 Copy these into `curxor storefront/public/demo/` when updating GTM assets.
+
+### Capital Claw flows (screenshots/capital/)
+
+| File | Focus | Use |
+|------|-------|-----|
+| `17-setup-wizard.png` | Setup Wizard modal | Day-one onboarding |
+| `18-analytics-tab.png` | Analytics workspace tab | Standard+ scorecard |
+| `19-capital-go-live.png` | Go Live checklist | Demo vs paper path |
+
+Capture Capital-only assets:
+
+```bash
+npm run demo:capture:capital
+# or: node scripts/capture-capital-demo.mjs --base http://127.0.0.1:3080
+```
+
+Set `experienceLevel` to `standard` in `user-settings.json` before capture if Analytics tab is gated.
 
 ## Walkthrough video (~90s)
 

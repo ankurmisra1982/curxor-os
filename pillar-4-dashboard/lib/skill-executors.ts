@@ -46,6 +46,11 @@ export async function executeSkillMesh(
     return { executed: false, kind: "plan", skipReason: "context sync via workspace or /api/mesh/context" };
   }
 
+  if (appId === "my-capital") {
+    const capital = await executeMyCapitalSkill(skillId, config);
+    if (capital) return capital;
+  }
+
   if (skill.kind === "plan") {
     return { executed: false, kind: "plan", skipReason: "local-only skill" };
   }
@@ -105,177 +110,6 @@ export async function executeSkillMesh(
       }
       return { executed: true, kind: "digital", digital: { ok: true, id: out.send?.id ?? "", tool: "work.email.send" } };
     }
-    if (appId === "my-capital" && skillId === "execute_trade") {
-      const ruleId = cfgStr(config, "selectedRuleId", "");
-      const { executeCapitalTrade, submitTradeToBridge } = await import("./capital-trade-executor");
-      const out = await executeCapitalTrade({ ruleId: ruleId || undefined });
-      if (!out.ok) {
-        return { executed: false, kind: "digital", skipReason: out.error ?? "trade failed" };
-      }
-      if (out.trade?.status === "pending_approval") {
-        return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
-      }
-      if (out.trade?.status === "queued" && out.trade.id) {
-        const sent = await submitTradeToBridge(out.trade.id);
-        return {
-          executed: sent.ok,
-          kind: "digital",
-          digital: sent.ok ? { ok: true, id: out.trade.id, tool: "capital.execute_trade" } : undefined,
-          skipReason: sent.error,
-        };
-      }
-      return { executed: true, kind: "digital", digital: { ok: true, id: out.trade?.id ?? "", tool: "capital.execute_trade" } };
-    }
-    if (appId === "my-capital" && skillId === "research_ticker") {
-      const asset = cfgStr(config, "selectedAsset", "SPY");
-      const { buildTickerIntel } = await import("./capital-ticker-intel");
-      const intel = await buildTickerIntel(asset);
-      return {
-        executed: true,
-        kind: "plan",
-        skipReason: `${intel.symbol} · ${intel.smartTake ?? "Intel refreshed"} · sentiment ${intel.sentiment.label}`,
-      };
-    }
-    if (appId === "my-capital" && skillId === "create_rule_from_thesis") {
-      const asset = cfgStr(config, "selectedAsset", "SPY");
-      const { getCachedTickerIntel, buildTickerIntel } = await import("./capital-ticker-intel");
-      const { createRuleFromIntelThesis } = await import("./capital-intel-actions");
-      const intel = (await getCachedTickerIntel(asset, { allowStale: true })) ?? (await buildTickerIntel(asset));
-      const rule = await createRuleFromIntelThesis(intel);
-      return {
-        executed: true,
-        kind: "plan",
-        skipReason: `Rule ${rule.id} · ${rule.name}`,
-      };
-    }
-    if (appId === "my-capital" && skillId === "subscribe_pilot") {
-      const pilotId = cfgStr(config, "selectedPilotId", "PILOT-NDAQ10");
-      const allocation = Number(config.allocationUsd ?? 1000);
-      const { subscribeToPilot } = await import("./capital-pilot-engine");
-      const out = await subscribeToPilot({ pilotId, allocationUsd: Number.isFinite(allocation) ? allocation : 1000 });
-      return { executed: out.ok, kind: "plan", skipReason: out.ok ? `Subscribed ${pilotId}` : out.error };
-    }
-    if (appId === "my-capital" && skillId === "sync_pilots") {
-      const { syncPilotSubscriptions } = await import("./capital-pilot-engine");
-      const out = await syncPilotSubscriptions();
-      return { executed: true, kind: "digital", skipReason: `Pilot sync · ${out.trades ?? 0} trade(s)` };
-    }
-    if (appId === "my-capital" && skillId === "preview_trade") {
-      const asset = cfgStr(config, "selectedAsset", "SPY");
-      const { previewTrade } = await import("./capital-trade-executor");
-      const out = await previewTrade({ ticker: asset, qty: 1, action: "buy" });
-      const p = out.preview;
-      return {
-        executed: out.ok,
-        kind: "plan",
-        skipReason: p
-          ? `${p.action} ${p.qty} ${p.ticker} · ~$${p.estimatedNotionalUsd ?? "?"} · auto=${p.autoApproveEligible}`
-          : out.error,
-      };
-    }
-    if (appId === "my-capital" && skillId === "pfm_refresh") {
-      const { refreshPfmData } = await import("./capital-pfm-store");
-      const snapshot = await refreshPfmData();
-      return {
-        executed: true,
-        kind: "plan",
-        skipReason: `PFM · net worth $${snapshot.netWorthUsd} · ${snapshot.dataSource}`,
-      };
-    }
-    if (appId === "my-capital" && skillId === "run_demo_tour") {
-      const { runCapitalDemoTour } = await import("./capital-demo-tour");
-      const tour = await runCapitalDemoTour();
-      return {
-        executed: tour.ok,
-        kind: "digital",
-        skipReason: tour.ok
-          ? `Demo tour · ${tour.tradeId ?? "fill"} · rule ${tour.ruleId ?? ""}`
-          : tour.error ?? "Demo tour failed",
-      };
-    }
-    if (appId === "my-capital" && skillId === "execute_now") {
-      const ruleId = cfgStr(config, "selectedRuleId", "");
-      const { executeCapitalTrade } = await import("./capital-trade-executor");
-      const { ensureCapitalQueue } = await import("./capital-store");
-      const file = await ensureCapitalQueue();
-      const rid = ruleId || file.rules.find((r) => r.state === "ARMED")?.id;
-      if (!rid) {
-        return { executed: false, kind: "plan", skipReason: "No armed rule — arm a rule first" };
-      }
-      const out = await executeCapitalTrade({ ruleId: rid, source: "manual" });
-      return {
-        executed: out.ok,
-        kind: "digital",
-        skipReason: out.ok
-          ? `Execute now · ${out.trade?.status ?? "ok"} · ${out.trade?.id ?? ""}`
-          : out.error ?? "Execute failed",
-      };
-    }
-    if (appId === "my-capital" && skillId === "portfolio_query") {
-      const q = cfgStr(config, "lastUserMessage", "portfolio health");
-      const { fetchCapitalStatus } = await import("./capital-store");
-      const { answerPortfolioQuery } = await import("./capital-nl-query");
-      const status = await fetchCapitalStatus();
-      const result = answerPortfolioQuery(q, status);
-      return { executed: true, kind: "plan", skipReason: result.answer };
-    }
-    if (appId === "my-capital" && skillId === "rebalance") {
-      const asset = cfgStr(config, "selectedAsset", "SPY");
-      const { createRule, setRuleState, fetchCapitalStatus } = await import("./capital-store");
-      const status = await fetchCapitalStatus();
-      const hint = status.portfolioHealth.rebalanceHints?.[0];
-      const sym = hint?.symbol ?? asset;
-      const target = hint?.targetWeightPct ?? 20;
-      const rule = await createRule({
-        name: `${sym} rebalance`,
-        asset: sym,
-        kind: "rebalance",
-        targetWeight: target,
-        driftThresholdPct: 10,
-        action: "sell",
-        conditionType: "manual_trigger",
-      });
-      await setRuleState(rule.id, "ARMED");
-      return {
-        executed: true,
-        kind: "plan",
-        skipReason: `Rebalance rule ${rule.id} armed · ${sym} target ${target}%`,
-      };
-    }
-    if (appId === "my-capital" && skillId === "agent_execute_trade") {
-      const asset = cfgStr(config, "selectedAsset", "SPY");
-      const { agentExecuteTrade } = await import("./capital-agent-executor");
-      const result = await agentExecuteTrade({
-        ticker: asset,
-        qty: 1,
-        action: "buy",
-        confirm: false,
-        source: "claw",
-      });
-      if (!result.ok && result.phase === "blocked") {
-        return { executed: false, kind: "digital", skipReason: result.error ?? "blocked" };
-      }
-      if (result.phase === "preview") {
-        const p = result.preview;
-        return {
-          executed: true,
-          kind: "plan",
-          skipReason: p
-            ? `Preview · ${p.action} ${p.qty} ${p.ticker} · confirm in Agent & MCP panel`
-            : "Preview ready — confirm in desk",
-        };
-      }
-      return {
-        executed: result.ok,
-        kind: "digital",
-        skipReason: result.ok
-          ? `Agent executed · ${result.trade?.id ?? ""} · ${result.trade?.status ?? ""}`
-          : result.error ?? "Agent execute failed",
-        digital: result.trade
-          ? { ok: result.ok, id: result.trade.id, tool: "capital.execute_trade" }
-          : undefined,
-      };
-    }
     const digital = await buildDigitalIntent(appId, skillId, config);
     if (!digital) {
       return { executed: false, kind: "digital", skipReason: "no digital mapping" };
@@ -290,6 +124,222 @@ export async function executeSkillMesh(
   }
   const result = await publishMotorCommand(motor);
   return { executed: result.ok, kind: "physical", motor: result };
+}
+
+async function executeMyCapitalSkill(
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  if (skillId === "execute_trade") {
+    const ruleId = cfgStr(config, "selectedRuleId", "");
+    const { executeCapitalTrade, submitTradeToBridge } = await import("./capital-trade-executor");
+    const out = await executeCapitalTrade({ ruleId: ruleId || undefined });
+    if (!out.ok) {
+      return { executed: false, kind: "digital", skipReason: out.error ?? "trade failed" };
+    }
+    if (out.trade?.status === "pending_approval") {
+      return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
+    }
+    if (out.trade?.status === "queued" && out.trade.id) {
+      const sent = await submitTradeToBridge(out.trade.id);
+      return {
+        executed: sent.ok,
+        kind: "digital",
+        digital: sent.ok ? { ok: true, id: out.trade.id, tool: "capital.execute_trade" } : undefined,
+        skipReason: sent.error,
+      };
+    }
+    return { executed: true, kind: "digital", digital: { ok: true, id: out.trade?.id ?? "", tool: "capital.execute_trade" } };
+  }
+  if (skillId === "research_ticker") {
+    const asset = cfgStr(config, "selectedAsset", "SPY");
+    const { buildTickerIntel } = await import("./capital-ticker-intel");
+    const intel = await buildTickerIntel(asset);
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `${intel.symbol} · ${intel.smartTake ?? "Intel refreshed"} · sentiment ${intel.sentiment.label}`,
+    };
+  }
+  if (skillId === "create_rule_from_thesis") {
+    const asset = cfgStr(config, "selectedAsset", "SPY");
+    const { getCachedTickerIntel, buildTickerIntel } = await import("./capital-ticker-intel");
+    const { createRuleFromIntelThesis } = await import("./capital-intel-actions");
+    const intel = (await getCachedTickerIntel(asset, { allowStale: true })) ?? (await buildTickerIntel(asset));
+    const rule = await createRuleFromIntelThesis(intel);
+    return { executed: true, kind: "plan", skipReason: `Rule ${rule.id} · ${rule.name}` };
+  }
+  if (skillId === "subscribe_pilot") {
+    const pilotId = cfgStr(config, "selectedPilotId", "PILOT-NDAQ10");
+    const allocation = Number(config.allocationUsd ?? 1000);
+    const { subscribeToPilot } = await import("./capital-pilot-engine");
+    const out = await subscribeToPilot({ pilotId, allocationUsd: Number.isFinite(allocation) ? allocation : 1000 });
+    return { executed: out.ok, kind: "plan", skipReason: out.ok ? `Subscribed ${pilotId}` : out.error };
+  }
+  if (skillId === "sync_pilots") {
+    const { syncPilotSubscriptions } = await import("./capital-pilot-engine");
+    const out = await syncPilotSubscriptions();
+    return { executed: true, kind: "digital", skipReason: `Pilot sync · ${out.trades ?? 0} trade(s)` };
+  }
+  if (skillId === "preview_trade") {
+    const asset = cfgStr(config, "selectedAsset", "SPY");
+    const { previewTrade } = await import("./capital-trade-executor");
+    const out = await previewTrade({ ticker: asset, qty: 1, action: "buy" });
+    const p = out.preview;
+    return {
+      executed: out.ok,
+      kind: "plan",
+      skipReason: p
+        ? `${p.action} ${p.qty} ${p.ticker} · ~$${p.estimatedNotionalUsd ?? "?"} · auto=${p.autoApproveEligible}`
+        : out.error,
+    };
+  }
+  if (skillId === "pfm_refresh") {
+    const { refreshPfmData } = await import("./capital-pfm-store");
+    const snapshot = await refreshPfmData();
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `PFM · net worth $${snapshot.netWorthUsd} · ${snapshot.dataSource}`,
+    };
+  }
+  if (skillId === "run_demo_tour") {
+    const { runCapitalDemoTour } = await import("./capital-demo-tour");
+    const tour = await runCapitalDemoTour();
+    return {
+      executed: tour.ok,
+      kind: "digital",
+      skipReason: tour.ok
+        ? `Demo tour · ${tour.tradeId ?? "fill"} · rule ${tour.ruleId ?? ""}`
+        : tour.error ?? "Demo tour failed",
+    };
+  }
+  if (skillId === "execute_now") {
+    const ruleId = cfgStr(config, "selectedRuleId", "");
+    const { executeCapitalTrade } = await import("./capital-trade-executor");
+    const { ensureCapitalQueue } = await import("./capital-store");
+    const file = await ensureCapitalQueue();
+    const rid = ruleId || file.rules.find((r) => r.state === "ARMED")?.id;
+    if (!rid) {
+      return { executed: false, kind: "plan", skipReason: "No armed rule — arm a rule first" };
+    }
+    const out = await executeCapitalTrade({ ruleId: rid, source: "manual" });
+    return {
+      executed: out.ok,
+      kind: "digital",
+      skipReason: out.ok
+        ? `Execute now · ${out.trade?.status ?? "ok"} · ${out.trade?.id ?? ""}`
+        : out.error ?? "Execute failed",
+    };
+  }
+  if (skillId === "portfolio_query") {
+    const q = cfgStr(config, "lastUserMessage", "portfolio health");
+    const { fetchCapitalStatus } = await import("./capital-store");
+    const { answerPortfolioQuery } = await import("./capital-nl-query");
+    const status = await fetchCapitalStatus();
+    const result = answerPortfolioQuery(q, status);
+    return { executed: true, kind: "plan", skipReason: result.answer };
+  }
+  if (skillId === "rebalance") {
+    const asset = cfgStr(config, "selectedAsset", "SPY");
+    const { createRule, setRuleState, fetchCapitalStatus } = await import("./capital-store");
+    const status = await fetchCapitalStatus();
+    const hint = status.portfolioHealth.rebalanceHints?.[0];
+    const sym = hint?.symbol ?? asset;
+    const target = hint?.targetWeightPct ?? 20;
+    const rule = await createRule({
+      name: `${sym} rebalance`,
+      asset: sym,
+      kind: "rebalance",
+      targetWeight: target,
+      driftThresholdPct: 10,
+      action: "sell",
+      conditionType: "manual_trigger",
+    });
+    await setRuleState(rule.id, "ARMED");
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Rebalance rule ${rule.id} armed · ${sym} target ${target}%`,
+    };
+  }
+  if (skillId === "create_rule") {
+    const asset = cfgStr(config, "selectedAsset", "SPY").trim().toUpperCase() || "SPY";
+    const { createRule } = await import("./capital-store");
+    const rule = await createRule({
+      name: `${asset} chat rule`,
+      asset,
+      action: "buy",
+      qty: 1,
+      conditionType: "manual_trigger",
+    });
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Rule ${rule.id} created (paused) · arm before execute`,
+    };
+  }
+  if (skillId === "arm_rule") {
+    const ruleId = cfgStr(config, "selectedRuleId", "").trim();
+    const { createRule, setRuleState, fetchCapitalStatus } = await import("./capital-store");
+    let id = ruleId;
+    if (!id) {
+      const status = await fetchCapitalStatus();
+      id = status.rules.find((r) => r.state !== "ARMED")?.id ?? status.rules[0]?.id ?? "";
+    }
+    if (!id) {
+      const asset = cfgStr(config, "selectedAsset", "SPY");
+      const created = await createRule({
+        name: `${asset} chat rule`,
+        asset,
+        action: "buy",
+        qty: 1,
+        conditionType: "manual_trigger",
+      });
+      id = created.id;
+    }
+    const armed = await setRuleState(id, "ARMED");
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: armed ? `Rule ${armed.id} armed` : `Could not arm ${id}`,
+    };
+  }
+  if (skillId === "agent_execute_trade") {
+    const asset = cfgStr(config, "selectedAsset", "SPY");
+    const { agentExecuteTrade } = await import("./capital-agent-executor");
+    const result = await agentExecuteTrade({
+      ticker: asset,
+      qty: 1,
+      action: "buy",
+      confirm: false,
+      source: "claw",
+    });
+    if (!result.ok && result.phase === "blocked") {
+      return { executed: false, kind: "digital", skipReason: result.error ?? "blocked" };
+    }
+    if (result.phase === "preview") {
+      const p = result.preview;
+      return {
+        executed: true,
+        kind: "plan",
+        skipReason: p
+          ? `Preview · ${p.action} ${p.qty} ${p.ticker} · confirm in Agent & MCP panel`
+          : "Preview ready — confirm in desk",
+      };
+    }
+    return {
+      executed: result.ok,
+      kind: "digital",
+      skipReason: result.ok
+        ? `Agent executed · ${result.trade?.id ?? ""} · ${result.trade?.status ?? ""}`
+        : result.error ?? "Agent execute failed",
+      digital: result.trade
+        ? { ok: result.ok, id: result.trade.id, tool: "capital.execute_trade" }
+        : undefined,
+    };
+  }
+  return null;
 }
 
 async function buildMotorIntent(

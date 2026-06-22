@@ -62,7 +62,7 @@ Shipped for ~90% retail day-one:
 | Pilot marketplace credibility (demo badge, perf bars, disclosure lag) | Shipped |
 | Idempotent pilot subscribe (QA-safe) | Shipped |
 
-Still deferred for v2: TradingView Lightweight Charts embed, live 13F/congress feeds, Robinhood MCP execution, NLP sentiment model, visual rule builder.
+Still deferred for v2+: mobile push for pending approvals, contextual PFM ads opt-in, Clear Street tier.
 
 ## V2 sprint (shipped)
 
@@ -75,7 +75,7 @@ Still deferred for v2: TradingView Lightweight Charts embed, live 13F/congress f
 | Visual rule builder | Shipped — WHEN/THEN panel on rule engine |
 | Multi-account broker rotation | Shipped — `activeBrokerId` + Set active on brokers panel |
 
-Remaining v3: options, crypto wallets, tax lots, live money guardrails, full 13F XML parse, Robinhood banking MCP.
+Remaining v3+: full tax-lot engine, Robinhood banking MCP, full 13F XML holdings parse.
 
 ## V3 sprint (shipped)
 
@@ -131,7 +131,7 @@ See [AGENT-TRADING.md](./AGENT-TRADING.md) for setup, competitive research (Robi
 | P1 | Go-live persistence | Onboarding apps | Show checklist until `ready` at Standard+ | S | **Shipped V4.3** |
 | P1 | Rule creation UX | Composer | Visual builder only — no `prompt()` | S | **Shipped V4.3** |
 | P1 | Post-execute feedback | Retail brokers | Status-aware header copy | S | **Shipped V4.3** |
-| P2 | Options/crypto rules | Composer | Condition types + bridge | L | Planned |
+| P2 | Options/crypto rules | Composer | Condition types + bridge | L | **Partial** — builder conditions shipped · bridge execution deferred |
 | P2 | Mobile pending push | Autopilot | Push beyond Telegram/Slack | M | Planned |
 
 See [EXECUTION-FLOW.md](./EXECUTION-FLOW.md) for journey maps and mermaid diagrams.

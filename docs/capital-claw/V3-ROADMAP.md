@@ -16,10 +16,10 @@
 
 ## In progress / next
 
-- Plaid (or sovereign bank feed) to replace demo PFM transactions
+- Plaid (or sovereign bank feed) to replace demo PFM transactions — **Link UI + sandbox scaffold shipped** · see [EXIT-DEMO.md](./EXIT-DEMO.md)
 - PFM ↔ portfolio reconciliation (brokerage balance vs Alpaca positions)
-- Auto-approval audit log in trade log (who/what skipped approval)
 - Portfolio health chart (weight over time)
+- SnapTrade pillar-3 execution worker (OAuth scaffold shipped)
 
 ## Env
 

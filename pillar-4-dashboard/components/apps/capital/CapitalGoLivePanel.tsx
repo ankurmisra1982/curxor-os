@@ -77,12 +77,24 @@ export function CapitalGoLivePanel({
   return (
     <div className="space-y-3 font-mono text-[10px]">
       {demoRelease ? (
-        <div className="border border-cursor-glow/40 bg-cursor-glow/5 px-3 py-2 text-[10px] text-muted">
-          <span className="uppercase tracking-widest text-cursor-glow">Demo mode</span>
-          <p className="mt-1">
-            No broker keys configured — expected for this release. Rules, research, and trade log work locally;
-            Alpaca / Plaid / SnapTrade setup is deferred (see Go Live when ready).
-          </p>
+        <div className="space-y-2">
+          <div className="border border-cursor-glow/40 bg-cursor-glow/5 px-3 py-2 text-[10px] text-muted">
+            <span className="uppercase tracking-widest text-cursor-glow">Demo mode</span>
+            <p className="mt-1">
+              No broker keys configured — expected for this release. Rules, research, analytics, and simulated fills work
+              locally without keys.
+            </p>
+          </div>
+          <div className="border border-line/60 bg-panel/50 px-3 py-2 text-[10px] text-muted">
+            <span className="uppercase tracking-widest text-stark">Exit demo mode</span>
+            <p className="mt-1">
+              When ready for Alpaca paper fills: run{" "}
+              <code className="text-cursor-glow">npm run setup:capital-env</code> then{" "}
+              <code className="text-cursor-glow">npm run configure:capital-keys</code>, restart dev, and refresh this
+              checklist. Verify scaffold: <code className="text-cursor-glow">npm run verify:exit-demo-scaffold</code>.
+            </p>
+            <p className="mt-1">Full guide: docs/capital-claw/EXIT-DEMO.md</p>
+          </div>
         </div>
       ) : null}
       <div className="flex flex-wrap items-center gap-2">

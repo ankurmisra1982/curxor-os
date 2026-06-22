@@ -17,13 +17,14 @@ Skip [Broker & live rails](#broker--live-rails) until you exit demo mode.
 
 ## Broker & live rails (deferred — not required for demo)
 
-When ready to exit demo mode, see [RELEASE-NEXT.md](./RELEASE-NEXT.md) todo **Exit demo mode**.
+When ready to exit demo mode, see **[EXIT-DEMO.md](./EXIT-DEMO.md)** (step-by-step) and [RELEASE-NEXT.md](./RELEASE-NEXT.md) todo **Exit demo mode**.
 
 ### Local dev (Windows / macOS)
 
 ```bash
 cd pillar-4-dashboard
 npm run setup:capital-env
+npm run verify:exit-demo-scaffold
 npm run configure:capital-keys   # optional — opens signup pages
 ```
 

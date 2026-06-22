@@ -22,25 +22,24 @@ Header shows **`demo`** until `ALPACA_*` keys are set. Without keys, executes pr
 
 1. Open **`/my-capital`** (Capital Claw desk).
 2. Complete **FRE** if prompted — keep **Paper only** trading mode.
-3. Click **Run demo tour** in Go Live — creates a rule, arms it, and **simulates a fill** (no broker keys).
+3. Use **Setup Wizard** (header) or **Run demo tour** in Go Live — creates a rule, arms it, and **simulates a fill** (no broker keys).
 4. **Research** a ticker → optional **Arm dip rule** or use **Rule engine** visual builder.
-5. Beginners see **Recent trades** strip; Standard+ unlocks full trade log + decision timeline.
+5. Beginners see **Recent trades** strip; Standard+ unlocks Analytics tab, full trade log + decision timeline.
 
 No `digital.env` setup required for this path.
 
 ---
 
-## When you leave demo mode (deferred — see todo)
+## When you leave demo mode
 
-See [GETTING-STARTED.md](./GETTING-STARTED.md) § Broker & live rails and run:
+See **[EXIT-DEMO.md](./EXIT-DEMO.md)** — scaffold without keys:
 
 ```bash
 cd pillar-4-dashboard
 npm run setup:capital-env
-npm run configure:capital-keys
+npm run verify:exit-demo-scaffold
+npm run configure:capital-keys   # when you have Alpaca / Plaid / SnapTrade keys
 ```
-
-Track progress in [RELEASE-NEXT.md](./RELEASE-NEXT.md) todo list.
 
 ---
 
@@ -48,4 +47,5 @@ Track progress in [RELEASE-NEXT.md](./RELEASE-NEXT.md) todo list.
 
 - [GETTING-STARTED.md](./GETTING-STARTED.md) — full checklist, API, env vars
 - [EXECUTION-FLOW.md](./EXECUTION-FLOW.md) — rule / agent / auto-approve journeys
+- [EXIT-DEMO.md](./EXIT-DEMO.md) — leave demo mode (Alpaca paper, Plaid, SnapTrade)
 - [BEST-IN-CLASS.md](./BEST-IN-CLASS.md) — competitive gaps and shipped sprints

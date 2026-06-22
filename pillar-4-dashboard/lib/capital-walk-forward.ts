@@ -38,7 +38,8 @@ export async function walkForwardBacktest(rule: CapitalRule): Promise<WalkForwar
     return {
       fires90d: fires,
       lastRunAt: new Date().toISOString(),
-      note: "Walk-forward needs Alpaca bars — single-window demo estimate",
+      note:
+        "Demo estimate — set ALPACA_* keys for multi-window walk-forward on historical bars. Manual/webhook rules use current quote only.",
       strategyReturnPct: 0,
       benchmarkReturnPct: 0,
       windows: [],

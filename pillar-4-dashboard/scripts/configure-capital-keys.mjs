@@ -168,6 +168,9 @@ async function main() {
   console.log(`\nWrote ${DIGITAL_ENV}`);
   console.log(`Live gate: CURXOR_CAPITAL_LIVE_ENABLED=${updates.CURXOR_CAPITAL_LIVE_ENABLED ?? "0"}`);
   console.log(configured.length ? `Configured: ${configured.join(", ")}` : "No broker keys set yet — desk stays in demo until keys are added.");
+  console.log("Optional: WEBULL_* / ETRADE_* in digital.env.example · OAuth link in Brokers panel.");
+  console.log("Verify scaffold: npm run verify:exit-demo-scaffold");
+  console.log("Full guide: docs/capital-claw/EXIT-DEMO.md");
   console.log("\nRestart npm run dev, then Capital desk → Go Live / Brokers / PFM.\n");
 }
 

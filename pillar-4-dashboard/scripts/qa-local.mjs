@@ -150,6 +150,10 @@ async function main() {
       if (capitalExit !== 0) exitCode = capitalExit;
     }
     if (exitCode === 0) {
+      const scaffoldExit = await run("node", ["scripts/verify-exit-demo-scaffold.mjs", BASE]);
+      if (scaffoldExit !== 0) exitCode = scaffoldExit;
+    }
+    if (exitCode === 0) {
       const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);
       if (flowExit !== 0) exitCode = flowExit;
     }

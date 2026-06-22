@@ -17,7 +17,9 @@
     "qa:capital-checklist": "node scripts/capital-checklist.mjs",
     "setup:capital-env": "node scripts/setup-capital-env.mjs",
     "configure:capital-keys": "node scripts/configure-capital-keys.mjs --open-signup-pages",
+    "verify:exit-demo-scaffold": "node scripts/verify-exit-demo-scaffold.mjs",
     "demo:capture": "node scripts/capture-demo-screenshots.mjs",
+    "demo:capture:capital": "node scripts/capture-capital-demo.mjs",
     "demo:capture:marketing": "node scripts/capture-marketing-flows.mjs"
   },
   "dependencies": {

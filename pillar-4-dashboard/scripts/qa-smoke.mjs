@@ -740,6 +740,24 @@ await check("app-agent assist (capital digital skill)", async () => {
   return typeof json.reply === "string";
 });
 
+await check("app-agent assist (capital create_rule skill)", async () => {
+  const { json } = await postJson("/api/app-agent/assist", {
+    appId: "my-capital",
+    skillId: "create_rule",
+    config: { tradingMode: "paper", selectedAsset: "SPY" },
+  });
+  return typeof json.reply === "string" && json.reply.includes("Rule");
+});
+
+await check("app-agent assist (capital arm_rule skill)", async () => {
+  const { json } = await postJson("/api/app-agent/assist", {
+    appId: "my-capital",
+    skillId: "arm_rule",
+    config: { tradingMode: "paper", selectedAsset: "SPY" },
+  });
+  return typeof json.reply === "string" && /armed|Rule/i.test(json.reply);
+});
+
 await check("claw assist", async () => {
   const { json } = await postJson("/api/claw/assist", {
     message: "forge a sorting claw",

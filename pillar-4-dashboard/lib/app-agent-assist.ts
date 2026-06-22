@@ -29,7 +29,7 @@ const LLM_PLAN_SKILLS: Partial<Record<OotbAppId, string[]>> = {
   "my-work": ["summarize_day"],
   "my-shop": ["ingest_order"],
   "my-content-creator": ["draft_post"],
-  "my-capital": ["create_rule", "run_demo_tour", "execute_now", "portfolio_query", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade", "rebalance"],
+  "my-capital": ["create_rule", "arm_rule", "run_demo_tour", "execute_now", "portfolio_query", "research_ticker", "create_rule_from_thesis", "preview_trade", "agent_execute_trade", "rebalance"],
 };
 
 function cfgStr(config: Record<string, unknown>, key: string, fallback: string): string {
@@ -646,9 +646,9 @@ async function runSkillReply(
   if (meshResult.kind === "plan" || !meshResult.executed) {
     if (skill.kind === "plan" || meshResult.skipReason === "local-only skill" || meshResult.skipReason === "vision attach is UI-only") {
       return {
-        reply: `${skill.label}: completed locally on appliance. See activity log for details.`,
-        activity: `[${skill.label}] ${skill.description}`,
-        mesh: { kind: "plan", ok: true },
+        reply: meshResult.skipReason ?? `${skill.label}: completed locally on appliance. See activity log for details.`,
+        activity: `[${skill.label}] ${meshResult.skipReason ?? skill.description}`,
+        mesh: { kind: "plan", ok: meshResult.executed !== false },
       };
     }
     return {

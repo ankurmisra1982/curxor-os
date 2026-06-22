@@ -8,14 +8,25 @@ See [STARTUP-GUIDE.md](./STARTUP-GUIDE.md) for the day-one operator path.
 
 ## Todo — exit demo mode (when ready)
 
+Scaffold (no keys): `npm run setup:capital-env` · `npm run verify:exit-demo-scaffold` · see [EXIT-DEMO.md](./EXIT-DEMO.md)
+
 - [ ] **Alpaca paper keys** — `ALPACA_*` in `digital.env` · verify Go Live Alpaca step green · first paper fill via bridge
 - [ ] **Plaid sandbox** — `PLAID_*` + Link bank in PFM panel · PFM `dataSource: plaid`
 - [ ] **SnapTrade OAuth** — `SNAPTRADE_*` + link flow in Brokers panel
 - [ ] **Live money gate** — set `CURXOR_CAPITAL_LIVE_ENABLED=1` only after paper path proven · FRE live + desk confirm
-- [ ] **SnapTrade bridge worker** — pillar-3 execution for Fidelity/Public/TD (scaffold only today)
-- [ ] **QA** — re-run `npm run qa:local` with keys present · smoke `snaptrade`, `plaid`, live gate
+- [ ] **SnapTrade bridge worker** — pillar-3 execution for Fidelity/Public/TD (OAuth scaffold shipped; worker pending)
+- [ ] **QA with keys** — re-run `npm run qa:local` with keys present · smoke `snaptrade`, `plaid`, live gate
 
-Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys`
+Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys` · `npm run verify:exit-demo-scaffold`
+
+## Shipped (V4.6.2 — polish & exit-demo scaffold)
+
+- **EXIT-DEMO.md** — operator guide for Alpaca paper / Plaid / SnapTrade without changing demo policy
+- **verify:exit-demo-scaffold** — 8 checks (env template, go_live, broker routes) · wired into `qa:local`
+- **Go Live panel** — inline exit-demo commands when Alpaca keys absent
+- **digital.env.example** — Webull + E*TRADE vars · `demo:capture:capital` script
+- **Chat skill parity** — `create_rule` + `arm_rule` executors (not plan-only)
+- **Docs sync** — BEST-IN-CLASS / RELEASE-NEXT deferred sections updated
 
 ## Shipped (V4.6 — day-one excellence sprint)
 
@@ -54,12 +65,14 @@ Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys`
 - **Broker adapters** — Alpaca brackets, Webull OAuth, E*TRADE OAuth 1.0a
 - **Pilot marketplace** — Autopilot-style browse/subscribe/proportional copy (`capital-pilot-*`)
 
-## Deferred
+## Deferred (requires keys or pillar-3 worker)
 
+- SnapTrade **execution** worker (OAuth + desk link shipped)
+- Robinhood MCP **sovereign execution** (catalog + link UI shipped)
+- Full tax-lot engine (FIFO/LIFO — beta avg-cost shipped in health panel)
+- Options/crypto **bridge execution** (condition types in builder shipped)
+- Full 13F holdings XML parse (signal aggregation shipped)
 - Webull signed OpenAPI (non-OAuth) for institutional keys
-- Live brokerage / real money
-- Options, crypto wallets, tax lots
-- Full 13F holdings XML parse (v2 uses SEC signal aggregation)
 
 ## Intel sprint (shipped)
 
