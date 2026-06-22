@@ -64,7 +64,11 @@ const DEMO_PROTOCOL: LongevityProtocolStep[] = [
 async function readVitalState(): Promise<VitalHealthState> {
   try {
     const raw = await readFile(vitalPath(), "utf8");
-    return JSON.parse(raw) as VitalHealthState;
+    const parsed = JSON.parse(raw) as Partial<VitalHealthState>;
+    if (parsed.version !== 1 || !Array.isArray(parsed.protocol)) {
+      throw new Error("invalid vital state");
+    }
+    return parsed as VitalHealthState;
   } catch {
     return {
       version: 1,

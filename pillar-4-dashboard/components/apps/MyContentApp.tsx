@@ -1027,39 +1027,41 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   useEffect(() => {
     if (skillTick === 0 || !lastSkillId) return;
     const stamp = new Date().toLocaleTimeString();
-    if (lastSkillId === "draft_post") {
-      setLastSignal(`Draft saved · ${selected} · ${stamp}`);
-      void loadStatus();
+    /** Server-side digital skills already ran in skill-executors — queue refresh only. */
+    const queueRefreshOnly = new Set([
+      "draft_post",
+      "publish_post",
+      "schedule_post",
+      "batch_publish",
+      "thumbnail_vision",
+      "generate_ai_image",
+      "render_video",
+      "adapt_for_platforms",
+      "fan_out_channels",
+      "generate_hooks",
+      "repurpose_content",
+    ]);
+    if (queueRefreshOnly.has(lastSkillId)) {
+      if (lastSkillId === "draft_post") {
+        setLastSignal(`Draft saved · ${selected} · ${stamp}`);
+      } else if (lastSkillId === "publish_post") {
+        setLastSignal(
+          config.requirePublishApproval === true
+            ? `Publish submitted for approval · ${selected} · ${stamp}`
+            : `Publish queued · ${selected} · ${stamp}`,
+        );
+      } else if (lastSkillId === "schedule_post") {
+        setLastSignal(`Scheduled · ${selected} · ${stamp}`);
+      } else {
+        setLastSignal(`${lastSkillId} · ${selected} · ${stamp}`);
+      }
+      void refreshQueue();
+      if (lastSkillId === "publish_post" || lastSkillId === "batch_publish") {
+        void loadBootstrap();
+      }
       return;
     }
-    if (lastSkillId === "publish_post") {
-      setLastSignal(
-        config.requirePublishApproval === true
-          ? `Publish submitted for approval · ${selected} · ${stamp}`
-          : `Publish queued · ${selected} · ${stamp}`,
-      );
-      void loadStatus();
-      return;
-    }
-    if (lastSkillId === "schedule_post") {
-      setLastSignal(`Scheduled · ${selected} · ${stamp}`);
-      void loadStatus();
-      return;
-    }
-    if (
-      lastSkillId === "thumbnail_vision" ||
-      lastSkillId === "generate_ai_image" ||
-      lastSkillId === "render_video" ||
-      lastSkillId === "adapt_for_platforms" ||
-      lastSkillId === "fan_out_channels" ||
-      lastSkillId === "batch_publish" ||
-      lastSkillId === "generate_hooks" ||
-      lastSkillId === "repurpose_content"
-    ) {
-      setLastSignal(`${lastSkillId} · ${selected} · ${stamp}`);
-      void loadStatus();
-    }
-  }, [skillTick, lastSkillId, selected, loadStatus, config.requirePublishApproval]);
+  }, [skillTick, lastSkillId, selected, refreshQueue, loadBootstrap, config.requirePublishApproval]);
 
   useEffect(() => {
     if (skillTick === 0 || lastSkillId !== "thumbnail_vision" || !selected || !frame?.previewBase64) return;

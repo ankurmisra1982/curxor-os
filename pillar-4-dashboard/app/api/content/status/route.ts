@@ -865,7 +865,7 @@ export async function POST(request: Request): Promise<Response> {
         const fre = await readAppFreState("my-content-creator");
         const out = await requestPostPublish(body.postId, fre.config, body.actor ?? "operator");
         const status = await fetchContentStatus();
-        return Response.json({ ok: true, ...out, ...status });
+        return Response.json({ ok: true, ...status, ...out });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         return Response.json({ error: msg }, { status: 400 });

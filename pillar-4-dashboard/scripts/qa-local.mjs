@@ -47,6 +47,7 @@ const env = {
   CURXOR_GARMIN_OAUTH_PATH: path.join(DEV_QA, "garmin-oauth.json"),
   CURXOR_CONTENT_AUDIT_PATH: path.join(DEV_QA, "content-audit.json"),
   CURXOR_BRIDGE_HEALTH_PATH: path.join(DEV_QA, "content-bridge-health.json"),
+  CURXOR_CONTENT_OPS_PATH: path.join(DEV_QA, "content-ops.json"),
   CURXOR_MESH_BROKER_IP: "127.0.0.1",
   PORT,
   HOSTNAME: "127.0.0.1",

@@ -648,13 +648,16 @@ await check("content dashboard_bootstrap", async () => {
 });
 
 await check("content publish_now (X bridge path)", async () => {
-  const current = await getJson("/api/content/status");
-  const draftPost =
-    current.posts?.find((p) => p.stage === "DRAFT" || p.stage === "SCHEDULED") ?? current.posts?.[0];
-  if (!draftPost?.id) return false;
+  const created = await postJson("/api/content/status", {
+    action: "create",
+    platform: "x",
+    channel: "QA publish_now smoke",
+  });
+  const postId = created.json.post?.id;
+  if (!postId) return false;
   const { ok, json } = await postJson("/api/content/status", {
     action: "publish_now",
-    postId: draftPost.id,
+    postId,
   });
   return ok && (json.mode === "published" || json.mode === "pending");
 });

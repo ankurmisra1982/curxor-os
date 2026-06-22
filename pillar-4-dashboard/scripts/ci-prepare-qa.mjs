@@ -22,6 +22,15 @@ const optionalFiles = [
   ["ccp-consent.json", "{}"],
   ["garmin-oauth.json", "{}"],
   ["llm-credentials.json", "{}"],
+  ["content-audit.json", '{"version":1,"entries":[],"updatedAt":"2020-01-01T00:00:00.000Z"}'],
+  [
+    "content-bridge-health.json",
+    '{"version":1,"platforms":{},"updatedAt":"2020-01-01T00:00:00.000Z"}',
+  ],
+  [
+    "content-ops.json",
+    '{"version":1,"publishingPaused":false,"autoSchedulePaused":false,"autoRepliesPaused":false,"metricsRulesPaused":false,"pauseReason":null,"pausedAt":null,"pausedBy":null,"lastDigestAt":null,"updatedAt":"2020-01-01T00:00:00.000Z"}',
+  ],
 ];
 
 for (const [name, fallback] of optionalFiles) {
