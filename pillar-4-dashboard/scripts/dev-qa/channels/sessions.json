@@ -162,7 +162,7 @@
           "text": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold."
         }
       ],
-      "updatedAt": "2026-06-21T07:50:18.859Z"
+      "updatedAt": "2026-06-21T22:53:15.085Z"
     },
     {
       "id": "webchat:my-work",
@@ -254,7 +254,7 @@
           "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
         }
       ],
-      "updatedAt": "2026-06-21T07:50:20.416Z"
+      "updatedAt": "2026-06-21T22:53:18.582Z"
     },
     {
       "id": "webchat:my-vital",
@@ -346,7 +346,7 @@
           "text": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables."
         }
       ],
-      "updatedAt": "2026-06-21T07:50:20.519Z"
+      "updatedAt": "2026-06-21T22:53:18.726Z"
     },
     {
       "id": "webchat:my-capital",
@@ -355,7 +355,7 @@
       "appId": "my-capital",
       "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
       "senderLabel": "dashboard",
-      "lastPreview": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance.",
+      "lastPreview": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
       "history": [
         {
           "role": "user",
@@ -363,14 +363,6 @@
         },
         {
           "role": "assistant",
-          "text": "Capital Claw in paper mode. Ask about watchlist or create a new rule."
-        },
-        {
-          "role": "user",
-          "text": "What is my trading mode?"
-        },
-        {
-          "role": "assistant",
           "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
         },
         {
@@ -391,11 +383,19 @@
         },
         {
           "role": "user",
-          "text": "What is my trading mode?"
+          "text": "/execute_trade"
         },
         {
           "role": "assistant",
-          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+          "text": "Agent Execute uses preview → confirm pipeline. Mode: paper."
+        },
+        {
+          "role": "user",
+          "text": "/execute_trade"
+        },
+        {
+          "role": "assistant",
+          "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
         },
         {
           "role": "user",
@@ -403,10 +403,42 @@
         },
         {
           "role": "assistant",
-          "text": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance."
+          "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
+        },
+        {
+          "role": "user",
+          "text": "/execute_trade"
+        },
+        {
+          "role": "assistant",
+          "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
+        },
+        {
+          "role": "user",
+          "text": "/execute_trade"
+        },
+        {
+          "role": "assistant",
+          "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
+        },
+        {
+          "role": "user",
+          "text": "What is my trading mode?"
+        },
+        {
+          "role": "assistant",
+          "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
         }
       ],
-      "updatedAt": "2026-06-21T07:50:19.929Z"
+      "updatedAt": "2026-06-21T22:53:17.985Z"
     },
     {
       "id": "webchat:tesla-optimus-engine",
@@ -464,9 +496,41 @@
         {
           "role": "assistant",
           "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
+        },
+        {
+          "role": "user",
+          "text": "What do you know about my household?"
+        },
+        {
+          "role": "assistant",
+          "text": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step."
         }
       ],
-      "updatedAt": "2026-06-21T07:50:20.736Z"
+      "updatedAt": "2026-06-21T22:53:19.013Z"
     }
   ]
 }

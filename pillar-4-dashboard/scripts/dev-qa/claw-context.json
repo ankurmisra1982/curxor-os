@@ -2,14 +2,50 @@
   "records": [
     {
       "envelope": {
-        "id": "0e94a8d5-5c3c-43ec-aefe-dbf60b3505b6",
+        "id": "6ceff269-6c64-4c0c-8ab5-c6652d5d7bc8",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-capital",
+        "profileId": null,
+        "scope": "finance",
+        "key": "intel.ticker.SPY",
+        "timestamp": "2026-06-21T22:53:20.238Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "symbol": "SPY",
+          "name": "State Street SPDR S&P 500 ETF Trust",
+          "price": 746.74,
+          "changePct1d": null,
+          "marketCap": null,
+          "sentiment": {
+            "label": "mixed",
+            "score": 0.058823529411764705,
+            "bullishPct": 6,
+            "bearishPct": 0,
+            "sampleSize": 17
+          },
+          "smartTake": "SPY price updating · Chatter skews mixed (6% bull / 0% bear). CNBC: Stock futures fall as oil prices rise; investors await key reading on inflation:",
+          "citations": [
+            "CNBC: Stock futures fall as oil prices rise; investors await key reading on inflation:",
+            "CNBC: Trump threatens Iran with fresh strikes as Vance leads peace talks in Switzerlan",
+            "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
+          ],
+          "updatedAt": "2026-06-21T22:53:20.235Z"
+        }
+      },
+      "storedAt": "2026-06-21T22:53:20.238Z",
+      "expiresAt": "2026-06-21T23:53:20.238Z"
+    },
+    {
+      "envelope": {
+        "id": "25a30ccd-b862-4f9b-b8de-2272b5599764",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": null,
         "scope": "work",
         "key": "inbox.rollup",
-        "timestamp": "2026-06-21T07:58:17.792Z",
+        "timestamp": "2026-06-21T22:53:19.022Z",
         "ttlSeconds": 3600,
         "payload": {
           "sessionCount": 7,
@@ -20,7 +56,7 @@
               "appId": "tesla-optimus-engine",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
-              "updatedAt": "2026-06-21T07:58:17.775Z"
+              "updatedAt": "2026-06-21T22:53:19.013Z"
             },
             {
               "sessionId": "webchat:my-vital",
@@ -28,7 +64,7 @@
               "appId": "my-vital",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
-              "updatedAt": "2026-06-21T07:58:17.407Z"
+              "updatedAt": "2026-06-21T22:53:18.726Z"
             },
             {
               "sessionId": "webchat:my-work",
@@ -36,15 +72,15 @@
               "appId": "my-work",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
-              "updatedAt": "2026-06-21T07:58:17.281Z"
+              "updatedAt": "2026-06-21T22:53:18.582Z"
             },
             {
               "sessionId": "webchat:my-capital",
               "channel": "webchat",
               "appId": "my-capital",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-              "preview": "Arm Rule enables selected IF/THEN block. Evaluation stays on appliance.",
-              "updatedAt": "2026-06-21T07:58:16.452Z"
+              "preview": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
+              "updatedAt": "2026-06-21T22:53:17.985Z"
             },
             {
               "sessionId": "webchat:my-shop",
@@ -52,7 +88,7 @@
               "appId": "my-shop",
               "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
               "preview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
-              "updatedAt": "2026-06-21T07:58:15.310Z"
+              "updatedAt": "2026-06-21T22:53:15.085Z"
             },
             {
               "sessionId": "webchat:webchat:my-work",
@@ -71,11 +107,39 @@
               "updatedAt": "2026-06-21T03:14:26.211Z"
             }
           ],
-          "updatedAt": "2026-06-21T07:58:17.792Z"
+          "updatedAt": "2026-06-21T22:53:19.022Z"
         }
       },
-      "storedAt": "2026-06-21T07:58:17.792Z",
-      "expiresAt": "2026-06-21T08:58:17.792Z"
+      "storedAt": "2026-06-21T22:53:19.022Z",
+      "expiresAt": "2026-06-21T23:53:19.022Z"
+    },
+    {
+      "envelope": {
+        "id": "4ff4e36b-b51a-479b-95a9-db47806ddbfa",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+        "scope": "hardware",
+        "key": "inbox.webchat:tesla-optimus-engine",
+        "timestamp": "2026-06-21T22:53:19.017Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:tesla-optimus-engine",
+          "channel": "webchat",
+          "externalChatId": "tesla-optimus-engine",
+          "appId": "tesla-optimus-engine",
+          "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+          "profileName": "Primary operator",
+          "senderLabel": "dashboard",
+          "lastUser": "What do you know about my household?",
+          "lastReply": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
+          "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
+          "updatedAt": "2026-06-21T22:53:19.016Z"
+        }
+      },
+      "storedAt": "2026-06-21T22:53:19.017Z",
+      "expiresAt": "2026-06-28T22:53:19.017Z"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-21T10:00:00.000Z",
+  "updatedAt": "2026-06-21T22:53:07.440Z",
   "leads": [
     {
       "id": "LEAD-001",
@@ -9,7 +9,10 @@
       "company": "Fintech Labs",
       "title": "Head of Ops",
       "stage": "contacted",
-      "tags": ["fintech", "warm"],
+      "tags": [
+        "fintech",
+        "warm"
+      ],
       "notes": "Met at demo — interested in sovereign appliance for outbound.",
       "source": "demo",
       "createdAt": "2026-06-21T07:58:08.036Z",
@@ -23,7 +26,9 @@
       "company": "BuildCo",
       "title": "Founder",
       "stage": "new",
-      "tags": ["saas"],
+      "tags": [
+        "saas"
+      ],
       "notes": "",
       "source": "import",
       "createdAt": "2026-06-21T07:58:08.036Z",
@@ -37,12 +42,112 @@
       "company": "EdgeCompute",
       "title": "CTO",
       "stage": "replied",
-      "tags": ["technical"],
+      "tags": [
+        "technical"
+      ],
       "notes": "Asked for pricing on Creator + Outreach bundle.",
       "source": "inbound",
       "createdAt": "2026-06-21T07:58:08.036Z",
       "updatedAt": "2026-06-21T07:58:08.036Z",
       "lastTouchAt": "2026-06-21T07:58:08.036Z"
+    },
+    {
+      "id": "LEAD-004",
+      "name": "QA TierB",
+      "email": "qa-tierb@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T16:54:07.563Z",
+      "updatedAt": "2026-06-21T16:54:07.563Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-005",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782079394322@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T22:03:14.357Z",
+      "updatedAt": "2026-06-21T22:03:14.357Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-006",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782079643328@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T22:07:23.366Z",
+      "updatedAt": "2026-06-21T22:07:23.366Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-007",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782079732392@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T22:08:52.437Z",
+      "updatedAt": "2026-06-21T22:08:52.437Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-008",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782080632486@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T22:23:52.535Z",
+      "updatedAt": "2026-06-21T22:23:52.535Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-009",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782081628878@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T22:40:28.906Z",
+      "updatedAt": "2026-06-21T22:40:28.906Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-010",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782082387267@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-06-21T22:53:07.304Z",
+      "updatedAt": "2026-06-21T22:53:07.304Z",
+      "lastTouchAt": null
     }
   ],
   "tasks": [
@@ -137,6 +242,866 @@
           "scheduledAt": null
         }
       ]
+    },
+    {
+      "id": "SEQ-003",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-4df7fc05",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-54ffe9ce",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-8115bb54",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T16:54:07.438Z",
+      "updatedAt": "2026-06-21T16:54:07.438Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-004",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-105e2feb",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-9c1e2579",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-507f1494",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T17:04:58.728Z",
+      "updatedAt": "2026-06-21T17:04:58.728Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-005",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-53049c45",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-ae59871f",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-e22b5e5b",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T17:13:05.483Z",
+      "updatedAt": "2026-06-21T17:13:05.483Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-006",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-d0fbc65a",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-ee1a5fda",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-f1c18638",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T17:18:56.657Z",
+      "updatedAt": "2026-06-21T17:18:56.657Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-007",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-b5f6571f",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-d66760b3",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-492305be",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T17:47:56.123Z",
+      "updatedAt": "2026-06-21T17:47:56.123Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-008",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-335035e8",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-6aa32085",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-94c1eb22",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T17:55:04.502Z",
+      "updatedAt": "2026-06-21T17:55:04.502Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-009",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-b813b7c0",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-e5dcebc8",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-db48b4af",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T19:39:07.873Z",
+      "updatedAt": "2026-06-21T19:39:07.873Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-010",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-3f500f96",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-c7ba7cd5",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-5aa0c952",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T20:00:37.045Z",
+      "updatedAt": "2026-06-21T20:00:37.045Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-011",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-4f2172a1",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-0e8e51fd",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-98e1f306",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T20:01:10.445Z",
+      "updatedAt": "2026-06-21T20:01:10.445Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-012",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-b0255015",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-19d856e1",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-4e6f73c9",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T20:02:29.767Z",
+      "updatedAt": "2026-06-21T20:02:29.767Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-013",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-559a8e12",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-0261ea9d",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-f2ff408d",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T20:13:19.868Z",
+      "updatedAt": "2026-06-21T20:13:19.868Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-014",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-716f9044",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-6776fe70",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-a66be4cd",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T20:18:51.410Z",
+      "updatedAt": "2026-06-21T20:18:51.410Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-015",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-3139820c",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-c82312ea",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-2b68c1f4",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T21:50:40.704Z",
+      "updatedAt": "2026-06-21T21:50:40.704Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-016",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-7ac8b704",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-3f8e5140",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-34c6841b",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T21:55:21.975Z",
+      "updatedAt": "2026-06-21T21:55:21.975Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-017",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-8aeb8249",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-727949e9",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-7628d0b7",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T22:03:14.234Z",
+      "updatedAt": "2026-06-21T22:03:14.234Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-018",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-e542b1dc",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-8809fa66",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-3438dd6b",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T22:07:23.237Z",
+      "updatedAt": "2026-06-21T22:07:23.237Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-019",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-8207558c",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-3f1f5f13",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-f70694be",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T22:08:52.293Z",
+      "updatedAt": "2026-06-21T22:08:52.293Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-020",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-94ffdd26",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-6ec6f724",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-7f74ec05",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T22:23:52.388Z",
+      "updatedAt": "2026-06-21T22:23:52.388Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-021",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-70350a8e",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-6cb846a6",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-b1776f4b",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T22:40:28.780Z",
+      "updatedAt": "2026-06-21T22:40:28.780Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-022",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-00179cf0",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-6ec96872",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-aeab9b3e",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-21T22:53:07.175Z",
+      "updatedAt": "2026-06-21T22:53:07.175Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
     }
   ],
   "sends": [
@@ -159,21 +1124,21 @@
   ],
   "mailIndex": [
     {
-      "id": "MAIL-demo-001",
+      "id": "MAIL-355e6e7f",
       "from": "alex@edgecompute.ai",
       "subject": "Re: CurXor pricing",
       "snippet": "Thanks — interested in appliance tiers. Can we schedule a call?",
-      "receivedAt": "2026-06-21T08:00:00.000Z",
+      "receivedAt": "2026-06-21T22:53:07.371Z",
       "leadId": "LEAD-003",
       "matchedReply": true,
       "replyIntent": "interested"
     },
     {
-      "id": "MAIL-demo-002",
+      "id": "MAIL-466bc427",
       "from": "notifications@calendar.local",
       "subject": "Out of office until Monday",
       "snippet": "I am away from email — automatic reply",
-      "receivedAt": "2026-06-21T08:05:00.000Z",
+      "receivedAt": "2026-06-21T22:53:07.371Z",
       "leadId": null,
       "matchedReply": false,
       "replyIntent": "ooo"
