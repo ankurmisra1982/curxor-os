@@ -1,6 +1,7 @@
 import "server-only";
 
 import { digitalEnvPath, loadDigitalEnv } from "./digital-env";
+import { isWorkHubSpotLinked } from "./work-hubspot-oauth";
 import { isWorkGoogleLinked } from "./work-google-oauth";
 import { isWorkMicrosoftLinked } from "./work-microsoft-oauth";
 import { isWorkNotionConfigured } from "./work-notion-client";
@@ -78,6 +79,9 @@ function buildFixHints(def: WorkConnectorDefinition, configured: boolean, missin
   if (def.id === "twenty") {
     hints.push("Set TWENTY_API_URL + TWENTY_API_KEY for GraphQL sync");
   }
+  if (def.id === "hubspot") {
+    hints.push("Link HubSpot OAuth from Integrations or set HUBSPOT_ACCESS_TOKEN");
+  }
   if (hints.length === 0) hints.push("Configured — run a work action to verify bridge receipt");
   return hints;
 }
@@ -91,6 +95,7 @@ async function resolveConnectorConfigured(
   if (id === "microsoft_365") return isWorkMicrosoftLinked();
   if (id === "notion") return isWorkNotionConfigured();
   if (id === "twenty") return isTwentyConfiguredAsync();
+  if (id === "hubspot") return isWorkHubSpotLinked() || Boolean(env.HUBSPOT_ACCESS_TOKEN?.trim());
   if (missing.length > 0) return false;
   return true;
 }

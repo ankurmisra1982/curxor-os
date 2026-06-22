@@ -942,6 +942,45 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W34 — hubspot_oauth_status
+{
+  const statusGet = await get("/api/work/hubspot");
+  const start = await post("/api/work/hubspot", { action: "start" });
+  const configured =
+    statusGet.ok &&
+    typeof statusGet.json.clientConfigured === "boolean" &&
+    typeof statusGet.json.linked === "boolean";
+  const startOk =
+    start.ok &&
+    (Boolean(start.json.authorizeUrl) || start.json.demo === true || Boolean(start.json.detail));
+  if (configured && startOk) {
+    pass(
+      "hubspot_oauth_status",
+      statusGet.json.clientConfigured ? "configured" : `demo linked=${statusGet.json.linked}`,
+    );
+  } else {
+    fail("hubspot_oauth_status", `configured=${statusGet.json?.clientConfigured} start=${start.ok}`);
+  }
+}
+
+// W34 — lead_activity_timeline
+{
+  await post("/api/work/status", { action: "sync_hubspot" });
+  const status = (await get("/api/work/status")).json;
+  const leadId = status.leads?.[0]?.id;
+  if (!leadId) {
+    fail("lead_activity_timeline", "no lead");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "lead_activity_timeline", leadId });
+    const kinds = json.kinds ?? [...new Set((json.events ?? []).map((e) => e.kind))];
+    if (ok && Array.isArray(json.events) && kinds.length >= 3) {
+      pass("lead_activity_timeline", `${kinds.length} kinds · ${json.events.length} events`);
+    } else {
+      fail("lead_activity_timeline", `kinds=${kinds.length} events=${json.events?.length}`);
+    }
+  }
+}
+
 // W29 — live_proof_scaffold
 {
   const { ok, json } = await post("/api/work/status", { action: "live_proof" });

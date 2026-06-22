@@ -22,6 +22,7 @@ interface WorkConnectorVaultPanelProps {
   onLinkGoogle?: () => void;
   onLinkMicrosoft?: () => void;
   onLinkNotion?: () => void;
+  onLinkHubSpot?: () => void;
 }
 
 function healthClass(health: string): string {
@@ -32,7 +33,7 @@ function healthClass(health: string): string {
   return "text-muted border-line/60";
 }
 
-export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle, onLinkMicrosoft, onLinkNotion }: WorkConnectorVaultPanelProps) {
+export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle, onLinkMicrosoft, onLinkNotion, onLinkHubSpot }: WorkConnectorVaultPanelProps) {
   if (!report) {
     return <p className="font-mono text-[10px] text-muted">Loading connector vault…</p>;
   }
@@ -100,6 +101,15 @@ export function WorkConnectorVaultPanel({ report, onRefresh, busy, onLinkGoogle,
             className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
           >
             Link Notion
+          </button>
+        ) : null}
+        {onLinkHubSpot ? (
+          <button
+            type="button"
+            onClick={onLinkHubSpot}
+            className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
+          >
+            Link HubSpot
           </button>
         ) : null}
       </div>

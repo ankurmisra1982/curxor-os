@@ -133,15 +133,20 @@
 - [x] **W33** — Team inbox lite: deskRole permissions, assignee collision, internal mail notes, Needs-you operator filter, n8n assign webhook
 - [x] Work checklist **66/66**
 
+## Shipped (Phase 3 excellence W34 — CRM system-of-record)
+
+- [x] **W34** — HubSpot OAuth link session, two-way sync v2 with per-lead sync log, lead activity timeline (sends/stage/sync/handoffs), Twenty sync error surface, FRE `hubspotPortalId`
+- [x] Work checklist **68/68**
+
 ## Next
 
-**Phase 3 excellence arc (W34–W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
+**Phase 3 excellence arc (W35)** — see [EXCELLENCE-PHASE3-BUILD-PLAN.md](./EXCELLENCE-PHASE3-BUILD-PLAN.md).
 
 | Sprint | Focus | Target tag |
 |--------|--------|------------|
 | W32 | Outbound worker v1 | v0.6.0 (partial) ✓ |
 | W33 | Team inbox lite | v0.6.0 ✓ |
-| W34 | HubSpot OAuth + activity timeline | v0.6.1 |
+| W34 | HubSpot OAuth + activity timeline | v0.6.1 ✓ |
 | W35 | OS moat + Cafe XP + governance UI | v0.6.2 |
 
 Deferred items unchanged — see **Deferred** above.

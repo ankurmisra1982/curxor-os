@@ -176,6 +176,14 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           ],
         },
         {
+          id: "hubspotPortalId",
+          label: "HubSpot portal ID",
+          type: "text",
+          defaultValue: "",
+          placeholder: "12345678",
+          help: "Optional — shown in connector vault when HubSpot OAuth is linked (W34).",
+        },
+        {
           id: "outreachTone",
           label: "Sequence tone",
           type: "select",

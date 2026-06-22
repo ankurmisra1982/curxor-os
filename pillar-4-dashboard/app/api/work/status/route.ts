@@ -867,6 +867,15 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
+      case "lead_activity_timeline": {
+        const leadId = (body as { leadId?: string }).leadId?.trim();
+        if (!leadId) return Response.json({ ok: false, error: "leadId required" }, { status: 400 });
+        const { buildLeadActivityTimeline } = await import("@/lib/work-lead-activity");
+        const events = await buildLeadActivityTimeline(leadId);
+        const kinds = [...new Set(events.map((e) => e.kind))];
+        return Response.json({ ok: true, leadId, events, kinds });
+      }
+
       case "signal_feed_list":
       case "list_signals": {
         const { listWorkSignals } = await import("@/lib/work-signal-feed");

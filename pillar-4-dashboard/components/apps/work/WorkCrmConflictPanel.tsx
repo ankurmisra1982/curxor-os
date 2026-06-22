@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import type { WorkSyncLogEntry } from "@/lib/work-queue-types";
+
 interface CrmConflictRow {
   id: string;
   email: string;
@@ -14,19 +16,33 @@ interface CrmConflictRow {
 
 interface WorkCrmConflictPanelProps {
   conflicts: CrmConflictRow[];
+  syncLog?: WorkSyncLogEntry[];
   busyId?: string | null;
   onResolve: (conflictId: string, resolution: "keep_local" | "take_remote") => void;
 }
 
-export function WorkCrmConflictPanel({ conflicts, busyId, onResolve }: WorkCrmConflictPanelProps) {
+export function WorkCrmConflictPanel({ conflicts, syncLog = [], busyId, onResolve }: WorkCrmConflictPanelProps) {
   const [localBusy, setLocalBusy] = useState<string | null>(null);
   const busy = busyId ?? localBusy;
 
   if (conflicts.length === 0) {
+    const errors = syncLog.filter((row) => row.error);
     return (
-      <p className="font-mono text-[10px] text-muted">
-        No CRM field conflicts — local and remote records align (or Twenty is in demo mode).
-      </p>
+      <div className="space-y-2 font-mono text-[10px]">
+        <p className="text-muted">
+          No CRM field conflicts — local and remote records align (or Twenty is in demo mode).
+        </p>
+        {errors.length > 0 ? (
+          <div className="border border-red-400/40 px-3 py-2">
+            <p className="uppercase text-red-400">Recent sync errors</p>
+            {errors.slice(0, 5).map((row) => (
+              <p key={row.id} className="mt-1 text-muted">
+                {row.connector} · {row.action} — {row.error}
+              </p>
+            ))}
+          </div>
+        ) : null}
+      </div>
     );
   }
 

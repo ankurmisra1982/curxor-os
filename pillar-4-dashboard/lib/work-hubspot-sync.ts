@@ -1,8 +1,8 @@
 import "server-only";
 
-import { loadDigitalEnv } from "./digital-env";
 import { appendWorkSyncLog, ensureWorkQueue, upsertLead, writeWorkFilePartial } from "./work-store";
 import type { WorkLead } from "./work-queue-types";
+import { isWorkHubSpotLinked, resolveHubSpotAccessToken } from "./work-hubspot-oauth";
 
 export interface HubSpotSyncResult {
   ok: boolean;
@@ -10,14 +10,11 @@ export interface HubSpotSyncResult {
   imported: number;
   pushed: number;
   detail: string;
-}
-
-function hubspotToken(): string | null {
-  return process.env.HUBSPOT_ACCESS_TOKEN?.trim() ?? null;
+  oauthLinked?: boolean;
 }
 
 async function hubspotFetch(path: string, init?: RequestInit): Promise<Response | null> {
-  const token = hubspotToken();
+  const token = await resolveHubSpotAccessToken();
   if (!token) return null;
   return fetch(`https://api.hubapi.com${path}`, {
     ...init,
@@ -30,19 +27,64 @@ async function hubspotFetch(path: string, init?: RequestInit): Promise<Response 
   });
 }
 
+/** Webhook pull stub — records inbound event for operator timeline (live webhook deferred). */
+export async function pullHubSpotWebhookStub(): Promise<{ ok: boolean; detail: string }> {
+  const linked = await isWorkHubSpotLinked();
+  await appendWorkSyncLog({
+    connector: "hubspot",
+    action: "webhook_pull_stub",
+    detail: linked ? "Webhook pull stub — no pending events" : "Demo webhook stub — OAuth not linked",
+    ok: true,
+  });
+  return {
+    ok: true,
+    detail: linked ? "HubSpot webhook pull stub (no events)" : "Demo webhook pull stub",
+  };
+}
+
 export async function syncHubSpotLeads(): Promise<HubSpotSyncResult> {
-  const env = await loadDigitalEnv();
-  const token = env.HUBSPOT_ACCESS_TOKEN?.trim() || hubspotToken();
+  const token = await resolveHubSpotAccessToken();
+  const oauthLinked = await isWorkHubSpotLinked();
 
   if (!token) {
     const file = await ensureWorkQueue();
     const demoImported = Math.min(2, file.leads.length);
+    const demoPushed = Math.min(1, file.leads.filter((l) => !["won", "lost"].includes(l.stage)).length);
+    for (const lead of file.leads.slice(0, demoImported)) {
+      await appendWorkSyncLog({
+        connector: "hubspot",
+        action: "sync_hubspot",
+        detail: `demo import · ${lead.email}`,
+        leadId: lead.id,
+        ok: true,
+      });
+    }
+    if (demoPushed > 0) {
+      const pushLead = file.leads.find((l) => !["won", "lost"].includes(l.stage));
+      if (pushLead) {
+        await appendWorkSyncLog({
+          connector: "hubspot",
+          action: "sync_hubspot_push",
+          detail: `demo push · ${pushLead.email}`,
+          leadId: pushLead.id,
+          ok: true,
+        });
+      }
+    }
     await appendWorkSyncLog({
       connector: "hubspot",
       action: "sync_hubspot",
-      detail: `demo · imported=${demoImported} pushed=0`,
+      detail: `demo · imported=${demoImported} pushed=${demoPushed}`,
+      ok: true,
     });
-    return { ok: true, demo: true, imported: demoImported, pushed: 0, detail: "Demo sync — set HUBSPOT_ACCESS_TOKEN" };
+    return {
+      ok: true,
+      demo: true,
+      imported: demoImported,
+      pushed: demoPushed,
+      oauthLinked: false,
+      detail: "Demo sync — link HubSpot OAuth or set HUBSPOT_ACCESS_TOKEN",
+    };
   }
 
   let imported = 0;
@@ -59,7 +101,7 @@ export async function syncHubSpotLeads(): Promise<HubSpotSyncResult> {
       const email = row.properties?.email?.trim();
       if (!email) continue;
       const name = [row.properties?.firstname, row.properties?.lastname].filter(Boolean).join(" ") || email;
-      await upsertLead({
+      const lead = await upsertLead({
         name,
         email,
         company: row.properties?.company ?? "",
@@ -67,7 +109,22 @@ export async function syncHubSpotLeads(): Promise<HubSpotSyncResult> {
         source: "hubspot",
       });
       imported += 1;
+      await appendWorkSyncLog({
+        connector: "hubspot",
+        action: "sync_hubspot_pull",
+        detail: `imported ${email}`,
+        leadId: lead.id,
+        ok: true,
+      });
     }
+  } else {
+    await appendWorkSyncLog({
+      connector: "hubspot",
+      action: "sync_hubspot_pull",
+      detail: "HubSpot pull failed",
+      ok: false,
+      error: pullRes ? `HTTP ${pullRes.status}` : "No token",
+    });
   }
 
   const file = await ensureWorkQueue();
@@ -91,6 +148,22 @@ export async function syncHubSpotLeads(): Promise<HubSpotSyncResult> {
       if (idx >= 0) {
         file.leads[idx] = { ...file.leads[idx]!, crmSyncAt: new Date().toISOString() };
       }
+      await appendWorkSyncLog({
+        connector: "hubspot",
+        action: "sync_hubspot_push",
+        detail: `pushed ${lead.email}`,
+        leadId: lead.id,
+        ok: true,
+      });
+    } else {
+      await appendWorkSyncLog({
+        connector: "hubspot",
+        action: "sync_hubspot_push",
+        detail: `push failed ${lead.email}`,
+        leadId: lead.id,
+        ok: false,
+        error: pushRes ? `HTTP ${pushRes.status}` : "No response",
+      });
     }
   }
   await writeWorkFilePartial(file);
@@ -98,10 +171,18 @@ export async function syncHubSpotLeads(): Promise<HubSpotSyncResult> {
   await appendWorkSyncLog({
     connector: "hubspot",
     action: "sync_hubspot",
-    detail: `imported=${imported} pushed=${pushed}`,
+    detail: `imported=${imported} pushed=${pushed}${oauthLinked ? " · oauth" : ""}`,
+    ok: imported > 0 || pushed > 0,
   });
 
-  return { ok: true, demo: false, imported, pushed, detail: `${imported} imported · ${pushed} pushed` };
+  return {
+    ok: true,
+    demo: false,
+    imported,
+    pushed,
+    oauthLinked,
+    detail: `${imported} imported · ${pushed} pushed`,
+  };
 }
 
 export function crmSyncBadgeForLead(lead: WorkLead): "synced" | "stale" | "conflict" | "local_only" {

@@ -239,10 +239,10 @@ W29 → W30 → W31 → W32 → W33 → W34 → W35
 
 **Acceptance**
 
-- [ ] HubSpot OAuth `start` returns authorize URL when configured (demo otherwise)
-- [ ] `sync_hubspot` with OAuth pushes ≥1 lead (demo counts OK)
-- [ ] Activity timeline shows ≥3 event types for seeded lead
-- [ ] `work-checklist.mjs`: `hubspot_oauth_status`, `lead_activity_timeline`
+- [x] HubSpot OAuth `start` returns authorize URL when configured (demo otherwise)
+- [x] `sync_hubspot` with OAuth pushes ≥1 lead (demo counts OK)
+- [x] Activity timeline shows ≥3 event types for seeded lead
+- [x] `work-checklist.mjs`: `hubspot_oauth_status`, `lead_activity_timeline`
 
 **Growth levels:** L4+ full.
 

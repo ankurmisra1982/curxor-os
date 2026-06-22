@@ -141,6 +141,9 @@ export interface WorkSyncLogEntry {
   action: string;
   detail: string;
   createdAt: string;
+  leadId?: string | null;
+  ok?: boolean;
+  error?: string | null;
 }
 
 export interface WorkQueueFile {

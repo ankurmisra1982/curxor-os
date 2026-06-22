@@ -76,13 +76,23 @@ export async function syncLeadsToTwenty(): Promise<{ pushed: number; errors: str
       remoteEmails.add(lead.email.toLowerCase());
     } else {
       errors.push(`Failed to push ${lead.email}`);
+      await appendWorkSyncLog({
+        connector: "twenty",
+        action: "sync_crm_push",
+        detail: `Failed to push ${lead.email}`,
+        leadId: lead.id,
+        ok: false,
+        error: "Twenty createPerson failed",
+      });
     }
   }
 
   await appendWorkSyncLog({
     connector: "twenty",
     action: "sync_crm_push",
-    detail: `Pushed ${pushed} lead(s) to Twenty`,
+    detail: `Pushed ${pushed} lead(s) to Twenty${errors.length ? ` · ${errors.length} error(s)` : ""}`,
+    ok: errors.length === 0,
+    error: errors[0] ?? null,
   });
 
   return { pushed, errors };

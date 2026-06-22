@@ -19,6 +19,7 @@ import { WorkConnectorVaultPanel } from "@/components/apps/work/WorkConnectorVau
 import { WorkExecutiveBriefPanel } from "@/components/apps/work/WorkExecutiveBriefPanel";
 import { WorkImportPanel } from "@/components/apps/work/WorkImportPanel";
 import { WorkInboxTriagePanel } from "@/components/apps/work/WorkInboxTriagePanel";
+import { WorkLeadActivityPanel } from "@/components/apps/work/WorkLeadActivityPanel";
 import { WorkLevelBadge } from "@/components/apps/work/WorkLevelBadge";
 import { WorkLevelUpNudge } from "@/components/apps/work/WorkLevelUpNudge";
 import { WorkMailIndexPanel } from "@/components/apps/work/WorkMailIndexPanel";
@@ -47,6 +48,7 @@ import { workFeatureVisible } from "@/lib/work-level-gates";
 import { resolveWorkGrowthLevel } from "@/lib/work-growth";
 import { listTemplatePacksForGrowth } from "@/lib/work-template-packs-data";
 import type { WorkExecutiveBrief } from "@/lib/work-executive-brief";
+import type { LeadActivityEvent } from "@/lib/work-lead-activity";
 import type { LeadStage, OutboundSend, ReplyIntent, WorkAgentAuditEntry, WorkQueueStatus } from "@/lib/work-queue-types";
 
 interface CrmConflictRow {
@@ -155,6 +157,8 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   const [syncBadges, setSyncBadges] = useState<Record<string, "synced" | "conflict" | "local_only">>({});
   const [preSendModal, setPreSendModal] = useState<{ sequenceId: string; missing: string[] } | null>(null);
   const [suppressionBusy, setSuppressionBusy] = useState(false);
+  const [leadActivity, setLeadActivity] = useState<LeadActivityEvent[]>([]);
+  const [leadActivityLoading, setLeadActivityLoading] = useState(false);
 
   const deskPerms = status?.deskPermissions;
   const canSend = deskPerms?.canSend ?? true;
@@ -223,6 +227,21 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     }
   }, [applyStatus, growthLevel]);
 
+  const loadLeadActivity = useCallback(async (leadId: string) => {
+    if (!leadId) {
+      setLeadActivity([]);
+      return;
+    }
+    setLeadActivityLoading(true);
+    try {
+      const json = await postWork({ action: "lead_activity_timeline", leadId });
+      const payload = json as { events?: LeadActivityEvent[] };
+      setLeadActivity(payload.events ?? []);
+    } finally {
+      setLeadActivityLoading(false);
+    }
+  }, []);
+
   const undoComposeSend = useCallback(
     (sendId: string) => {
       void postWork({ action: "undo_send", sendId }).then((json) => {
@@ -268,6 +287,14 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     const id = setInterval(() => void loadStatus(), 30_000);
     return () => clearInterval(id);
   }, [loadBootstrap, loadRecovery, loadStatus, growthLevel]);
+
+  useEffect(() => {
+    if (workFeatureVisible(growthLevel, "pipeline") && selectedLeadId) {
+      void loadLeadActivity(selectedLeadId);
+    } else {
+      setLeadActivity([]);
+    }
+  }, [selectedLeadId, growthLevel, loadLeadActivity, status?.updatedAt]);
 
   useEffect(() => {
     const lead = status?.leads.find((l) => l.id === selectedLeadId);
@@ -427,6 +454,23 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       setSignal(`${provider} OAuth started — complete in new tab`);
     } else {
       setSignal(json.error ?? "OAuth start failed");
+    }
+  };
+
+  const linkHubSpot = async () => {
+    const res = await fetch("/api/work/hubspot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start" }),
+    });
+    const json = (await res.json()) as { authorizeUrl?: string; demo?: boolean; detail?: string; error?: string };
+    if (json.authorizeUrl) {
+      window.open(json.authorizeUrl, "_blank", "noopener,noreferrer");
+      setSignal("HubSpot OAuth started — complete in new tab");
+    } else if (json.demo) {
+      setSignal(json.detail ?? "HubSpot OAuth demo mode — set HUBSPOT_CLIENT_ID in digital.env");
+    } else {
+      setSignal(json.error ?? "HubSpot OAuth start failed");
     }
   };
 
@@ -687,6 +731,18 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
                     await postWork({ action: "create_mini_sequence", leadId: selectedLeadId, presetId });
                     await loadBootstrap();
                   }}
+                />
+              </div>
+            ) : null}
+            {workFeatureVisible(growthLevel, "pipeline") ? (
+              <div className="mt-3 border-t border-line/60 pt-3">
+                <p className="mb-2 font-mono text-[10px] uppercase text-muted">Activity timeline</p>
+                <WorkLeadActivityPanel
+                  leadId={selectedLeadId || null}
+                  leadName={status?.leads.find((l) => l.id === selectedLeadId)?.name}
+                  events={leadActivity}
+                  loading={leadActivityLoading}
+                  onRefresh={() => void loadLeadActivity(selectedLeadId)}
                 />
               </div>
             ) : null}
@@ -986,6 +1042,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             onLinkGoogle={() => void linkOAuth("google")}
             onLinkMicrosoft={() => void linkOAuth("microsoft")}
             onLinkNotion={() => void linkOAuth("notion")}
+            onLinkHubSpot={() => void linkHubSpot()}
           />
         </ExperienceAppSection>
       ) : null}
@@ -994,6 +1051,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="crm-conflicts" minLevel="expert" title="CRM conflicts" subtitle="Twenty sync merge">
           <WorkCrmConflictPanel
             conflicts={crmConflicts}
+            syncLog={status?.syncLog ?? []}
             onResolve={(conflictId, resolution) =>
               void postWork({
                 action: "resolve_crm_conflict",

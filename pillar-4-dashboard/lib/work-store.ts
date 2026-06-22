@@ -392,6 +392,15 @@ export async function updateLeadStage(leadId: string, stage: LeadStage): Promise
   await writeWorkFile(file);
   const lead = file.leads[idx]!;
   void emitWorkWebhook("lead.stage_changed", { leadId, stage, email: lead.email });
+  void (async () => {
+    const { appendAgentAudit } = await import("./work-agent-audit");
+    await appendAgentAudit({
+      kind: "sync",
+      source: "desk",
+      leadId,
+      note: `Pipeline stage → ${stage}`,
+    });
+  })();
   return lead;
 }
 
@@ -552,6 +561,9 @@ export async function appendWorkSyncLog(input: {
   connector: string;
   action: string;
   detail: string;
+  leadId?: string | null;
+  ok?: boolean;
+  error?: string | null;
 }): Promise<WorkSyncLogEntry> {
   const file = await ensureWorkQueue();
   const entry: WorkSyncLogEntry = {
@@ -560,6 +572,9 @@ export async function appendWorkSyncLog(input: {
     action: input.action,
     detail: input.detail,
     createdAt: new Date().toISOString(),
+    leadId: input.leadId ?? null,
+    ok: input.ok ?? !input.error,
+    error: input.error ?? null,
   };
   file.syncLog = [entry, ...(file.syncLog ?? [])].slice(0, 100);
   await writeWorkFile(file);
