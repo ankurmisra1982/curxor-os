@@ -2,6 +2,7 @@ import "server-only";
 
 import { digitalEnvPath, loadDigitalEnv } from "./digital-env";
 import { isWorkGoogleLinked } from "./work-google-oauth";
+import { isWorkMicrosoftLinked } from "./work-microsoft-oauth";
 import { isWorkNotionConfigured } from "./work-notion-client";
 import { isTwentyConfiguredAsync } from "./work-twenty-client";
 import { CONNECTOR_CATALOG, type WorkConnectorDefinition, type WorkConnectorId } from "./work-connector-registry";
@@ -61,6 +62,9 @@ function buildFixHints(def: WorkConnectorDefinition, configured: boolean, missin
   if (def.id === "google_workspace") {
     hints.push("Link Google Workspace from Integrations tab or POST /api/work/google");
   }
+  if (def.id === "microsoft_365") {
+    hints.push("Link Microsoft 365 from Integrations tab or POST /api/work/microsoft");
+  }
   if (def.id === "notion") {
     hints.push("Link Notion from Integrations tab or POST /api/work/notion");
   }
@@ -77,6 +81,7 @@ async function resolveConnectorConfigured(
   missing: string[],
 ): Promise<boolean> {
   if (id === "google_workspace") return isWorkGoogleLinked();
+  if (id === "microsoft_365") return isWorkMicrosoftLinked();
   if (id === "notion") return isWorkNotionConfigured();
   if (id === "twenty") return isTwentyConfiguredAsync();
   if (missing.length > 0) return false;

@@ -96,7 +96,21 @@
 - [x] **W19** — Cross-Claw handoff API + Creator “Add to Work”, morning brief cross-claw strip
 - [x] **W20** — `work-xp-events.ts` stub (Claw Cafe consumes events)
 
+## Shipped (Phase 2 excellence W21–W28 — v0.5.1)
+
+- [x] **W21** — Work Claw rename, M365 OAuth E2E, `work-microsoft-oauth.ts`, liveReady EXIT-DEMO CTA
+- [x] **W22** — Thread expand, inbox splits (waiting/snoozed/done), archive/done keys, compose→send
+- [x] **W23** — Suppression list, warmup dashboard fields, pre-send gate, 2-mailbox rotation FRE
+- [x] **W24** — HubSpot sync, Twenty live conflicts, won→pause sequences, CRM sync badges
+- [x] **W25** — Signal feed + `WorkSignalStrip`, signal→lead→sequence, `N8N-TEMPLATES.md`
+- [x] **W26** — Approval callback route, audit export, MCP confirm smoke
+- [x] **W27** — Needs-you digest, OS morning brief, Capital handoff flow QA
+- [x] **W28** — `/api/work/xp`, gamification opt-out, `OUTBOUND-WORKER.md`, permissions stub
+- [x] Work checklist **55/55** · user flows **25/25** · `qa:local` green
+
 ## Next
 
-Deferred items unchanged — see **Deferred** above. Claw Cafe UI consumes XP events when Cafe shell ships.
+Post–v0.5.1: live M365 buyer proof in production, pre-send modal UI polish, Claw Cafe XP panel UI, dedicated outbound worker process (design in `OUTBOUND-WORKER.md`).
+
+Deferred items unchanged — see **Deferred** above.
 

@@ -35,6 +35,7 @@ import {
   activateSequence,
   appendWorkSyncLog,
   approveSend,
+  archiveMail,
   assignMailToLead,
   createSequence,
   createTask,
@@ -45,10 +46,12 @@ import {
   getSequenceNextDueAt,
   importLeadsFromCsv,
   isWorkEmailBridgeConfigured,
+  markMailDone,
   markSequenceReplied,
   pauseSequence,
   rejectSend,
   scanLocalMailQueue,
+  sendComposeReply,
   snoozeMail,
   listMailThreadsFromStore,
   tagMailReplyIntent,
@@ -263,7 +266,7 @@ export async function POST(request: Request): Promise<Response> {
           return Response.json({ ok: false, error: "csv required" }, { status: 400 });
         }
         const result = await importLeadsFromCsv(body.csv);
-        return Response.json({ ok: true, ...result, status: await fetchWorkStatus() });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
       case "tag_reply_intent": {
@@ -514,7 +517,7 @@ export async function POST(request: Request): Promise<Response> {
           : "";
         try {
           const result = await applyTemplatePack(packId);
-          return Response.json({ ok: true, ...result, status: await fetchWorkStatus() });
+          return Response.json({ ...result, status: await fetchWorkStatus() });
         } catch (err) {
           const message = err instanceof Error ? err.message : "apply_template_pack failed";
           return Response.json({ ok: false, error: message }, { status: 400 });
@@ -547,12 +550,213 @@ export async function POST(request: Request): Promise<Response> {
         if (!body.mailId) return Response.json({ ok: false, error: "mailId required" }, { status: 400 });
         const days = typeof (body as { days?: number }).days === "number" ? (body as { days: number }).days : 1;
         const result = await snoozeMail(body.mailId, days);
-        return Response.json({ ok: true, ...result, status: await fetchWorkStatus() });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
       case "list_threads": {
-        const threads = await listMailThreadsFromStore();
+        const file = await ensureWorkQueue();
+        if (file.mailIndex.length === 0) await scanLocalMailQueue();
+        const includeArchived = (body as { includeArchived?: boolean }).includeArchived === true;
+        const threads = await listMailThreadsFromStore({ includeArchived });
         return Response.json({ ok: true, threads, status: await fetchWorkStatus() });
+      }
+
+      case "archive_mail": {
+        if (!body.mailId) return Response.json({ ok: false, error: "mailId required" }, { status: 400 });
+        const entry = await archiveMail(body.mailId);
+        if (!entry) return Response.json({ ok: false, error: "mail not found" }, { status: 404 });
+        return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "mark_mail_done": {
+        if (!body.mailId) return Response.json({ ok: false, error: "mailId required" }, { status: 400 });
+        const entry = await markMailDone(body.mailId);
+        if (!entry) return Response.json({ ok: false, error: "mail not found" }, { status: 404 });
+        return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "compose_send":
+      case "send_compose_reply": {
+        const mailId = body.mailId ?? "";
+        const subject = typeof (body as { subject?: string }).subject === "string" ? (body as { subject: string }).subject : "Re:";
+        const replyBody = typeof (body as { body?: string }).body === "string" ? (body as { body: string }).body : "";
+        if (!mailId || !replyBody.trim()) {
+          return Response.json({ ok: false, error: "mailId and body required" }, { status: 400 });
+        }
+        const result = await sendComposeReply({ mailId, subject, body: replyBody });
+        return Response.json({ ...result, sendStatus: result.status, status: await fetchWorkStatus() });
+      }
+
+      case "suppression_list": {
+        const { listSuppressedEmails } = await import("@/lib/work-suppression");
+        const suppressed = await listSuppressedEmails();
+        return Response.json({ ok: true, suppressed, status: await fetchWorkStatus() });
+      }
+
+      case "add_suppression": {
+        const email = typeof (body as { email?: string }).email === "string" ? (body as { email: string }).email : "";
+        if (!email) return Response.json({ ok: false, error: "email required" }, { status: 400 });
+        const { addSuppression } = await import("@/lib/work-suppression");
+        const entry = await addSuppression(email, "manual block", "manual");
+        return Response.json({ ok: true, entry, status: await fetchWorkStatus() });
+      }
+
+      case "remove_suppression": {
+        const email = typeof (body as { email?: string }).email === "string" ? (body as { email: string }).email : "";
+        if (!email) return Response.json({ ok: false, error: "email required" }, { status: 400 });
+        const { removeSuppression } = await import("@/lib/work-suppression");
+        const removed = await removeSuppression(email);
+        return Response.json({ ok: removed, status: await fetchWorkStatus() });
+      }
+
+      case "suppression_block_test": {
+        const email = `bounce-test-${Date.now()}@example.com`;
+        const { addSuppression, isEmailSuppressed } = await import("@/lib/work-suppression");
+        await addSuppression(email, "test bounce", "bounce");
+        const blocked = await isEmailSuppressed(email);
+        return Response.json({ ok: blocked, email, status: await fetchWorkStatus() });
+      }
+
+      case "pre_send_gate": {
+        const { checkPreSendGate } = await import("@/lib/work-go-live");
+        const gate = await checkPreSendGate();
+        return Response.json({ ok: true, gate, status: await fetchWorkStatus() });
+      }
+
+      case "sync_hubspot": {
+        const { syncHubSpotLeads } = await import("@/lib/work-hubspot-sync");
+        const result = await syncHubSpotLeads();
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
+      case "signal_feed_list":
+      case "list_signals": {
+        const { listWorkSignals } = await import("@/lib/work-signal-feed");
+        const signals = await listWorkSignals(10);
+        return Response.json({ ok: true, signals, status: await fetchWorkStatus() });
+      }
+
+      case "signal_ingest": {
+        const payload = body as {
+          title?: string;
+          source?: string;
+          url?: string;
+          intent?: string;
+          score?: number;
+        };
+        if (!payload.title?.trim()) return Response.json({ ok: false, error: "title required" }, { status: 400 });
+        const { ingestWorkSignal } = await import("@/lib/work-signal-feed");
+        const signal = await ingestWorkSignal({
+          title: payload.title,
+          source: payload.source,
+          url: payload.url,
+          intent: payload.intent as "hiring" | "funding" | "product" | "community" | "other" | undefined,
+          score: payload.score,
+        });
+        return Response.json({ ok: true, signal, status: await fetchWorkStatus() });
+      }
+
+      case "signal_to_opportunity": {
+        const signalId = typeof (body as { signalId?: string }).signalId === "string"
+          ? (body as { signalId: string }).signalId
+          : "";
+        const { listWorkSignals, markSignalConverted } = await import("@/lib/work-signal-feed");
+        const signals = await listWorkSignals(20);
+        const signal = signals.find((s) => s.id === signalId) ?? signals[0];
+        if (!signal) return Response.json({ ok: false, error: "no signals" }, { status: 400 });
+        const slug = signal.title.slice(0, 24).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+        const lead = await upsertLead({
+          name: signal.title.slice(0, 48),
+          email: `signal-${slug}-${Date.now()}@example.com`,
+          company: signal.source,
+          source: `signal:${signal.intent}`,
+          tags: ["signal", signal.intent],
+        });
+        const seq = await createSequence({
+          name: `Signal · ${lead.name}`,
+          leadId: lead.id,
+          steps: MINI_SEQUENCE_PRESETS[0]?.steps.map((s) => ({
+            subject: s.subject,
+            body: s.body,
+            delayDays: s.delayDays,
+          })) ?? [{ subject: "Following up", body: "Hi — saw your update.", delayDays: 0 }],
+        });
+        await markSignalConverted(signal.id, lead.id);
+        void enrichLead(lead.id);
+        return Response.json({ ok: true, lead, sequenceId: seq.id, signalId: signal.id, status: await fetchWorkStatus() });
+      }
+
+      case "approval_callback_demo": {
+        const status = await fetchWorkStatus();
+        const pending = status.sends.find((s) => s.status === "pending_approval");
+        if (!pending) {
+          return Response.json({ ok: true, demoLogged: false, detail: "no pending approval" });
+        }
+        const approved = await approveSend(pending.id);
+        if (!approved) {
+          return Response.json({ ok: true, demoLogged: false, detail: "approve failed" });
+        }
+        await appendAgentAudit({
+          kind: "approval",
+          source: "telegram_callback",
+          note: `Demo approve ${pending.id}`,
+          sendId: pending.id,
+        });
+        await executeOutboundSend(pending.id);
+        return Response.json({ ok: true, demoLogged: true, sendId: pending.id, status: await fetchWorkStatus() });
+      }
+
+      case "audit_export": {
+        const audit = await listWorkAgentAudit(100);
+        return Response.json({ ok: true, audit, exportedAt: new Date().toISOString(), status: await fetchWorkStatus() });
+      }
+
+      case "needs_you_digest": {
+        const { sendNeedsYouDigest } = await import("@/lib/work-needs-you-digest");
+        const digest = await sendNeedsYouDigest();
+        return Response.json({ ...digest, status: await fetchWorkStatus() });
+      }
+
+      case "os_morning_brief": {
+        const { buildOsMorningBrief } = await import("@/lib/os-morning-brief");
+        const brief = await buildOsMorningBrief();
+        return Response.json({ ok: true, brief, status: await fetchWorkStatus() });
+      }
+
+      case "xp_list": {
+        const { listWorkXpEvents } = await import("@/lib/work-xp-events");
+        const events = await listWorkXpEvents(5);
+        return Response.json({ ok: true, events, status: await fetchWorkStatus() });
+      }
+
+      case "microsoft_oauth_status": {
+        const res = await fetch(new URL("/api/work/microsoft", request.url).toString(), { cache: "no-store" });
+        const m365 = (await res.json()) as Record<string, unknown>;
+        return Response.json({ ok: true, microsoft: m365, status: await fetchWorkStatus() });
+      }
+
+      case "crm_sync_badge": {
+        const { crmSyncBadgeForLead } = await import("@/lib/work-hubspot-sync");
+        const status = await fetchWorkStatus();
+        const lead = status.leads[0];
+        const badge = lead ? crmSyncBadgeForLead(lead) : "local_only";
+        return Response.json({ ok: true, badge, leadId: lead?.id ?? null, status });
+      }
+
+      case "won_pauses_sequences": {
+        const status = await fetchWorkStatus();
+        const lead = status.leads.find((l) => !["won", "lost"].includes(l.stage));
+        if (!lead) return Response.json({ ok: false, error: "no lead" }, { status: 400 });
+        const seq = await createSequence({
+          name: "Won test seq",
+          leadId: lead.id,
+          steps: [{ subject: "Test", body: "Test", delayDays: 0 }],
+        });
+        await activateSequence(seq.id);
+        await updateLeadStage(lead.id, "won");
+        const after = await fetchWorkStatus();
+        const paused = after.sequences.find((s) => s.id === seq.id)?.status === "paused";
+        return Response.json({ ok: paused, sequenceId: seq.id, status: after });
       }
 
       case "crm_conflict_list": {
@@ -663,6 +867,9 @@ export async function POST(request: Request): Promise<Response> {
         });
         const { listWorkXpEvents } = await import("@/lib/work-xp-events");
         const events = await listWorkXpEvents(5);
+        if (!event) {
+          return Response.json({ ok: true, skipped: true, optOut: true, events, status: await fetchWorkStatus() });
+        }
         return Response.json({ ok: true, event, events, status: await fetchWorkStatus() });
       }
 

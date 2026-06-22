@@ -28,6 +28,7 @@ import { WorkPipelinePanel } from "@/components/apps/work/WorkPipelinePanel";
 import { WorkRecoveryPanel } from "@/components/apps/work/WorkRecoveryPanel";
 import { WorkSendPolicyPanel } from "@/components/apps/work/WorkSendPolicyPanel";
 import { WorkSequencePanel } from "@/components/apps/work/WorkSequencePanel";
+import { WorkSignalStrip } from "@/components/apps/work/WorkSignalStrip";
 import { WorkSetupWizard } from "@/components/apps/work/WorkSetupWizard";
 import { WorkStartHomePanel } from "@/components/apps/work/WorkStartHomePanel";
 import {
@@ -38,7 +39,7 @@ import {
 } from "@/components/apps/work/WorkWorkspaceTabs";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import type { GrowthLevel } from "@/lib/os-growth-level";
-import { isGrowthLevel } from "@/lib/os-growth-level";
+import { isGrowthLevel, meetsGrowthLevel } from "@/lib/os-growth-level";
 import { workTerm } from "@/lib/work-level-copy";
 import { workFeatureVisible } from "@/lib/work-level-gates";
 import { resolveWorkGrowthLevel } from "@/lib/work-growth";
@@ -109,6 +110,9 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
     defaultWorkTab(resolveWorkGrowthLevel(config, level)),
   );
   const [status, setStatus] = useState<WorkQueueStatus | null>(null);
+  const [signals, setSignals] = useState<Array<{ id: string; title: string; source: string; intent: string; score: number; receivedAt: string }>>([]);
+  const [signalBusy, setSignalBusy] = useState(false);
+  const [composeSendBusy, setComposeSendBusy] = useState(false);
 
   const growthLevel = useMemo((): GrowthLevel => {
     const fromStatus = status?.growthProfile?.growthLevel;
@@ -191,6 +195,11 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       const badges: Record<string, "synced" | "conflict" | "local_only"> = {};
       for (const c of cj.conflicts ?? []) badges[c.leadId] = "conflict";
       setSyncBadges(badges);
+    }
+    if (meetsGrowthLevel(growthLevel, "L2")) {
+      const sigJson = await postWork({ action: "signal_feed_list" });
+      const sj = sigJson as { signals?: typeof signals };
+      if (sj.signals) setSignals(sj.signals);
     }
   }, [applyStatus, growthLevel]);
 
@@ -389,7 +398,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </p>
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{workspace}</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
-          Outreach Claw · {status?.source === "live" ? "live SMTP" : "demo queue"} · mesh {motorUp ? "linked" : "idle"} · {signal}
+          Work Claw · {status?.source === "live" ? "live SMTP" : "demo queue"} · mesh {motorUp ? "linked" : "idle"} · {signal}
           {goLiveChip ? (
             <span className="ml-2 border border-cursor-glow/50 px-1 uppercase text-cursor-glow">{goLiveChip} ready</span>
           ) : null}
@@ -487,6 +496,20 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
               }
             }}
           />
+          {meetsGrowthLevel(growthLevel, "L2") ? (
+            <div className="mt-4">
+              <WorkSignalStrip
+                signals={signals}
+                busy={signalBusy}
+                onConvert={(signalId) => {
+                  setSignalBusy(true);
+                  void postWork({ action: "signal_to_opportunity", signalId })
+                    .then(() => loadBootstrap())
+                    .finally(() => setSignalBusy(false));
+                }}
+              />
+            </div>
+          ) : null}
           {draftReplyPreview && growthLevel === "L1" ? (
             <pre className="mt-3 whitespace-pre-wrap border border-line/60 p-2 font-mono text-[10px] text-stark">{draftReplyPreview}</pre>
           ) : null}
@@ -660,17 +683,27 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="inbox-triage" minLevel="standard" title="Inbox triage" subtitle="Reply intent · assign · draft reply">
           <WorkInboxTriagePanel
             rows={status?.mailIndex ?? []}
+            tasks={status?.tasks ?? []}
             leads={status?.leads ?? []}
             highlightMailId={focusMailId}
             onAssign={(mailId, leadId) => void action({ action: "assign_mail_to_lead", mailId, leadId })}
             onTagIntent={(mailId, intent) => void action({ action: "tag_reply_intent", mailId, intent })}
             onDraftReply={(mailId) => draftReplyForMail(mailId)}
             onSnooze={(mailId) => void action({ action: "snooze_mail", mailId })}
+            onArchive={(mailId) => void action({ action: "archive_mail", mailId })}
+            onMarkDone={(mailId) => void action({ action: "mark_mail_done", mailId })}
           />
           <WorkComposeStrip
             mailId={focusMailId}
             draftPreview={draftReplyPreview}
             onDraftReply={(id, prompt) => draftReplyForMail(id, prompt)}
+            onSendReply={(mailId, subject, body) => {
+              setComposeSendBusy(true);
+              void postWork({ action: "compose_send", mailId, subject, body })
+                .then(() => loadBootstrap())
+                .finally(() => setComposeSendBusy(false));
+            }}
+            sendBusy={composeSendBusy}
             onClear={() => setDraftReplyPreview("")}
           />
           {draftReplyPreview ? (

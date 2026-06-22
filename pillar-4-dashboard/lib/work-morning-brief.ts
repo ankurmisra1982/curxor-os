@@ -1,7 +1,8 @@
 import "server-only";
 
 import { fetchWorkCalendarPreview, fetchWorkMailPreview } from "./work-google-client";
-import { fetchWorkMicrosoftMailPreview, getWorkMicrosoftStatus } from "./work-microsoft-client";
+import { fetchWorkMicrosoftCalendarPreview, fetchWorkMicrosoftMailPreview, getWorkMicrosoftStatus } from "./work-microsoft-client";
+import { isWorkMicrosoftLinked } from "./work-microsoft-oauth";
 import { ensureWorkQueue, readOutboundKillSwitch } from "./work-store";
 import { getCrmStatus } from "./work-crm-sync";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
@@ -13,10 +14,11 @@ const CROSS_CLAW_DEMO = {
 };
 
 export async function buildMorningBrief(): Promise<string> {
+  const m365Linked = await isWorkMicrosoftLinked();
   const [file, mail, calendar, crm, vault, needsYou, killSwitch, m365] = await Promise.all([
     ensureWorkQueue(),
-    fetchWorkMailPreview(5),
-    fetchWorkCalendarPreview(5),
+    m365Linked ? fetchWorkMicrosoftMailPreview(5) : fetchWorkMailPreview(5),
+    m365Linked ? fetchWorkMicrosoftCalendarPreview(5) : fetchWorkCalendarPreview(5),
     getCrmStatus(),
     buildWorkConnectorHealthReport(),
     buildNeedsYouSummary(),
@@ -42,7 +44,7 @@ export async function buildMorningBrief(): Promise<string> {
     lines.push(`  · ${m.from}: ${m.subject}`);
   }
 
-  if (m365.demo || m365.linked) {
+  if (!m365Linked && (m365.demo || m365.linked)) {
     const m365Mail = await fetchWorkMicrosoftMailPreview(3);
     lines.push("", `Microsoft 365 (${m365Mail.source}): ${m365Mail.messages.length} preview`);
     for (const m of m365Mail.messages.slice(0, 2)) {

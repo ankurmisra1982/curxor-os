@@ -27,6 +27,8 @@ export interface UserSettings {
     experienceLevel: ExperienceLevel;
     /** Optional Work Claw growth override (L1–L5). */
     workGrowthLevel?: GrowthLevel | null;
+    /** Suppress Work Claw XP emit to Claw Cafe */
+    workGamificationOptOut?: boolean;
     colorScheme: ColorScheme;
     themeMode: ThemeMode;
   };

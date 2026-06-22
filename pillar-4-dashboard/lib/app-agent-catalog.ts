@@ -45,9 +45,9 @@ export interface AppAgentDefinition {
 export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
   "my-work": {
     appId: "my-work",
-    agentName: "Outreach Claw",
-    tagline: "Outbound digital employee — leads, sequences, CRM",
-    ootbLabel: "Outreach Claw",
+    agentName: "Work Claw",
+    tagline: "Daily coordination desk — leads, sequences, CRM",
+    ootbLabel: "Work Claw",
     purpose: [
       "Scrape and qualify leads locally — no SaaS CRM bill.",
       "Personalized cold email sequences and follow-ups via eno2 bridges.",
@@ -75,10 +75,10 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       { id: "move_to_tray", label: "Move to Tray", description: "Physical move via motor_out", kind: "physical" },
     ],
     fre: {
-      welcomeTitle: "Welcome to Outreach Claw",
+      welcomeTitle: "Welcome to Work Claw",
       welcomeLead: "Your outbound digital employee runs 24/7 on sovereign hardware — no cloud CRM, no leaked playbooks.",
       configureTitle: "Configure outbound desk",
-      configureLead: "Name your pipeline and choose what Outreach Claw tracks first.",
+      configureLead: "Name your pipeline and choose what Work Claw tracks first.",
       fields: [
         { id: "workspaceName", label: "Workspace name", type: "text", defaultValue: "Outreach Desk", required: true },
         {
@@ -138,6 +138,14 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           type: "text",
           defaultValue: "50",
           placeholder: "50",
+        },
+        {
+          id: "secondarySmtpFrom",
+          label: "Secondary mailbox (rotation)",
+          type: "text",
+          defaultValue: "",
+          placeholder: "outbound2@yourdomain.com",
+          help: "Optional second From address — round-robin on sequence sends (W23).",
         },
         {
           id: "sendStaggerMinutes",

@@ -93,7 +93,8 @@ CurXor wedge: **sovereign on-appliance** — one desk for mail, CRM, tasks, cale
 | Deliverability UX | **Strong (~4.0/5)** | W15 DNS + warmup + bounce pause |
 | L4/L5 professional | **Improving (~3.8/5)** | CRM conflicts, executive brief, needs-you |
 | Cross-Claw OS | **Improving** | W19 handoffs + morning brief strip |
-| Live connector proof | Demo default | EXIT-DEMO + capture scripts |
+
+**Phase 2 plan:** [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) (W21–W28) — live proof, inbox send, deliverability ops, CRM live, signals, governance v2, OS brief.
 
 ---
 
@@ -289,6 +290,7 @@ Script: `npm run demo:capture:work` (new) → `docs/demo-pack/screenshots/outrea
 - [STARTUP-GUIDE.md](./STARTUP-GUIDE.md) — demo-only operator path
 - [GETTING-STARTED.md](./GETTING-STARTED.md) — day-one checklist
 - [RELEASE-NEXT.md](./RELEASE-NEXT.md) — deferred + sprint tracking
-- [BEST-IN-CLASS-BUILD-PLAN.md](./BEST-IN-CLASS-BUILD-PLAN.md) — **W13–W20 execution plan**
+- [BEST-IN-CLASS-BUILD-PLAN.md](./BEST-IN-CLASS-BUILD-PLAN.md) — **W13–W20 execution plan (complete)**
+- [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) — **W21–W28 Phase 2 plan**
 - Capital: [../capital-claw/BEST-IN-CLASS.md](../capital-claw/BEST-IN-CLASS.md)
 - Creator: [../creator-claw/RELEASE-NEXT.md](../creator-claw/RELEASE-NEXT.md)

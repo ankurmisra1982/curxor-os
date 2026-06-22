@@ -499,10 +499,240 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
 // W20 — xp_event_emit
 {
   const { ok, json } = await post("/api/work/status", { action: "xp_event_emit", kind: "draft_reply" });
-  if (ok && json.event?.kind === "draft_reply") {
-    pass("xp_event_emit", json.event.id);
+  if (ok && (json.event?.kind === "draft_reply" || json.skipped === true)) {
+    pass("xp_event_emit", json.event?.id ?? "opt-out");
   } else {
     fail("xp_event_emit", json.error ?? "no event");
+  }
+}
+
+// W21 — work_claw_rename
+{
+  const { ok, json } = await get("/api/work/status");
+  if (ok && json.productName === "Work Claw") {
+    pass("work_claw_rename", json.productName);
+  } else {
+    fail("work_claw_rename", `productName=${json.productName}`);
+  }
+}
+
+// W21 — microsoft_oauth_status
+{
+  const { ok, json } = await post("/api/work/status", { action: "microsoft_oauth_status" });
+  if (ok && json.microsoft?.scopes) {
+    pass("microsoft_oauth_status", json.microsoft.demo ? "demo" : "configured");
+  } else {
+    fail("microsoft_oauth_status", "missing microsoft");
+  }
+}
+
+// W22 — thread_expand_smoke
+{
+  await post("/api/work/status", { action: "scan_inbox" });
+  const { ok, json } = await post("/api/work/status", { action: "list_threads" });
+  const multi = json.threads?.find((t) => t.messages?.length >= 2);
+  if (ok && multi) {
+    pass("thread_expand_smoke", `${multi.messages.length} msgs`);
+  } else {
+    fail("thread_expand_smoke", `threads=${json.threads?.length}`);
+  }
+}
+
+// W22 — archive_mail
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.find((m) => !m.archivedAt)?.id;
+  if (!mailId) {
+    fail("archive_mail", "no mail");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "archive_mail", mailId });
+    if (ok && json.entry?.archivedAt) {
+      pass("archive_mail", mailId);
+    } else {
+      fail("archive_mail", `archivedAt=${json.entry?.archivedAt}`);
+    }
+  }
+}
+
+// W22 — compose_send_simulated
+{
+  const status = (await get("/api/work/status")).json;
+  const mailId = status.mailIndex?.find((m) => !m.archivedAt)?.id ?? status.mailIndex?.[0]?.id;
+  if (!mailId) {
+    fail("compose_send_simulated", "no mail");
+  } else {
+    const { ok, json } = await post("/api/work/status", {
+      action: "compose_send",
+      mailId,
+      subject: "Re: checklist",
+      body: "Thanks for your note — checklist simulated send.",
+    });
+    const st = json.sendStatus ?? json.status;
+    if (ok && json.ok && (st === "simulated" || st === "sent" || st === "queued")) {
+      pass("compose_send_simulated", String(st));
+    } else {
+      fail("compose_send_simulated", `ok=${json.ok} status=${st}`);
+    }
+  }
+}
+
+// W23 — suppression_block
+{
+  const { ok, json } = await post("/api/work/status", { action: "suppression_block_test" });
+  if (ok && json.ok === true) {
+    pass("suppression_block", json.email);
+  } else {
+    fail("suppression_block", `ok=${json.ok}`);
+  }
+}
+
+// W23 — warmup_dashboard
+{
+  const status = (await get("/api/work/status")).json;
+  const sp = status.sendPolicy;
+  const d = status.deliverability;
+  if (sp && typeof sp.remainingToday === "number" && (d?.warmupMode !== undefined || d?.warmupDailyCap !== undefined)) {
+    pass("warmup_dashboard", `remaining=${sp.remainingToday} cap=${d?.warmupDailyCap ?? "—"}`);
+  } else {
+    fail("warmup_dashboard", "missing warmup fields");
+  }
+}
+
+// W23 — pre_send_gate
+{
+  const { ok, json } = await post("/api/work/status", { action: "pre_send_gate" });
+  if (ok && json.gate && typeof json.gate.ok === "boolean") {
+    pass("pre_send_gate", json.gate.ok ? "ready" : `missing:${json.gate.missing?.join(",")}`);
+  } else {
+    fail("pre_send_gate", "missing gate");
+  }
+}
+
+// W24 — hubspot_sync
+{
+  const { ok, json } = await post("/api/work/status", { action: "sync_hubspot" });
+  if (ok && typeof json.imported === "number" && typeof json.pushed === "number") {
+    pass("hubspot_sync", `imported=${json.imported} pushed=${json.pushed}`);
+  } else {
+    fail("hubspot_sync", "missing counts");
+  }
+}
+
+// W24 — won_pauses_sequences
+{
+  const { ok, json } = await post("/api/work/status", { action: "won_pauses_sequences" });
+  if (ok && json.ok === true) {
+    pass("won_pauses_sequences", json.sequenceId);
+  } else {
+    fail("won_pauses_sequences", `ok=${json.ok}`);
+  }
+}
+
+// W24 — crm_sync_badge
+{
+  const { ok, json } = await post("/api/work/status", { action: "crm_sync_badge" });
+  if (ok && json.badge) {
+    pass("crm_sync_badge", json.badge);
+  } else {
+    fail("crm_sync_badge", `badge=${json.badge}`);
+  }
+}
+
+// W25 — signal_feed_list
+{
+  const { ok, json } = await post("/api/work/status", { action: "signal_feed_list" });
+  if (ok && Array.isArray(json.signals) && json.signals.length >= 3) {
+    pass("signal_feed_list", `${json.signals.length} signals`);
+  } else {
+    fail("signal_feed_list", `signals=${json.signals?.length}`);
+  }
+}
+
+// W25 — signal_convert
+{
+  const feed = (await post("/api/work/status", { action: "signal_feed_list" })).json;
+  const signalId = feed.signals?.[0]?.id;
+  if (!signalId) {
+    fail("signal_convert", "no signal");
+  } else {
+    const { ok, json } = await post("/api/work/status", { action: "signal_to_opportunity", signalId });
+    if (ok && json.lead?.id && json.sequenceId) {
+      pass("signal_convert", json.sequenceId);
+    } else {
+      fail("signal_convert", json.error ?? "failed");
+    }
+  }
+}
+
+// W26 — approval_callback_demo
+{
+  await post("/api/work/status", { action: "run_demo_tour", growthLevel: "L3" });
+  const { ok, json } = await post("/api/work/status", { action: "approval_callback_demo" });
+  if (ok && typeof json.demoLogged === "boolean") {
+    pass("approval_callback_demo", String(json.demoLogged));
+  } else {
+    fail("approval_callback_demo", `demoLogged=${json.demoLogged}`);
+  }
+}
+
+// W26 — audit_export
+{
+  const { ok, json } = await post("/api/work/status", { action: "audit_export" });
+  if (ok && Array.isArray(json.audit)) {
+    pass("audit_export", `${json.audit.length} rows`);
+  } else {
+    fail("audit_export", "missing audit");
+  }
+}
+
+// W26 — mcp_confirm_dry_run
+{
+  const res = await get("/api/work/mcp");
+  const tool = res.json.tools?.find((t) => t.name?.includes("send") || t.name?.includes("sequence"));
+  if (res.ok && tool) {
+    pass("mcp_confirm_dry_run", tool.name ?? "mcp tools");
+  } else {
+    fail("mcp_confirm_dry_run", "no send tool");
+  }
+}
+
+// W27 — needs_you_digest
+{
+  const { ok, json } = await post("/api/work/status", { action: "needs_you_digest" });
+  if (ok && json.demoLogged === true && typeof json.text === "string") {
+    pass("needs_you_digest", "logged");
+  } else {
+    fail("needs_you_digest", `demoLogged=${json.demoLogged}`);
+  }
+}
+
+// W27 — os_morning_brief
+{
+  const { ok, json } = await post("/api/work/status", { action: "os_morning_brief" });
+  if (ok && typeof json.brief === "string" && json.brief.includes("CurXor OS")) {
+    pass("os_morning_brief", "cross-claw");
+  } else {
+    fail("os_morning_brief", "missing brief");
+  }
+}
+
+// W28 — xp_list
+{
+  const { ok, json } = await post("/api/work/status", { action: "xp_list" });
+  if (ok && Array.isArray(json.events)) {
+    pass("xp_list", `${json.events.length} events`);
+  } else {
+    fail("xp_list", "missing events");
+  }
+}
+
+// W28 — xp_opt_out (settings default = emit enabled)
+{
+  const emit = await post("/api/work/status", { action: "xp_event_emit", kind: "create_lead" });
+  if (emit.ok && (emit.json.event || emit.json.skipped)) {
+    pass("xp_opt_out", emit.json.skipped ? "opt-out path ok" : emit.json.event.id);
+  } else {
+    fail("xp_opt_out", "emit failed");
   }
 }
 

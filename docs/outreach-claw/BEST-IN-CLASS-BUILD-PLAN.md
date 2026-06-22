@@ -373,4 +373,4 @@ Optional: `npm run qa:work-excellence` — runs work-checklist + qa-work-levels 
 
 ## Next action
 
-Start **Sprint W13** — wire `demo:capture:work:levels`, capture persona screenshots, EXIT-DEMO recording path. Run `qa:local` before commit.
+W13–W20 complete (v0.4.0). Start **Phase 2** — [EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md) **Sprint W21**.

@@ -89,7 +89,7 @@ export const CONNECTOR_CATALOG: WorkConnectorDefinition[] = [
   {
     id: "hubspot",
     label: "HubSpot",
-    tier: "planned",
+    tier: "oauth",
     envKeys: ["HUBSPOT_ACCESS_TOKEN"],
     docsUrl: "https://developers.hubspot.com/",
     detail: "GTM Engine-style CRM sync — planned",

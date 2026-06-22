@@ -13,6 +13,8 @@ interface UseWorkInboxKeysOptions {
   onDraftReply: (mailId: string) => void;
   onAssign: (mailId: string, leadId: string) => void;
   onSnooze: (mailId: string) => void;
+  onArchive: (mailId: string) => void;
+  onMarkDone: (mailId: string) => void;
   onTagIntent: (mailId: string, intent: ReplyIntent) => void;
   leads: WorkLead[];
   defaultLeadId?: string;
@@ -34,6 +36,8 @@ export function useWorkInboxKeys({
   onDraftReply,
   onAssign,
   onSnooze,
+  onArchive,
+  onMarkDone,
   onTagIntent,
   leads,
   defaultLeadId,
@@ -75,6 +79,16 @@ export function useWorkInboxKeys({
         onSnooze(mailId);
         return;
       }
+      if (e.key === "e") {
+        e.preventDefault();
+        onArchive(mailId);
+        return;
+      }
+      if (e.key === "d") {
+        e.preventDefault();
+        onMarkDone(mailId);
+        return;
+      }
       const intent = INTENT_KEYS[e.key];
       if (intent) {
         e.preventDefault();
@@ -88,8 +102,10 @@ export function useWorkInboxKeys({
     defaultLeadId,
     enabled,
     leads,
+    onArchive,
     onAssign,
     onDraftReply,
+    onMarkDone,
     onSelectIndex,
     onSnooze,
     onTagIntent,

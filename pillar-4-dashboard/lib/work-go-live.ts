@@ -227,3 +227,14 @@ export async function buildWorkGoLiveReport(): Promise<WorkGoLiveReport> {
     },
   };
 }
+
+export async function checkPreSendGate(): Promise<{ ok: boolean; missing: string[]; suppressionCount: number }> {
+  const [fre, file] = await Promise.all([readAppFreState("my-work"), ensureWorkQueue()]);
+  const physicalAddress = typeof fre.config.physicalAddress === "string" ? fre.config.physicalAddress.trim() : "";
+  const optOutLine = typeof fre.config.optOutLine === "string" ? fre.config.optOutLine.trim() : "";
+  const missing: string[] = [];
+  if (!physicalAddress) missing.push("physicalAddress");
+  if (!optOutLine) missing.push("optOutLine");
+  const suppressionCount = file.suppressionList?.length ?? 0;
+  return { ok: missing.length === 0, missing, suppressionCount };
+}

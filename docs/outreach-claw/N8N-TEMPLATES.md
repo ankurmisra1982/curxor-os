@@ -1,58 +1,49 @@
-# Work Claw — n8n webhook templates
+# n8n templates — Work Claw webhooks
 
-Self-host [n8n](https://n8n.io/) on eno2 and point these templates at `N8N_WEBHOOK_URL` in `digital.env`.
+## Signal ingest (W25)
 
-## 1. Lead stage → won
+Route RSS or Clay-style enrich output into Work Claw intent strip.
 
-Trigger when a lead moves to **won** — notify ops channel and create a celebration task.
+### Webhook node
 
-**Webhook payload (from Work desk or custom script):**
-
-```json
-{
-  "event": "work.lead.stage_changed",
-  "leadId": "LEAD-001",
-  "stage": "won",
-  "name": "Jordan Lee",
-  "email": "jordan@fintechlabs.io",
-  "company": "Fintech Labs"
-}
-```
-
-**n8n flow:** Webhook → IF `stage === won` → Slack message + optional Google Calendar “onboarding kickoff”.
-
-## 2. Sequence first send
-
-Fire after first outbound send (live or simulated) for analytics and CRM mirror.
+- **Method:** POST
+- **URL:** `http://127.0.0.1:3080/api/work/status`
+- **Body (JSON):**
 
 ```json
 {
-  "event": "work.sequence.first_send",
-  "sequenceId": "SEQ-001",
-  "sendId": "SEND-042",
-  "status": "simulated",
-  "leadEmail": "sam@buildco.dev"
+  "action": "signal_ingest",
+  "title": "{{ $json.title }}",
+  "source": "n8n-rss",
+  "url": "{{ $json.link }}",
+  "intent": "product",
+  "score": 70
 }
 ```
 
-**n8n flow:** Webhook → Twenty CRM create person (HTTP Request node) → Notion append row.
+### RSS → Signal flow
 
-## 3. Interested reply intent
+1. **RSS Feed Read** — poll every 15m
+2. **Filter** — keyword match (e.g. "hiring", "raised", "launch")
+3. **HTTP Request** — POST `signal_ingest` as above
 
-When operator tags mail as **interested**, Work Claw can also `channel.slack.send`. Duplicate to n8n for long-tail routing.
+### Signal → opportunity
+
+Use dashboard **Intent strip** or POST:
 
 ```json
 {
-  "event": "work.reply.interested",
-  "mailId": "MAIL-abc",
-  "leadId": "LEAD-003",
-  "subject": "Re: CurXor pricing",
-  "intent": "interested"
+  "action": "signal_to_opportunity",
+  "signalId": "SIG-xxxxxxxx"
 }
 ```
 
-**n8n flow:** Webhook → create Linear issue → assign SDR → schedule Cal.com follow-up link in Slack thread.
+Creates lead + `polite_followup` mini-sequence and runs `enrich_lead` in demo mode.
 
----
+## Approval callback (W26)
 
-Set `N8N_WEBHOOK_URL` in `/etc/curxor/digital.env`. Future Work releases may POST these payloads automatically on each event; today you can wire a small cron or heartbeat hook to forward `work-queue.json` diffs.
+Telegram bot callback → `POST /api/work/approval-callback` with `{ sendId, decision: "approve" | "reject" }`.
+
+## Needs-you digest (W27)
+
+Schedule **Cron** 7:00 local → POST `{ "action": "needs_you_digest" }`.

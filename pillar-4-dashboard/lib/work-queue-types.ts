@@ -2,6 +2,19 @@ export type LeadStage = "new" | "contacted" | "replied" | "qualified" | "won" | 
 
 export type TaskPriority = "P1" | "P2" | "P3";
 
+export type WorkSignalIntent = "hiring" | "funding" | "product" | "community" | "other";
+
+export interface WorkSignalRow {
+  id: string;
+  title: string;
+  source: string;
+  url?: string;
+  intent: WorkSignalIntent;
+  score: number;
+  receivedAt: string;
+  convertedLeadId?: string | null;
+}
+
 export type SequenceStatus = "draft" | "active" | "paused" | "completed" | "replied" | "bounced";
 
 export type SequenceStepKind = "email" | "wait" | "task";
@@ -25,6 +38,8 @@ export interface WorkLead {
   createdAt: string;
   updatedAt: string;
   lastTouchAt: string | null;
+  crmSyncAt?: string | null;
+  assignedTo?: string | null;
 }
 
 export interface WorkTask {
@@ -95,6 +110,9 @@ export interface MailIndexEntry {
   assignedTo?: string | null;
   matchedReply: boolean;
   replyIntent?: ReplyIntent;
+  archivedAt?: string | null;
+  doneAt?: string | null;
+  snoozedUntil?: string | null;
 }
 
 export interface WorkAgentAuditEntry {
@@ -134,6 +152,8 @@ export interface WorkQueueFile {
   agentAuditLog?: WorkAgentAuditEntry[];
   unsubscribeTokens?: Record<string, string>;
   crmConflictResolutions?: CrmConflictResolution[];
+  suppressionList?: Array<{ email: string; reason: string; at: string; source: "bounce" | "failed" | "manual" }>;
+  signals?: WorkSignalRow[];
 }
 
 export interface WorkConnectorVaultSummary {
@@ -169,6 +189,7 @@ export interface WorkConnectorVaultReport {
 
 export interface WorkQueueStatus {
   source: "live" | "demo";
+  productName?: string;
   bridgeConfigured: boolean;
   workspaceName: string;
   focusAreas: string[];

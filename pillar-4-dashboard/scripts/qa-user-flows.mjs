@@ -340,5 +340,29 @@ await check("flow: cross_claw_handoff creator to work", async () => {
   return Array.isArray(status.leads) && status.leads.some((l) => l.email === email);
 });
 
+await check("flow: capital_to_work_handoff", async () => {
+  const email = `capital-handoff-${Date.now()}@example.com`;
+  const handoff = await postJson("/api/work/status", {
+    action: "handoff_from_claw",
+    source: "my-capital",
+    name: "Capital Intel Lead",
+    email,
+    company: "Ticker follow-up",
+    contextLabel: "SPY alert reply",
+  });
+  if (!handoff.ok || !handoff.json.lead?.id) return false;
+  const status = await getJson("/api/work/status");
+  const lead = status.leads?.find((l) => l.email === email);
+  return Boolean(lead?.tags?.some((t) => t.includes("handoff") || t.includes("my-capital")));
+});
+
+await check("flow: signal_to_opportunity", async () => {
+  const feed = await postJson("/api/work/status", { action: "signal_feed_list" });
+  const signalId = feed.json.signals?.[0]?.id;
+  if (!signalId) return false;
+  const conv = await postJson("/api/work/status", { action: "signal_to_opportunity", signalId });
+  return conv.ok && Boolean(conv.json.lead?.id) && Boolean(conv.json.sequenceId);
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

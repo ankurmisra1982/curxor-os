@@ -5,6 +5,7 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 
 import { readAppFreState } from "./app-fre-state";
+import { getOotbApp } from "./ootb-apps";
 import { buildWorkGrowthProfile } from "./work-growth";
 import { readUserSettings } from "./user-settings";
 import { loadDigitalEnv } from "./digital-env";
@@ -73,6 +74,8 @@ export async function ensureWorkQueue(): Promise<WorkQueueFile> {
       crmConflictResolutions: Array.isArray(parsed.crmConflictResolutions)
         ? (parsed.crmConflictResolutions as WorkQueueFile["crmConflictResolutions"])
         : [],
+      suppressionList: Array.isArray(parsed.suppressionList) ? parsed.suppressionList : [],
+      signals: Array.isArray(parsed.signals) ? parsed.signals : [],
     };
   } catch {
     const seeded = seedDemoQueue();
@@ -272,6 +275,7 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
 
   return {
     source: bridgeConfigured ? "live" : "demo",
+    productName: getOotbApp("my-work").name,
     bridgeConfigured,
     workspaceName: typeof fre.config.workspaceName === "string" ? fre.config.workspaceName : "Outreach Desk",
     focusAreas: Array.isArray(fre.config.focusAreas)
@@ -370,6 +374,15 @@ export async function updateLeadStage(leadId: string, stage: LeadStage): Promise
       if (task.leadId === leadId && !task.done) {
         file.tasks[i] = { ...task, done: true, updatedAt: new Date().toISOString() };
       }
+    }
+  }
+  if (stage === "won" || stage === "lost") {
+    const now = new Date().toISOString();
+    for (const seq of file.sequences) {
+      if (seq.leadId !== leadId || seq.status !== "active") continue;
+      seq.status = "paused";
+      seq.lastError = `Lead marked ${stage}`;
+      seq.updatedAt = now;
     }
   }
   await writeWorkFile(file);
@@ -681,6 +694,16 @@ export async function scanLocalMailQueue(): Promise<MailIndexEntry[]> {
     },
     {
       id: `MAIL-${randomUUID().slice(0, 8)}`,
+      from: "alex@edgecompute.ai",
+      subject: "Re: CurXor pricing",
+      snippet: "Following up on my note — still keen to learn more about on-prem outreach.",
+      receivedAt: new Date(Date.now() - 86400000).toISOString(),
+      leadId: "LEAD-003",
+      matchedReply: true,
+      replyIntent: "interested",
+    },
+    {
+      id: `MAIL-${randomUUID().slice(0, 8)}`,
       from: "notifications@calendar.local",
       subject: "Out of office until Monday",
       snippet: "I am away from email — automatic reply",
@@ -887,6 +910,9 @@ export async function snoozeMail(mailId: string, days = 1): Promise<{ task: Work
   const idx = file.mailIndex.findIndex((m) => m.id === mailId);
   const entry = idx >= 0 ? file.mailIndex[idx]! : null;
   const dueAt = new Date(Date.now() + days * 86400000).toISOString();
+  if (idx >= 0) {
+    file.mailIndex[idx] = { ...file.mailIndex[idx]!, snoozedUntil: dueAt };
+  }
   const now = new Date().toISOString();
   const task: WorkTask = {
     id: `TASK-${String(file.tasks.length + 1).padStart(3, "0")}`,
@@ -929,9 +955,62 @@ export function listMailThreads(entries?: MailIndexEntry[]): MailThread[] {
   return groupMailIntoThreads(entries ?? []);
 }
 
-export async function listMailThreadsFromStore(): Promise<MailThread[]> {
+export async function listMailThreadsFromStore(opts?: { includeArchived?: boolean }): Promise<MailThread[]> {
   const file = await ensureWorkQueue();
-  return groupMailIntoThreads(file.mailIndex);
+  let rows = file.mailIndex;
+  if (!opts?.includeArchived) {
+    rows = rows.filter((m) => !m.archivedAt && !m.doneAt);
+  }
+  return groupMailIntoThreads(rows);
+}
+
+export async function archiveMail(mailId: string): Promise<MailIndexEntry | null> {
+  const file = await ensureWorkQueue();
+  const idx = file.mailIndex.findIndex((m) => m.id === mailId);
+  if (idx < 0) return null;
+  file.mailIndex[idx] = { ...file.mailIndex[idx]!, archivedAt: new Date().toISOString() };
+  await writeWorkFile(file);
+  return file.mailIndex[idx]!;
+}
+
+export async function markMailDone(mailId: string): Promise<MailIndexEntry | null> {
+  const file = await ensureWorkQueue();
+  const idx = file.mailIndex.findIndex((m) => m.id === mailId);
+  if (idx < 0) return null;
+  file.mailIndex[idx] = { ...file.mailIndex[idx]!, doneAt: new Date().toISOString() };
+  await writeWorkFile(file);
+  return file.mailIndex[idx]!;
+}
+
+export async function sendComposeReply(input: {
+  mailId: string;
+  subject: string;
+  body: string;
+}): Promise<{ ok: boolean; sendId?: string; status?: string; error?: string }> {
+  const file = await ensureWorkQueue();
+  const mail = file.mailIndex.find((m) => m.id === input.mailId);
+  if (!mail) return { ok: false, error: "mail not found" };
+
+  const { isEmailSuppressed } = await import("./work-suppression");
+  if (await isEmailSuppressed(mail.from)) {
+    return { ok: false, error: "Recipient is on suppression list" };
+  }
+
+  const send = await recordSend({
+    sequenceId: "COMPOSE",
+    stepId: "reply",
+    leadId: mail.leadId ?? "",
+    to: mail.from,
+    subject: input.subject,
+    body: input.body,
+    status: "queued",
+    sentAt: null,
+    error: null,
+  });
+
+  const { executeOutboundSend } = await import("./work-send-executor");
+  const result = await executeOutboundSend(send.id);
+  return { ok: result.ok, sendId: send.id, status: result.send?.status, error: result.error };
 }
 
 export async function personalizeTemplateForLead(text: string, lead: WorkLead): Promise<string> {

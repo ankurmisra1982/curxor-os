@@ -25,7 +25,7 @@ export const OOTB_APPS = [
   },
   {
     id: "my-work",
-    name: "Outreach Claw",
+    name: "Work Claw",
     href: "/my-work",
     short: "OUT",
     description:

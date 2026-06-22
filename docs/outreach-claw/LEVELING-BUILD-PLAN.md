@@ -388,4 +388,4 @@ WL1 (schema + FRE) → WL2 (L1) → WL3 (L2) → WL4 (L3) → WL5 (L4/L5 scaffol
 
 ## Next action
 
-Start **Sprint WL1** — FRE `growthIntent`, `WorkLevelBadge`, settings persistence, and L1 coach copy pass.
+WL1–WL8 + W13–W20 complete (v0.4.0). Continue with **[EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md)** — start **Sprint W21**.

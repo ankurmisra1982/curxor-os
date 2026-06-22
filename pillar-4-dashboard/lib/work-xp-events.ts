@@ -37,7 +37,11 @@ async function readEvents(): Promise<WorkXpEvent[]> {
 export async function emitWorkXpEvent(
   kind: WorkXpEventKind,
   payload: Record<string, unknown> = {},
-): Promise<WorkXpEvent> {
+): Promise<WorkXpEvent | null> {
+  const { readUserSettings } = await import("./user-settings");
+  const settings = await readUserSettings();
+  if (settings.appearance.workGamificationOptOut) return null;
+
   const events = await readEvents();
   const row: WorkXpEvent = {
     id: `WXP-${String(events.length + 1).padStart(4, "0")}`,

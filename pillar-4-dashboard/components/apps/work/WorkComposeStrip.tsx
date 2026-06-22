@@ -6,7 +6,9 @@ interface WorkComposeStripSimpleProps {
   mailId: string | null;
   draftPreview: string;
   onDraftReply: (mailId: string, prompt?: string) => void;
+  onSendReply?: (mailId: string, subject: string, body: string) => void;
   onClear: () => void;
+  sendBusy?: boolean;
 }
 
 interface WorkComposeStripEditorProps {
@@ -26,7 +28,7 @@ function isSimple(props: WorkComposeStripProps): props is WorkComposeStripSimple
 
 export function WorkComposeStrip(props: WorkComposeStripProps) {
   if (isSimple(props)) {
-    const { mailId, draftPreview, onDraftReply, onClear } = props;
+    const { mailId, draftPreview, onDraftReply, onSendReply, onClear, sendBusy } = props;
     const [prompt, setPrompt] = useState("");
     const lines = draftPreview.split("\n");
     const subject = lines[0] ?? "";
@@ -50,6 +52,22 @@ export function WorkComposeStrip(props: WorkComposeStripProps) {
             >
               Draft reply
             </button>
+            {onSendReply && draftPreview ? (
+              <button
+                type="button"
+                disabled={!mailId || sendBusy}
+                onClick={() => {
+                  if (!mailId) return;
+                  const lines = draftPreview.split("\n");
+                  const subject = lines[0] ?? "Re:";
+                  const body = lines.slice(1).join("\n").trim();
+                  onSendReply(mailId, subject, body);
+                }}
+                className="border border-stark px-1.5 py-0.5 uppercase text-stark disabled:opacity-40"
+              >
+                {sendBusy ? "Sending…" : "Send reply"}
+              </button>
+            ) : null}
           </div>
         </div>
         <input

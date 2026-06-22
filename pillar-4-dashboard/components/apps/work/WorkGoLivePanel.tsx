@@ -52,7 +52,7 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, onOpenSetupW
     return <p className="font-mono text-[10px] text-muted">Loading go-live checklist…</p>;
   }
 
-  const { steps, progress, ready, partiallyReady, demoReady, today } = report;
+  const { steps, progress, ready, partiallyReady, demoReady, liveReady, today } = report;
   const smtpStep = steps.find((s) => s.id === "smtp");
   const domainStep = steps.find((s) => s.id === "domain_health");
   const demoRelease = smtpStep?.status === "warning" && !ready;
@@ -108,6 +108,22 @@ export function WorkGoLivePanel({ report, onRefresh, onRunDemoTour, onOpenSetupW
               </a>
             </div>
           </div>
+        </div>
+      ) : null}
+      {liveReady ? (
+        <div className="border border-cursor-glow/50 bg-cursor-glow/10 px-3 py-2 text-[10px]">
+          <span className="uppercase tracking-widest text-cursor-glow">Live ready</span>
+          <p className="mt-1 text-muted">
+            SMTP verified and first real send recorded.{" "}
+            <a
+              href="https://github.com/curxor-os/curxor-os/blob/main/docs/outreach-claw/EXIT-DEMO.md#live-ready"
+              className="text-cursor-glow underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              EXIT-DEMO live-ready anchor
+            </a>
+          </p>
         </div>
       ) : null}
       <div className="flex flex-wrap items-center gap-2">

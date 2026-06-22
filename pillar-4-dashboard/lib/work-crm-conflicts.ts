@@ -1,6 +1,7 @@
 import "server-only";
 
 import { getCrmStatus } from "./work-crm-sync";
+import { isTwentyConfiguredAsync, listTwentyPeople } from "./work-twenty-client";
 import { ensureWorkQueue } from "./work-store";
 import type { WorkLead } from "./work-queue-types";
 
@@ -34,12 +35,19 @@ export async function listCrmConflicts(): Promise<CrmConflict[]> {
   const remoteRows =
     crm.demo || !crm.configured
       ? DEMO_REMOTE
-      : file.leads.slice(0, 5).map((l) => ({
-          email: l.email,
-          name: `${l.name} (remote)`,
-          company: l.company || "—",
-          title: l.title || "—",
-        }));
+      : (await isTwentyConfiguredAsync())
+        ? (await listTwentyPeople(25)).map((p) => ({
+            email: p.email,
+            name: p.name,
+            company: "Twenty",
+            title: "—",
+          }))
+        : file.leads.slice(0, 5).map((l) => ({
+            email: l.email,
+            name: `${l.name} (remote)`,
+            company: l.company || "—",
+            title: l.title || "—",
+          }));
 
   for (const lead of file.leads) {
     const remote = remoteRows.find((r) => r.email.toLowerCase() === lead.email.toLowerCase());

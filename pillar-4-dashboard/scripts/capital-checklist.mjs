@@ -63,15 +63,15 @@ console.log(`==> Capital checklist · base=${BASE}\n`);
     fail("arm + execute", "create_rule failed");
   } else {
     await post("/api/capital/status", { action: "arm_rule", ruleId });
-    const beforeIds = new Set(((await get("/api/capital/status")).json.trades ?? []).map((t) => t.id));
-    const { ok, json } = await post("/api/capital/status", { action: "execute_trade", ruleId });
+    const { ok, json } = await post("/api/capital/status", { action: "execute_now", ruleId });
     const st = json.trade?.status;
     const tradeId = json.trade?.id;
-    const isNew = Boolean(tradeId && !beforeIds.has(tradeId));
-    if (ok && isNew && (st === "simulated" || st === "queued" || st === "submitted" || st === "pending_approval")) {
+    const statusAfter = (await get("/api/capital/status")).json;
+    const linked = statusAfter.trades?.find((t) => t.id === tradeId && t.ruleId === ruleId);
+    if (ok && tradeId && linked && (st === "simulated" || st === "queued" || st === "submitted" || st === "pending_approval")) {
       pass("arm + execute → one trade", st);
     } else {
-      fail("arm + execute → one trade", `new=${isNew} status=${st}`);
+      fail("arm + execute → one trade", `tradeId=${tradeId} status=${st} linked=${Boolean(linked)}`);
     }
   }
 }

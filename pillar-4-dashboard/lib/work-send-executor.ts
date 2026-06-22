@@ -1,6 +1,7 @@
 import "server-only";
 
 import { publishDigitalIntent } from "./mesh-publish";
+import { readAppFreState } from "./app-fre-state";
 import {
   advanceSequenceStep,
   ensureWorkQueue,
@@ -19,6 +20,7 @@ import type { OutboundSend, ReplyIntent, WorkSequence } from "./work-queue-types
 import { notifyWorkSendFailure } from "./work-publish-failure-notify";
 import { notifyWorkPendingApproval } from "./work-approval-notify";
 import { evaluateSendPolicy, readWorkSendPolicy } from "./work-send-policy";
+import { addSuppression, isEmailSuppressed } from "./work-suppression";
 
 export function requireWorkSendApproval(): boolean {
   const env = process.env.CURXOR_WORK_REQUIRE_APPROVAL?.trim().toLowerCase();
@@ -34,12 +36,23 @@ export async function buildEmailIntent(input: {
   stepId?: string;
   leadId?: string;
 }): Promise<{ tool: string; payload: Record<string, unknown> }> {
+  const fre = await readAppFreState("my-work");
+  const primary = typeof fre.config.smtpFrom === "string" ? fre.config.smtpFrom : undefined;
+  const secondary =
+    typeof fre.config.secondarySmtpFrom === "string" ? fre.config.secondarySmtpFrom.trim() : undefined;
+  const file = await ensureWorkQueue();
+  const from =
+    secondary && file.sends.length % 2 === 1
+      ? secondary
+      : primary;
+
   return {
     tool: "work.email.send",
     payload: {
       to: input.to,
       subject: input.subject,
       body: input.body,
+      from,
       sequence_id: input.sequenceId,
       step_id: input.stepId,
       lead_id: input.leadId,
@@ -74,6 +87,9 @@ export async function sendSequenceStep(
 
   const lead = await getLead(seq.leadId);
   if (!lead?.email) return { ok: false, error: "Lead email missing" };
+  if (await isEmailSuppressed(lead.email)) {
+    return { ok: false, error: "Lead email is on suppression list" };
+  }
 
   const policy = await readWorkSendPolicy();
   const gate = evaluateSendPolicy(file, policy);
@@ -158,6 +174,9 @@ export async function executeOutboundSend(sendId: string): Promise<{ ok: boolean
 
   const err = result.error ?? "Bridge send failed";
   const failed = await updateSendStatus(sendId, { status: "failed", error: err });
+  if (err.toLowerCase().includes("bounce") || err.includes("550")) {
+    await addSuppression(send.to, err, "bounce");
+  }
   await notifyWorkSendFailure(send, err);
   return { ok: false, send: failed ?? undefined, error: err };
 }
