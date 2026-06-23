@@ -178,6 +178,16 @@ export function BuildPlanePanel({
         providers.
       </p>
 
+      <div className="border border-line/60 bg-void/30 px-3 py-2 font-mono text-[10px] text-muted">
+        <p className="uppercase tracking-widest text-cursor-glow">Inbound MCP (BP1)</p>
+        <p className="mt-1 text-stark">GET /api/build/mcp · POST JSON-RPC tools/list · tools/call</p>
+        <p className="mt-1">
+          Cursor: add server →{" "}
+          <code className="text-stark">{typeof window !== "undefined" ? `${window.location.origin}/api/build/mcp` : "http://127.0.0.1:3080/api/build/mcp"}</code>
+        </p>
+        <p className="mt-1">Enable overlay above before tools respond. Read-only: CCP summary, Cafe snapshot, Forge fleet, desk status.</p>
+      </div>
+
       <div className="space-y-2 border-t border-line/60 pt-3">
         <p className="font-mono text-[10px] uppercase tracking-widest text-muted">Policy (future gates)</p>
         <label className="flex cursor-pointer items-center gap-2 font-sans text-xs text-muted">
