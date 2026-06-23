@@ -55,7 +55,7 @@ Arbitrage, Signal, Swarm, Vital, Kin — preview banners, no fake live APIs. **C
 | Home `/home` | Fixed tonight — uses `user-settings` (was fre-state drift) |
 | Settings | Appearance, claws, intelligence, MCP egress, **Build Plane panel** |
 | Forged claws `/my-claw/[slug]` | Works |
-| Build Plane | **Scaffold only** — demo “Mark as linked”; no real Cursor OAuth yet |
+| Build Plane | **BP0 + BP1 shipped** — Settings panel, `/api/build/status`, inbound MCP at `/api/build/mcp` (read-only); real Cursor OAuth still deferred |
 
 ---
 
@@ -78,7 +78,7 @@ Arbitrage, Signal, Swarm, Vital, Kin — preview banners, no fake live APIs. **C
 | Settings label “Work gamification” | P2 | Confusing — controls all XP | Rename in C8 |
 | `UiModeProvider` localStorage vs server | P2 | Brief tier flash on load | Acceptable for v1 |
 | Shop / Kin / Signal no Go Live panel | P2 | Uneven exit-demo | Tier C — OK |
-| Build Plane not runtime-connected | P2 | Expected — v0.8+ | Documented |
+| Build Plane not runtime-connected | P2 | Was expected pre-BP1 | **Partially fixed** — inbound MCP read tools live; OAuth/worker deferred |
 | Pixel room art = colored tiles | P2 | Vision fidelity ~3.5/5 | Art pass later |
 
 **Verdict:** The overlay architecture **works as intended** for a sovereign appliance demo. The delight layer (Cafe, ceremonies, easter eggs) is **credible** — not yet best-in-class GTM (4.5+) until C8/C9 + appliance capture.
@@ -135,7 +135,7 @@ On **appliance** (predicted):
 - [ ] OTA tag only after on-device smoke
 - [ ] Appliance demo captures for storefront
 - [ ] Master AI patron panel (v0.8)
-- [ ] Build Plane inbound MCP (v0.8.1)
+- [x] Build Plane inbound MCP (v0.8.1) — PR #2 · merge pending approval
 
 ---
 
@@ -151,8 +151,9 @@ Use these when you return — each is a scoped sprint.
 
 ### Forge / Build Plane Agent
 
-4. BP0 complete? Confirm `buildPlane` + `/api/build/status` + Settings panel green.
-5. Any forged desk events still missing from Cafe sync?
+4. ~~BP0 complete?~~ **Done** — BP1 inbound MCP shipped on PR #2.
+5. Start v0.8.2 OS event bus webhooks (`forge.claw_minted`, `go_live.failed`, …)?
+6. Any forged desk events still missing from Cafe sync?
 
 ### Hardware Agent (day of unbox)
 
