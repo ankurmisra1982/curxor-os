@@ -5,9 +5,23 @@ import { CAFE_STATION_GRID } from "./claw-cafe-spatial";
 import type { GrowthLevel } from "./os-growth-level";
 import { meetsGrowthLevel } from "./os-growth-level";
 
-export type CafeEasterEggId = "coffee" | "window_night" | "eno2_freeze" | "architect";
+export type CafeEasterEggId = "coffee" | "window_night" | "eno2_freeze" | "architect" | "architect_whisper";
 
-export const ARCHITECT_OPACITY = { idle: 0.4, linked: 0.85 } as const;
+export const ARCHITECT_OPACITY = { whisper: 0.22, idle: 0.4, linked: 0.85 } as const;
+
+export function architectWhisperTier(growth: GrowthLevel): boolean {
+  return !meetsGrowthLevel(growth, "L4");
+}
+
+export function architectRoomOpacity(growth: GrowthLevel, linked: boolean): number {
+  if (architectWhisperTier(growth)) return ARCHITECT_OPACITY.whisper;
+  return linked ? ARCHITECT_OPACITY.linked : ARCHITECT_OPACITY.idle;
+}
+
+export function architectPulseScale(linked: boolean, tsMs: number): number {
+  if (!linked) return 1;
+  return 1 + 0.055 * Math.sin(tsMs * 0.005);
+}
 
 export function isNightWindowHour(hour: number): boolean {
   return hour >= 20 || hour < 6;
@@ -70,5 +84,6 @@ export const EASTER_EGG_COPY: Record<CafeEasterEggId, string> = {
   coffee: "Fresh brew — sovereignty tastes local.",
   window_night: "Constellation hour — the mesh keeps watch while you rest.",
   eno2_freeze: "eno2 paused — every Claw holds outbound until you release.",
-  architect: "Builder overlay — optional. Connect MCP in Settings when ready.",
+  architect: "Builder overlay — optional. Connect in Settings when ready.",
+  architect_whisper: "A faint figure sketches in the nook… Host tier unlocks The Architect.",
 };

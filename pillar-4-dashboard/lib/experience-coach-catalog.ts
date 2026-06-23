@@ -581,10 +581,66 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
       sectionId: "lanes",
       tips: [
         {
-          id: "engage-lanes-beginner",
+          id: "cafe-play-beginner",
           minLevel: "beginner",
-          title: "Engage lanes",
-          body: "Pick a lane, run Start Game or Drop Claw skills. Lane A shows live vision when the mesh is connected.",
+          title: "Play kiosk",
+          body: "Play tab is the mesh demo lane — Start Game, Drop Claw, Photo Booth. Ascension is your cross-Claw home.",
+        },
+      ],
+    },
+    {
+      sectionId: "spatial-room",
+      tips: [
+        {
+          id: "cafe-pixel-beginner",
+          minLevel: "beginner",
+          title: "Pixel room",
+          body: "Walk with arrows or click tiles. Stand adjacent to a Claw to inspect and open their desk.",
+        },
+        {
+          id: "cafe-architect-standard",
+          minLevel: "standard",
+          title: "The Architect",
+          body: "Host L4+ unlocks blueprint nook inspect. Link Build Plane in Settings for a brighter Architect pulse.",
+        },
+      ],
+    },
+    {
+      sectionId: "go-live",
+      tips: [
+        {
+          id: "cafe-golive-beginner",
+          minLevel: "beginner",
+          title: "Go Live",
+          body: "Run demo tour to ingest Work + Forge stubs and celebrate ascension — buyer-ready without SMTP or broker keys.",
+        },
+      ],
+    },
+    {
+      sectionId: "ascension-profile",
+      tips: [
+        {
+          id: "cafe-ascension-beginner",
+          minLevel: "beginner",
+          title: "Ascension G1–G6",
+          body: "Sprout → Infinity tiers track Knowledge and Wealth affinities from real Claw activity on this box.",
+        },
+        {
+          id: "cafe-sync-standard",
+          minLevel: "standard",
+          title: "Sync Claws",
+          body: "Tap Sync Claws to pull Work, Creator, Capital, Swarm, and Forge events into one ledger.",
+        },
+      ],
+    },
+    {
+      sectionId: "work-xp",
+      tips: [
+        {
+          id: "cafe-feed-standard",
+          minLevel: "standard",
+          title: "Cross-Claw feed",
+          body: "Every ingest updates character stations in the pixel room via live SSE — opt out in Settings → Gamification.",
         },
       ],
     },
@@ -592,10 +648,10 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
       sectionId: "guest-queue",
       tips: [
         {
-          id: "engage-queue-standard",
+          id: "cafe-queue-standard",
           minLevel: "standard",
           title: "Guest queue",
-          body: "Tracks in-person engagements — mirror this pattern for DM triage in Creator Claw Engage inbox.",
+          body: "Play tab guest queue mirrors in-person kiosk flow — separate from Creator Engage inbox (future CC2).",
         },
       ],
     },

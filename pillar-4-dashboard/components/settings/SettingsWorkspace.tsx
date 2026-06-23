@@ -687,7 +687,7 @@ export function SettingsWorkspace() {
               <section>
                 <h2 className="font-sans text-lg font-semibold text-stark">Gamification</h2>
                 <p className="mt-1 font-sans text-xs text-muted">
-                  Work streaks, Cafe ascension, and cross-Claw XP. Turn off to pause tracking and live room updates.
+                  Work streaks, Cafe ascension, and cross-Claw XP across the OS. Turn off to pause tracking and live room updates.
                 </p>
                 <label className="mt-4 flex cursor-pointer items-start gap-3 font-sans text-xs text-stark">
                   <input

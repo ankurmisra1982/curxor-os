@@ -15,6 +15,7 @@ import { applyGrowthFromVitalFre } from "@/lib/vital-growth";
 import { applyGrowthFromForgeFre } from "@/lib/forge-growth";
 import { applyGrowthFromKinFre } from "@/lib/kin-growth";
 import { applyGrowthFromSwarmFre } from "@/lib/swarm-growth";
+import { applyGrowthFromCafeFre } from "@/lib/cafe-growth";
 import { syncExperienceAfterForgeFre } from "@/lib/forge-onboarding";
 import { syncExperienceAfterShopFre } from "@/lib/shop-onboarding";
 import {
@@ -104,7 +105,9 @@ export async function POST(
               ? applyGrowthFromKinFre(rawConfig)
               : appId === "robotaxi-fleet-manager"
                 ? applyGrowthFromSwarmFre(rawConfig)
-                : rawConfig;
+                : appId === "claw-cafe"
+                  ? applyGrowthFromCafeFre(rawConfig)
+                  : rawConfig;
 
   try {
     try {

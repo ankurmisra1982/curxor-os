@@ -43,18 +43,6 @@ export interface StationSprite {
   accent: string;
 }
 
-export const STATION_SPRITES: StationSprite[] = (
-  Object.entries(CAFE_STATION_GRID) as Array<[CafeStationId, (typeof CAFE_STATION_GRID)[CafeStationId]]>
-)
-  .filter(([id]) => id !== "blueprint_nook")
-  .map(([id, station]) => ({
-  id,
-  label: station.label,
-  short: stationShortCode(id),
-  bg: stationColor(id).bg,
-  accent: stationColor(id).accent,
-}));
-
 const STATION_SHORT: Record<CafeStationId, string> = {
   mailbox: "OUT",
   publish_desk: "CRE",
@@ -83,6 +71,18 @@ function stationColor(id: CafeStationId): { bg: string; accent: string } {
   };
   return map[id];
 }
+
+export const STATION_SPRITES: StationSprite[] = (
+  Object.entries(CAFE_STATION_GRID) as Array<[CafeStationId, (typeof CAFE_STATION_GRID)[CafeStationId]]>
+)
+  .filter(([id]) => id !== "blueprint_nook")
+  .map(([id, station]) => ({
+  id,
+  label: station.label,
+  short: stationShortCode(id),
+  bg: stationColor(id).bg,
+  accent: stationColor(id).accent,
+}));
 
 export function stationGridPos(station: CafeStationId): GridPos {
   const cell = CAFE_STATION_GRID[station];

@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { CafeInspectFlyout } from "@/components/apps/cafe/CafeInspectFlyout";
+import { drawArchitectSprite } from "@/lib/cafe-architect-sprite";
 import type { CafeCharacter } from "@/lib/claw-cafe-spatial";
 import {
-  ARCHITECT_OPACITY,
   architectInspectable,
+  architectWhisperTier,
   buildYardClawSprites,
   EASTER_EGG_COPY,
   gridHitsStation,
@@ -56,6 +57,8 @@ interface DrawRoomOptions {
   nightWindow: boolean;
   builderBridgeLinked: boolean;
   yardSprites: YardClawSprite[];
+  growthLevel: GrowthLevel;
+  architectPulseMs: number;
 }
 
 function drawRoom(
@@ -90,11 +93,13 @@ function drawRoom(
   }
 
   const nook = stationGridPos("blueprint_nook");
-  ctx.fillStyle = "rgba(26,26,42,0.55)";
+  ctx.fillStyle = "rgba(18,20,32,0.45)";
   ctx.fillRect(nook.col * tile + 2, nook.row * tile + 2, tile - 4, tile - 4);
-  ctx.strokeStyle = "rgba(122,140,255,0.35)";
+  ctx.strokeStyle = "rgba(122,140,255,0.28)";
   ctx.lineWidth = 1;
   ctx.strokeRect(nook.col * tile + 3, nook.row * tile + 3, tile - 6, tile - 6);
+  ctx.fillStyle = "rgba(94,207,255,0.12)";
+  ctx.fillRect(nook.col * tile + 8, nook.row * tile + 10, tile - 16, tile - 18);
 
   for (const station of STATION_SPRITES) {
     const pos = stationGridPos(station.id);
@@ -166,20 +171,12 @@ function drawRoom(
     ctx.fillText(yard.label.slice(-1), cx, cy);
   }
 
-  const architectOpacity = options.builderBridgeLinked ? ARCHITECT_OPACITY.linked : ARCHITECT_OPACITY.idle;
-  const ax = nook.col * tile + tile / 2;
-  const ay = nook.row * tile + tile / 2;
-  const aSize = (CHAR_SIZE + 4) * scale;
-  ctx.globalAlpha = architectOpacity;
-  ctx.fillStyle = options.builderBridgeLinked ? "#9aa8ff" : "#4a5080";
-  ctx.fillRect(ax - aSize / 2, ay - aSize / 2, aSize, aSize);
-  ctx.strokeStyle = "#c8d0ff";
-  ctx.lineWidth = 1;
-  ctx.strokeRect(ax - aSize / 2, ay - aSize / 2, aSize, aSize);
-  ctx.fillStyle = "#e8ecff";
-  ctx.font = `bold ${6 * scale}px monospace`;
-  ctx.fillText("ARC", ax, ay);
-  ctx.globalAlpha = 1;
+  drawArchitectSprite(ctx, nook.col * tile + tile / 2, nook.row * tile + tile / 2, scale, {
+    growthLevel: options.growthLevel,
+    builderBridgeLinked: options.builderBridgeLinked,
+    pulseMs: options.architectPulseMs,
+    tile,
+  });
 
   const px = patron.col * tile + tile / 2;
   const py = patron.row * tile + tile / 2;
@@ -208,6 +205,7 @@ export function CafePixelCanvas({
   const patronRef = useRef<PatronState>(defaultPatronPos());
   const rafRef = useRef<number | null>(null);
   const lastFrameRef = useRef<number>(0);
+  const pulseMsRef = useRef(0);
   const [inspectChar, setInspectChar] = useState<AnimatedCafeCharacter | null>(null);
   const [showArchitect, setShowArchitect] = useState(false);
   const [dismissedInspectId, setDismissedInspectId] = useState<string | null>(null);
@@ -237,8 +235,10 @@ export function CafePixelCanvas({
       nightWindow,
       builderBridgeLinked,
       yardSprites,
+      growthLevel,
+      architectPulseMs: pulseMsRef.current,
     });
-  }, [eno2Frozen, nightWindow, builderBridgeLinked, yardSprites]);
+  }, [eno2Frozen, nightWindow, builderBridgeLinked, yardSprites, growthLevel]);
 
   const syncInspectable = useCallback(() => {
     if (architectInspectable(growthLevel, patronRef.current)) {
@@ -281,6 +281,7 @@ export function CafePixelCanvas({
       const prev = lastFrameRef.current || ts;
       const dt = ts - prev;
       lastFrameRef.current = ts;
+      pulseMsRef.current = ts;
       if (!eno2Frozen) {
         animatedRef.current = tickAnimatedCharacters(animatedRef.current, dt);
       }
@@ -355,11 +356,20 @@ export function CafePixelCanvas({
         });
         return;
       }
-      if (station === "blueprint_nook" && architectInspectable(growthLevel, target)) {
-        showEgg("architect");
-        patronRef.current = target;
-        syncInspectable();
-        paint();
+      if (station === "blueprint_nook") {
+        if (architectInspectable(growthLevel, patronRef.current) || architectInspectable(growthLevel, target)) {
+          if (target.col === stationGridPos("blueprint_nook").col && target.row === stationGridPos("blueprint_nook").row) {
+            patronRef.current = target;
+          }
+          syncInspectable();
+          paint();
+          return;
+        }
+        showEgg("architect_whisper");
+        if (target.col === stationGridPos("blueprint_nook").col && target.row === stationGridPos("blueprint_nook").row) {
+          patronRef.current = target;
+          paint();
+        }
         return;
       }
 
@@ -378,6 +388,8 @@ export function CafePixelCanvas({
       <p className="text-muted uppercase tracking-widest">
         Pixel room · {characters.length} Claw{characters.length === 1 ? "" : "s"}
         {visionConnected ? " · yard LIVE" : ""}
+        {builderBridgeLinked ? " · builder link" : ""}
+        {architectWhisperTier(growthLevel) ? " · architect whisper" : ""}
         {eno2Frozen ? " · eno2 hold" : ""}
         {lastPulseAt ? ` · pulse ${new Date(lastPulseAt).toLocaleTimeString()}` : ""}
       </p>
@@ -402,14 +414,14 @@ export function CafePixelCanvas({
             <p className="mt-1 text-muted">blueprint nook · Build Plane easter egg</p>
             <p className="mt-2 text-stark">
               {builderBridgeLinked
-                ? "Builder link active — MCP overlay connected on this box."
+                ? "Builder link active — Build Plane connected on this box."
                 : EASTER_EGG_COPY.architect}
             </p>
             <Link
               href="/settings"
               className="mt-3 inline-block border border-line px-3 py-1 uppercase tracking-widest text-muted hover:border-cursor-glow hover:text-cursor-glow"
             >
-              Settings
+              Build Plane settings
             </Link>
           </div>
         ) : inspectChar ? (
@@ -425,7 +437,7 @@ export function CafePixelCanvas({
           </div>
         ) : (
           <p className="text-muted lg:max-w-xs">
-            Walk adjacent to a Claw to inspect · coffee click · E toggles eno2 freeze · night window on top row
+            Walk adjacent to a Claw to inspect · coffee click · E toggles eno2 freeze · blueprint nook (Host L4+)
           </p>
         )}
       </div>

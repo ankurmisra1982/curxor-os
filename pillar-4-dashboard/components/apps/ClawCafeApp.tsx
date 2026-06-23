@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { CafeAscensionPanel } from "@/components/apps/cafe/CafeAscensionPanel";
 import { CafeGoLivePanel, type CafeGoLiveReportRow } from "@/components/apps/cafe/CafeGoLivePanel";
+import { CafeLevelUpNudge } from "@/components/apps/cafe/CafeLevelUpNudge";
 import { CafeHostConfigPanel } from "@/components/apps/cafe/CafeHostConfigPanel";
 import { CafeLevelBadge } from "@/components/apps/cafe/CafeLevelBadge";
 import { CafeLevelUpModal } from "@/components/apps/cafe/CafeLevelUpModal";
@@ -364,14 +365,22 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
             subtitle="G1–G6 tiers · Knowledge & Wealth affinities"
           >
             {ascension ? (
-              <CafeAscensionPanel
-                ascension={ascension}
-                epithet={cafeEpithet}
-                optOut={ascensionOptOut}
-                loading={ascensionLoading}
-                onRefresh={() => void loadCafeAscension()}
-                onSync={() => void loadCafeAscension(true)}
-              />
+              <div className="space-y-3">
+                <CafeLevelUpNudge
+                  ascension={ascension}
+                  optOut={ascensionOptOut}
+                  loading={ascensionLoading}
+                  onSync={() => void loadCafeAscension(true)}
+                />
+                <CafeAscensionPanel
+                  ascension={ascension}
+                  epithet={cafeEpithet}
+                  optOut={ascensionOptOut}
+                  loading={ascensionLoading}
+                  onRefresh={() => void loadCafeAscension()}
+                  onSync={() => void loadCafeAscension(true)}
+                />
+              </div>
             ) : (
               <p className="font-mono text-[10px] text-muted">Loading ascension…</p>
             )}

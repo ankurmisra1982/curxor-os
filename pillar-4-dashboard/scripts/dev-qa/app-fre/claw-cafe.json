@@ -1,9 +1,13 @@
 {
   "initialized": true,
   "config": {
-    "kioskName": "Engage Desk",
+    "kioskName": "Checklist Desk",
     "prizeMode": "demo",
-    "activeLanes": ["A", "B"]
+    "activeLanes": [
+      "A"
+    ],
+    "cafeGrowthIntent": "L3",
+    "growthLevel": "L3"
   },
-  "initializedAt": "2026-06-20T08:00:00.000Z"
+  "initializedAt": "2026-06-23T06:03:44.027Z"
 }
