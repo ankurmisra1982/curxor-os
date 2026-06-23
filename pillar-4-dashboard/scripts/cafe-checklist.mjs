@@ -190,6 +190,31 @@ if (osApprovals.ok && osApprovals.json.ok && typeof osApprovals.json.total === "
   fail("os approval inbox", JSON.stringify(osApprovals.json));
 }
 
+const overlayBootstrap = await get("/api/cafe/status");
+const pendingTotal = osApprovals.json?.total ?? 0;
+const overlayChars = (overlayBootstrap.json?.characters ?? []).filter((c) => c.needsApproval);
+if (pendingTotal > 0) {
+  if (
+    overlayChars.length > 0 &&
+    overlayChars.every((c) => c.bubble && c.approvalHref && c.approvalHref.includes("approval="))
+  ) {
+    pass("approval pixel overlay", `${overlayChars.length} character(s) · ${overlayChars[0].bubble}`);
+  } else {
+    fail("approval pixel overlay", `inbox=${pendingTotal} overlay=${overlayChars.length}`);
+  }
+} else {
+  pass("approval pixel overlay", "no pending inbox (skipped)");
+}
+
+const deepLinkSample = osApprovals.json?.items?.[0]?.href;
+if (typeof deepLinkSample === "string" && deepLinkSample.includes("approval=")) {
+  pass("approval deep links", deepLinkSample.split("?")[0] ?? deepLinkSample);
+} else if (pendingTotal === 0) {
+  pass("approval deep links", "no pending inbox (skipped)");
+} else {
+  fail("approval deep links", String(deepLinkSample));
+}
+
 const vitalIngest = await post("/api/cafe/status", {
   action: "ingest",
   kind: "vital.protocol_updated",

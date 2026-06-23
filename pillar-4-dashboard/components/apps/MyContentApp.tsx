@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
@@ -77,6 +78,7 @@ import type { GrowthLevel } from "@/lib/os-growth-level";
 import { isGrowthLevel } from "@/lib/os-growth-level";
 import { creatorFeatureVisible } from "@/lib/creator-level-gates";
 import { resolveCreatorGrowthLevel } from "@/lib/creator-growth";
+import { parseOsApprovalFocus, scrollToOsApprovalFocus } from "@/lib/os-approval-href";
 import { useDigitalStream } from "@/hooks/useDigitalStream";
 import { useVisionStream } from "@/hooks/useVisionStream";
 
@@ -93,6 +95,10 @@ function stageClass(stage: ContentPost["stage"]): string {
 export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceContext }: AgentAppContext) {
   const { frame, connected } = useVisionStream();
   const digital = useDigitalStream();
+  const searchParams = useSearchParams();
+  const approvalFocus = useMemo(() => parseOsApprovalFocus(searchParams), [searchParams]);
+  const highlightPostId = approvalFocus?.kind === "post" ? approvalFocus.postId : null;
+  const highlightReplyId = approvalFocus?.kind === "reply" ? approvalFocus.replyId : null;
   const tone = typeof config.contentTone === "string" ? config.contentTone : "technical";
   const autoSchedule = config.autoSchedule === true;
 
@@ -901,6 +907,13 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   useEffect(() => {
     if (meetsLevel("standard")) void loadGrowthData();
   }, [experienceLevel, meetsLevel, loadGrowthData]);
+
+  useEffect(() => {
+    if (!approvalFocus || (approvalFocus.kind !== "post" && approvalFocus.kind !== "reply")) return;
+    if (approvalFocus.kind === "post" && approvalPosts.length === 0) return;
+    if (approvalFocus.kind === "reply" && approvalReplies.length === 0) return;
+    scrollToOsApprovalFocus(approvalFocus);
+  }, [approvalFocus, approvalPosts.length, approvalReplies.length]);
 
   useEffect(() => {
     const raw = config.brandKit;
@@ -2298,12 +2311,15 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         title="Publish approval"
         subtitle="Human gate before bridge send · audit trail at /etc/curxor/content-audit.json"
       >
+        <div id="content-publish-approval">
         <ContentApprovalPanel
           posts={approvalPosts}
           replies={approvalReplies}
           auditEntries={auditEntries}
           requirePublishApproval={requirePublishApproval}
           requireReplyApproval={requireReplyApproval}
+          highlightPostId={highlightPostId}
+          highlightReplyId={highlightReplyId}
           approvalTelegram={approvalTelegram ?? undefined}
           publishTrust={publishTrust ?? undefined}
           onUpdatePublishTrust={updatePublishTrust}
@@ -2313,6 +2329,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             void loadReplies(selected || undefined);
           }}
         />
+        </div>
       </ExperienceAppSection>
 
       <ExperienceAppSection

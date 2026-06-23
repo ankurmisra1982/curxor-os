@@ -25,6 +25,7 @@
 | Go Live · demo tour · easter eggs · yard dock · Architect | **Shipped** (C7) |
 | FRE `cafeGrowthIntent` · coach · nudge | **Shipped** (C8) |
 | cafe-checklist · EXIT-DEMO · captures | **Shipped** (C9) |
+| Live SSE sync · approval pixel overlay | **Shipped** (C10) |
 
 ## Scorecard (post C4–C9)
 

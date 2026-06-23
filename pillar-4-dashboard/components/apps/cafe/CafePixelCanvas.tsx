@@ -159,7 +159,7 @@ function drawRoom(
       needsApproval: c.needsApproval,
       frozen,
     });
-    if (!frozen && c.bubble && c.displayState !== "walk") {
+    if (!frozen && c.bubble && (c.needsApproval || c.displayState !== "walk")) {
       ctx.fillStyle = c.needsApproval ? "rgba(40,30,10,0.95)" : "rgba(10,10,12,0.9)";
       const bw = Math.min(tile * 1.4, 90 * scale);
       ctx.fillRect(cx - bw / 2, cy - size - 14 * scale, bw, 10 * scale);

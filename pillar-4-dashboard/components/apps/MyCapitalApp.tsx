@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
@@ -65,6 +66,7 @@ import { formatAgentPhaseMessage, formatTradeOutcomeMessage } from "@/lib/capita
 import { chartMarkersForSymbol } from "@/lib/capital-chart-markers";
 import { resolveCapitalGrowthLevel } from "@/lib/capital-growth";
 import { type GrowthLevel, isGrowthLevel } from "@/lib/os-growth-level";
+import { parseOsApprovalFocus, scrollToOsApprovalFocus } from "@/lib/os-approval-href";
 
 async function postCapital(body: Record<string, unknown>) {
   const res = await fetch("/api/capital/status", {
@@ -96,6 +98,9 @@ function formatUsd(value: number | null): string {
 
 export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceContext }: AgentAppContext) {
   const digital = useDigitalStream("capital.execute_trade");
+  const searchParams = useSearchParams();
+  const approvalFocus = useMemo(() => parseOsApprovalFocus(searchParams), [searchParams]);
+  const highlightTradeId = approvalFocus?.kind === "trade" ? approvalFocus.tradeId : null;
   const { level } = useExperienceLevel();
   const mode = typeof config.tradingMode === "string" ? config.tradingMode : "paper";
   const risk = typeof config.riskProfile === "string" ? config.riskProfile : "balanced";
@@ -141,6 +146,11 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   useEffect(() => {
     setWorkspaceTab(defaultCapitalTab(growthLevel));
   }, [growthLevel]);
+
+  useEffect(() => {
+    if (approvalFocus?.kind !== "trade" || !status) return;
+    scrollToOsApprovalFocus(approvalFocus);
+  }, [approvalFocus, status]);
 
   const armedRuleId = status?.rules.find((r) => r.state === "ARMED")?.id ?? null;
 
@@ -632,6 +642,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
       <CapitalPendingTradesBanner
         trades={capitalFeatureVisible(growthLevel, "pending-banner") ? (status?.trades ?? []) : []}
+        highlightTradeId={highlightTradeId}
         onApprove={(tradeId) =>
           void action({ action: "submit_trade", tradeId }).then((j) =>
             setSignal(
