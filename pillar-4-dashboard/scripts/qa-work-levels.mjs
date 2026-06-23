@@ -131,4 +131,4 @@ await withWorkGrowthLevel("L5", async () => {
 
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
-process.exit(failed > 0 ? 1 : 0);
+if (failed > 0) process.exitCode = 1;

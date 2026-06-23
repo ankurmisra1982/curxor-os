@@ -31,6 +31,17 @@ function fail(name, detail) {
   console.log(`FAIL · ${name}${detail ? ` · ${detail}` : ""}`);
 }
 
+/** Re-seed demo mail when prior checks archived or drained the inbox. */
+async function ensureActiveMail() {
+  let status = (await get("/api/work/status")).json;
+  const hasActive = status.mailIndex?.some((m) => !m.archivedAt && !m.doneAt);
+  if (!hasActive) {
+    await post("/api/work/status", { action: "scan_inbox" });
+    status = (await get("/api/work/status")).json;
+  }
+  return status;
+}
+
 console.log(`==> Outreach checklist · base=${BASE}\n`);
 
 // 1. Status bootstrap
@@ -803,6 +814,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
 
 // W30 — compose_send_live_status
 {
+  await ensureActiveMail();
   const status = (await get("/api/work/status")).json;
   const mailId = status.mailIndex?.find((m) => !m.archivedAt && !m.doneAt)?.id ?? status.mailIndex?.[0]?.id;
   if (!mailId) {
@@ -893,6 +905,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
 
 // W33 — assign_collision_smoke
 {
+  await ensureActiveMail();
   const status = (await get("/api/work/status")).json;
   const mailId =
     status.mailIndex?.find((m) => !m.archivedAt && !m.doneAt)?.id ?? status.mailIndex?.[status.mailIndex.length - 1]?.id;
@@ -1060,4 +1073,4 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
 
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
-process.exit(failed > 0 ? 1 : 0);
+if (failed > 0) process.exitCode = 1;

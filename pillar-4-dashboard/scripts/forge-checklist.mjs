@@ -256,6 +256,24 @@ console.log(`==> Forge checklist · base=${BASE}\n`);
 
 {
 
+  const { ok: resOk, json } = await postJson("/api/forge/status", { action: "run_demo_tour", persona: "L4-creator" });
+
+  if (resOk && json.tour?.persona === "L4-creator" && json.tour.ok === true && json.tour.forgedHref) {
+
+    ok("forge demo tour L4 creator desk", json.tour.forgedHref);
+
+  } else {
+
+    bad("forge demo tour L4 creator desk", json.tour?.error ?? "missing href");
+
+  }
+
+}
+
+
+
+{
+
   const prov = await postJson("/api/claw/provision-app", {
 
     intent: "Forge checklist work desk",
@@ -298,11 +316,443 @@ console.log(`==> Forge checklist · base=${BASE}\n`);
 
       ok("forged work desk lead sequence", draft.json.sequence.id);
 
+      const send = await postJson(`/api/forged/${appId}/status`, {
+
+        action: "send_sequence_step",
+
+        sequenceId: draft.json.sequence.id,
+
+      });
+
+      if (send.ok && send.json.send?.status === "simulated") {
+
+        ok("forged work desk send step", send.json.send.id);
+
+      } else {
+
+        bad("forged work desk send step", send.json.error ?? "simulated send failed");
+
+      }
+
     } else {
 
       bad("forged work desk lead sequence", create.json.error ?? draft.json.error ?? "failed");
 
     }
+
+  }
+
+}
+
+
+
+{
+
+  const prov = await postJson("/api/claw/provision-app", {
+
+    intent: "Forge checklist creator desk",
+
+    templateId: "creator-desk",
+
+    name: "Checklist Creator Desk",
+
+    budgetTier: "balanced",
+
+  });
+
+  const appId = prov.json.forgedApp?.id;
+
+  if (!prov.ok || !appId) {
+
+    bad("forged creator desk bootstrap", "provision failed");
+
+  } else {
+
+    const draft = await postJson(`/api/forged/${appId}/status`, {
+
+      action: "draft_post",
+
+      draftText: "Checklist forged creator draft — local queue on appliance.",
+
+      channel: "Checklist Channel",
+
+      platform: "x",
+
+    });
+
+    const schedule = await postJson(`/api/forged/${appId}/status`, {
+
+      action: "schedule_post",
+
+      postId: draft.json.post?.id,
+
+    });
+
+    if (draft.ok && schedule.ok && schedule.json.post?.stage === "SCHEDULED") {
+
+      ok("forged creator desk draft schedule", schedule.json.post.id);
+
+    } else {
+
+      bad("forged creator desk draft schedule", draft.json.error ?? schedule.json.error ?? "failed");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const island = await postJson("/api/claw/create", {
+
+    intent: "Checklist island promote candidate",
+
+    name: "Checklist Island Claw",
+
+    budgetTier: "balanced",
+
+    provisioningMode: "island",
+
+  });
+
+  const profileId = island.json.profile?.id;
+
+  if (!island.ok || !profileId) {
+
+    bad("forge island promote", "island create failed");
+
+  } else {
+
+    const promote = await postJson("/api/forge/status", {
+
+      action: "promote_to_framework",
+
+      profileId,
+
+      templateId: "blank-desk",
+
+    });
+
+    if (promote.ok && promote.json.promote?.forgedApp?.href) {
+
+      ok("forge island promote framework", promote.json.promote.forgedApp.href);
+
+    } else {
+
+      bad("forge island promote framework", promote.json.error ?? promote.json.promote?.error ?? "failed");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const island = await postJson("/api/claw/create", {
+
+    intent: "Checklist island archive candidate",
+
+    name: "Checklist Archive Claw",
+
+    budgetTier: "balanced",
+
+    provisioningMode: "island",
+
+  });
+
+  const profileId = island.json.profile?.id;
+
+  if (!island.ok || !profileId) {
+
+    bad("forge archive claw", "island create failed");
+
+  } else {
+
+    const archive = await postJson("/api/forge/status", {
+
+      action: "archive_claw",
+
+      profileId,
+
+    });
+
+    const status = await getJson("/api/forge/status");
+
+    const stillVisible = status.fleet?.some((r) => r.profileId === profileId);
+
+    if (archive.ok && !stillVisible) {
+
+      ok("forge archive claw", profileId);
+
+    } else {
+
+      bad("forge archive claw", archive.json.error ?? "still in fleet");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const exp = await postJson("/api/claw/export", { exportAll: true });
+
+  if (exp.ok && Array.isArray(exp.json.bundles) && exp.json.bundles.length >= 1) {
+
+    ok("forge export fleet bundles", `count=${exp.json.bundles.length}`);
+
+  } else {
+
+    bad("forge export fleet bundles", exp.json.error ?? "empty bundles");
+
+  }
+
+}
+
+
+
+{
+
+  const prov = await postJson("/api/claw/provision-app", {
+
+    intent: "Checklist forged mesh publish",
+
+    templateId: "work-desk",
+
+    name: "Checklist Mesh Desk",
+
+    budgetTier: "balanced",
+
+  });
+
+  const appId = prov.json.forgedApp?.id;
+
+  if (!prov.ok || !appId) {
+
+    bad("forged publish context", "provision failed");
+
+  } else {
+
+    await postJson(`/api/app-fre/${appId}`, {
+
+      config: { persona: "side_hustle", meshPublish: true, growthLevel: "L2" },
+
+    });
+
+    const pub = await postJson(`/api/forged/${appId}/status`, { action: "publish_context" });
+
+    if (pub.ok && typeof pub.json.publishedKey === "string") {
+
+      ok("forged publish context", pub.json.publishedKey);
+
+      const ctx = await getJson("/api/mesh/context?appId=my-work");
+
+      const workCtx = ctx.context?.work ?? {};
+
+      const forgedKey = Object.keys(workCtx).find((k) => k.startsWith("forged."));
+
+      if (forgedKey) {
+
+        ok("forged CCP read my-work", forgedKey);
+
+      } else {
+
+        bad("forged CCP read my-work", "no forged key in work scope");
+
+      }
+
+    } else {
+
+      bad("forged publish context", pub.json.error ?? "missing key");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const prov = await postJson("/api/claw/provision-app", {
+
+    intent: "Checklist cafe mint consumer",
+
+    templateId: "creator-desk",
+
+    name: "Checklist Cafe Mint",
+
+    budgetTier: "balanced",
+
+  });
+
+  const appId = prov.json.forgedApp?.id;
+
+  if (!prov.ok || !appId) {
+
+    bad("forge cafe mint consumer", "provision failed");
+
+  } else {
+
+    await postJson("/api/cafe/status", { action: "sync" });
+
+    const forgeStatus = await getJson("/api/forge/status");
+
+    const cafeEvents = Array.isArray(forgeStatus.cafeEvents) ? forgeStatus.cafeEvents : [];
+
+    const mintEvent = cafeEvents.find(
+
+      (e) =>
+
+        (e.kind === "forge.framework_provisioned" || e.kind === "forge.claw_minted") &&
+
+        e.appId === appId,
+
+    );
+
+    if (mintEvent) {
+
+      ok("forge cafe mint consumer", mintEvent.appId);
+
+    } else {
+
+      bad("forge cafe mint consumer", "mint event not attributed to forged app");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const prov = await postJson("/api/claw/provision-app", {
+
+    intent: "Forge checklist capital desk",
+
+    templateId: "capital-desk",
+
+    name: "Checklist Capital Desk",
+
+    budgetTier: "balanced",
+
+  });
+
+  const appId = prov.json.forgedApp?.id;
+
+  if (!prov.ok || !appId) {
+
+    bad("forged capital desk bootstrap", "provision failed");
+
+  } else {
+
+    const research = await postJson(`/api/forged/${appId}/status`, {
+
+      action: "research_ticker",
+
+      ticker: "SPY",
+
+    });
+
+    const rule = await postJson(`/api/forged/${appId}/status`, {
+
+      action: "create_rule",
+
+      name: "Checklist rule",
+
+      asset: "SPY",
+
+    });
+
+    const arm = await postJson(`/api/forged/${appId}/status`, {
+
+      action: "arm_rule",
+
+      ruleId: rule.json.rule?.id,
+
+    });
+
+    if (research.ok && rule.ok && arm.ok && arm.json.rule?.state === "ARMED") {
+
+      ok("forged capital desk research arm", arm.json.rule.id);
+
+    } else {
+
+      bad("forged capital desk research arm", research.json.error ?? arm.json.error ?? "failed");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const island = await postJson("/api/claw/create", {
+
+    intent: "Checklist island mint honest mode",
+
+    name: "Checklist Island Mint",
+
+    provisioningMode: "island",
+
+    budgetTier: "balanced",
+
+  });
+
+  const profileId = island.json.profile?.id;
+
+  if (!island.ok || !profileId) {
+
+    bad("forge island mint no nav", "create failed");
+
+  } else {
+
+    const status = await getJson("/api/forge/status");
+
+    const row = status.fleet?.find((r) => r.profileId === profileId);
+
+    if (row?.mode === "island" && !row?.href) {
+
+      ok("forge island mint no nav", profileId);
+
+    } else {
+
+      bad("forge island mint no nav", "fleet row has href or wrong mode");
+
+    }
+
+  }
+
+}
+
+
+
+{
+
+  const { ok: resOk, json } = await postJson("/api/forge/status", { action: "run_demo_tour", persona: "L4-capital" });
+
+  if (resOk && json.tour?.persona === "L4-capital" && json.tour.ok === true && json.tour.forgedHref) {
+
+    ok("forge demo tour L4 capital desk", json.tour.forgedHref);
+
+  } else {
+
+    bad("forge demo tour L4 capital desk", json.tour?.error ?? "missing href");
 
   }
 
@@ -330,5 +780,5 @@ console.log(`==> Forge checklist · base=${BASE}\n`);
 
 console.log(`\n==> ${pass}/${pass + fail} passed`);
 
-process.exit(fail > 0 ? 1 : 0);
+if (fail > 0) process.exitCode = 1;
 

@@ -98,6 +98,55 @@ await check("forged work desk API round-trip", async () => {
   return create.ok && create.json.lead?.id;
 });
 
+await check("forged creator desk API round-trip", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "Exit demo scaffold creator desk",
+    templateId: "creator-desk",
+    name: "Exit Demo Creator",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const draft = await postJson(`/api/forged/${appId}/status`, {
+    action: "draft_post",
+    draftText: "Exit demo forged creator draft.",
+    platform: "x",
+  });
+  if (!draft.ok || !draft.json.post?.id) return false;
+  const schedule = await postJson(`/api/forged/${appId}/status`, {
+    action: "schedule_post",
+    postId: draft.json.post.id,
+  });
+  return schedule.ok && schedule.json.post?.stage === "SCHEDULED";
+});
+
+await check("forged capital desk API round-trip", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "Exit demo scaffold capital desk",
+    templateId: "capital-desk",
+    name: "Exit Demo Capital",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const research = await postJson(`/api/forged/${appId}/status`, {
+    action: "research_ticker",
+    ticker: "SPY",
+  });
+  if (!research.ok || !research.json.watch?.ticker) return false;
+  const rule = await postJson(`/api/forged/${appId}/status`, {
+    action: "create_rule",
+    name: "Exit rule",
+    asset: "SPY",
+  });
+  if (!rule.ok || !rule.json.rule?.id) return false;
+  const arm = await postJson(`/api/forged/${appId}/status`, {
+    action: "arm_rule",
+    ruleId: rule.json.rule.id,
+  });
+  return arm.ok && arm.json.rule?.state === "ARMED";
+});
+
 await check("forge create island-only contract documented", async () => {
   const example = path.join(REPO, "docs", "forge", "BEST-IN-CLASS-BUILD-PLAN.md");
   if (!existsSync(example)) return false;
@@ -106,4 +155,4 @@ await check("forge create island-only contract documented", async () => {
 });
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-process.exit(fail > 0 ? 1 : 0);
+if (fail > 0) process.exitCode = 1;

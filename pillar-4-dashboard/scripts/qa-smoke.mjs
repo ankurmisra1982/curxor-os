@@ -881,16 +881,56 @@ await check("cafe workspace tab gates", async () => {
   const order = { L1: 0, L2: 1, L3: 2, L4: 3, L5: 4 };
   const meets = (user, req) => order[user] >= order[req];
   const tabs = (g) => {
-    const out = ["play", "progress"];
+    const out = ["play", "ascension", "progress"];
     if (meets(g, "L2")) out.push("host");
     return out;
   };
   return (
-    tabs("L1").length === 2 &&
-    tabs("L2").length === 3 &&
+    tabs("L1").length === 3 &&
+    tabs("L2").length === 4 &&
+    tabs("L1").includes("ascension") &&
     tabs("L2").includes("host") &&
     !tabs("L1").includes("host")
   );
+});
+
+await check("cafe ascension status route", async () => {
+  const data = await getJson("/api/cafe/status");
+  return (
+    data.ok === true &&
+    data.ascension &&
+    typeof data.ascension.tier === "string" &&
+    Array.isArray(data.characters)
+  );
+});
+
+await check("swarm feature gates", async () => {
+  const order = { L1: 0, L2: 1, L3: 2, L4: 3, L5: 4 };
+  const meets = (user, req) => order[user] >= order[req];
+  return (
+    meets("L1", "L1") &&
+    !meets("L1", "L2") &&
+    meets("L2", "L2") &&
+    meets("L3", "L3") &&
+    meets("L4", "L4") &&
+    !meets("L3", "L4")
+  );
+});
+
+await check("swarm status bootstrap", async () => {
+  const { ok, json } = await postJson("/api/swarm/status", { action: "dashboard_bootstrap" });
+  return (
+    ok &&
+    Array.isArray(json.fleet) &&
+    json.fleet.length >= 2 &&
+    json.growthProfile &&
+    typeof json.growthProfile.growthLevel === "string"
+  );
+});
+
+await check("swarm preview app registered", async () => {
+  const preview = ["robotaxi-fleet-manager", "tesla-optimus-engine", "my-family", "my-vital", "my-shop"];
+  return preview.includes("robotaxi-fleet-manager");
 });
 
 await check("work xp route", async () => {
@@ -958,6 +998,69 @@ await check("forged work desk lead + sequence", async () => {
   return draft.status === 200 && draft.json.sequence?.id;
 });
 
+await check("forged creator desk draft + schedule", async () => {
+  const { status, json } = await postJson("/api/claw/provision-app", {
+    intent: "QA smoke forged creator desk queue",
+    templateId: "creator-desk",
+    name: "QA Smoke Creator Desk",
+    budgetTier: "balanced",
+  });
+  if (status !== 200 || !json.forgedApp?.id) return false;
+  const appId = json.forgedApp.id;
+  const draft = await postJson(`/api/forged/${appId}/status`, {
+    action: "draft_post",
+    draftText: "Smoke forged creator draft — sovereign publish path on appliance.",
+    channel: "Smoke Channel",
+    platform: "x",
+  });
+  if (draft.status !== 200 || !draft.json.post?.id) return false;
+  const schedule = await postJson(`/api/forged/${appId}/status`, {
+    action: "schedule_post",
+    postId: draft.json.post.id,
+  });
+  return schedule.status === 200 && schedule.json.post?.stage === "SCHEDULED";
+});
+
+await check("forged capital desk research + arm rule", async () => {
+  const { status, json } = await postJson("/api/claw/provision-app", {
+    intent: "QA smoke forged capital desk",
+    templateId: "capital-desk",
+    name: "QA Smoke Capital Desk",
+    budgetTier: "balanced",
+  });
+  if (status !== 200 || !json.forgedApp?.id) return false;
+  const appId = json.forgedApp.id;
+  const research = await postJson(`/api/forged/${appId}/status`, {
+    action: "research_ticker",
+    ticker: "QQQ",
+  });
+  if (research.status !== 200 || !research.json.watch?.ticker) return false;
+  const rule = await postJson(`/api/forged/${appId}/status`, {
+    action: "create_rule",
+    name: "QQQ dip",
+    asset: "QQQ",
+  });
+  if (rule.status !== 200 || !rule.json.rule?.id) return false;
+  const arm = await postJson(`/api/forged/${appId}/status`, {
+    action: "arm_rule",
+    ruleId: rule.json.rule.id,
+  });
+  return arm.status === 200 && arm.json.rule?.state === "ARMED";
+});
+
+await check("forge island mint fleet badge no nav", async () => {
+  const { status, json } = await postJson("/api/claw/create", {
+    intent: "QA smoke island mint honest mode",
+    name: "QA Island Mint",
+    provisioningMode: "island",
+    budgetTier: "balanced",
+  });
+  if (status !== 200 || !json.profile?.id) return false;
+  const fleet = await getJson("/api/forge/status");
+  const row = fleet.fleet?.find((r) => r.profileId === json.profile.id);
+  return row?.mode === "island" && !row?.href;
+});
+
 await check("mesh motor route", async () => {
   const { json } = await postJson("/api/mesh/motor", { x: 0.1, y: 0, z: 0.2 });
   return typeof json.ok === "boolean";
@@ -991,6 +1094,30 @@ await check("vital status", async () => {
   );
 });
 
+await check("vital lab status GET", async () => {
+  const data = await getJson("/api/vital/lab");
+  return data.ok === true && data.lab?.features?.personalizedQa === true && data.lab.literatureChunks >= 10;
+});
+
+await check("vital lab ask POST", async () => {
+  const { ok, json } = await postJson("/api/vital/lab", {
+    action: "ask",
+    query: "What does Sinclair say about NAD given my sleep score?",
+    expertLens: "sinclair",
+  });
+  return ok && typeof json.answer === "string" && json.answer.length > 20 && Array.isArray(json.citations);
+});
+
+await check("vital lab protocol diff", async () => {
+  const { ok, json } = await postJson("/api/vital/lab", { action: "protocol_diff", expertLens: "attia" });
+  return ok && json.diff && typeof json.diff.alignmentScore === "number" && Array.isArray(json.diff.missing);
+});
+
+await check("vital lab clinician export", async () => {
+  const { ok, json } = await postJson("/api/vital/lab", { action: "clinician_export" });
+  return ok && typeof json.markdown === "string" && json.markdown.includes("Vital Claw");
+});
+
 await check("family profiles GET", async () => {
   const data = await getJson("/api/family");
   return Array.isArray(data.members) && data.members.length >= 1;
@@ -1007,6 +1134,8 @@ await check("mesh context for optimus", async () => {
 });
 
 await check("humanoid fleet add unit", async () => {
+  const before = await getJson("/api/humanoid/hub");
+  if (before.fleetSummary?.total >= 2) return true;
   const { ok, json } = await postJson("/api/humanoid/hub", {
     action: "add_unit",
     kind: "mobile",
@@ -1037,6 +1166,35 @@ await check("humanoid hub GET", async () => {
 await check("humanoid hub push knowledge", async () => {
   const { ok, json } = await postJson("/api/humanoid/hub", { action: "sync_knowledge" });
   return ok && typeof json.hub?.lastKnowledgeSyncAt === "string";
+});
+
+await check("humanoid hub knowledge audit", async () => {
+  const { ok, json } = await postJson("/api/humanoid/hub", { action: "knowledge_audit" });
+  return ok && json.audit?.packageSummary && Array.isArray(json.audit.kinPolicies);
+});
+
+await check("humanoid hub kin policy update", async () => {
+  const hub = await getJson("/api/humanoid/hub");
+  const memberId = hub.kinPolicies?.[0]?.memberId;
+  if (!memberId) return true;
+  const { ok, json } = await postJson("/api/humanoid/hub", {
+    action: "update_kin_policy",
+    memberId,
+    tone: "warm",
+    greetByName: true,
+  });
+  return ok && json.kinPolicies?.some((p) => p.memberId === memberId && p.tone === "warm");
+});
+
+await check("humanoid hub compose routine", async () => {
+  const { ok, json } = await postJson("/api/humanoid/hub", {
+    action: "compose_routine",
+    prompt: "When guests arrive, greet them warmly and offer to take coats.",
+  });
+  return (
+    ok &&
+    json.hub?.routines?.some((r) => r.source === "composed" && r.enabled && /guest|coat|warm/i.test(r.description ?? r.label))
+  );
 });
 
 await check("signal unified feed GET", async () => {
@@ -1199,4 +1357,4 @@ for (const appId of appIds) {
 }
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-process.exit(fail > 0 ? 1 : 0);
+if (fail > 0) process.exitCode = 1;

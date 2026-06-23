@@ -205,6 +205,14 @@ await check("flow: inbox lists webchat + stats", async () => {
   );
 });
 
+await check("flow: vital demo tour → go_live", async () => {
+  const tour = await postJson("/api/vital/status", { action: "run_demo_tour" });
+  if (!tour.ok || !tour.json.tour?.ok) return false;
+  const goLive = await postJson("/api/vital/status", { action: "go_live" });
+  const gl = goLive.json.goLive;
+  return goLive.ok && gl?.demoReady === true && gl.steps?.some((s) => s.id === "lab");
+});
+
 await check("flow: optimus reads merged context after vital chat", async () => {
   await postJson("/api/channels/webchat", {
     appId: "tesla-optimus-engine",
@@ -366,6 +374,40 @@ await check("flow: cafe_work_xp_smoke", async () => {
   return xp.ok !== false && Array.isArray(xp.events) && xp.events.length >= 1 && xp.optOut !== true;
 });
 
+await check("flow: cafe_ascension_cross_claw", async () => {
+  const before = await getJson("/api/cafe/status");
+  if (before.optOut === true) return true;
+  const xpBefore = typeof before.ascension?.ascensionXp === "number" ? before.ascension.ascensionXp : 0;
+
+  await postJson("/api/work/status", { action: "xp_event_emit", kind: "handoff_received", payload: { source: "swarm" } });
+  await new Promise((r) => setTimeout(r, 400));
+
+  const sync = await postJson("/api/cafe/status", { action: "sync" });
+  if (sync.ok === false) return false;
+
+  const after = await getJson("/api/cafe/status");
+  const xpAfter = typeof after.ascension?.ascensionXp === "number" ? after.ascension.ascensionXp : 0;
+  const hasEvents = Array.isArray(after.events) && after.events.length >= 1;
+
+  return after.ok !== false && hasEvents && xpAfter >= xpBefore;
+});
+
+await check("flow: swarm_bootstrap_and_handoff", async () => {
+  const boot = await postJson("/api/swarm/status", { action: "dashboard_bootstrap" });
+  if (!boot.ok || !Array.isArray(boot.json.fleet) || boot.json.fleet.length < 2) return false;
+
+  const handoff = await postJson("/api/work/status", {
+    action: "handoff_to_swarm",
+    title: "Freeze QA handoff",
+    targetCell: "C3",
+  });
+  if (!handoff.ok || !handoff.json.workloadId) return false;
+
+  const after = await postJson("/api/swarm/status", { action: "dashboard_bootstrap" });
+  const workloads = after.json.workloads ?? [];
+  return workloads.some((w) => w.id === handoff.json.workloadId || w.title?.includes("Freeze"));
+});
+
 await check("flow: forge demo tour → go_live", async () => {
   const tour = await postJson("/api/forge/status", { action: "run_demo_tour" });
   if (!tour.ok || !tour.json.tour?.ok) return false;
@@ -405,5 +447,125 @@ await check("flow: forge L4 persona work desk tour", async () => {
   );
 });
 
+await check("flow: forge creator desk draft schedule", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "User flow forged creator desk",
+    templateId: "creator-desk",
+    name: "Flow Forged Creator",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const draft = await postJson(`/api/forged/${appId}/status`, {
+    action: "draft_post",
+    draftText: "User flow forged creator post — schedule on appliance.",
+    platform: "linkedin",
+  });
+  if (!draft.ok || !draft.json.post?.id) return false;
+  const schedule = await postJson(`/api/forged/${appId}/status`, {
+    action: "schedule_post",
+    postId: draft.json.post.id,
+  });
+  return schedule.ok && schedule.json.post?.stage === "SCHEDULED";
+});
+
+await check("flow: forge L4-creator persona tour", async () => {
+  const tour = await postJson("/api/forge/status", { action: "run_demo_tour", persona: "L4-creator" });
+  return (
+    tour.ok &&
+    tour.json.tour?.ok === true &&
+    tour.json.tour?.persona === "L4-creator" &&
+    typeof tour.json.tour?.forgedHref === "string"
+  );
+});
+
+await check("flow: forge capital desk research arm rule", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "User flow forged capital desk",
+    templateId: "capital-desk",
+    name: "Flow Forged Capital",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const research = await postJson(`/api/forged/${appId}/status`, {
+    action: "research_ticker",
+    ticker: "SPY",
+  });
+  if (!research.ok) return false;
+  const rule = await postJson(`/api/forged/${appId}/status`, {
+    action: "create_rule",
+    name: "Flow rule",
+    asset: "SPY",
+  });
+  if (!rule.ok || !rule.json.rule?.id) return false;
+  const arm = await postJson(`/api/forged/${appId}/status`, {
+    action: "arm_rule",
+    ruleId: rule.json.rule.id,
+  });
+  return arm.ok && arm.json.rule?.state === "ARMED";
+});
+
+await check("flow: forge island mint no desk nav", async () => {
+  const create = await postJson("/api/claw/create", {
+    intent: "User flow island mint",
+    name: "Flow Island Claw",
+    provisioningMode: "island",
+    budgetTier: "balanced",
+  });
+  if (!create.ok || !create.json.profile?.id) return false;
+  const status = await getJson("/api/forge/status");
+  const row = status.fleet?.find((r) => r.profileId === create.json.profile.id);
+  return row?.mode === "island" && !row?.href;
+});
+
+await check("flow: forged work desk assist create_lead", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "User flow forged assist work",
+    templateId: "work-desk",
+    name: "Flow Assist Work",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const assist = await postJson("/api/app-agent/assist", {
+    appId,
+    skillId: "create_lead",
+    config: {
+      name: "Assist Flow Lead",
+      email: `assist-flow-${Date.now()}@forged.local`,
+    },
+  });
+  return assist.ok && typeof assist.json.reply === "string" && /Lead created/i.test(assist.json.reply);
+});
+
+await check("flow: forge export import round-trip", async () => {
+  const prov = await postJson("/api/claw/provision-app", {
+    intent: "User flow export import round trip",
+    templateId: "blank-desk",
+    name: "Flow Round Trip",
+    budgetTier: "balanced",
+  });
+  const appId = prov.json.forgedApp?.id;
+  if (!prov.ok || !appId) return false;
+  const exp = await postJson("/api/claw/export", { forgedAppId: appId });
+  if (!exp.ok || !exp.json.bundle) return false;
+  const imp = await postJson("/api/claw/import", {
+    bundle: { ...exp.json.bundle, name: "Flow Reimport Claw" },
+    operatorConfirmedWarnings: true,
+  });
+  return imp.ok && (imp.json.profile?.id || imp.json.forgedApp?.id);
+});
+
+await check("flow: forge L4-capital persona tour", async () => {
+  const tour = await postJson("/api/forge/status", { action: "run_demo_tour", persona: "L4-capital" });
+  return (
+    tour.ok &&
+    tour.json.tour?.ok === true &&
+    tour.json.tour?.persona === "L4-capital" &&
+    typeof tour.json.tour?.forgedHref === "string"
+  );
+});
+
 console.log(`\nUser flow results: ${pass} passed, ${fail} failed`);
-process.exit(fail > 0 ? 1 : 0);
+if (fail > 0) process.exitCode = 1;

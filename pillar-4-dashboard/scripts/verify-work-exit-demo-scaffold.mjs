@@ -103,4 +103,4 @@ await check("setup-work-env script exists", async () => {
 });
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-process.exit(fail > 0 ? 1 : 0);
+if (fail > 0) process.exitCode = 1;

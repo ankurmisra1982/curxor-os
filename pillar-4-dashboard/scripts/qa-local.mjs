@@ -5,7 +5,7 @@
  * Usage:
  *   node scripts/qa-local.mjs [--rebuild] [--port 3080]
  */
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
 import net from "node:net";
 import { existsSync, rmSync } from "node:fs";
 import path from "node:path";
@@ -51,6 +51,14 @@ const env = {
   CURXOR_CONTENT_AUDIT_PATH: path.join(DEV_QA, "content-audit.json"),
   CURXOR_BRIDGE_HEALTH_PATH: path.join(DEV_QA, "content-bridge-health.json"),
   CURXOR_CONTENT_OPS_PATH: path.join(DEV_QA, "content-ops.json"),
+  CURXOR_COMMERCE_SHOPIFY_PATH: path.join(DEV_QA, "commerce-shopify.json"),
+  CURXOR_COMMERCE_EBAY_PATH: path.join(DEV_QA, "commerce-ebay.json"),
+  CURXOR_COMMERCE_PRINTIFY_PATH: path.join(DEV_QA, "commerce-printify.json"),
+  CURXOR_SHOP_SYNC_PATH: path.join(DEV_QA, "shop-sync.json"),
+  CURXOR_SHOPIFY_MOCK: "1",
+  CURXOR_EBAY_MOCK: "1",
+  CURXOR_PRINTIFY_MOCK: "1",
+  CURXOR_DEV_QA_DIR: DEV_QA,
   CURXOR_MESH_BROKER_IP: "127.0.0.1",
   PORT,
   HOSTNAME: "127.0.0.1",
@@ -58,16 +66,51 @@ const env = {
 
 function run(cmd, cmdArgs, opts = {}) {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, cmdArgs, {
+    const isNode = cmd === "node";
+    const executable = isNode ? process.execPath : cmd;
+    const argv = isNode
+      ? cmdArgs.map((a) => (a.startsWith("scripts/") ? path.join(DASHBOARD, a) : a))
+      : cmdArgs;
+    const useShell = process.platform === "win32" && !isNode;
+    const child = spawn(executable, argv, {
       cwd: DASHBOARD,
       env,
-      stdio: "inherit",
-      shell: process.platform === "win32",
+      stdio: ["ignore", "pipe", "pipe"],
+      shell: useShell,
+      windowsHide: true,
       ...opts,
     });
+    child.stdout?.pipe(process.stdout);
+    child.stderr?.pipe(process.stderr);
     child.on("error", reject);
-    child.on("exit", (code) => resolve(code ?? 1));
+    child.on("exit", (code) => {
+      child.stdout?.destroy();
+      child.stderr?.destroy();
+      const done = () => resolve(code ?? 1);
+      if (process.platform === "win32") setTimeout(done, 250);
+      else done();
+    });
   });
+}
+
+function runSyncNode(script, scriptArgs = []) {
+  execFileSync(
+    process.execPath,
+    [path.join(DASHBOARD, script), ...scriptArgs],
+    { cwd: DASHBOARD, env, stdio: "inherit", windowsHide: true },
+  );
+}
+
+function runNode(script, scriptArgs = []) {
+  if (process.platform === "win32") {
+    try {
+      runSyncNode(script, scriptArgs);
+      return Promise.resolve(0);
+    } catch (err) {
+      return Promise.resolve(typeof err.status === "number" ? err.status : 1);
+    }
+  }
+  return run("node", [script, ...scriptArgs]);
 }
 
 async function assertPortFree(port) {
@@ -119,7 +162,7 @@ async function main() {
 
   if (rebuild || !existsSync(buildId)) {
     console.log("==> Building production bundle (same as CI pillar-4-qa-smoke)\n");
-    const prepCode = await run("node", ["scripts/ci-prepare-qa.mjs"]);
+    const prepCode = await runNode("scripts/ci-prepare-qa.mjs");
     if (prepCode !== 0) process.exit(prepCode);
     const buildCode = await run("npm", ["run", "build"]);
     if (buildCode !== 0) process.exit(buildCode);
@@ -139,82 +182,42 @@ async function main() {
     {
       cwd: DASHBOARD,
       env,
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: "ignore",
       shell: process.platform === "win32",
     },
   );
 
-  server.stdout?.on("data", (chunk) => process.stdout.write(chunk));
-  server.stderr?.on("data", (chunk) => {
-    const text = chunk.toString();
-    process.stderr.write(chunk);
-    if (text.includes("EADDRINUSE")) {
-      console.error(`\nPort ${PORT} is already in use. Try: npm run qa:local -- --port ${Number(PORT) + 1}\n`);
-    }
-  });
-
   let exitCode = 1;
   try {
     await waitForServer();
-    exitCode = await run("node", ["scripts/qa-smoke.mjs", BASE]);
-    if (exitCode === 0) {
-      const capitalExit = await run("node", ["scripts/capital-checklist.mjs", BASE]);
-      if (capitalExit !== 0) exitCode = capitalExit;
-    }
-    if (exitCode === 0) {
-      const creatorExit = await run("node", ["scripts/creator-checklist.mjs", BASE]);
-      if (creatorExit !== 0) exitCode = creatorExit;
-    }
-    if (exitCode === 0) {
-      const workExit = await run("node", ["scripts/work-checklist.mjs", BASE]);
-      if (workExit !== 0) exitCode = workExit;
-    }
-    if (exitCode === 0) {
-      const forgeLevelsExit = await run("node", ["scripts/qa-forge-levels.mjs"]);
-      if (forgeLevelsExit !== 0) exitCode = forgeLevelsExit;
-    }
-    if (exitCode === 0) {
-      const forgeExit = await run("node", ["scripts/forge-checklist.mjs", BASE]);
-      if (forgeExit !== 0) exitCode = forgeExit;
-    }
-    if (exitCode === 0) {
-      const levelsExit = await run("node", ["scripts/qa-work-levels.mjs", BASE]);
-      if (levelsExit !== 0) exitCode = levelsExit;
-    }
-    if (exitCode === 0) {
-      const scaffoldExit = await run("node", ["scripts/verify-exit-demo-scaffold.mjs", BASE]);
-      if (scaffoldExit !== 0) exitCode = scaffoldExit;
-    }
-    if (exitCode === 0) {
-      const workScaffoldExit = await run("node", ["scripts/verify-work-exit-demo-scaffold.mjs", BASE]);
-      if (workScaffoldExit !== 0) exitCode = workScaffoldExit;
-    }
-    if (exitCode === 0) {
-      const workLiveProofExit = await run("node", ["scripts/verify-work-live-proof.mjs", BASE]);
-      if (workLiveProofExit !== 0) exitCode = workLiveProofExit;
-    }
-    if (exitCode === 0) {
-      const forgeScaffoldExit = await run("node", ["scripts/verify-forge-exit-demo-scaffold.mjs", BASE]);
-      if (forgeScaffoldExit !== 0) exitCode = forgeScaffoldExit;
-    }
-    if (exitCode === 0) {
-      const flowExit = await run("node", ["scripts/qa-user-flows.mjs", BASE]);
-      if (flowExit !== 0) exitCode = flowExit;
-    }
+    exitCode = await runNode("scripts/qa-local-suites.mjs", [BASE]);
   } catch (err) {
     console.error(err instanceof Error ? err.message : String(err));
     exitCode = 1;
   } finally {
-    if (process.platform === "win32") {
-      spawn("taskkill", ["/pid", String(server.pid), "/f", "/t"], { shell: true, stdio: "ignore" });
-    } else {
-      server.kill("SIGTERM");
+    if (server?.pid) {
+      if (process.platform === "win32") {
+        try {
+          server.kill("SIGTERM");
+          await new Promise((r) => setTimeout(r, 2000));
+        } catch {
+          /* process may already be gone */
+        }
+        spawn("taskkill", ["/pid", String(server.pid), "/f", "/t"], {
+          shell: true,
+          stdio: "ignore",
+          detached: true,
+        });
+        await new Promise((r) => setTimeout(r, 500));
+      } else {
+        server.kill("SIGTERM");
+        await new Promise((r) => setTimeout(r, 1500));
+      }
     }
-    await new Promise((r) => setTimeout(r, 1500));
   }
 
   console.log(exitCode === 0 ? "\n==> QA local passed\n" : "\n==> QA local failed\n");
-  process.exit(exitCode);
+  if (exitCode !== 0) process.exitCode = exitCode;
 }
 
 main();
