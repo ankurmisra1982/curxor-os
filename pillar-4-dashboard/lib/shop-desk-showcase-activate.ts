@@ -51,6 +51,12 @@ export async function activateShopDeskShowcase(storeName: string): Promise<{
     syncPrintifyCatalog({ storeName, allowMock: allowMock.printify }),
   ]);
 
+  const { emitShopXpEvent } = await import("./shop-xp-events");
+  void emitShopXpEvent("desk_activated", { storeName });
+  if (shopify.ok) void emitShopXpEvent("channel_sync", { channel: "shopify" });
+  if (ebay.ok) void emitShopXpEvent("channel_sync", { channel: "ebay" });
+  if (printify.ok) void emitShopXpEvent("channel_sync", { channel: "printify" });
+
   return {
     ok: shopify.ok || ebay.ok || printify.ok,
     shopify,

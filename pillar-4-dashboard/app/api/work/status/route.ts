@@ -114,6 +114,7 @@ export async function POST(request: Request): Promise<Response> {
     mailId?: string;
     outboundKillSwitch?: boolean;
     autoSendOnActivate?: boolean;
+    requireSendApproval?: boolean;
     workerPid?: number;
     scanInbox?: boolean;
     deskRole?: string;
@@ -452,6 +453,18 @@ export async function POST(request: Request): Promise<Response> {
         await writeAppFreState("my-work", {
           ...fre,
           config: { ...fre.config, autoSendOnActivate },
+        });
+        return Response.json({ ok: true, status: await fetchWorkStatus() });
+      }
+
+      case "set_require_send_approval": {
+        const fre = await readAppFreState("my-work");
+        if (typeof body.requireSendApproval !== "boolean") {
+          return Response.json({ ok: false, error: "requireSendApproval boolean required" }, { status: 400 });
+        }
+        await writeAppFreState("my-work", {
+          ...fre,
+          config: { ...fre.config, requireSendApproval: body.requireSendApproval },
         });
         return Response.json({ ok: true, status: await fetchWorkStatus() });
       }

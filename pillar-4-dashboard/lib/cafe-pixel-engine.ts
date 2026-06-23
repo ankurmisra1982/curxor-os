@@ -33,6 +33,10 @@ export interface AnimatedCafeCharacter {
   row: number;
   targetCol: number;
   targetRow: number;
+  offsetCol: number;
+  offsetRow: number;
+  needsApproval?: boolean;
+  approvalHref?: string | null;
 }
 
 export interface StationSprite {
@@ -52,6 +56,7 @@ const STATION_SHORT: Record<CafeStationId, string> = {
   couch: "LOU",
   coffee: "CAF",
   blueprint_nook: "ARC",
+  master_chamber: "MAI",
 };
 
 function stationShortCode(id: CafeStationId): string {
@@ -68,6 +73,7 @@ function stationColor(id: CafeStationId): { bg: string; accent: string } {
     couch: { bg: "#252525", accent: "#888888" },
     coffee: { bg: "#2a1f1a", accent: "#d4a574" },
     blueprint_nook: { bg: "#1a1a2a", accent: "#7a8cff" },
+    master_chamber: { bg: "#0a0a14", accent: "#4a3a6a" },
   };
   return map[id];
 }
@@ -75,7 +81,7 @@ function stationColor(id: CafeStationId): { bg: string; accent: string } {
 export const STATION_SPRITES: StationSprite[] = (
   Object.entries(CAFE_STATION_GRID) as Array<[CafeStationId, (typeof CAFE_STATION_GRID)[CafeStationId]]>
 )
-  .filter(([id]) => id !== "blueprint_nook")
+  .filter(([id]) => id !== "blueprint_nook" && id !== "master_chamber")
   .map(([id, station]) => ({
   id,
   label: station.label,
@@ -132,16 +138,29 @@ export function stepToward(from: GridPos, to: GridPos): GridPos {
   return clampGrid({ col: from.col, row: from.row + dr });
 }
 
+export function characterStationOffset(appId: string, index: number): { offsetCol: number; offsetRow: number } {
+  const hash = appId.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  const slot = (hash + index) % 4;
+  const offsets = [
+    { offsetCol: 0, offsetRow: 0 },
+    { offsetCol: 0.22, offsetRow: -0.12 },
+    { offsetCol: -0.18, offsetRow: 0.1 },
+    { offsetCol: 0.15, offsetRow: 0.14 },
+  ];
+  return offsets[slot] ?? offsets[0]!;
+}
+
 export function buildAnimatedCharacters(
   server: CafeCharacter[],
   prev: AnimatedCafeCharacter[],
 ): AnimatedCafeCharacter[] {
-  return server.map((c) => {
+  return server.map((c, index) => {
     const target = stationGridPos(c.station);
+    const { offsetCol, offsetRow } = characterStationOffset(c.appId, index);
     const existing = prev.find((p) => p.id === c.id);
     const stationChanged = Boolean(existing && existing.station !== c.station);
-    const col = stationChanged ? (existing?.col ?? target.col) : target.col;
-    const row = stationChanged ? (existing?.row ?? target.row) : target.row;
+    const col = stationChanged ? (existing?.col ?? target.col) : target.col + offsetCol;
+    const row = stationChanged ? (existing?.row ?? target.row) : target.row + offsetRow;
     return {
       id: c.id,
       label: c.label,
@@ -152,8 +171,12 @@ export function buildAnimatedCharacters(
       displayState: stationChanged ? "walk" : c.state,
       col,
       row,
-      targetCol: target.col,
-      targetRow: target.row,
+      targetCol: target.col + offsetCol,
+      targetRow: target.row + offsetRow,
+      offsetCol,
+      offsetRow,
+      needsApproval: c.needsApproval,
+      approvalHref: c.approvalHref,
     };
   });
 }

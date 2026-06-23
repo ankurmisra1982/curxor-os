@@ -28,6 +28,7 @@ import {
   tryHandleApprovalTelegramMessage,
 } from "../content-approval-telegram";
 import { tryHandleWorkApprovalTelegramCallback } from "../work-approval-telegram";
+import { tryHandleCapitalTradeApprovalTelegramCallback } from "../capital-approval-telegram";
 import { tryHandleApprovalSlackMessage } from "../content-approval-slack";
 
 export interface InboundChannelMessage {
@@ -295,6 +296,18 @@ export async function handleTelegramUpdate(update: Record<string, unknown>): Pro
           sessionId: `telegram:${chatId}`,
           profileId: null,
           activity: "[Approval] work telegram callback",
+        };
+      }
+
+      const capitalApproval = await tryHandleCapitalTradeApprovalTelegramCallback(cqId, chatId, data);
+      if (capitalApproval.handled && capitalApproval.text) {
+        await sendTelegramApprovalMessage(chatId, capitalApproval.text);
+        return {
+          text: capitalApproval.text,
+          appId: "my-capital",
+          sessionId: `telegram:${chatId}`,
+          profileId: null,
+          activity: "[Approval] capital telegram callback",
         };
       }
 

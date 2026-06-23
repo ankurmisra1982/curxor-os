@@ -1,8 +1,8 @@
 import "server-only";
 
 import type { CapitalRule, CapitalTrade } from "./capital-queue-types";
+import { notifyCapitalTradeApprovalTelegram } from "./capital-approval-telegram";
 import { listApprovalSlackChannelIds } from "./content-approval-slack-config";
-import { sendTelegramApprovalMessage } from "./content-approval-telegram";
 import { listApprovalTelegramChatIds } from "./content-approval-telegram-config";
 import { loadDigitalEnv } from "./digital-env";
 import { publishDigitalIntent } from "./mesh-publish";
@@ -32,13 +32,13 @@ export async function notifyCapitalTradeApproval(trade: CapitalTrade, rule?: Cap
     trade.riskDecision ? `Risk: ${trade.riskDecision}` : "",
     trade.approvalNote ? `Note: ${trade.approvalNote}` : "",
     "",
-    "Open dashboard → Trade log → Approve & submit.",
+    "Tap Approve below or open dashboard → Trade log.",
   ]
     .filter(Boolean)
     .join("\n");
 
   for (const chatId of await listApprovalTelegramChatIds()) {
-    await sendTelegramApprovalMessage(chatId, text);
+    await notifyCapitalTradeApprovalTelegram(chatId, trade);
   }
   for (const channel of await listApprovalSlackChannelIds()) {
     await publishDigitalIntent({

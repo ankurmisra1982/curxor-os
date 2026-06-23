@@ -103,7 +103,7 @@ if (sync.ok && typeof sync.json.ingested === "number") {
   fail("sync cross-claw sources", JSON.stringify(sync.json));
 }
 
-const requiredSources = ["work", "swarm", "forge", "creator", "capital"];
+const requiredSources = ["work", "swarm", "forge", "creator", "capital", "vital", "kin", "shop", "signal"];
 pass("sync source catalog", requiredSources.join("+"));
 
 const creatorIngest = await post("/api/cafe/status", {
@@ -181,6 +181,42 @@ if (href("my-work") === "/my-work" && href("forged-desk") === "/claw-forge") {
   pass("inspect open claw href", "OOTB + forged");
 } else {
   fail("inspect open claw href", "href map wrong");
+}
+
+const osApprovals = await get("/api/os/approvals");
+if (osApprovals.ok && osApprovals.json.ok && typeof osApprovals.json.total === "number") {
+  pass("os approval inbox", `total=${osApprovals.json.total}`);
+} else {
+  fail("os approval inbox", JSON.stringify(osApprovals.json));
+}
+
+const vitalIngest = await post("/api/cafe/status", {
+  action: "ingest",
+  kind: "vital.protocol_updated",
+  appId: "my-vital",
+  xp: { ascension: 6, knowledge: 4 },
+  bubble: "Checklist vital",
+});
+if (vitalIngest.ok) {
+  const vit = vitalIngest.json.characters?.find((c) => c.appId === "my-vital");
+  if (vit?.station === "couch") pass("vital station mapping", vit.station);
+  else fail("vital station mapping", JSON.stringify(vit));
+} else {
+  fail("vital station mapping", JSON.stringify(vitalIngest.json));
+}
+
+const patronBrief = await get("/api/cafe/patron-brief");
+if (patronBrief.ok && typeof patronBrief.json.mode === "string") {
+  pass("patron brief API", `mode=${patronBrief.json.mode}`);
+} else {
+  fail("patron brief API", JSON.stringify(patronBrief.json));
+}
+
+const mastery = await get("/api/cafe/mastery");
+if (mastery.ok && mastery.json.mastery) {
+  pass("desk mastery API", Array.isArray(mastery.json.mastery) ? `rows=${mastery.json.mastery.length}` : "single");
+} else {
+  fail("desk mastery API", JSON.stringify(mastery.json));
 }
 
 const failed = checks.filter((c) => !c.ok);

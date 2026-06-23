@@ -6,6 +6,7 @@ import { AppMetric } from "@/components/app-shared/AppLayout";
 import { CafeAscensionPanel } from "@/components/apps/cafe/CafeAscensionPanel";
 import { CafeGoLivePanel, type CafeGoLiveReportRow } from "@/components/apps/cafe/CafeGoLivePanel";
 import { CafeLevelUpNudge } from "@/components/apps/cafe/CafeLevelUpNudge";
+import { CafeOsApprovalSection } from "@/components/apps/cafe/CafeOsApprovalSection";
 import { CafeHostConfigPanel } from "@/components/apps/cafe/CafeHostConfigPanel";
 import { CafeLevelBadge } from "@/components/apps/cafe/CafeLevelBadge";
 import { CafeLevelUpModal } from "@/components/apps/cafe/CafeLevelUpModal";
@@ -335,12 +336,15 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
               characters={characters}
               lastPulseAt={lastRoomPulseAt}
               ascensionSnippet={ascensionProfileLine ? `${ascensionProfileLine} · ${ascension?.ascensionXp ?? 0} XP` : null}
+              ascensionTier={ascension?.tier ?? "sprout"}
               growthLevel={growthLevel}
               visionConnected={connected}
               builderBridgeLinked={builderBridgeLinked}
               yardActUntilMs={yardActUntilMs}
             />
           </ExperienceAppSection>
+
+          <CafeOsApprovalSection />
 
           <ExperienceAppSection
             appId="claw-cafe"

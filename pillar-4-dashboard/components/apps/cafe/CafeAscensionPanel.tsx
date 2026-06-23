@@ -54,8 +54,9 @@ export function CafeAscensionPanel({
               onClick={onSync}
               disabled={loading}
               className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow disabled:opacity-40"
+              title="Backfill ledger if live ingest missed an event"
             >
-              Sync Claws
+              Repair sync
             </button>
           ) : null}
           {onRefresh ? (

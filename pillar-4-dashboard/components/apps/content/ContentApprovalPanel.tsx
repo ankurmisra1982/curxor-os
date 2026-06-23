@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import type { PublishTrustTierRow } from "@/lib/content-trust-tiers";
+import { ContentTrustTiersPanel } from "@/components/apps/content/ContentTrustTiersPanel";
+
 import type { ContentPost } from "@/lib/content-queue-types";
 import type { ContentReply } from "@/lib/content-replies-store";
 
@@ -26,7 +29,16 @@ interface ContentApprovalPanelProps {
     notifyEnabled: boolean;
     chatIdCount: number;
   };
+  publishTrust?: {
+    minApprovals: number;
+    platforms: string[];
+    tiers: PublishTrustTierRow[];
+  };
   onRefresh: () => void;
+  onUpdatePublishTrust?: (patch: {
+    publishTrustMinApprovals?: number;
+    publishTrustPlatforms?: string[];
+  }) => void;
 }
 
 async function postAction(action: string, payload: Record<string, unknown>) {
@@ -45,7 +57,9 @@ export function ContentApprovalPanel({
   requirePublishApproval,
   requireReplyApproval,
   approvalTelegram,
+  publishTrust,
   onRefresh,
+  onUpdatePublishTrust,
 }: ContentApprovalPanelProps) {
   const [busyId, setBusyId] = useState<string | null>(null);
   const gateOn = requirePublishApproval || requireReplyApproval;
@@ -97,6 +111,20 @@ export function ContentApprovalPanel({
         <p className="text-muted">
           Operators: /approvals · /approve POST-001 · /reject POST-001 · /approve reply &lt;id&gt;
         </p>
+      ) : null}
+
+      {publishTrust && onUpdatePublishTrust ? (
+        <ContentTrustTiersPanel
+          tiers={publishTrust.tiers}
+          minApprovals={publishTrust.minApprovals}
+          enabledPlatforms={publishTrust.platforms}
+          busy={busyId === "trust"}
+          onUpdate={(patch) =>
+            void run("trust", async () => {
+              await onUpdatePublishTrust(patch);
+            })
+          }
+        />
       ) : null}
 
       {empty ? (

@@ -250,6 +250,9 @@ export interface WorkQueueStatus {
   autoSendOnActivate?: boolean;
   autoSendDefault?: boolean;
   outboundKillSwitch?: boolean;
+  requireSendApproval?: boolean;
+  requireSendApprovalFre?: boolean | null;
+  requireSendApprovalEnvForced?: boolean;
   suppressionList?: Array<{ email: string; reason: string; at: string; source: "bounce" | "failed" | "manual" }>;
   growthProfile?: {
     growthLevel: string;

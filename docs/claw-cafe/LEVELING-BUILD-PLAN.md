@@ -21,6 +21,10 @@ Claw Cafe is the **OS gamification home** — cross-Claw progression, spatial ro
 | **C7** | Easter eggs, yard dock, Go Live + demo tour | **Shipped** |
 | **C8** | FRE growth intent, coach, nudge | **Shipped** |
 | **C9** | QA checklist, GTM, v0.7.0 | **Shipped** |
+| **C10** | Live ingest + approval bubbles | **Shipped** |
+| **C11** | Vital/Kin/Shop/Signal emitters | **Shipped** |
+| **C12** | Hidden Master AI + patron brief | **Shipped** |
+| **C13** | Sprites + room mastery | **Shipped** |
 | **CC1/CC2** | FRE polish, Engage inbox slice | Deferred / light only |
 
 ## Workspace map (current)

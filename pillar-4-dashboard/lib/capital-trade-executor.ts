@@ -253,6 +253,8 @@ export async function executeCapitalTrade(input: {
 
   if (needsApproval && !input.skipAutonomousGate) {
     await notifyCapitalTradeApproval(trade, rule);
+    const { emitCapitalXpEvent } = await import("./capital-xp-events");
+    void emitCapitalXpEvent("trade_pending_approval", { tradeId: trade.id, asset: ticker, appId: "my-capital" });
     return { ok: true, trade };
   }
 

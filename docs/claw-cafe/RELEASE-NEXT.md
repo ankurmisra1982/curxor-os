@@ -22,6 +22,13 @@
 - [x] **C8** — `cafeGrowthIntent` FRE · coach tips · `CafeLevelUpNudge`
 - [x] **C9** — `cafe-checklist.mjs` · BEST-IN-CLASS scorecard · EXIT-DEMO · pixel capture · **v0.7.0**
 
+## Shipped (operational mirror — v0.7.2)
+
+- [x] **C10** — Live auto-sync on SSE/bootstrap · approval bubbles in pixel room · Repair sync backfill
+- [x] **C11** — Vital/Kin/Shop/Signal XP emitters + sync path · forged desk activity hook
+- [x] **C12** — Hidden Master AI chamber · G4+ patron brief (ledger answers, no Claw banter)
+- [x] **C13** — Per-Claw sprite pass · room mastery stars on inspect flyout
+
 ## Deferred
 
 - Master AI patron chat panel (v0.8)

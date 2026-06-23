@@ -10,7 +10,8 @@ export type CafeStationId =
   | "yard_dock"
   | "couch"
   | "coffee"
-  | "blueprint_nook";
+  | "blueprint_nook"
+  | "master_chamber";
 
 export interface CafeCharacter {
   id: string;
@@ -20,7 +21,12 @@ export interface CafeCharacter {
   state: CafeCharacterState;
   bubble: string | null;
   lastEventAt: string | null;
+  needsApproval?: boolean;
+  approvalHref?: string | null;
 }
+
+/** Hidden tile — patron must discover bottom-right corner (col 4, row 3). */
+export const MASTER_CHAMBER_GRID = { row: 3, col: 4 } as const;
 
 export const CAFE_STATION_GRID: Record<CafeStationId, { row: number; col: number; label: string }> = {
   mailbox: { row: 0, col: 0, label: "Mail" },
@@ -31,6 +37,7 @@ export const CAFE_STATION_GRID: Record<CafeStationId, { row: number; col: number
   couch: { row: 3, col: 2, label: "Couch" },
   coffee: { row: 1, col: 1, label: "Coffee" },
   blueprint_nook: { row: 1, col: 3, label: "Blueprint" },
+  master_chamber: { row: 3, col: 4, label: "Chamber" },
 };
 
 export const APP_STATION: Record<string, CafeStationId> = {
@@ -54,11 +61,16 @@ export function stationForApp(appId: string): CafeStationId {
 export function stateForEventKind(kind: string): CafeCharacterState {
   if (kind.includes("archived")) return "walk";
   if (kind.includes("mint") || kind.includes("handshake") || kind === "streak.day") return "celebrate";
+  if (kind.includes("approval")) return "act";
   if (
     kind.includes("publish") ||
     kind.includes("dispatch") ||
     kind.includes("sequence") ||
-    kind.includes("rule")
+    kind.includes("rule") ||
+    kind.includes("vital") ||
+    kind.includes("kin") ||
+    kind.includes("shop") ||
+    kind.includes("signal")
   ) {
     return "act";
   }

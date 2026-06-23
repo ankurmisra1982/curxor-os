@@ -4,8 +4,17 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { CafeInspectFlyout } from "@/components/apps/cafe/CafeInspectFlyout";
+import { CafeMasterAiFlyout } from "@/components/apps/cafe/CafeMasterAiFlyout";
 import { drawArchitectSprite } from "@/lib/cafe-architect-sprite";
+import { drawClawSprite, walkFrameIndex } from "@/lib/cafe-character-sprites";
+import {
+  masterChamberUnlocked,
+  masterChamberWhisper,
+  patronBriefMode,
+  patronInMasterChamber,
+} from "@/lib/cafe-master-chamber";
 import type { CafeCharacter } from "@/lib/claw-cafe-spatial";
+import { MASTER_CHAMBER_GRID } from "@/lib/claw-cafe-spatial";
 import {
   architectInspectable,
   architectWhisperTier,
@@ -37,11 +46,13 @@ import {
   stationGridPos,
 } from "@/lib/cafe-pixel-engine";
 import type { GrowthLevel } from "@/lib/os-growth-level";
+import type { AscensionTierId } from "@/lib/claw-cafe-ascension";
 
 interface CafePixelCanvasProps {
   characters: CafeCharacter[];
   lastPulseAt?: string | null;
   ascensionSnippet?: string | null;
+  ascensionTier?: AscensionTierId;
   growthLevel?: GrowthLevel;
   visionConnected?: boolean;
   builderBridgeLinked?: boolean;
@@ -59,6 +70,7 @@ interface DrawRoomOptions {
   yardSprites: YardClawSprite[];
   growthLevel: GrowthLevel;
   architectPulseMs: number;
+  ascensionTier: AscensionTierId;
 }
 
 function drawRoom(
@@ -101,6 +113,17 @@ function drawRoom(
   ctx.fillStyle = "rgba(94,207,255,0.12)";
   ctx.fillRect(nook.col * tile + 8, nook.row * tile + 10, tile - 16, tile - 18);
 
+  const chamber = MASTER_CHAMBER_GRID;
+  const chamberX = chamber.col * tile + 2;
+  const chamberY = chamber.row * tile + 2;
+  const chamberUnlocked = masterChamberUnlocked(options.ascensionTier);
+  ctx.fillStyle = chamberUnlocked ? "rgba(60,40,90,0.35)" : "rgba(8,8,12,0.2)";
+  ctx.fillRect(chamberX, chamberY, tile - 4, tile - 4);
+  if (chamberUnlocked) {
+    ctx.strokeStyle = "rgba(160,120,255,0.45)";
+    ctx.strokeRect(chamberX + 2, chamberY + 2, tile - 8, tile - 8);
+  }
+
   for (const station of STATION_SPRITES) {
     const pos = stationGridPos(station.id);
     const x = pos.col * tile + 2;
@@ -122,36 +145,27 @@ function drawRoom(
   }
 
   const frozen = options.eno2Frozen;
+  const pulseMs = options.architectPulseMs;
   for (const c of animated) {
     const cx = c.col * tile + tile / 2;
     const cy = c.row * tile + tile / 2;
+    const walking = c.displayState === "walk";
+    const frame = walkFrameIndex(pulseMs, walking);
     const pulse = frozen ? 1 : c.displayState === "celebrate" ? 1.15 : c.displayState === "act" ? 1.08 : 1;
     const size = CHAR_SIZE * scale * pulse;
-    ctx.fillStyle = frozen
-      ? "#3a5a6a"
-      : c.displayState === "celebrate"
-        ? "#ffd966"
-        : c.displayState === "act"
-          ? "#6fdc8c"
-          : c.displayState === "walk"
-            ? "#8ab4f8"
-            : "#4a5568";
-    ctx.fillRect(cx - size / 2, cy - size / 2, size, size);
-    ctx.strokeStyle = frozen ? "#5b9bd5" : "#e8f4ff";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(cx - size / 2, cy - size / 2, size, size);
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `bold ${7 * scale}px monospace`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    const code = c.label.slice(0, 3).toUpperCase();
-    ctx.fillText(code, cx, cy);
+    drawClawSprite(ctx, cx, cy, size, c.appId, c.label, {
+      frame,
+      state: frozen ? "idle" : c.displayState,
+      needsApproval: c.needsApproval,
+      frozen,
+    });
     if (!frozen && c.bubble && c.displayState !== "walk") {
-      ctx.fillStyle = "rgba(10,10,12,0.9)";
+      ctx.fillStyle = c.needsApproval ? "rgba(40,30,10,0.95)" : "rgba(10,10,12,0.9)";
       const bw = Math.min(tile * 1.4, 90 * scale);
       ctx.fillRect(cx - bw / 2, cy - size - 14 * scale, bw, 10 * scale);
-      ctx.fillStyle = "#5b9bd5";
+      ctx.fillStyle = c.needsApproval ? "#ffb347" : "#5b9bd5";
       ctx.font = `${5 * scale}px monospace`;
+      ctx.textAlign = "center";
       const text = c.bubble.length > 18 ? `${c.bubble.slice(0, 16)}…` : c.bubble;
       ctx.fillText(text, cx, cy - size - 9 * scale);
     }
@@ -195,6 +209,7 @@ export function CafePixelCanvas({
   characters,
   lastPulseAt,
   ascensionSnippet,
+  ascensionTier = "sprout",
   growthLevel = "L1",
   visionConnected = false,
   builderBridgeLinked = false,
@@ -208,6 +223,8 @@ export function CafePixelCanvas({
   const pulseMsRef = useRef(0);
   const [inspectChar, setInspectChar] = useState<AnimatedCafeCharacter | null>(null);
   const [showArchitect, setShowArchitect] = useState(false);
+  const [showMasterAi, setShowMasterAi] = useState(false);
+  const [masterWhisper, setMasterWhisper] = useState<string | null>(null);
   const [dismissedInspectId, setDismissedInspectId] = useState<string | null>(null);
   const [eno2Frozen, setEno2Frozen] = useState(false);
   const [eggToast, setEggToast] = useState<CafeEasterEggId | null>(null);
@@ -237,10 +254,24 @@ export function CafePixelCanvas({
       yardSprites,
       growthLevel,
       architectPulseMs: pulseMsRef.current,
+      ascensionTier,
     });
-  }, [eno2Frozen, nightWindow, builderBridgeLinked, yardSprites, growthLevel]);
+  }, [eno2Frozen, nightWindow, builderBridgeLinked, yardSprites, growthLevel, ascensionTier]);
 
   const syncInspectable = useCallback(() => {
+    if (patronInMasterChamber(patronRef.current)) {
+      setShowMasterAi(true);
+      setShowArchitect(false);
+      setInspectChar(null);
+      if (!masterChamberUnlocked(ascensionTier)) {
+        setMasterWhisper(masterChamberWhisper(ascensionTier));
+      } else {
+        setMasterWhisper(null);
+      }
+      return;
+    }
+    setShowMasterAi(false);
+    setMasterWhisper(null);
     if (architectInspectable(growthLevel, patronRef.current)) {
       setShowArchitect(true);
       setInspectChar(null);
@@ -258,7 +289,7 @@ export function CafePixelCanvas({
       return;
     }
     setInspectChar(found);
-  }, [dismissedInspectId, growthLevel]);
+  }, [dismissedInspectId, growthLevel, ascensionTier]);
 
   useEffect(() => {
     animatedRef.current = buildAnimatedCharacters(characters, animatedRef.current);
@@ -373,12 +404,18 @@ export function CafePixelCanvas({
         return;
       }
 
+      if (target.col === MASTER_CHAMBER_GRID.col && target.row === MASTER_CHAMBER_GRID.row) {
+        patronRef.current = target;
+        handlePatronMove(target);
+        return;
+      }
+
       const next = stepToward(patronRef.current, target);
       if (next.col !== patronRef.current.col || next.row !== patronRef.current.row) {
         handlePatronMove(next);
       }
     },
-    [growthLevel, handlePatronMove, paint, showEgg, syncInspectable],
+    [growthLevel, ascensionTier, handlePatronMove, paint, showEgg, syncInspectable],
   );
 
   const { width, height } = canvasPixelSize(PIXEL_SCALE);
@@ -408,7 +445,21 @@ export function CafePixelCanvas({
           className="max-w-full cursor-crosshair border border-line bg-void outline-none focus:border-cursor-glow"
           style={{ imageRendering: "pixelated", width: `${width}px`, height: `${height}px` }}
         />
-        {showArchitect ? (
+        {masterWhisper ? (
+          <p className="border border-violet-500/30 bg-panel px-2 py-1 text-violet-200">{masterWhisper}</p>
+        ) : null}
+        {showMasterAi ? (
+          <div className="min-w-[14rem] flex-1">
+            <CafeMasterAiFlyout
+              mode={patronBriefMode(ascensionTier)}
+              locked={!masterChamberUnlocked(ascensionTier)}
+              onClose={() => {
+                setShowMasterAi(false);
+                setDismissedInspectId("master-ai");
+              }}
+            />
+          </div>
+        ) : showArchitect ? (
           <div className="min-w-[14rem] flex-1 border border-cursor-glow/40 bg-panel p-3 shadow-cursor">
             <p className="uppercase tracking-widest text-cursor-glow">The Architect</p>
             <p className="mt-1 text-muted">blueprint nook · Build Plane easter egg</p>
@@ -437,7 +488,7 @@ export function CafePixelCanvas({
           </div>
         ) : (
           <p className="text-muted lg:max-w-xs">
-            Walk adjacent to a Claw to inspect · coffee click · E toggles eno2 freeze · blueprint nook (Host L4+)
+            Walk adjacent to a Claw to inspect · hidden chamber: far corner beyond the yard · coffee · E = eno2
           </p>
         )}
       </div>

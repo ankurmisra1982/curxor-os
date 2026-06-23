@@ -15,6 +15,7 @@ import { WorkNeedsYouPanel } from "@/components/apps/work/WorkNeedsYouPanel";
 import { WorkGoLivePanel, type WorkGoLiveReportRow } from "@/components/apps/work/WorkGoLivePanel";
 import { WorkAnalyticsPanel } from "@/components/apps/work/WorkAnalyticsPanel";
 import { WorkApprovalPanel } from "@/components/apps/work/WorkApprovalPanel";
+import { WorkApprovalPolicyPanel } from "@/components/apps/work/WorkApprovalPolicyPanel";
 import { WorkConnectorVaultPanel } from "@/components/apps/work/WorkConnectorVaultPanel";
 import { WorkExecutiveBriefPanel } from "@/components/apps/work/WorkExecutiveBriefPanel";
 import { WorkImportPanel } from "@/components/apps/work/WorkImportPanel";
@@ -1008,6 +1009,17 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
 
       {show("approval") ? (
         <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="approval" minLevel="standard" title="Send approval" subtitle="Human gate before outbound">
+          <WorkApprovalPolicyPanel
+            requireSendApproval={status?.requireSendApproval ?? false}
+            envForced={status?.requireSendApprovalEnvForced}
+            growthDefault={status?.requireSendApprovalFre == null}
+            busy={policyBusy}
+            onToggle={(value) =>
+              void action({ action: "set_require_send_approval", requireSendApproval: value }).then(() =>
+                loadBootstrap(),
+              )
+            }
+          />
           <WorkApprovalPanel
             sends={status?.sends ?? []}
             canApprove={canApprove}

@@ -686,6 +686,25 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
   }
 }
 
+// W26b — require_send_approval policy
+{
+  const status = (await get("/api/work/status")).json;
+  if (typeof status.requireSendApproval === "boolean") {
+    pass("require_send_approval status", String(status.requireSendApproval));
+  } else {
+    fail("require_send_approval status", "missing field");
+  }
+  const { ok, json } = await post("/api/work/status", {
+    action: "set_require_send_approval",
+    requireSendApproval: status.requireSendApproval,
+  });
+  if (ok && json.status?.requireSendApproval === status.requireSendApproval) {
+    pass("set_require_send_approval", String(json.status.requireSendApproval));
+  } else {
+    fail("set_require_send_approval", json.error ?? "failed");
+  }
+}
+
 // W26 — audit_export
 {
   const { ok, json } = await post("/api/work/status", { action: "audit_export" });

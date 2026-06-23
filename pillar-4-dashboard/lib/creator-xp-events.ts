@@ -7,7 +7,9 @@ export type CreatorXpEventKind =
   | "post_published"
   | "post_scheduled"
   | "go_live_demo_ready"
-  | "demo_tour_complete";
+  | "demo_tour_complete"
+  | "post_approval_pending"
+  | "reply_approval_pending";
 
 export interface CreatorXpEvent {
   id: string;

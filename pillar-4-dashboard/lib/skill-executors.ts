@@ -52,6 +52,8 @@ export async function executeSkillMesh(
   if (appId === "tesla-optimus-engine" && (skillId === "sync_context" || skillId === "push_knowledge")) {
     const { syncHumanoidKnowledgeToMesh } = await import("./humanoid-hub-store");
     await syncHumanoidKnowledgeToMesh();
+    const { emitSignalXpEvent } = await import("./signal-xp-events");
+    void emitSignalXpEvent(skillId === "push_knowledge" ? "knowledge_pushed" : "context_synced", { skillId });
     return {
       executed: true,
       kind: "plan",
@@ -59,14 +61,20 @@ export async function executeSkillMesh(
     };
   }
 
-  if (appId === "my-capital") {
-    const capital = await executeMyCapitalSkill(skillId, config);
-    if (capital) return capital;
+  if (appId === "my-shop" && skillId === "ingest_order") {
+    const { emitShopXpEvent } = await import("./shop-xp-events");
+    void emitShopXpEvent("order_ingested", { orderId: cfgStr(config, "selectedOrderId", "demo") });
+    return { executed: true, kind: "plan", skipReason: "Demo order ingested · margin brief on desk" };
   }
 
   if (appId === "my-vital") {
     const vital = await executeMyVitalSkill(skillId, config);
     if (vital) return vital;
+  }
+
+  if (appId === "my-capital") {
+    const capital = await executeMyCapitalSkill(skillId, config);
+    if (capital) return capital;
   }
 
   if (appId === "my-work") {
@@ -253,6 +261,8 @@ async function executeMyWorkSkill(
       return { executed: false, kind: "digital", skipReason: out.error ?? "send failed" };
     }
     if (out.send?.status === "pending_approval") {
+      const { emitWorkXpEvent } = await import("./work-xp-events");
+      void emitWorkXpEvent("approval_pending", { sendId: out.send.id, to: out.send.to });
       return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
     }
     if (out.send?.status === "queued" && out.send.id) {
@@ -312,6 +322,8 @@ async function executeForgedAppSkill(
     try {
       const { publishForgedDeskContext } = await import("./forged-context-mesh");
       const key = await publishForgedDeskContext(record);
+      const { ingestForgedDeskActivity } = await import("./claw-cafe-events");
+      void ingestForgedDeskActivity({ forgedAppId, deskLabel: record.name, detail: "Context published" });
       return {
         executed: true,
         kind: "plan",
@@ -544,6 +556,8 @@ async function executeMyVitalSkill(
   if (skillId === "sync_wearables") {
     const { syncWearablesDemo } = await import("./vital-health-store");
     const state = await syncWearablesDemo();
+    const { emitVitalXpEvent } = await import("./vital-xp-events");
+    void emitVitalXpEvent("wearable_sync", { count: state.vitals.length });
     return {
       executed: true,
       kind: "plan",
@@ -554,6 +568,8 @@ async function executeMyVitalSkill(
     const { ingestDemoReport } = await import("./vital-health-store");
     const summary = cfgStr(config, "ingestSummary", "") || cfgStr(config, "lastUserMessage", "");
     const report = await ingestDemoReport({ summary: summary || undefined });
+    const { emitVitalXpEvent } = await import("./vital-xp-events");
+    void emitVitalXpEvent("report_ingested", { reportId: report.id });
     return {
       executed: true,
       kind: "plan",
@@ -566,6 +582,8 @@ async function executeMyVitalSkill(
     const fre = await readAppFreState("my-vital");
     const focus = cfgStr(config, "longevityFocus", "") || cfgStr(fre.config, "longevityFocus", "metabolic");
     const state = await refreshProtocolForFocus(focus);
+    const { emitVitalXpEvent } = await import("./vital-xp-events");
+    void emitVitalXpEvent("protocol_updated", { focus, steps: state.protocol.length });
     return {
       executed: true,
       kind: "plan",
@@ -576,6 +594,8 @@ async function executeMyVitalSkill(
     const { syncVitalContextToMesh } = await import("./vital-health-store");
     const profileId = cfgStr(config, "selectedProfileId", "") || null;
     await syncVitalContextToMesh(profileId);
+    const { emitVitalXpEvent } = await import("./vital-xp-events");
+    void emitVitalXpEvent("context_published", { profileId });
     return {
       executed: true,
       kind: "plan",
@@ -597,6 +617,8 @@ async function executeMyCapitalSkill(
       return { executed: false, kind: "digital", skipReason: out.error ?? "trade failed" };
     }
     if (out.trade?.status === "pending_approval") {
+      const { emitCapitalXpEvent } = await import("./capital-xp-events");
+      void emitCapitalXpEvent("trade_pending_approval", { tradeId: out.trade.id, asset: out.trade.ticker });
       return { executed: true, kind: "plan", skipReason: "awaiting operator approval" };
     }
     if (out.trade?.status === "queued" && out.trade.id) {

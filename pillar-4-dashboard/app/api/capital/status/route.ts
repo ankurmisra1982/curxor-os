@@ -585,6 +585,23 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ...result, status: await fetchCapitalStatus() });
       }
 
+      case "approval_callback_demo": {
+        const { approvePendingCapitalTrade } = await import("@/lib/capital-approval-telegram");
+        const status = await fetchCapitalStatus();
+        const pending = status.trades.find((t) => t.status === "pending_approval");
+        if (!pending) {
+          return Response.json({ ok: true, demoLogged: false, detail: "no pending approval" });
+        }
+        const result = await approvePendingCapitalTrade(pending.id, "api");
+        return Response.json({
+          ok: true,
+          demoLogged: result.ok,
+          tradeId: pending.id,
+          tradeStatus: result.trade?.status,
+          status: await fetchCapitalStatus(),
+        });
+      }
+
       default:
         return Response.json({ ok: false, error: `Unknown action: ${action}` }, { status: 400 });
     }

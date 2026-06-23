@@ -33,6 +33,7 @@
     "verify:tier-c-sweep": "node scripts/verify-tier-c-sweep.mjs",
     "qa:forge-levels": "node scripts/qa-forge-levels.mjs",
     "qa:work-checklist": "node scripts/work-checklist.mjs",
+    "qa:approval-stack": "node scripts/qa-approval-stack.mjs",
     "qa:work-levels": "node scripts/qa-work-levels.mjs",
     "setup:capital-env": "node scripts/setup-capital-env.mjs",
     "setup:work-env": "node scripts/setup-work-env.mjs",

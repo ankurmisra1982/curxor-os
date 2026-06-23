@@ -7,7 +7,8 @@ export type CapitalXpEventKind =
   | "rule_armed"
   | "rule_fired"
   | "go_live_demo_ready"
-  | "demo_tour_complete";
+  | "demo_tour_complete"
+  | "trade_pending_approval";
 
 export interface CapitalXpEvent {
   id: string;

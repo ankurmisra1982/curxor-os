@@ -9,7 +9,7 @@ import { getOotbApp } from "./ootb-apps";
 import { buildWorkGrowthProfile } from "./work-growth";
 import { readWorkDeskPermissions } from "./work-permissions";
 import { readUserSettings } from "./user-settings";
-import { loadDigitalEnv } from "./digital-env";
+import { loadDigitalEnv, envFlag } from "./digital-env";
 import { buildWorkAnalytics } from "./work-analytics";
 import { buildWorkDeliverabilitySummary } from "./work-deliverability";
 import { buildWorkConnectorHealthReport } from "./work-connector-health";
@@ -18,6 +18,7 @@ import { groupMailIntoThreads, type MailThread } from "./work-mail-threads";
 import { isWorkImapConfigured, fetchImapMailForScan } from "./work-imap-client";
 import { emitWorkWebhook } from "./work-webhook-emitter";
 import { countSendsToday, readAutoSendOnActivateFre, readWorkSendPolicy, resolveAutoSendOnActivate } from "./work-send-policy";
+import { requireWorkSendApproval, readRequireSendApprovalFre } from "./work-approval-config";
 import type {
   LeadStage,
   MailIndexEntry,
@@ -274,6 +275,8 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
   const autoSendOnActivate = autoSendFre ?? (await resolveAutoSendOnActivate(bridgeConfigured));
   const outboundKillSwitch = await readOutboundKillSwitch();
   const deskPermissions = await readWorkDeskPermissions();
+  const requireSendApproval = await requireWorkSendApproval();
+  const requireSendApprovalFre = await readRequireSendApprovalFre();
 
   return {
     source: bridgeConfigured ? "live" : "demo",
@@ -314,6 +317,9 @@ export async function fetchWorkStatus(): Promise<WorkQueueStatus> {
     autoSendOnActivate,
     autoSendDefault: bridgeConfigured,
     outboundKillSwitch,
+    requireSendApproval,
+    requireSendApprovalFre,
+    requireSendApprovalEnvForced: envFlag("CURXOR_WORK_REQUIRE_APPROVAL", false),
     suppressionList: (file.suppressionList ?? []).slice(0, 25),
     growthProfile: {
       growthLevel: growthProfile.growthLevel,

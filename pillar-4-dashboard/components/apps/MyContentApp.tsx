@@ -37,6 +37,7 @@ import {
   type BridgeHealthSummary,
 } from "@/components/apps/content/ContentBridgeHealthPanel";
 import { ContentApprovalPanel, type ContentAuditEntryRow } from "@/components/apps/content/ContentApprovalPanel";
+import type { PublishTrustTierRow } from "@/lib/content-trust-tiers";
 import { ContentOpsPanel, type ContentOpsStateRow } from "@/components/apps/content/ContentOpsPanel";
 import { ContentPreflightPanel, type PreflightReportRow } from "@/components/apps/content/ContentPreflightPanel";
 import { ContentExperimentsPanel, type ExperimentRow } from "@/components/apps/content/ContentExperimentsPanel";
@@ -130,6 +131,11 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     configured: boolean;
     notifyEnabled: boolean;
     chatIdCount: number;
+  } | null>(null);
+  const [publishTrust, setPublishTrust] = useState<{
+    minApprovals: number;
+    platforms: string[];
+    tiers: PublishTrustTierRow[];
   } | null>(null);
   const [metricsRules, setMetricsRules] = useState<MetricsRuleRow[]>([]);
   const [metricsRuleFires, setMetricsRuleFires] = useState<MetricsRuleFireRow[]>([]);
@@ -588,12 +594,25 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             notifyEnabled: boolean;
             chatIdCount: number;
           };
+          publishTrust?: {
+            minApprovals: number;
+            platforms: string[];
+            tiers: Array<{
+              platform: string;
+              label: string;
+              approvedCount: number;
+              minApprovals: number;
+              autoEligible: boolean;
+              enabled: boolean;
+            }>;
+          };
         };
         if (data.posts) setApprovalPosts(data.posts);
         if (data.replies) setApprovalReplies(data.replies);
         setRequirePublishApproval(data.requirePublishApproval === true);
         setRequireReplyApproval(data.requireReplyApproval === true);
         if (data.approvalTelegram) setApprovalTelegram(data.approvalTelegram);
+        if (data.publishTrust) setPublishTrust(data.publishTrust);
       }
       if (auditRes.ok) {
         const data = (await auditRes.json()) as { entries?: ContentAuditEntryRow[] };
@@ -603,6 +622,30 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       /* optional */
     }
   }, []);
+
+  const updatePublishTrust = useCallback(
+    async (patch: { publishTrustMinApprovals?: number; publishTrustPlatforms?: string[] }) => {
+      const res = await fetch("/api/content/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "set_publish_trust", ...patch }),
+      });
+      if (!res.ok) return;
+      const data = (await res.json()) as {
+        config?: { minApprovals: number; platforms: string[] };
+        tiers?: PublishTrustTierRow[];
+      };
+      if (data.config && data.tiers) {
+        setPublishTrust({
+          minApprovals: data.config.minApprovals,
+          platforms: data.config.platforms,
+          tiers: data.tiers,
+        });
+      }
+      await loadApproval();
+    },
+    [loadApproval],
+  );
 
   const loadBootstrap = useCallback(
     async (opts?: { week?: Date; postId?: string }) => {
@@ -679,6 +722,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           setRequirePublishApproval(data.approval.requirePublishApproval === true);
           setRequireReplyApproval(data.approval.requireReplyApproval === true);
           if (data.approval.approvalTelegram) setApprovalTelegram(data.approval.approvalTelegram);
+          if (data.approval.publishTrust) setPublishTrust(data.approval.publishTrust);
         }
         if (data.recovery?.candidates) setRecoveryCandidates(data.recovery.candidates);
         if (data.studio) {
@@ -2249,6 +2293,8 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           requirePublishApproval={requirePublishApproval}
           requireReplyApproval={requireReplyApproval}
           approvalTelegram={approvalTelegram ?? undefined}
+          publishTrust={publishTrust ?? undefined}
+          onUpdatePublishTrust={updatePublishTrust}
           onRefresh={() => {
             void loadApproval();
             void loadStatus();

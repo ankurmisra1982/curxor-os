@@ -144,6 +144,26 @@ console.log(`==> Capital checklist · base=${BASE}\n`);
   }
 }
 
+// 7. Capital approval callback demo (pending trade → approve)
+{
+  const { ok, json } = await post("/api/capital/status", { action: "approval_callback_demo" });
+  if (ok && json.ok && (json.demoLogged === true || json.demoLogged === false)) {
+    pass("approval_callback_demo", json.demoLogged ? json.tradeId : "no pending");
+  } else {
+    fail("approval_callback_demo", `demoLogged=${json.demoLogged}`);
+  }
+}
+
+// 8. OS approval inbox API
+{
+  const { ok, json } = await get("/api/os/approvals");
+  if (ok && json.ok && typeof json.total === "number" && json.counts) {
+    pass("os approval inbox", `total=${json.total}`);
+  } else {
+    fail("os approval inbox", JSON.stringify(json));
+  }
+}
+
 const failed = checks.filter((c) => !c.ok).length;
 console.log(`\nResults: ${checks.length - failed} passed, ${failed} failed`);
 if (failed > 0) process.exitCode = 1;

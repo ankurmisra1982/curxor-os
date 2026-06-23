@@ -97,6 +97,8 @@ export async function upsertFamilyProfile(
   }
   if (!file.primaryProfileId) file.primaryProfileId = next.id;
   await writeProfilesFile(file);
+  const { emitKinXpEvent } = await import("./kin-xp-events");
+  void emitKinXpEvent("profile_updated", { displayName: next.displayName, profileId: next.id });
   return next;
 }
 

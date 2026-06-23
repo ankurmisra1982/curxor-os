@@ -11,6 +11,7 @@ import {
 } from "./claw-cafe-ascension";
 import { buildCafeEpithet } from "./cafe-epithet";
 import { buildCafeGoLiveReport } from "./cafe-go-live";
+import { applyCafeApprovalOverlay } from "./cafe-approval-overlay";
 import type { CafeCharacter, CafeCharacterState } from "./claw-cafe-spatial";
 import { APP_STATION, stateForEventKind, stationForApp } from "./claw-cafe-spatial";
 import { isPreviewApp } from "./claw-preview-apps";
@@ -23,16 +24,30 @@ export type CafeEventKind =
   | "app.go_live"
   | "work.sequence_step"
   | "work.handoff"
+  | "work.approval_pending"
   | "creator.publish"
+  | "creator.approval_pending"
   | "capital.rule_armed"
   | "capital.rule_fired"
+  | "capital.approval_pending"
   | "forge.claw_minted"
   | "forge.framework_provisioned"
   | "forge.import_completed"
   | "forge.claw_archived"
+  | "forge.desk_activity"
   | "swarm.dispatch"
   | "swarm.handoff"
   | "swarm.rebalance"
+  | "vital.wearable_sync"
+  | "vital.report_ingested"
+  | "vital.protocol_updated"
+  | "vital.context_published"
+  | "kin.profile_updated"
+  | "kin.handoff"
+  | "shop.order_ingested"
+  | "shop.channel_sync"
+  | "signal.knowledge_pushed"
+  | "signal.context_synced"
   | "streak.day"
   | "cross_claw.handshake";
 
@@ -112,7 +127,10 @@ function applyMilestone(kind: CafeEventKind, milestones: AscensionMilestones): A
   if (
     kind === "creator.publish" ||
     kind === "app.tour_complete" ||
-    kind === "forge.framework_provisioned"
+    kind === "forge.framework_provisioned" ||
+    kind.includes("vital") ||
+    kind.includes("kin") ||
+    kind.includes("signal")
   ) {
     next.knowledgeEvent = true;
   }
@@ -121,7 +139,8 @@ function applyMilestone(kind: CafeEventKind, milestones: AscensionMilestones): A
     kind === "capital.rule_armed" ||
     kind === "work.sequence_step" ||
     kind === "swarm.dispatch" ||
-    kind === "app.go_live"
+    kind === "app.go_live" ||
+    kind.includes("shop")
   ) {
     next.wealthEvent = true;
   }
@@ -259,7 +278,11 @@ export async function readCafeStateMetrics(): Promise<{
   };
 }
 
-export async function buildCafeAscensionBootstrap() {
+export async function buildCafeAscensionBootstrap(options?: { autoSync?: boolean }) {
+  if (options?.autoSync !== false) {
+    await syncCafeEventSources();
+  }
+
   const settings = await readUserSettings();
   const state = await readState();
   const titleStyle: CafeTitleStyle = settings.appearance.cafeTitleStyle ?? "mythic";
@@ -268,6 +291,9 @@ export async function buildCafeAscensionBootstrap() {
   let characters = state.characters;
   if (characters.length === 0) {
     characters = await defaultCharacters();
+  }
+  if (!optOut) {
+    characters = await applyCafeApprovalOverlay(characters);
   }
 
   const ascension = buildAscensionState({
@@ -314,6 +340,14 @@ function mapWorkXpToCafe(
       appId: "my-work",
       xp: { ascension: 20, knowledge: 5, wealth: 10 },
       bubble: "Handshake across Claws",
+    };
+  }
+  if (kind === "approval_pending") {
+    return {
+      kind: "work.approval_pending",
+      appId: "my-work",
+      xp: { ascension: 4, wealth: 2 },
+      bubble: "Needs OK · send",
     };
   }
   if (kind === "sequence_activated") {
@@ -432,6 +466,14 @@ function mapCreatorXpToCafe(
       bubble: "Creator demo tour complete",
     };
   }
+  if (kind === "post_approval_pending" || kind === "reply_approval_pending") {
+    return {
+      kind: "creator.approval_pending",
+      appId,
+      xp: { ascension: 4, knowledge: 2 },
+      bubble: kind === "reply_approval_pending" ? "Needs OK · reply" : "Needs OK · post",
+    };
+  }
   return null;
 }
 
@@ -474,6 +516,87 @@ function mapCapitalXpToCafe(
       xp: { ascension: 25, wealth: 12 },
       bubble: "Capital demo tour complete",
     };
+  }
+  if (kind === "trade_pending_approval") {
+    return {
+      kind: "capital.approval_pending",
+      appId,
+      xp: { ascension: 4, wealth: 2 },
+      bubble: `Needs OK · ${asset}`,
+    };
+  }
+  return null;
+}
+
+function mapVitalXpToCafe(
+  kind: string,
+  _payload: Record<string, unknown>,
+): Omit<Parameters<typeof ingestCafeEvent>[0], "sourceRef"> | null {
+  if (kind === "wearable_sync") {
+    return { kind: "vital.wearable_sync", appId: "my-vital", xp: { ascension: 8, knowledge: 5 }, bubble: "Wearables synced" };
+  }
+  if (kind === "report_ingested") {
+    return { kind: "vital.report_ingested", appId: "my-vital", xp: { ascension: 10, knowledge: 8 }, bubble: "Report in vault" };
+  }
+  if (kind === "protocol_updated") {
+    return { kind: "vital.protocol_updated", appId: "my-vital", xp: { ascension: 12, knowledge: 10 }, bubble: "Protocol updated" };
+  }
+  if (kind === "context_published") {
+    return { kind: "vital.context_published", appId: "my-vital", xp: { ascension: 6, knowledge: 4 }, bubble: "Health context pushed" };
+  }
+  return null;
+}
+
+function mapKinXpToCafe(
+  kind: string,
+  payload: Record<string, unknown>,
+): Omit<Parameters<typeof ingestCafeEvent>[0], "sourceRef"> | null {
+  const name = typeof payload.displayName === "string" ? payload.displayName : "member";
+  if (kind === "profile_updated") {
+    return { kind: "kin.profile_updated", appId: "my-family", xp: { ascension: 8, knowledge: 6 }, bubble: `Kin · ${name}` };
+  }
+  if (kind === "handoff" || kind === "context_synced") {
+    return {
+      kind: "kin.handoff",
+      appId: "my-family",
+      xp: { ascension: 10, knowledge: 8 },
+      bubble: kind === "handoff" ? "Family handoff" : "Kin context synced",
+    };
+  }
+  return null;
+}
+
+function mapShopXpToCafe(
+  kind: string,
+  payload: Record<string, unknown>,
+): Omit<Parameters<typeof ingestCafeEvent>[0], "sourceRef"> | null {
+  const channel = typeof payload.channel === "string" ? payload.channel : "channel";
+  if (kind === "order_ingested") {
+    return { kind: "shop.order_ingested", appId: "my-shop", xp: { ascension: 10, wealth: 8 }, bubble: "Order ingested" };
+  }
+  if (kind === "channel_sync" || kind === "desk_activated") {
+    return {
+      kind: "shop.channel_sync",
+      appId: "my-shop",
+      xp: { ascension: 8, wealth: 5 },
+      bubble: kind === "desk_activated" ? "Desk activated" : `Sync · ${channel}`,
+    };
+  }
+  return null;
+}
+
+function mapSignalXpToCafe(
+  kind: string,
+  _payload: Record<string, unknown>,
+): Omit<Parameters<typeof ingestCafeEvent>[0], "sourceRef"> | null {
+  if (kind === "knowledge_pushed") {
+    return { kind: "signal.knowledge_pushed", appId: "tesla-optimus-engine", xp: { ascension: 10, knowledge: 8 }, bubble: "Knowledge pushed" };
+  }
+  if (kind === "context_synced") {
+    return { kind: "signal.context_synced", appId: "tesla-optimus-engine", xp: { ascension: 6, knowledge: 4 }, bubble: "Context synced" };
+  }
+  if (kind === "routine_armed") {
+    return { kind: "signal.knowledge_pushed", appId: "tesla-optimus-engine", xp: { ascension: 8, knowledge: 6 }, bubble: "Routine armed" };
   }
   return null;
 }
@@ -563,6 +686,34 @@ export async function syncCafeEventSources(): Promise<{ ingested: number }> {
     await append({ ...mapped, sourceRef: `capital:${row.id}` });
   }
 
+  const { listVitalXpEvents } = await import("./vital-xp-events");
+  for (const row of await listVitalXpEvents(50)) {
+    const mapped = mapVitalXpToCafe(row.kind, row.payload);
+    if (!mapped) continue;
+    await append({ ...mapped, sourceRef: `vital:${row.id}` });
+  }
+
+  const { listKinXpEvents } = await import("./kin-xp-events");
+  for (const row of await listKinXpEvents(50)) {
+    const mapped = mapKinXpToCafe(row.kind, row.payload);
+    if (!mapped) continue;
+    await append({ ...mapped, sourceRef: `kin:${row.id}` });
+  }
+
+  const { listShopXpEvents } = await import("./shop-xp-events");
+  for (const row of await listShopXpEvents(50)) {
+    const mapped = mapShopXpToCafe(row.kind, row.payload);
+    if (!mapped) continue;
+    await append({ ...mapped, sourceRef: `shop:${row.id}` });
+  }
+
+  const { listSignalXpEvents } = await import("./signal-xp-events");
+  for (const row of await listSignalXpEvents(50)) {
+    const mapped = mapSignalXpToCafe(row.kind, row.payload);
+    if (!mapped) continue;
+    await append({ ...mapped, sourceRef: `signal:${row.id}` });
+  }
+
   if (ingested > 0) {
     state.events = state.events.slice(0, 300);
     await writeState(state);
@@ -607,6 +758,42 @@ export async function ingestCafeEventFromCapital(
   await ingestCafeEvent({ ...mapped, sourceRef: `capital-live:${kind}:${Date.now()}` });
 }
 
+export async function ingestCafeEventFromVital(
+  kind: string,
+  payload: Record<string, unknown> = {},
+): Promise<void> {
+  const mapped = mapVitalXpToCafe(kind, payload);
+  if (!mapped) return;
+  await ingestCafeEvent({ ...mapped, sourceRef: `vital-live:${kind}:${Date.now()}` });
+}
+
+export async function ingestCafeEventFromKin(
+  kind: string,
+  payload: Record<string, unknown> = {},
+): Promise<void> {
+  const mapped = mapKinXpToCafe(kind, payload);
+  if (!mapped) return;
+  await ingestCafeEvent({ ...mapped, sourceRef: `kin-live:${kind}:${Date.now()}` });
+}
+
+export async function ingestCafeEventFromShop(
+  kind: string,
+  payload: Record<string, unknown> = {},
+): Promise<void> {
+  const mapped = mapShopXpToCafe(kind, payload);
+  if (!mapped) return;
+  await ingestCafeEvent({ ...mapped, sourceRef: `shop-live:${kind}:${Date.now()}` });
+}
+
+export async function ingestCafeEventFromSignal(
+  kind: string,
+  payload: Record<string, unknown> = {},
+): Promise<void> {
+  const mapped = mapSignalXpToCafe(kind, payload);
+  if (!mapped) return;
+  await ingestCafeEvent({ ...mapped, sourceRef: `signal-live:${kind}:${Date.now()}` });
+}
+
 /** Forged desk actions → cafe room (work / creator / capital templates). */
 export async function ingestForgedDeskCafeEvent(input: {
   forgedAppId: string;
@@ -645,5 +832,21 @@ export async function ingestForgedDeskCafeEvent(input: {
     bubble: input.detail ?? `Forged desk · rule armed${input.asset ? ` · ${input.asset}` : ""}`,
     sourceRef: `forged-live:capital:${input.forgedAppId}:${Date.now()}`,
     label,
+  });
+}
+
+/** Daily forged-app use → ascension (not only mint/archive). */
+export async function ingestForgedDeskActivity(input: {
+  forgedAppId: string;
+  deskLabel: string;
+  detail?: string;
+}): Promise<void> {
+  await ingestCafeEvent({
+    kind: "forge.desk_activity",
+    appId: input.forgedAppId,
+    xp: { ascension: 6, knowledge: 3 },
+    bubble: input.detail ?? "Forged desk activity",
+    sourceRef: `forged-activity:${input.forgedAppId}:${Date.now()}`,
+    label: input.deskLabel.slice(0, 16),
   });
 }

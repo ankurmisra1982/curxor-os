@@ -10,6 +10,7 @@ import { creationStudioStatusAsync } from "./content-creation-service";
 import { buildCreatorGrowthProfile, type CreatorGrowthProfile } from "./creator-growth";
 import { buildGoLiveReport, type GoLiveReport } from "./content-go-live";
 import { listApprovalQueue } from "./content-approval-service";
+import { buildPublishTrustReport, readPublishTrustConfig } from "./content-trust-tiers";
 import { fetchContentStatus } from "./content-queue-store";
 import type { ContentQueueStatus } from "./content-queue-types";
 import {
@@ -38,6 +39,11 @@ export interface ContentDashboardBootstrap {
     requirePublishApproval: boolean;
     requireReplyApproval: boolean;
     approvalTelegram: Awaited<ReturnType<typeof getApprovalTelegramStatus>>;
+    publishTrust: {
+      minApprovals: number;
+      platforms: string[];
+      tiers: Awaited<ReturnType<typeof buildPublishTrustReport>>;
+    };
   };
   recovery: { candidates: RecoveryCandidate[] };
   studio: Awaited<ReturnType<typeof creationStudioStatusAsync>>;
@@ -76,6 +82,7 @@ export async function buildContentDashboardBootstrap(options?: {
     publishApproval,
     replyApproval,
     approvalTelegram,
+    publishTrustConfig,
   ] = await Promise.all([
     buildGoLiveReport(),
     buildBridgeHealthReport(channels),
@@ -86,7 +93,10 @@ export async function buildContentDashboardBootstrap(options?: {
     requirePublishApproval(),
     requireReplyApproval(),
     getApprovalTelegramStatus(),
+    readPublishTrustConfig(),
   ]);
+
+  const publishTrustTiers = await buildPublishTrustReport();
 
   const calendar = buildCalendarWeek(status.posts, week, timeZone);
 
@@ -107,6 +117,11 @@ export async function buildContentDashboardBootstrap(options?: {
       requirePublishApproval: publishApproval,
       requireReplyApproval: replyApproval,
       approvalTelegram,
+      publishTrust: {
+        minApprovals: publishTrustConfig.minApprovals,
+        platforms: publishTrustConfig.platforms,
+        tiers: publishTrustTiers,
+      },
     },
     recovery: { candidates: recoveryCandidates },
     studio,

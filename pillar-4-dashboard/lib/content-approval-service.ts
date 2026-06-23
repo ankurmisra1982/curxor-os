@@ -2,6 +2,7 @@ import "server-only";
 
 import { appendAuditEntry } from "./content-audit-store";
 import { requirePublishApproval, requireReplyApproval } from "./content-approval-config";
+import { isPublishTrustAutoEligible } from "./content-trust-tiers";
 import {
   failPostPublish,
   getContentPost,
@@ -62,6 +63,22 @@ export async function requestPostPublish(
     return { mode: "published", result };
   }
 
+  const postForTrust = await getContentPost(postId);
+  if (postForTrust && (await isPublishTrustAutoEligible(postForTrust.platform))) {
+    const result = await publishPostToBridge(postId, config);
+    await appendAuditEntry({
+      action: "publish_post",
+      targetType: "post",
+      targetId: postId,
+      actor,
+      detail: result.ok
+        ? `Trust-tier auto-publish · ${postForTrust.platform}`
+        : result.error ?? "Publish failed",
+      meta: { intentId: result.id, ok: result.ok, platform: postForTrust.platform, trustAuto: true },
+    });
+    return { mode: "published", result };
+  }
+
   const existing = await getContentPost(postId);
   if (existing?.stage === "PENDING_APPROVAL") {
     return { mode: "pending", post: existing };
@@ -81,6 +98,9 @@ export async function requestPostPublish(
 
   void notifyPostPendingApproval(post).catch(() => undefined);
   void notifyPostPendingApprovalSlack(post).catch(() => undefined);
+
+  const { emitCreatorXpEvent } = await import("./creator-xp-events");
+  void emitCreatorXpEvent("post_approval_pending", { postId, platform: post.platform, appId: "my-content-creator" });
 
   return { mode: "pending", post };
 }
@@ -107,7 +127,7 @@ export async function approvePost(
     targetId: postId,
     actor,
     detail: result.ok ? "Approved and sent to bridge" : result.error ?? "Bridge send failed",
-    meta: { intentId: result.id, ok: result.ok },
+    meta: { intentId: result.id, ok: result.ok, platform: post.platform },
   });
 
   if (result.ok) {
@@ -184,6 +204,9 @@ export async function requestReplyPublish(
 
   void notifyReplyPendingApproval(reply).catch(() => undefined);
   void notifyReplyPendingApprovalSlack(reply).catch(() => undefined);
+
+  const { emitCreatorXpEvent } = await import("./creator-xp-events");
+  void emitCreatorXpEvent("reply_approval_pending", { replyId, platform: reply.platform, appId: "my-content-creator" });
 
   return { mode: "pending", reply };
 }

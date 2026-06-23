@@ -35,7 +35,10 @@ export function CafeLevelUpNudge({ ascension, optOut, loading, onSync }: CafeLev
 
   return (
     <div className="border border-cursor-glow/40 bg-panel px-3 py-2 font-mono text-[10px]">
-      <p className="uppercase tracking-widest text-cursor-glow">Sync Claws to advance</p>
+      <p className="uppercase tracking-widest text-cursor-glow">Room is listening</p>
+      <p className="mt-1 text-muted">
+        Events stream live from your Claws. Use Repair sync only if the ledger missed something.
+      </p>
       <p className="mt-1 text-stark">
         {ascension.xpToNext > 0
           ? `${ascension.xpToNext} XP to ${ascension.titleStyle === "neutral" ? "next tier" : "next ascension"} — unlock milestones across desks.`
@@ -51,7 +54,7 @@ export function CafeLevelUpNudge({ ascension, optOut, loading, onSync }: CafeLev
           onClick={onSync}
           className="mt-2 border border-cursor-glow px-3 py-1 uppercase tracking-widest text-cursor-glow disabled:opacity-40"
         >
-          Sync Claws
+          Repair sync
         </button>
       ) : null}
     </div>

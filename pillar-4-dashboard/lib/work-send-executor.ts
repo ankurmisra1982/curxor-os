@@ -19,17 +19,12 @@ import {
 import type { OutboundSend, ReplyIntent, WorkSequence } from "./work-queue-types";
 import { notifyWorkSendFailure } from "./work-publish-failure-notify";
 import { notifyWorkPendingApproval } from "./work-approval-notify";
+import { requireWorkSendApproval } from "./work-approval-config";
 import { readWorkDeskPermissions, workPermissionDeniedMessage } from "./work-permissions";
 import { evaluateSendPolicy, readWorkSendPolicy } from "./work-send-policy";
 import { addSuppression, isEmailSuppressed } from "./work-suppression";
 
 export const UNDO_SEND_WINDOW_MS = 8000;
-
-export function requireWorkSendApproval(): boolean {
-  const env = process.env.CURXOR_WORK_REQUIRE_APPROVAL?.trim().toLowerCase();
-  if (env === "1" || env === "true") return true;
-  return false;
-}
 
 export async function buildEmailIntent(input: {
   to: string;
@@ -110,6 +105,7 @@ export async function sendSequenceStep(
   const { subject, variant } = resolveStepSubject(step, lead);
   const body = await personalizeTemplateForLead(step.body, lead);
 
+  const needsApproval = await requireWorkSendApproval();
   const send = await recordSend({
     sequenceId: seq.id,
     stepId: step.id,
@@ -118,12 +114,12 @@ export async function sendSequenceStep(
     subject,
     body,
     subjectVariant: variant,
-    status: requireWorkSendApproval() ? "pending_approval" : "queued",
+    status: needsApproval ? "pending_approval" : "queued",
     sentAt: null,
     error: null,
   });
 
-  if (requireWorkSendApproval()) {
+  if (needsApproval) {
     await notifyWorkPendingApproval(send);
     return { ok: true, send };
   }

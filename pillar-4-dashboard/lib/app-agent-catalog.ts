@@ -166,6 +166,13 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           ],
         },
         {
+          id: "requireSendApproval",
+          label: "Require approval before outbound send",
+          type: "toggle",
+          defaultValue: true,
+          help: "Recommended at Operator level (L3+). Queues sequence sends for desk or Telegram approve.",
+        },
+        {
           id: "crmBackend",
           label: "CRM backend",
           type: "select",
@@ -644,6 +651,21 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           label: "Require approval before replies",
           type: "toggle",
           defaultValue: false,
+        },
+        {
+          id: "publishTrustMinApprovals",
+          label: "Auto-publish after N approvals per platform",
+          type: "text",
+          defaultValue: "5",
+          placeholder: "5",
+          help: "0 = off. When gate is on, trusted platforms skip queue after this many human approvals.",
+        },
+        {
+          id: "publishTrustPlatforms",
+          label: "Trust-tier platforms",
+          type: "multiselect",
+          defaultValue: ["bluesky", "x"],
+          options: creatorFreChannelOptions(),
         },
         {
           id: "notifyApprovalOnTelegram",

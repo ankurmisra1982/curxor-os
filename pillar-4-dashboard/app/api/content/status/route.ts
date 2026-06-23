@@ -79,6 +79,7 @@ import { listMetricsRuleFires, listMetricsRules, updateMetricsRule } from "@/lib
 import { metricsRulesEnabled } from "@/lib/content-metrics-rules-config";
 import { requirePublishApproval, requireReplyApproval } from "@/lib/content-approval-config";
 import { getApprovalTelegramStatus } from "@/lib/content-approval-telegram";
+import { buildPublishTrustReport, readPublishTrustConfig } from "@/lib/content-trust-tiers";
 import { listAuditEntries } from "@/lib/content-audit-store";
 import { requireLanAuth } from "@/lib/lan-auth";
 import type { ContentFormat } from "@/lib/content-queue-types";
@@ -127,6 +128,8 @@ export async function POST(request: Request): Promise<Response> {
     name?: string;
     channels?: string[];
     autoPublish?: boolean;
+    publishTrustMinApprovals?: number;
+    publishTrustPlatforms?: string[];
     slideId?: string;
     thumbId?: string;
     captionStyle?: string;
@@ -849,10 +852,13 @@ export async function POST(request: Request): Promise<Response> {
 
     case "approval_list": {
       const queue = await listApprovalQueue();
-      const [requirePublish, requireReply, approvalTelegram] = await Promise.all([
+      const [requirePublish, requireReply, approvalTelegram, publishTrustConfig, publishTrustTiers] =
+        await Promise.all([
         requirePublishApproval(),
         requireReplyApproval(),
         getApprovalTelegramStatus(),
+        readPublishTrustConfig(),
+        buildPublishTrustReport(),
       ]);
       return Response.json({
         ok: true,
@@ -860,7 +866,34 @@ export async function POST(request: Request): Promise<Response> {
         requirePublishApproval: requirePublish,
         requireReplyApproval: requireReply,
         approvalTelegram,
+        publishTrust: {
+          minApprovals: publishTrustConfig.minApprovals,
+          platforms: publishTrustConfig.platforms,
+          tiers: publishTrustTiers,
+        },
       });
+    }
+
+    case "publish_trust_report": {
+      const [config, tiers] = await Promise.all([readPublishTrustConfig(), buildPublishTrustReport()]);
+      return Response.json({ ok: true, config, tiers });
+    }
+
+    case "set_publish_trust": {
+      const fre = await readAppFreState("my-content-creator");
+      const next = { ...fre.config };
+      if (body.publishTrustMinApprovals !== undefined) {
+        next.publishTrustMinApprovals = body.publishTrustMinApprovals;
+      }
+      if (Array.isArray(body.publishTrustPlatforms)) {
+        next.publishTrustPlatforms = body.publishTrustPlatforms.filter(
+          (x): x is string => typeof x === "string",
+        );
+      }
+      const { writeAppFreState } = await import("@/lib/app-fre-state");
+      await writeAppFreState("my-content-creator", { ...fre, config: next });
+      const [config, tiers] = await Promise.all([readPublishTrustConfig(), buildPublishTrustReport()]);
+      return Response.json({ ok: true, config, tiers, status: await fetchContentStatus() });
     }
 
     case "publish_now": {
