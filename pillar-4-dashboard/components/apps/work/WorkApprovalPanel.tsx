@@ -6,13 +6,21 @@ import type { OutboundSend } from "@/lib/work-queue-types";
 
 interface WorkApprovalPanelProps {
   sends: OutboundSend[];
+  highlightSendId?: string | null;
   canApprove?: boolean;
   onApprove: (sendId: string) => Promise<void>;
   onReject: (sendId: string) => Promise<void>;
   onRefresh: () => void;
 }
 
-export function WorkApprovalPanel({ sends, canApprove = true, onApprove, onReject, onRefresh }: WorkApprovalPanelProps) {
+export function WorkApprovalPanel({
+  sends,
+  highlightSendId,
+  canApprove = true,
+  onApprove,
+  onReject,
+  onRefresh,
+}: WorkApprovalPanelProps) {
   const pending = sends.filter((s) => s.status === "pending_approval");
   const [busyId, setBusyId] = useState<string | null>(null);
 
@@ -45,7 +53,15 @@ export function WorkApprovalPanel({ sends, canApprove = true, onApprove, onRejec
   return (
     <div className="space-y-2 font-mono text-[10px]">
       {pending.map((send) => (
-        <div key={send.id} className="border border-cursor-glow/40 px-3 py-2">
+        <div
+          key={send.id}
+          data-send-id={send.id}
+          className={`border px-3 py-2 ${
+            highlightSendId === send.id
+              ? "border-amber-400 bg-amber-500/10 ring-1 ring-amber-400/50"
+              : "border-cursor-glow/40"
+          }`}
+        >
           <p className="text-stark">{send.to}</p>
           <p className="text-muted">{send.subject}</p>
           <p className="mt-1 line-clamp-3 text-muted">{send.body}</p>

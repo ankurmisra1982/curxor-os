@@ -8,6 +8,11 @@ export interface BuildStatusPayload {
   ok: true;
   buildPlane: SanitizedBuildPlaneSettings;
   bridgeLinked: boolean;
+  mcp: {
+    endpoint: string;
+    toolCount: number;
+    requiresEnabled: boolean;
+  };
 }
 
 export async function buildBuildStatus(): Promise<BuildStatusPayload> {
@@ -17,5 +22,10 @@ export async function buildBuildStatus(): Promise<BuildStatusPayload> {
     ok: true,
     buildPlane,
     bridgeLinked: isBuildPlaneLinked(settings.buildPlane),
+    mcp: {
+      endpoint: "/api/build/mcp",
+      toolCount: 5,
+      requiresEnabled: true,
+    },
   };
 }

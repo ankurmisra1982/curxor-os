@@ -24,6 +24,8 @@ interface ContentApprovalPanelProps {
   auditEntries: ContentAuditEntryRow[];
   requirePublishApproval: boolean;
   requireReplyApproval: boolean;
+  highlightPostId?: string | null;
+  highlightReplyId?: string | null;
   approvalTelegram?: {
     configured: boolean;
     notifyEnabled: boolean;
@@ -56,6 +58,8 @@ export function ContentApprovalPanel({
   auditEntries,
   requirePublishApproval,
   requireReplyApproval,
+  highlightPostId,
+  highlightReplyId,
   approvalTelegram,
   publishTrust,
   onRefresh,
@@ -136,7 +140,15 @@ export function ContentApprovalPanel({
               <p className="mb-2 uppercase tracking-widest text-muted">Posts ({posts.length})</p>
               <ul className="space-y-2">
                 {posts.map((p) => (
-                  <li key={p.id} className="border border-line/60 p-2">
+                  <li
+                    key={p.id}
+                    data-post-id={p.id}
+                    className={`border p-2 ${
+                      highlightPostId === p.id
+                        ? "border-amber-400 bg-amber-500/10 ring-1 ring-amber-400/50"
+                        : "border-line/60"
+                    }`}
+                  >
                     <div className="flex justify-between gap-2">
                       <span className="text-stark">{p.platform}</span>
                       <span className="text-cursor-glow">PENDING</span>
@@ -180,7 +192,15 @@ export function ContentApprovalPanel({
               <p className="mb-2 uppercase tracking-widest text-muted">Replies ({replies.length})</p>
               <ul className="space-y-2">
                 {replies.map((r) => (
-                  <li key={r.id} className="border border-line/60 p-2">
+                  <li
+                    key={r.id}
+                    data-reply-id={r.id}
+                    className={`border p-2 ${
+                      highlightReplyId === r.id
+                        ? "border-amber-400 bg-amber-500/10 ring-1 ring-amber-400/50"
+                        : "border-line/60"
+                    }`}
+                  >
                     <div className="flex justify-between gap-2">
                       <span className="text-stark">{r.platform}</span>
                       <span className="text-cursor-glow">PENDING</span>

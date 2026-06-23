@@ -1,5 +1,7 @@
 import "server-only";
 
+import { classifyNetworkUrl, isNetworkPathAllowed } from "../network-path";
+import { readUserSettings } from "../user-settings";
 import { mcpCallTool, mcpInitialize, mcpListTools } from "./mcp-jsonrpc";
 
 export interface McpServerConfig {
@@ -62,6 +64,12 @@ export async function invokeMcpTool(
   args: Record<string, unknown>,
 ): Promise<{ ok: boolean; result?: string; error?: string }> {
   if (!server.enabled) return { ok: false, error: "server disabled" };
+
+  const settings = await readUserSettings();
+  const pathTag = classifyNetworkUrl(server.url);
+  if (!isNetworkPathAllowed(pathTag, settings.buildPlane)) {
+    return { ok: false, error: `Outbound MCP blocked (${pathTag} path — enable Build Plane for builder hosts)` };
+  }
 
   const prefix = `${server.id}.`;
   const bareName = toolName.startsWith(prefix) ? toolName.slice(prefix.length) : toolName;

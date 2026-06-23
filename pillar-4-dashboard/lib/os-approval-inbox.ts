@@ -3,24 +3,10 @@ import "server-only";
 import { listApprovalQueue } from "./content-approval-service";
 import { ensureCapitalQueue } from "./capital-store";
 import { ensureWorkQueue } from "./work-store";
+import { osApprovalHref } from "./os-approval-href";
+import type { OsApprovalInbox, OsApprovalItem } from "./os-approval-inbox-types";
 
-export type OsApprovalKind = "trade" | "send" | "post" | "reply";
-
-export interface OsApprovalItem {
-  id: string;
-  appId: "my-capital" | "my-work" | "my-content-creator";
-  kind: OsApprovalKind;
-  label: string;
-  detail: string;
-  href: string;
-  at: string;
-}
-
-export interface OsApprovalInbox {
-  total: number;
-  counts: { capital: number; work: number; creator: number };
-  items: OsApprovalItem[];
-}
+export type { OsApprovalInbox, OsApprovalItem, OsApprovalKind } from "./os-approval-inbox-types";
 
 export async function buildOsApprovalInbox(limit = 12): Promise<OsApprovalInbox> {
   const [capitalFile, workFile, creatorQueue] = await Promise.all([
@@ -38,7 +24,7 @@ export async function buildOsApprovalInbox(limit = 12): Promise<OsApprovalInbox>
       kind: "trade",
       label: `${t.action.toUpperCase()} ${t.qty} ${t.ticker}`,
       detail: t.approvalNote ?? "Trade awaiting approval",
-      href: "/my-capital",
+      href: osApprovalHref("my-capital", "trade", t.id),
       at: t.createdAt,
     });
   }
@@ -50,7 +36,7 @@ export async function buildOsApprovalInbox(limit = 12): Promise<OsApprovalInbox>
       kind: "send",
       label: s.subject.slice(0, 72) || s.to,
       detail: `${s.to} · outbound send`,
-      href: "/my-work",
+      href: osApprovalHref("my-work", "send", s.id),
       at: s.createdAt,
     });
   }
@@ -62,7 +48,7 @@ export async function buildOsApprovalInbox(limit = 12): Promise<OsApprovalInbox>
       kind: "post",
       label: `${p.platform} · ${p.channel}`,
       detail: p.draftText.slice(0, 120),
-      href: "/my-content",
+      href: osApprovalHref("my-content-creator", "post", p.id),
       at: p.updatedAt ?? p.createdAt,
     });
   }
@@ -74,7 +60,7 @@ export async function buildOsApprovalInbox(limit = 12): Promise<OsApprovalInbox>
       kind: "reply",
       label: `Reply · ${r.platform}`,
       detail: r.replyText.slice(0, 120),
-      href: "/my-content",
+      href: osApprovalHref("my-content-creator", "reply", r.id),
       at: r.updatedAt ?? r.createdAt,
     });
   }

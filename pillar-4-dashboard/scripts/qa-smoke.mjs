@@ -63,8 +63,44 @@ await check("build plane status", async () => {
     data.buildPlane &&
     typeof data.buildPlane.enabled === "boolean" &&
     data.buildPlane.webhookSecret === undefined &&
-    typeof data.bridgeLinked === "boolean"
+    typeof data.bridgeLinked === "boolean" &&
+    data.mcp?.endpoint === "/api/build/mcp" &&
+    data.mcp?.toolCount === 5
   );
+});
+
+await check("build plane mcp catalog", async () => {
+  const data = await getJson("/api/build/mcp");
+  return (
+    data.ok === true &&
+    data.name === "curxor-build-plane" &&
+    Array.isArray(data.tools) &&
+    data.tools.length === 5 &&
+    data.tools.some((t) => t.name === "get_ccp_summary") &&
+    data.tools.some((t) => t.name === "get_cafe_snapshot")
+  );
+});
+
+await check("build plane mcp tools/list", async () => {
+  const { ok, json } = await postJson("/api/build/mcp", {
+    jsonrpc: "2.0",
+    id: 1,
+    method: "tools/list",
+  });
+  return ok && Array.isArray(json.result?.tools) && json.result.tools.length === 5;
+});
+
+await check("build plane mcp get_build_status", async () => {
+  await postJson("/api/settings", { buildPlane: { enabled: true } });
+  const { ok, json } = await postJson("/api/build/mcp", {
+    jsonrpc: "2.0",
+    id: 2,
+    method: "tools/call",
+    params: { name: "get_build_status", arguments: {} },
+  });
+  const text = json.result?.content?.[0]?.text;
+  const parsed = text ? JSON.parse(text) : null;
+  return ok && parsed?.ok === true && parsed?.buildPlane?.enabled === true;
 });
 
 await check("settings claws POST", async () => {

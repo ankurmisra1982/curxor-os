@@ -7,3 +7,6 @@ __pycache__/
 build-out.txt
 qa-out.txt
 typecheck-out.txt
+
+# Cursor IDE local state
+.cursor/

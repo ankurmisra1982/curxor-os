@@ -123,6 +123,16 @@ export async function queryClawContext(options: {
     .slice(0, limit);
 }
 
+/** Bridge read path — all consented scopes for Build Plane MCP (read-only). */
+export async function queryClawContextForBridge(limit = 40): Promise<ClawContextRecord[]> {
+  const { BRIDGE_READ_SCOPES } = await import("./build-plane-bridge-policy");
+  const file = await readFile_();
+  return file.records
+    .filter((r) => !isExpired(r))
+    .filter((r) => BRIDGE_READ_SCOPES.includes(r.envelope.scope))
+    .slice(0, limit);
+}
+
 export async function getContextSummaryForApp(appId: OotbAppId, profileId?: string | null): Promise<string> {
   const records = await queryClawContext({ appId, profileId, limit: 24 });
   if (records.length === 0) return "No shared context yet on the Claw Context mesh.";

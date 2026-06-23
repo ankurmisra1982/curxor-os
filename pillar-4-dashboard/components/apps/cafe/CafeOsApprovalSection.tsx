@@ -21,7 +21,7 @@ export function CafeOsApprovalSection() {
 
   useEffect(() => {
     void load();
-    const timer = setInterval(() => void load(), 30_000);
+    const timer = setInterval(() => void load(), 5_000);
     return () => clearInterval(timer);
   }, [load]);
 

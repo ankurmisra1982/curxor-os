@@ -4,6 +4,7 @@ import type { CapitalTrade } from "@/lib/capital-queue-types";
 
 interface CapitalPendingTradesBannerProps {
   trades: CapitalTrade[];
+  highlightTradeId?: string | null;
   onApprove: (tradeId: string) => void;
   onApproveAll: () => void;
   onViewTradeLog?: () => void;
@@ -19,6 +20,7 @@ function sourceLabel(source: CapitalTrade["source"]): string {
 
 export function CapitalPendingTradesBanner({
   trades,
+  highlightTradeId,
   onApprove,
   onApproveAll,
   onViewTradeLog,
@@ -27,7 +29,7 @@ export function CapitalPendingTradesBanner({
   if (pending.length === 0) return null;
 
   return (
-    <div className="border border-amber-500/50 bg-amber-500/10 px-4 py-3 font-mono text-xs">
+    <div id="capital-pending-approvals" className="border border-amber-500/50 bg-amber-500/10 px-4 py-3 font-mono text-xs">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-amber-300">
           {pending.length} trade{pending.length === 1 ? "" : "s"} awaiting approval — auto-approval off or over cap
@@ -55,7 +57,15 @@ export function CapitalPendingTradesBanner({
       </div>
       <div className="mt-2 space-y-1">
         {pending.slice(0, 4).map((t) => (
-          <div key={t.id} className="flex flex-wrap items-center justify-between gap-2 border-t border-amber-500/20 pt-1">
+          <div
+            key={t.id}
+            data-trade-id={t.id}
+            className={`flex flex-wrap items-center justify-between gap-2 border-t pt-1 ${
+              highlightTradeId === t.id
+                ? "border-amber-400 bg-amber-500/15 ring-1 ring-amber-400/50"
+                : "border-amber-500/20"
+            }`}
+          >
             <div>
               <span className="text-stark">
                 {t.action.toUpperCase()} {t.qty} {t.ticker}

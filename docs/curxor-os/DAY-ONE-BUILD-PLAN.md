@@ -202,21 +202,19 @@ flowchart LR
 - [ ] Demo re-capture on appliance IP
 - [ ] Golden image + OTA freeze
 
-### Phase 4 — Build Plane foundation (BP0) · **v0.8.0-prep**
+### Phase 4 — Build Plane foundation (BP0) · **v0.8.0-prep** · **Shipped**
 
-Universal OS plumbing for optional Cursor Bridge — **not GTM**. Cafe C7 Architect can read stub state before full link flow exists.
+### Phase 4b — Build Plane inbound MCP (BP1) · **v0.8.1** · **Shipped**
 
 | Item | Scope |
 |------|--------|
-| **`buildPlane` settings block** | Separate from `intelligence` / frontier providers — see [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md) |
-| **`GET /api/build/status`** | LAN-auth; sanitized link state for Settings + Cafe |
-| **Settings “Builder overlay” panel** | Enable toggle · link status · honest “optional power-user” copy |
-| **Decouple Cursor** | Bridge state ≠ `connectedProviders.cursor` (frontier inference stays separate) |
-| **Optional** | `bridgeLinked` on `/api/cafe/status` for C7 Architect |
+| **`GET/POST /api/build/mcp`** | JSON-RPC MCP server on LAN (tools/list, tools/call, initialize) |
+| **Read tools** | `get_build_status`, `get_ccp_summary`, `get_cafe_snapshot`, `get_forge_fleet`, `get_desk_status` |
+| **Bridge read policy** | `build-plane-bridge-policy.ts` · CCP scopes · `allowWriteTools` gate for future writes |
+| **Network path tags** | `network-path.ts` · operate / build / egress · outbound MCP client respects `buildPlane.enabled` |
+| **Settings panel** | MCP connect URL + BP1 copy in `BuildPlanePanel` |
 
-**Run in Forge / build Agent chat** — can parallel Cafe C4–C6 if files don’t overlap. Target: schema + API green in `qa:local` before v0.8.1 inbound MCP.
-
-**Deferred (post-BP0):** inbound MCP server (v0.8.1) · OS event bus (v0.8.2) · remote worker (v0.9).
+**Deferred (post-BP1):** OS event bus webhooks (v0.8.2) · remote worker wizard (v0.9) · Master AI delegation queue.
 
 ---
 

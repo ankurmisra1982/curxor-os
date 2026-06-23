@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
@@ -48,6 +49,7 @@ import { isGrowthLevel, meetsGrowthLevel } from "@/lib/os-growth-level";
 import { workTerm } from "@/lib/work-level-copy";
 import { workFeatureVisible } from "@/lib/work-level-gates";
 import { resolveWorkGrowthLevel } from "@/lib/work-growth";
+import { parseOsApprovalFocus, scrollToOsApprovalFocus } from "@/lib/os-approval-href";
 import { listTemplatePacksForGrowth } from "@/lib/work-template-packs-data";
 import type { WorkExecutiveBrief } from "@/lib/work-executive-brief";
 import type { LeadActivityEvent } from "@/lib/work-lead-activity";
@@ -134,6 +136,9 @@ async function postWork(body: Record<string, unknown>) {
 
 export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceContext }: AgentAppContext) {
   const { connected: motorUp } = useMotorStream();
+  const searchParams = useSearchParams();
+  const approvalFocus = useMemo(() => parseOsApprovalFocus(searchParams), [searchParams]);
+  const highlightSendId = approvalFocus?.kind === "send" ? approvalFocus.sendId : null;
   const { level } = useExperienceLevel();
 
   const [workspaceTab, setWorkspaceTab] = useState<WorkWorkspaceTab>(() =>
@@ -328,6 +333,11 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
   useEffect(() => {
     setWorkspaceTab(defaultWorkTab(growthLevel));
   }, [growthLevel]);
+
+  useEffect(() => {
+    if (approvalFocus?.kind !== "send" || !status) return;
+    scrollToOsApprovalFocus(approvalFocus);
+  }, [approvalFocus, status]);
 
   useEffect(() => {
     void loadBootstrap();
@@ -1008,7 +1018,15 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
       ) : null}
 
       {show("approval") ? (
-        <ExperienceAppSection appId="my-work" skipExperienceGate sectionId="approval" minLevel="standard" title="Send approval" subtitle="Human gate before outbound">
+        <ExperienceAppSection
+          appId="my-work"
+          skipExperienceGate
+          sectionId="approval"
+          minLevel="standard"
+          title="Send approval"
+          subtitle="Human gate before outbound"
+        >
+          <div id="work-send-approval">
           <WorkApprovalPolicyPanel
             requireSendApproval={status?.requireSendApproval ?? false}
             envForced={status?.requireSendApprovalEnvForced}
@@ -1022,6 +1040,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
           />
           <WorkApprovalPanel
             sends={status?.sends ?? []}
+            highlightSendId={highlightSendId}
             canApprove={canApprove}
             onApprove={async (sendId) => {
               await postWork({ action: "approve_send", sendId });
@@ -1033,6 +1052,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
             }}
             onRefresh={() => void loadBootstrap()}
           />
+          </div>
         </ExperienceAppSection>
       ) : null}
 

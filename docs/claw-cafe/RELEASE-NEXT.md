@@ -21,12 +21,12 @@
 - [x] **C7** — Easter eggs · yard dock · Go Live + demo tour · Architect C7.1 polish
 - [x] **C8** — `cafeGrowthIntent` FRE · ascension coach tips · `CafeLevelUpNudge` · Gamification toggle rename
 - [x] **C9** — `cafe-checklist.mjs` in qa:local · BEST-IN-CLASS scorecard · EXIT-DEMO · pixel captures · **v0.7.0** tag
+- [x] **C10** — Live SSE auto-sync on bootstrap · OS approval overlay on pixel characters · orange “Needs OK” bubbles + inspect flyout · deep-link hrefs · walk-state approval bubbles · split SSE ingest (2s approval / 10s ingest)
 
 ## Deferred (v0.7.1+)
 
 - Master AI patron chat panel (full unified ask — v0.8)
-- Live auto-sync polish · approval bubbles in pixel room (C10)
-- Vital/Kin/Shop/Signal XP emitters completeness (C11)
+- Vital/Kin/Shop/Signal XP emitters completeness polish (C11)
 - G4+ patron brief chamber · room mastery stars (C12–C13)
 - Second room / eno2 break room
 - Full Engage/DM inbox (CC2 heavy)
