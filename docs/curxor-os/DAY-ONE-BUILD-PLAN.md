@@ -260,6 +260,8 @@ Out of scope: [Tier A excellence, hardware install, storefront]
 ## References
 
 - Growth framework: [GROWTH-LEVEL-FRAMEWORK.md](./GROWTH-LEVEL-FRAMEWORK.md)
+- Founder overnight audit: [FOUNDER-OVERNIGHT-AUDIT.md](./FOUNDER-OVERNIGHT-AUDIT.md)
+- Hardware readiness: [HW-READINESS-CHECKLIST.md](./HW-READINESS-CHECKLIST.md)
 - Build Plane vision: [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md)
 - Holding pattern (superseded for build): [../HOLDING-PATTERN.md](../HOLDING-PATTERN.md)
 - Work XP stub: `pillar-4-dashboard/components/apps/work/WorkCafeXpPanel.tsx`

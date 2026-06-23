@@ -1,6 +1,6 @@
 # Holding Pattern — MS-S1 MAX Pending
 
-Hardware has not arrived. **On-device validation is blocked**, but software build is **active on the dev machine** — see [DAY-ONE-BUILD-PLAN.md](curxor-os/DAY-ONE-BUILD-PLAN.md).
+Hardware expected **~Thu Jun 25, 2026**. **On-device validation pending** — software build active on dev machine. See [HW-READINESS-CHECKLIST.md](curxor-os/HW-READINESS-CHECKLIST.md) and [FOUNDER-OVERNIGHT-AUDIT.md](curxor-os/FOUNDER-OVERNIGHT-AUDIT.md).
 
 ## Status
 

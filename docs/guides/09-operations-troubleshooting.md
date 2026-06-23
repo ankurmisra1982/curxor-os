@@ -7,6 +7,10 @@ Day-2 operations for CurXor OS appliances in the field.
 Run after install, OTA, or network changes:
 
 ```bash
+# Unbox day — full session (inventory + GPU + mesh + inference)
+sudo /opt/curxor/scripts/verify-unbox-day.sh
+sudo /opt/curxor/scripts/verify-unbox-day.sh --post-models   # after deploy.sh --pull-models
+
 # Master target
 systemctl status curxor-os.target
 systemctl list-dependencies curxor-os.target
