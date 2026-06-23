@@ -15,13 +15,17 @@ import { isGrowthLevel } from "./os-growth-level";
 import {
   DEFAULT_USER_SETTINGS,
   getUserSettingsPath,
+  isBuildPlaneLinkStatus,
+  isBuildPlaneWorkerStatus,
   type ColorScheme,
   type IntelligenceSource,
   type ThemeMode,
   type UiMode,
   type UserSettings,
   type UserSettingsPatch,
+  DEFAULT_BUILD_PLANE,
 } from "./user-settings-types";
+import { sanitizeBuildPlane } from "./build-plane";
 
 function isColorScheme(v: unknown): v is ColorScheme {
   return v === "curxor" || v === "ocean" || v === "amber" || v === "mono";
@@ -33,6 +37,36 @@ function isIntelligenceSource(v: unknown): v is IntelligenceSource {
 
 function isThemeMode(v: unknown): v is ThemeMode {
   return v === "dark" || v === "light" || v === "system";
+}
+
+function mergeBuildPlane(
+  partial: UserSettingsPatch["buildPlane"],
+  base: UserSettings["buildPlane"],
+): UserSettings["buildPlane"] {
+  const src = partial ?? {};
+  const linkStatus = isBuildPlaneLinkStatus(src.linkStatus) ? src.linkStatus : base.linkStatus;
+  const linkedAt =
+    src.linkedAt === null
+      ? null
+      : typeof src.linkedAt === "string"
+        ? src.linkedAt
+        : linkStatus === "linked" && !base.linkedAt
+          ? new Date().toISOString()
+          : base.linkedAt;
+  return {
+    enabled: typeof src.enabled === "boolean" ? src.enabled : base.enabled,
+    linkStatus,
+    linkedAt: linkStatus === "disconnected" ? null : linkedAt,
+    workerStatus: isBuildPlaneWorkerStatus(src.workerStatus) ? src.workerStatus : base.workerStatus,
+    allowDelegation: typeof src.allowDelegation === "boolean" ? src.allowDelegation : base.allowDelegation,
+    allowWriteTools: typeof src.allowWriteTools === "boolean" ? src.allowWriteTools : base.allowWriteTools,
+    webhookSecret:
+      src.webhookSecret === null
+        ? null
+        : typeof src.webhookSecret === "string"
+          ? src.webhookSecret
+          : base.webhookSecret,
+  };
 }
 
 function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSettings {
@@ -121,6 +155,14 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
             : isGrowthLevel(base.appearance.kinGrowthLevel)
               ? base.appearance.kinGrowthLevel
               : null,
+      workGamificationOptOut:
+        typeof partial.appearance?.workGamificationOptOut === "boolean"
+          ? partial.appearance.workGamificationOptOut
+          : base.appearance.workGamificationOptOut === true,
+      cafeTitleStyle:
+        partial.appearance?.cafeTitleStyle === "neutral" || partial.appearance?.cafeTitleStyle === "mythic"
+          ? partial.appearance.cafeTitleStyle
+          : base.appearance.cafeTitleStyle ?? "mythic",
       colorScheme: isColorScheme(partial.appearance?.colorScheme)
         ? partial.appearance.colorScheme
         : base.appearance.colorScheme,
@@ -194,6 +236,7 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
         ? partial.egress.allowHosts.map(String)
         : base.egress.allowHosts,
     },
+    buildPlane: mergeBuildPlane(partial.buildPlane, base.buildPlane ?? DEFAULT_BUILD_PLANE),
     updatedAt: new Date().toISOString(),
   };
 }
@@ -277,8 +320,19 @@ export async function sanitizeSettingsForClient(settings: UserSettings): Promise
     };
   }
 
+  const sanitizedBp = sanitizeBuildPlane(settings.buildPlane ?? DEFAULT_BUILD_PLANE);
+
   return {
     ...settings,
+    buildPlane: {
+      enabled: sanitizedBp.enabled,
+      linkStatus: sanitizedBp.linkStatus,
+      linkedAt: sanitizedBp.linkedAt,
+      workerStatus: sanitizedBp.workerStatus,
+      allowDelegation: sanitizedBp.allowDelegation,
+      allowWriteTools: sanitizedBp.allowWriteTools,
+      webhookSecret: null,
+    },
     intelligence: {
       ...settings.intelligence,
       connectedProviders,

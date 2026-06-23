@@ -2,9 +2,11 @@
 
 import type { AscensionState } from "@/lib/claw-cafe-ascension";
 import { ASCENSION_TIER_INDEX, MYTHIC_TITLES, NEUTRAL_TITLES } from "@/lib/claw-cafe-ascension";
+import { formatCafeProfileLine } from "@/lib/cafe-epithet";
 
 interface CafeAscensionPanelProps {
   ascension: AscensionState;
+  epithet?: string;
   optOut?: boolean;
   loading?: boolean;
   onRefresh?: () => void;
@@ -13,6 +15,7 @@ interface CafeAscensionPanelProps {
 
 export function CafeAscensionPanel({
   ascension,
+  epithet,
   optOut,
   loading,
   onRefresh,
@@ -21,7 +24,7 @@ export function CafeAscensionPanel({
   if (optOut) {
     return (
       <p className="font-mono text-[10px] text-muted">
-        Gamification is off — enable in Settings → Appearance to track ascension.
+        Gamification is off — enable in Settings → Appearance to track ascension and room activity.
       </p>
     );
   }
@@ -33,11 +36,13 @@ export function CafeAscensionPanel({
         : MYTHIC_TITLES[ascension.nextTier]
       : null;
 
+  const profileLine = formatCafeProfileLine(ascension.title, epithet ?? "");
+
   return (
     <div className="space-y-3 font-mono text-[10px]">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="uppercase tracking-widest text-cursor-glow">{ascension.title}</p>
+          <p className="uppercase tracking-widest text-cursor-glow">{profileLine}</p>
           <p className="text-muted">
             G{ASCENSION_TIER_INDEX[ascension.tier] + 1} · {ascension.ascensionXp} ascension XP
           </p>

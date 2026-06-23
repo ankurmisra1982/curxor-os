@@ -57,9 +57,10 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     supportsSubscriptionLogin: true,
   },
   {
+    // Frontier inference only — Build Plane link state lives in userSettings.buildPlane (see BP0).
     id: "cursor",
     name: "Cursor",
-    tagline: "Use your existing Cursor subscription where supported",
+    tagline: "Frontier inference via API key (optional) — not the Build Plane bridge",
     models: [{ id: "cursor-default", label: "Cursor agent model" }],
     connectUrl: "https://cursor.com/settings",
     purchaseUrl: "https://cursor.com/pricing",

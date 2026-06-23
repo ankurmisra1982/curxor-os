@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
 import { AgentRuntimeSettingsPanels } from "@/components/settings/AgentRuntimeSettingsPanels";
+import { BuildPlanePanel } from "@/components/settings/BuildPlanePanel";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import {
@@ -89,6 +90,8 @@ export function SettingsWorkspace() {
   const [forgeGrowthLevel, setForgeGrowthLevel] = useState<GrowthLevel | "">("");
   const [kinGrowthLevel, setKinGrowthLevel] = useState<GrowthLevel | "">("");
   const [shopGrowthLevel, setShopGrowthLevel] = useState<GrowthLevel | "">("");
+  const [workGamificationOptOut, setWorkGamificationOptOut] = useState(false);
+  const [cafeTitleStyle, setCafeTitleStyle] = useState<"mythic" | "neutral">("mythic");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -117,6 +120,8 @@ export function SettingsWorkspace() {
       setVitalGrowthLevel(data.settings.appearance.vitalGrowthLevel ?? "");
       setForgeGrowthLevel(data.settings.appearance.forgeGrowthLevel ?? "");
       setKinGrowthLevel(data.settings.appearance.kinGrowthLevel ?? "");
+      setWorkGamificationOptOut(data.settings.appearance.workGamificationOptOut === true);
+      setCafeTitleStyle(data.settings.appearance.cafeTitleStyle === "neutral" ? "neutral" : "mythic");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Load failed");
     } finally {
@@ -239,6 +244,8 @@ export function SettingsWorkspace() {
           forgeGrowthLevel: forgeGrowthLevel || null,
           kinGrowthLevel: kinGrowthLevel || null,
           shopGrowthLevel: shopGrowthLevel || null,
+          workGamificationOptOut,
+          cafeTitleStyle,
         },
       });
       setSettings(data.settings);
@@ -248,7 +255,7 @@ export function SettingsWorkspace() {
     } finally {
       setSaving(false);
     }
-  }, [level, colorScheme, themeMode, workGrowthLevel, creatorGrowthLevel, capitalGrowthLevel, vitalGrowthLevel, forgeGrowthLevel, kinGrowthLevel, shopGrowthLevel]);
+  }, [level, colorScheme, themeMode, workGrowthLevel, creatorGrowthLevel, capitalGrowthLevel, vitalGrowthLevel, forgeGrowthLevel, kinGrowthLevel, shopGrowthLevel, workGamificationOptOut, cafeTitleStyle]);
 
   const connectProvider = useCallback(async () => {
     if (!frontierProviderId) {
@@ -315,7 +322,7 @@ export function SettingsWorkspace() {
     { id: "intelligence", label: "Intelligence", hint: "Local, frontier, or both" },
     { id: "appearance", label: "Appearance", hint: "Theme and display mode" },
     { id: "agent", label: "Agent runtime", hint: "Channels, CCP, heartbeat" },
-    { id: "general", label: "General", hint: "Appliance preferences" },
+    { id: "general", label: "General", hint: "Builder overlay + appliance prefs" },
   ];
 
   if (loading && !settings) {
@@ -678,6 +685,55 @@ export function SettingsWorkspace() {
               </section>
 
               <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Gamification</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Work streaks, Cafe ascension, and cross-Claw XP. Turn off to pause tracking and live room updates.
+                </p>
+                <label className="mt-4 flex cursor-pointer items-start gap-3 font-sans text-xs text-stark">
+                  <input
+                    type="checkbox"
+                    checked={!workGamificationOptOut}
+                    onChange={(e) => setWorkGamificationOptOut(!e.target.checked)}
+                    className="mt-0.5"
+                  />
+                  <span>
+                    Track XP and ascension across Claws
+                    <span className="mt-0.5 block text-[10px] text-muted">
+                      When off, Work XP and Claw Cafe ascension stay frozen until re-enabled.
+                    </span>
+                  </span>
+                </label>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Claw Cafe title style</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Mythic titles (Sprout, Voyager…) or neutral labels on your ascension profile.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {(
+                    [
+                      ["mythic", "Mythic"],
+                      ["neutral", "Neutral"],
+                    ] as const
+                  ).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setCafeTitleStyle(value)}
+                      className={`border px-3 py-2 font-sans text-xs ${
+                        cafeTitleStyle === value
+                          ? "border-cursor-glow text-cursor-glow"
+                          : "border-line text-muted hover:text-stark"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <section>
                 <h2 className="font-sans text-lg font-semibold text-stark">Work Claw growth level</h2>
                 <p className="mt-1 font-sans text-xs text-muted">
                   Optional override for Outreach desk persona (Explorer → Executive). Leave default to use FRE persona.
@@ -885,7 +941,16 @@ export function SettingsWorkspace() {
           ) : null}
 
           {tab === "general" ? (
-            <div className="space-y-4 p-6">
+            <div className="space-y-6 p-6">
+              <BuildPlanePanel
+                enabled={settings?.buildPlane?.enabled ?? false}
+                linkStatus={settings?.buildPlane?.linkStatus ?? "disconnected"}
+                allowDelegation={settings?.buildPlane?.allowDelegation ?? false}
+                allowWriteTools={settings?.buildPlane?.allowWriteTools ?? false}
+                onSaved={() => void load()}
+              />
+
+              <div className="space-y-4">
               <h2 className="font-sans text-lg font-semibold text-stark">General</h2>
               <p className="font-sans text-sm text-muted">
                 CurXor OS keeps preferences on this appliance. Nothing here locks you into a vendor —
@@ -920,6 +985,7 @@ export function SettingsWorkspace() {
                 >
                   Re-run setup wizard
                 </Link>
+              </div>
               </div>
             </div>
           ) : null}

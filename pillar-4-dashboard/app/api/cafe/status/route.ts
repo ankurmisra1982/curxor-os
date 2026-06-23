@@ -8,6 +8,8 @@ import {
   type CafeEventKind,
   type CafeEventXp,
 } from "@/lib/claw-cafe-events";
+import { buildCafeGoLiveReport } from "@/lib/cafe-go-live";
+import { runCafeDemoTour } from "@/lib/cafe-demo-tour";
 
 export async function GET(): Promise<Response> {
   const bootstrap = await buildCafeAscensionBootstrap();
@@ -45,6 +47,19 @@ export async function POST(request: Request): Promise<Response> {
     });
     const bootstrap = await buildCafeAscensionBootstrap();
     return Response.json({ ...bootstrap, event });
+  }
+
+  if (action === "go_live") {
+    const goLive = await buildCafeGoLiveReport();
+    const bootstrap = await buildCafeAscensionBootstrap();
+    return Response.json({ ...bootstrap, goLive, demoReady: goLive.demoReady });
+  }
+
+  if (action === "run_demo_tour") {
+    const tour = await runCafeDemoTour();
+    const bootstrap = await buildCafeAscensionBootstrap();
+    const goLive = await buildCafeGoLiveReport();
+    return Response.json({ ...bootstrap, ok: tour.ok, tour, goLive, demoReady: goLive.demoReady });
   }
 
   return Response.json({ ok: false, error: "unknown_action" }, { status: 400 });

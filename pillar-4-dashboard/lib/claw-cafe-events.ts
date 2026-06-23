@@ -9,6 +9,8 @@ import {
   type AscensionMilestones,
   type CafeTitleStyle,
 } from "./claw-cafe-ascension";
+import { buildCafeEpithet } from "./cafe-epithet";
+import { buildCafeGoLiveReport } from "./cafe-go-live";
 import type { CafeCharacter, CafeCharacterState } from "./claw-cafe-spatial";
 import { APP_STATION, stateForEventKind, stationForApp } from "./claw-cafe-spatial";
 import { isPreviewApp } from "./claw-preview-apps";
@@ -244,6 +246,19 @@ export async function listCafeEvents(limit = 25): Promise<CafeEvent[]> {
   return (await readState()).events.slice(0, limit);
 }
 
+export async function readCafeStateMetrics(): Promise<{
+  eventCount: number;
+  ascensionXp: number;
+  characterCount: number;
+}> {
+  const state = await readState();
+  return {
+    eventCount: state.events.length,
+    ascensionXp: state.ascensionXp,
+    characterCount: state.characters.length,
+  };
+}
+
 export async function buildCafeAscensionBootstrap() {
   const settings = await readUserSettings();
   const state = await readState();
@@ -262,13 +277,29 @@ export async function buildCafeAscensionBootstrap() {
     titleStyle,
   });
 
+  const epithet = buildCafeEpithet({
+    experienceLevel: settings.appearance.experienceLevel ?? "beginner",
+    workGrowthLevel: settings.appearance.workGrowthLevel,
+    creatorGrowthLevel: settings.appearance.creatorGrowthLevel,
+    capitalGrowthLevel: settings.appearance.capitalGrowthLevel,
+  });
+
+  const goLive = await buildCafeGoLiveReport();
+  const bridgeLinked = settings.buildPlane?.linkStatus === "linked";
+  const builderBridgeLinked = bridgeLinked;
+
   return {
     ok: true as const,
     optOut,
     ascension,
+    epithet,
+    bridgeLinked,
+    builderBridgeLinked,
+    goLive,
+    demoReady: goLive.demoReady,
     events: optOut ? [] : state.events.slice(0, 15),
-    characters,
-    lastRoomPulseAt: state.lastRoomPulseAt,
+    characters: optOut ? [] : characters,
+    lastRoomPulseAt: optOut ? null : state.lastRoomPulseAt,
     titleStyle,
   };
 }

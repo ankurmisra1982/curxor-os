@@ -45,7 +45,9 @@ export interface StationSprite {
 
 export const STATION_SPRITES: StationSprite[] = (
   Object.entries(CAFE_STATION_GRID) as Array<[CafeStationId, (typeof CAFE_STATION_GRID)[CafeStationId]]>
-).map(([id, station]) => ({
+)
+  .filter(([id]) => id !== "blueprint_nook")
+  .map(([id, station]) => ({
   id,
   label: station.label,
   short: stationShortCode(id),
@@ -61,6 +63,7 @@ const STATION_SHORT: Record<CafeStationId, string> = {
   yard_dock: "SW",
   couch: "LOU",
   coffee: "CAF",
+  blueprint_nook: "ARC",
 };
 
 function stationShortCode(id: CafeStationId): string {
@@ -76,6 +79,7 @@ function stationColor(id: CafeStationId): { bg: string; accent: string } {
     yard_dock: { bg: "#2a2a1a", accent: "#e8d44d" },
     couch: { bg: "#252525", accent: "#888888" },
     coffee: { bg: "#2a1f1a", accent: "#d4a574" },
+    blueprint_nook: { bg: "#1a1a2a", accent: "#7a8cff" },
   };
   return map[id];
 }

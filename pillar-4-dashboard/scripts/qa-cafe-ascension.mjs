@@ -91,6 +91,19 @@ if (bootstrap.ok && bootstrap.json.ascension?.tier) {
   fail("GET /api/cafe/status", JSON.stringify(bootstrap.json));
 }
 
+if (bootstrap.ok && typeof bootstrap.json.epithet === "string" && bootstrap.json.epithet.includes(" of ")) {
+  pass("cafe epithet", bootstrap.json.epithet);
+} else {
+  fail("cafe epithet", "missing cross-Claw epithet");
+}
+
+const defaultTab = (g) => (["L2", "L3", "L4", "L5"].includes(g) ? "ascension" : "play");
+if (defaultTab("L1") === "play" && defaultTab("L2") === "ascension") {
+  pass("default tab for growth", "L1→play · L2+→ascension");
+} else {
+  fail("default tab for growth", "unexpected mapping");
+}
+
 if (bootstrap.ok && Array.isArray(bootstrap.json.characters)) {
   pass("spatial characters", `${bootstrap.json.characters.length} patrons`);
 } else {
@@ -172,6 +185,26 @@ if (capitalIngest.ok) {
 
 const syncSources = ["work", "swarm", "forge", "creator", "capital"];
 pass("sync source catalog", syncSources.join("+"));
+
+const goLive = await post("/api/cafe/status", { action: "go_live" });
+if (goLive.ok && goLive.json.goLive && typeof goLive.json.goLive.demoReady === "boolean") {
+  pass("go_live report", `demoReady=${goLive.json.goLive.demoReady}`);
+} else {
+  fail("go_live report", JSON.stringify(goLive.json));
+}
+
+const tour = await post("/api/cafe/status", { action: "run_demo_tour" });
+if (tour.ok && Array.isArray(tour.json.tour?.steps) && tour.json.tour.steps.length >= 3) {
+  pass("run_demo_tour", `${tour.json.tour.steps.length} steps`);
+} else {
+  fail("run_demo_tour", JSON.stringify(tour.json));
+}
+
+if (typeof bootstrap.json.builderBridgeLinked === "boolean") {
+  pass("builder bridge flag", String(bootstrap.json.builderBridgeLinked));
+} else {
+  fail("builder bridge flag", "missing on bootstrap");
+}
 
 const failed = checks.filter((c) => !c.ok);
 console.log(`\n==> ${checks.length - failed.length}/${checks.length} passed`);

@@ -220,6 +220,8 @@
     "swarmGrowthLevel": null,
     "shopGrowthLevel": null,
     "kinGrowthLevel": null,
+    "workGamificationOptOut": false,
+    "cafeTitleStyle": "mythic",
     "colorScheme": "curxor",
     "themeMode": "dark"
   },
@@ -245,5 +247,14 @@
   "egress": {
     "allowHosts": []
   },
-  "updatedAt": "2026-06-23T03:25:24.098Z"
+  "buildPlane": {
+    "enabled": false,
+    "linkStatus": "disconnected",
+    "linkedAt": null,
+    "workerStatus": "unknown",
+    "allowDelegation": false,
+    "allowWriteTools": false,
+    "webhookSecret": null
+  },
+  "updatedAt": "2026-06-23T05:13:50.393Z"
 }

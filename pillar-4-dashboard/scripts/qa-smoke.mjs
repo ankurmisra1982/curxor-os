@@ -35,7 +35,23 @@ await check("setup status", async () => {
 
 await check("settings GET", async () => {
   const data = await getJson("/api/settings");
-  return data.settings?.version === 1 && Array.isArray(data.providers);
+  return (
+    data.settings?.version === 1 &&
+    Array.isArray(data.providers) &&
+    data.settings?.buildPlane &&
+    typeof data.settings.buildPlane.linkStatus === "string"
+  );
+});
+
+await check("build plane status", async () => {
+  const data = await getJson("/api/build/status");
+  return (
+    data.ok === true &&
+    data.buildPlane &&
+    typeof data.buildPlane.enabled === "boolean" &&
+    data.buildPlane.webhookSecret === undefined &&
+    typeof data.bridgeLinked === "boolean"
+  );
 });
 
 await check("settings claws POST", async () => {
@@ -877,6 +893,11 @@ await check("forge workspace tab gates", async () => {
   );
 });
 
+await check("cafe default tab for growth", async () => {
+  const defaultTab = (g) => (["L2", "L3", "L4", "L5"].includes(g) ? "ascension" : "play");
+  return defaultTab("L1") === "play" && defaultTab("L2") === "ascension" && defaultTab("L5") === "ascension";
+});
+
 await check("cafe workspace tab gates", async () => {
   const order = { L1: 0, L2: 1, L3: 2, L4: 3, L5: 4 };
   const meets = (user, req) => order[user] >= order[req];
@@ -901,7 +922,10 @@ await check("cafe ascension status route", async () => {
     data.ok === true &&
     data.ascension &&
     typeof data.ascension.tier === "string" &&
-    Array.isArray(data.characters)
+    typeof data.epithet === "string" &&
+    data.epithet.length > 0 &&
+    Array.isArray(data.characters) &&
+    typeof data.bridgeLinked === "boolean"
   );
 });
 
@@ -912,6 +936,16 @@ await check("cafe pixel engine proximity", async () => {
   const mail = { col: 0, row: 0 };
   const ticker = { col: 4, row: 0 };
   return adjacent(patron, mail) && !adjacent(patron, ticker);
+});
+
+await check("cafe go_live report", async () => {
+  const { ok, json } = await postJson("/api/cafe/status", { action: "go_live" });
+  return ok && json.goLive && typeof json.goLive.demoReady === "boolean" && Array.isArray(json.goLive.steps);
+});
+
+await check("cafe run_demo_tour", async () => {
+  const { ok, json } = await postJson("/api/cafe/status", { action: "run_demo_tour" });
+  return ok && json.tour && Array.isArray(json.tour.steps) && json.tour.steps.length >= 3;
 });
 
 await check("swarm feature gates", async () => {

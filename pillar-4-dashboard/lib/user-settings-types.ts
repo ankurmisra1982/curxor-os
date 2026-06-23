@@ -8,6 +8,34 @@ export type ColorScheme = "curxor" | "ocean" | "amber" | "mono";
 export type ThemeMode = "dark" | "light" | "system";
 export type IntelligenceSource = "local" | "frontier" | "auto";
 
+export type BuildPlaneLinkStatus = "disconnected" | "linked" | "error";
+export type BuildPlaneWorkerStatus = "unknown" | "online" | "offline";
+
+/** Optional Cursor Bridge overlay — separate from frontier inference providers. */
+export interface BuildPlaneSettings {
+  enabled: boolean;
+  linkStatus: BuildPlaneLinkStatus;
+  linkedAt: string | null;
+  workerStatus: BuildPlaneWorkerStatus;
+  /** G5+ Master AI delegation gate (default off). */
+  allowDelegation: boolean;
+  /** Inbound MCP write tools policy (default off). */
+  allowWriteTools: boolean;
+  /** Inbound automation webhook secret — never exposed to client APIs. */
+  webhookSecret: string | null;
+}
+
+/** Client-safe Build Plane view (no secrets). */
+export interface SanitizedBuildPlaneSettings {
+  enabled: boolean;
+  linkStatus: BuildPlaneLinkStatus;
+  linkedAt: string | null;
+  workerStatus: BuildPlaneWorkerStatus;
+  allowDelegation: boolean;
+  allowWriteTools: boolean;
+  hasWebhookSecret: boolean;
+}
+
 export interface ConnectedProvider {
   connectedAt: string;
   label: string;
@@ -75,6 +103,8 @@ export interface UserSettings {
   egress: {
     allowHosts: string[];
   };
+  /** Optional Build Plane / Cursor Bridge overlay (not required for Claws). */
+  buildPlane: BuildPlaneSettings;
   updatedAt: string;
 }
 
@@ -86,6 +116,17 @@ export type UserSettingsPatch = {
   multiModel?: Partial<UserSettings["multiModel"]>;
   mcp?: Partial<UserSettings["mcp"]>;
   egress?: Partial<UserSettings["egress"]>;
+  buildPlane?: Partial<BuildPlaneSettings>;
+};
+
+export const DEFAULT_BUILD_PLANE: BuildPlaneSettings = {
+  enabled: false,
+  linkStatus: "disconnected",
+  linkedAt: null,
+  workerStatus: "unknown",
+  allowDelegation: false,
+  allowWriteTools: false,
+  webhookSecret: null,
 };
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
@@ -120,6 +161,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   egress: {
     allowHosts: [],
   },
+  buildPlane: { ...DEFAULT_BUILD_PLANE },
   updatedAt: new Date(0).toISOString(),
 };
 
@@ -129,4 +171,12 @@ export function getUserSettingsPath(): string {
 
 export function getLlmCredentialsPath(): string {
   return process.env.CURXOR_LLM_CREDENTIALS_PATH ?? "/etc/curxor/llm-credentials.json";
+}
+
+export function isBuildPlaneLinkStatus(v: unknown): v is BuildPlaneLinkStatus {
+  return v === "disconnected" || v === "linked" || v === "error";
+}
+
+export function isBuildPlaneWorkerStatus(v: unknown): v is BuildPlaneWorkerStatus {
+  return v === "unknown" || v === "online" || v === "offline";
 }

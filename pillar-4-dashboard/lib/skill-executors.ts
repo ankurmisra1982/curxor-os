@@ -79,6 +79,11 @@ export async function executeSkillMesh(
     if (forge) return forge;
   }
 
+  if (appId === "claw-cafe") {
+    const cafe = await executeClawCafeSkill(skillId, config);
+    if (cafe) return cafe;
+  }
+
   if (isForgedAppId(appId)) {
     return {
       executed: false,
@@ -511,6 +516,22 @@ async function executeClawForgeSkill(
       skipReason: tour.ok
         ? `Demo tour · ${tour.forgedHref ?? tour.profileId ?? "complete"} · ${tour.steps.join(" · ")}`
         : tour.error ?? "Demo tour failed",
+    };
+  }
+  return null;
+}
+
+async function executeClawCafeSkill(
+  skillId: string,
+  _config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  if (skillId === "run_cafe_demo_tour") {
+    const { runCafeDemoTour } = await import("./cafe-demo-tour");
+    const tour = await runCafeDemoTour();
+    return {
+      executed: tour.ok,
+      kind: "plan",
+      skipReason: tour.ok ? tour.steps.join(" · ") : tour.error ?? "Cafe demo tour failed",
     };
   }
   return null;

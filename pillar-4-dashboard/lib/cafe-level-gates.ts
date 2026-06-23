@@ -26,7 +26,8 @@ export function cafeTabsForGrowth(growth: GrowthLevel): CafeWorkspaceTab[] {
   return tabs;
 }
 
-export function defaultCafeTabForGrowth(_growth: GrowthLevel): CafeWorkspaceTab {
+export function defaultCafeTabForGrowth(growth: GrowthLevel): CafeWorkspaceTab {
+  if (meetsGrowthLevel(growth, "L2")) return "ascension";
   return "play";
 }
 

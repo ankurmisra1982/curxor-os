@@ -18,8 +18,8 @@
 
 - [ ] **C4** — Pixel Canvas room + patron avatar + proximity inspect
 - [ ] **C5** — Creator + Capital + forged desk event bridges; Progress tab merge
-- [ ] **C6** — Level-up ceremony · unified gamification opt-out · default Ascension tab
-- [ ] **C7** — Easter eggs · yard dock mesh Claws · Go Live + demo tour
+- [x] **C6** — Level-up ceremony · unified gamification opt-out · default Ascension tab
+- [x] **C7** — Easter eggs · yard dock mesh Claws · Go Live + demo tour
 - [ ] **C8** — Cafe FRE growth intent · coach · nudge
 - [ ] **C9** — cafe-checklist · BEST-IN-CLASS scorecard · EXIT-DEMO · v0.7.0 tag
 

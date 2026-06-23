@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { CafeAscensionPanel } from "@/components/apps/cafe/CafeAscensionPanel";
+import { CafeGoLivePanel, type CafeGoLiveReportRow } from "@/components/apps/cafe/CafeGoLivePanel";
 import { CafeHostConfigPanel } from "@/components/apps/cafe/CafeHostConfigPanel";
 import { CafeLevelBadge } from "@/components/apps/cafe/CafeLevelBadge";
+import { CafeLevelUpModal } from "@/components/apps/cafe/CafeLevelUpModal";
 import { CafePixelCanvas } from "@/components/apps/cafe/CafePixelCanvas";
 import { CafeUnifiedFeedPanel } from "@/components/apps/cafe/CafeUnifiedFeedPanel";
 import {
@@ -19,7 +21,9 @@ import { ExperienceAppSection } from "@/components/experience/ExperienceAppSecti
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { resolveCafeGrowthLevel } from "@/lib/cafe-growth";
-import type { AscensionState } from "@/lib/claw-cafe-ascension";
+import { formatCafeProfileLine } from "@/lib/cafe-epithet";
+import type { AscensionState, AscensionTierId } from "@/lib/claw-cafe-ascension";
+import { ASCENSION_TIER_INDEX } from "@/lib/claw-cafe-ascension";
 import type { CafeCharacter } from "@/lib/claw-cafe-spatial";
 import { getOotbApp } from "@/lib/ootb-apps";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -62,11 +66,41 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
   const [ascensionLoading, setAscensionLoading] = useState(false);
   const [ascensionOptOut, setAscensionOptOut] = useState(false);
   const [ascension, setAscension] = useState<AscensionState | null>(null);
+  const [cafeEpithet, setCafeEpithet] = useState("");
+  const [levelUpAscension, setLevelUpAscension] = useState<AscensionState | null>(null);
+  const tierRef = useRef<AscensionTierId | null>(null);
   const [cafeEvents, setCafeEvents] = useState<
     Array<{ id: string; kind: string; appId: string; at: string; bubble?: string; xp?: { ascension: number } }>
   >([]);
   const [characters, setCharacters] = useState<CafeCharacter[]>([]);
   const [lastRoomPulseAt, setLastRoomPulseAt] = useState<string | null>(null);
+  const [goLive, setGoLive] = useState<CafeGoLiveReportRow | null>(null);
+  const [builderBridgeLinked, setBuilderBridgeLinked] = useState(false);
+  const [demoTourRunning, setDemoTourRunning] = useState(false);
+  const [yardActUntilMs, setYardActUntilMs] = useState(0);
+
+  const applyCafeBootstrap = useCallback(
+    (json: {
+      ascension?: AscensionState;
+      epithet?: string;
+      events?: typeof cafeEvents;
+      characters?: CafeCharacter[];
+      lastRoomPulseAt?: string | null;
+      optOut?: boolean;
+      goLive?: CafeGoLiveReportRow;
+      builderBridgeLinked?: boolean;
+    }) => {
+      if (json.ascension) setAscension(json.ascension);
+      setCafeEpithet(json.epithet ?? "");
+      setCafeEvents(json.events ?? []);
+      setCharacters(json.characters ?? []);
+      setLastRoomPulseAt(json.lastRoomPulseAt ?? null);
+      setAscensionOptOut(json.optOut === true);
+      if (json.goLive) setGoLive(json.goLive);
+      if (json.builderBridgeLinked !== undefined) setBuilderBridgeLinked(json.builderBridgeLinked);
+    },
+    [],
+  );
 
   const loadCafeAscension = useCallback(async (sync = false) => {
     setAscensionLoading(true);
@@ -76,22 +110,38 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
         method: sync ? "POST" : "GET",
         ...(sync ? { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "sync" }) } : {}),
       });
-      const json = (await res.json()) as {
-        ascension?: AscensionState;
-        events?: typeof cafeEvents;
-        characters?: CafeCharacter[];
-        lastRoomPulseAt?: string | null;
-        optOut?: boolean;
-      };
-      if (json.ascension) setAscension(json.ascension);
-      setCafeEvents(json.events ?? []);
-      setCharacters(json.characters ?? []);
-      setLastRoomPulseAt(json.lastRoomPulseAt ?? null);
-      setAscensionOptOut(json.optOut === true);
+      const json = (await res.json()) as Parameters<typeof applyCafeBootstrap>[0];
+      applyCafeBootstrap(json);
     } finally {
       setAscensionLoading(false);
     }
+  }, [applyCafeBootstrap]);
+
+  const refreshGoLive = useCallback(async () => {
+    const res = await fetch("/api/cafe/status", {
+      cache: "no-store",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "go_live" }),
+    });
+    const json = (await res.json()) as { goLive?: CafeGoLiveReportRow };
+    if (json.goLive) setGoLive(json.goLive);
   }, []);
+
+  const runDemoTour = useCallback(async () => {
+    setDemoTourRunning(true);
+    try {
+      const res = await fetch("/api/cafe/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "run_demo_tour" }),
+      });
+      const json = (await res.json()) as Parameters<typeof applyCafeBootstrap>[0] & { ok?: boolean };
+      applyCafeBootstrap(json);
+    } finally {
+      setDemoTourRunning(false);
+    }
+  }, [applyCafeBootstrap]);
 
   const loadWorkXp = useCallback(async () => {
     setXpLoading(true);
@@ -123,28 +173,32 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
   }, [workspaceTab, loadWorkXp]);
 
   useEffect(() => {
-    if (workspaceTab !== "ascension") return;
+    if (workspaceTab !== "ascension" || ascensionOptOut) return;
     const source = new EventSource("/api/stream/cafe");
     source.onmessage = (msg) => {
       try {
-        const json = JSON.parse(msg.data) as {
-          ascension?: AscensionState;
-          events?: typeof cafeEvents;
-          characters?: CafeCharacter[];
-          lastRoomPulseAt?: string | null;
-          optOut?: boolean;
-        };
-        if (json.ascension) setAscension(json.ascension);
-        if (json.events) setCafeEvents(json.events);
-        if (json.characters) setCharacters(json.characters);
-        if (json.lastRoomPulseAt !== undefined) setLastRoomPulseAt(json.lastRoomPulseAt);
-        if (json.optOut !== undefined) setAscensionOptOut(json.optOut);
+        const json = JSON.parse(msg.data) as Parameters<typeof applyCafeBootstrap>[0];
+        applyCafeBootstrap(json);
       } catch {
         /* ignore malformed SSE */
       }
     };
     return () => source.close();
-  }, [workspaceTab]);
+  }, [workspaceTab, ascensionOptOut, applyCafeBootstrap]);
+
+  useEffect(() => {
+    if (!ascension || ascensionOptOut) return;
+    const prev = tierRef.current;
+    tierRef.current = ascension.tier;
+    if (prev && ASCENSION_TIER_INDEX[ascension.tier] > ASCENSION_TIER_INDEX[prev]) {
+      setLevelUpAscension(ascension);
+    }
+  }, [ascension, ascensionOptOut]);
+
+  const ascensionProfileLine = useMemo(
+    () => (ascension ? formatCafeProfileLine(ascension.title, cafeEpithet) : null),
+    [ascension, cafeEpithet],
+  );
 
   useEffect(() => {
     setWorkspaceTab((prev) => {
@@ -158,16 +212,23 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
 
   useEffect(() => {
     if (skillTick === 0 || !lastSkillId) return;
+    if (lastSkillId === "run_cafe_demo_tour") {
+      void loadCafeAscension(true);
+      return;
+    }
     if (lastSkillId === "reset_lane") {
       setGuestQueue([]);
       setLastDrop(null);
       return;
     }
+    if (lastSkillId === "drop_claw") {
+      setYardActUntilMs(Date.now() + 1800);
+    }
     if (lastSkillId !== "drop_claw" && lastSkillId !== "start_game" && lastSkillId !== "photo_booth") return;
     setGamesPlayed((n) => n + 1);
     setGuestQueue((q) => [`Guest #${q.length + 1} · lane ${activeLane}`, ...q].slice(0, 6));
     setLastDrop(new Date().toLocaleTimeString());
-  }, [skillTick, lastSkillId, activeLane]);
+  }, [skillTick, lastSkillId, activeLane, loadCafeAscension]);
 
   const laneBots = BOTS.filter((b) => activeLanes.includes(b.lane));
 
@@ -272,7 +333,26 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
             <CafePixelCanvas
               characters={characters}
               lastPulseAt={lastRoomPulseAt}
-              ascensionSnippet={ascension ? `${ascension.title} · ${ascension.ascensionXp} XP` : null}
+              ascensionSnippet={ascensionProfileLine ? `${ascensionProfileLine} · ${ascension?.ascensionXp ?? 0} XP` : null}
+              growthLevel={growthLevel}
+              visionConnected={connected}
+              builderBridgeLinked={builderBridgeLinked}
+              yardActUntilMs={yardActUntilMs}
+            />
+          </ExperienceAppSection>
+
+          <ExperienceAppSection
+            appId="claw-cafe"
+            sectionId="go-live"
+            minLevel="beginner"
+            title="Go Live"
+            subtitle="Demo-ready checklist · run tour to celebrate across Claws"
+          >
+            <CafeGoLivePanel
+              report={goLive}
+              onRefresh={() => void refreshGoLive()}
+              onRunDemoTour={() => void runDemoTour()}
+              demoTourRunning={demoTourRunning}
             />
           </ExperienceAppSection>
 
@@ -286,6 +366,7 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
             {ascension ? (
               <CafeAscensionPanel
                 ascension={ascension}
+                epithet={cafeEpithet}
                 optOut={ascensionOptOut}
                 loading={ascensionLoading}
                 onRefresh={() => void loadCafeAscension()}
@@ -329,6 +410,12 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
           <CafeHostConfigPanel kioskName={kiosk} prizeMode={prizeMode} activeLanes={activeLanes} />
         </ExperienceAppSection>
       ) : null}
+
+      <CafeLevelUpModal
+        ascension={levelUpAscension}
+        epithet={cafeEpithet}
+        onClose={() => setLevelUpAscension(null)}
+      />
     </div>
   );
 }

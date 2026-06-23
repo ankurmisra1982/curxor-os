@@ -9,7 +9,8 @@ export type CafeStationId =
   | "anvil"
   | "yard_dock"
   | "couch"
-  | "coffee";
+  | "coffee"
+  | "blueprint_nook";
 
 export interface CafeCharacter {
   id: string;
@@ -29,6 +30,7 @@ export const CAFE_STATION_GRID: Record<CafeStationId, { row: number; col: number
   yard_dock: { row: 2, col: 4, label: "Robotaxi Yard" },
   couch: { row: 3, col: 2, label: "Couch" },
   coffee: { row: 1, col: 1, label: "Coffee" },
+  blueprint_nook: { row: 1, col: 3, label: "Blueprint" },
 };
 
 export const APP_STATION: Record<string, CafeStationId> = {

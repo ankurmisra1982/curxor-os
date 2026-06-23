@@ -160,6 +160,7 @@ Structured as **discoverable objects + behavioral triggers**, not random jokes.
 | **Cross-Claw** | Creator publish + Work follow-up same week | “Handshake” animation between two characters |
 | **Forge** | First user-minted Claw enters room through door | One-time celebration |
 | **Meta** | Collect 6 “constellation” marks (one per ascension tier) | Hints toward Infinity lore |
+| **The Architect** | Semi-transparent NPC at `blueprint_nook` | L4+ proximity; full opacity when Cursor Bridge connected — see [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md) |
 | **Seasonal** | Limited decor / dialogue during OTA milestone | Ops-controlled flag |
 
 **Principle:** easter eggs reward **real OS mastery**, not clicking 100 times.
@@ -277,6 +278,12 @@ flowchart TB
     EVENTS --> MASTER
     CAFE -->|proximity / patron chat| MASTER
   end
+  subgraph phase3b [Phase 3b — Build Plane optional]
+    BRIDGE[Cursor Bridge]
+    ARCH[Architect NPC in Cafe]
+    MASTER -->|G5+ delegate| BRIDGE
+    BRIDGE --> ARCH
+  end
   subgraph phase4 [Phase 4 — Embodied]
     HW[hardware scope CCP]
     OPT[Humanoids / Optimus / mesh Claws]
@@ -315,6 +322,21 @@ flowchart TB
 3. **Delegation policy** — ascension tier gates what can be pushed to hardware (e.g. G4+ before wealth-adjacent motor commands; G5+ before cross-domain humanoid tasks)
 4. **Device vocabulary** — Forge defines new device Claws; Master translates operator intent → mesh + bridge commands
 
+### Build Plane — Cursor Bridge (optional overlay)
+
+**Not GTM.** Integral to long-term OS architecture — see [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md).
+
+| Plane | Role |
+|-------|------|
+| **Operate** | Claws + Cafe + **local** Master AI (included) |
+| **Build** | **Cursor Bridge** — MCP context export, webhooks, remote worker on MS-S1, user automations |
+
+Master AI learns from Cafe + CCP locally. When intent requires **code, repo ops, or always-on build automation**, G5+ patron may **delegate** to Cursor Bridge — user confirms; compute can stay on the appliance via remote worker.
+
+**Cafe easter egg:** semi-transparent **The Architect** NPC at `blueprint_nook` — CurXor-native, not a branded Claw. Becomes more visible when Builder overlay is connected. **Not xAI** — Grok remains a optional frontier provider in Settings, not the room’s builder character.
+
+**Pricing (later):** optional Cursor subscription on top of sovereign appliance; never bundled in $3,999 hero message.
+
 **Optimus / humanoids:** Signal Claw already subscribes to health, family, work, finance for context-rich prompts. Master AI extends this: *learned preferences from years of Cafe + CCP* → safer, richer command packages to a humanoid — “Neural link lite” is the **far horizon** (ambient intent, low-latency local loop), not a v0.4 commitment.
 
 ### Infinity unlock path (built over time)
@@ -323,9 +345,15 @@ flowchart TB
 |-----------|------------------------|
 | G4 Goddess of Wealth | Master AI **briefings** — daily sovereign summary |
 | G5 Consciousness | **Cross-Claw orchestration** from patron chat; Forge mint ceremonies |
-| G6 Infinity | **Full Master AI panel** + highest **device delegation** tier; secret room / constellation endgame |
+| G6 Infinity | **Full Master AI panel** + highest **device delegation** tier; secret room / constellation endgame; **Build Plane delegate** unlocked |
 
 Ship ascension UI early; **gate Master AI features** behind tiers so GTM stays honest.
+
+---
+
+## Build Plane cross-reference
+
+Full architecture, sovereignty rules, Cursor vs xAI roles, and Architect NPC spec: **[BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md)**.
 
 ---
 
@@ -375,6 +403,7 @@ Ship ascension UI early; **gate Master AI features** behind tiers so GTM stays h
 
 ## References
 
+- Build Plane (Cursor Bridge): [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md)
 - Day-one plan: [DAY-ONE-BUILD-PLAN.md](./DAY-ONE-BUILD-PLAN.md)
 - Growth framework: [GROWTH-LEVEL-FRAMEWORK.md](./GROWTH-LEVEL-FRAMEWORK.md)
 - Work XP stub: `pillar-4-dashboard/components/apps/work/WorkCafeXpPanel.tsx`

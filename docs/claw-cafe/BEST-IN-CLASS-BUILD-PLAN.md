@@ -171,7 +171,7 @@ Uses `GROWTH_LABELS["claw-cafe"]` today (Visitor → Founder). Map FRE intent:
 
 | Task | Detail |
 |------|--------|
-| **Easter eggs (3)** | Coffee object click · Window/time easter egg · eno2-down freeze all chars (read bridge status or mock flag) |
+| **Easter eggs (4+)** | Coffee click · Window/time · eno2 freeze · **The Architect** at `blueprint_nook` (semi-transparent; opacity when Cursor Bridge linked) — [BUILD-PLANE-CURSOR.md](../curxor-os/BUILD-PLANE-CURSOR.md) |
 | **Yard dock** | When `useVisionStream` connected, spawn CLAW-01..04 sprites at `yard_dock`; motor skill → brief act |
 | `lib/cafe-go-live.ts` | demoReady: ascension sync + ≥1 event + inference optional |
 | `CafeGoLivePanel.tsx` | Mint tab or Ascension header; **Run demo tour** |

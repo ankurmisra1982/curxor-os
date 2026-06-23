@@ -17,8 +17,8 @@ Claw Cafe is the **OS gamification home** — cross-Claw progression, spatial ro
 | **CC3** | Ascension G1–G6, event bus, CSS spatial grid, SSE, Forge sync | **Shipped (scaffold)** |
 | **C4** | Pixel Canvas room + patron avatar + inspect | **Shipped** |
 | **C5** | Creator/Capital XP + sync + forged hooks; Progress merged | **Shipped** |
-| **C6** | Level-up UX, opt-out, default tab | **Next** |
-| **C7** | Easter eggs, yard dock, Go Live + demo tour | Planned |
+| **C6** | Level-up UX, opt-out, default tab | **Shipped** |
+| **C7** | Easter eggs, yard dock, Go Live + demo tour | **Shipped** |
 | **C8** | FRE growth intent, coach, nudge | Planned |
 | **C9** | QA checklist, GTM, v0.7.0 | Planned |
 | **CC1/CC2** | FRE polish, Engage inbox slice | Deferred / light only |

@@ -501,6 +501,12 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       { id: "drop_claw", label: "Drop Claw", description: "Execute prize grab motion", kind: "physical" },
       { id: "reset_lane", label: "Reset Lane", description: "Clear lane state", kind: "plan" },
       { id: "photo_booth", label: "Photo Booth", description: "Capture vision frame for guest", kind: "physical" },
+      {
+        id: "run_cafe_demo_tour",
+        label: "Run Demo Tour",
+        description: "Ingest Work + Forge stubs and celebrate ascension",
+        kind: "plan",
+      },
     ],
     fre: {
       welcomeTitle: "Welcome to Engage Claw",
