@@ -9,9 +9,10 @@ import type { SwarmWorkloadItem, SwarmWorkloadSource } from "./swarm-workload-ty
 export type { SwarmWorkloadItem, SwarmWorkloadSource, SwarmWorkloadStatus } from "./swarm-workload-types";
 export { SWARM_SOURCE_LABELS } from "./swarm-workload-types";
 
+import { curxorDataPath } from "./curxor-data-dir";
+
 function queuePath(): string {
-  const base = process.env.CURXOR_DEV_QA_DIR ?? path.join(process.cwd(), "scripts", "dev-qa");
-  return path.join(base, "swarm-workload-queue.json");
+  return curxorDataPath("swarm-workload-queue.json");
 }
 
 async function readQueue(): Promise<SwarmWorkloadItem[]> {

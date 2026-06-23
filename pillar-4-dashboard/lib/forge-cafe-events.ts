@@ -4,6 +4,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { ForgeProvisioningMode } from "./forge-provisioning";
+import { curxorDataPath } from "./curxor-data-dir";
 
 export type ForgeCafeEventKind =
   | "forge.claw_minted"
@@ -23,11 +24,7 @@ export interface ForgeCafeEvent {
 }
 
 export function getForgeCafeEventsPath(): string {
-  return process.env.CURXOR_FORGE_CAFE_EVENTS_PATH ?? "/etc/curxor/forge-cafe-events.json";
-}
-
-function devQaEventsPath(): string {
-  return path.join(process.cwd(), "scripts", "dev-qa", "forge-cafe-events.json");
+  return process.env.CURXOR_FORGE_CAFE_EVENTS_PATH ?? curxorDataPath("forge-cafe-events.json");
 }
 
 async function readEventsFile(filePath: string): Promise<ForgeCafeEvent[]> {
@@ -41,22 +38,14 @@ async function readEventsFile(filePath: string): Promise<ForgeCafeEvent[]> {
 }
 
 async function appendEvent(event: ForgeCafeEvent): Promise<void> {
-  const primary = getForgeCafeEventsPath();
-  const paths = [primary, devQaEventsPath()];
-
-  for (const filePath of paths) {
-    try {
-      const events = await readEventsFile(filePath);
-      await mkdir(path.dirname(filePath), { recursive: true });
-      await writeFile(
-        filePath,
-        `${JSON.stringify({ events: [...events, event] }, null, 2)}\n`,
-        { mode: 0o640 },
-      );
-    } catch {
-      /* dev path may be read-only in prod — best effort */
-    }
-  }
+  const filePath = getForgeCafeEventsPath();
+  const events = await readEventsFile(filePath);
+  await mkdir(path.dirname(filePath), { recursive: true });
+  await writeFile(
+    filePath,
+    `${JSON.stringify({ events: [...events, event] }, null, 2)}\n`,
+    { mode: 0o640 },
+  );
 }
 
 function eventKindForMode(mode: ForgeProvisioningMode): ForgeCafeEventKind {
@@ -131,7 +120,6 @@ export async function emitForgeCafeArchivedEvent(input: {
 }
 
 export async function readForgeCafeEvents(limit = 50): Promise<ForgeCafeEvent[]> {
-  const primary = await readEventsFile(getForgeCafeEventsPath());
-  if (primary.length > 0) return primary.slice(-limit);
-  return (await readEventsFile(devQaEventsPath())).slice(-limit);
+  const events = await readEventsFile(getForgeCafeEventsPath());
+  return events.slice(-limit);
 }

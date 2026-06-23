@@ -12,9 +12,10 @@ export interface KinXpEvent {
   payload: Record<string, unknown>;
 }
 
+import { curxorDataPath } from "./curxor-data-dir";
+
 function xpPath(): string {
-  const base = process.env.CURXOR_DEV_QA_DIR ?? path.join(process.cwd(), "scripts", "dev-qa");
-  return path.join(base, "kin-xp-events.json");
+  return curxorDataPath("kin-xp-events.json");
 }
 
 async function readEvents(): Promise<KinXpEvent[]> {

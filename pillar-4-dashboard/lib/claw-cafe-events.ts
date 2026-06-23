@@ -76,9 +76,10 @@ interface CafeStateFile {
   lastRoomPulseAt: string | null;
 }
 
+import { curxorDataPath } from "./curxor-data-dir";
+
 function storePath(): string {
-  const base = process.env.CURXOR_DEV_QA_DIR ?? path.join(process.cwd(), "scripts", "dev-qa");
-  return path.join(base, "cafe-state.json");
+  return curxorDataPath("cafe-state.json");
 }
 
 const DEFAULT_MILESTONES: AscensionMilestones = {

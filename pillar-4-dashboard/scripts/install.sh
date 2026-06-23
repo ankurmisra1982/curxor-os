@@ -30,15 +30,20 @@ if ! command -v pnpm &>/dev/null; then
 fi
 
 mkdir -p "${INSTALL_ROOT}" /etc/curxor /var/log/curxor
-FRE_STATE="/etc/curxor/fre-state.json"
-CLAW_PROFILES="/etc/curxor/claw-profiles.json"
-if [[ ! -f "${FRE_STATE}" ]]; then
-  printf '%s\n' '{"initialized":false,"selectedApps":[],"provisionedAt":null}' > "${FRE_STATE}"
+SEED_SCRIPT="${CURXOR_ROOT:-/opt/curxor}/scripts/seed-appliance-data.sh"
+if [[ -x "${SEED_SCRIPT}" ]]; then
+  CURXOR_ROOT="${CURXOR_ROOT:-/opt/curxor}" CURXOR_USER="${SERVICE_USER}" bash "${SEED_SCRIPT}"
+else
+  FRE_STATE="/etc/curxor/fre-state.json"
+  CLAW_PROFILES="/etc/curxor/claw-profiles.json"
+  if [[ ! -f "${FRE_STATE}" ]]; then
+    printf '%s\n' '{"initialized":false,"selectedApps":[],"provisionedAt":null}' > "${FRE_STATE}"
+  fi
+  if [[ ! -f "${CLAW_PROFILES}" ]]; then
+    printf '%s\n' '{"claws":[],"activeClawId":null}' > "${CLAW_PROFILES}"
+  fi
+  chmod 644 "${FRE_STATE}" "${CLAW_PROFILES}"
 fi
-if [[ ! -f "${CLAW_PROFILES}" ]]; then
-  printf '%s\n' '{"claws":[],"activeClawId":null}' > "${CLAW_PROFILES}"
-fi
-chmod 644 "${FRE_STATE}" "${CLAW_PROFILES}"
 if [[ -x "${CURXOR_ROOT:-/opt/curxor}/scripts/ensure-app-fre-dir.sh" ]]; then
   "${CURXOR_ROOT:-/opt/curxor}/scripts/ensure-app-fre-dir.sh"
 else
@@ -68,8 +73,7 @@ fi
 
 cp "${INSTALL_ROOT}/systemd/curxor-dashboard.service" /etc/systemd/system/
 systemctl daemon-reload
-chown -R "${SERVICE_USER}:${SERVICE_USER}" "${INSTALL_ROOT}" /var/lib/curxor
-chown "${SERVICE_USER}:${SERVICE_USER}" "${FRE_STATE}" "${CLAW_PROFILES}"
+chown -R "${SERVICE_USER}:${SERVICE_USER}" "${INSTALL_ROOT}" /var/lib/curxor /etc/curxor
 chown -R "${SERVICE_USER}:${SERVICE_USER}" /var/log/curxor 2>/dev/null || true
 
 echo ""
