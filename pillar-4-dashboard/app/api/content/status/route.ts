@@ -140,6 +140,10 @@ export async function POST(request: Request): Promise<Response> {
     useBestTime?: boolean;
     subAction?: string;
     config?: Record<string, unknown>;
+    title?: string;
+    contextLabel?: string;
+    detail?: string;
+    targetCell?: string;
     status?: string;
     reason?: string;
     kind?: string;
@@ -1345,6 +1349,29 @@ export async function POST(request: Request): Promise<Response> {
         selectedPostId: typeof body.postId === "string" ? body.postId : undefined,
       });
       return Response.json(bootstrap);
+    }
+
+    case "handoff_to_swarm": {
+      const { handoffToSwarm } = await import("@/lib/swarm-handoff");
+      const title =
+        typeof body.title === "string"
+          ? body.title
+          : typeof body.contextLabel === "string"
+            ? body.contextLabel
+            : "Creator publish fan-out";
+      const result = await handoffToSwarm({
+        source: "my-content-creator",
+        title,
+        detail: typeof body.detail === "string" ? body.detail : "Creator Claw handoff to Swarm",
+        targetCell:
+          typeof body.targetCell === "string"
+            ? (body.targetCell as import("@/lib/swarm-fleet").SwarmGridCell)
+            : "D3",
+        priority: "normal",
+      });
+      if (!result.ok) return Response.json({ ok: false, error: result.error }, { status: 400 });
+      const status = await fetchContentStatus();
+      return Response.json({ ...result, status });
     }
 
     default:

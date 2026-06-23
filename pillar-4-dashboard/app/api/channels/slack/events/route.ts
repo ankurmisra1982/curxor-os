@@ -7,6 +7,7 @@ import { resolveSlackSigningSecret, verifySlackSignature } from "@/lib/agent-run
 
 export async function POST(request: Request): Promise<Response> {
   const rawBody = await request.text();
+
   let payload: Record<string, unknown>;
   try {
     payload = JSON.parse(rawBody) as Record<string, unknown>;

@@ -16,6 +16,8 @@ import { ForgeFleetPanel } from "@/components/apps/forge/ForgeFleetPanel";
 
 import { ForgeGoLivePanel, type ForgeGoLiveReportRow } from "@/components/apps/forge/ForgeGoLivePanel";
 
+import { ForgeSetupWizard } from "@/components/apps/forge/ForgeSetupWizard";
+
 import { ForgeImportPanel } from "@/components/apps/forge/ForgeImportPanel";
 
 import { ForgeIntentPanel } from "@/components/apps/forge/ForgeIntentPanel";
@@ -71,19 +73,13 @@ import { getOotbApp } from "@/lib/ootb-apps";
 
 
 const EMPTY_COUNTS: ForgeFleetCounts = {
-
   total: 0,
-
   profiles: 0,
-
   forgedApps: 0,
-
   island: 0,
-
   framework: 0,
-
   imported: 0,
-
+  archived: 0,
 };
 
 
@@ -131,6 +127,10 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
   const [budgetTier, setBudgetTier] = useState<BudgetTier>((config.defaultBudget as BudgetTier) ?? "balanced");
 
   const [embeddedWizardKey, setEmbeddedWizardKey] = useState(0);
+
+  const [setupWizardOpen, setSetupWizardOpen] = useState(false);
+
+  const setupNudgeShown = useRef(false);
 
 
 
@@ -203,6 +203,20 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
     void loadForgeStatus();
 
   }, [loadForgeStatus]);
+
+
+
+  useEffect(() => {
+
+    if (setupNudgeShown.current) return;
+
+    if (config.forgeSetupComplete === true || forgedApps.length > 0) return;
+
+    setupNudgeShown.current = true;
+
+    setSetupWizardOpen(true);
+
+  }, [config.forgeSetupComplete, forgedApps.length]);
 
 
 
@@ -348,6 +362,28 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
 
 
+  const exportFleetBundles = useCallback(async () => {
+    const res = await fetch("/api/claw/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ exportAll: true }),
+    });
+    if (!res.ok) return;
+    const data = (await res.json()) as {
+      bundles?: Array<{ targetId: string; name: string; bundle: unknown }>;
+    };
+    if (!data.bundles?.length) return;
+    const blob = new Blob([JSON.stringify({ version: 1, bundles: data.bundles }, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "forge-fleet-export.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
   const exportFirstForged = useCallback(async () => {
 
     const target = forgedApps[0]?.id ?? fleet.find((r) => r.forgedAppId)?.forgedAppId;
@@ -477,6 +513,8 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
           onRefresh={() => void loadForgeStatus()}
 
           onRunDemoTour={() => void runDemoTour()}
+
+          onOpenSetupWizard={() => setSetupWizardOpen(true)}
 
           demoTourRunning={demoTourRunning}
 
@@ -608,7 +646,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
           onRefresh={() => void loadForgeStatus()}
 
-          onExportFleet={() => void exportFirstForged()}
+          onExportFleet={() => void exportFleetBundles()}
 
         />
 
@@ -639,6 +677,38 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
         />
 
       ) : null}
+
+
+
+      <ForgeSetupWizard
+
+        open={setupWizardOpen}
+
+        onClose={() => setSetupWizardOpen(false)}
+
+        onComplete={(result) => {
+
+          setSetupWizardOpen(false);
+
+          void loadForgeStatus();
+
+          if (result?.forgedHref) {
+
+            router.push(result.forgedHref);
+
+            return;
+
+          }
+
+          if (result?.openImportTab) {
+
+            setWorkspaceTab("import");
+
+          }
+
+        }}
+
+      />
 
     </div>
 

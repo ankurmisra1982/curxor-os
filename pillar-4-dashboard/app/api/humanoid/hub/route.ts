@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { readAppFreState } from "@/lib/app-fre-state";
 import {
+  addComposedRoutine,
   addFleetUnit,
   addHouseRule,
   advancePairWizard,
@@ -19,8 +20,11 @@ import {
   toggleHumanoidRoutine,
   updateHumanoidRelationship,
   updateHumanoidUnit,
+  updateKinRobotPolicy,
 } from "@/lib/humanoid-hub-store";
-import type { RobotKind, SetupStepId } from "@/lib/humanoid-hub-types";
+import { buildKnowledgeAudit } from "@/lib/humanoid-knowledge-audit";
+import { composeRoutineFromNaturalLanguage } from "@/lib/humanoid-routine-compose";
+import type { KinRobotTone, RobotKind, SetupStepId } from "@/lib/humanoid-hub-types";
 import { requireLanAuth } from "@/lib/lan-auth";
 
 async function freConfig(): Promise<Record<string, unknown>> {
@@ -28,10 +32,7 @@ async function freConfig(): Promise<Record<string, unknown>> {
   return state?.config ?? {};
 }
 
-export async function GET(request: Request) {
-  const denied = requireLanAuth(request);
-  if (denied) return denied;
-
+export async function GET() {
   const status = await fetchHumanoidHubStatus(await freConfig());
   return Response.json({ ok: true, ...status });
 }
@@ -166,6 +167,48 @@ export async function POST(req: Request) {
       case "notify_when_live": {
         const status = await setNotifyWhenLive(body.notify === true);
         return Response.json({ ok: true, ...status });
+      }
+
+      case "update_kin_policy": {
+        const memberId = typeof body.memberId === "string" ? body.memberId : "";
+        if (!memberId) return Response.json({ ok: false, error: "memberId required" }, { status: 400 });
+        const tone =
+          body.tone === "inherit" ||
+          body.tone === "warm" ||
+          body.tone === "professional" ||
+          body.tone === "playful" ||
+          body.tone === "formal" ||
+          body.tone === "calm" ||
+          body.tone === "direct"
+            ? (body.tone as KinRobotTone)
+            : undefined;
+        const status = await updateKinRobotPolicy({
+          memberId,
+          tone,
+          greetByName: typeof body.greetByName === "boolean" ? body.greetByName : undefined,
+          allowKitchenTasks: typeof body.allowKitchenTasks === "boolean" ? body.allowKitchenTasks : undefined,
+          allowBedroomEntry: typeof body.allowBedroomEntry === "boolean" ? body.allowBedroomEntry : undefined,
+          requireAskBefore: typeof body.requireAskBefore === "string" ? body.requireAskBefore : undefined,
+          notes: typeof body.notes === "string" ? body.notes : undefined,
+        });
+        return Response.json({ ok: true, ...status, message: "Kin robot policy updated" });
+      }
+
+      case "knowledge_audit": {
+        const audit = await buildKnowledgeAudit(await freConfig());
+        return Response.json({ ok: true, audit });
+      }
+
+      case "compose_routine": {
+        const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
+        if (!prompt) return Response.json({ ok: false, error: "prompt required" }, { status: 400 });
+        const routine = await composeRoutineFromNaturalLanguage(prompt);
+        const status = await addComposedRoutine(routine);
+        return Response.json({
+          ok: true,
+          ...status,
+          message: `Routine "${routine.label}" composed and armed for pair day`,
+        });
       }
 
       default:

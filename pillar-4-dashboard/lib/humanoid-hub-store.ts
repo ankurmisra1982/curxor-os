@@ -14,10 +14,18 @@ import type {
   HumanoidRelationship,
   HumanoidRoutine,
   HumanoidUnit,
+  KinRobotPolicy,
+  KinRobotTone,
   RobotKind,
   SetupStepId,
 } from "./humanoid-hub-types";
 import { FLEET_UNIT_LIMIT, ROBOT_KIND_META } from "./humanoid-fleet-meta";
+import {
+  kinPolicyViews,
+  loadFamilyMembersForPolicies,
+  mergeKinPolicies,
+  isKinRobotTone,
+} from "./humanoid-kin-policy";
 import { syncFamilyContextToMesh } from "./claw-context-service";
 
 const DEFAULT_ROUTINES: Omit<HumanoidRoutine, "enabled">[] = [
@@ -99,7 +107,7 @@ function normalizeHub(parsed: Partial<HumanoidHubFile>): HumanoidHubFile {
   const routines =
     Array.isArray(parsed.routines) && parsed.routines.length > 0
       ? parsed.routines
-      : DEFAULT_ROUTINES.map((r) => ({ ...r, enabled: r.id === "help-handoff" }));
+      : DEFAULT_ROUTINES.map((r) => ({ ...r, enabled: r.id === "help-handoff", source: "template" as const }));
 
   return {
     version: 1,
@@ -122,8 +130,9 @@ function normalizeHub(parsed: Partial<HumanoidHubFile>): HumanoidHubFile {
           };
         })
       : [],
-    relationship: parsed.relationship ?? defaultRelationship(),
+    relationship: { ...defaultRelationship(), ...(parsed.relationship ?? {}) },
     houseRules: Array.isArray(parsed.houseRules) ? parsed.houseRules : [],
+    kinPolicies: Array.isArray(parsed.kinPolicies) ? parsed.kinPolicies : [],
     routines,
     setupCompleted: Array.isArray(parsed.setupCompleted) ? parsed.setupCompleted : [],
     lastKnowledgeSyncAt: typeof parsed.lastKnowledgeSyncAt === "string" ? parsed.lastKnowledgeSyncAt : null,
@@ -158,6 +167,16 @@ async function ensurePrimaryUnit(
   return hub;
 }
 
+async function ensureKinPolicies(hub: HumanoidHubFile): Promise<HumanoidHubFile> {
+  const members = await loadFamilyMembersForPolicies();
+  const merged = mergeKinPolicies(hub.kinPolicies, members);
+  if (JSON.stringify(merged) !== JSON.stringify(hub.kinPolicies)) {
+    hub.kinPolicies = merged;
+    await writeHubFile(hub);
+  }
+  return hub;
+}
+
 function computeReadiness(hub: HumanoidHubFile, kinCount: number, vitalLinked: boolean): HumanoidReadinessReport {
   const steps: HumanoidReadinessReport["steps"] = [
     {
@@ -170,8 +189,10 @@ function computeReadiness(hub: HumanoidHubFile, kinCount: number, vitalLinked: b
     {
       id: "link_kin",
       label: "Link Kin profiles",
-      done: kinCount > 0 || hub.setupCompleted.includes("link_kin"),
-      hint: "Kin Claw teaches who lives here — names, tones, and guest mode.",
+      done:
+        (kinCount > 0 && hub.kinPolicies.length > 0) ||
+        hub.setupCompleted.includes("link_kin"),
+      hint: "Kin Claw teaches who lives here — tune per-member robot policy below.",
     },
     {
       id: "teach_rules",
@@ -257,6 +278,7 @@ export async function fetchHumanoidHubStatus(freConfig?: Record<string, unknown>
     unitId: typeof freConfig?.unitId === "string" ? freConfig.unitId : undefined,
     safetyProfile: typeof freConfig?.safetyProfile === "string" ? freConfig.safetyProfile : undefined,
   });
+  hub = await ensureKinPolicies(hub);
 
   const family = await listFamilyProfiles();
   const kinMemberCount = family.members.length;
@@ -284,6 +306,7 @@ export async function fetchHumanoidHubStatus(freConfig?: Record<string, unknown>
     readiness: computeReadiness(hub, kinMemberCount, vitalLinked),
     kinMemberCount,
     vitalLinked,
+    kinPolicies: kinPolicyViews(hub.kinPolicies, family.members),
     fleetSummary: fleetSummary(hub.units),
   };
 }
@@ -388,7 +411,36 @@ export async function syncHumanoidKnowledgeToMesh(): Promise<HumanoidHubStatus> 
       })),
       relationship: hub.relationship,
       houseRules: hub.houseRules.map((r) => ({ text: r.text, priority: r.priority })),
+      kinPolicies: hub.kinPolicies.map((p) => ({
+        memberId: p.memberId,
+        tone: p.tone,
+        greetByName: p.greetByName,
+        allowKitchenTasks: p.allowKitchenTasks,
+        allowBedroomEntry: p.allowBedroomEntry,
+        requireAskBefore: p.requireAskBefore,
+        notes: p.notes,
+      })),
       routines: hub.routines.filter((r) => r.enabled).map((r) => ({ id: r.id, label: r.label, trigger: r.trigger })),
+      syncedAt: now,
+    },
+    ttlSeconds: null,
+  });
+
+  await publishClawContext("tesla-optimus-engine", {
+    scope: "family",
+    key: "humanoid.policies",
+    payload: {
+      policies: status.kinPolicies.map((p) => ({
+        memberId: p.memberId,
+        displayName: p.displayName,
+        role: p.role,
+        tone: p.tone,
+        greetByName: p.greetByName,
+        allowKitchenTasks: p.allowKitchenTasks,
+        allowBedroomEntry: p.allowBedroomEntry,
+        requireAskBefore: p.requireAskBefore,
+        notes: p.notes,
+      })),
       syncedAt: now,
     },
     ttlSeconds: null,
@@ -559,6 +611,46 @@ export async function completePairPreview(unitId: string): Promise<HumanoidHubSt
 export async function cancelPairWizard(): Promise<HumanoidHubStatus> {
   const hub = await readHubFile();
   hub.pairWizard = null;
+  await writeHubFile(hub);
+  return fetchHumanoidHubStatus();
+}
+
+export async function updateKinRobotPolicy(input: {
+  memberId: string;
+  tone?: KinRobotTone;
+  greetByName?: boolean;
+  allowKitchenTasks?: boolean;
+  allowBedroomEntry?: boolean;
+  requireAskBefore?: string;
+  notes?: string;
+}): Promise<HumanoidHubStatus> {
+  let hub = await ensureKinPolicies(await readHubFile());
+  const idx = hub.kinPolicies.findIndex((p) => p.memberId === input.memberId);
+  if (idx < 0) throw new Error("Kin member not found");
+
+  const current = hub.kinPolicies[idx]!;
+  hub.kinPolicies[idx] = {
+    ...current,
+    tone: input.tone && isKinRobotTone(input.tone) ? input.tone : current.tone,
+    greetByName: typeof input.greetByName === "boolean" ? input.greetByName : current.greetByName,
+    allowKitchenTasks:
+      typeof input.allowKitchenTasks === "boolean" ? input.allowKitchenTasks : current.allowKitchenTasks,
+    allowBedroomEntry:
+      typeof input.allowBedroomEntry === "boolean" ? input.allowBedroomEntry : current.allowBedroomEntry,
+    requireAskBefore:
+      typeof input.requireAskBefore === "string" ? input.requireAskBefore.slice(0, 160) : current.requireAskBefore,
+    notes: typeof input.notes === "string" ? input.notes.slice(0, 240) : current.notes,
+  };
+
+  if (!hub.setupCompleted.includes("link_kin")) hub.setupCompleted.push("link_kin");
+  await writeHubFile(hub);
+  return fetchHumanoidHubStatus();
+}
+
+export async function addComposedRoutine(routine: HumanoidRoutine): Promise<HumanoidHubStatus> {
+  const hub = await readHubFile();
+  hub.routines.unshift(routine);
+  if (hub.routines.length > 24) hub.routines = hub.routines.slice(0, 24);
   await writeHubFile(hub);
   return fetchHumanoidHubStatus();
 }

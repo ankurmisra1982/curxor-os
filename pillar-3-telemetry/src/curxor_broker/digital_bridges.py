@@ -50,6 +50,13 @@ TOOL_WHATSAPP_SEND = "channel.whatsapp.send"
 TOOL_IMESSAGE_SEND = "channel.imessage.send"
 TOOL_BROWSER_FETCH = "browser.fetch_page"
 TOOL_BROWSER_AUTOMATE = "browser.automate"
+TOOL_COMMERCE_SHOPIFY_PRODUCTS_LIST = "commerce.shopify.products.list"
+TOOL_COMMERCE_SHOPIFY_ORDERS_LIST = "commerce.shopify.orders.list"
+TOOL_COMMERCE_SHOPIFY_CATALOG_SYNC = "commerce.shopify.catalog.sync"
+TOOL_COMMERCE_EBAY_ORDERS_LIST = "commerce.ebay.orders.list"
+TOOL_COMMERCE_EBAY_FULFILLMENT_SYNC = "commerce.ebay.fulfillment.sync"
+TOOL_COMMERCE_PRINTIFY_PRODUCTS_LIST = "commerce.printify.products.list"
+TOOL_COMMERCE_PRINTIFY_CATALOG_SYNC = "commerce.printify.catalog.sync"
 TOOL_WORK_EMAIL_SEND = "work.email.send"
 TOOL_WORK_EMAIL_FETCH = "work.email.fetch"
 
@@ -2901,6 +2908,615 @@ class WorkEmailFetchWorker:
             return DigitalReceipt.failure(intent, str(exc))
 
 
+COMMERCE_SHOPIFY_PATH = os.environ.get("CURXOR_COMMERCE_SHOPIFY_PATH", "/etc/curxor/commerce-shopify.json")
+SHOPIFY_DEFAULT_API_VERSION = "2025-01"
+
+SHOPIFY_CATALOG_QUERY = """
+query ShopCatalogSync($productCount: Int!, $orderCount: Int!) {
+  products(first: $productCount) {
+    edges {
+      node {
+        id
+        title
+        handle
+        variants(first: 10) {
+          edges {
+            node {
+              id
+              sku
+              price
+              inventoryItem {
+                unitCost {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  orders(first: $orderCount, sortKey: PROCESSED_AT, reverse: true) {
+    edges {
+      node {
+        id
+        name
+        processedAt
+        lineItems(first: 10) {
+          edges {
+            node {
+              sku
+              title
+              quantity
+              originalUnitPriceSet {
+                shopMoney {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+
+def _load_commerce_shopify_creds() -> dict[str, Any] | None:
+    path = Path(COMMERCE_SHOPIFY_PATH)
+    if path.is_file():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and data.get("accessToken") and data.get("shopDomain"):
+                return data
+        except Exception:
+            pass
+    domain = os.environ.get("SHOPIFY_SHOP_DOMAIN", "").strip()
+    token = os.environ.get("SHOPIFY_ACCESS_TOKEN", "").strip()
+    if domain and token:
+        return {
+            "shopDomain": domain,
+            "accessToken": token,
+            "apiVersion": os.environ.get("SHOPIFY_API_VERSION", SHOPIFY_DEFAULT_API_VERSION),
+        }
+    return None
+
+
+class ShopifyCommerceWorker:
+    """Shopify Admin GraphQL — commerce.shopify.* read intents on eno2."""
+
+    def _creds(self) -> dict[str, Any] | None:
+        return _load_commerce_shopify_creds()
+
+    @property
+    def enabled(self) -> bool:
+        return self._creds() is not None
+
+    def _endpoint(self, creds: dict[str, Any]) -> str:
+        domain = str(creds.get("shopDomain", "")).strip().replace("https://", "").replace("http://", "").rstrip("/")
+        if not domain.endswith(".myshopify.com"):
+            alt = str(creds.get("myshopifyDomain") or creds.get("shopSlug") or "").strip()
+            if alt:
+                domain = alt if alt.endswith(".myshopify.com") else f"{alt}.myshopify.com"
+            elif "." not in domain:
+                domain = f"{domain}.myshopify.com"
+            else:
+                raise RuntimeError(
+                    "Shopify Admin API requires *.myshopify.com — set shopDomain to your myshopify host, not a custom storefront domain"
+                )
+        version = str(creds.get("apiVersion") or SHOPIFY_DEFAULT_API_VERSION).strip()
+        return f"https://{domain}/admin/api/{version}/graphql.json"
+
+    async def _graphql(self, creds: dict[str, Any], query: str, variables: dict[str, Any]) -> dict[str, Any]:
+        try:
+            import aiohttp
+        except ImportError:
+            raise RuntimeError("aiohttp not installed")
+
+        headers = {
+            "Content-Type": "application/json",
+            "X-Shopify-Access-Token": str(creds["accessToken"]),
+        }
+        body = {"query": query, "variables": variables}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self._endpoint(creds), json=body, headers=headers, timeout=45) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    msg = data.get("errors") if isinstance(data, dict) else resp.reason
+                    raise RuntimeError(f"Shopify HTTP {resp.status}: {msg}")
+                if isinstance(data, dict) and data.get("errors"):
+                    raise RuntimeError(f"Shopify GraphQL: {data['errors']}")
+                if not isinstance(data, dict):
+                    raise RuntimeError("Invalid Shopify response")
+                return data.get("data") or {}
+
+    @staticmethod
+    def _normalize_products(data: dict[str, Any]) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        products = ((data.get("products") or {}).get("edges")) or []
+        for edge in products:
+            node = edge.get("node") if isinstance(edge, dict) else None
+            if not isinstance(node, dict):
+                continue
+            title = str(node.get("title") or "")
+            handle = str(node.get("handle") or "")
+            for variant_edge in ((node.get("variants") or {}).get("edges")) or []:
+                variant = variant_edge.get("node") if isinstance(variant_edge, dict) else None
+                if not isinstance(variant, dict):
+                    continue
+                sku = str(variant.get("sku") or handle or variant.get("id") or "").strip()
+                if not sku:
+                    continue
+                try:
+                    sell = float(variant.get("price") or 0)
+                except (TypeError, ValueError):
+                    sell = 0.0
+                buy = 0.0
+                inv = variant.get("inventoryItem")
+                if isinstance(inv, dict):
+                    unit_cost = inv.get("unitCost")
+                    if isinstance(unit_cost, dict) and unit_cost.get("amount") is not None:
+                        try:
+                            buy = float(unit_cost["amount"])
+                        except (TypeError, ValueError):
+                            buy = 0.0
+                margin_pct = ((sell - buy) / sell * 100) if sell > 0 and buy > 0 else 0.0
+                rows.append(
+                    {
+                        "sku": sku,
+                        "label": title,
+                        "channelBuy": "Unit cost" if buy > 0 else "COGS unset",
+                        "channelSell": "Shopify",
+                        "buyPrice": buy,
+                        "sellPrice": sell,
+                        "marginPct": round(margin_pct, 1),
+                        "alert": margin_pct >= 15,
+                        "source": "shopify",
+                    }
+                )
+        return rows
+
+    @staticmethod
+    def _normalize_orders(data: dict[str, Any]) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        orders = ((data.get("orders") or {}).get("edges")) or []
+        for edge in orders:
+            node = edge.get("node") if isinstance(edge, dict) else None
+            if not isinstance(node, dict):
+                continue
+            order_name = str(node.get("name") or node.get("id") or "")
+            for item_edge in ((node.get("lineItems") or {}).get("edges")) or []:
+                item = item_edge.get("node") if isinstance(item_edge, dict) else None
+                if not isinstance(item, dict):
+                    continue
+                sku = str(item.get("sku") or item.get("title") or order_name).strip()
+                qty = item.get("quantity")
+                try:
+                    sell = float(((item.get("originalUnitPriceSet") or {}).get("shopMoney") or {}).get("amount") or 0)
+                except (TypeError, ValueError):
+                    sell = 0.0
+                rows.append(
+                    {
+                        "orderName": order_name,
+                        "sku": sku,
+                        "title": str(item.get("title") or ""),
+                        "quantity": qty,
+                        "sellPrice": sell,
+                        "processedAt": node.get("processedAt"),
+                    }
+                )
+        return rows
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        creds = self._creds()
+        if not creds:
+            return DigitalReceipt.failure(
+                intent,
+                "Shopify not linked — set /etc/curxor/commerce-shopify.json or SHOPIFY_* in digital.env",
+            )
+
+        try:
+            product_count = int(intent.payload.get("productCount") or 20)
+        except (TypeError, ValueError):
+            product_count = 20
+        try:
+            order_count = int(intent.payload.get("orderCount") or 10)
+        except (TypeError, ValueError):
+            order_count = 10
+        product_count = max(1, min(product_count, 50))
+        order_count = max(1, min(order_count, 25))
+
+        try:
+            if intent.tool == TOOL_COMMERCE_SHOPIFY_PRODUCTS_LIST:
+                data = await self._graphql(
+                    creds,
+                    """
+                    query Products($count: Int!) {
+                      products(first: $count) {
+                        edges {
+                          node {
+                            id title handle
+                            variants(first: 10) {
+                              edges {
+                                node {
+                                  id sku price
+                                  inventoryItem { unitCost { amount } }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    """,
+                    {"count": product_count},
+                )
+                spreads = self._normalize_products(data)
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "shopDomain": creds.get("shopDomain"),
+                        "productCount": len(spreads),
+                        "spreads": spreads,
+                    },
+                )
+
+            if intent.tool == TOOL_COMMERCE_SHOPIFY_ORDERS_LIST:
+                data = await self._graphql(
+                    creds,
+                    """
+                    query Orders($count: Int!) {
+                      orders(first: $count, sortKey: PROCESSED_AT, reverse: true) {
+                        edges {
+                          node {
+                            id name processedAt
+                            lineItems(first: 10) {
+                              edges {
+                                node {
+                                  sku title quantity
+                                  originalUnitPriceSet { shopMoney { amount } }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    """,
+                    {"count": order_count},
+                )
+                orders = self._normalize_orders(data)
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "shopDomain": creds.get("shopDomain"),
+                        "orderLineCount": len(orders),
+                        "orders": orders,
+                    },
+                )
+
+            if intent.tool == TOOL_COMMERCE_SHOPIFY_CATALOG_SYNC:
+                data = await self._graphql(
+                    creds,
+                    SHOPIFY_CATALOG_QUERY,
+                    {"productCount": product_count, "orderCount": order_count},
+                )
+                spreads = self._normalize_products(data)
+                orders = self._normalize_orders(data)
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "shopDomain": creds.get("shopDomain"),
+                        "productCount": len(spreads),
+                        "orderLineCount": len(orders),
+                        "spreads": spreads,
+                        "orders": orders,
+                    },
+                )
+
+            return DigitalReceipt.failure(intent, f"Unsupported Shopify tool: {intent.tool}")
+        except Exception as exc:
+            LOG.exception("Shopify commerce bridge failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+
+COMMERCE_EBAY_PATH = os.environ.get("CURXOR_COMMERCE_EBAY_PATH", "/etc/curxor/commerce-ebay.json")
+COMMERCE_PRINTIFY_PATH = os.environ.get("CURXOR_COMMERCE_PRINTIFY_PATH", "/etc/curxor/commerce-printify.json")
+
+
+def _load_commerce_ebay_creds() -> dict[str, Any] | None:
+    path = Path(COMMERCE_EBAY_PATH)
+    if path.is_file():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and data.get("accessToken"):
+                return data
+        except Exception:
+            pass
+    token = os.environ.get("EBAY_ACCESS_TOKEN", "").strip()
+    if token:
+        env = os.environ.get("EBAY_ENVIRONMENT", "production").strip().lower()
+        return {
+            "accessToken": token,
+            "environment": "sandbox" if env == "sandbox" else "production",
+        }
+    return None
+
+
+def _load_commerce_printify_creds() -> dict[str, Any] | None:
+    path = Path(COMMERCE_PRINTIFY_PATH)
+    if path.is_file():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and data.get("accessToken") and data.get("shopId"):
+                return data
+        except Exception:
+            pass
+    token = os.environ.get("PRINTIFY_API_TOKEN", "").strip()
+    shop_id = os.environ.get("PRINTIFY_SHOP_ID", "").strip()
+    if token and shop_id:
+        return {"accessToken": token, "shopId": shop_id}
+    return None
+
+
+class EbayCommerceWorker:
+    """eBay Sell Fulfillment API — commerce.ebay.* read intents on eno2."""
+
+    def _creds(self) -> dict[str, Any] | None:
+        return _load_commerce_ebay_creds()
+
+    @property
+    def enabled(self) -> bool:
+        return self._creds() is not None
+
+    def _api_base(self, creds: dict[str, Any]) -> str:
+        env = str(creds.get("environment") or "production").lower()
+        if env == "sandbox":
+            return "https://api.sandbox.ebay.com"
+        return "https://api.ebay.com"
+
+    async def _get_orders(self, creds: dict[str, Any], limit: int) -> dict[str, Any]:
+        try:
+            import aiohttp
+        except ImportError:
+            raise RuntimeError("aiohttp not installed")
+
+        url = f"{self._api_base(creds)}/sell/fulfillment/v1/order?limit={limit}"
+        headers = {
+            "Authorization": f"Bearer {creds['accessToken']}",
+            "Content-Type": "application/json",
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=45) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(f"eBay HTTP {resp.status}: {data}")
+                if not isinstance(data, dict):
+                    raise RuntimeError("Invalid eBay response")
+                return data
+
+    @staticmethod
+    def _map_stage(status: str) -> str:
+        s = str(status or "").upper()
+        if s == "FULFILLED":
+            return "SHIP"
+        if s == "IN_PROGRESS":
+            return "PICK"
+        return "INGEST"
+
+    def _normalize(self, data: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+        order_lines: list[dict[str, Any]] = []
+        spreads: list[dict[str, Any]] = []
+        pipeline: list[dict[str, Any]] = []
+        orders = data.get("orders") if isinstance(data.get("orders"), list) else []
+        for order in orders:
+            if not isinstance(order, dict):
+                continue
+            order_id = str(order.get("orderId") or order.get("legacyOrderId") or "").strip()
+            status = str(order.get("orderFulfillmentStatus") or "NOT_STARTED")
+            stage = self._map_stage(status)
+            line_items = order.get("lineItems") if isinstance(order.get("lineItems"), list) else []
+            for item in line_items:
+                if not isinstance(item, dict):
+                    continue
+                sku = str(item.get("sku") or item.get("title") or order_id).strip()
+                if not sku:
+                    continue
+                qty = item.get("quantity")
+                sell = 0.0
+                cost = item.get("lineItemCost")
+                if isinstance(cost, dict) and cost.get("value") is not None:
+                    try:
+                        sell = float(cost["value"])
+                    except (TypeError, ValueError):
+                        sell = 0.0
+                order_lines.append(
+                    {
+                        "orderId": order_id,
+                        "sku": sku,
+                        "title": str(item.get("title") or ""),
+                        "quantity": qty,
+                        "sellPrice": sell,
+                        "fulfillmentStatus": status,
+                    }
+                )
+                spreads.append(
+                    {
+                        "sku": sku,
+                        "label": str(item.get("title") or sku),
+                        "channelBuy": "Acquisition cost",
+                        "channelSell": "eBay",
+                        "buyPrice": 0.0,
+                        "sellPrice": sell,
+                        "marginPct": 0.0,
+                        "alert": False,
+                        "source": "ebay",
+                    }
+                )
+                pipeline.append(
+                    {
+                        "id": f"{order_id}-{sku}" if order_id else sku,
+                        "sku": sku,
+                        "stage": stage,
+                        "eta": "shipped" if status == "FULFILLED" else "live",
+                        "source": "ebay",
+                    }
+                )
+        return order_lines, spreads, pipeline
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        creds = self._creds()
+        if not creds:
+            return DigitalReceipt.failure(
+                intent,
+                "eBay not linked — set /etc/curxor/commerce-ebay.json or EBAY_* in digital.env",
+            )
+        try:
+            limit = int(intent.payload.get("orderLimit") or 25)
+        except (TypeError, ValueError):
+            limit = 25
+        limit = max(1, min(limit, 50))
+        try:
+            data = await self._get_orders(creds, limit)
+            order_lines, spreads, pipeline = self._normalize(data)
+            env = str(creds.get("environment") or "production")
+            if intent.tool == TOOL_COMMERCE_EBAY_ORDERS_LIST:
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "environment": env,
+                        "orderLineCount": len(order_lines),
+                        "orders": order_lines,
+                    },
+                )
+            if intent.tool == TOOL_COMMERCE_EBAY_FULFILLMENT_SYNC:
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "environment": env,
+                        "orderLineCount": len(order_lines),
+                        "orders": order_lines,
+                        "spreads": spreads,
+                        "pipelineOrders": pipeline,
+                    },
+                )
+            return DigitalReceipt.failure(intent, f"Unsupported eBay tool: {intent.tool}")
+        except Exception as exc:
+            LOG.exception("eBay commerce bridge failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+
+class PrintifyCommerceWorker:
+    """Printify REST catalog — commerce.printify.* read intents on eno2."""
+
+    def _creds(self) -> dict[str, Any] | None:
+        return _load_commerce_printify_creds()
+
+    @property
+    def enabled(self) -> bool:
+        return self._creds() is not None
+
+    @staticmethod
+    def _cents_to_dollars(value: Any) -> float:
+        try:
+            n = float(value or 0)
+        except (TypeError, ValueError):
+            return 0.0
+        if n <= 0:
+            return 0.0
+        return n / 100.0
+
+    def _normalize_products(self, data: Any) -> list[dict[str, Any]]:
+        products = data if isinstance(data, list) else (data.get("data") if isinstance(data, dict) else [])
+        if not isinstance(products, list):
+            products = []
+        spreads: list[dict[str, Any]] = []
+        for product in products:
+            if not isinstance(product, dict):
+                continue
+            title = str(product.get("title") or "")
+            variants = product.get("variants") if isinstance(product.get("variants"), list) else []
+            for variant in variants:
+                if not isinstance(variant, dict):
+                    continue
+                sku = str(variant.get("sku") or variant.get("id") or title).strip()
+                if not sku:
+                    continue
+                sell = self._cents_to_dollars(variant.get("price"))
+                buy = self._cents_to_dollars(variant.get("cost") or variant.get("production_cost"))
+                margin_pct = round((sell - buy) / sell * 100, 1) if sell > 0 and buy > 0 else 0.0
+                spreads.append(
+                    {
+                        "sku": sku,
+                        "label": title,
+                        "channelBuy": "Printify production" if buy > 0 else "Cost pending",
+                        "channelSell": "Printify retail",
+                        "buyPrice": buy,
+                        "sellPrice": sell,
+                        "marginPct": margin_pct,
+                        "alert": margin_pct >= 15,
+                        "source": "printify",
+                    }
+                )
+        return spreads
+
+    async def _get_products(self, creds: dict[str, Any], limit: int) -> Any:
+        try:
+            import aiohttp
+        except ImportError:
+            raise RuntimeError("aiohttp not installed")
+
+        shop_id = str(creds.get("shopId") or "").strip()
+        url = f"https://api.printify.com/v1/shops/{shop_id}/products.json?limit={limit}"
+        headers = {
+            "Authorization": f"Bearer {creds['accessToken']}",
+            "Content-Type": "application/json",
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, timeout=45) as resp:
+                data = await resp.json(content_type=None)
+                if resp.status >= 400:
+                    raise RuntimeError(f"Printify HTTP {resp.status}: {data}")
+                return data
+
+    async def handle(self, intent: DigitalIntent) -> DigitalReceipt:
+        creds = self._creds()
+        if not creds:
+            return DigitalReceipt.failure(
+                intent,
+                "Printify not linked — set /etc/curxor/commerce-printify.json or PRINTIFY_* in digital.env",
+            )
+        try:
+            limit = int(intent.payload.get("productLimit") or 20)
+        except (TypeError, ValueError):
+            limit = 20
+        limit = max(1, min(limit, 50))
+        shop_id = str(creds.get("shopId") or "")
+        try:
+            data = await self._get_products(creds, limit)
+            spreads = self._normalize_products(data)
+            if intent.tool == TOOL_COMMERCE_PRINTIFY_PRODUCTS_LIST:
+                return DigitalReceipt.success(
+                    intent,
+                    {"shopId": shop_id, "productCount": len(spreads), "spreads": spreads},
+                )
+            if intent.tool == TOOL_COMMERCE_PRINTIFY_CATALOG_SYNC:
+                return DigitalReceipt.success(
+                    intent,
+                    {
+                        "shopId": shop_id,
+                        "shopTitle": creds.get("shopTitle"),
+                        "productCount": len(spreads),
+                        "spreads": spreads,
+                    },
+                )
+            return DigitalReceipt.failure(intent, f"Unsupported Printify tool: {intent.tool}")
+        except Exception as exc:
+            LOG.exception("Printify commerce bridge failed")
+            return DigitalReceipt.failure(intent, str(exc))
+
+
 class BrowserFetchWorker:
     """Headless page fetch scaffold — browser.fetch_page on eno2."""
 
@@ -3019,6 +3635,9 @@ class DigitalBridgeRuntime:
         self._browser_auto = BrowserAutomateWorker()
         self._work_email = WorkEmailSendWorker()
         self._work_email_fetch = WorkEmailFetchWorker()
+        self._shopify = ShopifyCommerceWorker()
+        self._ebay = EbayCommerceWorker()
+        self._printify = PrintifyCommerceWorker()
         self._ctx = zmq.asyncio.Context.instance()
         self._running = True
 
@@ -3071,6 +3690,9 @@ class DigitalBridgeRuntime:
         LOG.info("Discord worker: %s", "enabled" if self._discord.enabled else "disabled (no creds)")
         LOG.info("WhatsApp worker: %s", "enabled" if self._whatsapp.enabled else "disabled (no creds)")
         LOG.info("iMessage worker: %s", "enabled" if self._imessage.enabled else "disabled (no creds)")
+        LOG.info("Shopify commerce worker: %s", "enabled" if self._shopify.enabled else "disabled (no creds)")
+        LOG.info("eBay commerce worker: %s", "enabled" if self._ebay.enabled else "disabled (no creds)")
+        LOG.info("Printify commerce worker: %s", "enabled" if self._printify.enabled else "disabled (no creds)")
 
         await asyncio.sleep(0.25)
 
@@ -3142,6 +3764,22 @@ class DigitalBridgeRuntime:
             return await self._work_email.handle(intent)
         if intent.tool == TOOL_WORK_EMAIL_FETCH:
             return await self._work_email_fetch.handle(intent)
+        if intent.tool in (
+            TOOL_COMMERCE_SHOPIFY_PRODUCTS_LIST,
+            TOOL_COMMERCE_SHOPIFY_ORDERS_LIST,
+            TOOL_COMMERCE_SHOPIFY_CATALOG_SYNC,
+        ):
+            return await self._shopify.handle(intent)
+        if intent.tool in (
+            TOOL_COMMERCE_EBAY_ORDERS_LIST,
+            TOOL_COMMERCE_EBAY_FULFILLMENT_SYNC,
+        ):
+            return await self._ebay.handle(intent)
+        if intent.tool in (
+            TOOL_COMMERCE_PRINTIFY_PRODUCTS_LIST,
+            TOOL_COMMERCE_PRINTIFY_CATALOG_SYNC,
+        ):
+            return await self._printify.handle(intent)
         return DigitalReceipt.failure(intent, f"Unknown digital tool: {intent.tool}")
 
     def stop(self) -> None:
