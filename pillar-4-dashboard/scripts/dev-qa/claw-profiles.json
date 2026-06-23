@@ -50,6 +50,57 @@
       "forgedAppId": "forged-fabricator-creator-desk",
       "forgedAppSlug": "fabricator-creator-desk",
       "meshConnected": true
+    },
+    {
+      "id": "claw-mqq6vn96",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T05:13:45.594Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work",
+      "forgedAppSlug": "exit-demo-work",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqq6vohg",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T05:13:47.188Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator",
+      "forgedAppSlug": "exit-demo-creator",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqq6vpq2",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T05:13:48.794Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital",
+      "forgedAppSlug": "exit-demo-capital",
+      "meshConnected": false
     }
   ],
   "activeClawId": "claw-mqpvngrs"

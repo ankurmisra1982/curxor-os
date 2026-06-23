@@ -44,6 +44,51 @@
       "id": "forged-fabricator-creator-desk",
       "href": "/my-claw/fabricator-creator-desk",
       "createdAt": "2026-06-22T23:59:28.443Z"
+    },
+    {
+      "slug": "exit-demo-work",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "templateId": "work-desk",
+      "short": "EXIT",
+      "provisioningMode": "framework",
+      "meshConnected": true,
+      "clawProfileId": "claw-mqq6vn96",
+      "growthLevel": "L2",
+      "importSource": null,
+      "id": "forged-exit-demo-work",
+      "href": "/my-claw/exit-demo-work",
+      "createdAt": "2026-06-23T05:13:45.580Z"
+    },
+    {
+      "slug": "exit-demo-creator",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "templateId": "creator-desk",
+      "short": "EXIT",
+      "provisioningMode": "framework",
+      "meshConnected": true,
+      "clawProfileId": "claw-mqq6vohg",
+      "growthLevel": "L2",
+      "importSource": null,
+      "id": "forged-exit-demo-creator",
+      "href": "/my-claw/exit-demo-creator",
+      "createdAt": "2026-06-23T05:13:47.177Z"
+    },
+    {
+      "slug": "exit-demo-capital",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "templateId": "capital-desk",
+      "short": "EXIT",
+      "provisioningMode": "framework",
+      "meshConnected": false,
+      "clawProfileId": "claw-mqq6vpq2",
+      "growthLevel": "L1",
+      "importSource": null,
+      "id": "forged-exit-demo-capital",
+      "href": "/my-claw/exit-demo-capital",
+      "createdAt": "2026-06-23T05:13:48.776Z"
     }
   ]
 }
