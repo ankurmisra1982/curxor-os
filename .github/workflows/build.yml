@@ -94,6 +94,7 @@ jobs:
       CURXOR_COMMERCE_PRINTIFY_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/commerce-printify.json
       CURXOR_SHOP_SYNC_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/shop-sync.json
       CURXOR_SIGNAL_FEED_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/signal-feed.json
+      CURXOR_ACTIVE_CLAW_CONF: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/engine.env.d/active-claw.conf
       CURXOR_SHOPIFY_MOCK: "1"
       CURXOR_EBAY_MOCK: "1"
       CURXOR_PRINTIFY_MOCK: "1"

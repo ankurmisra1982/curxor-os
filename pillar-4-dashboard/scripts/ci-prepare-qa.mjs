@@ -46,5 +46,6 @@ mkdirSync(path.join(DEV_QA, "channels"), { recursive: true });
 mkdirSync(path.join(DEV_QA, "app-fre"), { recursive: true });
 mkdirSync(path.join(DEV_QA, "agent-workspace"), { recursive: true });
 mkdirSync(path.join(DEV_QA, "scheduler"), { recursive: true });
+mkdirSync(path.join(DEV_QA, "engine.env.d"), { recursive: true });
 
 console.log("CI QA state ready");
