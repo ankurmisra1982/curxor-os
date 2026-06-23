@@ -6,7 +6,7 @@ import { AppMetric } from "@/components/app-shared/AppLayout";
 import { CafeAscensionPanel } from "@/components/apps/cafe/CafeAscensionPanel";
 import { CafeHostConfigPanel } from "@/components/apps/cafe/CafeHostConfigPanel";
 import { CafeLevelBadge } from "@/components/apps/cafe/CafeLevelBadge";
-import { CafeSpatialRoom } from "@/components/apps/cafe/CafeSpatialRoom";
+import { CafePixelCanvas } from "@/components/apps/cafe/CafePixelCanvas";
 import { CafeUnifiedFeedPanel } from "@/components/apps/cafe/CafeUnifiedFeedPanel";
 import {
   CafeWorkspaceTabs,
@@ -14,7 +14,7 @@ import {
   defaultCafeTab,
   type CafeWorkspaceTab,
 } from "@/components/apps/cafe/CafeWorkspaceTabs";
-import { WorkCafeXpPanel } from "@/components/apps/work/WorkCafeXpPanel";
+import { CafeWorkStreakStrip } from "@/components/apps/cafe/CafeWorkStreakStrip";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
@@ -116,6 +116,11 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
     void loadWorkXp();
     void loadCafeAscension();
   }, [loadWorkXp, loadCafeAscension]);
+
+  useEffect(() => {
+    if (workspaceTab !== "ascension") return;
+    void loadWorkXp();
+  }, [workspaceTab, loadWorkXp]);
 
   useEffect(() => {
     if (workspaceTab !== "ascension") return;
@@ -261,10 +266,14 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
             appId="claw-cafe"
             sectionId="spatial-room"
             minLevel="beginner"
-            title="Spatial room"
-            subtitle="Patrons react to cross-Claw events · live via SSE"
+            title="Pixel room"
+            subtitle="Walk the room · Claws animate on live SSE events"
           >
-            <CafeSpatialRoom characters={characters} lastPulseAt={lastRoomPulseAt} />
+            <CafePixelCanvas
+              characters={characters}
+              lastPulseAt={lastRoomPulseAt}
+              ascensionSnippet={ascension ? `${ascension.title} · ${ascension.ascensionXp} XP` : null}
+            />
           </ExperienceAppSection>
 
           <ExperienceAppSection
@@ -292,30 +301,21 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
             sectionId="work-xp"
             minLevel="beginner"
             title="Cross-Claw feed"
-            subtitle="Unified event ledger from Work, Swarm, Forge, and Capital"
+            subtitle="Work, Creator, Capital, Swarm, and Forge events in one ledger"
           >
-            <CafeUnifiedFeedPanel events={cafeEvents} loading={ascensionLoading} />
+            <CafeWorkStreakStrip
+              streak={xpStreak}
+              eventCount={xpEvents.length}
+              optOut={xpOptOut}
+              bonusReason={xpBonus}
+              loading={xpLoading}
+              onRefresh={() => void loadWorkXp()}
+            />
+            <div className="mt-3">
+              <CafeUnifiedFeedPanel events={cafeEvents} loading={ascensionLoading} />
+            </div>
           </ExperienceAppSection>
         </>
-      ) : null}
-
-      {workspaceTab === "progress" ? (
-        <ExperienceAppSection
-          appId="claw-cafe"
-          sectionId="work-xp"
-          minLevel="beginner"
-          title="Work desk XP"
-          subtitle="Work-only streak · see Ascension tab for merged feed"
-        >
-          <WorkCafeXpPanel
-            events={xpEvents}
-            streak={xpStreak}
-            optOut={xpOptOut}
-            bonusReason={xpBonus}
-            loading={xpLoading}
-            onRefresh={() => void loadWorkXp()}
-          />
-        </ExperienceAppSection>
       ) : null}
 
       {workspaceTab === "host" ? (

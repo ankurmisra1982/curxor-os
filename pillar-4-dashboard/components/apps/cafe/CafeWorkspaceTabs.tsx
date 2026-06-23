@@ -17,7 +17,6 @@ export {
 const TAB_LABELS: Record<CafeWorkspaceTab, string> = {
   play: "Play",
   ascension: "Ascension",
-  progress: "Progress",
   host: "Host",
 };
 

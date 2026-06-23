@@ -191,6 +191,13 @@ export async function POST(request: Request, { params }: RouteParams): Promise<R
           { status: 400 },
         );
       }
+      const { ingestForgedDeskCafeEvent } = await import("@/lib/claw-cafe-events");
+      void ingestForgedDeskCafeEvent({
+        forgedAppId: appId,
+        deskLabel: resolved.record.name,
+        action: "send_sequence_step",
+        detail: "Sequence step sent",
+      });
       const status = await fetchForgedWorkStatus(appId);
       return Response.json({ ok: true, send: result.send, sequence: result.sequence, status });
     }
@@ -224,6 +231,13 @@ export async function POST(request: Request, { params }: RouteParams): Promise<R
       if (!post) {
         return Response.json({ ok: false, error: "Post not found" }, { status: 404 });
       }
+      const { ingestForgedDeskCafeEvent } = await import("@/lib/claw-cafe-events");
+      void ingestForgedDeskCafeEvent({
+        forgedAppId: appId,
+        deskLabel: resolved.record.name,
+        action: "schedule_post",
+        detail: `Scheduled · ${post.channel}`,
+      });
       const status = await fetchForgedCreatorStatus(appId);
       return Response.json({ ok: true, post, status });
     }
@@ -268,6 +282,14 @@ export async function POST(request: Request, { params }: RouteParams): Promise<R
       if (!rule) {
         return Response.json({ ok: false, error: "Rule not found" }, { status: 404 });
       }
+      const { ingestForgedDeskCafeEvent } = await import("@/lib/claw-cafe-events");
+      void ingestForgedDeskCafeEvent({
+        forgedAppId: appId,
+        deskLabel: resolved.record.name,
+        action: "arm_rule",
+        detail: `Rule armed · ${rule.asset}`,
+        asset: rule.asset,
+      });
       const status = await fetchForgedCapitalStatus(appId);
       return Response.json({ ok: true, rule, status });
     }

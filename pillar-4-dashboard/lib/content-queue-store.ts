@@ -393,7 +393,16 @@ export async function scheduleContentPost(
     enabled: true,
   });
 
-  return file.posts[idx]!;
+  const scheduled = file.posts[idx]!;
+  const { emitCreatorXpEvent } = await import("./creator-xp-events");
+  void emitCreatorXpEvent("post_scheduled", {
+    postId,
+    channel: scheduled.channel,
+    platform: scheduled.platform,
+    scheduledAt: when,
+  });
+
+  return scheduled;
 }
 
 export async function saveHookVariants(

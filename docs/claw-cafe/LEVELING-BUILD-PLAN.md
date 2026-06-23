@@ -15,9 +15,9 @@ Claw Cafe is the **OS gamification home** — cross-Claw progression, spatial ro
 |--------|--------|--------|
 | **CC0** | Workspace tabs, gates, badge, Work XP consumer | **Shipped** |
 | **CC3** | Ascension G1–G6, event bus, CSS spatial grid, SSE, Forge sync | **Shipped (scaffold)** |
-| **C4** | Pixel Canvas room + patron avatar + inspect | **Next** |
-| **C5** | Creator/Capital/forged ingest; feed completeness | Planned |
-| **C6** | Level-up UX, opt-out, default tab | Planned |
+| **C4** | Pixel Canvas room + patron avatar + inspect | **Shipped** |
+| **C5** | Creator/Capital XP + sync + forged hooks; Progress merged | **Shipped** |
+| **C6** | Level-up UX, opt-out, default tab | **Next** |
 | **C7** | Easter eggs, yard dock, Go Live + demo tour | Planned |
 | **C8** | FRE growth intent, coach, nudge | Planned |
 | **C9** | QA checklist, GTM, v0.7.0 | Planned |
@@ -28,8 +28,7 @@ Claw Cafe is the **OS gamification home** — cross-Claw progression, spatial ro
 | Tab | Min level | Content today | Target |
 |-----|-----------|---------------|--------|
 | **Play** | L1 | Kiosk lanes, vision, guest queue | Sub-lane of Cafe; optional default L1 only |
-| **Ascension** | L1 | CSS room, G1–G6, cross-Claw feed | **Primary home** · pixel room + patron |
-| **Progress** | L1 | Work-only XP | Merge into Ascension (C5) |
+| **Ascension** | L1 | Pixel room, G1–G6, cross-Claw feed, Work streak | **Primary home** |
 | **Host** | L2 | FRE desk config | Keep |
 
 ## Code map
@@ -39,9 +38,9 @@ Claw Cafe is the **OS gamification home** — cross-Claw progression, spatial ro
 | Gates | `lib/cafe-level-gates.ts` · `lib/cafe-growth.ts` |
 | Ascension | `lib/claw-cafe-ascension.ts` |
 | Events | `lib/claw-cafe-events.ts` |
-| Spatial | `lib/claw-cafe-spatial.ts` · `components/apps/cafe/CafeSpatialRoom.tsx` |
+| Spatial | `lib/claw-cafe-spatial.ts` · `lib/cafe-pixel-engine.ts` · `CafePixelCanvas.tsx` |
 | UI | `ClawCafeApp.tsx` · `CafeAscensionPanel.tsx` · `CafeUnifiedFeedPanel.tsx` |
-| Bridges | `work-xp-events.ts` · `swarm-xp-events.ts` · `forge-cafe-events.ts` |
+| Bridges | `work-xp-events.ts` · `creator-xp-events.ts` · `capital-xp-events.ts` · `swarm-xp-events.ts` · `forge-cafe-events.ts` |
 | API | `app/api/cafe/status/route.ts` · `app/api/stream/cafe/route.ts` |
 | QA | `npm run qa:cafe-ascension` |
 

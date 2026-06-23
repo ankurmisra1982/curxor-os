@@ -106,6 +106,9 @@ export async function runContentDemoTour(): Promise<ContentDemoTourResult> {
     steps.push("Bridge configured — schedule only (use Publish now for live send)");
   }
 
+  const { emitCreatorXpEvent } = await import("./creator-xp-events");
+  void emitCreatorXpEvent("demo_tour_complete", { postId: post.id, platform: post.platform });
+
   return {
     ok: true,
     postId: post.id,

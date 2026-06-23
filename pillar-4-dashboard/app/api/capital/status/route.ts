@@ -151,6 +151,9 @@ export async function POST(request: Request): Promise<Response> {
       case "arm_rule": {
         if (!body.ruleId) return Response.json({ ok: false, error: "ruleId required" }, { status: 400 });
         const rule = await setRuleState(body.ruleId, "ARMED");
+        if (!rule) return Response.json({ ok: false, error: "Rule not found" }, { status: 404 });
+        const { emitCapitalXpEvent } = await import("@/lib/capital-xp-events");
+        void emitCapitalXpEvent("rule_armed", { ruleId: rule.id, asset: rule.asset });
         return Response.json({ ok: true, rule, status: await fetchCapitalStatus() });
       }
 
@@ -167,6 +170,11 @@ export async function POST(request: Request): Promise<Response> {
         if (!current) return Response.json({ ok: false, error: "Rule not found" }, { status: 404 });
         const next: RuleState = current.state === "ARMED" ? "PAUSED" : "ARMED";
         const rule = await setRuleState(body.ruleId, next);
+        if (!rule) return Response.json({ ok: false, error: "Rule not found" }, { status: 404 });
+        if (next === "ARMED") {
+          const { emitCapitalXpEvent } = await import("@/lib/capital-xp-events");
+          void emitCapitalXpEvent("rule_armed", { ruleId: rule.id, asset: rule.asset });
+        }
         return Response.json({ ok: true, rule, status: await fetchCapitalStatus() });
       }
 

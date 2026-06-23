@@ -22,7 +22,7 @@ export function CafeUnifiedFeedPanel({ events, loading }: CafeUnifiedFeedPanelPr
   if (events.length === 0) {
     return (
       <p className="font-mono text-[10px] text-muted">
-        No ascension events yet — use Work, Swarm, Forge, or Capital and tap Sync Claws.
+        No ascension events yet — use Work, Creator, Capital, Swarm, or Forge and tap Sync Claws.
       </p>
     );
   }

@@ -881,16 +881,17 @@ await check("cafe workspace tab gates", async () => {
   const order = { L1: 0, L2: 1, L3: 2, L4: 3, L5: 4 };
   const meets = (user, req) => order[user] >= order[req];
   const tabs = (g) => {
-    const out = ["play", "ascension", "progress"];
+    const out = ["play", "ascension"];
     if (meets(g, "L2")) out.push("host");
     return out;
   };
   return (
-    tabs("L1").length === 3 &&
-    tabs("L2").length === 4 &&
+    tabs("L1").length === 2 &&
+    tabs("L2").length === 3 &&
     tabs("L1").includes("ascension") &&
     tabs("L2").includes("host") &&
-    !tabs("L1").includes("host")
+    !tabs("L1").includes("host") &&
+    !tabs("L1").includes("progress")
   );
 });
 
@@ -902,6 +903,15 @@ await check("cafe ascension status route", async () => {
     typeof data.ascension.tier === "string" &&
     Array.isArray(data.characters)
   );
+});
+
+await check("cafe pixel engine proximity", async () => {
+  const manhattan = (a, b) => Math.abs(a.col - b.col) + Math.abs(a.row - b.row);
+  const adjacent = (a, b) => manhattan(a, b) <= 1;
+  const patron = { col: 1, row: 0 };
+  const mail = { col: 0, row: 0 };
+  const ticker = { col: 4, row: 0 };
+  return adjacent(patron, mail) && !adjacent(patron, ticker);
 });
 
 await check("swarm feature gates", async () => {

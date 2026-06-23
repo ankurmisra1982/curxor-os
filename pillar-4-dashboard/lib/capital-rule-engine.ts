@@ -118,6 +118,12 @@ export async function evaluateArmedRules(options?: { force?: boolean }): Promise
       fired += 1;
       await markRuleEvaluated(rule.id, true);
       await incrementAutoTradeCount();
+      const { emitCapitalXpEvent } = await import("./capital-xp-events");
+      void emitCapitalXpEvent("rule_fired", {
+        ruleId: rule.id,
+        asset: rule.asset,
+        tradeId: result.trade?.id,
+      });
     } else {
       skipped += 1;
     }

@@ -71,6 +71,11 @@ export async function runCapitalDemoTour(): Promise<DemoTourResult> {
       : exec.error ?? "failed",
   });
 
+  if (exec.ok) {
+    const { emitCapitalXpEvent } = await import("./capital-xp-events");
+    void emitCapitalXpEvent("demo_tour_complete", { ruleId: rule.id, asset: rule.asset });
+  }
+
   return {
     ok: exec.ok,
     steps,

@@ -15,6 +15,15 @@ import type { SocialPlatformId } from "./social-channels";
 async function simulateDemoPublish(postId: string): Promise<DigitalPublishResult & { postId: string }> {
   const simId = `SIM-${postId.slice(-6)}`;
   await markPostPublished(postId, "demo://local", simId);
+  const post = await getContentPost(postId);
+  if (post) {
+    const { emitCreatorXpEvent } = await import("./creator-xp-events");
+    void emitCreatorXpEvent("post_published", {
+      postId,
+      platform: post.platform,
+      channel: post.channel,
+    });
+  }
   return {
     ok: true,
     id: simId,
@@ -54,6 +63,15 @@ export async function publishPostToBridge(
   const result = await publishDigitalIntent(digital);
   if (result.ok) {
     await markPostSubmitted(postId, result.id);
+    const published = await getContentPost(postId);
+    if (published) {
+      const { emitCreatorXpEvent } = await import("./creator-xp-events");
+      void emitCreatorXpEvent("post_published", {
+        postId,
+        platform: published.platform,
+        channel: published.channel,
+      });
+    }
   } else {
     const post = await getContentPost(postId);
     if (post) {

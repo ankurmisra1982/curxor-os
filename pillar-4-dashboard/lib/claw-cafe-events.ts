@@ -11,6 +11,7 @@ import {
 } from "./claw-cafe-ascension";
 import type { CafeCharacter, CafeCharacterState } from "./claw-cafe-spatial";
 import { APP_STATION, stateForEventKind, stationForApp } from "./claw-cafe-spatial";
+import { isPreviewApp } from "./claw-preview-apps";
 import { readClawProfiles } from "./claw-profiles";
 import { OOTB_APPS, type OotbAppId } from "./ootb-apps";
 import { readUserSettings } from "./user-settings";
@@ -21,6 +22,7 @@ export type CafeEventKind =
   | "work.sequence_step"
   | "work.handoff"
   | "creator.publish"
+  | "capital.rule_armed"
   | "capital.rule_fired"
   | "forge.claw_minted"
   | "forge.framework_provisioned"
@@ -114,6 +116,7 @@ function applyMilestone(kind: CafeEventKind, milestones: AscensionMilestones): A
   }
   if (
     kind === "capital.rule_fired" ||
+    kind === "capital.rule_armed" ||
     kind === "work.sequence_step" ||
     kind === "swarm.dispatch" ||
     kind === "app.go_live"
@@ -165,13 +168,16 @@ async function defaultCharacters(): Promise<CafeCharacter[]> {
   for (const app of OOTB_APPS) {
     if (!settings.selectedApps.includes(app.id as OotbAppId)) continue;
     if (app.id === "claw-cafe") continue;
+    const preview =
+      isPreviewApp(app.id) &&
+      app.id !== "robotaxi-fleet-manager";
     chars.push({
       id: `char-${app.id}`,
       label: app.short,
       appId: app.id,
-      station: stationForApp(app.id),
+      station: preview ? "couch" : stationForApp(app.id),
       state: "idle",
-      bubble: null,
+      bubble: preview ? "Preview" : null,
       lastEventAt: null,
     });
   }
@@ -355,6 +361,92 @@ function mapSwarmXpToCafe(
   };
 }
 
+function mapCreatorXpToCafe(
+  kind: string,
+  payload: Record<string, unknown>,
+): Omit<Parameters<typeof ingestCafeEvent>[0], "sourceRef"> | null {
+  const appId = typeof payload.appId === "string" ? payload.appId : "my-content-creator";
+  const channel = typeof payload.channel === "string" ? payload.channel : "channel";
+  const platform = typeof payload.platform === "string" ? payload.platform : "";
+
+  if (kind === "post_published") {
+    return {
+      kind: "creator.publish",
+      appId,
+      xp: { ascension: 18, knowledge: 12 },
+      bubble: platform ? `Published · ${platform}` : "Published to bridge",
+    };
+  }
+  if (kind === "post_scheduled") {
+    return {
+      kind: "creator.publish",
+      appId,
+      xp: { ascension: 10, knowledge: 8 },
+      bubble: `Scheduled · ${channel}`,
+    };
+  }
+  if (kind === "go_live_demo_ready") {
+    return {
+      kind: "app.go_live",
+      appId,
+      xp: { ascension: 28, knowledge: 15 },
+      bubble: "Creator Go Live milestone",
+    };
+  }
+  if (kind === "demo_tour_complete") {
+    return {
+      kind: "app.tour_complete",
+      appId,
+      xp: { ascension: 22, knowledge: 12 },
+      bubble: "Creator demo tour complete",
+    };
+  }
+  return null;
+}
+
+function mapCapitalXpToCafe(
+  kind: string,
+  payload: Record<string, unknown>,
+): Omit<Parameters<typeof ingestCafeEvent>[0], "sourceRef"> | null {
+  const appId = typeof payload.appId === "string" ? payload.appId : "my-capital";
+  const asset = typeof payload.asset === "string" ? payload.asset : "ticker";
+  const ruleId = typeof payload.ruleId === "string" ? payload.ruleId : "";
+
+  if (kind === "rule_armed") {
+    return {
+      kind: "capital.rule_armed",
+      appId,
+      xp: { ascension: 12, wealth: 8 },
+      bubble: ruleId ? `Rule armed · ${asset}` : `Rule armed · ${asset}`,
+    };
+  }
+  if (kind === "rule_fired") {
+    return {
+      kind: "capital.rule_fired",
+      appId,
+      xp: { ascension: 20, wealth: 15 },
+      bubble: `Rule fired · ${asset}`,
+    };
+  }
+  if (kind === "go_live_demo_ready") {
+    return {
+      kind: "app.go_live",
+      appId,
+      xp: { ascension: 30, wealth: 18 },
+      bubble: "Capital Go Live milestone",
+    };
+  }
+  if (kind === "demo_tour_complete") {
+    return {
+      kind: "app.tour_complete",
+      appId,
+      xp: { ascension: 25, wealth: 12 },
+      bubble: "Capital demo tour complete",
+    };
+  }
+  return null;
+}
+
 /** Pull un-synced work / swarm / forge rows into unified cafe ledger (single write). */
 export async function syncCafeEventSources(): Promise<{ ingested: number }> {
   const settings = await readUserSettings();
@@ -426,6 +518,20 @@ export async function syncCafeEventSources(): Promise<{ ingested: number }> {
     });
   }
 
+  const { listCreatorXpEvents } = await import("./creator-xp-events");
+  for (const row of await listCreatorXpEvents(50)) {
+    const mapped = mapCreatorXpToCafe(row.kind, row.payload);
+    if (!mapped) continue;
+    await append({ ...mapped, sourceRef: `creator:${row.id}` });
+  }
+
+  const { listCapitalXpEvents } = await import("./capital-xp-events");
+  for (const row of await listCapitalXpEvents(50)) {
+    const mapped = mapCapitalXpToCafe(row.kind, row.payload);
+    if (!mapped) continue;
+    await append({ ...mapped, sourceRef: `capital:${row.id}` });
+  }
+
   if (ingested > 0) {
     state.events = state.events.slice(0, 300);
     await writeState(state);
@@ -450,4 +556,63 @@ export async function ingestCafeEventFromSwarm(
   const mapped = mapSwarmXpToCafe(kind, payload);
   if (!mapped) return;
   await ingestCafeEvent({ ...mapped, sourceRef: `swarm-live:${kind}:${Date.now()}` });
+}
+
+export async function ingestCafeEventFromCreator(
+  kind: string,
+  payload: Record<string, unknown> = {},
+): Promise<void> {
+  const mapped = mapCreatorXpToCafe(kind, payload);
+  if (!mapped) return;
+  await ingestCafeEvent({ ...mapped, sourceRef: `creator-live:${kind}:${Date.now()}` });
+}
+
+export async function ingestCafeEventFromCapital(
+  kind: string,
+  payload: Record<string, unknown> = {},
+): Promise<void> {
+  const mapped = mapCapitalXpToCafe(kind, payload);
+  if (!mapped) return;
+  await ingestCafeEvent({ ...mapped, sourceRef: `capital-live:${kind}:${Date.now()}` });
+}
+
+/** Forged desk actions → cafe room (work / creator / capital templates). */
+export async function ingestForgedDeskCafeEvent(input: {
+  forgedAppId: string;
+  deskLabel: string;
+  action: "send_sequence_step" | "schedule_post" | "arm_rule";
+  detail?: string;
+  asset?: string;
+}): Promise<void> {
+  const label = input.deskLabel.slice(0, 16);
+  if (input.action === "send_sequence_step") {
+    await ingestCafeEvent({
+      kind: "work.sequence_step",
+      appId: input.forgedAppId,
+      xp: { ascension: 10, wealth: 6 },
+      bubble: input.detail ?? "Forged desk · sequence step",
+      sourceRef: `forged-live:work:${input.forgedAppId}:${Date.now()}`,
+      label,
+    });
+    return;
+  }
+  if (input.action === "schedule_post") {
+    await ingestCafeEvent({
+      kind: "creator.publish",
+      appId: input.forgedAppId,
+      xp: { ascension: 10, knowledge: 8 },
+      bubble: input.detail ?? "Forged desk · post scheduled",
+      sourceRef: `forged-live:creator:${input.forgedAppId}:${Date.now()}`,
+      label,
+    });
+    return;
+  }
+  await ingestCafeEvent({
+    kind: "capital.rule_armed",
+    appId: input.forgedAppId,
+    xp: { ascension: 12, wealth: 8 },
+    bubble: input.detail ?? `Forged desk · rule armed${input.asset ? ` · ${input.asset}` : ""}`,
+    sourceRef: `forged-live:capital:${input.forgedAppId}:${Date.now()}`,
+    label,
+  });
 }

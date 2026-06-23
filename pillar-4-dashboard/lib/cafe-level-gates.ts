@@ -1,7 +1,7 @@
 import type { GrowthLevel } from "./os-growth-level";
 import { meetsGrowthLevel } from "./os-growth-level";
 
-export type CafeWorkspaceTab = "play" | "ascension" | "progress" | "host";
+export type CafeWorkspaceTab = "play" | "ascension" | "host";
 
 export type CafeSection =
   | "lanes"
@@ -21,7 +21,7 @@ const SECTION_MIN: Record<CafeSection, GrowthLevel> = {
 };
 
 export function cafeTabsForGrowth(growth: GrowthLevel): CafeWorkspaceTab[] {
-  const tabs: CafeWorkspaceTab[] = ["play", "ascension", "progress"];
+  const tabs: CafeWorkspaceTab[] = ["play", "ascension"];
   if (meetsGrowthLevel(growth, "L2")) tabs.push("host");
   return tabs;
 }
