@@ -4,7 +4,7 @@
 > **Vision:** [CLAW-CAFE-PRD.md](../curxor-os/CLAW-CAFE-PRD.md)  
 > **Framework:** [GROWTH-LEVEL-FRAMEWORK.md](../curxor-os/GROWTH-LEVEL-FRAMEWORK.md)  
 > **Forge handoff:** F8–F12 mint/archive events + CCP — **done**  
-> **Status:** Active — hand to Cafe Agent chat  
+> **Status:** C4–C9 shipped · **v0.7.0** tagged  
 > **Target band:** v0.7.0–v0.7.2
 
 ---

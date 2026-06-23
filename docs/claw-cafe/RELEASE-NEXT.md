@@ -19,22 +19,16 @@
 - [x] **C5** — Creator + Capital + forged hooks; Progress merged into Ascension
 - [x] **C6** — Level-up ceremony · unified gamification opt-out · default Ascension tab L2+
 - [x] **C7** — Easter eggs · yard dock · Go Live + demo tour · Architect C7.1 polish
-- [x] **C8** — `cafeGrowthIntent` FRE · coach tips · `CafeLevelUpNudge`
-- [x] **C9** — `cafe-checklist.mjs` · BEST-IN-CLASS scorecard · EXIT-DEMO · pixel capture · **v0.7.0**
+- [x] **C8** — `cafeGrowthIntent` FRE · ascension coach tips · `CafeLevelUpNudge` · Gamification toggle rename
+- [x] **C9** — `cafe-checklist.mjs` in qa:local · BEST-IN-CLASS scorecard · EXIT-DEMO · pixel captures · **v0.7.0** tag
 
-## Shipped (operational mirror — v0.7.2)
+## Deferred (v0.7.1+)
 
-- [x] **C10** — Live auto-sync on SSE/bootstrap · approval bubbles in pixel room · Repair sync backfill
-- [x] **C11** — Vital/Kin/Shop/Signal XP emitters + sync path · forged desk activity hook
-- [x] **C12** — Hidden Master AI chamber · G4+ patron brief (ledger answers, no Claw banter)
-- [x] **C13** — Per-Claw sprite pass · room mastery stars on inspect flyout
-
-## Deferred
-
-- Master AI patron chat panel (v0.8)
+- Master AI patron chat panel (full unified ask — v0.8)
+- Live auto-sync polish · approval bubbles in pixel room (C10)
+- Vital/Kin/Shop/Signal XP emitters completeness (C11)
+- G4+ patron brief chamber · room mastery stars (C12–C13)
 - Second room / eno2 break room
 - Full Engage/DM inbox (CC2 heavy)
 - Nav rebrand Engage → Claw Cafe (optional; noted in EXIT-DEMO)
-- Full forged desk XP hooks
-- Tier C preview bubbles in pixel room
 - Storefront copy refresh

@@ -626,10 +626,16 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           body: "Sprout → Infinity tiers track Knowledge and Wealth affinities from real Claw activity on this box.",
         },
         {
+          id: "cafe-milestone-nudge-standard",
+          minLevel: "standard",
+          title: "Milestone nudge",
+          body: "When a tier is close, the nudge lists open milestones (Creator/Forge knowledge, Work/Capital wealth, handshake, Forge mint). Repair sync only if an event was missed.",
+        },
+        {
           id: "cafe-sync-standard",
           minLevel: "standard",
-          title: "Sync Claws",
-          body: "Tap Sync Claws to pull Work, Creator, Capital, Swarm, and Forge events into one ledger.",
+          title: "Live ledger",
+          body: "Desk activity streams into the pixel room via SSE. Use Repair sync on Ascension only if an event was missed.",
         },
       ],
     },

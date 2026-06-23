@@ -19,7 +19,7 @@ export function WorkCafeXpPanel({ events, streak, optOut, bonusReason, loading, 
   if (optOut) {
     return (
       <p className="font-mono text-[10px] text-muted">
-        Work gamification is off — enable in Settings → Appearance to show XP streak here.
+        Work XP and Cafe ascension are paused — enable Gamification in Settings → Appearance.
       </p>
     );
   }
