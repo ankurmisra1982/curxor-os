@@ -38,6 +38,7 @@ interface ForgeGoLivePanelProps {
   report: ForgeGoLiveReportRow | null;
   onRefresh: () => void;
   onRunDemoTour?: () => void;
+  onOpenSetupWizard?: () => void;
   demoTourRunning?: boolean;
 }
 
@@ -45,6 +46,7 @@ export function ForgeGoLivePanel({
   report,
   onRefresh,
   onRunDemoTour,
+  onOpenSetupWizard,
   demoTourRunning,
 }: ForgeGoLivePanelProps) {
   if (!report) {
@@ -74,6 +76,15 @@ export function ForgeGoLivePanel({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {onOpenSetupWizard ? (
+            <button
+              type="button"
+              onClick={onOpenSetupWizard}
+              className="border border-line px-3 py-1 uppercase tracking-widest text-stark hover:text-cursor-glow"
+            >
+              Setup wizard
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={onRefresh}

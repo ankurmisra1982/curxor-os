@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-23T03:25:21.199Z",
+  "leads": [
+    {
+      "id": "LEAD-001",
+      "name": "Demo Prospect",
+      "email": "demo-t-work-5@forged.local",
+      "company": "CurXor Pilot",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-23T03:25:21.074Z",
+      "updatedAt": "2026-06-23T03:25:21.074Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-002",
+      "name": "Assist Flow Lead",
+      "email": "assist-flow-1782185121120@forged.local",
+      "company": "",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-23T03:25:21.199Z",
+      "updatedAt": "2026-06-23T03:25:21.199Z",
+      "lastTouchAt": null
+    }
+  ],
+  "tasks": [],
+  "sequences": [],
+  "sends": [],
+  "mailIndex": [],
+  "syncLog": []
+}

@@ -53,6 +53,10 @@ export async function emitWorkXpEvent(
   const filePath = xpPath();
   await mkdir(path.dirname(filePath), { recursive: true });
   await writeFile(filePath, `${JSON.stringify({ events: events.slice(0, 200) }, null, 2)}\n`, "utf8");
+
+  const { ingestCafeEventFromWork } = await import("./claw-cafe-events");
+  void ingestCafeEventFromWork(kind, payload);
+
   return row;
 }
 

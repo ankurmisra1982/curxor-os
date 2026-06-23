@@ -74,7 +74,8 @@ export function ForgedClawWorkspace({
   const [bootstrapped, setBootstrapped] = useState(false);
 
   useEffect(() => {
-    if (forgedApp.templateId !== "work-desk" || bootstrapped) return;
+    const deskTemplates = new Set(["work-desk", "creator-desk", "capital-desk"]);
+    if (!deskTemplates.has(forgedApp.templateId) || bootstrapped) return;
     void fetch(`/api/forged/${forgedApp.id}/status`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -87,7 +88,17 @@ export function ForgedClawWorkspace({
 
   useEffect(() => {
     if (skillTick === 0 || !lastSkillId) return;
-    const serverExecuted = new Set(["create_lead", "draft_sequence"]);
+    const serverExecuted = new Set([
+      "create_lead",
+      "draft_sequence",
+      "send_sequence_step",
+      "draft_post",
+      "schedule_post",
+      "research_ticker",
+      "create_rule",
+      "arm_rule",
+      "publish_context",
+    ]);
     if (!serverExecuted.has(lastSkillId)) return;
     setDeskRefreshKey((k) => k + 1);
   }, [skillTick, lastSkillId]);
@@ -140,7 +151,11 @@ export function ForgedClawWorkspace({
           subtitle={
             forgedApp.templateId === "work-desk"
               ? "Local pipeline · leads and sequences on appliance"
-              : `${forgedApp.templateId} template · tap skills in agent console`
+              : forgedApp.templateId === "creator-desk"
+                ? "Local content queue · drafts and schedule on appliance"
+                : forgedApp.templateId === "capital-desk"
+                  ? "Local watchlist and rules · paper path on appliance"
+                  : `${forgedApp.templateId} template · tap skills in agent console`
           }
         >
           <TemplateDeskPanel
@@ -169,6 +184,12 @@ export function ForgedClawWorkspace({
             {forgedApp.templateId === "work-desk" ? (
               <li>✓ Pipeline stored in agent-workspace/{forgedApp.id}/work-queue.json</li>
             ) : null}
+            {forgedApp.templateId === "creator-desk" ? (
+              <li>✓ Content queue stored in agent-workspace/{forgedApp.id}/content-queue.json</li>
+            ) : null}
+            {forgedApp.templateId === "capital-desk" ? (
+              <li>✓ Capital desk stored in agent-workspace/{forgedApp.id}/capital-queue.json</li>
+            ) : null}
           </ul>
         </ExperienceAppSection>
       ) : null}
@@ -179,17 +200,23 @@ export function ForgedClawWorkspace({
           sectionId="forged-skills"
           minLevel="expert"
           title="Skills"
-          subtitle="Server-executed on work-desk · plan skills elsewhere"
+          subtitle="Server-executed on work / creator / capital desks · plan skills elsewhere"
         >
           <ul className="space-y-1 font-mono text-[10px] text-muted">
-            {agent.skills.map((s) => (
-              <li key={s.id}>
-                {s.label} · {s.kind}
-                {forgedApp.templateId === "work-desk" && (s.id === "create_lead" || s.id === "draft_sequence")
-                  ? " · server"
-                  : ""}
-              </li>
-            ))}
+            {agent.skills.map((s) => {
+              const serverSkill =
+                (forgedApp.templateId === "work-desk" && (s.id === "create_lead" || s.id === "draft_sequence")) ||
+                (forgedApp.templateId === "creator-desk" && (s.id === "draft_post" || s.id === "schedule_post")) ||
+                (forgedApp.templateId === "capital-desk" &&
+                  (s.id === "research_ticker" || s.id === "create_rule" || s.id === "arm_rule")) ||
+                s.id === "publish_context";
+              return (
+                <li key={s.id}>
+                  {s.label} · {s.kind}
+                  {serverSkill ? " · server" : ""}
+                </li>
+              );
+            })}
           </ul>
         </ExperienceAppSection>
       ) : null}

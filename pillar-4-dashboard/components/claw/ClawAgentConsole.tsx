@@ -10,15 +10,24 @@ import { useForgeAssistOptional } from "@/components/claw/ForgeAssistProvider";
 
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 
-import { getAppAgent } from "@/lib/app-agent-catalog";
+import { getAppAgent, type AppAgentDefinition } from "@/lib/app-agent-catalog";
+import type { ResolvedAppAgent } from "@/lib/forged-agent-catalog";
+import { resolveCreatorGrowthLevel } from "@/lib/creator-growth";
+import { creatorSkillVisible } from "@/lib/creator-level-gates";
+import { resolveVitalGrowthLevel } from "@/lib/vital-growth";
+import { vitalSkillVisible } from "@/lib/vital-level-gates";
+import { resolveShopGrowthLevel } from "@/lib/shop-growth";
+import { shopSkillVisible } from "@/lib/shop-level-gates";
+import { resolveKinGrowthLevel } from "@/lib/kin-growth";
+import { kinSkillVisible } from "@/lib/kin-level-gates";
+import { resolveSwarmGrowthLevel } from "@/lib/swarm-growth";
+import { swarmSkillVisible } from "@/lib/swarm-level-gates";
 import { resolveWorkGrowthLevel } from "@/lib/work-growth";
 import { workSkillVisible } from "@/lib/work-level-gates";
+import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
 
 import { skillActivityLine } from "@/lib/app-agent-types";
-
 import type { ForgeAssistResult } from "@/lib/claw-assist";
-
-import type { OotbAppId } from "@/lib/ootb-apps";
 
 
 
@@ -33,31 +42,74 @@ interface ChatLine {
 
 
 export interface ClawAgentConsoleProps {
-
-  appId: OotbAppId;
-
+  appId: string;
+  agentDef?: AppAgentDefinition | ResolvedAppAgent;
   config: Record<string, unknown>;
-
-  onSkill?: (skillId: string) => void;
-
+  onSkill?: (skillId: string, dispatchHints?: Record<string, unknown>) => void;
+  updateWorkspaceContext?: (patch: Record<string, unknown>) => void;
 }
 
-
-
-export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsoleProps) {
-
-  const agentDef = getAppAgent(appId);
+export function ClawAgentConsole({ appId, agentDef, config, onSkill, updateWorkspaceContext }: ClawAgentConsoleProps) {
+  const baseAgent = agentDef ?? (isValidAppId(appId) ? getAppAgent(appId as OotbAppId) : null);
+  const agentDefResolved = baseAgent ?? {
+    agentName: "Claw",
+    skills: [],
+    bootMessage: "Ready.",
+    purpose: [],
+    howToUse: [],
+    tagline: "",
+    ootbLabel: "Claw",
+    appId: appId as OotbAppId,
+    fre: { welcomeTitle: "", welcomeLead: "", configureTitle: "", configureLead: "", fields: [], activateTitle: "", activateTips: [] },
+  };
 
   const { isExpert, isBeginner, level } = useExperienceLevel();
 
   const agent = useMemo(() => {
-    if (appId !== "my-work") return agentDef;
-    const growth = resolveWorkGrowthLevel(config, level);
-    return {
-      ...agentDef,
-      skills: agentDef.skills.filter((s) => workSkillVisible(growth, s.id)),
-    };
-  }, [appId, agentDef, config, level]);
+    if (appId === "my-work") {
+      const growth = resolveWorkGrowthLevel(config, level);
+      return {
+        ...agentDefResolved,
+        skills: agentDefResolved.skills.filter((s) => workSkillVisible(growth, s.id)),
+      };
+    }
+    if (appId === "my-content-creator") {
+      const growth = resolveCreatorGrowthLevel(config, level);
+      return {
+        ...agentDefResolved,
+        skills: agentDefResolved.skills.filter((s) => creatorSkillVisible(growth, s.id)),
+      };
+    }
+    if (appId === "my-vital") {
+      const growth = resolveVitalGrowthLevel(config, level);
+      return {
+        ...agentDefResolved,
+        skills: agentDefResolved.skills.filter((s) => vitalSkillVisible(growth, s.id)),
+      };
+    }
+    if (appId === "my-family") {
+      const growth = resolveKinGrowthLevel(config, level);
+      return {
+        ...agentDefResolved,
+        skills: agentDefResolved.skills.filter((s) => kinSkillVisible(growth, s.id)),
+      };
+    }
+    if (appId === "robotaxi-fleet-manager") {
+      const growth = resolveSwarmGrowthLevel(config, level);
+      return {
+        ...agentDefResolved,
+        skills: agentDefResolved.skills.filter((s) => swarmSkillVisible(growth, s.id)),
+      };
+    }
+    if (appId === "my-shop") {
+      const growth = resolveShopGrowthLevel(config, level);
+      return {
+        ...agentDefResolved,
+        skills: agentDefResolved.skills.filter((s) => shopSkillVisible(growth, s.id)),
+      };
+    }
+    return agentDefResolved;
+  }, [appId, agentDefResolved, config, level]);
 
   const forge = useForgeAssistOptional();
 
@@ -254,13 +306,12 @@ export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsolePro
         if (!res.ok) throw new Error("assist failed");
 
         const data = (await res.json()) as {
-
           reply: string;
-
           activity?: string;
-
           mesh?: { kind: string; ok: boolean; seq?: number; id?: string; tool?: string };
-
+          suggestedSkill?: string;
+          autoDispatchSkill?: boolean;
+          dispatchHints?: Record<string, unknown>;
         };
 
 
@@ -289,8 +340,13 @@ export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsolePro
 
           }
 
-          onSkill?.(skillId);
+          onSkill?.(skillId, data.dispatchHints);
 
+        } else if (data.autoDispatchSkill && data.suggestedSkill) {
+          if (data.dispatchHints) updateWorkspaceContext?.(data.dispatchHints);
+          pushActivity(skillActivityLine(appId, data.suggestedSkill));
+          if (data.activity) pushActivity(data.activity);
+          onSkill?.(data.suggestedSkill, data.dispatchHints);
         } else if (data.activity) {
 
           pushActivity(data.activity);
@@ -311,7 +367,7 @@ export function ClawAgentConsole({ appId, config, onSkill }: ClawAgentConsolePro
 
     },
 
-    [appId, config, messages, onSkill, pushActivity],
+    [appId, config, messages, onSkill, pushActivity, updateWorkspaceContext],
 
   );
 

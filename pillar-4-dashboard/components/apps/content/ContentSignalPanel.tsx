@@ -19,7 +19,9 @@ interface ContentSignalPanelProps {
 export function ContentSignalPanel({ items, onRefresh, onDraft }: ContentSignalPanelProps) {
   return (
     <div className="space-y-3 font-mono text-[10px]">
-      <p className="text-muted">Reactive drafts from Signal Claw feed (`/etc/curxor/signal-feed.json`).</p>
+      <p className="text-muted">
+        Reactive drafts from Signal Claw home (`/optimus` · Signals tab). Downstream view — full desk at Signal Claw.
+      </p>
       <button type="button" onClick={onRefresh} className="border border-line px-2 py-0.5 uppercase text-muted">
         Refresh
       </button>

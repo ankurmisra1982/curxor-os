@@ -3,20 +3,34 @@ import "server-only";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import type { CapitalThesisEntry } from "./capital-alpha-types";
 import type {
   CapitalIntelSnapshot,
   IntelAlertFire,
+  IntelAlertPreferences,
   IntelAlertRule,
   TickerIntel,
 } from "./capital-intel-types";
 
 export interface CapitalIntelCache {
-  version: 2;
+  version: 3;
   updatedAt: string;
   digest: CapitalIntelSnapshot | null;
   tickerBySymbol: Record<string, TickerIntel>;
   alertRules: IntelAlertRule[];
   alertFires: IntelAlertFire[];
+  alertPreferences: IntelAlertPreferences;
+  thesisEntries: CapitalThesisEntry[];
+}
+
+export function defaultAlertPreferences(): IntelAlertPreferences {
+  return {
+    notifyPilotSignals: true,
+    minPilotNotionalUsd: 500,
+    notifyMoverSpikes: true,
+    moverSpikePct: 3,
+    notifyIntelFires: true,
+  };
 }
 
 function cachePath(): string {
@@ -25,23 +39,27 @@ function cachePath(): string {
 
 function emptyCache(): CapitalIntelCache {
   return {
-    version: 2,
+    version: 3,
     updatedAt: new Date().toISOString(),
     digest: null,
     tickerBySymbol: {},
     alertRules: [],
     alertFires: [],
+    alertPreferences: defaultAlertPreferences(),
+    thesisEntries: [],
   };
 }
 
 function migrateCache(parsed: Partial<CapitalIntelCache>): CapitalIntelCache {
   return {
-    version: 2,
+    version: 3,
     updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString(),
     digest: parsed.digest ?? null,
     tickerBySymbol: parsed.tickerBySymbol ?? {},
     alertRules: Array.isArray(parsed.alertRules) ? parsed.alertRules : [],
     alertFires: Array.isArray(parsed.alertFires) ? parsed.alertFires.slice(-100) : [],
+    alertPreferences: { ...defaultAlertPreferences(), ...(parsed.alertPreferences ?? {}) },
+    thesisEntries: Array.isArray(parsed.thesisEntries) ? parsed.thesisEntries : [],
   };
 }
 
@@ -85,6 +103,7 @@ export async function upsertIntelAlertRule(rule: Omit<IntelAlertRule, "id" | "cr
     kind: rule.kind,
     keyword: rule.keyword,
     thresholdPct: rule.thresholdPct,
+    minNotionalUsd: rule.minNotionalUsd,
     enabled: rule.enabled,
     createdAt: now,
     lastFiredAt: null,
@@ -109,4 +128,52 @@ export async function recordIntelAlertFire(fire: IntelAlertFire, ruleId: string)
   const rule = cache.alertRules.find((r) => r.id === ruleId);
   if (rule) rule.lastFiredAt = fire.firedAt;
   await writeIntelCache(cache);
+}
+
+export async function getAlertPreferences(): Promise<IntelAlertPreferences> {
+  const cache = await readIntelCache();
+  return cache.alertPreferences;
+}
+
+export async function setAlertPreferences(patch: Partial<IntelAlertPreferences>): Promise<IntelAlertPreferences> {
+  const cache = await readIntelCache();
+  cache.alertPreferences = { ...cache.alertPreferences, ...patch };
+  await writeIntelCache(cache);
+  return cache.alertPreferences;
+}
+
+export async function listThesisEntries(symbol?: string): Promise<CapitalThesisEntry[]> {
+  const cache = await readIntelCache();
+  const sym = symbol?.trim().toUpperCase();
+  const rows = cache.thesisEntries;
+  if (!sym) return [...rows].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+  return rows
+    .filter((e) => e.symbol === sym)
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+}
+
+export async function addThesisEntry(input: {
+  symbol: string;
+  body: string;
+  source?: CapitalThesisEntry["source"];
+  linkedTradeId?: string | null;
+  linkedRuleId?: string | null;
+  linkedPilotId?: string | null;
+}): Promise<CapitalThesisEntry> {
+  const cache = await readIntelCache();
+  const now = new Date().toISOString();
+  const entry: CapitalThesisEntry = {
+    id: `TH-${String(cache.thesisEntries.length + 1).padStart(3, "0")}`,
+    symbol: input.symbol.trim().toUpperCase(),
+    body: input.body.trim().slice(0, 2000),
+    source: input.source ?? "manual",
+    linkedTradeId: input.linkedTradeId ?? null,
+    linkedRuleId: input.linkedRuleId ?? null,
+    linkedPilotId: input.linkedPilotId ?? null,
+    createdAt: now,
+  };
+  cache.thesisEntries.unshift(entry);
+  cache.thesisEntries = cache.thesisEntries.slice(0, 200);
+  await writeIntelCache(cache);
+  return entry;
 }

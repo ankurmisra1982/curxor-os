@@ -51,6 +51,9 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
     selectedApps: Array.isArray(partial.selectedApps)
       ? validateAppIds(partial.selectedApps.map(String))
       : base.selectedApps,
+    forgedAppSlugs: Array.isArray(partial.forgedAppSlugs)
+      ? partial.forgedAppSlugs.map(String).filter(Boolean)
+      : base.forgedAppSlugs ?? [],
     appearance: {
       uiMode: syncedUiMode,
       experienceLevel,
@@ -61,6 +64,62 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
             ? partial.appearance.workGrowthLevel
             : isGrowthLevel(base.appearance.workGrowthLevel)
               ? base.appearance.workGrowthLevel
+              : null,
+      creatorGrowthLevel:
+        partial.appearance?.creatorGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.creatorGrowthLevel)
+            ? partial.appearance.creatorGrowthLevel
+            : isGrowthLevel(base.appearance.creatorGrowthLevel)
+              ? base.appearance.creatorGrowthLevel
+              : null,
+      capitalGrowthLevel:
+        partial.appearance?.capitalGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.capitalGrowthLevel)
+            ? partial.appearance.capitalGrowthLevel
+            : isGrowthLevel(base.appearance.capitalGrowthLevel)
+              ? base.appearance.capitalGrowthLevel
+              : null,
+      vitalGrowthLevel:
+        partial.appearance?.vitalGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.vitalGrowthLevel)
+            ? partial.appearance.vitalGrowthLevel
+            : isGrowthLevel(base.appearance.vitalGrowthLevel)
+              ? base.appearance.vitalGrowthLevel
+              : null,
+      forgeGrowthLevel:
+        partial.appearance?.forgeGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.forgeGrowthLevel)
+            ? partial.appearance.forgeGrowthLevel
+            : isGrowthLevel(base.appearance.forgeGrowthLevel)
+              ? base.appearance.forgeGrowthLevel
+              : null,
+      swarmGrowthLevel:
+        partial.appearance?.swarmGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.swarmGrowthLevel)
+            ? partial.appearance.swarmGrowthLevel
+            : isGrowthLevel(base.appearance.swarmGrowthLevel)
+              ? base.appearance.swarmGrowthLevel
+              : null,
+      shopGrowthLevel:
+        partial.appearance?.shopGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.shopGrowthLevel)
+            ? partial.appearance.shopGrowthLevel
+            : isGrowthLevel(base.appearance.shopGrowthLevel)
+              ? base.appearance.shopGrowthLevel
+              : null,
+      kinGrowthLevel:
+        partial.appearance?.kinGrowthLevel === null
+          ? null
+          : isGrowthLevel(partial.appearance?.kinGrowthLevel)
+            ? partial.appearance.kinGrowthLevel
+            : isGrowthLevel(base.appearance.kinGrowthLevel)
+              ? base.appearance.kinGrowthLevel
               : null,
       colorScheme: isColorScheme(partial.appearance?.colorScheme)
         ? partial.appearance.colorScheme
@@ -188,6 +247,20 @@ export async function updateSelectedClaws(apps: OotbAppId[]): Promise<UserSettin
   const next = await updateUserSettings({ selectedApps: validated });
   await syncFreSelectedApps(validated);
   return next;
+}
+
+export async function appendForgedAppSlug(slug: string): Promise<UserSettings> {
+  const current = await readUserSettings();
+  const slugs = current.forgedAppSlugs ?? [];
+  if (slugs.includes(slug)) return current;
+  return updateUserSettings({ forgedAppSlugs: [...slugs, slug] });
+}
+
+export async function removeForgedAppSlug(slug: string): Promise<UserSettings> {
+  const current = await readUserSettings();
+  const slugs = (current.forgedAppSlugs ?? []).filter((s) => s !== slug);
+  if (slugs.length === (current.forgedAppSlugs ?? []).length) return current;
+  return updateUserSettings({ forgedAppSlugs: slugs });
 }
 
 export async function sanitizeSettingsForClient(settings: UserSettings): Promise<UserSettings> {

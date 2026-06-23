@@ -59,7 +59,7 @@ Output: `docs/demo-pack/screenshots/` (+ `screenshots/creator/` for Creator Claw
 | `03-capital-claw.png` | `/my-capital` | Capital Claw desk (Setup Wizard · Analytics · Go Live) |
 | `04-forge.png` | `/claw-forge` | Create-to-earn · Agent Factory |
 | `05-vital-claw.png` | `/my-vital` | Life & family — longevity desk |
-| `06-kin-claw.png` | `/my-family` | Life & family — household profiles |
+| `06-kin-claw.png` | `/my-family` | Life & family — Kin showcase (Optimus + Vital identity story) |
 | `07-unified-inbox.png` | `/my-work` | Unified comms — Outreach Claw comms desk |
 | `08-creator-claw.png` | `/my-content` | Creator Claw — Go Live checklist + queue |
 

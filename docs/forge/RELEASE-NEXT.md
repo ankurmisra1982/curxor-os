@@ -59,6 +59,51 @@
 - [x] **ForgeLevelUpNudge** — fleet-based growth tips on Mint tab
 - [x] **QA + GTM** — verify-forge-exit-demo-scaffold, user flows, capture-forge-demo, forge-exit walkthrough
 
+## Shipped (F10 — creator-desk v2)
+
+- [x] **Forged creator-desk v2** — per-desk `content-queue.json`, draft + schedule server skills
+- [x] **ForgedCreatorDeskPanel** — real queue UI with draft, schedule, post list
+- [x] **L4-creator demo tour** — `run_demo_tour` persona `L4-creator`
+- [x] **Forged skill execution** — agent console taps call `executeSkillMesh` on forged desks
+- [x] **QA** — smoke, checklist, user flows, exit-demo scaffold for creator round-trip
+
+## Shipped (F11 — fleet lifecycle)
+
+- [x] **Archive claw** — `POST /api/forge/status` action `archive_claw` (soft archive, nav slug removed)
+- [x] **Promote island → framework** — action `promote_to_framework` with template inference
+- [x] **Batch export** — `POST /api/claw/export` `{ exportAll: true }` + Ops/Fleet UI
+- [x] **Fleet UI** — Archive, Promote, per-row Export on Fleet tab
+
+## Shipped (F12 — Cafe + CCP handoff)
+
+- [x] **Cafe mint consumer** — mint events attribute to forged/profile `appId`; sync uses per-claw id
+- [x] **Archive walk-out** — `forge.claw_archived` → Cafe walk state
+- [x] **CCP forged publish** — `publishForgedDeskContext` + real `publish_context` skill/API
+- [x] **FRE mesh sync** — `meshPublish` toggle updates `meshConnected` on forged record + profile
+
+## Shipped (F13 — capital-desk v2)
+
+- [x] **Forged capital-desk v2** — per-desk `capital-queue.json`, research + rules + arm server skills
+- [x] **ForgedCapitalDeskPanel** — watchlist, rule list, arm rule UI
+- [x] **L4-capital demo tour** — `run_demo_tour` persona `L4-capital`
+
+## Shipped (F14 — GTM finalize)
+
+- [x] **Island mint E2E** — smoke + checklist + user flow (fleet badge, no nav href)
+- [x] **Import/export round-trip** — user flow export → re-import with operator confirm
+- [x] **Forged assist E2E** — user flow work-desk `create_lead` via `/api/app-agent/assist`
+- [x] **Scorecard + storefront** — `BEST-IN-CLASS.md` refresh, `FEATURE-FUNCTION.md` honest modes
+- [x] **QA expansion** — capital smoke/flows, exit-demo scaffold, checklist ~22 checks
+- [x] **Version** — `0.6.5` + release notes
+
+## Shipped (F15 — audit hardening + desk send stub)
+
+- [x] **Forged work send stub** — `sendForgedSequenceStep` simulated send advances sequence
+- [x] **CCP profileId fix** — `claw-context-store` null profile filter; Cafe mint attribution stable
+- [x] **ForgeSetupWizard** — first-visit auto-open; framework provision path
+- [x] **Audit remediation** — Slack raw-body signature, Printify cents, work approval permissions, archived nav filter, Shopify `*.myshopify.com` domain guard
+- [x] **QA harness** — `qa-local-suites.mjs` (Windows Node 24 spawn fix), shop `reset_commerce_demo`, tier-c sweep 21/21
+
 ## Deferred
 
 
@@ -69,7 +114,7 @@
 
 - Master AI patron panel
 
-- Delete/archive claw API
+- Hard delete claw (files on disk) — soft archive only for now
 
 
 

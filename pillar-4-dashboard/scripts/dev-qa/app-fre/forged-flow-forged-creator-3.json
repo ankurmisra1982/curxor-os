@@ -1,0 +1,11 @@
+{
+  "initialized": true,
+  "config": {
+    "primaryChannel": "x",
+    "meshPublish": true,
+    "growthLevel": "L2",
+    "forgedIntent": "User flow forged creator desk",
+    "forgedTemplateId": "creator-desk"
+  },
+  "initializedAt": "2026-06-23T03:11:17.758Z"
+}

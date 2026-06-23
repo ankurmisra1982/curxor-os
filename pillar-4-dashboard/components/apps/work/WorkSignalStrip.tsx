@@ -26,7 +26,7 @@ export function WorkSignalStrip({ signals, busy, onConvert }: WorkSignalStripPro
 
   return (
     <div className="space-y-2 font-mono text-[10px]">
-      <p className="text-muted uppercase">Intent strip · top signals</p>
+      <p className="text-muted uppercase">Intent strip · top signals · full desk at /optimus</p>
       {signals.slice(0, 5).map((s) => (
         <div key={s.id} className="flex flex-wrap items-start justify-between gap-2 border border-line px-2 py-1.5">
           <div className="min-w-0 flex-1">

@@ -4,6 +4,8 @@ export const dynamic = "force-dynamic";
 import { requireLanAuth } from "@/lib/lan-auth";
 import { parseDigitalReceipt } from "@/lib/digital-protocol";
 import { buildCapitalGoLiveReport, runCapitalBootstrap } from "@/lib/capital-go-live";
+import { buildCapitalGrowthProfile } from "@/lib/capital-growth";
+import { readUserSettings } from "@/lib/user-settings";
 import { grantAutonomousPermission, setTradingViewSecret } from "@/lib/capital-permissions";
 import { confirmLiveMoney, isCapitalLiveEnvEnabled } from "@/lib/capital-live-gate";
 import { readAppFreState, writeAppFreState } from "@/lib/app-fre-state";
@@ -94,9 +96,18 @@ export async function POST(request: Request): Promise<Response> {
       case "dashboard_bootstrap": {
         await ensureCapitalQueue();
         const boot = await runCapitalBootstrap();
-        const status = await fetchCapitalStatus();
-        const goLive = await buildCapitalGoLiveReport();
-        return Response.json({ ok: true, ...boot, status, goLive });
+        const [status, goLive, settings, fre] = await Promise.all([
+          fetchCapitalStatus(),
+          buildCapitalGoLiveReport(),
+          readUserSettings(),
+          readAppFreState("my-capital"),
+        ]);
+        const growthProfile = buildCapitalGrowthProfile(
+          fre.config,
+          settings.appearance.experienceLevel,
+          settings.appearance.capitalGrowthLevel ?? null,
+        );
+        return Response.json({ ok: true, ...boot, status, goLive, growthProfile });
       }
 
       case "go_live": {
@@ -545,6 +556,25 @@ export async function POST(request: Request): Promise<Response> {
         const { evaluateDeskHealthAlerts } = await import("@/lib/capital-desk-alerts");
         const out = await evaluateDeskHealthAlerts();
         return Response.json({ ok: true, ...out, status: await fetchCapitalStatus() });
+      }
+
+      case "handoff_to_swarm": {
+        const payload = body as {
+          title?: string;
+          detail?: string;
+          targetCell?: string;
+          ticker?: string;
+        };
+        const { handoffToSwarm } = await import("@/lib/swarm-handoff");
+        const result = await handoffToSwarm({
+          source: "my-capital",
+          title: payload.title ?? `${payload.ticker ?? "Capital"} desk sweep`,
+          detail: payload.detail ?? "Capital Claw handoff to Swarm fleet",
+          targetCell: payload.targetCell as import("@/lib/swarm-fleet").SwarmGridCell | undefined,
+          priority: "high",
+        });
+        if (!result.ok) return Response.json({ ok: false, error: result.error }, { status: 400 });
+        return Response.json({ ...result, status: await fetchCapitalStatus() });
       }
 
       default:

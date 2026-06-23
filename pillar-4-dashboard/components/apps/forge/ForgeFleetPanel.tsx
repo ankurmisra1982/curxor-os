@@ -34,23 +34,21 @@ export function ForgeFleetPanel({
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const setActive = useCallback(
-    async (clawId: string) => {
+  const postFleetAction = useCallback(
+    async (body: Record<string, unknown>, rowId: string) => {
       setError(null);
-      setBusyId(clawId);
+      setBusyId(rowId);
       try {
         const res = await fetch("/api/forge/status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "set_active", clawId }),
+          body: JSON.stringify(body),
         });
-        if (!res.ok) {
-          const json = (await res.json()) as { error?: string };
-          throw new Error(json.error ?? "Could not set active profile");
-        }
+        const json = (await res.json()) as { error?: string };
+        if (!res.ok) throw new Error(json.error ?? "Fleet action failed");
         onRefresh();
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Set active failed");
+        setError(err instanceof Error ? err.message : "Fleet action failed");
       } finally {
         setBusyId(null);
       }
@@ -58,13 +56,79 @@ export function ForgeFleetPanel({
     [onRefresh],
   );
 
+  const setActive = useCallback(
+    (clawId: string) => postFleetAction({ action: "set_active", clawId }, clawId),
+    [postFleetAction],
+  );
+
+  const archiveRow = useCallback(
+    (row: ForgeFleetEntry) =>
+      postFleetAction(
+        {
+          action: "archive_claw",
+          profileId: row.profileId ?? undefined,
+          forgedAppId: row.forgedAppId ?? undefined,
+        },
+        row.rowId,
+      ),
+    [postFleetAction],
+  );
+
+  const promoteRow = useCallback(
+    (row: ForgeFleetEntry) =>
+      postFleetAction(
+        {
+          action: "promote_to_framework",
+          profileId: row.profileId ?? undefined,
+          templateId: row.templateId ?? undefined,
+        },
+        row.rowId,
+      ),
+    [postFleetAction],
+  );
+
+  const exportRow = useCallback(async (row: ForgeFleetEntry) => {
+    setError(null);
+    setBusyId(row.rowId);
+    try {
+      const body = row.forgedAppId
+        ? { forgedAppId: row.forgedAppId }
+        : row.profileId
+          ? { profileId: row.profileId }
+          : null;
+      if (!body) throw new Error("Nothing to export for this row");
+      const res = await fetch("/api/claw/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const json = (await res.json()) as { error?: string };
+        throw new Error(json.error ?? "Export failed");
+      }
+      const data = (await res.json()) as { bundle?: unknown };
+      if (!data.bundle) throw new Error("Empty export bundle");
+      const blob = new Blob([JSON.stringify(data.bundle, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${row.name.replace(/\s+/g, "-").toLowerCase()}-export.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Export failed");
+    } finally {
+      setBusyId(null);
+    }
+  }, []);
+
   return (
     <ExperienceAppSection
       appId="claw-forge"
       sectionId="fleet"
       minLevel="standard"
       title="Unified Fleet Registry"
-      subtitle={`${counts.profiles} engine profiles · ${counts.forgedApps} forged desks · Island ${counts.island} · Framework ${counts.framework} · Imported ${counts.imported}`}
+      subtitle={`${counts.profiles} engine profiles · ${counts.forgedApps} forged desks · Island ${counts.island} · Framework ${counts.framework} · Archived ${counts.archived}`}
     >
       {error ? <p className="mb-3 font-mono text-[11px] text-cursor-glow">{error}</p> : null}
 
@@ -122,13 +186,39 @@ export function ForgeFleetPanel({
                 {row.profileId && !row.isActive ? (
                   <button
                     type="button"
-                    disabled={busyId === row.profileId}
+                    disabled={busyId === row.rowId}
                     onClick={() => void setActive(row.profileId!)}
                     className="font-mono text-[10px] uppercase tracking-widest text-muted hover:text-cursor-glow disabled:opacity-40"
                   >
-                    {busyId === row.profileId ? "Setting…" : "Set active"}
+                    {busyId === row.rowId ? "Working…" : "Set active"}
                   </button>
                 ) : null}
+                {row.canPromote ? (
+                  <button
+                    type="button"
+                    disabled={busyId === row.rowId}
+                    onClick={() => void promoteRow(row)}
+                    className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow disabled:opacity-40"
+                  >
+                    Promote → framework
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  disabled={busyId === row.rowId}
+                  onClick={() => void exportRow(row)}
+                  className="font-mono text-[10px] uppercase tracking-widest text-muted hover:text-cursor-glow disabled:opacity-40"
+                >
+                  Export
+                </button>
+                <button
+                  type="button"
+                  disabled={busyId === row.rowId}
+                  onClick={() => void archiveRow(row)}
+                  className="font-mono text-[10px] uppercase tracking-widest text-muted hover:text-cursor-glow disabled:opacity-40"
+                >
+                  Archive
+                </button>
                 {!row.hasEngineProfile ? (
                   <span className="font-mono text-[10px] text-muted">Desk only — no engine profile</span>
                 ) : null}

@@ -1,0 +1,120 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { AppMetric } from "@/components/app-shared/AppLayout";
+import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
+import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
+import { useMotorStream } from "@/hooks/useMotorStream";
+import { useVisionStream } from "@/hooks/useVisionStream";
+
+const JOINTS = ["SHOULDER_L", "SHOULDER_R", "ELBOW_L", "ELBOW_R", "GRIP"] as const;
+
+export function OptimusHardwarePanel({ config, skillTick, lastSkillId }: AgentAppContext) {
+  const { command, connected } = useMotorStream();
+  useVisionStream();
+  const unitId = typeof config.unitId === "string" ? config.unitId : "OPTIMUS-01";
+  const safety = typeof config.safetyProfile === "string" ? config.safetyProfile : "standard";
+  const [torque, setTorque] = useState<Record<string, number>>({
+    SHOULDER_L: 0.42,
+    SHOULDER_R: 0.38,
+    ELBOW_L: 0.55,
+    ELBOW_R: 0.51,
+    GRIP: 0.62,
+  });
+  const [rlWeight, setRlWeight] = useState(0.73);
+  const [lastAction, setLastAction] = useState("Idle — awaiting skill");
+
+  useEffect(() => {
+    if (skillTick === 0 || !lastSkillId) return;
+    if (
+      lastSkillId !== "home_position" &&
+      lastSkillId !== "test_grip" &&
+      lastSkillId !== "tune_joint"
+    ) {
+      return;
+    }
+    setLastAction(`${lastSkillId.replace(/_/g, " ")} · seq ${command?.seq ?? "—"} · safety ${safety}`);
+  }, [skillTick, lastSkillId, command?.seq, safety]);
+
+  return (
+    <div className="space-y-4">
+      <p className="font-mono text-[10px] text-muted">
+        Control preview · motor mesh, joint limits, and safety profiles for humanoid-class hardware when paired.
+      </p>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <AppMetric label="Mesh τ" value={connected && command ? command.torqueZ.toFixed(2) : "—"} unit="Nm live" highlight />
+        <AppMetric label="Policy" value="OPTIMUS-v3" unit="local RL preview" />
+        <AppMetric label="Position" value={command ? `${command.x.toFixed(2)}, ${command.y.toFixed(2)}` : "—"} unit="xyz" />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ExperienceAppSection
+          appId="tesla-optimus-engine"
+          sectionId="torque"
+          minLevel="beginner"
+          title="Joint Torque Tuning"
+          subtitle="Adjust limits · Tune Joint skill applies to motor_out"
+        >
+          <div className="space-y-4">
+            {JOINTS.map((joint) => (
+              <label key={joint} className="block font-mono text-xs">
+                <div className="mb-1 flex justify-between text-[10px] uppercase tracking-widest text-muted">
+                  <span>{joint}</span>
+                  <span className="text-cursor-glow">{torque[joint]?.toFixed(2)} Nm</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={torque[joint]}
+                  onChange={(e) => setTorque((t) => ({ ...t, [joint]: Number(e.target.value) }))}
+                  className="w-full accent-[#bc13fe]"
+                />
+              </label>
+            ))}
+          </div>
+        </ExperienceAppSection>
+
+        <ExperienceAppSection
+          appId="tesla-optimus-engine"
+          sectionId="rl"
+          minLevel="expert"
+          title="RL Policy Weights"
+          subtitle="Exploration ε · RL Step skill runs one local epoch"
+        >
+          <label className="block font-mono text-xs">
+            <span className="text-[10px] uppercase tracking-widest text-muted">Exploration ε</span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={rlWeight}
+              onChange={(e) => setRlWeight(Number(e.target.value))}
+              className="mt-2 w-full accent-[#bc13fe]"
+            />
+            <span className="mt-1 block text-cursor-glow">{rlWeight.toFixed(2)}</span>
+          </label>
+          <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-[10px]">
+            <Cell k="reward" v="+0.91" />
+            <Cell k="epoch" v="4021" />
+            <Cell k="enable RL" v={config.enableRl ? "ON" : "OFF"} />
+            <Cell k="mesh" v={connected ? "LIVE" : "OFF"} />
+          </div>
+        </ExperienceAppSection>
+      </div>
+    </div>
+  );
+}
+
+function Cell({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="border border-line bg-panel p-2">
+      <div className="text-muted">{k}</div>
+      <div className="text-stark">{v}</div>
+    </div>
+  );
+}

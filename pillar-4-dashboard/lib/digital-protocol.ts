@@ -63,3 +63,13 @@ export function formatPostReceipt(receipt: DigitalReceipt): string {
   if (!receipt.ok) return receipt.error ?? "Post failed";
   return extractPublishedUrl(receipt) ?? String(receipt.receipt.post_id ?? receipt.receipt.pin_id ?? "Published");
 }
+
+export function formatCommerceReceipt(receipt: DigitalReceipt): string {
+  if (!receipt.ok) return receipt.error ?? "Commerce bridge failed";
+  if (receipt.tool.startsWith("commerce.shopify")) {
+    const count = receipt.receipt.productCount ?? receipt.receipt.orderLineCount ?? "—";
+    const domain = receipt.receipt.shopDomain ?? "shop";
+    return `Shopify ${domain} · ${count} rows`;
+  }
+  return JSON.stringify(receipt.receipt).slice(0, 120);
+}

@@ -382,25 +382,27 @@ export async function updateLeadStage(leadId: string, stage: LeadStage): Promise
   }
   if (stage === "won" || stage === "lost") {
     const now = new Date().toISOString();
-    for (const seq of file.sequences) {
+    for (let i = 0; i < file.sequences.length; i++) {
+      const seq = file.sequences[i]!;
       if (seq.leadId !== leadId || seq.status !== "active") continue;
-      seq.status = "paused";
-      seq.lastError = `Lead marked ${stage}`;
-      seq.updatedAt = now;
+      file.sequences[i] = {
+        ...seq,
+        status: "paused",
+        lastError: `Lead marked ${stage}`,
+        updatedAt: now,
+      };
     }
   }
   await writeWorkFile(file);
   const lead = file.leads[idx]!;
   void emitWorkWebhook("lead.stage_changed", { leadId, stage, email: lead.email });
-  void (async () => {
-    const { appendAgentAudit } = await import("./work-agent-audit");
-    await appendAgentAudit({
-      kind: "sync",
-      source: "desk",
-      leadId,
-      note: `Pipeline stage → ${stage}`,
-    });
-  })();
+  const { appendAgentAudit } = await import("./work-agent-audit");
+  await appendAgentAudit({
+    kind: "sync",
+    source: "desk",
+    leadId,
+    note: `Pipeline stage → ${stage}`,
+  });
   return lead;
 }
 

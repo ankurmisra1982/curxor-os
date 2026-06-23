@@ -15,6 +15,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD = path.resolve(__dirname, "..");
 const OUT = path.join(DASHBOARD, "docs", "demo-pack");
 const TMP = path.join(OUT, ".outreach-walkthrough-tmp");
+const STOREFRONT_VIDEO = path.resolve(
+  DASHBOARD,
+  "..",
+  "curxor storefront",
+  "public",
+  "demo",
+  "outreach-walkthrough.webm",
+);
 
 const args = process.argv.slice(2);
 const baseIdx = args.indexOf("--base");
@@ -63,8 +71,11 @@ async function main() {
   const src = path.join(TMP, files[0]);
   const dest = path.join(OUT, "outreach-walkthrough.webm");
   copyFileSync(src, dest);
+  mkdirSync(path.dirname(STOREFRONT_VIDEO), { recursive: true });
+  copyFileSync(src, STOREFRONT_VIDEO);
   rmSync(TMP, { recursive: true, force: true });
   console.log(`Saved ${dest}`);
+  console.log(`Copied ${STOREFRONT_VIDEO}`);
 }
 
 main().catch((err) => {

@@ -1,6 +1,8 @@
 {
   "initialized": true,
   "config": {
+    "growthIntent": "brand_marketing",
+    "growthLevel": "L4",
     "channels": ["youtube", "x", "linkedin", "instagram", "tiktok"],
     "contentTone": "technical",
     "autoSchedule": true,

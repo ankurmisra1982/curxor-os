@@ -1,0 +1,2435 @@
+{
+  "events": [
+    {
+      "id": "CAFE-00148",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:27.773Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm-live:ping_mesh:1782185127768"
+    },
+    {
+      "id": "CAFE-00147",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.882Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm-live:handoff_received:1782185126878"
+    },
+    {
+      "id": "CAFE-00146",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.848Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm-live:handoff_received:1782185126844"
+    },
+    {
+      "id": "CAFE-00145",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.808Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm-live:handoff_received:1782185126799"
+    },
+    {
+      "id": "CAFE-00144",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.780Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm-live:exit_demo_ready:1782185126774"
+    },
+    {
+      "id": "CAFE-00143",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.771Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm-live:fleet_milestone:1782185126769"
+    },
+    {
+      "id": "CAFE-00142",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.331Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm-live:handoff_received:1782185126327"
+    },
+    {
+      "id": "CAFE-00141",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.302Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm-live:exit_demo_ready:1782185126295"
+    },
+    {
+      "id": "CAFE-00140",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.291Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm-live:fleet_milestone:1782185126287"
+    },
+    {
+      "id": "CAFE-00139",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:26.220Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm-live:ping_mesh:1782185126215"
+    },
+    {
+      "id": "CAFE-00138",
+      "kind": "app.tour_complete",
+      "appId": "claw-cafe",
+      "at": "2026-06-23T03:25:24.527Z",
+      "xp": {
+        "ascension": 10,
+        "knowledge": 5
+      },
+      "bubble": "QA tour complete"
+    },
+    {
+      "id": "CAFE-00137",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:24.494Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0053"
+    },
+    {
+      "id": "CAFE-00136",
+      "kind": "forge.import_completed",
+      "appId": "forged-flow-reimport-claw-5",
+      "at": "2026-06-23T03:25:24.152Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Reimport Claw entered the room",
+      "sourceRef": "forge:forge-1782185124139-us2xjh"
+    },
+    {
+      "id": "CAFE-00135",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-round-trip-5",
+      "at": "2026-06-23T03:25:22.818Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Round Trip entered the room",
+      "sourceRef": "forge:forge-1782185122804-x84z1e"
+    },
+    {
+      "id": "CAFE-00134",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-assist-work-5",
+      "at": "2026-06-23T03:25:21.116Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Assist Work entered the room",
+      "sourceRef": "forge:forge-1782185121107-2v0icp"
+    },
+    {
+      "id": "CAFE-00133",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq3073p",
+      "at": "2026-06-23T03:25:19.513Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Island Claw entered the room",
+      "sourceRef": "forge:forge-1782185119506-ygo3c2"
+    },
+    {
+      "id": "CAFE-00132",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-capital-5",
+      "at": "2026-06-23T03:25:16.408Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Capital entered the room",
+      "sourceRef": "forge:forge-1782185116397-8qv73t"
+    },
+    {
+      "id": "CAFE-00131",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-creator-5",
+      "at": "2026-06-23T03:25:14.771Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Creator entered the room",
+      "sourceRef": "forge:forge-1782185114762-uqtmj6"
+    },
+    {
+      "id": "CAFE-00130",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-work-5",
+      "at": "2026-06-23T03:25:13.118Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Work entered the room",
+      "sourceRef": "forge:forge-1782185113109-o9clpz"
+    },
+    {
+      "id": "CAFE-00129",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.411Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm-live:handoff_received:1782185111408"
+    },
+    {
+      "id": "CAFE-00128",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-capital-5",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Capital entered the room",
+      "sourceRef": "forge:forge-1782185106445-og4p9u"
+    },
+    {
+      "id": "CAFE-00127",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-creator-5",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Creator entered the room",
+      "sourceRef": "forge:forge-1782185104794-lwofbf"
+    },
+    {
+      "id": "CAFE-00126",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-work-5",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Work entered the room",
+      "sourceRef": "forge:forge-1782185103193-z176f2"
+    },
+    {
+      "id": "CAFE-00125",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2zryc",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Mint entered the room",
+      "sourceRef": "forge:forge-1782185099872-14i60j"
+    },
+    {
+      "id": "CAFE-00124",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-capital-desk-14",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Capital Desk entered the room",
+      "sourceRef": "forge:forge-1782185096762-mautqh"
+    },
+    {
+      "id": "CAFE-00123",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-cafe-mint-15",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Cafe Mint entered the room",
+      "sourceRef": "forge:forge-1782185095081-m1ig33"
+    },
+    {
+      "id": "CAFE-00122",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-mesh-desk-15",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Mesh Desk entered the room",
+      "sourceRef": "forge:forge-1782185093347-vqrahd"
+    },
+    {
+      "id": "CAFE-00121",
+      "kind": "forge.claw_archived",
+      "appId": "claw-mqq2zkbr",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 5
+      },
+      "bubble": "Checklist Archive Claw left the room",
+      "sourceRef": "forge:forge-1782185090068-ksjnw1"
+    },
+    {
+      "id": "CAFE-00120",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2zkbr",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Archive Claw entered the room",
+      "sourceRef": "forge:forge-1782185090018-2zfh2c"
+    },
+    {
+      "id": "CAFE-00119",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-island-claw-15",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Claw entered the room",
+      "sourceRef": "forge:forge-1782185086904-4bd4ih"
+    },
+    {
+      "id": "CAFE-00118",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2zhwb",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Claw entered the room",
+      "sourceRef": "forge:forge-1782185086850-4yhw4w"
+    },
+    {
+      "id": "CAFE-00117",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-creator-desk-16",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Creator Desk entered the room",
+      "sourceRef": "forge:forge-1782185083748-6f5100"
+    },
+    {
+      "id": "CAFE-00116",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-work-desk-16",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Work Desk entered the room",
+      "sourceRef": "forge:forge-1782185082110-2z878n"
+    },
+    {
+      "id": "CAFE-00115",
+      "kind": "forge.import_completed",
+      "appId": "claw-mqq2zcv1",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Claw entered the room",
+      "sourceRef": "forge:forge-1782185080315-l5pwqb"
+    },
+    {
+      "id": "CAFE-00114",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2z5s7",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Island Mint entered the room",
+      "sourceRef": "forge:forge-1782185071138-04d2v9"
+    },
+    {
+      "id": "CAFE-00113",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-capital-desk-13",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Smoke Capital Desk entered the room",
+      "sourceRef": "forge:forge-1782185068028-2jgztd"
+    },
+    {
+      "id": "CAFE-00112",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-creator-desk-13",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Smoke Creator Desk entered the room",
+      "sourceRef": "forge:forge-1782185066375-dp6627"
+    },
+    {
+      "id": "CAFE-00111",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-work-desk-13",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Smoke Work Desk entered the room",
+      "sourceRef": "forge:forge-1782185064679-z4ioi5"
+    },
+    {
+      "id": "CAFE-00110",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-framework-desk-for--17",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA smoke framework desk for sorting pipeline entered the room",
+      "sourceRef": "forge:forge-1782185063028-hju99r"
+    },
+    {
+      "id": "CAFE-00109",
+      "kind": "forge.import_completed",
+      "appId": "forged-flow-reimport-claw-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Reimport Claw entered the room",
+      "sourceRef": "forge:forge-1782184709128-9deomb"
+    },
+    {
+      "id": "CAFE-00108",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-round-trip-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Round Trip entered the room",
+      "sourceRef": "forge:forge-1782184707773-2g6zk4"
+    },
+    {
+      "id": "CAFE-00107",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-assist-work-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Assist Work entered the room",
+      "sourceRef": "forge:forge-1782184706108-aakxp9"
+    },
+    {
+      "id": "CAFE-00106",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2ravg",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Island Claw entered the room",
+      "sourceRef": "forge:forge-1782184704492-fly8f7"
+    },
+    {
+      "id": "CAFE-00105",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-capital-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Capital entered the room",
+      "sourceRef": "forge:forge-1782184701350-5uul5d"
+    },
+    {
+      "id": "CAFE-00104",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-creator-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Creator entered the room",
+      "sourceRef": "forge:forge-1782184699590-9q5qzz"
+    },
+    {
+      "id": "CAFE-00103",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-work-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Work entered the room",
+      "sourceRef": "forge:forge-1782184697832-tuz369"
+    },
+    {
+      "id": "CAFE-00102",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-capital-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Capital entered the room",
+      "sourceRef": "forge:forge-1782184691753-3z80nz"
+    },
+    {
+      "id": "CAFE-00101",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-creator-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Creator entered the room",
+      "sourceRef": "forge:forge-1782184690014-js6nki"
+    },
+    {
+      "id": "CAFE-00100",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-work-4",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Work entered the room",
+      "sourceRef": "forge:forge-1782184688364-00i1tu"
+    },
+    {
+      "id": "CAFE-00099",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2qvwi",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Mint entered the room",
+      "sourceRef": "forge:forge-1782184685086-75ibrk"
+    },
+    {
+      "id": "CAFE-00098",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-capital-desk-13",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Capital Desk entered the room",
+      "sourceRef": "forge:forge-1782184681976-aef21u"
+    },
+    {
+      "id": "CAFE-00097",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-cafe-mint-14",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Cafe Mint entered the room",
+      "sourceRef": "forge:forge-1782184680345-p4etit"
+    },
+    {
+      "id": "CAFE-00096",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-mesh-desk-14",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Mesh Desk entered the room",
+      "sourceRef": "forge:forge-1782184678659-8w6s5s"
+    },
+    {
+      "id": "CAFE-00095",
+      "kind": "forge.claw_archived",
+      "appId": "claw-mqq2qp4i",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 5
+      },
+      "bubble": "Checklist Archive Claw left the room",
+      "sourceRef": "forge:forge-1782184676331-317mjf"
+    },
+    {
+      "id": "CAFE-00094",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2qp4i",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Archive Claw entered the room",
+      "sourceRef": "forge:forge-1782184676303-ihapqr"
+    },
+    {
+      "id": "CAFE-00093",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-island-claw-14",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Claw entered the room",
+      "sourceRef": "forge:forge-1782184673224-2we28m"
+    },
+    {
+      "id": "CAFE-00092",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2qmpi",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Claw entered the room",
+      "sourceRef": "forge:forge-1782184673176-uyuo0m"
+    },
+    {
+      "id": "CAFE-00091",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-creator-desk-15",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Creator Desk entered the room",
+      "sourceRef": "forge:forge-1782184670036-yttyw3"
+    },
+    {
+      "id": "CAFE-00090",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-checklist-work-desk-15",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Work Desk entered the room",
+      "sourceRef": "forge:forge-1782184668344-4y53vz"
+    },
+    {
+      "id": "CAFE-00089",
+      "kind": "forge.import_completed",
+      "appId": "claw-mqq2qhhn",
+      "at": "2026-06-23T03:25:11.336Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Claw entered the room",
+      "sourceRef": "forge:forge-1782184666428-fsi2n2"
+    },
+    {
+      "id": "CAFE-00088",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2qaiu",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Island Mint entered the room",
+      "sourceRef": "forge:forge-1782184657404-53d3ko"
+    },
+    {
+      "id": "CAFE-00087",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-capital-desk-12",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Smoke Capital Desk entered the room",
+      "sourceRef": "forge:forge-1782184654281-fh9q79"
+    },
+    {
+      "id": "CAFE-00086",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-creator-desk-12",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Smoke Creator Desk entered the room",
+      "sourceRef": "forge:forge-1782184652634-xveia1"
+    },
+    {
+      "id": "CAFE-00085",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-work-desk-12",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Smoke Work Desk entered the room",
+      "sourceRef": "forge:forge-1782184651004-i05cqn"
+    },
+    {
+      "id": "CAFE-00084",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-qa-smoke-framework-desk-for--16",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA smoke framework desk for sorting pipeline entered the room",
+      "sourceRef": "forge:forge-1782184649403-a41bwo"
+    },
+    {
+      "id": "CAFE-00083",
+      "kind": "forge.import_completed",
+      "appId": "forged-flow-reimport-claw-3",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Reimport Claw entered the room",
+      "sourceRef": "forge:forge-1782184287326-sbgsqi"
+    },
+    {
+      "id": "CAFE-00082",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-round-trip-3",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Round Trip entered the room",
+      "sourceRef": "forge:forge-1782184286031-uhgbi2"
+    },
+    {
+      "id": "CAFE-00081",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-assist-work-3",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Assist Work entered the room",
+      "sourceRef": "forge:forge-1782184284333-u1x4up"
+    },
+    {
+      "id": "CAFE-00080",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqq2i9dn",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Island Claw entered the room",
+      "sourceRef": "forge:forge-1782184282661-k9hlmc"
+    },
+    {
+      "id": "CAFE-00079",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-flow-forged-capital-3",
+      "at": "2026-06-23T03:25:11.335Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Forged Capital entered the room",
+      "sourceRef": "forge:forge-1782184279498-mkdcyp"
+    },
+    {
+      "id": "CAFE-00078",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0003"
+    },
+    {
+      "id": "CAFE-00077",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0004"
+    },
+    {
+      "id": "CAFE-00076",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0005"
+    },
+    {
+      "id": "CAFE-00075",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0006"
+    },
+    {
+      "id": "CAFE-00074",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0007"
+    },
+    {
+      "id": "CAFE-00073",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0008"
+    },
+    {
+      "id": "CAFE-00072",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0009"
+    },
+    {
+      "id": "CAFE-00071",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0010"
+    },
+    {
+      "id": "CAFE-00070",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0011"
+    },
+    {
+      "id": "CAFE-00069",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0012"
+    },
+    {
+      "id": "CAFE-00068",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0013"
+    },
+    {
+      "id": "CAFE-00067",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0014"
+    },
+    {
+      "id": "CAFE-00066",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0015"
+    },
+    {
+      "id": "CAFE-00065",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0016"
+    },
+    {
+      "id": "CAFE-00064",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0017"
+    },
+    {
+      "id": "CAFE-00063",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0018"
+    },
+    {
+      "id": "CAFE-00062",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0019"
+    },
+    {
+      "id": "CAFE-00061",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0020"
+    },
+    {
+      "id": "CAFE-00060",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0021"
+    },
+    {
+      "id": "CAFE-00059",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0022"
+    },
+    {
+      "id": "CAFE-00058",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0023"
+    },
+    {
+      "id": "CAFE-00057",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0024"
+    },
+    {
+      "id": "CAFE-00056",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0025"
+    },
+    {
+      "id": "CAFE-00055",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0026"
+    },
+    {
+      "id": "CAFE-00054",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0027"
+    },
+    {
+      "id": "CAFE-00053",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0028"
+    },
+    {
+      "id": "CAFE-00052",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0029"
+    },
+    {
+      "id": "CAFE-00051",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0030"
+    },
+    {
+      "id": "CAFE-00050",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0031"
+    },
+    {
+      "id": "CAFE-00049",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0032"
+    },
+    {
+      "id": "CAFE-00048",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0033"
+    },
+    {
+      "id": "CAFE-00047",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0034"
+    },
+    {
+      "id": "CAFE-00046",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.333Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0035"
+    },
+    {
+      "id": "CAFE-00045",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0036"
+    },
+    {
+      "id": "CAFE-00044",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0037"
+    },
+    {
+      "id": "CAFE-00043",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0038"
+    },
+    {
+      "id": "CAFE-00042",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0039"
+    },
+    {
+      "id": "CAFE-00041",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0040"
+    },
+    {
+      "id": "CAFE-00040",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0041"
+    },
+    {
+      "id": "CAFE-00039",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0042"
+    },
+    {
+      "id": "CAFE-00038",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0043"
+    },
+    {
+      "id": "CAFE-00037",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0044"
+    },
+    {
+      "id": "CAFE-00036",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0045"
+    },
+    {
+      "id": "CAFE-00035",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0046"
+    },
+    {
+      "id": "CAFE-00034",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0047"
+    },
+    {
+      "id": "CAFE-00033",
+      "kind": "cross_claw.handshake",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 10,
+        "wealth": 10
+      },
+      "bubble": "Fleet milestone",
+      "sourceRef": "swarm:SXP-0048"
+    },
+    {
+      "id": "CAFE-00032",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0049"
+    },
+    {
+      "id": "CAFE-00031",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-work",
+      "sourceRef": "swarm:SXP-0050"
+    },
+    {
+      "id": "CAFE-00030",
+      "kind": "swarm.handoff",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 18,
+        "wealth": 8
+      },
+      "bubble": "Handoff from my-capital",
+      "sourceRef": "swarm:SXP-0051"
+    },
+    {
+      "id": "CAFE-00029",
+      "kind": "swarm.dispatch",
+      "appId": "robotaxi-fleet-manager",
+      "at": "2026-06-23T03:25:11.332Z",
+      "xp": {
+        "ascension": 6
+      },
+      "bubble": "ping mesh",
+      "sourceRef": "swarm:SXP-0052"
+    },
+    {
+      "id": "CAFE-00028",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0001"
+    },
+    {
+      "id": "CAFE-00027",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0002"
+    },
+    {
+      "id": "CAFE-00026",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0003"
+    },
+    {
+      "id": "CAFE-00025",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0004"
+    },
+    {
+      "id": "CAFE-00024",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0005"
+    },
+    {
+      "id": "CAFE-00023",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0006"
+    },
+    {
+      "id": "CAFE-00022",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work:WXP-0007"
+    },
+    {
+      "id": "CAFE-00021",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0008"
+    },
+    {
+      "id": "CAFE-00020",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work:WXP-0009"
+    },
+    {
+      "id": "CAFE-00019",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0010"
+    },
+    {
+      "id": "CAFE-00018",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work:WXP-0011"
+    },
+    {
+      "id": "CAFE-00017",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work:WXP-0012"
+    },
+    {
+      "id": "CAFE-00016",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 12,
+        "wealth": 8
+      },
+      "bubble": "Sequence step sent",
+      "sourceRef": "work:WXP-0013"
+    },
+    {
+      "id": "CAFE-00015",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:11.331Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work:WXP-0014"
+    },
+    {
+      "id": "CAFE-00014",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.879Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work-live:handoff_received:1782185110876"
+    },
+    {
+      "id": "CAFE-00013",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.816Z",
+      "xp": {
+        "ascension": 12,
+        "wealth": 8
+      },
+      "bubble": "Sequence step sent",
+      "sourceRef": "work-live:sequence_activated:1782185110813"
+    },
+    {
+      "id": "CAFE-00012",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.782Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work-live:handoff_received:1782185110779"
+    },
+    {
+      "id": "CAFE-00011",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.774Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185110771"
+    },
+    {
+      "id": "CAFE-00010",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.705Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185110702"
+    },
+    {
+      "id": "CAFE-00009",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.599Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work-live:handoff_received:1782185110596"
+    },
+    {
+      "id": "CAFE-00008",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.592Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185110588"
+    },
+    {
+      "id": "CAFE-00007",
+      "kind": "cross_claw.handshake",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.527Z",
+      "xp": {
+        "ascension": 20,
+        "knowledge": 5,
+        "wealth": 10
+      },
+      "bubble": "Handshake across Claws",
+      "sourceRef": "work-live:handoff_received:1782185110524"
+    },
+    {
+      "id": "CAFE-00006",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:10.520Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185110517"
+    },
+    {
+      "id": "CAFE-00005",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:07.721Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:draft_reply:1782185107718"
+    },
+    {
+      "id": "CAFE-00004",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:07.643Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185107639"
+    },
+    {
+      "id": "CAFE-00003",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:07.640Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185107637"
+    },
+    {
+      "id": "CAFE-00002",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:07.595Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:draft_reply:1782185107591"
+    },
+    {
+      "id": "CAFE-00001",
+      "kind": "work.sequence_step",
+      "appId": "my-work",
+      "at": "2026-06-23T03:25:07.356Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Pipeline activity",
+      "sourceRef": "work-live:create_lead:1782185107352"
+    }
+  ],
+  "ascensionXp": 2894,
+  "affinities": {
+    "knowledge": 1120,
+    "wealth": 652
+  },
+  "milestones": {
+    "knowledgeEvent": true,
+    "wealthEvent": true,
+    "crossClawHandshake": true,
+    "forgeMint": true
+  },
+  "characters": [
+    {
+      "id": "char-claw-forge",
+      "label": "FORGE",
+      "appId": "claw-forge",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-my-capital",
+      "label": "CAP",
+      "appId": "my-capital",
+      "station": "ticker_wall",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-my-content-creator",
+      "label": "CRE",
+      "appId": "my-content-creator",
+      "station": "publish_desk",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-my-shop",
+      "label": "ARB",
+      "appId": "my-shop",
+      "station": "mailbox",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-tesla-optimus-engine",
+      "label": "SIG",
+      "appId": "tesla-optimus-engine",
+      "station": "yard_dock",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-my-vital",
+      "label": "VIT",
+      "appId": "my-vital",
+      "station": "couch",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-my-family",
+      "label": "KIN",
+      "appId": "my-family",
+      "station": "couch",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-claw-mqprph6g",
+      "label": "QA smoke framewo",
+      "appId": "claw-mqprph6g",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-claw-mqprsmr8",
+      "label": "QA smoke framewo",
+      "appId": "claw-mqprsmr8",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-claw-mqps34a5",
+      "label": "QA smoke framewo",
+      "appId": "claw-mqps34a5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-claw-mqps385c",
+      "label": "Checklist Island",
+      "appId": "claw-mqps385c",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": null,
+      "lastEventAt": null
+    },
+    {
+      "id": "char-my-work",
+      "label": "OUT",
+      "appId": "my-work",
+      "station": "mailbox",
+      "state": "act",
+      "bubble": "Pipeline activity",
+      "lastEventAt": "2026-06-23T03:25:11.331Z"
+    },
+    {
+      "id": "char-forged-flow-forged-capital-3",
+      "label": "Flow Forged Capital",
+      "appId": "forged-flow-forged-capital-3",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Capital entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-claw-mqq2i9dn",
+      "label": "Flow Island Claw",
+      "appId": "claw-mqq2i9dn",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Flow Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-flow-assist-work-3",
+      "label": "Flow Assist Work",
+      "appId": "forged-flow-assist-work-3",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Assist Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-flow-round-trip-3",
+      "label": "Flow Round Trip",
+      "appId": "forged-flow-round-trip-3",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Round Trip entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-flow-reimport-claw-3",
+      "label": "Flow Reimport Claw",
+      "appId": "forged-flow-reimport-claw-3",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Reimport Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-framework-desk-for--16",
+      "label": "QA smoke framework desk for sorting pipeline",
+      "appId": "forged-qa-smoke-framework-desk-for--16",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA smoke framework desk for sorting pipeline entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-work-desk-12",
+      "label": "QA Smoke Work Desk",
+      "appId": "forged-qa-smoke-work-desk-12",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA Smoke Work Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-creator-desk-12",
+      "label": "QA Smoke Creator Desk",
+      "appId": "forged-qa-smoke-creator-desk-12",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA Smoke Creator Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-capital-desk-12",
+      "label": "QA Smoke Capital Desk",
+      "appId": "forged-qa-smoke-capital-desk-12",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA Smoke Capital Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-claw-mqq2qaiu",
+      "label": "QA Island Mint",
+      "appId": "claw-mqq2qaiu",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "QA Island Mint entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.335Z"
+    },
+    {
+      "id": "char-claw-mqq2qhhn",
+      "label": "Checklist Island Claw",
+      "appId": "claw-mqq2qhhn",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-work-desk-15",
+      "label": "Checklist Work Desk",
+      "appId": "forged-checklist-work-desk-15",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Work Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-creator-desk-15",
+      "label": "Checklist Creator Desk",
+      "appId": "forged-checklist-creator-desk-15",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Creator Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2qmpi",
+      "label": "Checklist Island Claw",
+      "appId": "claw-mqq2qmpi",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Checklist Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-island-claw-14",
+      "label": "Checklist Island Claw",
+      "appId": "forged-checklist-island-claw-14",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2qp4i",
+      "label": "Checklist Archive Claw",
+      "appId": "claw-mqq2qp4i",
+      "station": "anvil",
+      "state": "walk",
+      "bubble": "Checklist Archive Claw left the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-mesh-desk-14",
+      "label": "Checklist Mesh Desk",
+      "appId": "forged-checklist-mesh-desk-14",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Mesh Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-cafe-mint-14",
+      "label": "Checklist Cafe Mint",
+      "appId": "forged-checklist-cafe-mint-14",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Cafe Mint entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-capital-desk-13",
+      "label": "Checklist Capital Desk",
+      "appId": "forged-checklist-capital-desk-13",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Capital Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2qvwi",
+      "label": "Checklist Island Mint",
+      "appId": "claw-mqq2qvwi",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Checklist Island Mint entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-exit-demo-work-4",
+      "label": "Exit Demo Work",
+      "appId": "forged-exit-demo-work-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-exit-demo-creator-4",
+      "label": "Exit Demo Creator",
+      "appId": "forged-exit-demo-creator-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Creator entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-exit-demo-capital-4",
+      "label": "Exit Demo Capital",
+      "appId": "forged-exit-demo-capital-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Capital entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-forged-work-4",
+      "label": "Flow Forged Work",
+      "appId": "forged-flow-forged-work-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-forged-creator-4",
+      "label": "Flow Forged Creator",
+      "appId": "forged-flow-forged-creator-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Creator entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-forged-capital-4",
+      "label": "Flow Forged Capital",
+      "appId": "forged-flow-forged-capital-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Capital entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2ravg",
+      "label": "Flow Island Claw",
+      "appId": "claw-mqq2ravg",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Flow Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-assist-work-4",
+      "label": "Flow Assist Work",
+      "appId": "forged-flow-assist-work-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Assist Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-round-trip-4",
+      "label": "Flow Round Trip",
+      "appId": "forged-flow-round-trip-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Round Trip entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-reimport-claw-4",
+      "label": "Flow Reimport Claw",
+      "appId": "forged-flow-reimport-claw-4",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Reimport Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-framework-desk-for--17",
+      "label": "QA smoke framework desk for sorting pipeline",
+      "appId": "forged-qa-smoke-framework-desk-for--17",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA smoke framework desk for sorting pipeline entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-work-desk-13",
+      "label": "QA Smoke Work Desk",
+      "appId": "forged-qa-smoke-work-desk-13",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA Smoke Work Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-creator-desk-13",
+      "label": "QA Smoke Creator Desk",
+      "appId": "forged-qa-smoke-creator-desk-13",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA Smoke Creator Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-qa-smoke-capital-desk-13",
+      "label": "QA Smoke Capital Desk",
+      "appId": "forged-qa-smoke-capital-desk-13",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "QA Smoke Capital Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2z5s7",
+      "label": "QA Island Mint",
+      "appId": "claw-mqq2z5s7",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "QA Island Mint entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2zcv1",
+      "label": "Checklist Island Claw",
+      "appId": "claw-mqq2zcv1",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-work-desk-16",
+      "label": "Checklist Work Desk",
+      "appId": "forged-checklist-work-desk-16",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Work Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-creator-desk-16",
+      "label": "Checklist Creator Desk",
+      "appId": "forged-checklist-creator-desk-16",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Creator Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2zhwb",
+      "label": "Checklist Island Claw",
+      "appId": "claw-mqq2zhwb",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Checklist Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-island-claw-15",
+      "label": "Checklist Island Claw",
+      "appId": "forged-checklist-island-claw-15",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2zkbr",
+      "label": "Checklist Archive Claw",
+      "appId": "claw-mqq2zkbr",
+      "station": "anvil",
+      "state": "walk",
+      "bubble": "Checklist Archive Claw left the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-mesh-desk-15",
+      "label": "Checklist Mesh Desk",
+      "appId": "forged-checklist-mesh-desk-15",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Mesh Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-cafe-mint-15",
+      "label": "Checklist Cafe Mint",
+      "appId": "forged-checklist-cafe-mint-15",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Cafe Mint entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-checklist-capital-desk-14",
+      "label": "Checklist Capital Desk",
+      "appId": "forged-checklist-capital-desk-14",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Checklist Capital Desk entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-claw-mqq2zryc",
+      "label": "Checklist Island Mint",
+      "appId": "claw-mqq2zryc",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Checklist Island Mint entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-exit-demo-work-5",
+      "label": "Exit Demo Work",
+      "appId": "forged-exit-demo-work-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-exit-demo-creator-5",
+      "label": "Exit Demo Creator",
+      "appId": "forged-exit-demo-creator-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Creator entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-exit-demo-capital-5",
+      "label": "Exit Demo Capital",
+      "appId": "forged-exit-demo-capital-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Capital entered the room",
+      "lastEventAt": "2026-06-23T03:25:11.336Z"
+    },
+    {
+      "id": "char-forged-flow-forged-work-5",
+      "label": "Flow Forged Work",
+      "appId": "forged-flow-forged-work-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:13.118Z"
+    },
+    {
+      "id": "char-forged-flow-forged-creator-5",
+      "label": "Flow Forged Creator",
+      "appId": "forged-flow-forged-creator-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Creator entered the room",
+      "lastEventAt": "2026-06-23T03:25:14.771Z"
+    },
+    {
+      "id": "char-forged-flow-forged-capital-5",
+      "label": "Flow Forged Capital",
+      "appId": "forged-flow-forged-capital-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Forged Capital entered the room",
+      "lastEventAt": "2026-06-23T03:25:16.408Z"
+    },
+    {
+      "id": "char-claw-mqq3073p",
+      "label": "Flow Island Claw",
+      "appId": "claw-mqq3073p",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Flow Island Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:19.513Z"
+    },
+    {
+      "id": "char-forged-flow-assist-work-5",
+      "label": "Flow Assist Work",
+      "appId": "forged-flow-assist-work-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Assist Work entered the room",
+      "lastEventAt": "2026-06-23T03:25:21.116Z"
+    },
+    {
+      "id": "char-forged-flow-round-trip-5",
+      "label": "Flow Round Trip",
+      "appId": "forged-flow-round-trip-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Round Trip entered the room",
+      "lastEventAt": "2026-06-23T03:25:22.818Z"
+    },
+    {
+      "id": "char-forged-flow-reimport-claw-5",
+      "label": "Flow Reimport Claw",
+      "appId": "forged-flow-reimport-claw-5",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Flow Reimport Claw entered the room",
+      "lastEventAt": "2026-06-23T03:25:24.152Z"
+    },
+    {
+      "id": "char-claw-cafe",
+      "label": "ENG",
+      "appId": "claw-cafe",
+      "station": "anvil",
+      "state": "walk",
+      "bubble": "QA tour complete",
+      "lastEventAt": "2026-06-23T03:25:24.527Z"
+    },
+    {
+      "id": "char-robotaxi-fleet-manager",
+      "label": "SWARM",
+      "appId": "robotaxi-fleet-manager",
+      "station": "yard_dock",
+      "state": "act",
+      "bubble": "ping mesh",
+      "lastEventAt": "2026-06-23T03:25:27.773Z"
+    }
+  ],
+  "lastRoomPulseAt": "2026-06-23T03:25:27.773Z"
+}

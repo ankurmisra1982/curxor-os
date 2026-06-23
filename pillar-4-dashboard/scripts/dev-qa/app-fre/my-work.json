@@ -2,8 +2,13 @@
   "initialized": true,
   "config": {
     "workspaceName": "Outreach Desk",
-    "focusAreas": ["tasks", "calendar", "mail"],
-    "clawLane": "A"
+    "focusAreas": [
+      "tasks",
+      "calendar",
+      "mail"
+    ],
+    "clawLane": "A",
+    "deskRole": "operator"
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

@@ -1,0 +1,11 @@
+{
+  "initialized": true,
+  "config": {
+    "deskFocus": "",
+    "meshPublish": false,
+    "growthLevel": "L1",
+    "forgedIntent": "QA smoke framework desk for sorting pipeline",
+    "forgedTemplateId": "blank-desk"
+  },
+  "initializedAt": "2026-06-22T22:26:48.149Z"
+}

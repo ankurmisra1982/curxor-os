@@ -25,6 +25,11 @@ CURXOR_CAPITAL_INTEL_PATH=${path.join(DEV_QA, "capital-intel.json")}
 CURXOR_CAPITAL_PLAID_PATH=${path.join(DEV_QA, "capital-plaid.json")}
 CURXOR_CAPITAL_SNAPTRADE_PATH=${path.join(DEV_QA, "capital-snaptrade.json")}
 CURXOR_DIGITAL_ENV_PATH=${DIGITAL_ENV}
+CURXOR_FAMILY_PROFILES_PATH=${path.join(DEV_QA, "family-profiles.json")}
+CURXOR_APP_FRE_DIR=${path.join(DEV_QA, "app-fre")}
+CURXOR_VITAL_STATE_PATH=${path.join(DEV_QA, "vital-health.json")}
+CURXOR_CLAW_CONTEXT_PATH=${path.join(DEV_QA, "claw-context.json")}
+CURXOR_HUMANOID_HUB_PATH=${path.join(DEV_QA, "humanoid-hub.json")}
 `.trim();
 
 function main() {

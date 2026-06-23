@@ -1,6 +1,41 @@
 import "server-only";
 
+import { experienceLevelFromGrowth } from "./os-growth-level";
 import { readUserSettings, updateUserSettings } from "./user-settings";
+import { applyGrowthFromCapitalFre, resolveCapitalGrowthLevel } from "./capital-growth";
+
+/**
+ * After Capital Claw FRE — sync legacy experience tier from growth persona
+ * unless the user explicitly chose Expert in Settings.
+ */
+export async function syncExperienceAfterCapitalFre(config: Record<string, unknown>): Promise<void> {
+  const enriched = applyGrowthFromCapitalFre(config);
+  const settings = await readUserSettings();
+  const growth = resolveCapitalGrowthLevel(
+    enriched,
+    settings.appearance.experienceLevel,
+    settings.appearance.capitalGrowthLevel ?? null,
+  );
+  const targetExperience = experienceLevelFromGrowth(growth);
+
+  const explicitExpert =
+    settings.appearance.experienceLevel === "expert" && settings.appearance.uiMode === "expert";
+  if (explicitExpert) return;
+
+  if (
+    settings.appearance.experienceLevel === targetExperience &&
+    settings.appearance.uiMode === (targetExperience === "expert" ? "expert" : "simple")
+  ) {
+    return;
+  }
+
+  await updateUserSettings({
+    appearance: {
+      experienceLevel: targetExperience,
+      uiMode: targetExperience === "expert" ? "expert" : "simple",
+    },
+  });
+}
 
 /**
  * First Capital Claw FRE completion — nudge operators into Beginner mode

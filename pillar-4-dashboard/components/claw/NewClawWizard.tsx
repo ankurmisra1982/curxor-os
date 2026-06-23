@@ -9,8 +9,13 @@ import {
   type BudgetTier,
 } from "@/lib/local-llm-catalog";
 import type { ClawModels } from "@/lib/claw-recommend";
+import { ForgeConnectionModePicker } from "@/components/apps/forge/ForgeConnectionModePicker";
+import { useForgeAssist } from "@/components/claw/ForgeAssistProvider";
 
-const STEPS = ["State Intent", "Choose LLMs", "Provision Claw"] as const;
+import { FORGE_TEMPLATE_LIST, inferTemplateFromIntent } from "@/lib/forge-templates";
+import { parseImportBundle } from "@/lib/forge-import";
+
+const STEPS = ["Connection", "Intent", "Mode Setup", "LLMs", "Provision"] as const;
 
 export interface NewClawWizardProps {
   onClose: () => void;
@@ -33,6 +38,7 @@ export function NewClawWizard({
   initialLiveVision = false,
   initialImageHint = null,
 }: NewClawWizardProps) {
+  const forge = useForgeAssist();
   const [step, setStep] = useState(0);
   const [intent, setIntent] = useState(initialIntent);
   const [budgetTier, setBudgetTier] = useState<BudgetTier>(initialBudgetTier);
@@ -79,28 +85,52 @@ export function NewClawWizard({
     setBudgetTier(initialBudgetTier);
   }, [initialBudgetTier]);
 
-  const canAdvance = step === 0 ? intent.trim().length >= 8 : true;
+  useEffect(() => {
+    if (intent.trim().length >= 8 && forge.provisioningMode === "framework") {
+      forge.setTemplateId(inferTemplateFromIntent(intent));
+    }
+  }, [intent, forge.provisioningMode, forge.setTemplateId]);
+
+  const canAdvance =
+    step === 0
+      ? true
+      : step === 1
+        ? intent.trim().length >= 8
+        : step === 2
+          ? forge.provisioningMode === "imported"
+            ? Boolean(forge.importJson.trim())
+            : true
+          : true;
+
+  const multimodalPayload =
+    imagePreview || liveVision
+      ? {
+          hadReferenceImage: Boolean(imagePreview),
+          liveVision,
+          imageHint,
+        }
+      : undefined;
 
   async function createClaw() {
     setError(null);
-    setStep(2);
+    setStep(4);
     setProvisioning(true);
-    setMatrixRows([
-      { label: "Pull vision weights", status: "pending", progress: 0 },
-      { label: "Pull reasoning weights", status: "pending", progress: 0 },
-      { label: "Bind mesh endpoints", status: "pending", progress: 0 },
-      { label: "Register claw profile", status: "pending", progress: 0 },
-    ]);
+    const labels =
+      forge.provisioningMode === "framework"
+        ? ["Seed FRE + workspace", "Register forged app", "Link engine profile", "Add to nav"]
+        : forge.provisioningMode === "imported"
+          ? ["Validate bundle", "Write agent workspace", "Register profile", "Finalize import"]
+          : ["Pull vision weights", "Pull reasoning weights", "Bind mesh endpoints", "Register claw profile"];
+    setMatrixRows(labels.map((label) => ({ label, status: "pending", progress: 0 })));
 
     const animate = async () => {
-      const labels = ["Pull vision weights", "Pull reasoning weights", "Bind mesh endpoints", "Register claw profile"];
       for (let i = 0; i < labels.length; i++) {
         const label = labels[i]!;
-        await new Promise((r) => setTimeout(r, 700));
+        await new Promise((r) => setTimeout(r, 600));
         setMatrixRows((rows) =>
           rows.map((row) => (row.label === label ? { ...row, status: "running", progress: 55 } : row)),
         );
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 400));
         setMatrixRows((rows) =>
           rows.map((row) => (row.label === label ? { ...row, status: "done", progress: 100 } : row)),
         );
@@ -110,6 +140,64 @@ export function NewClawWizard({
     void animate();
 
     try {
+      if (forge.provisioningMode === "framework") {
+        const res = await fetch("/api/claw/provision-app", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            intent,
+            templateId: forge.templateId,
+            budgetTier,
+            autoSelected: autoChoose,
+            models,
+            multimodal: multimodalPayload,
+          }),
+        });
+        const data = (await res.json()) as { profile?: { id: string }; href?: string; error?: string };
+        if (!res.ok) throw new Error(data.error ?? "Provision app failed");
+        onCreated?.(data.profile?.id ?? "forged");
+        onClose();
+        return;
+      }
+
+      if (forge.provisioningMode === "imported") {
+        let bundle: unknown;
+        try {
+          bundle = JSON.parse(forge.importJson);
+        } catch {
+          throw new Error("Invalid import JSON");
+        }
+        const parsed = parseImportBundle({
+          ...(bundle as Record<string, unknown>),
+          integrationLevel: forge.importIntegration,
+        });
+        if (!parsed.ok) throw new Error(parsed.error);
+        const res = await fetch("/api/claw/import", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bundle: parsed.value.bundle,
+            budgetTier,
+            intentFallback: intent,
+            operatorConfirmedWarnings: forge.importWarningsConfirmed || parsed.value.warnings.length === 0,
+          }),
+        });
+        const data = (await res.json()) as {
+          profile?: { id: string };
+          requiresConfirmation?: boolean;
+          warnings?: string[];
+          error?: string;
+        };
+        if (res.status === 409 && data.requiresConfirmation) {
+          forge.setImportWarningsConfirmed(true);
+          throw new Error(`Confirm warnings: ${(data.warnings ?? []).join(" ")} — tap Provision again.`);
+        }
+        if (!res.ok) throw new Error(data.error ?? "Import failed");
+        onCreated?.(data.profile?.id ?? "imported");
+        onClose();
+        return;
+      }
+
       const res = await fetch("/api/claw/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -117,25 +205,19 @@ export function NewClawWizard({
           intent,
           budgetTier,
           autoSelected: autoChoose,
+          provisioningMode: "island",
           models,
-          multimodal:
-            imagePreview || liveVision
-              ? {
-                  hadReferenceImage: Boolean(imagePreview),
-                  liveVision,
-                  imageHint,
-                }
-              : undefined,
+          multimodal: multimodalPayload,
         }),
       });
       if (!res.ok) throw new Error("Create failed");
       const data = (await res.json()) as { profile: { id: string } };
       onCreated?.(data.profile.id);
       onClose();
-    } catch {
-      setError("Failed to provision claw. Retry or check logs.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to provision claw. Retry or check logs.");
       setProvisioning(false);
-      setStep(1);
+      setStep(3);
     }
   }
 
@@ -167,7 +249,7 @@ export function NewClawWizard({
           </button>
         </header>
 
-        <nav className="grid grid-cols-3 gap-1 border-b border-line px-4 py-2">
+        <nav className="grid grid-cols-5 gap-1 border-b border-line px-4 py-2">
           {STEPS.map((label, idx) => (
             <div
               key={label}
@@ -188,6 +270,22 @@ export function NewClawWizard({
           ) : null}
 
           {step === 0 && (
+            <div>
+              <h3 className="font-display text-xs uppercase tracking-[0.2em] text-stark">Connection Mode</h3>
+              <p className="mt-2 font-mono text-[11px] text-muted">
+                All three provisioning paths are live. Island keeps a local engine profile in Fleet only. Framework
+                seeds a CurXor desk with FRE, workspace, and nav. Import brings an external SOUL / TOOLS bundle.
+              </p>
+              <div className="mt-4">
+                <ForgeConnectionModePicker
+                  value={forge.provisioningMode}
+                  onChange={forge.setProvisioningMode}
+                />
+              </div>
+            </div>
+          )}
+
+          {step === 1 && (
             <div>
               <h3 className="font-display text-xs uppercase tracking-[0.2em] text-stark">State Your Intent</h3>
               <p className="mt-2 font-mono text-[11px] text-muted">
@@ -223,7 +321,48 @@ export function NewClawWizard({
             </div>
           )}
 
-          {step === 1 && (
+          {step === 2 && (
+            <div className="space-y-4">
+              {forge.provisioningMode === "framework" ? (
+                <>
+                  <h3 className="font-display text-xs uppercase tracking-[0.2em] text-stark">Framework Template</h3>
+                  <div className="grid gap-2">
+                    {FORGE_TEMPLATE_LIST.map((pack) => (
+                      <button
+                        key={pack.id}
+                        type="button"
+                        onClick={() => forge.setTemplateId(pack.id)}
+                        className={`border px-3 py-2 text-left ${
+                          forge.templateId === pack.id ? "border-cursor-glow bg-surface" : "border-line"
+                        }`}
+                      >
+                        <div className="font-mono text-xs text-stark">{pack.label}</div>
+                        <div className="mt-1 font-mono text-[10px] text-muted">{pack.description}</div>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : null}
+              {forge.provisioningMode === "imported" ? (
+                <>
+                  <h3 className="font-display text-xs uppercase tracking-[0.2em] text-stark">Import Bundle</h3>
+                  <textarea
+                    value={forge.importJson}
+                    onChange={(e) => forge.setImportJson(e.target.value)}
+                    rows={8}
+                    className="w-full border border-line bg-void px-3 py-2 font-mono text-[11px] text-stark"
+                  />
+                </>
+              ) : null}
+              {forge.provisioningMode === "island" ? (
+                <p className="font-mono text-[11px] text-muted">
+                  Island mode — engine profile only. No OS nav, mesh, or leveling. Continue to pick your local LLM stack.
+                </p>
+              ) : null}
+            </div>
+          )}
+
+          {step === 3 && (
             <div className="space-y-5">
               <div>
                 <h3 className="font-display text-xs uppercase tracking-[0.2em] text-stark">UMA Budget Tier</h3>
@@ -319,7 +458,7 @@ export function NewClawWizard({
             </div>
           )}
 
-          {step === 2 && (
+          {step === 4 && (
             <div>
               <h3 className="font-display text-xs uppercase tracking-[0.2em] text-stark">Provisioning Matrix</h3>
               <table className="mt-4 w-full border-collapse font-mono text-xs">
@@ -350,14 +489,14 @@ export function NewClawWizard({
           >
             ← Back
           </button>
-          {step < 2 ? (
+          {step < 4 ? (
             <button
               type="button"
               disabled={!canAdvance}
-              onClick={() => (step === 1 ? void createClaw() : setStep(1))}
-              className="border border-cursor-glow px-5 py-2 font-mono text-[10px] uppercase tracking-widest text-cursor-glow"
+              onClick={() => (step === 3 ? void createClaw() : setStep((s) => s + 1))}
+              className="border border-cursor-glow px-5 py-2 font-mono text-[10px] uppercase tracking-widest text-cursor-glow disabled:opacity-40"
             >
-              {step === 1 ? "Provision Claw →" : "Continue →"}
+              {step === 3 ? "Provision Claw →" : "Continue →"}
             </button>
           ) : (
             <span className="animate-pulse-cursor font-mono text-[10px] uppercase text-cursor-glow">

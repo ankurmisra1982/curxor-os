@@ -3,7 +3,9 @@
   "config": {
     "defaultBudget": "balanced",
     "autoRecommend": true,
-    "multimodalDefault": true
+    "multimodalDefault": true,
+    "forgeGrowthIntent": "templates_import",
+    "growthLevel": "L4"
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

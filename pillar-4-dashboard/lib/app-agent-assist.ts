@@ -268,16 +268,38 @@ function ruleBasedReply(req: AgentAssistRequest, agent: AppAgentDefinition | Res
           suggestedSkill: "push_knowledge",
         };
       }
+      if (/audit|pair.day|pair day|memory pack|what will.*know|inherit|package summary/.test(combined)) {
+        return {
+          reply:
+            "Knowledge tab — scroll to Pair-day memory audit · View audit. Shows rules, Kin policies, armed routines, fleet, and CCP consent before hardware pairs.",
+          suggestedSkill: "push_knowledge",
+        };
+      }
+      if (/policy|per.member|kitchen|bedroom|greet by name|tone.*kin|child.*robot|guest.*robot/.test(combined)) {
+        return {
+          reply:
+            "Knowledge tab · Kin-aware robot policy — per-member tone, kitchen/bedroom boundaries, ask-first zones. Changes sync on Push to mesh.",
+          suggestedSkill: "push_knowledge",
+        };
+      }
+      if (/compose|natural language|plain language|describe.*routine|write.*routine|custom routine/.test(combined)) {
+        return {
+          reply:
+            "Routines tab · Compose routine — describe in plain language, then Compose & arm. Also toggle built-in templates like morning welcome.",
+          suggestedSkill: "push_knowledge",
+        };
+      }
       if (/rule|teach|know|learn|house|guest|family|kin|remember|instruction/.test(combined)) {
         return {
           reply:
-            "Knowledge tab — add house rules, then tap Push Knowledge or the Push to mesh skill. Kin profiles teach who lives here.",
+            "Knowledge tab — Kin-aware policies + house rules, then Push to mesh. Run View audit to preview the full pair-day memory package.",
           suggestedSkill: "push_knowledge",
         };
       }
       if (/routine|morning|quiet|welcome|schedule|daily/.test(combined)) {
         return {
-          reply: "Routines tab — arm templates like morning welcome and guest arrival. They execute on pair day.",
+          reply:
+            "Routines tab — arm templates or Compose & arm from plain language. They execute on pair day after you push knowledge.",
           suggestedSkill: "push_knowledge",
         };
       }
@@ -312,11 +334,18 @@ function ruleBasedReply(req: AgentAssistRequest, agent: AppAgentDefinition | Res
         };
       }
       return {
-        reply: `Humanoid Home Hub preview · ${cfgStr(config, "unitId", "Home Humanoid")}. Start on Home — teach rules in Knowledge — arm Routines.`,
+        reply: `Humanoid Home Hub preview · ${cfgStr(config, "unitId", "Home Humanoid")}. Home → relationship · Knowledge → Kin policy + audit + rules · Routines → compose · Fleet → pair wizard.`,
         suggestedSkill: "push_knowledge",
       };
 
     case "robotaxi-fleet-manager":
+      if (/tesla|robotaxi|autonomous|acquire|vin|vehicle fleet/.test(combined)) {
+        return {
+          reply:
+            "Robotaxi fleet is preview-only today — use the grid and simulators to train dispatch. Tesla VIN roster, utilization, and live autonomous ops ship on the horizon tab (Coming Soon). No live pairing yet.",
+          suggestedSkill: "rebalance",
+        };
+      }
       if (/assign|dispatch|send|route|workload/.test(combined)) {
         return {
           reply: "Select a Claw, then Assign Route. Policy: " + cfgStr(config, "dispatchPolicy", "latency") + ".",
@@ -496,12 +525,12 @@ function ruleBasedReply(req: AgentAssistRequest, agent: AppAgentDefinition | Res
       }
       if (/sinclair|johnson|blueprint|don'?t die|attia|huberman|longevity|aging|nad|healthspan/.test(combined)) {
         return {
-          reply: `Longevity Lab preview — ask about Sinclair, Blueprint / Don't Die, Attia, or general habits. Tap Ask Longevity or open the Lab tab. ${VITAL_LONGEVITY_DISCLAIMER}`,
+          reply: `Longevity Lab is live — open the Lab tab for personalized Q&A, protocol diff, and literature search. ${VITAL_LONGEVITY_DISCLAIMER}`,
           suggestedSkill: "ask_longevity",
         };
       }
       return {
-        reply: "Vital Claw preview — open Ask / Lab for longevity science, or ask about vitals, protocol, and bridges.",
+        reply: "Vital Claw — open Lab for longevity Q&A against your vitals, or use Protocol / Bridges tabs.",
         suggestedSkill: "ask_longevity",
       };
     }
@@ -537,10 +566,15 @@ export async function assistAppAgent(req: AgentAssistRequest): Promise<AgentAssi
     const skill = resolved.skills.find((s) => s.id === req.skillId);
     if (!skill) return { reply: "Unknown skill.", activity: undefined };
     if (isForgedAppId(req.appId)) {
+      const { executeSkillMesh } = await import("./skill-executors");
+      const meshResult = await executeSkillMesh(req.appId, req.skillId, config);
       return {
-        reply: `**${skill.label}** staged. Skill recorded locally on your forged desk.`,
+        reply:
+          meshResult.skipReason ??
+          `**${skill.label}** completed on your forged desk.`,
         suggestedSkill: skill.id,
-        activity: `Forged skill · ${skill.id}`,
+        activity: `Forged skill · ${skill.id} · ${meshResult.skipReason ?? "ok"}`,
+        mesh: { kind: meshResult.kind, ok: meshResult.executed !== false },
       };
     }
     return runSkillReply(req.appId as OotbAppId, req.skillId, config, skill, req.message);
@@ -584,14 +618,63 @@ async function runSkillReply(
   message: string,
 ): Promise<AgentAssistResult> {
   if (appId === "my-vital" && skillId === "ask_longevity") {
-    const q = message.trim() || "What should I prioritize for longevity?";
-    const preview =
-      longevityPreviewReply(q) ??
-      longevityPreviewReply("longevity priority") ??
-      "Longevity Lab preview — personalized answers against your vitals ship soon. Try asking about Sinclair, Blueprint habits, or Zone 2 cardio.";
+    const { fetchVitalStatus } = await import("./vital-health-store");
+    const { readAppFreState } = await import("./app-fre-state");
+    const { askVitalLongevityLab } = await import("./vital-longevity-lab");
+    const [state, fre] = await Promise.all([fetchVitalStatus(), readAppFreState("my-vital")]);
+    const q = message.trim() || "What should I prioritize for longevity given my vitals and labs?";
+    const mergedConfig = { ...(fre.config ?? {}), ...config };
+    const result = await askVitalLongevityLab(q, mergedConfig, state, mergedConfig.expertLens);
+    const { markVitalLabUsed } = await import("./vital-health-store");
+    await markVitalLabUsed();
     return {
-      reply: `${preview}\n\n${VITAL_LONGEVITY_DISCLAIMER}`,
-      activity: `[${skill.label}] preview Q&A`,
+      reply: `${result.answer}\n\n${result.disclaimer}`,
+      activity: `[${skill.label}] ${result.mode} · ${result.citations.length} citation(s)`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
+  if (appId === "my-vital" && skillId === "sync_wearables") {
+    const { syncWearablesDemo } = await import("./vital-health-store");
+    const state = await syncWearablesDemo();
+    return {
+      reply: `Synced ${state.vitals.length} vitals from demo bridges. Overview refreshes automatically — live eno2 pull ships after hardware validation.`,
+      activity: `[${skill.label}] ${state.vitals.length} vitals · demo sync`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
+  if (appId === "my-vital" && skillId === "ingest_report") {
+    const { ingestDemoReport } = await import("./vital-health-store");
+    const summary = message.trim() || "Operator-ingested summary — attach PDF when OCR bridge ships.";
+    const report = await ingestDemoReport({ summary });
+    return {
+      reply: `Added **${report.title}** (${report.id}) to your Reports vault. Full PDF OCR is preview until eno2 validation.`,
+      activity: `[${skill.label}] ${report.id}`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
+  if (appId === "my-vital" && skillId === "update_protocol") {
+    const { refreshProtocolForFocus } = await import("./vital-health-store");
+    const { readAppFreState } = await import("./app-fre-state");
+    const fre = await readAppFreState("my-vital");
+    const focus = cfgStr(config, "longevityFocus", "") || cfgStr(fre.config, "longevityFocus", "metabolic");
+    const state = await refreshProtocolForFocus(focus);
+    return {
+      reply: `Protocol updated with ${state.protocol.length} steps for **${focus}** focus. Open Protocol tab to review — not medical advice.`,
+      activity: `[${skill.label}] ${state.protocol.length} steps`,
+      mesh: { kind: "plan", ok: true },
+    };
+  }
+
+  if (appId === "my-vital" && skillId === "publish_context") {
+    const { syncVitalContextToMesh } = await import("./vital-health-store");
+    const profileId = cfgStr(config, "selectedProfileId", "") || null;
+    await syncVitalContextToMesh(profileId);
+    return {
+      reply: "Published vitals and active protocol to Claw Context — Kin and Optimus can read scoped health slices when consented.",
+      activity: `[${skill.label}] health/vitals.latest + protocol.active`,
       mesh: { kind: "plan", ok: true },
     };
   }

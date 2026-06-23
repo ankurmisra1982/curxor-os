@@ -96,5 +96,14 @@
       "GTM assets — demo:capture:forge (30–32), forge-exit-walkthrough.webm, expanded forge-checklist and user flows",
       "140+ smoke + forge excellence QA — forged desk E2E mint → lead → sequence; tagged v0.6.3"
     ]
+  },
+  "0.6.5": {
+    "highlights": [
+      "Forged capital-desk v2 — per-desk capital-queue.json, watchlist research, IF/THEN rules, arm_rule server skills, and L4-capital demo tour",
+      "Fleet lifecycle F11 — archive claw, island→framework promote, batch fleet export, Fleet tab actions",
+      "Cafe + CCP F12 — per-mint Cafe attribution, archive walk-out, publishForgedDeskContext on FRE mesh opt-in",
+      "GTM F14 — island mint + import round-trip + forged assist E2E in QA; scorecard refresh; FEATURE-FUNCTION honest modes copy",
+      "Audit F15 — Slack/Printify/approval fixes, qa-local-suites Windows harness, shop commerce reset, tier-c FREEZE sweep 21/21; tagged v0.6.5"
+    ]
   }
 }

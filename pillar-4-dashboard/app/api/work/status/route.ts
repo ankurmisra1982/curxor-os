@@ -1135,6 +1135,27 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ...result, status: await fetchWorkStatus() });
       }
 
+      case "handoff_to_swarm": {
+        const payload = body as {
+          title?: string;
+          detail?: string;
+          targetCell?: string;
+          priority?: string;
+          contextLabel?: string;
+        };
+        const { handoffToSwarm } = await import("@/lib/swarm-handoff");
+        const result = await handoffToSwarm({
+          source: "my-work",
+          title: payload.title ?? payload.contextLabel ?? "Work Claw workload",
+          detail: payload.detail,
+          targetCell: payload.targetCell as import("@/lib/swarm-fleet").SwarmGridCell | undefined,
+          priority:
+            payload.priority === "high" || payload.priority === "low" ? payload.priority : "normal",
+        });
+        if (!result.ok) return Response.json({ ok: false, error: result.error }, { status: 400 });
+        return Response.json({ ...result, status: await fetchWorkStatus() });
+      }
+
       case "xp_event_emit": {
         const kind = typeof (body as { kind?: string }).kind === "string"
           ? (body as { kind: string }).kind

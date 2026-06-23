@@ -4,12 +4,13 @@
 
 ## Purpose
 
-Kin Claw manages **household profiles** so every Claw and hardware unit can personalize per person:
+Kin Claw is the **household identity layer** on CurXor — the reason your appliance can treat your kids, partner, and you as different people:
 
-- Add family members with roles and personalities
-- Bind devices (phone, watch, tablet, Optimus robot, appliance)
-- Control **shared scopes** (health, work, finance, personal) per member
-- Sync all profiles to **Claw Context Protocol**
+- **Optimus (Signal Claw)** — guest-aware tone and physical interactions per profile (preview)
+- **Vital Claw** — wearables, labs, and longevity advice scoped per member (preview)
+- **Every Claw** — Work tone, scheduling, and mesh context routed via CCP (live sync today)
+
+Add family members with roles and personalities. Bind devices when ready. Control **shared scopes** (health, work, finance, personal) per member. Sync all profiles to **Claw Context Protocol**.
 
 ## Why "Kin Claw"
 

@@ -145,12 +145,12 @@ Agent behavior: `pillar-4-dashboard/lib/app-agent-catalog.ts`
 
 | Display name | Route | Appliance ID | Primary function |
 |--------------|-------|--------------|------------------|
-| **The Forge** | `/claw-forge` | `claw-forge` | Mint Claws — intent, photo, vision, model stack, provision |
+| **The Forge** | `/claw-forge` | `claw-forge` | Mint Claws — **Island** (engine only), **Framework** (nav desk + FRE), or **Import** (SOUL/TOOLS bundle); forged work/creator/capital desks with local stores on appliance |
 | **Capital Claw** | `/my-capital` | `my-capital` | Rule engine, paper trades via Alpaca bridge |
 | **Creator Claw** | `/my-content` | `my-content-creator` | Sovereign content ops — queue, calendar, 10-platform publish, Go Live, engage loop, analytics |
 | **Outreach Claw** | `/my-work` | `my-work` | Outbound desk, sequences, task matrix (mock CRM) |
 | **Arbitrage Claw** | `/my-shop` | `my-shop` | Margin / fulfillment desk (mock e-com) |
-| **Signal Claw** | `/optimus` | `tesla-optimus-engine` | Feed triggers, alert thresholds (demo canvas) |
+| **Signal Claw** | `/optimus` | `tesla-optimus-engine` | Humanoid Home Hub — teach, instruct, relate (preview) |
 | **Swarm Claw** | `/robotaxi` | `robotaxi-fleet-manager` | Multi-Claw grid, dispatch policy (mock fleet) |
 | **Engage Claw** | `/claw-cafe` | `claw-cafe` | DM/thread engagement demos, vision lanes |
 

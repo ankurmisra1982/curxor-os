@@ -27,6 +27,7 @@ export function appIdFromPathname(pathname: string): OotbAppId | null {
 }
 
 export function isPathEnabled(pathname: string, selectedApps: OotbAppId[]): boolean {
+  if (pathname.startsWith("/my-claw/")) return true;
   const appId = appIdFromPathname(pathname);
   if (!appId) return true;
   return isAppEnabled(appId, selectedApps);

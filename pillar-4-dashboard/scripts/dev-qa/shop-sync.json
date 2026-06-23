@@ -1,0 +1,263 @@
+{
+  "version": 2,
+  "mergedSpreads": [
+    {
+      "sku": "GEAR-KIT-A",
+      "label": "Claw starter kit",
+      "channelBuy": "Wholesale lot",
+      "channelSell": "Marketplace A",
+      "buyPrice": 24.5,
+      "sellPrice": 31.2,
+      "marginPct": 21.4,
+      "alert": true,
+      "source": "shopify"
+    },
+    {
+      "sku": "CLAW-PRIZE-03",
+      "label": "Prize bundle",
+      "channelBuy": "Liquidator",
+      "channelSell": "Marketplace B",
+      "buyPrice": 8,
+      "sellPrice": 11.4,
+      "marginPct": 29.8,
+      "alert": true,
+      "source": "shopify"
+    },
+    {
+      "sku": "ROBOTAXI-MAT",
+      "label": "Desk mat",
+      "channelBuy": "Supplier CSV",
+      "channelSell": "Shopify (mock)",
+      "buyPrice": 12,
+      "sellPrice": 14.1,
+      "marginPct": 14.9,
+      "alert": false,
+      "source": "shopify"
+    },
+    {
+      "sku": "NEW-SKU",
+      "label": "Watch · Arbitrage De",
+      "channelBuy": "Scan pending",
+      "channelSell": "—",
+      "buyPrice": 0,
+      "sellPrice": 0,
+      "marginPct": 0,
+      "alert": false,
+      "source": "shopify"
+    },
+    {
+      "sku": "GEAR-KIT-A",
+      "label": "Claw starter kit",
+      "channelBuy": "Wholesale lot",
+      "channelSell": "eBay (mock)",
+      "buyPrice": 24.5,
+      "sellPrice": 31.2,
+      "marginPct": 21.4,
+      "alert": true,
+      "source": "ebay"
+    },
+    {
+      "sku": "CLAW-PRIZE-03",
+      "label": "Prize bundle",
+      "channelBuy": "Liquidator",
+      "channelSell": "eBay (mock)",
+      "buyPrice": 8,
+      "sellPrice": 11.4,
+      "marginPct": 29.8,
+      "alert": true,
+      "source": "ebay"
+    },
+    {
+      "sku": "GEAR-KIT-A",
+      "label": "Claw starter kit",
+      "channelBuy": "Printify production (mock)",
+      "channelSell": "Printify retail",
+      "buyPrice": 24.5,
+      "sellPrice": 31.2,
+      "marginPct": 21.4,
+      "alert": true,
+      "source": "printify"
+    },
+    {
+      "sku": "CLAW-PRIZE-03",
+      "label": "Prize bundle",
+      "channelBuy": "Printify production (mock)",
+      "channelSell": "Printify retail",
+      "buyPrice": 8,
+      "sellPrice": 11.4,
+      "marginPct": 29.8,
+      "alert": true,
+      "source": "printify"
+    },
+    {
+      "sku": "ROBOTAXI-MAT",
+      "label": "Desk mat",
+      "channelBuy": "Printify production (mock)",
+      "channelSell": "Printify retail",
+      "buyPrice": 12,
+      "sellPrice": 14.1,
+      "marginPct": 14.9,
+      "alert": false,
+      "source": "printify"
+    }
+  ],
+  "mergedPipelineOrders": [
+    {
+      "id": "EBAY-MOCK-1",
+      "sku": "GEAR-KIT-A",
+      "stage": "INGEST",
+      "eta": "live",
+      "source": "ebay"
+    },
+    {
+      "id": "EBAY-MOCK-2",
+      "sku": "CLAW-PRIZE-03",
+      "stage": "PICK",
+      "eta": "live",
+      "source": "ebay"
+    }
+  ],
+  "channels": {
+    "shopify": {
+      "label": "mock.myshopify.com",
+      "syncedAt": "2026-06-23T03:25:28.550Z",
+      "receiptId": "mock-receipt",
+      "spreads": [
+        {
+          "sku": "GEAR-KIT-A",
+          "label": "Claw starter kit",
+          "channelBuy": "Wholesale lot",
+          "channelSell": "Marketplace A",
+          "buyPrice": 24.5,
+          "sellPrice": 31.2,
+          "marginPct": 21.4,
+          "alert": true,
+          "source": "shopify"
+        },
+        {
+          "sku": "CLAW-PRIZE-03",
+          "label": "Prize bundle",
+          "channelBuy": "Liquidator",
+          "channelSell": "Marketplace B",
+          "buyPrice": 8,
+          "sellPrice": 11.4,
+          "marginPct": 29.8,
+          "alert": true,
+          "source": "shopify"
+        },
+        {
+          "sku": "ROBOTAXI-MAT",
+          "label": "Desk mat",
+          "channelBuy": "Supplier CSV",
+          "channelSell": "Shopify (mock)",
+          "buyPrice": 12,
+          "sellPrice": 14.1,
+          "marginPct": 14.9,
+          "alert": false,
+          "source": "shopify"
+        },
+        {
+          "sku": "NEW-SKU",
+          "label": "Watch · Arbitrage De",
+          "channelBuy": "Scan pending",
+          "channelSell": "—",
+          "buyPrice": 0,
+          "sellPrice": 0,
+          "marginPct": 0,
+          "alert": false,
+          "source": "shopify"
+        }
+      ],
+      "orderLineCount": 3,
+      "pipelineOrders": []
+    },
+    "ebay": {
+      "label": "sandbox",
+      "syncedAt": "2026-06-23T03:25:28.471Z",
+      "receiptId": "mock-ebay-receipt",
+      "spreads": [
+        {
+          "sku": "GEAR-KIT-A",
+          "label": "Claw starter kit",
+          "channelBuy": "Wholesale lot",
+          "channelSell": "eBay (mock)",
+          "buyPrice": 24.5,
+          "sellPrice": 31.2,
+          "marginPct": 21.4,
+          "alert": true,
+          "source": "ebay"
+        },
+        {
+          "sku": "CLAW-PRIZE-03",
+          "label": "Prize bundle",
+          "channelBuy": "Liquidator",
+          "channelSell": "eBay (mock)",
+          "buyPrice": 8,
+          "sellPrice": 11.4,
+          "marginPct": 29.8,
+          "alert": true,
+          "source": "ebay"
+        }
+      ],
+      "orderLineCount": 2,
+      "pipelineOrders": [
+        {
+          "id": "EBAY-MOCK-1",
+          "sku": "GEAR-KIT-A",
+          "stage": "INGEST",
+          "eta": "live",
+          "source": "ebay"
+        },
+        {
+          "id": "EBAY-MOCK-2",
+          "sku": "CLAW-PRIZE-03",
+          "stage": "PICK",
+          "eta": "live",
+          "source": "ebay"
+        }
+      ]
+    },
+    "printify": {
+      "label": "mock-shop",
+      "syncedAt": "2026-06-23T03:25:28.869Z",
+      "receiptId": "mock-printify-receipt",
+      "spreads": [
+        {
+          "sku": "GEAR-KIT-A",
+          "label": "Claw starter kit",
+          "channelBuy": "Printify production (mock)",
+          "channelSell": "Printify retail",
+          "buyPrice": 24.5,
+          "sellPrice": 31.2,
+          "marginPct": 21.4,
+          "alert": true,
+          "source": "printify"
+        },
+        {
+          "sku": "CLAW-PRIZE-03",
+          "label": "Prize bundle",
+          "channelBuy": "Printify production (mock)",
+          "channelSell": "Printify retail",
+          "buyPrice": 8,
+          "sellPrice": 11.4,
+          "marginPct": 29.8,
+          "alert": true,
+          "source": "printify"
+        },
+        {
+          "sku": "ROBOTAXI-MAT",
+          "label": "Desk mat",
+          "channelBuy": "Printify production (mock)",
+          "channelSell": "Printify retail",
+          "buyPrice": 12,
+          "sellPrice": 14.1,
+          "marginPct": 14.9,
+          "alert": false,
+          "source": "printify"
+        }
+      ],
+      "orderLineCount": 0,
+      "pipelineOrders": []
+    }
+  }
+}

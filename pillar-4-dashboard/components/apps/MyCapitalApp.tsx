@@ -1,11 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
 import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
 import { DigitalReceiptPanel } from "@/components/digital/DigitalReceiptPanel";
+import { CapitalLevelBadge } from "@/components/apps/capital/CapitalLevelBadge";
+import { CapitalAlphaFeedPanel } from "@/components/apps/capital/CapitalAlphaFeedPanel";
+import { CapitalThesisJournalPanel } from "@/components/apps/capital/CapitalThesisJournalPanel";
+import { CapitalPilotLeaderboardPanel } from "@/components/apps/capital/CapitalPilotLeaderboardPanel";
 import { CapitalAutoApprovalPanel } from "@/components/apps/capital/CapitalAutoApprovalPanel";
 import { CapitalAgentTradingPanel } from "@/components/apps/capital/CapitalAgentTradingPanel";
 import { CapitalGoLivePanel, type CapitalGoLiveReportRow } from "@/components/apps/capital/CapitalGoLivePanel";
@@ -38,10 +42,12 @@ import { CapitalSetupWizard } from "@/components/apps/capital/CapitalSetupWizard
 import { CapitalTaxLotsPanel } from "@/components/apps/capital/CapitalTaxLotsPanel";
 import {
   CapitalWorkspaceTabs,
+  capitalFeatureVisible,
   capitalSectionVisible,
   defaultCapitalTab,
   type CapitalWorkspaceTab,
 } from "@/components/apps/capital/CapitalWorkspaceTabs";
+import { capitalTerm } from "@/lib/capital-level-copy";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import type {
@@ -56,6 +62,9 @@ import { getOotbApp } from "@/lib/ootb-apps";
 import { useDigitalStream } from "@/hooks/useDigitalStream";
 import { formatTradeReceipt } from "@/lib/digital-protocol";
 import { formatAgentPhaseMessage, formatTradeOutcomeMessage } from "@/lib/capital-trade-feedback";
+import { chartMarkersForSymbol } from "@/lib/capital-chart-markers";
+import { resolveCapitalGrowthLevel } from "@/lib/capital-growth";
+import { type GrowthLevel, isGrowthLevel } from "@/lib/os-growth-level";
 
 async function postCapital(body: Record<string, unknown>) {
   const res = await fetch("/api/capital/status", {
@@ -67,6 +76,7 @@ async function postCapital(body: Record<string, unknown>) {
     ok: boolean;
     status?: CapitalQueueStatus;
     goLive?: CapitalGoLiveReportRow;
+    growthProfile?: { growthLevel?: GrowthLevel; growthLabel?: string };
     failed?: CapitalTrade[];
     error?: string;
     rule?: CapitalRule;
@@ -100,7 +110,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [selectedTradeId, setSelectedTradeId] = useState<string | null>(null);
   const [demoTourRunning, setDemoTourRunning] = useState(false);
   const [executeRunning, setExecuteRunning] = useState(false);
-  const [workspaceTab, setWorkspaceTab] = useState<CapitalWorkspaceTab>(() => defaultCapitalTab(level));
+  const [workspaceTab, setWorkspaceTab] = useState<CapitalWorkspaceTab>(() =>
+    defaultCapitalTab(resolveCapitalGrowthLevel(config, level)),
+  );
   const [wizardOpen, setWizardOpen] = useState(false);
   const [coachDismissed, setCoachDismissed] = useState(false);
   const [analytics, setAnalytics] = useState<CapitalTradeAnalytics | null>(null);
@@ -109,8 +121,27 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [nlAnswer, setNlAnswer] = useState<string | null>(null);
   const [walkForwardNote, setWalkForwardNote] = useState<string | null>(null);
   const [unlockDismissed, setUnlockDismissed] = useState(false);
+  const [thesisPromptDraft, setThesisPromptDraft] = useState<string | null>(null);
+  const [thesisPromptKey, setThesisPromptKey] = useState(0);
+  const [thesisSaveNudge, setThesisSaveNudge] = useState(false);
+  const [growthProfile, setGrowthProfile] = useState<{
+    growthLevel: GrowthLevel;
+    growthLabel: string;
+  } | null>(null);
 
-  const hideCapitalSection = (sectionId: string) => !capitalSectionVisible(sectionId, workspaceTab);
+  const growthLevel = useMemo((): GrowthLevel => {
+    const fromProfile = growthProfile?.growthLevel;
+    if (fromProfile && isGrowthLevel(fromProfile)) return fromProfile;
+    return resolveCapitalGrowthLevel(config, level);
+  }, [config, level, growthProfile?.growthLevel]);
+
+  const hideCapitalSection = (sectionId: string) =>
+    !capitalSectionVisible(sectionId, workspaceTab, growthLevel);
+
+  useEffect(() => {
+    setWorkspaceTab(defaultCapitalTab(growthLevel));
+  }, [growthLevel]);
+
   const armedRuleId = status?.rules.find((r) => r.state === "ARMED")?.id ?? null;
 
   const applyStatus = useCallback((next: CapitalQueueStatus) => {
@@ -137,6 +168,12 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     const json = await postCapital({ action: "dashboard_bootstrap" });
     if (json.status) applyStatus(json.status);
     if (json.goLive) setGoLive(json.goLive);
+    if (json.growthProfile?.growthLevel && isGrowthLevel(json.growthProfile.growthLevel)) {
+      setGrowthProfile({
+        growthLevel: json.growthProfile.growthLevel,
+        growthLabel: json.growthProfile.growthLabel ?? json.growthProfile.growthLevel,
+      });
+    }
   }, [applyStatus]);
 
   const loadRecovery = useCallback(async () => {
@@ -165,19 +202,21 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
   useEffect(() => {
     void loadBootstrap();
-    if (level !== "beginner") {
+    if (capitalFeatureVisible(growthLevel, "recovery")) {
       void loadRecovery();
+    }
+    if (capitalFeatureVisible(growthLevel, "movers")) {
       void loadGrowthData();
     }
     const id = setInterval(() => void loadStatus(), 30_000);
     return () => clearInterval(id);
-  }, [loadBootstrap, loadRecovery, loadGrowthData, loadStatus, level]);
+  }, [loadBootstrap, loadRecovery, loadGrowthData, loadStatus, growthLevel]);
 
   useEffect(() => {
-    if (level !== "beginner") {
+    if (capitalFeatureVisible(growthLevel, "analytics")) {
       void loadAnalytics();
     }
-  }, [level, loadAnalytics]);
+  }, [growthLevel, loadAnalytics]);
 
   const scrollToTradeLog = () => {
     document.getElementById("capital-trade-log")?.scrollIntoView({ behavior: "smooth" });
@@ -235,7 +274,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             setSignal(`Researching ${sym}`);
           } else if (lastSkillId === "run_demo_tour" || lastSkillId === "execute_now") {
             setSignal(lastSkillId === "run_demo_tour" ? "Demo tour complete" : "Execute now complete");
-            if (level !== "beginner") void loadAnalytics();
+            if (capitalFeatureVisible(growthLevel, "analytics")) void loadAnalytics();
           } else if (lastSkillId === "portfolio_query") {
             setSignal("Portfolio Q&A answered in chat");
           } else if (lastSkillId === "create_rule") {
@@ -249,7 +288,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             setSignal("Trade preview ready — confirm in Agent & MCP panel");
           } else if (lastSkillId === "agent_execute_trade") {
             setSignal(formatTradeOutcomeMessage(data.trades[0], null));
-            if (level !== "beginner") void loadAnalytics();
+            if (capitalFeatureVisible(growthLevel, "analytics")) void loadAnalytics();
           } else if (lastSkillId === "pfm_refresh") {
             setSignal("PFM snapshot refreshed");
           }
@@ -331,17 +370,55 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
   const pendingTrades = (status?.trades ?? []).filter((t) => t.status === "pending_approval");
 
+  const researchSymbol =
+    activeIntelSymbol ?? researchTicker ?? status?.rules.find((r) => r.id === selectedRuleId)?.asset ?? status?.watchlist[0] ?? null;
+
+  const tradeMarkers = researchSymbol
+    ? chartMarkersForSymbol(researchSymbol, status?.trades ?? [], status?.pilotSignals ?? [])
+    : [];
+
   const runDemoTour = () => {
     setDemoTourRunning(true);
     void action({ action: "run_demo_tour" })
-      .then((j) => {
-        const t = j as { ok?: boolean; tradeId?: string; error?: string };
-        if (j.status) applyStatus(j.status as CapitalQueueStatus);
+      .then(async (j) => {
+        const t = j as { ok?: boolean; tradeId?: string; error?: string; status?: CapitalQueueStatus };
+        if (t.status) applyStatus(t.status);
         if (t.tradeId) setSelectedTradeId(t.tradeId);
         setSignal(t.ok ? "Demo tour complete · simulated fill" : t.error ?? "Demo tour failed");
         void postCapital({ action: "go_live" }).then((gl) => gl.goLive && setGoLive(gl.goLive));
         if (t.tradeId) scrollToTradeLog();
-        if (level !== "beginner") void loadAnalytics();
+        if (capitalFeatureVisible(growthLevel, "analytics")) void loadAnalytics();
+        if (t.ok && capitalFeatureVisible(growthLevel, "analytics")) {
+          const trade = t.status?.trades.find((x) => x.id === t.tradeId);
+          const sym =
+            trade?.ticker ??
+            t.status?.rules.find((r) => r.name.startsWith("Demo tour"))?.asset ??
+            status?.watchlist[0] ??
+            "SPY";
+          setWorkspaceTab("alpha");
+          setResearchTicker(sym);
+          setActiveIntelSymbol(sym);
+          let prompt = `Demo fill · ${sym} — catalyst, risk, exit plan…`;
+          try {
+            const intelRes = await fetch(`/api/capital/intel?ticker=${encodeURIComponent(sym)}`, {
+              cache: "no-store",
+            });
+            const intelJson = (await intelRes.json()) as { intel?: { smartTake?: string | null } };
+            const take = intelJson.intel?.smartTake?.trim();
+            if (take) prompt = `Demo fill · ${take.slice(0, 200)}`;
+          } catch {
+            /* keep default prompt */
+          }
+          setThesisPromptDraft(prompt);
+          setThesisPromptKey((k) => k + 1);
+          setThesisSaveNudge(true);
+          requestAnimationFrame(() => {
+            document.querySelector("[data-capital-thesis-journal]")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          });
+        }
       })
       .finally(() => setDemoTourRunning(false));
   };
@@ -359,23 +436,57 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           setSelectedTradeId(t.trade.id);
           scrollToTradeLog();
         }
-        if (level !== "beginner") void loadAnalytics();
+        if (capitalFeatureVisible(growthLevel, "analytics")) void loadAnalytics();
       })
       .finally(() => setExecuteRunning(false));
   };
 
   const hasFill = (status?.trades ?? []).some((t) => t.status === "simulated" || t.status === "filled");
   const coachTip =
-    !coachDismissed && (status?.rules.length ?? 0) === 0
-      ? { tip: "New here? Setup Wizard walks you through risk → rule → arm → first fill in under a minute.", action: "Setup Wizard", onAction: () => setWizardOpen(true) }
-      : !coachDismissed && !armedRuleId
-        ? { tip: "Arm a rule (toggle in Rule engine) to unlock Execute now on Go Live.", action: undefined, onAction: undefined }
-        : !coachDismissed && !hasFill
-          ? { tip: "Run demo tour or Execute now to log your first simulated fill — counts toward Go Live.", action: "Demo tour", onAction: runDemoTour }
-          : null;
+    !coachDismissed && growthLevel === "L1" && (status?.rules.length ?? 0) === 0
+      ? {
+          tip: "New here? Quick start walks you through a watchlist → practice rule → first practice buy in under a minute.",
+          action: capitalTerm(growthLevel, "setupWizard"),
+          onAction: () => setWizardOpen(true),
+        }
+      : !coachDismissed && growthLevel === "L1" && !armedRuleId
+        ? {
+            tip: `${capitalTerm(growthLevel, "armRule")} in Practice rules to unlock a practice buy on Get started.`,
+            action: undefined,
+            onAction: undefined,
+          }
+        : !coachDismissed && growthLevel === "L1" && !hasFill
+          ? {
+              tip: "Run Guided practice to log your first practice buy — no account needed.",
+              action: capitalTerm(growthLevel, "demoTour"),
+              onAction: runDemoTour,
+            }
+          : !coachDismissed && (status?.rules.length ?? 0) === 0
+            ? {
+                tip: "New here? Setup Wizard walks you through risk → rule → arm → first fill in under a minute.",
+                action: "Setup Wizard",
+                onAction: () => setWizardOpen(true),
+              }
+            : !coachDismissed && !armedRuleId
+              ? {
+                  tip: "Arm a rule (toggle in Rule engine) to unlock Execute now on Go Live.",
+                  action: undefined,
+                  onAction: undefined,
+                }
+              : !coachDismissed && !hasFill
+                ? {
+                    tip: "Run demo tour or Execute now to log your first simulated fill — counts toward Go Live.",
+                    action: "Demo tour",
+                    onAction: runDemoTour,
+                  }
+                : null;
 
   const showUnlock =
-    level === "beginner" && hasFill && !unlockDismissed && (status?.trades.length ?? 0) > 0;
+    growthLevel === "L2" &&
+    hasFill &&
+    !unlockDismissed &&
+    (status?.trades.length ?? 0) > 0 &&
+    capitalFeatureVisible(growthLevel, "level-up-nudge");
 
   return (
     <div className="space-y-4 p-4">
@@ -393,6 +504,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               : " · demo · simulated fills OK"}{" "}
           · {signal}
           <ExperienceLevelBadge />
+          <CapitalLevelBadge growthLevel={growthLevel} />
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
           <button
@@ -400,10 +512,12 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             onClick={() => setWizardOpen(true)}
             className="border border-cursor-glow px-2 py-0.5 font-mono text-[9px] uppercase text-cursor-glow"
           >
-            Setup Wizard
+            {capitalTerm(growthLevel, "setupWizard")}
           </button>
           {goLive?.demoReady ? (
-            <span className="font-mono text-[9px] uppercase text-cursor-glow">Demo ready</span>
+            <span className="font-mono text-[9px] uppercase text-cursor-glow">
+              {growthLevel === "L1" ? "Ready to practice" : "Demo ready"}
+            </span>
           ) : null}
         </div>
       </header>
@@ -412,6 +526,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         open={wizardOpen}
         onClose={() => setWizardOpen(false)}
         defaultAsset={status?.watchlist[0] ?? "SPY"}
+        growthLevel={growthLevel}
         onComplete={(r) => {
           setWizardOpen(false);
           if (r.ruleId) setSelectedRuleId(r.ruleId);
@@ -447,12 +562,68 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       ) : null}
 
-      {benchmark && level !== "beginner" ? <CapitalBenchmarkStrip benchmark={benchmark} /> : null}
+      {benchmark && capitalFeatureVisible(growthLevel, "benchmark") ? (
+        <CapitalBenchmarkStrip benchmark={benchmark} />
+      ) : null}
 
-      <CapitalWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} experienceLevel={level} />
+      <CapitalWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} growthLevel={growthLevel} />
+
+      {capitalSectionVisible("alpha-feed", workspaceTab, growthLevel) ? (
+        <ExperienceAppSection
+          appId="my-capital"
+          sectionId="alpha-feed"
+          minLevel="standard"
+          title="Alpha feed"
+          subtitle="Pilots · movers · fills · thesis · intel — sovereign local graph"
+          hideWhen={hideCapitalSection("alpha-feed")}
+        >
+          <CapitalAlphaFeedPanel
+            onTickerClick={(sym) => {
+              openResearch(sym);
+              setWorkspaceTab("research");
+            }}
+            onRunDemoTour={runDemoTour}
+            demoTourRunning={demoTourRunning}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {capitalSectionVisible("pilot-leaderboard", workspaceTab, growthLevel) ? (
+        <ExperienceAppSection
+          appId="my-capital"
+          sectionId="pilot-leaderboard"
+          minLevel="standard"
+          title="Pilot leaderboard"
+          subtitle="Ranked returns · 24h / 7d / 30d / 1Y"
+          hideWhen={hideCapitalSection("pilot-leaderboard")}
+        >
+          <CapitalPilotLeaderboardPanel
+            onPilotClick={() => setWorkspaceTab("agents")}
+          />
+        </ExperienceAppSection>
+      ) : null}
+
+      {capitalSectionVisible("thesis-journal", workspaceTab, growthLevel) ? (
+        <ExperienceAppSection
+          appId="my-capital"
+          sectionId="thesis-journal"
+          minLevel="standard"
+          title="Thesis journal"
+          subtitle="Local conviction log · feeds Alpha tab"
+          hideWhen={hideCapitalSection("thesis-journal")}
+        >
+          <CapitalThesisJournalPanel
+            symbol={researchSymbol}
+            promptDraft={thesisPromptDraft}
+            promptKey={thesisPromptKey}
+            highlightSave={thesisSaveNudge}
+            onPromptDismiss={() => setThesisSaveNudge(false)}
+          />
+        </ExperienceAppSection>
+      ) : null}
 
       <CapitalPendingTradesBanner
-        trades={level !== "beginner" ? (status?.trades ?? []) : []}
+        trades={capitalFeatureVisible(growthLevel, "pending-banner") ? (status?.trades ?? []) : []}
         onApprove={(tradeId) =>
           void action({ action: "submit_trade", tradeId }).then((j) =>
             setSignal(
@@ -475,37 +646,39 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         }
       />
 
-      {level !== "beginner" && capitalSectionVisible("research", workspaceTab) ? (
+      {capitalFeatureVisible(growthLevel, "watchlist-strip") &&
+      capitalSectionVisible("research", workspaceTab, growthLevel) ? (
         <CapitalWatchlistIntelStrip
           watchlist={status?.watchlist ?? ["NVDA", "SPY", "BTC-USD"]}
           onTickerClick={openResearch}
         />
       ) : null}
 
-      {level === "beginner" ? (
+      {capitalSectionVisible("recent-trades", workspaceTab, growthLevel) ? (
         <ExperienceAppSection
           appId="my-capital"
           sectionId="recent-trades"
           minLevel="beginner"
           title="Recent trades"
-          subtitle="Last 5 executions · upgrade to Standard for full log"
+          subtitle={capitalTerm(growthLevel, "recentTradesSubtitle")}
           hideWhen={hideCapitalSection("recent-trades")}
         >
           <CapitalRecentTradesStrip trades={status?.trades ?? []} />
         </ExperienceAppSection>
       ) : null}
 
-      {level === "beginner" || !goLive?.paperReady ? (
+      {(growthLevel === "L1" || !goLive?.paperReady) && capitalSectionVisible("go-live", workspaceTab, growthLevel) ? (
         <ExperienceAppSection
           appId="my-capital"
           sectionId="go-live"
           minLevel="beginner"
-          title="Go Live"
-          subtitle="Demo mode OK without broker keys · paper checklist when you connect Alpaca"
+          title={capitalTerm(growthLevel, "goLive")}
+          subtitle={capitalTerm(growthLevel, "goLiveSubtitle")}
           hideWhen={hideCapitalSection("go-live")}
         >
           <CapitalGoLivePanel
             report={goLive}
+            growthLevel={growthLevel}
             demoTourRunning={demoTourRunning}
             armedRuleId={armedRuleId}
             executeRunning={executeRunning}
@@ -527,10 +700,20 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </div>
 
-      <ExperienceAppSection appId="my-capital" sectionId="research" minLevel="beginner" title="Ticker research" subtitle="Price · smart take · headlines — chart & chatter unlock in Standard" hideWhen={hideCapitalSection("research")}>
+      <ExperienceAppSection
+        appId="my-capital"
+        sectionId="research"
+        minLevel="beginner"
+        title="Ticker research"
+        subtitle={capitalTerm(growthLevel, "researchSubtitle")}
+        hideWhen={hideCapitalSection("research")}
+      >
         <CapitalTickerIntelPanel
           watchlist={status?.watchlist ?? ["NVDA", "SPY", "BTC-USD"]}
           focusTicker={researchTicker}
+          tradeMarkers={tradeMarkers}
+          pilotSignals={status?.pilotSignals ?? []}
+          positions={status?.positions ?? []}
           onTickerSelect={(sym) => {
             setResearchTicker(null);
             setActiveIntelSymbol(sym);
@@ -557,15 +740,20 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
+      {capitalFeatureVisible(growthLevel, "intel-alerts") ? (
       <ExperienceAppSection appId="my-capital" sectionId="intel-alerts" minLevel="standard" title="Intel alerts" subtitle="Telegram/Slack nudge when dip or sentiment triggers" hideWhen={hideCapitalSection("intel-alerts")}>
         <CapitalIntelAlertsPanel symbol={activeIntelSymbol ?? researchTicker ?? status?.watchlist[0] ?? null} />
       </ExperienceAppSection>
+      ) : null}
 
+      {capitalFeatureVisible(growthLevel, "digest") ? (
       <ExperienceAppSection appId="my-capital" sectionId="digest" minLevel="standard" title="Market intel digest" subtitle="CNBC + WSB + Reddit + FinTwit across your watchlist" hideWhen={hideCapitalSection("digest")}>
         <CapitalMarketDigestPanel onTickerClick={(t) => setResearchTicker(t)} />
       </ExperienceAppSection>
+      ) : null}
 
-      <ExperienceAppSection appId="my-capital" sectionId="pilots" minLevel="beginner" title="Pilot marketplace" subtitle="Choose a portfolio · allocate · auto-mirror trades" hideWhen={hideCapitalSection("pilots")}>
+      {capitalFeatureVisible(growthLevel, "pilots") ? (
+      <ExperienceAppSection appId="my-capital" sectionId="pilots" minLevel="beginner" title={capitalTerm(growthLevel, "pilotMarketplace")} subtitle="Choose a portfolio · allocate · auto-mirror trades" hideWhen={hideCapitalSection("pilots")}>
         <div className="mb-2 flex justify-end">
           <button
             type="button"
@@ -588,7 +776,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           onHoldingClick={openResearch}
         />
       </ExperienceAppSection>
+      ) : null}
 
+      {capitalFeatureVisible(growthLevel, "subscriptions") ? (
       <ExperienceAppSection appId="my-capital" sectionId="subscriptions" minLevel="standard" title="Your pilots" subtitle="Pause · re-sync · unsubscribe" hideWhen={hideCapitalSection("subscriptions")}>
         <CapitalSubscriptionsPanel
           subscriptions={status?.subscriptions ?? []}
@@ -600,7 +790,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           onSync={(id) => void action({ action: "sync_pilot_subscription", subscriptionId: id })}
         />
       </ExperienceAppSection>
+      ) : null}
 
+      {capitalFeatureVisible(growthLevel, "risk") ? (
       <ExperienceAppSection appId="my-capital" sectionId="risk" minLevel="beginner" title="Risk & permissions" subtitle="Crisis mode · autonomous trading · guardrails" hideWhen={hideCapitalSection("risk")}>
         <CapitalPermissionsPanel
           permissions={status?.permissions ?? { autonomousMode: "off", autonomousGrantedAt: null, allowedBrokers: [], activeBrokerId: "alpaca", maxAutoTradesPerDay: 10, tradingviewWebhookSecret: null, liveMoneyConfirmedAt: null }}
@@ -628,16 +820,34 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           }
         />
       </ExperienceAppSection>
+      ) : null}
 
-      <ExperienceAppSection appId="my-capital" sectionId="auto-approval" minLevel="standard" title="Auto-approval stack" subtitle="Sovereign execution policy · paper-first · notional caps" hideWhen={hideCapitalSection("auto-approval")}>
+      {capitalFeatureVisible(growthLevel, "auto-approval") ? (
+      <ExperienceAppSection
+        appId="my-capital"
+        sectionId="auto-approval"
+        minLevel="standard"
+        title={capitalTerm(growthLevel, "autoApproval") || "Auto-approval stack"}
+        subtitle="Sovereign execution policy · paper-first · notional caps"
+        hideWhen={hideCapitalSection("auto-approval")}
+      >
         <CapitalAutoApprovalPanel
           policy={status?.autoApproval ?? defaultAutoApprovalPolicy()}
           tradingMode={mode}
           onUpdate={(patch) => void action({ action: "set_auto_approval", autoApproval: patch })}
         />
       </ExperienceAppSection>
+      ) : null}
 
-      <ExperienceAppSection appId="my-capital" sectionId="agent-trading" minLevel="standard" title="Agent & MCP trading" subtitle="Claude · Cursor · Claw chat · review before execute" hideWhen={hideCapitalSection("agent-trading")}>
+      {capitalFeatureVisible(growthLevel, "agent-trading") ? (
+      <ExperienceAppSection
+        appId="my-capital"
+        sectionId="agent-trading"
+        minLevel="standard"
+        title={capitalTerm(growthLevel, "agentTrading") || "Agent & MCP trading"}
+        subtitle="Claude · Cursor · Claw chat · review before execute"
+        hideWhen={hideCapitalSection("agent-trading")}
+      >
         <CapitalAgentTradingPanel
           autoApproval={status?.autoApproval ?? defaultAutoApprovalPolicy()}
           auditLog={status?.agentAuditLog ?? []}
@@ -669,15 +879,16 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           }}
         />
       </ExperienceAppSection>
+      ) : null}
 
-      {level !== "beginner" ? (
+      {capitalFeatureVisible(growthLevel, "pfm") ? (
         <ExperienceAppSection appId="my-capital" sectionId="pfm" minLevel="standard" title="Personal finance" subtitle="Cash flow · spending · wealth goals · Mint-style insights on-appliance" hideWhen={hideCapitalSection("pfm")}>
           <CapitalPlaidLinkSection onLinked={() => void loadStatus()} />
           <CapitalPfmPanel onSuggestionAction={handlePfmSuggestion} />
         </ExperienceAppSection>
       ) : null}
 
-      {level !== "beginner" ? (
+      {capitalFeatureVisible(growthLevel, "portfolio-health") ? (
         <ExperienceAppSection appId="my-capital" sectionId="portfolio-health" minLevel="standard" title="Portfolio health" subtitle="Concentration · sector mix · rebalance hints" hideWhen={hideCapitalSection("portfolio-health")}>
           <CapitalPortfolioHealthPanel
             health={portfolioHealth}
@@ -706,6 +917,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </ExperienceAppSection>
       ) : null}
 
+      {capitalFeatureVisible(growthLevel, "movers") ? (
       <ExperienceAppSection appId="my-capital" sectionId="movers" minLevel="standard" title="Movers & positions" subtitle="Quote cache · Alpaca sync" hideWhen={hideCapitalSection("movers")}>
         <CapitalMoversPanel
           movers={status?.movers ?? []}
@@ -713,7 +925,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           onSymbolClick={openResearch}
         />
       </ExperienceAppSection>
+      ) : null}
 
+      {capitalFeatureVisible(growthLevel, "brokers") ? (
       <ExperienceAppSection appId="my-capital" sectionId="brokers" minLevel="standard" title="Broker integrations" subtitle="Alpaca live · TradingView webhook · Robinhood MCP" hideWhen={hideCapitalSection("brokers")}>
         <CapitalBrokersPanel
           brokers={status?.brokers ?? []}
@@ -821,8 +1035,16 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           }}
         />
       </ExperienceAppSection>
+      ) : null}
 
-      <ExperienceAppSection appId="my-capital" sectionId="portfolio" minLevel="beginner" title="Rule engine" subtitle="WHEN / THEN · Arm · Execute via digital bridge" hideWhen={hideCapitalSection("portfolio")}>
+      <ExperienceAppSection
+        appId="my-capital"
+        sectionId="portfolio"
+        minLevel="beginner"
+        title={capitalTerm(growthLevel, "ruleEngine")}
+        subtitle={capitalTerm(growthLevel, "ruleEngineSubtitle")}
+        hideWhen={hideCapitalSection("portfolio")}
+      >
         <CapitalRulesPanel
           rules={status?.rules ?? []}
           selectedRuleId={selectedRuleId}
@@ -865,6 +1087,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         />
       </ExperienceAppSection>
 
+      {capitalFeatureVisible(growthLevel, "trades-full") ? (
       <div id="capital-trade-log">
         <ExperienceAppSection appId="my-capital" sectionId="trades" minLevel="standard" title="Trade log" subtitle="Paper orders · simulated · recovery" hideWhen={hideCapitalSection("trades")}>
           <CapitalTradeLogPanel
@@ -881,8 +1104,9 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           </div>
         </ExperienceAppSection>
       </div>
+      ) : null}
 
-      {level !== "beginner" ? (
+      {capitalFeatureVisible(growthLevel, "recovery") ? (
         <ExperienceAppSection appId="my-capital" sectionId="recovery" minLevel="standard" title="Trade recovery" subtitle="Retry failed Alpaca submissions" hideWhen={hideCapitalSection("recovery")}>
           <CapitalRecoveryPanel
             failed={failedTrades}
@@ -892,7 +1116,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </ExperienceAppSection>
       ) : null}
 
-      {level !== "beginner" ? (
+      {capitalFeatureVisible(growthLevel, "analytics") ? (
         <>
           <ExperienceAppSection
             appId="my-capital"

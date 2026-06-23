@@ -45,5 +45,8 @@ export async function POST(request: Request): Promise<Response> {
     profileId: result.profileId,
     activity: result.activity,
     mesh: result.mesh,
+    suggestedSkill: result.suggestedSkill,
+    autoDispatchSkill: result.autoDispatchSkill,
+    dispatchHints: result.dispatchHints,
   });
 }

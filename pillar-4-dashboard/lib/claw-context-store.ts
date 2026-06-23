@@ -113,7 +113,7 @@ export async function queryClawContext(options: {
     .filter((r) => !isExpired(r))
     .filter((r) => allowedScopes.includes(r.envelope.scope))
     .filter((r) => {
-      if (options.profileId === undefined) return true;
+      if (options.profileId == null) return true;
       return r.envelope.profileId === options.profileId;
     })
     .filter((r) => {

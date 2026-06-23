@@ -39,23 +39,23 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   },
   "/my-shop": {
     id: "shop-intro",
-    title: "Order pipeline",
-    body: "Select an order row, then use skills to advance stages. Physical picks publish to your claw mesh when connected.",
+    title: "Arbitrage preview",
+    body: "Tier C preview — roadmap and demo ingest at Scout level. Pipeline and margin watch unlock at Flipper+. No live storefront APIs.",
   },
   "/optimus": {
     id: "signal-intro",
-    title: "Optimus + signals",
-    body: "Signal Claw drives Optimus hardware and ingests feeds. It subscribes to the Claw Context mesh — health, work, and family from Vital and Kin Claws.",
+    title: "Humanoid Home Hub (preview)",
+    body: "Teach your future humanoid — house rules, Kin context, routines, and neural link readiness. Control tab previews motor mesh when hardware pairs.",
   },
   "/my-vital": {
     id: "vital-intro",
     title: "Longevity desk",
-    body: "Connect wearables and health apps via bridges. Vital Claw builds your protocol and publishes health context to Optimus and Kin Claw.",
+    body: "Ask about aging science in the Lab tab. Connect wearables, build your protocol, and publish health context to Optimus and Kin — all on your appliance.",
   },
   "/my-family": {
     id: "family-intro",
-    title: "Household hub",
-    body: "Add family members, bind devices, and set personalities. Kin Claw syncs profiles to every subscribed Claw on the mesh.",
+    title: "Household identity layer",
+    body: "Add your partner and kids — Kin gives Optimus guest-aware tone and Vital per-member health context. Preview today; full routing ships with Signal and Vital depth.",
   },
   "/robotaxi": {
     id: "swarm-intro",

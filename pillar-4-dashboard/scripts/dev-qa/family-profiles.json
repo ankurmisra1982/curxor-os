@@ -1,20 +1,28 @@
 {
   "version": 1,
-  "primaryProfileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+  "primaryProfileId": "demo-owner-001",
   "members": [
     {
-      "id": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-      "displayName": "Primary operator",
+      "id": "demo-owner-001",
+      "displayName": "Ankur",
       "role": "owner",
       "avatarColor": "#bc13fe",
-      "devices": [],
+      "devices": [
+        {
+          "id": "dev-owner-phone",
+          "label": "iPhone",
+          "kind": "phone",
+          "hardwareRef": null,
+          "lastSeenAt": "2026-06-22T12:00:00.000Z"
+        }
+      ],
       "personality": {
         "traits": [
-          "sovereign",
+          "direct",
           "builder"
         ],
-        "communicationStyle": "warm",
-        "notes": ""
+        "communicationStyle": "direct",
+        "notes": "Primary operator"
       },
       "sharedScopes": [
         "personal",
@@ -28,8 +36,85 @@
           "address": "+15551234567"
         }
       ],
-      "createdAt": "2026-06-20T23:36:47.968Z",
-      "updatedAt": "2026-06-21T22:53:18.187Z"
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-23T03:25:07.010Z"
+    },
+    {
+      "id": "demo-partner-002",
+      "displayName": "Priya",
+      "role": "partner",
+      "avatarColor": "#6366f1",
+      "devices": [
+        {
+          "id": "dev-partner-watch",
+          "label": "Apple Watch",
+          "kind": "watch",
+          "hardwareRef": null,
+          "lastSeenAt": "2026-06-22T11:30:00.000Z"
+        }
+      ],
+      "personality": {
+        "traits": [
+          "warm",
+          "organized"
+        ],
+        "communicationStyle": "warm",
+        "notes": ""
+      },
+      "sharedScopes": [
+        "personal",
+        "health"
+      ],
+      "channelHandles": [
+        {
+          "channel": "imessage",
+          "address": "+15550100002"
+        }
+      ],
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-22T12:00:00.000Z"
+    },
+    {
+      "id": "demo-child-003",
+      "displayName": "Arjun",
+      "role": "child",
+      "avatarColor": "#22c55e",
+      "devices": [],
+      "personality": {
+        "traits": [
+          "curious",
+          "playful"
+        ],
+        "communicationStyle": "playful",
+        "notes": "Age 9 — Optimus uses playful tone when family mode ships"
+      },
+      "sharedScopes": [
+        "personal"
+      ],
+      "channelHandles": [],
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-22T12:00:00.000Z"
+    },
+    {
+      "id": "demo-child-004",
+      "displayName": "Maya",
+      "role": "child",
+      "avatarColor": "#f59e0b",
+      "devices": [],
+      "personality": {
+        "traits": [
+          "creative",
+          "energetic"
+        ],
+        "communicationStyle": "playful",
+        "notes": "Age 6"
+      },
+      "sharedScopes": [
+        "personal"
+      ],
+      "channelHandles": [],
+      "createdAt": "2026-06-20T08:00:00.000Z",
+      "updatedAt": "2026-06-22T12:00:00.000Z"
     }
   ]
 }

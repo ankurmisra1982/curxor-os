@@ -7,6 +7,7 @@ import { buildBridgeHealthReport, type BridgeHealthReport } from "./content-brid
 import { listRecoveryCandidates, type RecoveryCandidate } from "./content-bridge-recovery";
 import { buildCalendarWeek, type CalendarWeek } from "./content-calendar";
 import { creationStudioStatusAsync } from "./content-creation-service";
+import { buildCreatorGrowthProfile, type CreatorGrowthProfile } from "./creator-growth";
 import { buildGoLiveReport, type GoLiveReport } from "./content-go-live";
 import { listApprovalQueue } from "./content-approval-service";
 import { fetchContentStatus } from "./content-queue-store";
@@ -18,11 +19,13 @@ import {
 } from "./content-schedule-insights";
 import type { ContentPost } from "./content-queue-types";
 import type { ContentReply } from "./content-replies-store";
+import { readUserSettings } from "./user-settings";
 
 export interface ContentDashboardBootstrap {
   ok: true;
   status: ContentQueueStatus;
   goLive: GoLiveReport;
+  growthProfile: CreatorGrowthProfile;
   bridgeHealth: BridgeHealthReport;
   calendar: CalendarWeek;
   scheduleInsights: PlatformScheduleInsight[];
@@ -50,6 +53,12 @@ export async function buildContentDashboardBootstrap(options?: {
 }): Promise<ContentDashboardBootstrap> {
   const week = options?.week ?? new Date();
   const fre = await readAppFreState("my-content-creator");
+  const settings = await readUserSettings();
+  const growthProfile = buildCreatorGrowthProfile(
+    fre.config,
+    settings.appearance.experienceLevel,
+    settings.appearance.creatorGrowthLevel ?? null,
+  );
   const channels = Array.isArray(fre.config.channels)
     ? fre.config.channels.filter((x): x is string => typeof x === "string")
     : [];
@@ -85,6 +94,7 @@ export async function buildContentDashboardBootstrap(options?: {
     ok: true,
     status,
     goLive,
+    growthProfile,
     bridgeHealth,
     calendar,
     scheduleInsights: scheduleBundle.insights,

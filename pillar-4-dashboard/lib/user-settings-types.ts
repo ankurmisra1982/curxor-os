@@ -21,14 +21,32 @@ export interface ConnectedProvider {
 export interface UserSettings {
   version: 1;
   selectedApps: OotbAppId[];
+  /** Forged app slugs shown in nav (from The Forge). */
+  forgedAppSlugs: string[];
   appearance: {
     uiMode: UiMode;
     /** Canonical UX tier — drives progressive disclosure across all Claw apps. */
     experienceLevel: ExperienceLevel;
     /** Optional Work Claw growth override (L1–L5). */
     workGrowthLevel?: GrowthLevel | null;
+    /** Optional Creator Claw growth override (L1–L5). */
+    creatorGrowthLevel?: GrowthLevel | null;
+    /** Optional Capital Claw growth override (L1–L5). */
+    capitalGrowthLevel?: GrowthLevel | null;
+    /** Optional Vital Claw persona override (L1–L5) */
+    vitalGrowthLevel?: GrowthLevel | null;
+    /** Optional Forge growth override (L1–L5). */
+    forgeGrowthLevel?: GrowthLevel | null;
+    /** Optional Swarm Claw growth override (L1–L5). */
+    swarmGrowthLevel?: GrowthLevel | null;
+    /** Optional Arbitrage Claw growth override (L1–L5). */
+    shopGrowthLevel?: GrowthLevel | null;
+    /** Optional Kin Claw growth override (L1–L5). */
+    kinGrowthLevel?: GrowthLevel | null;
     /** Suppress Work Claw XP emit to Claw Cafe */
     workGamificationOptOut?: boolean;
+    /** Mythic vs neutral ascension titles in Claw Cafe */
+    cafeTitleStyle?: "mythic" | "neutral";
     colorScheme: ColorScheme;
     themeMode: ThemeMode;
   };
@@ -62,6 +80,7 @@ export interface UserSettings {
 
 export type UserSettingsPatch = {
   selectedApps?: OotbAppId[];
+  forgedAppSlugs?: string[];
   appearance?: Partial<UserSettings["appearance"]>;
   intelligence?: Partial<UserSettings["intelligence"]>;
   multiModel?: Partial<UserSettings["multiModel"]>;
@@ -72,6 +91,7 @@ export type UserSettingsPatch = {
 export const DEFAULT_USER_SETTINGS: UserSettings = {
   version: 1,
   selectedApps: ["my-capital", "my-content-creator", "my-work"],
+  forgedAppSlugs: [],
   appearance: {
     uiMode: "simple",
     experienceLevel: "beginner",

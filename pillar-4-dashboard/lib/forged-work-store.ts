@@ -4,7 +4,13 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-import type { WorkLead, WorkQueueFile, WorkSequence, SequenceStep } from "./work-queue-types";
+import type {
+  OutboundSend,
+  WorkLead,
+  WorkQueueFile,
+  WorkSequence,
+  SequenceStep,
+} from "./work-queue-types";
 
 function workspaceRoot(): string {
   return process.env.CURXOR_AGENT_WORKSPACE_PATH ?? "/etc/curxor/agent-workspace";
@@ -60,11 +66,14 @@ export interface ForgedWorkQueueStatus {
   source: "demo" | "live";
   leads: WorkLead[];
   sequences: WorkSequence[];
+  sends: OutboundSend[];
   stats: {
     leadCount: number;
     sequenceCount: number;
     activeSequences: number;
     draftSequences: number;
+    sendCount: number;
+    simulatedSends: number;
   };
 }
 
@@ -75,13 +84,93 @@ export async function fetchForgedWorkStatus(forgedAppId: string): Promise<Forged
     source: file.leads.length === 0 && file.sequences.length === 0 ? "demo" : "live",
     leads: file.leads,
     sequences: file.sequences,
+    sends: file.sends,
     stats: {
       leadCount: file.leads.length,
       sequenceCount: file.sequences.length,
       activeSequences: file.sequences.filter((s) => s.status === "active").length,
       draftSequences: file.sequences.filter((s) => s.status === "draft").length,
+      sendCount: file.sends.length,
+      simulatedSends: file.sends.filter((s) => s.status === "simulated").length,
     },
   };
+}
+
+function personalizeForLead(template: string, lead: WorkLead): string {
+  return template
+    .replace(/\{\{name\}\}/gi, lead.name)
+    .replace(/\{\{company\}\}/gi, lead.company || lead.name)
+    .replace(/\{\{email\}\}/gi, lead.email);
+}
+
+export async function sendForgedSequenceStep(
+  forgedAppId: string,
+  input: { sequenceId?: string },
+): Promise<{ send: OutboundSend; sequence: WorkSequence } | null> {
+  const file = await ensureForgedWorkQueue(forgedAppId);
+  const sequenceId = input.sequenceId?.trim();
+  const seqIdx = sequenceId
+    ? file.sequences.findIndex((s) => s.id === sequenceId)
+    : file.sequences.findIndex((s) => s.status === "draft" || s.status === "active");
+  if (seqIdx < 0) return null;
+
+  const seq = file.sequences[seqIdx]!;
+  if (seq.status !== "active" && seq.status !== "draft") return null;
+
+  const step = seq.steps[seq.currentStepIndex];
+  if (!step || step.kind !== "email") return null;
+  if (step.sentAt) return null;
+
+  const lead = file.leads.find((l) => l.id === seq.leadId);
+  if (!lead?.email) return null;
+
+  const now = new Date().toISOString();
+  const subject = personalizeForLead(step.subject, lead);
+  const body = personalizeForLead(step.body, lead);
+
+  const send: OutboundSend = {
+    id: `SEND-${String(file.sends.length + 1).padStart(3, "0")}`,
+    sequenceId: seq.id,
+    stepId: step.id,
+    leadId: lead.id,
+    to: lead.email,
+    subject,
+    body,
+    status: "simulated",
+    sentAt: now,
+    error: null,
+    createdAt: now,
+  };
+
+  seq.steps[seq.currentStepIndex] = { ...step, sentAt: now, scheduledAt: null };
+  if (seq.status === "draft") {
+    seq.status = "active";
+    seq.activatedAt = now;
+  }
+  seq.updatedAt = now;
+
+  const next = seq.currentStepIndex + 1;
+  if (next >= seq.steps.length) {
+    seq.status = "completed";
+    seq.completedAt = now;
+  } else {
+    const nextStep = seq.steps[next]!;
+    const scheduledAt =
+      nextStep.delayDays > 0
+        ? new Date(Date.now() + nextStep.delayDays * 86400000).toISOString()
+        : null;
+    seq.steps = seq.steps.map((st, i) => (i === next ? { ...st, scheduledAt } : st));
+    seq.currentStepIndex = next;
+  }
+
+  file.sequences[seqIdx] = seq;
+  file.sends.push(send);
+  lead.lastTouchAt = now;
+  lead.updatedAt = now;
+  lead.stage = "contacted";
+
+  await writeForgedWorkQueue(forgedAppId, file);
+  return { send, sequence: seq };
 }
 
 export async function upsertForgedLead(

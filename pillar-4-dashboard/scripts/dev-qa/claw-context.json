@@ -2,93 +2,259 @@
   "records": [
     {
       "envelope": {
-        "id": "6ceff269-6c64-4c0c-8ab5-c6652d5d7bc8",
+        "id": "a9b8aba6-f4dc-4487-bac8-95307d74d70d",
         "version": 1,
         "action": "publish",
-        "sourceAppId": "my-capital",
-        "profileId": null,
-        "scope": "finance",
-        "key": "intel.ticker.SPY",
-        "timestamp": "2026-06-21T22:53:20.238Z",
-        "ttlSeconds": 3600,
+        "sourceAppId": "my-family",
+        "profileId": "demo-child-004",
+        "scope": "family",
+        "key": "members.demo-child-004",
+        "timestamp": "2026-06-23T03:25:29.156Z",
+        "ttlSeconds": null,
         "payload": {
-          "symbol": "SPY",
-          "name": "State Street SPDR S&P 500 ETF Trust",
-          "price": 746.74,
-          "changePct1d": null,
-          "marketCap": null,
-          "sentiment": {
-            "label": "mixed",
-            "score": 0.058823529411764705,
-            "bullishPct": 6,
-            "bearishPct": 0,
-            "sampleSize": 17
+          "displayName": "Maya",
+          "role": "child",
+          "personality": {
+            "traits": [
+              "creative",
+              "energetic"
+            ],
+            "communicationStyle": "playful",
+            "notes": "Age 6"
           },
-          "smartTake": "SPY price updating · Chatter skews mixed (6% bull / 0% bear). CNBC: Stock futures fall as oil prices rise; investors await key reading on inflation:",
-          "citations": [
-            "CNBC: Stock futures fall as oil prices rise; investors await key reading on inflation:",
-            "CNBC: Trump threatens Iran with fresh strikes as Vance leads peace talks in Switzerlan",
-            "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
+          "sharedScopes": [
+            "personal"
           ],
-          "updatedAt": "2026-06-21T22:53:20.235Z"
+          "deviceCount": 0,
+          "channelHandles": []
         }
       },
-      "storedAt": "2026-06-21T22:53:20.238Z",
-      "expiresAt": "2026-06-21T23:53:20.238Z"
+      "storedAt": "2026-06-23T03:25:29.156Z",
+      "expiresAt": null
     },
     {
       "envelope": {
-        "id": "25a30ccd-b862-4f9b-b8de-2272b5599764",
+        "id": "b9fe9ce5-a7a8-425a-b900-77e82b8e8ef4",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-family",
+        "profileId": "demo-child-003",
+        "scope": "family",
+        "key": "members.demo-child-003",
+        "timestamp": "2026-06-23T03:25:29.152Z",
+        "ttlSeconds": null,
+        "payload": {
+          "displayName": "Arjun",
+          "role": "child",
+          "personality": {
+            "traits": [
+              "curious",
+              "playful"
+            ],
+            "communicationStyle": "playful",
+            "notes": "Age 9 — Optimus uses playful tone when family mode ships"
+          },
+          "sharedScopes": [
+            "personal"
+          ],
+          "deviceCount": 0,
+          "channelHandles": []
+        }
+      },
+      "storedAt": "2026-06-23T03:25:29.152Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "fb7841f1-0209-4af4-ae71-3bf62e6481c6",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-family",
+        "profileId": "demo-partner-002",
+        "scope": "family",
+        "key": "devices.demo-partner-002",
+        "timestamp": "2026-06-23T03:25:29.147Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "devices": [
+            {
+              "id": "dev-partner-watch",
+              "label": "Apple Watch",
+              "kind": "watch",
+              "hardwareRef": null,
+              "lastSeenAt": "2026-06-22T11:30:00.000Z"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-23T03:25:29.147Z",
+      "expiresAt": "2026-06-23T04:25:29.147Z"
+    },
+    {
+      "envelope": {
+        "id": "60b05e9d-6334-49c6-9050-2a8e1319fef6",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-family",
+        "profileId": "demo-partner-002",
+        "scope": "family",
+        "key": "members.demo-partner-002",
+        "timestamp": "2026-06-23T03:25:29.142Z",
+        "ttlSeconds": null,
+        "payload": {
+          "displayName": "Priya",
+          "role": "partner",
+          "personality": {
+            "traits": [
+              "warm",
+              "organized"
+            ],
+            "communicationStyle": "warm",
+            "notes": ""
+          },
+          "sharedScopes": [
+            "personal",
+            "health"
+          ],
+          "deviceCount": 1,
+          "channelHandles": [
+            {
+              "channel": "imessage",
+              "address": "+15550100002"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-23T03:25:29.142Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "540d5d8f-e90c-4824-8667-933b1569458f",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-family",
+        "profileId": "demo-owner-001",
+        "scope": "family",
+        "key": "devices.demo-owner-001",
+        "timestamp": "2026-06-23T03:25:29.138Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "devices": [
+            {
+              "id": "dev-owner-phone",
+              "label": "iPhone",
+              "kind": "phone",
+              "hardwareRef": null,
+              "lastSeenAt": "2026-06-22T12:00:00.000Z"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-23T03:25:29.138Z",
+      "expiresAt": "2026-06-23T04:25:29.138Z"
+    },
+    {
+      "envelope": {
+        "id": "636948c8-d75d-467b-b4f2-102915639a4b",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-family",
+        "profileId": "demo-owner-001",
+        "scope": "family",
+        "key": "members.demo-owner-001",
+        "timestamp": "2026-06-23T03:25:29.135Z",
+        "ttlSeconds": null,
+        "payload": {
+          "displayName": "Ankur",
+          "role": "owner",
+          "personality": {
+            "traits": [
+              "direct",
+              "builder"
+            ],
+            "communicationStyle": "direct",
+            "notes": "Primary operator"
+          },
+          "sharedScopes": [
+            "personal",
+            "health",
+            "work",
+            "finance"
+          ],
+          "deviceCount": 1,
+          "channelHandles": [
+            {
+              "channel": "whatsapp",
+              "address": "+15551234567"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-23T03:25:29.135Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "16d2687a-d7fc-4d1d-aefc-7f4a64bd60a5",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": null,
         "scope": "work",
         "key": "inbox.rollup",
-        "timestamp": "2026-06-21T22:53:19.022Z",
+        "timestamp": "2026-06-23T03:25:26.263Z",
         "ttlSeconds": 3600,
         "payload": {
-          "sessionCount": 7,
+          "sessionCount": 8,
           "sessions": [
+            {
+              "sessionId": "webchat:robotaxi-fleet-manager",
+              "channel": "webchat",
+              "appId": "robotaxi-fleet-manager",
+              "profileId": "demo-owner-001",
+              "preview": "Dispatching RX-01 → B3 (latency policy).",
+              "updatedAt": "2026-06-23T03:25:26.251Z"
+            },
             {
               "sessionId": "webchat:tesla-optimus-engine",
               "channel": "webchat",
               "appId": "tesla-optimus-engine",
-              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-              "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
-              "updatedAt": "2026-06-21T22:53:19.013Z"
+              "profileId": "demo-owner-001",
+              "preview": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
+              "updatedAt": "2026-06-23T03:25:08.103Z"
             },
             {
               "sessionId": "webchat:my-vital",
               "channel": "webchat",
               "appId": "my-vital",
-              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-              "preview": "Vital Claw online. Ask about vitals, protocol, or tap Sync Wearables.",
-              "updatedAt": "2026-06-21T22:53:18.726Z"
+              "profileId": "demo-owner-001",
+              "preview": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context",
+              "updatedAt": "2026-06-23T03:25:07.874Z"
             },
             {
               "sessionId": "webchat:my-work",
               "channel": "webchat",
               "appId": "my-work",
-              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "profileId": "demo-owner-001",
               "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
-              "updatedAt": "2026-06-21T22:53:18.582Z"
+              "updatedAt": "2026-06-23T03:25:07.299Z"
             },
             {
               "sessionId": "webchat:my-capital",
               "channel": "webchat",
               "appId": "my-capital",
-              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
+              "profileId": "demo-owner-001",
               "preview": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
-              "updatedAt": "2026-06-21T22:53:17.985Z"
+              "updatedAt": "2026-06-23T03:25:06.937Z"
             },
             {
               "sessionId": "webchat:my-shop",
               "channel": "webchat",
               "appId": "my-shop",
-              "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-              "preview": "Routing to margin watch. Tap Sort SKU when a spread clears your threshold.",
-              "updatedAt": "2026-06-21T22:53:15.085Z"
+              "profileId": "demo-owner-001",
+              "preview": "Preview margin watch — local spread demo only. Tap Ingest Order for a brief or unlock Sort SKU at Flipper level.",
+              "updatedAt": "2026-06-23T03:24:32.088Z"
             },
             {
               "sessionId": "webchat:webchat:my-work",
@@ -107,39 +273,716 @@
               "updatedAt": "2026-06-21T03:14:26.211Z"
             }
           ],
-          "updatedAt": "2026-06-21T22:53:19.022Z"
+          "updatedAt": "2026-06-23T03:25:26.263Z"
         }
       },
-      "storedAt": "2026-06-21T22:53:19.022Z",
-      "expiresAt": "2026-06-21T23:53:19.022Z"
+      "storedAt": "2026-06-23T03:25:26.263Z",
+      "expiresAt": "2026-06-23T04:25:26.263Z"
     },
     {
       "envelope": {
-        "id": "4ff4e36b-b51a-479b-95a9-db47806ddbfa",
+        "id": "19c0e1f3-3e1b-45b7-9758-564292d71f73",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
-        "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-        "scope": "hardware",
-        "key": "inbox.webchat:tesla-optimus-engine",
-        "timestamp": "2026-06-21T22:53:19.017Z",
+        "profileId": "demo-owner-001",
+        "scope": "personal",
+        "key": "comms.latest.webchat:robotaxi-fleet-manager",
+        "timestamp": "2026-06-23T03:25:26.255Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:robotaxi-fleet-manager",
+          "channel": "webchat",
+          "externalChatId": "robotaxi-fleet-manager",
+          "appId": "robotaxi-fleet-manager",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "dispatch lowest latency to B3",
+          "lastReply": "Dispatching RX-01 → B3 (latency policy).",
+          "preview": "Dispatching RX-01 → B3 (latency policy).",
+          "updatedAt": "2026-06-23T03:25:26.255Z",
+          "unified": true
+        }
+      },
+      "storedAt": "2026-06-23T03:25:26.255Z",
+      "expiresAt": "2026-06-30T03:25:26.255Z"
+    },
+    {
+      "envelope": {
+        "id": "0260c7dc-d136-4654-bcee-8beee12f9553",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-capital",
+        "profileId": null,
+        "scope": "finance",
+        "key": "intel.ticker.SPY",
+        "timestamp": "2026-06-23T03:25:10.042Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "symbol": "SPY",
+          "name": "State Street SPDR S&P 500 ETF Trust",
+          "price": 744.39,
+          "changePct1d": null,
+          "marketCap": null,
+          "sentiment": {
+            "label": "mixed",
+            "score": -0.0625,
+            "bullishPct": 13,
+            "bearishPct": 19,
+            "sampleSize": 16
+          },
+          "smartTake": "SPY price updating · Chatter skews mixed (13% bull / 19% bear). CNBC: China&apos;s 618 shopping festival growth slows sharply as consumer spending mal",
+          "citations": [
+            "CNBC: China&apos;s 618 shopping festival growth slows sharply as consumer spending mal",
+            "CNBC: &apos;I like their money&apos;: Trump threatens lawsuits against ABC for reporti",
+            "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
+          ],
+          "updatedAt": "2026-06-23T03:25:10.036Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:25:10.042Z",
+      "expiresAt": "2026-06-23T04:25:10.042Z"
+    },
+    {
+      "envelope": {
+        "id": "093fa9d6-955e-4160-91af-e53a9e4651af",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "personal",
+        "key": "comms.latest.webchat:tesla-optimus-engine",
+        "timestamp": "2026-06-23T03:25:08.108Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:tesla-optimus-engine",
           "channel": "webchat",
           "externalChatId": "tesla-optimus-engine",
           "appId": "tesla-optimus-engine",
-          "profileId": "9dfd5f38-f639-4b09-85b4-2e47dfdb2b8f",
-          "profileName": "Primary operator",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
           "senderLabel": "dashboard",
           "lastUser": "What do you know about my household?",
-          "lastReply": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
-          "preview": "Signal unit OPTIMUS-01 linked. Adjust thresholds or run RL step.",
-          "updatedAt": "2026-06-21T22:53:19.016Z"
+          "lastReply": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
+          "preview": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
+          "updatedAt": "2026-06-23T03:25:08.108Z",
+          "unified": true
         }
       },
-      "storedAt": "2026-06-21T22:53:19.017Z",
-      "expiresAt": "2026-06-28T22:53:19.017Z"
+      "storedAt": "2026-06-23T03:25:08.108Z",
+      "expiresAt": "2026-06-30T03:25:08.108Z"
+    },
+    {
+      "envelope": {
+        "id": "102cf871-5957-44e3-9b71-b2567f8a8a8f",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-vital",
+        "profileId": null,
+        "scope": "health",
+        "key": "protocol.active",
+        "timestamp": "2026-06-23T03:25:08.035Z",
+        "ttlSeconds": 86400,
+        "payload": {
+          "steps": [
+            {
+              "id": "cardio-sleep",
+              "category": "sleep",
+              "title": "Sleep consistency",
+              "detail": "7–8h window; track resting HR trend weekly.",
+              "frequency": "Daily",
+              "priority": "core"
+            },
+            {
+              "id": "cardio-z2",
+              "category": "movement",
+              "title": "Zone 2 base",
+              "detail": "150+ min/week conversational cardio.",
+              "frequency": "4× / week",
+              "priority": "core"
+            },
+            {
+              "id": "cardio-labs",
+              "category": "labs",
+              "title": "Lipid panel",
+              "detail": "ApoB + Lp(a) annually; share PDF in Reports vault.",
+              "frequency": "Annual",
+              "priority": "optional"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-23T03:25:08.035Z",
+      "expiresAt": "2026-06-24T03:25:08.035Z"
+    },
+    {
+      "envelope": {
+        "id": "38107505-455e-4339-9b65-401c8d133373",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "my-vital",
+        "profileId": null,
+        "scope": "health",
+        "key": "vitals.latest",
+        "timestamp": "2026-06-23T03:25:08.029Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "readings": [
+            {
+              "metric": "resting_hr",
+              "value": 59,
+              "unit": "bpm",
+              "recordedAt": "2026-06-23T03:25:08.014Z",
+              "source": "oura"
+            },
+            {
+              "metric": "hrv",
+              "value": 44,
+              "unit": "ms",
+              "recordedAt": "2026-06-23T03:25:08.014Z",
+              "source": "oura"
+            },
+            {
+              "metric": "sleep_score",
+              "value": 79,
+              "unit": "score",
+              "recordedAt": "2026-06-23T03:25:08.014Z",
+              "source": "oura"
+            },
+            {
+              "metric": "steps",
+              "value": 8220,
+              "unit": "count",
+              "recordedAt": "2026-06-23T03:25:08.014Z",
+              "source": "apple_health"
+            }
+          ]
+        }
+      },
+      "storedAt": "2026-06-23T03:25:08.029Z",
+      "expiresAt": "2026-06-23T04:25:08.029Z"
+    },
+    {
+      "envelope": {
+        "id": "3f042d43-ff78-491e-92bf-e2bc78c64b7b",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "personal",
+        "key": "comms.latest.webchat:my-vital",
+        "timestamp": "2026-06-23T03:25:07.879Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-vital",
+          "channel": "webchat",
+          "externalChatId": "my-vital",
+          "appId": "my-vital",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "status check",
+          "lastReply": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context, but stresses sleep, exercise, and fasting as the foundation. Vital Lab maps this to your vitals and lab vault when you Ask.\n\nOpen the Ask / Lab tab for more preview Q&A. Educational only — not medical advice. Vital Claw runs on your appliance; confirm changes with a qualified clinician.",
+          "preview": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context",
+          "updatedAt": "2026-06-23T03:25:07.879Z",
+          "unified": true
+        }
+      },
+      "storedAt": "2026-06-23T03:25:07.879Z",
+      "expiresAt": "2026-06-30T03:25:07.879Z"
+    },
+    {
+      "envelope": {
+        "id": "fccece72-08d4-468a-a30c-2596421d859e",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "personal",
+        "key": "comms.latest.webchat:my-work",
+        "timestamp": "2026-06-23T03:25:07.303Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-work",
+          "channel": "webchat",
+          "externalChatId": "my-work",
+          "appId": "my-work",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "Remember to follow up with Acme Corp tomorrow morning",
+          "lastReply": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+          "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
+          "updatedAt": "2026-06-23T03:25:07.303Z",
+          "unified": true
+        }
+      },
+      "storedAt": "2026-06-23T03:25:07.303Z",
+      "expiresAt": "2026-06-30T03:25:07.303Z"
+    },
+    {
+      "envelope": {
+        "id": "2e019fc7-04dc-4429-a050-c83ffe2b99fa",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "finance",
+        "key": "inbox.webchat:my-capital",
+        "timestamp": "2026-06-23T03:25:06.940Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-capital",
+          "channel": "webchat",
+          "externalChatId": "my-capital",
+          "appId": "my-capital",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "What is my trading mode?",
+          "lastReply": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
+          "preview": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
+          "updatedAt": "2026-06-23T03:25:06.940Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:25:06.940Z",
+      "expiresAt": "2026-06-30T03:25:06.940Z"
+    },
+    {
+      "envelope": {
+        "id": "19486499-2981-44f5-a2c0-876b343b6f5e",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "health",
+        "key": "inbox.webchat:my-vital",
+        "timestamp": "2026-06-23T03:25:06.857Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-vital",
+          "channel": "webchat",
+          "externalChatId": "my-vital",
+          "appId": "my-vital",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "Summarize that in one sentence",
+          "lastReply": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context, but stresses sleep, exercise, and fasting as the foundation. Vital Lab maps this to your vitals and lab vault when you Ask.\n\nOpen the Ask / Lab tab for more preview Q&A. Educational only — not medical advice. Vital Claw runs on your appliance; confirm changes with a qualified clinician.",
+          "preview": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context",
+          "updatedAt": "2026-06-23T03:25:06.857Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:25:06.857Z",
+      "expiresAt": "2026-06-30T03:25:06.857Z"
+    },
+    {
+      "envelope": {
+        "id": "2d16ad55-3617-4352-a5ba-b4f36a84fb1b",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "system",
+        "profileId": "claw-mqq2zmws",
+        "scope": "work",
+        "key": "forged.forged-checklist-mesh-desk-15.desk",
+        "timestamp": "2026-06-23T03:24:53.423Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "name": "Checklist Mesh Desk",
+          "intent": "Checklist forged mesh publish",
+          "templateId": "work-desk",
+          "forgedSlug": "checklist-mesh-desk-15",
+          "mode": "framework",
+          "forgedAppId": "forged-checklist-mesh-desk-15"
+        }
+      },
+      "storedAt": "2026-06-23T03:24:53.423Z",
+      "expiresAt": "2026-06-23T04:24:53.423Z"
+    },
+    {
+      "envelope": {
+        "id": "9aaf3291-157e-4ba2-a6c1-244d00e5b92e",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "personal",
+        "key": "comms.latest.webchat:my-shop",
+        "timestamp": "2026-06-23T03:24:32.091Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-shop",
+          "channel": "webchat",
+          "externalChatId": "my-shop",
+          "appId": "my-shop",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "any alerts?",
+          "lastReply": "Preview margin watch — local spread demo only. Tap Ingest Order for a brief or unlock Sort SKU at Flipper level.",
+          "preview": "Preview margin watch — local spread demo only. Tap Ingest Order for a brief or unlock Sort SKU at Flipper level.",
+          "updatedAt": "2026-06-23T03:24:32.091Z",
+          "unified": true
+        }
+      },
+      "storedAt": "2026-06-23T03:24:32.091Z",
+      "expiresAt": "2026-06-30T03:24:32.091Z"
+    },
+    {
+      "envelope": {
+        "id": "58de08e9-9cea-4ade-bf67-8c7565214e77",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "tesla-optimus-engine",
+        "profileId": null,
+        "scope": "hardware",
+        "key": "optimus.status",
+        "timestamp": "2026-06-23T03:24:31.545Z",
+        "ttlSeconds": 3600,
+        "payload": {
+          "unitId": "Home Humanoid",
+          "kind": "humanoid",
+          "mode": "standby",
+          "safetyProfile": "standard",
+          "neuralLinkScore": 100
+        }
+      },
+      "storedAt": "2026-06-23T03:24:31.545Z",
+      "expiresAt": "2026-06-23T04:24:31.545Z"
+    },
+    {
+      "envelope": {
+        "id": "ae6ecd26-fc55-44f5-b238-1bed2fa6746d",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "tesla-optimus-engine",
+        "profileId": null,
+        "scope": "family",
+        "key": "humanoid.policies",
+        "timestamp": "2026-06-23T03:24:31.542Z",
+        "ttlSeconds": null,
+        "payload": {
+          "policies": [
+            {
+              "memberId": "demo-owner-001",
+              "displayName": "Ankur",
+              "role": "owner",
+              "tone": "warm",
+              "greetByName": true,
+              "allowKitchenTasks": true,
+              "allowBedroomEntry": true,
+              "requireAskBefore": "",
+              "notes": "Primary operator — match relationship tone from hub."
+            },
+            {
+              "memberId": "demo-partner-002",
+              "displayName": "Priya",
+              "role": "partner",
+              "tone": "inherit",
+              "greetByName": true,
+              "allowKitchenTasks": true,
+              "allowBedroomEntry": true,
+              "requireAskBefore": "",
+              "notes": "Full household trust tier."
+            },
+            {
+              "memberId": "demo-child-003",
+              "displayName": "Arjun",
+              "role": "child",
+              "tone": "playful",
+              "greetByName": true,
+              "allowKitchenTasks": false,
+              "allowBedroomEntry": false,
+              "requireAskBefore": "kitchen, sharp objects, outdoor exit",
+              "notes": "Use short sentences. Ask a parent before physical help."
+            },
+            {
+              "memberId": "demo-child-004",
+              "displayName": "Maya",
+              "role": "child",
+              "tone": "playful",
+              "greetByName": true,
+              "allowKitchenTasks": false,
+              "allowBedroomEntry": false,
+              "requireAskBefore": "kitchen, sharp objects, outdoor exit",
+              "notes": "Use short sentences. Ask a parent before physical help."
+            }
+          ],
+          "syncedAt": "2026-06-23T03:24:31.537Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:24:31.542Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "a542e121-07ee-4082-81cf-e35a6df29065",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "tesla-optimus-engine",
+        "profileId": null,
+        "scope": "hardware",
+        "key": "humanoid.knowledge",
+        "timestamp": "2026-06-23T03:24:31.539Z",
+        "ttlSeconds": null,
+        "payload": {
+          "primaryUnitId": "59e5500a-1457-4c50-af90-36d9a2bcc03a",
+          "units": [
+            {
+              "id": "59e5500a-1457-4c50-af90-36d9a2bcc03a",
+              "kind": "humanoid",
+              "displayName": "Home Humanoid",
+              "paired": true,
+              "meshNodeId": "mesh://curxor/HOME-HUMANOI-59E550"
+            },
+            {
+              "id": "e1893008-cea6-4fb3-a7fa-7a0dffb617f8",
+              "kind": "mobile",
+              "displayName": "QA Rover",
+              "paired": false,
+              "meshNodeId": null
+            },
+            {
+              "id": "20e37159-b5ba-4788-85f6-4b200dd45d54",
+              "kind": "mobile",
+              "displayName": "QA Rover",
+              "paired": false,
+              "meshNodeId": null
+            },
+            {
+              "id": "29b51bb3-6382-4396-85db-be457ac20f57",
+              "kind": "mobile",
+              "displayName": "QA Rover",
+              "paired": false,
+              "meshNodeId": null
+            },
+            {
+              "id": "613f51d6-62bf-4724-b8fe-8d05d08183ee",
+              "kind": "mobile",
+              "displayName": "QA Rover",
+              "paired": false,
+              "meshNodeId": null
+            },
+            {
+              "id": "b21a1529-b3ae-40af-a3c1-824881f1b4e0",
+              "kind": "mobile",
+              "displayName": "QA Rover",
+              "paired": false,
+              "meshNodeId": null
+            }
+          ],
+          "relationship": {
+            "callName": "Operator",
+            "tone": "warm",
+            "guestModeEnabled": true,
+            "introScript": "I'm your home humanoid — I learn from Kin, Vital, and your house rules on this appliance."
+          },
+          "houseRules": [
+            {
+              "text": "Shoes off at the door — preview rule",
+              "priority": "essential"
+            }
+          ],
+          "kinPolicies": [
+            {
+              "memberId": "demo-owner-001",
+              "tone": "warm",
+              "greetByName": true,
+              "allowKitchenTasks": true,
+              "allowBedroomEntry": true,
+              "requireAskBefore": "",
+              "notes": "Primary operator — match relationship tone from hub."
+            },
+            {
+              "memberId": "demo-partner-002",
+              "tone": "inherit",
+              "greetByName": true,
+              "allowKitchenTasks": true,
+              "allowBedroomEntry": true,
+              "requireAskBefore": "",
+              "notes": "Full household trust tier."
+            },
+            {
+              "memberId": "demo-child-003",
+              "tone": "playful",
+              "greetByName": true,
+              "allowKitchenTasks": false,
+              "allowBedroomEntry": false,
+              "requireAskBefore": "kitchen, sharp objects, outdoor exit",
+              "notes": "Use short sentences. Ask a parent before physical help."
+            },
+            {
+              "memberId": "demo-child-004",
+              "tone": "playful",
+              "greetByName": true,
+              "allowKitchenTasks": false,
+              "allowBedroomEntry": false,
+              "requireAskBefore": "kitchen, sharp objects, outdoor exit",
+              "notes": "Use short sentences. Ask a parent before physical help."
+            }
+          ],
+          "routines": [
+            {
+              "id": "routine-0e209485",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-e2be7565",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-a9b729c6",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-f5e3c1f4",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-0a37e7b5",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-db55012a",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-4cf2b8d9",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-bba620ba",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-fd20118d",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-07134f47",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-9fabda32",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-2336d107",
+              "label": "When guests arrive, greet them warmly and offer ",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-c833189a",
+              "label": "When guests arrive, greet them warmly by name an",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "routine-1aea92f6",
+              "label": "When guests arrive greet warmly and offer coats",
+              "trigger": "Guest profile active or door signal"
+            },
+            {
+              "id": "help-handoff",
+              "label": "Help handoff",
+              "trigger": "Low confidence gesture"
+            }
+          ],
+          "syncedAt": "2026-06-23T03:24:31.537Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:24:31.539Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "a6c4695d-2e81-40e4-8e30-5850b5832ddd",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "tesla-optimus-engine",
+        "profileId": null,
+        "scope": "hardware",
+        "key": "units.59e5500a-1457-4c50-af90-36d9a2bcc03a",
+        "timestamp": "2026-06-23T03:24:31.485Z",
+        "ttlSeconds": null,
+        "payload": {
+          "displayName": "Home Humanoid",
+          "kind": "humanoid",
+          "meshNodeId": "mesh://curxor/HOME-HUMANOI-59E550",
+          "pairedAt": "2026-06-23T03:24:31.485Z",
+          "mode": "paired_preview",
+          "safetyProfile": "standard"
+        }
+      },
+      "storedAt": "2026-06-23T03:24:31.485Z",
+      "expiresAt": null
+    },
+    {
+      "envelope": {
+        "id": "de662cad-28eb-4d3d-bcb7-937699b1045d",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "hardware",
+        "key": "inbox.webchat:robotaxi-fleet-manager",
+        "timestamp": "2026-06-23T03:18:31.263Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:robotaxi-fleet-manager",
+          "channel": "webchat",
+          "externalChatId": "robotaxi-fleet-manager",
+          "appId": "robotaxi-fleet-manager",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "dispatch lowest latency to B3",
+          "lastReply": "Dispatching RX-01 → B3 (latency policy).",
+          "preview": "Dispatching RX-01 → B3 (latency policy).",
+          "updatedAt": "2026-06-23T03:18:31.263Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:18:31.263Z",
+      "expiresAt": "2026-06-30T03:18:31.263Z"
+    },
+    {
+      "envelope": {
+        "id": "587cd5eb-acce-413b-920b-e8bebeb08fd2",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "hardware",
+        "key": "inbox.webchat:tesla-optimus-engine",
+        "timestamp": "2026-06-23T03:18:13.182Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:tesla-optimus-engine",
+          "channel": "webchat",
+          "externalChatId": "tesla-optimus-engine",
+          "appId": "tesla-optimus-engine",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "What do you know about my household?",
+          "lastReply": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
+          "preview": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
+          "updatedAt": "2026-06-23T03:18:13.181Z"
+        }
+      },
+      "storedAt": "2026-06-23T03:18:13.182Z",
+      "expiresAt": "2026-06-30T03:18:13.182Z"
     }
   ]
 }

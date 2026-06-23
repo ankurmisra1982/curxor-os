@@ -14,6 +14,7 @@ import {
   type ExperienceLevel,
 } from "@/lib/experience-level";
 import { GROWTH_LABELS, type GrowthLevel } from "@/lib/os-growth-level";
+import { FORGE_GROWTH_LABELS } from "@/lib/forge-level-copy";
 import type { FrontierProvider } from "@/lib/frontier-providers";
 import { THEME_PRESETS } from "@/lib/theme-presets";
 import type { OotbAppId } from "@/lib/ootb-apps";
@@ -82,6 +83,12 @@ export function SettingsWorkspace() {
   const [longContextProviderId, setLongContextProviderId] = useState<string | null>(null);
   const [apiKeyDraft, setApiKeyDraft] = useState("");
   const [workGrowthLevel, setWorkGrowthLevel] = useState<GrowthLevel | "">("");
+  const [creatorGrowthLevel, setCreatorGrowthLevel] = useState<GrowthLevel | "">("");
+  const [capitalGrowthLevel, setCapitalGrowthLevel] = useState<GrowthLevel | "">("");
+  const [vitalGrowthLevel, setVitalGrowthLevel] = useState<GrowthLevel | "">("");
+  const [forgeGrowthLevel, setForgeGrowthLevel] = useState<GrowthLevel | "">("");
+  const [kinGrowthLevel, setKinGrowthLevel] = useState<GrowthLevel | "">("");
+  const [shopGrowthLevel, setShopGrowthLevel] = useState<GrowthLevel | "">("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -105,6 +112,11 @@ export function SettingsWorkspace() {
       setCodingProviderId(data.settings.multiModel.codingProviderId);
       setLongContextProviderId(data.settings.multiModel.longContextProviderId);
       setWorkGrowthLevel(data.settings.appearance.workGrowthLevel ?? "");
+      setCreatorGrowthLevel(data.settings.appearance.creatorGrowthLevel ?? "");
+      setCapitalGrowthLevel(data.settings.appearance.capitalGrowthLevel ?? "");
+      setVitalGrowthLevel(data.settings.appearance.vitalGrowthLevel ?? "");
+      setForgeGrowthLevel(data.settings.appearance.forgeGrowthLevel ?? "");
+      setKinGrowthLevel(data.settings.appearance.kinGrowthLevel ?? "");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Load failed");
     } finally {
@@ -221,6 +233,12 @@ export function SettingsWorkspace() {
           colorScheme,
           themeMode,
           workGrowthLevel: workGrowthLevel || null,
+          creatorGrowthLevel: creatorGrowthLevel || null,
+          capitalGrowthLevel: capitalGrowthLevel || null,
+          vitalGrowthLevel: vitalGrowthLevel || null,
+          forgeGrowthLevel: forgeGrowthLevel || null,
+          kinGrowthLevel: kinGrowthLevel || null,
+          shopGrowthLevel: shopGrowthLevel || null,
         },
       });
       setSettings(data.settings);
@@ -230,7 +248,7 @@ export function SettingsWorkspace() {
     } finally {
       setSaving(false);
     }
-  }, [level, colorScheme, themeMode, workGrowthLevel]);
+  }, [level, colorScheme, themeMode, workGrowthLevel, creatorGrowthLevel, capitalGrowthLevel, vitalGrowthLevel, forgeGrowthLevel, kinGrowthLevel, shopGrowthLevel]);
 
   const connectProvider = useCallback(async () => {
     if (!frontierProviderId) {
@@ -673,6 +691,120 @@ export function SettingsWorkspace() {
                   {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
                     <option key={g} value={g}>
                       {g} — {GROWTH_LABELS["my-work"][g]}
+                    </option>
+                  ))}
+                </select>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Creator Claw growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Creator desk persona (Explorer → Studio). Leave default to use FRE persona.
+                </p>
+                <select
+                  value={creatorGrowthLevel}
+                  onChange={(e) => setCreatorGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {GROWTH_LABELS["my-content-creator"][g]}
+                    </option>
+                  ))}
+                </select>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Capital Claw growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Capital desk persona (Learner → Principal). Leave default to use FRE persona.
+                </p>
+                <select
+                  value={capitalGrowthLevel}
+                  onChange={(e) => setCapitalGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {GROWTH_LABELS["my-capital"][g]}
+                    </option>
+                  ))}
+                </select>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Vital Claw growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Vital desk persona (Starter → Longevity). Leave default to use FRE persona.
+                </p>
+                <select
+                  value={vitalGrowthLevel}
+                  onChange={(e) => setVitalGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {GROWTH_LABELS["my-vital"][g]}
+                    </option>
+                  ))}
+                </select>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">The Forge growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Forge persona (Sketcher → Foundry). Leave default to use FRE intent.
+                </p>
+                <select
+                  value={forgeGrowthLevel}
+                  onChange={(e) => setForgeGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {FORGE_GROWTH_LABELS[g]}
+                    </option>
+                  ))}
+                </select>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Kin Claw growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Kin desk persona (Member → Elder). Leave default to use FRE intent.
+                </p>
+                <select
+                  value={kinGrowthLevel}
+                  onChange={(e) => setKinGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {GROWTH_LABELS["my-family"][g]}
+                    </option>
+                  ))}
+                </select>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Arbitrage Claw growth level</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  Optional override for Arbitrage desk persona (Scout → Desk Lead). Leave default to use FRE intent.
+                </p>
+                <select
+                  value={shopGrowthLevel}
+                  onChange={(e) => setShopGrowthLevel(e.target.value as GrowthLevel | "")}
+                  className="mt-3 w-full max-w-md border border-line bg-panel px-3 py-2 font-mono text-xs text-stark"
+                >
+                  <option value="">From FRE / experience mapping</option>
+                  {(["L1", "L2", "L3", "L4", "L5"] as GrowthLevel[]).map((g) => (
+                    <option key={g} value={g}>
+                      {g} — {GROWTH_LABELS["my-shop"][g]}
                     </option>
                   ))}
                 </select>

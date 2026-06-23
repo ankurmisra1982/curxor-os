@@ -2,24 +2,67 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
-import { ExperienceLevelBadge } from "@/components/experience/ExperienceLevelBadge";
+import { ComingSoonBadge } from "@/components/app-shared/ComingSoonBadge";
+import { KinShowcasePanel } from "@/components/apps/kin/KinShowcasePanel";
+import { KinDevicesPanel } from "@/components/apps/kin/KinDevicesPanel";
+import { KinLevelBadge } from "@/components/apps/kin/KinLevelBadge";
+import { KinMembersPanel } from "@/components/apps/kin/KinMembersPanel";
+import { KinMeshPanel } from "@/components/apps/kin/KinMeshPanel";
+import { KinProfilePanel } from "@/components/apps/kin/KinProfilePanel";
+import { KinSettingsPanel } from "@/components/apps/kin/KinSettingsPanel";
+import {
+  KinWorkspaceTabs,
+  defaultKinTab,
+  type KinWorkspaceTab,
+} from "@/components/apps/kin/KinWorkspaceTabs";
+import { kinTabsForGrowth } from "@/lib/kin-level-gates";
 import type { AgentAppContext } from "@/components/claw/ClawAgentApp";
+import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+import type { FamilyChannelHandle, FamilyDevice, FamilyProfile } from "@/lib/family-types";
+import { resolveKinGrowthLevel } from "@/lib/kin-growth";
+import { kinLevelCopy } from "@/lib/kin-level-copy";
 import { getOotbApp } from "@/lib/ootb-apps";
-import type { FamilyChannelHandle, FamilyProfile } from "@/lib/family-types";
+import type { GrowthLevel } from "@/lib/os-growth-level";
+import { isGrowthLevel } from "@/lib/os-growth-level";
 
 interface FamilyResponse {
   primaryProfileId: string | null;
   members: FamilyProfile[];
 }
 
-export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
+export function MyFamilyApp({ config, updateWorkspaceContext }: AgentAppContext) {
+  const { level } = useExperienceLevel();
+  const [settingsGrowth, setSettingsGrowth] = useState<GrowthLevel | null>(null);
+  const growthLevel = resolveKinGrowthLevel(config, level, settingsGrowth);
+  const levelCopy = kinLevelCopy(growthLevel);
+
+  const [workspaceTab, setWorkspaceTab] = useState<KinWorkspaceTab>(() => defaultKinTab(growthLevel));
   const [data, setData] = useState<FamilyResponse | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [draftName, setDraftName] = useState("");
-  const [handleChannel, setHandleChannel] = useState<FamilyChannelHandle["channel"]>("whatsapp");
-  const [handleAddress, setHandleAddress] = useState("");
   const [saving, setSaving] = useState(false);
+  const [localConfig, setLocalConfig] = useState(config);
+
+  useEffect(() => {
+    setLocalConfig(config);
+  }, [config]);
+
+  useEffect(() => {
+    void fetch("/api/settings", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const g = data?.settings?.appearance?.kinGrowthLevel;
+        if (isGrowthLevel(g)) setSettingsGrowth(g);
+      })
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    const visible = kinTabsForGrowth(growthLevel);
+    if (!visible.includes(workspaceTab)) {
+      setWorkspaceTab(defaultKinTab(growthLevel));
+    }
+  }, [growthLevel, workspaceTab]);
 
   const load = useCallback(async () => {
     try {
@@ -27,41 +70,28 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
       if (!res.ok) return;
       const json = (await res.json()) as FamilyResponse;
       setData(json);
-      if (!selectedId && json.members[0]) setSelectedId(json.members[0].id);
+      setSelectedId((prev) => prev ?? json.members[0]?.id ?? null);
     } catch {
       /* retry */
     }
-  }, [selectedId]);
+  }, []);
 
   useEffect(() => {
     void load();
   }, [load]);
 
-  useEffect(() => {
-    const member = data?.members.find((m) => m.id === selectedId);
-    if (!member) return;
-    updateWorkspaceContext({
-      selectedProfileId: member.id,
-      selectedProfileName: member.displayName,
-      selectedProfileRole: member.role,
-    });
-  }, [selectedId, data, updateWorkspaceContext]);
+  const members = data?.members ?? [];
+  const selected = members.find((m) => m.id === selectedId);
 
-  const addMember = useCallback(async () => {
-    if (!draftName.trim()) return;
-    setSaving(true);
-    try {
-      await fetch("/api/family", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ displayName: draftName.trim(), role: "guest" }),
-      });
-      setDraftName("");
-      await load();
-    } finally {
-      setSaving(false);
-    }
-  }, [draftName, load]);
+  useEffect(() => {
+    if (!selected) return;
+    updateWorkspaceContext({
+      selectedProfileId: selected.id,
+      selectedProfileName: selected.displayName,
+      selectedProfileRole: selected.role,
+      growthLevel,
+    });
+  }, [selected, growthLevel, updateWorkspaceContext]);
 
   const resyncMesh = useCallback(async () => {
     await fetch("/api/mesh/context", {
@@ -71,178 +101,125 @@ export function MyFamilyApp({ updateWorkspaceContext }: AgentAppContext) {
     });
   }, []);
 
-  const members = data?.members ?? [];
-  const selected = members.find((m) => m.id === selectedId);
-
-  const addChannelHandle = useCallback(async () => {
-    if (!selected || !handleAddress.trim()) return;
-    setSaving(true);
-    try {
-      const nextHandles: FamilyChannelHandle[] = [
-        ...(selected.channelHandles ?? []),
-        { channel: handleChannel, address: handleAddress.trim() },
-      ];
+  const upsertMember = useCallback(
+    async (patch: Partial<FamilyProfile> & { displayName: string }) => {
       await fetch("/api/family", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: selected.id,
-          displayName: selected.displayName,
-          channelHandles: nextHandles,
-        }),
+        body: JSON.stringify(patch),
       });
-      setHandleAddress("");
       await load();
       await resyncMesh();
+    },
+    [load, resyncMesh],
+  );
+
+  const addMember = useCallback(async () => {
+    if (!draftName.trim()) return;
+    setSaving(true);
+    try {
+      await upsertMember({ displayName: draftName.trim(), role: "guest" });
+      setDraftName("");
     } finally {
       setSaving(false);
     }
-  }, [selected, handleChannel, handleAddress, load, resyncMesh]);
+  }, [draftName, upsertMember]);
+
+  const saveHandles = useCallback(
+    async (handles: FamilyChannelHandle[]) => {
+      if (!selected) return;
+      setSaving(true);
+      try {
+        await upsertMember({
+          id: selected.id,
+          displayName: selected.displayName,
+          channelHandles: handles,
+        });
+      } finally {
+        setSaving(false);
+      }
+    },
+    [selected, upsertMember],
+  );
+
+  const saveDevices = useCallback(
+    async (devices: FamilyDevice[]) => {
+      if (!selected) return;
+      setSaving(true);
+      try {
+        await upsertMember({
+          id: selected.id,
+          displayName: selected.displayName,
+          devices,
+        });
+      } finally {
+        setSaving(false);
+      }
+    },
+    [selected, upsertMember],
+  );
+
+  const saveNotifyPreference = useCallback(async (notifyWhenLive: boolean) => {
+    const nextConfig = { ...localConfig, notifyWhenLive };
+    const res = await fetch("/api/app-fre/my-family", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ config: nextConfig }),
+    });
+    if (res.ok) setLocalConfig(nextConfig);
+  }, [localConfig]);
 
   return (
     <div className="space-y-6 p-6">
       <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">
-          {getOotbApp("my-family").name}
-        </p>
-        <h2 className="mt-1 font-sans text-xl font-semibold text-stark">Household context hub</h2>
-        <p className="mt-2 font-sans text-sm text-muted">
-          Each member gets their own profile, devices, and personality — synced to every Claw that needs it
-          (Optimus, Vital, Outreach, and more).
-          <ExperienceLevelBadge />
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">
+            {getOotbApp("my-family").name}
+          </p>
+          <ComingSoonBadge />
+          <KinLevelBadge growthLevel={growthLevel} />
+        </div>
+        <h2 className="mt-1 font-sans text-xl font-semibold text-stark">{levelCopy.headline}</h2>
+        <p className="mt-2 font-sans text-sm text-muted">{levelCopy.subtitle}</p>
       </header>
 
-      <ExperienceAppSection
-        appId="my-family"
-        sectionId="members"
-        minLevel="beginner"
-        title="Family members"
-        subtitle="Select a profile to view devices and shared scopes"
-      >
-        <div className="flex flex-wrap gap-2">
-          {members.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              onClick={() => setSelectedId(m.id)}
-              className={`border px-3 py-2 font-sans text-sm transition ${
-                selectedId === m.id
-                  ? "border-cursor-glow text-cursor-glow"
-                  : "border-line text-muted hover:text-stark"
-              }`}
-            >
-              {m.displayName}
-            </button>
-          ))}
-        </div>
-      </ExperienceAppSection>
+      <KinShowcasePanel members={members} />
 
-      {selected ? (
-        <ExperienceAppSection
-          appId="my-family"
-          sectionId="profile"
-          minLevel="beginner"
-          title={selected.displayName}
-          subtitle={`Role: ${selected.role}`}
-        >
-          <dl className="space-y-2 font-sans text-sm">
-            <div className="flex justify-between border-b border-line py-2">
-              <dt className="text-muted">Role</dt>
-              <dd className="text-stark">{selected.role}</dd>
-            </div>
-            <div className="flex justify-between border-b border-line py-2">
-              <dt className="text-muted">Communication</dt>
-              <dd className="text-stark">{selected.personality.communicationStyle}</dd>
-            </div>
-            <div className="flex justify-between border-b border-line py-2">
-              <dt className="text-muted">Traits</dt>
-              <dd className="text-stark">{selected.personality.traits.join(", ") || "—"}</dd>
-            </div>
-            <div className="flex justify-between border-b border-line py-2">
-              <dt className="text-muted">Shared scopes</dt>
-              <dd className="font-mono text-xs text-stark">{selected.sharedScopes.join(", ")}</dd>
-            </div>
-            <div className="flex justify-between border-b border-line py-2">
-              <dt className="text-muted">Devices</dt>
-              <dd className="text-stark">{selected.devices.length}</dd>
-            </div>
-            <div className="border-b border-line py-2">
-              <dt className="text-muted">Channel handles</dt>
-              <dd className="mt-2 space-y-1 font-mono text-xs text-stark">
-                {(selected.channelHandles ?? []).length === 0 ? (
-                  <span className="text-muted">None — add below to route WhatsApp/iMessage to this member</span>
-                ) : (
-                  selected.channelHandles.map((h) => (
-                    <div key={`${h.channel}-${h.address}`}>
-                      {h.channel}: {h.address}
-                    </div>
-                  ))
-                )}
-              </dd>
-            </div>
-          </dl>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <select
-              value={handleChannel}
-              onChange={(e) => setHandleChannel(e.target.value as FamilyChannelHandle["channel"])}
-              className="border border-line bg-void px-2 py-2 font-sans text-sm text-stark"
-            >
-              <option value="whatsapp">WhatsApp</option>
-              <option value="telegram">Telegram</option>
-              <option value="imessage">iMessage</option>
-              <option value="slack">Slack</option>
-              <option value="email">Email</option>
-            </select>
-            <input
-              value={handleAddress}
-              onChange={(e) => setHandleAddress(e.target.value)}
-              placeholder="Phone, @username, or chat id"
-              className="min-w-[180px] flex-1 border border-line bg-void px-3 py-2 font-sans text-sm text-stark"
-            />
-            <button
-              type="button"
-              disabled={saving || !handleAddress.trim()}
-              onClick={() => void addChannelHandle()}
-              className="border border-cursor-glow px-3 py-2 font-sans text-sm text-stark disabled:opacity-50"
-            >
-              Link handle
-            </button>
-          </div>
-        </ExperienceAppSection>
+      <KinWorkspaceTabs active={workspaceTab} onChange={setWorkspaceTab} growthLevel={growthLevel} />
+
+      {workspaceTab === "members" ? (
+        <KinMembersPanel
+          growthLevel={growthLevel}
+          members={members}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+          draftName={draftName}
+          onDraftNameChange={setDraftName}
+          onAddMember={() => void addMember()}
+          saving={saving}
+        />
       ) : null}
 
-      <ExperienceAppSection
-        appId="my-family"
-        sectionId="add-member"
-        minLevel="standard"
-        title="Add member"
-        subtitle="Profiles sync to Optimus, Vital, and other subscribed Claws"
-      >
-        <div className="flex flex-wrap gap-2">
-          <input
-            value={draftName}
-            onChange={(e) => setDraftName(e.target.value)}
-            placeholder="Display name"
-            className="min-w-[200px] flex-1 border border-line bg-void px-3 py-2 font-sans text-sm text-stark"
-          />
-          <button
-            type="button"
-            disabled={saving || !draftName.trim()}
-            onClick={() => void addMember()}
-            className="border border-cursor-glow px-4 py-2 font-sans text-sm text-stark disabled:opacity-50"
-          >
-            Add
-          </button>
-          <button
-            type="button"
-            onClick={() => void resyncMesh()}
-            className="border border-line px-4 py-2 font-sans text-sm text-muted hover:text-stark"
-          >
-            Resync mesh
-          </button>
-        </div>
-      </ExperienceAppSection>
+      {workspaceTab === "profile" ? (
+        <KinProfilePanel
+          growthLevel={growthLevel}
+          selected={selected}
+          onSaveHandles={saveHandles}
+          saving={saving}
+        />
+      ) : null}
+
+      {workspaceTab === "devices" ? (
+        <KinDevicesPanel selected={selected} onSaveDevices={saveDevices} saving={saving} />
+      ) : null}
+
+      {workspaceTab === "mesh" ? (
+        <KinMeshPanel memberCount={members.length} onResync={resyncMesh} />
+      ) : null}
+
+      {workspaceTab === "settings" ? (
+        <KinSettingsPanel config={localConfig} onSaveNotify={saveNotifyPreference} />
+      ) : null}
     </div>
   );
 }

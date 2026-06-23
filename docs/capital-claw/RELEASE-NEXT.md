@@ -19,6 +19,17 @@ Scaffold (no keys): `npm run setup:capital-env` · `npm run verify:exit-demo-sca
 
 Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys` · `npm run verify:exit-demo-scaffold`
 
+## Shipped (Sovereign Alpha Feed — fomo-inspired P0)
+
+- **Alpha tab** — default home for Standard+ (`CapitalWorkspaceTabs`)
+- **Alpha feed** — merged timeline: trades, pilots, movers, thesis, intel fires (`capital-alpha-feed.ts`)
+- **Thesis journal** — local entries in intel cache v3 (`add_thesis` / `list_thesis`)
+- **Alert preferences** — mover spike %, pilot min notional (`set_alert_preferences`)
+- **New alert kinds** — `mover_spike`, `pilot_signal` with Telegram/Slack nudge
+- **Chart overlays** — buy/sell/pilot markers on research charts
+- **Pilot leaderboard** — ranked 24h / 7d / 30d / 1Y
+- **Build plan** — [SOCIAL-ALPHA-BUILD-PLAN.md](./SOCIAL-ALPHA-BUILD-PLAN.md)
+
 ## Shipped (V4.6.2 — polish & exit-demo scaffold)
 
 - **EXIT-DEMO.md** — operator guide for Alpaca paper / Plaid / SnapTrade without changing demo policy

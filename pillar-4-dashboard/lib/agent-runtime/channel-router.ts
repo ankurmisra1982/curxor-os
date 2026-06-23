@@ -58,6 +58,9 @@ export interface ChannelReply {
     tool?: string;
     error?: string;
   };
+  suggestedSkill?: string;
+  autoDispatchSkill?: boolean;
+  dispatchHints?: Record<string, unknown>;
 }
 
 const COMMAND_CHANNELS: ChannelType[] = ["telegram", "slack", "whatsapp", "imessage"];
@@ -176,6 +179,9 @@ export async function handleInboundChannelMessage(msg: InboundChannelMessage): P
     profileId,
     activity: result.activity,
     mesh: result.mesh,
+    suggestedSkill: result.suggestedSkill,
+    autoDispatchSkill: result.autoDispatchSkill,
+    dispatchHints: result.dispatchHints,
   };
 }
 

@@ -6,6 +6,7 @@ import { listApprovalSlackChannelIds } from "./content-approval-slack-config";
 import { sendTelegramApprovalMessage } from "./content-approval-telegram";
 import { listApprovalTelegramChatIds } from "./content-approval-telegram-config";
 import { INTEL_ALERT_COOLDOWN_MS } from "./capital-data-providers";
+import { ensureCapitalQueue } from "./capital-store";
 import { buildTickerIntel, getCachedTickerIntel } from "./capital-ticker-intel";
 import {
   listIntelAlertRules,
@@ -65,22 +66,86 @@ function ruleMatches(intel: TickerIntel, rule: IntelAlertRule): string | null {
       }
       return null;
     }
+    case "mover_spike":
+    case "pilot_signal":
+      return null;
     default:
       return null;
   }
 }
 
+async function evaluateMoverAndPilotAlerts(): Promise<{ fired: number; messages: string[] }> {
+  const rules = await listIntelAlertRules();
+  const moverRules = rules.filter((r) => r.enabled && r.kind === "mover_spike");
+  const pilotRules = rules.filter((r) => r.enabled && r.kind === "pilot_signal");
+  if (moverRules.length === 0 && pilotRules.length === 0) return { fired: 0, messages: [] };
+
+  const file = await ensureCapitalQueue();
+  const messages: string[] = [];
+  let fired = 0;
+
+  for (const rule of moverRules) {
+    if (rule.lastFiredAt && Date.now() - Date.parse(rule.lastFiredAt) < INTEL_ALERT_COOLDOWN_MS) continue;
+    const mover = file.movers.find((m) => m.symbol === rule.symbol);
+    const th = rule.thresholdPct ?? 3;
+    if (mover?.changePct1d != null && Math.abs(mover.changePct1d) >= th) {
+      const msg = `${mover.symbol} mover ${mover.changePct1d >= 0 ? "+" : ""}${mover.changePct1d.toFixed(1)}% (threshold ${th}%)`;
+      const fire: IntelAlertFire = {
+        id: randomUUID().slice(0, 12),
+        ruleId: rule.id,
+        symbol: rule.symbol,
+        message: msg,
+        firedAt: new Date().toISOString(),
+      };
+      await recordIntelAlertFire(fire, rule.id);
+      await notifyIntelAlert(msg);
+      messages.push(msg);
+      fired += 1;
+    }
+  }
+
+  for (const rule of pilotRules) {
+    if (rule.lastFiredAt && Date.now() - Date.parse(rule.lastFiredAt) < INTEL_ALERT_COOLDOWN_MS) continue;
+    const minUsd = rule.minNotionalUsd ?? 500;
+    const sym = rule.symbol === "*" ? null : rule.symbol;
+    const hit = file.pilotSignals.find(
+      (s) =>
+        (sym == null || s.ticker === sym) &&
+        (s.pilotNotionalUsd == null || s.pilotNotionalUsd >= minUsd),
+    );
+    if (!hit) continue;
+    const msg = `Pilot signal · ${hit.action.toUpperCase()} ${hit.ticker}${hit.pilotNotionalUsd != null ? ` ~$${hit.pilotNotionalUsd}` : ""}`;
+    const fire: IntelAlertFire = {
+      id: randomUUID().slice(0, 12),
+      ruleId: rule.id,
+      symbol: hit.ticker,
+      message: msg,
+      firedAt: new Date().toISOString(),
+    };
+    await recordIntelAlertFire(fire, rule.id);
+    await notifyIntelAlert(msg);
+    messages.push(msg);
+    fired += 1;
+  }
+
+  return { fired, messages };
+}
+
 export async function evaluateIntelAlerts(symbols?: string[]): Promise<{ fired: number; messages: string[] }> {
   const rules = await listIntelAlertRules();
-  if (rules.length === 0) return { fired: 0, messages: [] };
+  const tickerRules = rules.filter(
+    (r) => r.enabled && r.kind !== "mover_spike" && r.kind !== "pilot_signal",
+  );
+  const moverPilot = await evaluateMoverAndPilotAlerts();
+  if (tickerRules.length === 0) return moverPilot;
 
   const cache = await readIntelCache();
   const syms =
     symbols ??
-    [...new Set(rules.filter((r) => r.enabled).map((r) => r.symbol))].slice(0, 12);
+    [...new Set(tickerRules.filter((r) => r.enabled).map((r) => r.symbol))].slice(0, 12);
 
-  const messages: string[] = [];
-  let fired = 0;
+  const messages: string[] = [...moverPilot.messages];
+  let fired = moverPilot.fired;
 
   for (const sym of syms) {
     let intel = cache.tickerBySymbol[sym] ?? (await getCachedTickerIntel(sym));
@@ -92,7 +157,7 @@ export async function evaluateIntelAlerts(symbols?: string[]): Promise<{ fired: 
       }
     }
 
-    for (const rule of rules) {
+    for (const rule of tickerRules) {
       const msg = ruleMatches(intel, rule);
       if (!msg) continue;
       const fire: IntelAlertFire = {

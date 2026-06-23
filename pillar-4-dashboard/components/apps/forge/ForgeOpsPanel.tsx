@@ -69,7 +69,7 @@ export function ForgeOpsPanel({
           onClick={onExportFleet}
           className="border border-cursor-glow px-3 py-1.5 uppercase tracking-widest text-cursor-glow disabled:opacity-40"
         >
-          Export first forged bundle
+          Export fleet bundles
         </button>
         <button
           type="button"

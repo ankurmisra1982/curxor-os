@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-23T02:56:55.591Z",
+  "leads": [
+    {
+      "id": "LEAD-001",
+      "name": "Demo Prospect",
+      "email": "demo-k-desk-6@forged.local",
+      "company": "CurXor Pilot",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-23T02:56:55.498Z",
+      "updatedAt": "2026-06-23T02:56:55.498Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-002",
+      "name": "Smoke Lead",
+      "email": "smoke-1782183415545@forged.local",
+      "company": "",
+      "title": "",
+      "stage": "contacted",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-23T02:56:55.563Z",
+      "updatedAt": "2026-06-23T02:56:55.591Z",
+      "lastTouchAt": null
+    }
+  ],
+  "tasks": [],
+  "sequences": [
+    {
+      "id": "SEQ-001",
+      "name": "Smoke Lead sequence",
+      "leadId": "LEAD-002",
+      "status": "draft",
+      "steps": [
+        {
+          "id": "STEP-3d882515",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "Intro — Smoke Lead",
+          "body": "Hi {{name}},\n\nReaching out from your forged outreach desk on CurXor.\n\nBest,",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-6eadad59",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Follow-up — Smoke Lead",
+          "body": "Hi {{name}},\n\nFollowing up on my note — happy to share more if useful.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-06-23T02:56:55.591Z",
+      "updatedAt": "2026-06-23T02:56:55.591Z",
+      "activatedAt": null,
+      "completedAt": null,
+      "lastError": null
+    }
+  ],
+  "sends": [],
+  "mailIndex": [],
+  "syncLog": []
+}

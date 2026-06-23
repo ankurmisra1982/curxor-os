@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-23T02:48:59.418Z",
+  "posts": [
+    {
+      "id": "POST-001",
+      "channel": "CurXor Dev Log",
+      "platform": "x",
+      "stage": "SCRIPT",
+      "draftText": "Sovereign creator desk on CurXor — draft locally, schedule on appliance, publish via eno2 bridge when wired.",
+      "scheduledAt": null,
+      "createdAt": "2026-06-23T02:48:59.353Z",
+      "updatedAt": "2026-06-23T02:48:59.353Z"
+    },
+    {
+      "id": "POST-002",
+      "channel": "Smoke Channel",
+      "platform": "x",
+      "stage": "SCHEDULED",
+      "draftText": "Smoke forged creator draft — sovereign publish path on appliance.",
+      "scheduledAt": "2026-06-23T22:00:00.000Z",
+      "createdAt": "2026-06-23T02:48:59.403Z",
+      "updatedAt": "2026-06-23T02:48:59.418Z"
+    }
+  ]
+}

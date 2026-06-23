@@ -41,15 +41,13 @@ export async function buildLeadActivityTimeline(leadId: string): Promise<LeadAct
     detail: `${lead.source || "manual"} · ${lead.email}`,
   });
 
-  if (lead.updatedAt !== lead.createdAt) {
-    events.push({
-      id: `stage-${leadId}-${lead.stage}`,
-      kind: "stage",
-      at: lead.updatedAt,
-      title: `Pipeline · ${lead.stage}`,
-      detail: lead.lastTouchAt ? `Last touch ${lead.lastTouchAt.slice(0, 10)}` : "Stage updated",
-    });
-  }
+  events.push({
+    id: `stage-${leadId}-${lead.stage}`,
+    kind: "stage",
+    at: lead.updatedAt,
+    title: `Pipeline · ${lead.stage}`,
+    detail: lead.lastTouchAt ? `Last touch ${lead.lastTouchAt.slice(0, 10)}` : "Stage updated",
+  });
 
   for (const send of file.sends.filter((s) => s.leadId === leadId)) {
     events.push({

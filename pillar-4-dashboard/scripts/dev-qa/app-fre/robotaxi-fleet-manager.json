@@ -1,7 +1,10 @@
 {
   "initialized": true,
   "config": {
+    "growthIntent": "first_dispatch",
+    "growthLevel": "L2",
     "depotGrid": "A1",
+    "secondaryDepot": "D1",
     "fleetSize": "4",
     "dispatchPolicy": "latency"
   },

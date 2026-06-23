@@ -57,13 +57,12 @@ export async function GET(): Promise<Response> {
 
 
 interface ForgeStatusPostBody {
-
   action?: string;
-
   clawId?: string;
-
   persona?: string;
-
+  profileId?: string;
+  forgedAppId?: string;
+  templateId?: string;
 }
 
 
@@ -139,8 +138,9 @@ export async function POST(request: Request): Promise<Response> {
     const personaRaw = typeof body.persona === "string" ? body.persona : "default";
 
     const persona =
-
-      personaRaw === "L1" || personaRaw === "L4" || personaRaw === "L5" ? personaRaw : "default";
+      personaRaw === "L1" || personaRaw === "L4" || personaRaw === "L4-creator" || personaRaw === "L4-capital" || personaRaw === "L5"
+        ? personaRaw
+        : "default";
 
     const { runForgeDemoTour } = await import("@/lib/forge-demo-tour");
 
@@ -156,7 +156,36 @@ export async function POST(request: Request): Promise<Response> {
 
   }
 
+  if (body.action === "archive_claw") {
+    const profileId = typeof body.profileId === "string" ? body.profileId.trim() : undefined;
+    const forgedAppId = typeof body.forgedAppId === "string" ? body.forgedAppId.trim() : undefined;
+    const { archiveClawInFleet } = await import("@/lib/forge-fleet-lifecycle");
+    const result = await archiveClawInFleet({ profileId, forgedAppId });
+    if (!result.ok) {
+      return Response.json({ ok: false, error: result.error }, { status: 400 });
+    }
+    const forgedState = await readForgedApps();
+    const status = buildForgeStatus(await readClawProfiles(), forgedState.apps);
+    const goLive = await buildForgeGoLiveReport();
+    return Response.json({ ok: true, archive: result, ...status, goLive, demoReady: goLive.demoReady });
+  }
 
+  if (body.action === "promote_to_framework") {
+    const profileId = typeof body.profileId === "string" ? body.profileId.trim() : "";
+    if (!profileId) {
+      return Response.json({ ok: false, error: "profileId required" }, { status: 400 });
+    }
+    const templateId = typeof body.templateId === "string" ? body.templateId : undefined;
+    const { promoteIslandToFramework } = await import("@/lib/forge-fleet-lifecycle");
+    const result = await promoteIslandToFramework(profileId, templateId);
+    if (!result.ok) {
+      return Response.json({ ok: false, error: result.error }, { status: 400 });
+    }
+    const forgedState = await readForgedApps();
+    const status = buildForgeStatus(await readClawProfiles(), forgedState.apps);
+    const goLive = await buildForgeGoLiveReport();
+    return Response.json({ ok: true, promote: result, ...status, goLive, demoReady: goLive.demoReady });
+  }
 
   return Response.json({ ok: false, error: "Unknown action" }, { status: 400 });
 

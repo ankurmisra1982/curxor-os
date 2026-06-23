@@ -4,7 +4,9 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getAppAgent } from "../app-agent-catalog";
+import { resolveAppAgent } from "../forged-agent-resolve";
 import type { OotbAppId } from "../ootb-apps";
+import { isForgedAppId, isWorkspaceAppId, type WorkspaceAppId } from "../workspace-app-id";
 
 import {
   DEFAULT_GLOBAL_MEMORY,
@@ -22,11 +24,11 @@ function globalDir(): string {
   return path.join(workspaceRoot(), "_global");
 }
 
-function appDir(appId: OotbAppId): string {
+function appDir(appId: WorkspaceAppId): string {
   return path.join(workspaceRoot(), appId);
 }
 
-function skillsDir(appId: OotbAppId): string {
+function skillsDir(appId: WorkspaceAppId): string {
   return path.join(appDir(appId), "skills");
 }
 
@@ -82,7 +84,32 @@ Scheduled checks for this Claw. Parsed lines use \`skill:<id>\` or \`message:<te
 `;
 }
 
-async function listSkillFiles(appId: OotbAppId): Promise<string[]> {
+async function defaultSoulForApp(appId: WorkspaceAppId): Promise<string> {
+  if (isForgedAppId(appId)) {
+    const agent = await resolveAppAgent(appId);
+    return `# ${agent.agentName}\n\n${agent.tagline}\n`;
+  }
+  return defaultSoul(appId as OotbAppId);
+}
+
+async function defaultToolsForApp(appId: WorkspaceAppId): Promise<string> {
+  if (isForgedAppId(appId)) {
+    const agent = await resolveAppAgent(appId);
+    const lines = agent.skills.map((s) => `- **${s.id}** (${s.kind}): ${s.description}`);
+    return `# Tools available to ${agent.agentName}\n\n${lines.join("\n")}\n`;
+  }
+  return defaultTools(appId as OotbAppId);
+}
+
+async function defaultHeartbeatForApp(appId: WorkspaceAppId): Promise<string> {
+  if (isForgedAppId(appId)) {
+    const agent = await resolveAppAgent(appId);
+    return `# HEARTBEAT — ${agent.agentName}\n\n## Daily at 08:00\n- message:Check in\n`;
+  }
+  return defaultHeartbeat(appId as OotbAppId);
+}
+
+async function listSkillFiles(appId: WorkspaceAppId): Promise<string[]> {
   try {
     const entries = await readdir(skillsDir(appId));
     return entries.filter((f) => f.endsWith(".md")).sort();
@@ -91,7 +118,7 @@ async function listSkillFiles(appId: OotbAppId): Promise<string[]> {
   }
 }
 
-export async function ensureWorkspace(appId: OotbAppId): Promise<void> {
+export async function ensureWorkspace(appId: WorkspaceAppId): Promise<void> {
   await mkdir(globalDir(), { recursive: true });
   await mkdir(appDir(appId), { recursive: true });
   await mkdir(skillsDir(appId), { recursive: true });
@@ -109,10 +136,14 @@ export async function ensureWorkspace(appId: OotbAppId): Promise<void> {
     await writeText(gMem, DEFAULT_GLOBAL_MEMORY);
   }
 
+  const soul = await defaultSoulForApp(appId);
+  const tools = await defaultToolsForApp(appId);
+  const heartbeat = await defaultHeartbeatForApp(appId);
+
   for (const [file, content] of [
-    ["SOUL.md", defaultSoul(appId)],
-    ["TOOLS.md", defaultTools(appId)],
-    ["HEARTBEAT.md", defaultHeartbeat(appId)],
+    ["SOUL.md", soul],
+    ["TOOLS.md", tools],
+    ["HEARTBEAT.md", heartbeat],
   ] as const) {
     const fp = path.join(appDir(appId), file);
     try {
@@ -123,15 +154,19 @@ export async function ensureWorkspace(appId: OotbAppId): Promise<void> {
   }
 }
 
-export async function readWorkspace(appId: OotbAppId): Promise<AgentWorkspaceSnapshot> {
+export async function readWorkspace(appId: WorkspaceAppId): Promise<AgentWorkspaceSnapshot> {
   await ensureWorkspace(appId);
+
+  const soulFallback = await defaultSoulForApp(appId);
+  const toolsFallback = await defaultToolsForApp(appId);
+  const heartbeatFallback = await defaultHeartbeatForApp(appId);
 
   const [user, memory, soul, tools, heartbeat, skillFiles] = await Promise.all([
     readText(path.join(globalDir(), "USER.md"), DEFAULT_GLOBAL_USER),
     readText(path.join(globalDir(), "MEMORY.md"), DEFAULT_GLOBAL_MEMORY),
-    readText(path.join(appDir(appId), "SOUL.md"), defaultSoul(appId)),
-    readText(path.join(appDir(appId), "TOOLS.md"), defaultTools(appId)),
-    readText(path.join(appDir(appId), "HEARTBEAT.md"), defaultHeartbeat(appId)),
+    readText(path.join(appDir(appId), "SOUL.md"), soulFallback),
+    readText(path.join(appDir(appId), "TOOLS.md"), toolsFallback),
+    readText(path.join(appDir(appId), "HEARTBEAT.md"), heartbeatFallback),
     listSkillFiles(appId),
   ]);
 
@@ -144,7 +179,7 @@ export async function readWorkspace(appId: OotbAppId): Promise<AgentWorkspaceSna
 }
 
 export async function writeWorkspaceFile(
-  appId: OotbAppId,
+  appId: WorkspaceAppId,
   scope: "global" | "app",
   file: GlobalWorkspaceFile | AppWorkspaceFile,
   content: string,
@@ -175,13 +210,13 @@ export async function appendMemory(fact: string): Promise<void> {
   await writeText(memPath, `${existing.trim()}\n${line}\n`);
 }
 
-export async function writeSkillFile(appId: OotbAppId, name: string, content: string): Promise<void> {
+export async function writeSkillFile(appId: WorkspaceAppId, name: string, content: string): Promise<void> {
   const safe = name.replace(/[^a-zA-Z0-9_-]/g, "-").replace(/\.md$/i, "") + ".md";
   await ensureWorkspace(appId);
   await writeText(path.join(skillsDir(appId), safe), content);
 }
 
-export async function readSkillFile(appId: OotbAppId, name: string): Promise<string | null> {
+export async function readSkillFile(appId: WorkspaceAppId, name: string): Promise<string | null> {
   const safe = path.basename(name);
   if (!safe.endsWith(".md")) return null;
   try {
@@ -191,14 +226,15 @@ export async function readSkillFile(appId: OotbAppId, name: string): Promise<str
   }
 }
 
-export async function buildWorkspacePromptBlock(appId: OotbAppId): Promise<string> {
+export async function buildWorkspacePromptBlock(appId: WorkspaceAppId): Promise<string> {
   const ws = await readWorkspace(appId);
+  const agent = isForgedAppId(appId) ? await resolveAppAgent(appId) : getAppAgent(appId as OotbAppId);
   const parts = [
     "## Operator (USER.md)",
     ws.global["USER.md"].trim(),
     "## Memory (MEMORY.md)",
     ws.global["MEMORY.md"].trim(),
-    `## ${getAppAgent(appId).agentName} soul (SOUL.md)`,
+    `## ${agent.agentName} soul (SOUL.md)`,
     ws.app["SOUL.md"].trim(),
   ];
   return `\n\n${parts.join("\n\n")}\n`;

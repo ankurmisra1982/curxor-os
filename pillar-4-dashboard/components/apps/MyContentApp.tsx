@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AppMetric } from "@/components/app-shared/AppLayout";
 import { ExperienceAppSection } from "@/components/experience/ExperienceAppSection";
@@ -61,6 +61,8 @@ import { ContentPlanPanel, type ContentPlanReportRow } from "@/components/apps/c
 import { ContentSignalPanel, type SignalFeedItemRow } from "@/components/apps/content/ContentSignalPanel";
 import { ContentGoLivePanel, type GoLiveReportRow } from "@/components/apps/content/ContentGoLivePanel";
 import { ContentEmptyQueuePanel } from "@/components/apps/content/ContentEmptyQueuePanel";
+import { CreatorLevelBadge } from "@/components/apps/content/CreatorLevelBadge";
+import { CreatorLevelUpNudge } from "@/components/apps/content/CreatorLevelUpNudge";
 import {
   ContentWorkspaceTabs,
   creatorSectionVisible,
@@ -70,6 +72,10 @@ import {
 import { ContentMediaAttachPanel } from "@/components/apps/content/ContentMediaAttachPanel";
 import type { ContentReply } from "@/lib/content-replies-store";
 import { getOotbApp } from "@/lib/ootb-apps";
+import type { GrowthLevel } from "@/lib/os-growth-level";
+import { isGrowthLevel } from "@/lib/os-growth-level";
+import { creatorFeatureVisible } from "@/lib/creator-level-gates";
+import { resolveCreatorGrowthLevel } from "@/lib/creator-growth";
 import { useDigitalStream } from "@/hooks/useDigitalStream";
 import { useVisionStream } from "@/hooks/useVisionStream";
 
@@ -156,6 +162,10 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [contentPlan, setContentPlan] = useState<ContentPlanReportRow | null>(null);
   const [signalItems, setSignalItems] = useState<SignalFeedItemRow[]>([]);
   const [goLive, setGoLive] = useState<GoLiveReportRow | null>(null);
+  const [growthProfile, setGrowthProfile] = useState<{
+    growthLevel: GrowthLevel;
+    growthLabel: string;
+  } | null>(null);
   const [demoTourRunning, setDemoTourRunning] = useState(false);
   const [growthBusy, setGrowthBusy] = useState(false);
   const [useDataDrivenSchedule, setUseDataDrivenSchedule] = useState(true);
@@ -171,15 +181,25 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     bannedHashtags: "",
   });
   const { level: experienceLevel, levelLabel, meetsLevel } = useExperienceLevel();
-  const [workspaceTab, setWorkspaceTab] = useState<CreatorWorkspaceTab>(() => defaultCreatorTab(experienceLevel));
+
+  const growthLevel = useMemo((): GrowthLevel => {
+    const fromProfile = growthProfile?.growthLevel;
+    if (fromProfile && isGrowthLevel(fromProfile)) return fromProfile;
+    return resolveCreatorGrowthLevel(config, experienceLevel);
+  }, [config, experienceLevel, growthProfile?.growthLevel]);
+
+  const [workspaceTab, setWorkspaceTab] = useState<CreatorWorkspaceTab>(() =>
+    defaultCreatorTab(resolveCreatorGrowthLevel(config, experienceLevel)),
+  );
   const [publishingNow, setPublishingNow] = useState(false);
   const { toasts, pushToast, dismissToast } = useContentToasts();
 
-  const hideCreatorSection = (sectionId: string) => !creatorSectionVisible(sectionId, workspaceTab);
+  const hideCreatorSection = (sectionId: string) =>
+    !creatorSectionVisible(sectionId, workspaceTab, growthLevel);
 
   useEffect(() => {
-    setWorkspaceTab(defaultCreatorTab(experienceLevel));
-  }, [experienceLevel]);
+    setWorkspaceTab(defaultCreatorTab(growthLevel));
+  }, [growthLevel]);
 
   const loadCalendar = useCallback(async (anchor = weekAnchor) => {
     try {
@@ -625,8 +645,15 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           recovery?: { candidates?: RecoveryCandidateRow[] };
           studio?: { tts?: string; imageGen?: boolean };
           freConfig?: { useDataDrivenSchedule?: boolean; autoSchedule?: boolean };
+          growthProfile?: { growthLevel?: GrowthLevel; growthLabel?: string };
         };
 
+        if (data.growthProfile?.growthLevel && isGrowthLevel(data.growthProfile.growthLevel)) {
+          setGrowthProfile({
+            growthLevel: data.growthProfile.growthLevel,
+            growthLabel: data.growthProfile.growthLabel ?? data.growthProfile.growthLevel,
+          });
+        }
         if (data.status) {
           setStatus(data.status);
           if (data.status.posts[0] && !data.status.posts.some((p) => p.id === selected)) {
@@ -1216,10 +1243,11 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </p>
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">Creator Claw Studio</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
-          {tone} tone · {levelLabel} mode · vision {connected ? "ON" : "OFF"} · {lastSignal}
+          {tone} tone · {growthProfile?.growthLabel ?? levelLabel} · vision {connected ? "ON" : "OFF"} · {lastSignal}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[10px]">
           <ExperienceLevelBadge />
+          <CreatorLevelBadge growthLevel={growthLevel} />
           <button type="button" onClick={() => setWizardOpen(true)} className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow">
             Creation wizard
           </button>
@@ -1247,8 +1275,20 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       <ContentWorkspaceTabs
         active={workspaceTab}
         onChange={setWorkspaceTab}
-        experienceLevel={experienceLevel}
+        growthLevel={growthLevel}
       />
+
+      {creatorFeatureVisible(growthLevel, "level-up-nudge") && status ? (
+        <CreatorLevelUpNudge
+          growthLevel={growthLevel}
+          stats={{
+            scheduledPosts: status.posts.filter((p) => p.stage === "SCHEDULED").length,
+            publishedPosts: status.posts.filter((p) => p.stage === "PUBLISHED").length,
+            pendingApprovals: approvalPosts.length + approvalReplies.length,
+            engageSuggestions: engageSuggestions.length,
+          }}
+        />
+      ) : null}
 
       <div className="grid gap-4 md:grid-cols-4">
         <AppMetric label="Queue" value={String(status?.posts.length ?? "—")} unit={queueSource} highlight />
@@ -2360,7 +2400,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </ExperienceAppSection>
       )}
 
-      {creatorSectionVisible("campaign", workspaceTab) ? (
+      {!hideCreatorSection("campaign") ? (
       <ContentCampaignPanel
         posts={status?.posts ?? []}
         campaigns={status?.campaigns ?? []}
@@ -2528,7 +2568,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         </div>
       </ExperienceAppSection>
 
-      {creatorSectionVisible("publish-receipts", workspaceTab) ? (
+      {!hideCreatorSection("publish-receipts") ? (
       <DigitalReceiptPanel
         title="Publish Receipts"
         receipts={digital.receipts.filter(

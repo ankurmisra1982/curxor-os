@@ -3,10 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ExperienceGate } from "@/components/experience/ExperienceGate";
+import { CapitalConsensusMeter } from "@/components/apps/capital/CapitalConsensusMeter";
 import { CapitalLightweightChart } from "@/components/apps/capital/CapitalLightweightChart";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+import type { ChartTradeMarker } from "@/lib/capital-alpha-types";
+import { computeConsensusMeter } from "@/lib/capital-consensus";
 import type { TickerChartPoint, TickerIntel } from "@/lib/capital-intel-types";
 import type { IntelProviderStatus } from "@/lib/capital-data-providers";
+import type { CapitalPosition, PilotSignal } from "@/lib/capital-queue-types";
 
 function formatAge(iso: string): string {
   const mins = Math.round((Date.now() - Date.parse(iso)) / 60_000);
@@ -17,7 +21,7 @@ function formatAge(iso: string): string {
 
 type ChartRange = "1M" | "3M" | "ALL";
 
-function PriceChart({ points }: { points: TickerChartPoint[] }) {
+function PriceChart({ points, markers = [] }: { points: TickerChartPoint[]; markers?: ChartTradeMarker[] }) {
   const [range, setRange] = useState<ChartRange>("3M");
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
@@ -44,6 +48,26 @@ function PriceChart({ points }: { points: TickerChartPoint[] }) {
     const area = `${line} L${w},${h} L0,${h} Z`;
     return { path: line, areaPath: area, min: lo, max: hi, lastClose: closes[closes.length - 1]! };
   }, [sliced]);
+
+  const markerCoords = useMemo(() => {
+    if (!sliced.length || markers.length === 0) return [];
+    const w = 320;
+    const h = 72;
+    const closes = sliced.map((p) => p.close);
+    const lo = Math.min(...closes);
+    const hi = Math.max(...closes);
+    const span = hi - lo || 1;
+    return markers
+      .map((m) => {
+        const idx = sliced.findIndex((p) => p.t.slice(0, 10) === m.t.slice(0, 10));
+        const i = idx >= 0 ? idx : sliced.length - 1;
+        const price = m.price > 0 ? m.price : sliced[i]!.close;
+        const x = (i / Math.max(sliced.length - 1, 1)) * w;
+        const y = h - ((price - lo) / span) * h;
+        return { x, y, m };
+      })
+      .filter((c) => Number.isFinite(c.x) && Number.isFinite(c.y));
+  }, [sliced, markers]);
 
   if (!path) return <div className="h-[88px] text-[10px] text-muted">Chart unavailable</div>;
 
@@ -94,6 +118,15 @@ function PriceChart({ points }: { points: TickerChartPoint[] }) {
             onMouseEnter={() => setHoverIdx(i)}
           />
         ))}
+        {markerCoords.map(({ x, y, m }, i) => (
+          <circle
+            key={`${m.t}-${i}`}
+            cx={x}
+            cy={y}
+            r={3}
+            className={m.kind === "sell" ? "fill-red-400" : m.kind === "pilot" ? "fill-amber-300" : "fill-cursor-glow"}
+          />
+        ))}
       </svg>
     </div>
   );
@@ -120,13 +153,16 @@ function sentimentClass(label: string): string {
   return "text-muted";
 }
 
-function MiniChart({ points }: { points: TickerChartPoint[] }) {
-  return <PriceChart points={points} />;
+function MiniChart({ points, markers }: { points: TickerChartPoint[]; markers?: ChartTradeMarker[] }) {
+  return <PriceChart points={points} markers={markers} />;
 }
 
 interface CapitalTickerIntelPanelProps {
   watchlist: string[];
   focusTicker?: string | null;
+  tradeMarkers?: ChartTradeMarker[];
+  pilotSignals?: PilotSignal[];
+  positions?: CapitalPosition[];
   onTickerSelect?: (symbol: string) => void;
   onArmDipRule?: (symbol: string) => void;
   onAddWatchlist?: (symbol: string) => void;
@@ -136,6 +172,9 @@ interface CapitalTickerIntelPanelProps {
 export function CapitalTickerIntelPanel({
   watchlist,
   focusTicker,
+  tradeMarkers = [],
+  pilotSignals = [],
+  positions = [],
   onTickerSelect,
   onArmDipRule,
   onAddWatchlist,
@@ -197,6 +236,11 @@ export function CapitalTickerIntelPanel({
   const chatterLimit = showExpert ? 12 : showStandard ? 6 : 0;
   const providersOk = providers.filter((p) => p.available).length;
   const providersTotal = providers.length || 6;
+
+  const consensus = useMemo(() => {
+    if (!intel) return null;
+    return computeConsensusMeter(intel.symbol, intel.sentiment, pilotSignals, positions);
+  }, [intel, pilotSignals, positions]);
 
   return (
     <div className="space-y-3 font-mono text-xs">
@@ -282,6 +326,8 @@ export function CapitalTickerIntelPanel({
             </button>
           </div>
 
+          {showStandard && consensus ? <CapitalConsensusMeter meter={consensus} /> : null}
+
           {showStandard && intel.nextEarningsDate ? (
             <p className="text-[10px] text-muted">Next earnings · {intel.nextEarningsDate}</p>
           ) : null}
@@ -301,9 +347,9 @@ export function CapitalTickerIntelPanel({
           {showStandard ? (
             <>
               {showExpert ? (
-                <CapitalLightweightChart points={intel.chart} />
+                <CapitalLightweightChart points={intel.chart} markers={tradeMarkers} />
               ) : (
-                <MiniChart points={intel.chart} />
+                <MiniChart points={intel.chart} markers={tradeMarkers} />
               )}
               <div className="grid grid-cols-2 gap-2 md:grid-cols-4 text-[10px]">
                 <div>

@@ -388,4 +388,4 @@ WL1 (schema + FRE) → WL2 (L1) → WL3 (L2) → WL4 (L3) → WL5 (L4/L5 scaffol
 
 ## Next action
 
-WL1–WL8 + W13–W20 complete (v0.4.0). Continue with **[EXCELLENCE-PHASE2-BUILD-PLAN.md](./EXCELLENCE-PHASE2-BUILD-PLAN.md)** — start **Sprint W21**.
+WL1–WL8 + W13–W35 complete (v0.6.2). Phase 3 excellence arc closed — GTM assets + live proof per [RELEASE-NEXT.md](./RELEASE-NEXT.md). No further leveling sprints until Phase 4 scope is defined.

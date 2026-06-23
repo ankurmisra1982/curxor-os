@@ -2,14 +2,14 @@ import "server-only";
 
 import { assistAppAgent } from "../app-agent-assist";
 import { readAppFreState } from "../app-fre-state";
-import type { OotbAppId } from "../ootb-apps";
+import type { WorkspaceAppId } from "../workspace-app-id";
 
 import { listDueJobs, markJobRun } from "./scheduler-store";
 import type { SchedulerJob } from "./scheduler-types";
 
 export interface SchedulerRunResult {
   jobId: string;
-  appId: OotbAppId;
+  appId: WorkspaceAppId;
   status: "ok" | "error" | "skipped";
   reply?: string;
   error?: string;

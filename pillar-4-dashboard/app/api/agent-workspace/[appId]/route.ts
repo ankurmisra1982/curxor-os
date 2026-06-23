@@ -9,7 +9,7 @@ import {
 } from "@/lib/agent-runtime/workspace-store";
 import type { AppWorkspaceFile, GlobalWorkspaceFile } from "@/lib/agent-runtime/workspace-types";
 import { syncHeartbeatToJobs } from "@/lib/agent-runtime/scheduler-store";
-import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
+import { isWorkspaceAppId, type WorkspaceAppId } from "@/lib/workspace-app-id";
 import { requireLanAuth } from "@/lib/lan-auth";
 
 export async function GET(
@@ -17,10 +17,10 @@ export async function GET(
   context: { params: Promise<{ appId: string }> },
 ): Promise<Response> {
   const { appId: raw } = await context.params;
-  if (!isValidAppId(raw)) {
+  if (!isWorkspaceAppId(raw)) {
     return Response.json({ error: "Invalid appId" }, { status: 400 });
   }
-  const workspace = await readWorkspace(raw as OotbAppId);
+  const workspace = await readWorkspace(raw);
   return Response.json({ ok: true, workspace });
 }
 
@@ -32,10 +32,10 @@ export async function POST(
   if (auth) return auth;
 
   const { appId: raw } = await context.params;
-  if (!isValidAppId(raw)) {
+  if (!isWorkspaceAppId(raw)) {
     return Response.json({ error: "Invalid appId" }, { status: 400 });
   }
-  const appId = raw as OotbAppId;
+  const appId = raw as WorkspaceAppId;
 
   let body: {
     action?: string;

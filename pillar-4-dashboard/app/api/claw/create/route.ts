@@ -10,6 +10,12 @@ import {
   recommendModels,
   type ClawProfile,
 } from "@/lib/claw-recommend";
+import {
+  createRejectsNonIslandError,
+  islandCreateAvailable,
+  resolveProvisioningMode,
+  type ForgeProvisioningMode,
+} from "@/lib/forge-provisioning";
 import type { BudgetTier } from "@/lib/local-llm-catalog";
 import { LOCAL_LLM_CATALOG } from "@/lib/local-llm-catalog";
 
@@ -17,6 +23,7 @@ interface CreateBody {
   intent?: string;
   budgetTier?: BudgetTier;
   autoSelected?: boolean;
+  provisioningMode?: ForgeProvisioningMode;
   models?: { vision?: string; reasoning?: string; vla?: string | null };
   name?: string;
   multimodal?: {
@@ -54,6 +61,17 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ ok: false, error: "Intent is required" }, { status: 400 });
   }
 
+  const provisioningMode = resolveProvisioningMode(body.provisioningMode);
+  if (!islandCreateAvailable(provisioningMode)) {
+    return Response.json(
+      {
+        ok: false,
+        error: createRejectsNonIslandError(provisioningMode),
+      },
+      { status: 400 },
+    );
+  }
+
   const budgetTier = isBudgetTier(body.budgetTier ?? "") ? body.budgetTier! : "balanced";
   const autoSelected = Boolean(body.autoSelected);
 
@@ -83,6 +101,7 @@ export async function POST(request: Request): Promise<Response> {
       vla: models!.vla ?? null,
     },
     createdAt: new Date().toISOString(),
+    provisioningMode,
     multimodal: body.multimodal
       ? {
           hadReferenceImage: Boolean(body.multimodal.hadReferenceImage),
@@ -96,6 +115,14 @@ export async function POST(request: Request): Promise<Response> {
 
   await writeActiveClawEnv(profile);
   await restartEngineForActiveClaw();
+
+  const { emitForgeCafeEvent } = await import("@/lib/forge-cafe-events");
+  await emitForgeCafeEvent({
+    mode: provisioningMode,
+    name: profile.name,
+    appId: profile.id,
+    forgedSlug: profile.forgedAppSlug ?? null,
+  }).catch(() => undefined);
 
   return Response.json({ ok: true, profile, state }, { status: 200 });
 }

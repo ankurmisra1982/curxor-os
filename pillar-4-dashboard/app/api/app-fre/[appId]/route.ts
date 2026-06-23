@@ -79,6 +79,8 @@ export async function POST(
       /* dev */
     }
     const state = await markForgedAppFreComplete(appId, rawConfig);
+    const { syncForgedMeshFromFre } = await import("@/lib/forge-fleet-lifecycle");
+    await syncForgedMeshFromFre(appId, rawConfig).catch(() => undefined);
     return Response.json({ ok: true, state });
   }
 

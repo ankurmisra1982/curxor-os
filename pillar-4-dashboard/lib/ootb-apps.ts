@@ -45,7 +45,7 @@ export const OOTB_APPS = [
     href: "/optimus",
     short: "SIG",
     description:
-      "Ingest market feeds, social mentions, and news triggers — spin up agents the moment alpha appears.",
+      "Humanoid home hub — teach house rules, pass knowledge, and relate before your robot arrives. More robot types later.",
   },
   {
     id: "robotaxi-fleet-manager",
@@ -53,7 +53,7 @@ export const OOTB_APPS = [
     href: "/robotaxi",
     short: "SWARM",
     description:
-      "Orchestrate dozens of Claws in parallel — assign workloads, monitor uptime, and scale your digital workforce.",
+      "Orchestrate digital Claws today — preview path to operating many Tesla Robotaxis as an autonomous fleet from sovereign metal.",
   },
   {
     id: "claw-cafe",
@@ -69,7 +69,7 @@ export const OOTB_APPS = [
     href: "/my-vital",
     short: "VIT",
     description:
-      "Longevity desk — wearable vitals, medical reports, diet and health app sync, and a personalized health protocol on your metal.",
+      "Longevity desk — wearables, labs, expert Q&A preview (Sinclair, Blueprint), and a personalized health protocol on your metal.",
   },
   {
     id: "my-family",
@@ -77,7 +77,7 @@ export const OOTB_APPS = [
     href: "/my-family",
     short: "KIN",
     description:
-      "Family profiles — each member's devices, personality, and preferences sync through the Claw Context mesh.",
+      "Household identity layer — partner, kids, and guests get their own context so Optimus and Vital personalize per person, not per box.",
   },
 ] as const;
 

@@ -2,21 +2,52 @@
 
 import { useCallback, useMemo, useState, type Dispatch, type SetStateAction } from "react";
 
-import type { AppFreField } from "@/lib/app-agent-catalog";
+import type { AppFreField, AppAgentDefinition } from "@/lib/app-agent-catalog";
 import { defaultFreConfig, getAppAgent } from "@/lib/app-agent-catalog";
-import type { OotbAppId } from "@/lib/ootb-apps";
+import { ComingSoonBadge } from "@/components/app-shared/ComingSoonBadge";
+import type { ResolvedAppAgent } from "@/lib/forged-agent-catalog";
+import { defaultFreConfigForApp } from "@/lib/forged-agent-catalog";
+import { isPreviewApp, PREVIEW_FRE_ACTIVATE_TIPS, PREVIEW_FRE_WELCOME_SUFFIX } from "@/lib/claw-preview-apps";
+import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
+import { isForgedAppId } from "@/lib/workspace-app-id";
 
 const STEPS = ["Welcome", "Configure", "Activate"] as const;
 
+const FALLBACK_AGENT: ResolvedAppAgent = {
+  appId: "forged-unknown",
+  agentName: "Claw",
+  tagline: "Custom forged desk",
+  ootbLabel: "Claw",
+  purpose: ["Operator desk on CurXor OS."],
+  howToUse: ["Chat in the agent panel.", "Tap skills for explicit actions."],
+  skills: [],
+  fre: {
+    welcomeTitle: "Welcome",
+    welcomeLead: "",
+    configureTitle: "Configure",
+    configureLead: "",
+    fields: [],
+    activateTitle: "Activate",
+    activateTips: [],
+  },
+  bootMessage: "Claw ready.",
+};
+
 interface AppFreWizardProps {
-  appId: OotbAppId;
+  appId: string;
+  agent?: AppAgentDefinition | ResolvedAppAgent;
   onComplete: (config: Record<string, unknown>) => void;
 }
 
-export function AppFreWizard({ appId, onComplete }: AppFreWizardProps) {
-  const agent = getAppAgent(appId);
+export function AppFreWizard({ appId, agent: agentOverride, onComplete }: AppFreWizardProps) {
+  const agent =
+    agentOverride ??
+    (isValidAppId(appId) ? getAppAgent(appId as OotbAppId) : null) ??
+    FALLBACK_AGENT;
   const [step, setStep] = useState(0);
-  const [config, setConfig] = useState<Record<string, unknown>>(() => defaultFreConfig(appId));
+  const [config, setConfig] = useState<Record<string, unknown>>(() =>
+    isValidAppId(appId) ? defaultFreConfig(appId as OotbAppId) : defaultFreConfigForApp(appId),
+  );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,14 +78,21 @@ export function AppFreWizard({ appId, onComplete }: AppFreWizardProps) {
     }
   }, [appId, config, onComplete]);
 
+  const preview = isPreviewApp(appId);
+  const activateTips = preview ? [...agent.fre.activateTips, ...PREVIEW_FRE_ACTIVATE_TIPS] : agent.fre.activateTips;
+  const welcomeLead = preview ? `${agent.fre.welcomeLead}${PREVIEW_FRE_WELCOME_SUFFIX}` : agent.fre.welcomeLead;
+
   return (
     <div className="flex min-h-[480px] flex-col border border-line bg-panel">
       <header className="border-b border-line px-6 py-5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
-          {agent.ootbLabel} · First Run
-        </p>
-        <h1 className="font-sans text-xl font-semibold text-stark">{agent.fre.welcomeTitle}</h1>
-        <p className="mt-2 max-w-2xl font-sans text-sm leading-relaxed text-muted">{agent.fre.welcomeLead}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
+            {agent.ootbLabel} · First Run
+          </p>
+          {preview ? <ComingSoonBadge /> : null}
+        </div>
+        <h1 className="mt-1 font-sans text-xl font-semibold text-stark">{agent.fre.welcomeTitle}</h1>
+        <p className="mt-2 max-w-2xl font-sans text-sm leading-relaxed text-muted">{welcomeLead}</p>
       </header>
 
       <nav className="grid grid-cols-3 gap-1 border-b border-line px-4 py-2">
@@ -108,7 +146,7 @@ export function AppFreWizard({ appId, onComplete }: AppFreWizardProps) {
             <div className="border border-line bg-void p-4">
               <div className="font-mono text-[10px] uppercase tracking-widest text-muted">Quick start</div>
               <ul className="mt-3 space-y-2 font-mono text-[11px] text-stark">
-                {agent.fre.activateTips.map((tip) => (
+                {activateTips.map((tip) => (
                   <li key={tip}>→ {tip}</li>
                 ))}
               </ul>

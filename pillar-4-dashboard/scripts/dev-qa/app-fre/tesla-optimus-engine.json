@@ -1,7 +1,7 @@
 {
   "initialized": true,
   "config": {
-    "unitId": "OPTIMUS-01",
+    "unitId": "Home Humanoid",
     "safetyProfile": "standard",
     "enableRl": true
   },

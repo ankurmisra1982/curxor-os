@@ -22,6 +22,32 @@ class MeshBridge {
   private motorListeners = new Set<Listener<MotorCommand>>();
   private digitalListeners = new Set<Listener<DigitalReceipt>>();
   private startPromise: Promise<void> | null = null;
+  private lastMotor: MotorCommand | null = null;
+  private lastVision: VisionFrame | null = null;
+
+  getSnapshot(): { motor: MotorCommand | null; vision: VisionFrame | null } {
+    return { motor: this.lastMotor, vision: this.lastVision };
+  }
+
+  waitForMotor(afterSeq: number, timeoutMs: number): Promise<MotorCommand | null> {
+    const snap = this.lastMotor;
+    if (snap && snap.seq > afterSeq) return Promise.resolve(snap);
+
+    return new Promise((resolve) => {
+      let settled = false;
+      const finish = (cmd: MotorCommand | null) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        unsub();
+        resolve(cmd);
+      };
+      const unsub = this.subscribeMotor((cmd) => {
+        if (cmd.seq > afterSeq) finish(cmd);
+      });
+      const timer = setTimeout(() => finish(null), timeoutMs);
+    });
+  }
 
   ensureStarted(): Promise<void> {
     if (!this.startPromise) {
@@ -85,6 +111,7 @@ class MeshBridge {
       const payload = parts[2];
       if (!header || !payload) continue;
       const frame = unpackVisionHeader(header, payload);
+      this.lastVision = frame;
       for (const listener of this.visionListeners) listener(frame);
     }
   }
@@ -97,6 +124,7 @@ class MeshBridge {
       const payload = parts[1];
       if (!payload || payload.length < 40) continue;
       const cmd = unpackMotor(payload);
+      this.lastMotor = cmd;
       for (const listener of this.motorListeners) listener(cmd);
     }
   }

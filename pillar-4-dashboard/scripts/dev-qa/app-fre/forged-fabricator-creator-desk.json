@@ -1,0 +1,11 @@
+{
+  "initialized": true,
+  "config": {
+    "primaryChannel": "x",
+    "meshPublish": true,
+    "growthLevel": "L2",
+    "forgedIntent": "L4 Fabricator tour — forged creator desk with local content queue",
+    "forgedTemplateId": "creator-desk"
+  },
+  "initializedAt": "2026-06-22T23:59:28.465Z"
+}

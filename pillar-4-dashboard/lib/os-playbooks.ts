@@ -6,7 +6,7 @@ import { upsertLead } from "./work-store";
 import { emitWorkXpEvent } from "./work-xp-events";
 import type { WorkLead } from "./work-queue-types";
 
-export type OsPlaybookId = "capital-alert" | "creator-signal";
+export type OsPlaybookId = "capital-alert" | "creator-signal" | "swarm-fleet";
 
 export interface OsPlaybookResult {
   ok: boolean;
@@ -64,6 +64,26 @@ export async function runOsPlaybook(playbookId: string): Promise<OsPlaybookResul
     await emitWorkXpEvent("handoff_received", { source: "playbook:creator-signal", leadId: lead.id });
 
     return { ok: true, playbookId: id, lead, tags: lead.tags };
+  }
+
+  if (id === "swarm-fleet") {
+    const { handoffToSwarm } = await import("./swarm-handoff");
+    const { seedSwarmDemoWorkloads } = await import("./swarm-workload-queue");
+    await seedSwarmDemoWorkloads();
+    const handoff = await handoffToSwarm({
+      source: "my-capital",
+      title: "OS playbook fleet sweep",
+      detail: "Capital + Creator workloads routed to Swarm queue",
+      targetCell: "C2",
+      priority: "high",
+    });
+    await handoffToSwarm({
+      source: "my-content-creator",
+      title: "OS playbook publish stagger",
+      detail: "Creator fan-out staged for fleet dispatch",
+      targetCell: "D3",
+    });
+    return { ok: handoff.ok, playbookId: id, tags: ["playbook:swarm-fleet"] };
   }
 
   return { ok: false, playbookId: "capital-alert", error: `Unknown playbook: ${playbookId}` };

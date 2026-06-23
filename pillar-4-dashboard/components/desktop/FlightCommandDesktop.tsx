@@ -28,6 +28,7 @@ import { LiveTelemetryStrip } from "@/components/telemetry/LiveTelemetryStrip";
 
 import { UiModeProvider, useUiMode } from "@/components/ui/UiModeProvider";
 
+import type { ForgedAppRecord } from "@/lib/forged-apps-types";
 import { SETTINGS_PATH } from "@/lib/ui-categories";
 import type { OotbAppId } from "@/lib/ootb-apps";
 import type { ColorScheme, ThemeMode, UiMode } from "@/lib/user-settings-types";
@@ -37,6 +38,7 @@ import type { ColorScheme, ThemeMode, UiMode } from "@/lib/user-settings-types";
 interface FlightCommandDesktopProps {
   children: ReactNode;
   selectedApps: OotbAppId[];
+  forgedApps?: ForgedAppRecord[];
   initialUiMode?: UiMode;
   initialExperienceLevel?: import("@/lib/experience-level").ExperienceLevel;
   initialColorScheme?: ColorScheme;
@@ -45,7 +47,7 @@ interface FlightCommandDesktopProps {
 
 
 
-function DesktopInner({ children, selectedApps }: FlightCommandDesktopProps) {
+function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommandDesktopProps) {
 
   const [healthOpen, setHealthOpen] = useState(false);
 
@@ -170,7 +172,7 @@ function DesktopInner({ children, selectedApps }: FlightCommandDesktopProps) {
 
 
 
-        <AppNav selectedApps={selectedApps} />
+        <AppNav selectedApps={selectedApps} forgedApps={forgedApps} />
 
         <ContextHintBar />
 
@@ -213,6 +215,7 @@ function DesktopInner({ children, selectedApps }: FlightCommandDesktopProps) {
 export function FlightCommandDesktop({
   children,
   selectedApps,
+  forgedApps = [],
   initialUiMode,
   initialExperienceLevel,
   initialColorScheme,
@@ -229,7 +232,9 @@ export function FlightCommandDesktop({
             initialThemeMode={initialThemeMode}
           />
           <ExpertBodyClass />
-          <DesktopInner selectedApps={selectedApps}>{children}</DesktopInner>
+          <DesktopInner selectedApps={selectedApps} forgedApps={forgedApps}>
+            {children}
+          </DesktopInner>
         </UiModeProvider>
       </ThemeProvider>
     </TelemetryProvider>

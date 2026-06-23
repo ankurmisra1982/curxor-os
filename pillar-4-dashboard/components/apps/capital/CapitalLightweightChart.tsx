@@ -2,14 +2,16 @@
 
 import { useEffect, useRef } from "react";
 
+import type { ChartTradeMarker } from "@/lib/capital-alpha-types";
 import type { TickerChartPoint } from "@/lib/capital-intel-types";
 
 interface CapitalLightweightChartProps {
   points: TickerChartPoint[];
+  markers?: ChartTradeMarker[];
   height?: number;
 }
 
-export function CapitalLightweightChart({ points, height = 220 }: CapitalLightweightChartProps) {
+export function CapitalLightweightChart({ points, markers = [], height = 220 }: CapitalLightweightChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,7 +23,9 @@ export function CapitalLightweightChart({ points, height = 220 }: CapitalLightwe
     let onResize: (() => void) | null = null;
 
     void (async () => {
-      const { createChart, AreaSeries, ColorType, CrosshairMode } = await import("lightweight-charts");
+      const { createChart, AreaSeries, ColorType, CrosshairMode, createSeriesMarkers } = await import(
+        "lightweight-charts"
+      );
       if (disposed || !containerRef.current) return;
 
       const width = containerRef.current.clientWidth || 320;
@@ -55,6 +59,20 @@ export function CapitalLightweightChart({ points, height = 220 }: CapitalLightwe
         value: p.close,
       }));
       series.setData(data);
+
+      if (markers.length > 0) {
+        const seriesMarkers = createSeriesMarkers(series);
+        seriesMarkers.setMarkers(
+          markers.map((m) => ({
+            time: m.t.slice(0, 10),
+            position: m.kind === "sell" ? ("aboveBar" as const) : ("belowBar" as const),
+            color: m.kind === "sell" ? "#f87171" : m.kind === "pilot" ? "#fbbf24" : "#bc13fe",
+            shape: m.kind === "sell" ? ("arrowDown" as const) : ("arrowUp" as const),
+            text: m.label ?? m.kind,
+          })),
+        );
+      }
+
       c.timeScale().fitContent();
       chart = c;
 
@@ -74,7 +92,7 @@ export function CapitalLightweightChart({ points, height = 220 }: CapitalLightwe
       if (onResize) window.removeEventListener("resize", onResize);
       chart?.remove();
     };
-  }, [points, height]);
+  }, [points, markers, height]);
 
   if (points.length < 2) {
     return <div className="text-[10px] text-muted">Chart unavailable</div>;
@@ -82,7 +100,10 @@ export function CapitalLightweightChart({ points, height = 220 }: CapitalLightwe
 
   return (
     <div className="space-y-1">
-      <p className="text-[9px] uppercase tracking-widest text-muted">TradingView Lightweight Charts</p>
+      <p className="text-[9px] uppercase tracking-widest text-muted">
+        TradingView Lightweight Charts
+        {markers.length > 0 ? ` · ${markers.length} overlay${markers.length === 1 ? "" : "s"}` : ""}
+      </p>
       <div ref={containerRef} className="w-full" style={{ height }} />
     </div>
   );

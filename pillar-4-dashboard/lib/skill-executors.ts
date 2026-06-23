@@ -64,6 +64,11 @@ export async function executeSkillMesh(
     if (capital) return capital;
   }
 
+  if (appId === "my-vital") {
+    const vital = await executeMyVitalSkill(skillId, config);
+    if (vital) return vital;
+  }
+
   if (appId === "my-work") {
     const work = await executeMyWorkSkill(skillId, config);
     if (work) return work;
@@ -276,17 +281,41 @@ async function executeForgedAppSkill(
     if (work) return work;
   }
 
+  if (record.templateId === "creator-desk") {
+    const creator = await executeForgedCreatorSkill(forgedAppId, skillId, config);
+    if (creator) return creator;
+  }
+
+  if (record.templateId === "capital-desk") {
+    const capital = await executeForgedCapitalSkill(forgedAppId, skillId, config);
+    if (capital) return capital;
+  }
+
   if (skillId === "plan_day") {
     return { executed: true, kind: "plan", skipReason: "Day priorities captured on forged desk." };
   }
   if (skillId === "publish_context") {
-    return {
-      executed: true,
-      kind: "plan",
-      skipReason: record.meshConnected
-        ? "Context publish noted — mesh opt-in active in FRE."
-        : "Enable mesh publish in FRE to share context with Master AI.",
-    };
+    const fre = await import("./forged-app-fre").then((m) => m.readForgedAppFre(forgedAppId));
+    const meshOn = record.meshConnected || Boolean(fre.config.meshPublish);
+    if (!meshOn) {
+      return {
+        executed: false,
+        kind: "plan",
+        skipReason: "Enable mesh publish in FRE to share context with Master AI.",
+      };
+    }
+    try {
+      const { publishForgedDeskContext } = await import("./forged-context-mesh");
+      const key = await publishForgedDeskContext(record);
+      return {
+        executed: true,
+        kind: "plan",
+        skipReason: `Context published · ${key}`,
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Publish failed";
+      return { executed: false, kind: "plan", skipReason: message };
+    }
   }
   return null;
 }
@@ -337,6 +366,135 @@ async function executeForgedWorkSkill(
     };
   }
 
+  if (skillId === "send_sequence_step") {
+    const sequenceId = cfgStr(config, "selectedSequenceId", "");
+    const { sendForgedSequenceStep } = await import("./forged-work-store");
+    const result = await sendForgedSequenceStep(forgedAppId, { sequenceId: sequenceId || undefined });
+    if (!result) {
+      return {
+        executed: false,
+        kind: "digital",
+        skipReason: "No sendable step — draft a sequence and select it in the desk panel.",
+      };
+    }
+    return {
+      executed: true,
+      kind: "digital",
+      digital: { ok: true, id: result.send.id, tool: "forged.work.email.simulated" },
+      skipReason: `Simulated send · ${result.send.id} · ${result.send.subject}`,
+    };
+  }
+
+  return null;
+}
+
+async function executeForgedCreatorSkill(
+  forgedAppId: string,
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  const {
+    upsertForgedDraftPost,
+    scheduleForgedPost,
+    fetchForgedCreatorStatus,
+  } = await import("./forged-creator-store");
+
+  if (skillId === "draft_post") {
+    const draftText =
+      cfgStr(config, "draftText", "") ||
+      cfgStr(config, "selectedPostDraft", "") ||
+      cfgStr(config, "postDraft", "") ||
+      "Forged creator draft — edit in desk panel and schedule when ready.";
+    const postId = cfgStr(config, "selectedPostId", "") || undefined;
+    const platform = cfgStr(config, "primaryChannel", "") || cfgStr(config, "platform", "") || undefined;
+    const post = await upsertForgedDraftPost(forgedAppId, {
+      postId,
+      draftText,
+      channel: cfgStr(config, "channel", "") || undefined,
+      platform: platform as import("./forged-creator-types").ForgedCreatorPlatform | undefined,
+    });
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Draft saved · ${post.id} · ${post.stage}`,
+    };
+  }
+
+  if (skillId === "schedule_post") {
+    let postId = cfgStr(config, "selectedPostId", "");
+    if (!postId) {
+      const status = await fetchForgedCreatorStatus(forgedAppId);
+      postId = status.posts.find((p) => p.stage === "SCRIPT" || p.stage === "IDEATE")?.id ?? status.posts[0]?.id ?? "";
+    }
+    if (!postId) {
+      return { executed: false, kind: "plan", skipReason: "Draft a post first — use panel or Draft Post skill." };
+    }
+    const post = await scheduleForgedPost(forgedAppId, { postId });
+    if (!post) {
+      return { executed: false, kind: "plan", skipReason: "Post not found for schedule." };
+    }
+    const when = post.scheduledAt ? new Date(post.scheduledAt).toLocaleString() : "next slot";
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Scheduled · ${post.id} · ${when}`,
+    };
+  }
+
+  return null;
+}
+
+async function executeForgedCapitalSkill(
+  forgedAppId: string,
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  const {
+    researchForgedTicker,
+    createForgedCapitalRule,
+    armForgedCapitalRule,
+    fetchForgedCapitalStatus,
+  } = await import("./forged-capital-store");
+
+  if (skillId === "research_ticker") {
+    const ticker =
+      cfgStr(config, "selectedTicker", "") ||
+      cfgStr(config, "ticker", "") ||
+      cfgStr(config, "ruleAsset", "") ||
+      "SPY";
+    const watch = await researchForgedTicker(forgedAppId, { ticker });
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Watchlist · ${watch.ticker} · $${watch.lastPrice?.toFixed(2) ?? "—"}`,
+    };
+  }
+
+  if (skillId === "create_rule" || skillId === "arm_rule") {
+    if (skillId === "create_rule") {
+      const asset =
+        cfgStr(config, "ruleAsset", "") || cfgStr(config, "selectedTicker", "") || cfgStr(config, "ticker", "") || "SPY";
+      const rule = await createForgedCapitalRule(forgedAppId, {
+        name: cfgStr(config, "ruleName", "") || `${asset} dip buy`,
+        asset,
+      });
+      return { executed: true, kind: "plan", skipReason: `Rule created · ${rule.id} · ${rule.state}` };
+    }
+    let ruleId = cfgStr(config, "selectedRuleId", "");
+    if (!ruleId) {
+      const status = await fetchForgedCapitalStatus(forgedAppId);
+      ruleId = status.rules.find((r) => r.state === "PAUSED")?.id ?? status.rules[0]?.id ?? "";
+    }
+    if (!ruleId) {
+      return { executed: false, kind: "plan", skipReason: "Create a rule first — use panel or create_rule skill." };
+    }
+    const rule = await armForgedCapitalRule(forgedAppId, ruleId);
+    if (!rule) {
+      return { executed: false, kind: "plan", skipReason: "Rule not found for arm." };
+    }
+    return { executed: true, kind: "plan", skipReason: `Rule armed · ${rule.id} · ${rule.asset}` };
+  }
+
   return null;
 }
 
@@ -353,6 +511,54 @@ async function executeClawForgeSkill(
       skipReason: tour.ok
         ? `Demo tour · ${tour.forgedHref ?? tour.profileId ?? "complete"} · ${tour.steps.join(" · ")}`
         : tour.error ?? "Demo tour failed",
+    };
+  }
+  return null;
+}
+
+async function executeMyVitalSkill(
+  skillId: string,
+  config: Record<string, unknown>,
+): Promise<SkillMeshResult | null> {
+  if (skillId === "sync_wearables") {
+    const { syncWearablesDemo } = await import("./vital-health-store");
+    const state = await syncWearablesDemo();
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Wearables synced on-box · ${state.vitals.length} vitals · demo bridge (eno2 live pull pending)`,
+    };
+  }
+  if (skillId === "ingest_report") {
+    const { ingestDemoReport } = await import("./vital-health-store");
+    const summary = cfgStr(config, "ingestSummary", "") || cfgStr(config, "lastUserMessage", "");
+    const report = await ingestDemoReport({ summary: summary || undefined });
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Report ${report.id} added to vault — PDF OCR ships with eno2 validation`,
+    };
+  }
+  if (skillId === "update_protocol") {
+    const { refreshProtocolForFocus } = await import("./vital-health-store");
+    const { readAppFreState } = await import("./app-fre-state");
+    const fre = await readAppFreState("my-vital");
+    const focus = cfgStr(config, "longevityFocus", "") || cfgStr(fre.config, "longevityFocus", "metabolic");
+    const state = await refreshProtocolForFocus(focus);
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: `Protocol refreshed · ${state.protocol.length} steps · ${focus} focus`,
+    };
+  }
+  if (skillId === "publish_context") {
+    const { syncVitalContextToMesh } = await import("./vital-health-store");
+    const profileId = cfgStr(config, "selectedProfileId", "") || null;
+    await syncVitalContextToMesh(profileId);
+    return {
+      executed: true,
+      kind: "plan",
+      skipReason: "Health vitals + protocol published to Claw Context mesh",
     };
   }
   return null;

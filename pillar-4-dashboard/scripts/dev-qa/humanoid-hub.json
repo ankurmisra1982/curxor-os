@@ -1,0 +1,314 @@
+{
+  "version": 1,
+  "primaryUnitId": "59e5500a-1457-4c50-af90-36d9a2bcc03a",
+  "units": [
+    {
+      "id": "59e5500a-1457-4c50-af90-36d9a2bcc03a",
+      "kind": "humanoid",
+      "displayName": "Home Humanoid",
+      "vendorLabel": "Humanoid-class · home assistant",
+      "status": "standby",
+      "safetyProfile": "standard",
+      "pairedAt": "2026-06-23T03:24:31.485Z",
+      "meshNodeId": "mesh://curxor/HOME-HUMANOI-59E550",
+      "discoverName": "CURXOR-HOME-HUMANOI",
+      "createdAt": "2026-06-23T00:03:51.020Z"
+    },
+    {
+      "id": "e1893008-cea6-4fb3-a7fa-7a0dffb617f8",
+      "kind": "mobile",
+      "displayName": "QA Rover",
+      "vendorLabel": "Mobile base · patrol & fetch",
+      "status": "awaiting_pair",
+      "safetyProfile": "standard",
+      "pairedAt": null,
+      "meshNodeId": null,
+      "discoverName": null,
+      "createdAt": "2026-06-23T02:43:05.205Z"
+    },
+    {
+      "id": "20e37159-b5ba-4788-85f6-4b200dd45d54",
+      "kind": "mobile",
+      "displayName": "QA Rover",
+      "vendorLabel": "Mobile base · patrol & fetch",
+      "status": "awaiting_pair",
+      "safetyProfile": "standard",
+      "pairedAt": null,
+      "meshNodeId": null,
+      "discoverName": null,
+      "createdAt": "2026-06-23T02:47:01.964Z"
+    },
+    {
+      "id": "29b51bb3-6382-4396-85db-be457ac20f57",
+      "kind": "mobile",
+      "displayName": "QA Rover",
+      "vendorLabel": "Mobile base · patrol & fetch",
+      "status": "awaiting_pair",
+      "safetyProfile": "standard",
+      "pairedAt": null,
+      "meshNodeId": null,
+      "discoverName": null,
+      "createdAt": "2026-06-23T02:49:04.582Z"
+    },
+    {
+      "id": "613f51d6-62bf-4724-b8fe-8d05d08183ee",
+      "kind": "mobile",
+      "displayName": "QA Rover",
+      "vendorLabel": "Mobile base · patrol & fetch",
+      "status": "awaiting_pair",
+      "safetyProfile": "standard",
+      "pairedAt": null,
+      "meshNodeId": null,
+      "discoverName": null,
+      "createdAt": "2026-06-23T02:50:57.638Z"
+    },
+    {
+      "id": "b21a1529-b3ae-40af-a3c1-824881f1b4e0",
+      "kind": "mobile",
+      "displayName": "QA Rover",
+      "vendorLabel": "Mobile base · patrol & fetch",
+      "status": "awaiting_pair",
+      "safetyProfile": "standard",
+      "pairedAt": null,
+      "meshNodeId": null,
+      "discoverName": null,
+      "createdAt": "2026-06-23T02:54:30.534Z"
+    }
+  ],
+  "relationship": {
+    "callName": "Operator",
+    "tone": "warm",
+    "guestModeEnabled": true,
+    "introScript": "I'm your home humanoid — I learn from Kin, Vital, and your house rules on this appliance."
+  },
+  "houseRules": [
+    {
+      "id": "9965bf6d-b50e-489c-8874-cb01a6dbb77b",
+      "text": "Shoes off at the door — preview rule",
+      "priority": "essential",
+      "syncedAt": "2026-06-23T03:24:31.537Z",
+      "createdAt": "2026-06-23T01:58:00.157Z"
+    }
+  ],
+  "kinPolicies": [
+    {
+      "memberId": "demo-owner-001",
+      "tone": "warm",
+      "greetByName": true,
+      "allowKitchenTasks": true,
+      "allowBedroomEntry": true,
+      "requireAskBefore": "",
+      "notes": "Primary operator — match relationship tone from hub."
+    },
+    {
+      "memberId": "demo-partner-002",
+      "tone": "inherit",
+      "greetByName": true,
+      "allowKitchenTasks": true,
+      "allowBedroomEntry": true,
+      "requireAskBefore": "",
+      "notes": "Full household trust tier."
+    },
+    {
+      "memberId": "demo-child-003",
+      "tone": "playful",
+      "greetByName": true,
+      "allowKitchenTasks": false,
+      "allowBedroomEntry": false,
+      "requireAskBefore": "kitchen, sharp objects, outdoor exit",
+      "notes": "Use short sentences. Ask a parent before physical help."
+    },
+    {
+      "memberId": "demo-child-004",
+      "tone": "playful",
+      "greetByName": true,
+      "allowKitchenTasks": false,
+      "allowBedroomEntry": false,
+      "requireAskBefore": "kitchen, sharp objects, outdoor exit",
+      "notes": "Use short sentences. Ask a parent before physical help."
+    }
+  ],
+  "routines": [
+    {
+      "id": "routine-e36712ca",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-0e209485",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-e2be7565",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-a9b729c6",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-f5e3c1f4",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-0a37e7b5",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-db55012a",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-4cf2b8d9",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-bba620ba",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-fd20118d",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-07134f47",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-9fabda32",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-2336d107",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-c833189a",
+      "label": "When guests arrive, greet them warmly by name an",
+      "description": "When guests arrive, greet them warmly by name and offer to take coats in the entryway.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-1aea92f6",
+      "label": "When guests arrive greet warmly and offer coats",
+      "description": "When guests arrive greet warmly and offer coats",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "morning-welcome",
+      "label": "Morning welcome",
+      "description": "Greet household members by name with today's Vital snapshot when shared.",
+      "trigger": "First motion after 6am",
+      "previewOnly": true,
+      "enabled": false,
+      "source": "template"
+    },
+    {
+      "id": "guest-arrival",
+      "label": "Guest arrival",
+      "description": "Switch to guest tone from Kin profiles — offer coat rack and beverage preference.",
+      "trigger": "Door signal or Kin guest profile",
+      "previewOnly": true,
+      "enabled": false,
+      "source": "template"
+    },
+    {
+      "id": "quiet-hours",
+      "label": "Quiet hours",
+      "description": "Lower voice, dim status lights, defer non-urgent Claw alerts.",
+      "trigger": "10pm – 7am local",
+      "previewOnly": true,
+      "enabled": false,
+      "source": "template"
+    },
+    {
+      "id": "help-handoff",
+      "label": "Help handoff",
+      "description": "When unsure, ask the operator before physical action — safety first.",
+      "trigger": "Low confidence gesture",
+      "previewOnly": true,
+      "enabled": true,
+      "source": "template"
+    }
+  ],
+  "setupCompleted": [
+    "link_kin",
+    "sync_knowledge",
+    "teach_rules",
+    "pair_hardware"
+  ],
+  "lastKnowledgeSyncAt": "2026-06-23T03:24:31.537Z",
+  "notifyWhenLive": false,
+  "pairWizard": null,
+  "updatedAt": "2026-06-23T03:24:31.619Z"
+}

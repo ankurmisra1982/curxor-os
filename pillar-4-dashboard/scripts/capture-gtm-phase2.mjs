@@ -73,8 +73,31 @@ async function capturePage(page, url, dest, waitText) {
   await page.screenshot({ path: dest, fullPage: false });
 }
 
+async function clickCapitalTab(page, tabLabel) {
+  const btn = page.getByRole("button", { name: new RegExp(`^${tabLabel}$`, "i") });
+  if (await btn.count()) {
+    await btn.first().click();
+    await page.waitForTimeout(800);
+  }
+}
+
+async function primeStandardExperience(page) {
+  await page.addInitScript(() => {
+    localStorage.setItem("curxor-experience-level", "standard");
+    localStorage.setItem("curxor-ui-mode", "standard");
+  });
+}
+
 /** @type {{ file: string; label: string; setup: (page: import('playwright').Page) => Promise<void> }[]} */
 const CAPITAL_FLOWS = [
+  {
+    file: "20-capital-alpha-tab.png",
+    label: "Alpha tab feed",
+    setup: async (page) => {
+      await clickCapitalTab(page, "Alpha");
+      await page.getByText("Sovereign alpha feed", { exact: false }).first().scrollIntoViewIfNeeded();
+    },
+  },
   {
     file: "19-capital-go-live.png",
     label: "Go Live checklist",
@@ -213,12 +236,21 @@ async function main() {
 
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: VIEWPORT });
+  await primeStandardExperience(page);
   let failed = 0;
 
   console.log("==> Capital desk overview → 03-capital-claw.png\n");
   try {
     const dest = path.join(OUT, "03-capital-claw.png");
-    await capturePage(page, `${base}/my-capital`, dest, "Capital");
+    await withExperienceLevel("standard", async () => {
+      await page.goto(`${base}/my-capital`, { waitUntil: "domcontentloaded", timeout: 90_000 });
+      await page.waitForTimeout(SETTLE_MS);
+      await waitForText(page, "Capital");
+      await clickCapitalTab(page, "Alpha");
+      await page.getByText("Sovereign alpha feed", { exact: false }).first().scrollIntoViewIfNeeded();
+      await page.waitForTimeout(1200);
+      await page.screenshot({ path: dest, fullPage: false });
+    });
     copyToStorefront("03-capital-claw.png");
   } catch (err) {
     failed += 1;

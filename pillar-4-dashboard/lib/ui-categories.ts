@@ -1,5 +1,6 @@
 import type { OotbAppId } from "./ootb-apps";
 import { APP_ROUTES } from "./app-routes";
+import type { ForgedAppRecord } from "./forged-apps-types";
 
 export const HOME_PATH = "/home";
 export const SETTINGS_PATH = "/settings";
@@ -47,7 +48,18 @@ export interface NavItem {
   noviceLabel: string;
 }
 
-export function buildNavItems(selectedAppIds: OotbAppId[]): NavItem[] {
+export function forgedNavItems(apps: ForgedAppRecord[]): NavItem[] {
+  return apps.map((a) => ({
+    href: a.href,
+    name: a.name,
+    short: a.short,
+    appId: null,
+    category: "forge" as ClawCategoryId,
+    noviceLabel: a.name,
+  }));
+}
+
+export function buildNavItems(selectedAppIds: OotbAppId[], forgedApps: ForgedAppRecord[] = []): NavItem[] {
   const home: NavItem = {
     href: HOME_PATH,
     name: "Home",
@@ -72,7 +84,7 @@ export function buildNavItems(selectedAppIds: OotbAppId[]): NavItem[] {
     noviceLabel: r.name,
   }));
 
-  return [home, ...items];
+  return [home, ...items, ...forgedNavItems(forgedApps)];
 }
 
 export function groupedNavItems(items: NavItem[]): { category: ClawCategory; items: NavItem[] }[] {

@@ -258,7 +258,7 @@ Match Capital/Creator capture scripts:
 | Primary desk tab | ✅ | ✅ | ✅ |
 | Analytics | ✅ | ✅ | ✅ |
 | Connector vault | brokers | platform vault | ✅ |
-| Walkthrough video | capital-walkthrough.webm | ❌ | **Shipped** — `demo:record:work` |
+| Walkthrough video | capital-walkthrough.webm | ❌ | **Shipped** — `outreach-walkthrough.webm` (`demo:record:work`) |
 
 Script: `npm run demo:capture:work` (new) → `docs/demo-pack/screenshots/outreach/`
 

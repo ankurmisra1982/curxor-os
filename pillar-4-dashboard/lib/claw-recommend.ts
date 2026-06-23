@@ -1,5 +1,8 @@
+import type { ForgeProvisioningMode } from "./forge-provisioning";
 import type { BudgetTier } from "./local-llm-catalog";
 import { LOCAL_LLM_CATALOG } from "./local-llm-catalog";
+
+export type { ForgeProvisioningMode };
 
 export interface ClawModels {
   vision: string;
@@ -15,11 +18,19 @@ export interface ClawProfile {
   autoSelected: boolean;
   models: ClawModels;
   createdAt: string;
+  /** How this profile connects to CurXor OS — defaults to island for legacy rows. */
+  provisioningMode?: ForgeProvisioningMode;
+  /** Linked forged app when provisioned via framework/import path. */
+  forgedAppId?: string;
+  forgedAppSlug?: string;
+  meshConnected?: boolean;
   multimodal?: {
     hadReferenceImage: boolean;
     liveVision: boolean;
     imageHint: string | null;
   };
+  status?: "active" | "archived";
+  archivedAt?: string | null;
 }
 
 export interface ClawProfilesState {

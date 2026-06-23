@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-23T03:25:29.449Z",
+  "vitals": [
+    {
+      "metric": "resting_hr",
+      "value": 59,
+      "unit": "bpm",
+      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "source": "oura"
+    },
+    {
+      "metric": "hrv",
+      "value": 44,
+      "unit": "ms",
+      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "source": "oura"
+    },
+    {
+      "metric": "sleep_score",
+      "value": 79,
+      "unit": "score",
+      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "source": "oura"
+    },
+    {
+      "metric": "steps",
+      "value": 8220,
+      "unit": "count",
+      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "source": "apple_health"
+    }
+  ],
+  "reports": [
+    {
+      "id": "RPT-1782179307531",
+      "title": "Operator-ingested lab summary",
+      "provider": "Local vault",
+      "receivedAt": "2026-06-23T01:48:27.531Z",
+      "summary": "Checklist metabolic panel — A1c 5.4%, LDL 98",
+      "tags": [
+        "ingested",
+        "local"
+      ]
+    },
+    {
+      "id": "RPT-DEMO-01",
+      "title": "Comprehensive metabolic panel",
+      "provider": "LabCorp",
+      "receivedAt": "2026-06-09T01:47:36.296Z",
+      "summary": "A1c 5.4%, fasting glucose 92 mg/dL, LDL 98 — within target range for metabolic focus.",
+      "tags": [
+        "metabolic",
+        "labs",
+        "quarterly"
+      ]
+    },
+    {
+      "id": "RPT-DEMO-02",
+      "title": "Annual physical summary",
+      "provider": "Primary care",
+      "receivedAt": "2026-05-09T01:47:36.296Z",
+      "summary": "BP 118/72, resting HR 58 — continue Zone 2 protocol and sleep window.",
+      "tags": [
+        "cardio",
+        "annual"
+      ]
+    }
+  ],
+  "dietSync": [
+    {
+      "app": "Cronometer",
+      "lastSyncAt": null,
+      "caloriesTarget": 2200,
+      "macros": {
+        "protein": 140,
+        "carbs": 200,
+        "fat": 70
+      }
+    },
+    {
+      "app": "MyFitnessPal",
+      "lastSyncAt": null,
+      "caloriesTarget": null,
+      "macros": null
+    }
+  ],
+  "healthAppSync": [
+    {
+      "app": "Apple Health",
+      "lastSyncAt": "2026-06-23T03:25:08.014Z",
+      "connected": true
+    },
+    {
+      "app": "Samsung Health",
+      "lastSyncAt": null,
+      "connected": false
+    },
+    {
+      "app": "Garmin Connect",
+      "lastSyncAt": null,
+      "connected": false
+    },
+    {
+      "app": "Oura",
+      "lastSyncAt": "2026-06-23T03:25:08.014Z",
+      "connected": true
+    }
+  ],
+  "protocol": [
+    {
+      "id": "cardio-sleep",
+      "category": "sleep",
+      "title": "Sleep consistency",
+      "detail": "7–8h window; track resting HR trend weekly.",
+      "frequency": "Daily",
+      "priority": "core"
+    },
+    {
+      "id": "cardio-z2",
+      "category": "movement",
+      "title": "Zone 2 base",
+      "detail": "150+ min/week conversational cardio.",
+      "frequency": "4× / week",
+      "priority": "core"
+    },
+    {
+      "id": "cardio-labs",
+      "category": "labs",
+      "title": "Lipid panel",
+      "detail": "ApoB + Lp(a) annually; share PDF in Reports vault.",
+      "frequency": "Annual",
+      "priority": "optional"
+    }
+  ],
+  "meta": {
+    "lastLabAt": "2026-06-23T03:25:29.449Z",
+    "lastWearableSyncAt": "2026-06-23T03:25:08.014Z",
+    "lastMeshPublishedAt": "2026-06-23T03:25:08.040Z"
+  }
+}

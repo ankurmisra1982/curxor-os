@@ -1,0 +1,133 @@
+{
+  "events": [
+    {
+      "id": "WXP-0014",
+      "kind": "handoff_received",
+      "at": "2026-06-23T03:25:10.874Z",
+      "payload": {
+        "source": "checklist"
+      }
+    },
+    {
+      "id": "WXP-0013",
+      "kind": "sequence_activated",
+      "at": "2026-06-23T03:25:10.810Z",
+      "payload": {
+        "source": "checklist"
+      }
+    },
+    {
+      "id": "WXP-0012",
+      "kind": "handoff_received",
+      "at": "2026-06-23T03:25:10.776Z",
+      "payload": {
+        "source": "playbook:capital-alert",
+        "leadId": "LEAD-012"
+      }
+    },
+    {
+      "id": "WXP-0011",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:10.769Z",
+      "payload": {
+        "leadId": "LEAD-012",
+        "name": "QQQ alert follow-up",
+        "email": "playbook-capital-1782185110763@example.com"
+      }
+    },
+    {
+      "id": "WXP-0010",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:10.699Z",
+      "payload": {
+        "leadId": "LEAD-011",
+        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
+        "email": "signal-edgecompute-posted-3-sdr-1782185110693@example.com"
+      }
+    },
+    {
+      "id": "WXP-0009",
+      "kind": "handoff_received",
+      "at": "2026-06-23T03:25:10.594Z",
+      "payload": {
+        "source": "my-capital",
+        "leadId": "LEAD-010"
+      }
+    },
+    {
+      "id": "WXP-0008",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:10.586Z",
+      "payload": {
+        "leadId": "LEAD-010",
+        "name": "Capital Intel Lead",
+        "email": "capital-handoff-1782185110566@example.com"
+      }
+    },
+    {
+      "id": "WXP-0007",
+      "kind": "handoff_received",
+      "at": "2026-06-23T03:25:10.521Z",
+      "payload": {
+        "source": "my-content",
+        "leadId": "LEAD-009"
+      }
+    },
+    {
+      "id": "WXP-0006",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:10.514Z",
+      "payload": {
+        "leadId": "LEAD-009",
+        "name": "Creator Collab",
+        "email": "handoff-1782185110501@example.com"
+      }
+    },
+    {
+      "id": "WXP-0005",
+      "kind": "draft_reply",
+      "at": "2026-06-23T03:25:07.715Z",
+      "payload": {
+        "mailId": "MAIL-3e4d9885",
+        "leadId": ""
+      }
+    },
+    {
+      "id": "WXP-0004",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:07.637Z",
+      "payload": {
+        "leadId": "LEAD-008",
+        "email": "flow-l1-1782185107610@example.com"
+      }
+    },
+    {
+      "id": "WXP-0003",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:07.634Z",
+      "payload": {
+        "leadId": "LEAD-008",
+        "name": "Flow L1 Opportunity",
+        "email": "flow-l1-1782185107610@example.com"
+      }
+    },
+    {
+      "id": "WXP-0002",
+      "kind": "draft_reply",
+      "at": "2026-06-23T03:25:07.589Z",
+      "payload": {
+        "mailId": "MAIL-3e4d9885",
+        "leadId": ""
+      }
+    },
+    {
+      "id": "WXP-0001",
+      "kind": "create_lead",
+      "at": "2026-06-23T03:25:07.350Z",
+      "payload": {
+        "leadId": "LEAD-007",
+        "email": "flow-1782185107320@example.com"
+      }
+    }
+  ]
+}

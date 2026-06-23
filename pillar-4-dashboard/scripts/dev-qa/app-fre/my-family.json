@@ -3,7 +3,9 @@
   "config": {
     "householdName": "CurXor Household",
     "defaultCommStyle": "warm",
-    "allowChildProfiles": true
+    "allowChildProfiles": true,
+    "growthIntent": "solo_member",
+    "growthLevel": "L1"
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

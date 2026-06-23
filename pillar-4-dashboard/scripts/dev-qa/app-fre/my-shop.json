@@ -2,6 +2,8 @@
   "initialized": true,
   "config": {
     "storeName": "Arbitrage Desk",
+    "growthIntent": "side_hustle_flips",
+    "growthLevel": "L2",
     "fulfillmentMode": "pick_pack_ship",
     "clawLanes": ["INGEST", "SORT"]
   },

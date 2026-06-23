@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { assistAppAgent, type AgentChatTurn } from "@/lib/app-agent-assist";
 import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
+import { isForgedAppId } from "@/lib/workspace-app-id";
 
 function isTurn(v: unknown): v is AgentChatTurn {
   if (!v || typeof v !== "object") return false;
@@ -25,12 +26,12 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  if (!body.appId || !isValidAppId(body.appId)) {
+  if (!body.appId || (!isValidAppId(body.appId) && !isForgedAppId(body.appId))) {
     return Response.json({ error: "Invalid appId" }, { status: 400 });
   }
 
   const result = await assistAppAgent({
-    appId: body.appId as OotbAppId,
+    appId: body.appId,
     message: typeof body.message === "string" ? body.message : "",
     history: Array.isArray(body.history) ? body.history.filter(isTurn) : [],
     config: body.config,

@@ -3,15 +3,21 @@ export const dynamic = "force-dynamic";
 
 import { requireLanAuth } from "@/lib/lan-auth";
 import { readAppFreState } from "@/lib/app-fre-state";
+import { buildAlphaFeed, buildPilotLeaderboard } from "@/lib/capital-alpha-feed";
 import { createDipRuleFromIntel, createRuleFromIntelThesis } from "@/lib/capital-intel-actions";
 import { evaluateIntelAlerts } from "@/lib/capital-intel-alerts";
 import {
+  addThesisEntry,
   deleteIntelAlertRule,
+  getAlertPreferences,
   listIntelAlertRules,
+  listThesisEntries,
   readIntelCache,
+  setAlertPreferences,
   upsertIntelAlertRule,
 } from "@/lib/capital-intel-store";
 import type { IntelAlertKind } from "@/lib/capital-intel-types";
+import { ensureCapitalQueue } from "@/lib/capital-store";
 import {
   buildMarketDigest,
   buildTickerIntel,
@@ -34,8 +40,12 @@ export async function GET(request: Request): Promise<Response> {
   const meta = url.searchParams.get("meta") === "1";
 
   if (meta) {
-    const [providers, alerts] = await Promise.all([listIntelProviderStatus(), listIntelAlertRules()]);
-    return Response.json({ ok: true, providers, alerts });
+    const [providers, alerts, preferences] = await Promise.all([
+      listIntelProviderStatus(),
+      listIntelAlertRules(),
+      getAlertPreferences(),
+    ]);
+    return Response.json({ ok: true, providers, alerts, preferences });
   }
 
   if (ticker) {
@@ -73,9 +83,16 @@ export async function POST(request: Request): Promise<Response> {
     kind?: IntelAlertKind;
     keyword?: string;
     thresholdPct?: number;
+    minNotionalUsd?: number;
     alertId?: string;
     dropPct?: number;
     qty?: number;
+    body?: string;
+    source?: string;
+    linkedTradeId?: string;
+    linkedRuleId?: string;
+    preferences?: Record<string, unknown>;
+    window?: string;
   };
   try {
     body = (await request.json()) as typeof body;
@@ -107,6 +124,7 @@ export async function POST(request: Request): Promise<Response> {
       kind: body.kind,
       keyword: body.keyword,
       thresholdPct: body.thresholdPct,
+      minNotionalUsd: body.minNotionalUsd,
       enabled: true,
     });
     return Response.json({ ok: true, alert });
@@ -138,6 +156,45 @@ export async function POST(request: Request): Promise<Response> {
     const intel = await getCachedTickerIntel(sym, { allowStale: true }) ?? (await buildTickerIntel(sym));
     const rule = await createRuleFromIntelThesis(intel);
     return Response.json({ ok: true, rule, intel });
+  }
+
+  if (body.action === "alpha_feed") {
+    const prefs = await getAlertPreferences();
+    const feed = await buildAlphaFeed({ moverSpikePct: prefs.moverSpikePct });
+    return Response.json({ ok: true, feed, preferences: prefs });
+  }
+
+  if (body.action === "pilot_leaderboard") {
+    const file = await ensureCapitalQueue();
+    const win = (body.window === "w1" || body.window === "m3" || body.window === "y1" ? body.window : "m1") as
+      | "w1"
+      | "m1"
+      | "m3"
+      | "y1";
+    const subscribed = file.subscriptions.filter((s) => s.state === "active").map((s) => s.pilotId);
+    const rows = buildPilotLeaderboard(file.pilots, subscribed, win);
+    return Response.json({ ok: true, rows, window: win });
+  }
+
+  if (body.action === "list_thesis") {
+    const entries = await listThesisEntries(sym);
+    return Response.json({ ok: true, entries });
+  }
+
+  if (body.action === "add_thesis" && sym && body.body?.trim()) {
+    const entry = await addThesisEntry({
+      symbol: sym,
+      body: body.body,
+      source: (body.source as "manual" | "trade" | "rule" | "pilot" | "intel" | undefined) ?? "manual",
+      linkedTradeId: body.linkedTradeId ?? null,
+      linkedRuleId: body.linkedRuleId ?? null,
+    });
+    return Response.json({ ok: true, entry });
+  }
+
+  if (body.action === "set_alert_preferences" && body.preferences) {
+    const preferences = await setAlertPreferences(body.preferences as Parameters<typeof setAlertPreferences>[0]);
+    return Response.json({ ok: true, preferences });
   }
 
   return Response.json({ ok: false, error: "Unknown action" }, { status: 400 });

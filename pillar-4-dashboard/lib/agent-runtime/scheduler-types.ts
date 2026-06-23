@@ -1,10 +1,9 @@
-import type { OotbAppId } from "../ootb-apps";
-
+import type { WorkspaceAppId } from "../workspace-app-id";
 export type SchedulerJobKind = "skill" | "message" | "heartbeat";
 
 export interface SchedulerJob {
   id: string;
-  appId: OotbAppId;
+  appId: WorkspaceAppId;
   kind: SchedulerJobKind;
   /** skill id when kind=skill */
   skillId?: string;

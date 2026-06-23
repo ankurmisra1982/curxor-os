@@ -41,6 +41,16 @@ async function slowScroll(page, steps, pauseMs) {
   }
 }
 
+async function clickCreatorTab(page, tabLabel) {
+  const btn = page.locator("nav").filter({ hasText: /Plan|Create|Publish|Engage|Analytics/ }).getByRole("button", {
+    name: new RegExp(`^${tabLabel}$`, "i"),
+  });
+  if (await btn.count()) {
+    await btn.first().click();
+    await page.waitForTimeout(1200);
+  }
+}
+
 async function main() {
   rmSync(TMP, { recursive: true, force: true });
   mkdirSync(TMP, { recursive: true });
@@ -65,9 +75,12 @@ async function main() {
   }
 
   await page.waitForTimeout(8_000);
-  await slowScroll(page, 6, 5_000);
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(6_000);
+  for (const tab of ["Plan", "Create", "Publish", "Engage", "Analytics"]) {
+    await clickCreatorTab(page, tab);
+    await slowScroll(page, 2, 2_500);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(2_000);
+  }
   await slowScroll(page, 4, 4_000);
   await page.waitForTimeout(5_000);
 

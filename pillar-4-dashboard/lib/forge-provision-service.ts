@@ -103,6 +103,16 @@ export async function provisionFrameworkApp(input: ProvisionFrameworkInput): Pro
     await seedForgedWorkDemoIfEmpty(forgedApp.id);
   }
 
+  if (templateId === "creator-desk") {
+    const { seedForgedCreatorDemoIfEmpty } = await import("./forged-creator-store");
+    await seedForgedCreatorDemoIfEmpty(forgedApp.id);
+  }
+
+  if (templateId === "capital-desk") {
+    const { seedForgedCapitalDemoIfEmpty } = await import("./forged-capital-store");
+    await seedForgedCapitalDemoIfEmpty(forgedApp.id);
+  }
+
   const profile: ClawProfile = {
     id: randomClawId(),
     name,

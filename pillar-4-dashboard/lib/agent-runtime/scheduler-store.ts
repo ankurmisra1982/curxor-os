@@ -6,6 +6,7 @@ import path from "node:path";
 import type { OotbAppId } from "../ootb-apps";
 
 import { readWorkspace } from "./workspace-store";
+import type { WorkspaceAppId } from "../workspace-app-id";
 import {
   DEFAULT_SCHEDULER_STATE,
   type HeartbeatLine,
@@ -110,7 +111,7 @@ export function parseHeartbeatMd(content: string): HeartbeatLine[] {
   return lines;
 }
 
-export async function syncHeartbeatToJobs(appId: OotbAppId): Promise<SchedulerState> {
+export async function syncHeartbeatToJobs(appId: WorkspaceAppId): Promise<SchedulerState> {
   const ws = await readWorkspace(appId);
   const parsed = parseHeartbeatMd(ws.app["HEARTBEAT.md"]);
   const state = await readState();

@@ -5,13 +5,19 @@ import { readClawProfiles } from "./claw-profiles";
 import { provisionFrameworkApp } from "./forge-provision-service";
 import { readForgedApps } from "./forged-apps-store";
 import { seedForgedWorkDemoIfEmpty } from "./forged-work-store";
+import { seedForgedCreatorDemoIfEmpty } from "./forged-creator-store";
+import { seedForgedCapitalDemoIfEmpty } from "./forged-capital-store";
 
 const DEMO_INTENT = "Forge demo tour — sovereign agent factory on bare metal";
 const DEMO_NAME = "Demo Tour Desk";
 const L4_DEMO_NAME = "Fabricator Work Desk";
 const L4_DEMO_INTENT = "L4 Fabricator tour — forged outreach desk with local pipeline";
+const L4_CREATOR_DEMO_NAME = "Fabricator Creator Desk";
+const L4_CREATOR_DEMO_INTENT = "L4 Fabricator tour — forged creator desk with local content queue";
+const L4_CAPITAL_DEMO_NAME = "Fabricator Capital Desk";
+const L4_CAPITAL_DEMO_INTENT = "L4 Fabricator tour — forged capital desk with local watchlist and rules";
 
-export type ForgeTourPersona = "default" | "L1" | "L4" | "L5";
+export type ForgeTourPersona = "default" | "L1" | "L4" | "L4-creator" | "L4-capital" | "L5";
 
 export interface ForgeDemoTourResult {
   ok: boolean;
@@ -47,7 +53,9 @@ export async function runForgeDemoTour(persona: ForgeTourPersona = "default"): P
 
   if (persona === "L4") {
     const existing = forged.apps.find(
-      (a) => a.templateId === "work-desk" && (a.name === L4_DEMO_NAME || a.intent.includes("Fabricator")),
+      (a) =>
+        a.templateId === "work-desk" &&
+        (a.name === L4_DEMO_NAME || a.intent.includes("outreach desk")),
     );
     if (existing) {
       await seedForgedWorkDemoIfEmpty(existing.id);
@@ -83,6 +91,94 @@ export async function runForgeDemoTour(persona: ForgeTourPersona = "default"): P
     } catch (err) {
       const message = err instanceof Error ? err.message : "Provision failed";
       steps.push(`L4 mint failed · ${message}`);
+      return { ok: false, persona, steps, error: message };
+    }
+  }
+
+  if (persona === "L4-creator") {
+    const existing = forged.apps.find(
+      (a) =>
+        a.templateId === "creator-desk" &&
+        (a.name === L4_CREATOR_DEMO_NAME || a.intent.includes("creator desk")),
+    );
+    if (existing) {
+      await seedForgedCreatorDemoIfEmpty(existing.id);
+      steps.push(`Reused creator-desk · ${existing.id} · ${existing.href}`);
+      return {
+        ok: true,
+        persona,
+        steps,
+        forgedAppId: existing.id,
+        forgedHref: existing.href,
+        profileId: existing.clawProfileId ?? undefined,
+      };
+    }
+    try {
+      const out = await provisionFrameworkApp({
+        intent: L4_CREATOR_DEMO_INTENT,
+        name: L4_CREATOR_DEMO_NAME,
+        templateId: "creator-desk",
+        budgetTier: "balanced",
+        autoSelected: true,
+      });
+      await seedForgedCreatorDemoIfEmpty(out.forgedApp.id);
+      steps.push(`Minted creator-desk · ${out.forgedApp.slug} · content queue seeded`);
+      steps.push(`Open desk · ${out.forgedApp.href}`);
+      return {
+        ok: true,
+        persona,
+        steps,
+        forgedAppId: out.forgedApp.id,
+        forgedHref: out.forgedApp.href,
+        profileId: out.profile.id,
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Provision failed";
+      steps.push(`L4-creator mint failed · ${message}`);
+      return { ok: false, persona, steps, error: message };
+    }
+  }
+
+  if (persona === "L4-capital") {
+    const existing = forged.apps.find(
+      (a) =>
+        a.templateId === "capital-desk" &&
+        (a.name === L4_CAPITAL_DEMO_NAME || a.intent.includes("capital desk")),
+    );
+    if (existing) {
+      await seedForgedCapitalDemoIfEmpty(existing.id);
+      steps.push(`Reused capital-desk · ${existing.id} · ${existing.href}`);
+      return {
+        ok: true,
+        persona,
+        steps,
+        forgedAppId: existing.id,
+        forgedHref: existing.href,
+        profileId: existing.clawProfileId ?? undefined,
+      };
+    }
+    try {
+      const out = await provisionFrameworkApp({
+        intent: L4_CAPITAL_DEMO_INTENT,
+        name: L4_CAPITAL_DEMO_NAME,
+        templateId: "capital-desk",
+        budgetTier: "balanced",
+        autoSelected: true,
+      });
+      await seedForgedCapitalDemoIfEmpty(out.forgedApp.id);
+      steps.push(`Minted capital-desk · ${out.forgedApp.slug} · watchlist seeded`);
+      steps.push(`Open desk · ${out.forgedApp.href}`);
+      return {
+        ok: true,
+        persona,
+        steps,
+        forgedAppId: out.forgedApp.id,
+        forgedHref: out.forgedApp.href,
+        profileId: out.profile.id,
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Provision failed";
+      steps.push(`L4-capital mint failed · ${message}`);
       return { ok: false, persona, steps, error: message };
     }
   }

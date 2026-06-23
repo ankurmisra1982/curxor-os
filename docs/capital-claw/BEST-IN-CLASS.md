@@ -8,6 +8,7 @@ Research snapshot for Sprints 1–3 (June 2026). CurXor’s wedge: **sovereign o
 |---------|--------|-----------------|
 | [Era](https://era.app/en-GB) | MCP-native finance, explicit permissions, RIA-backed automations | Match **permission granularity** (off / per-trade / auto-armed) and MCP catalog for brokers |
 | [Autopilot](https://www.joinautopilot.com/landing) | Copy-trading marketplace — pick pilot, connect brokerage, proportional mirror | **Pilot marketplace** + subscriptions + proportional copy on sovereign bridge |
+| [fomo](https://fomo.family/) | Social crypto feed, leaderboards, thesis on trades, chart overlays | **Sovereign Alpha Feed** — local feed, thesis journal, pilot leaderboard, overlays (not cloud social graph) |
 | TradingView / CNBC / Reddit | Fundamentals, charts, headlines, WSB chatter | **Ticker research** — Yahoo basics + CNBC + Reddit + FinTwit digest, local LLM smart take |
 | [Composer](https://www.composer.trade/) | No-code strategy builder + auto execution | Rule engine + backtest on save |
 | [Robinhood Agentic Trading](https://robinhood.com/us/en/support/articles/agentic-trading-overview/) | Official MCP at `https://agent.robinhood.com/mcp/trading`, isolated agentic account | Listed in broker registry as **MCP tier** — user connects from agent settings |

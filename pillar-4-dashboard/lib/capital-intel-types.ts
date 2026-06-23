@@ -78,7 +78,17 @@ export type IntelAlertKind =
   | "sentiment_bearish"
   | "sentiment_bullish"
   | "headline_keyword"
-  | "price_drop_pct";
+  | "price_drop_pct"
+  | "mover_spike"
+  | "pilot_signal";
+
+export interface IntelAlertPreferences {
+  notifyPilotSignals: boolean;
+  minPilotNotionalUsd: number;
+  notifyMoverSpikes: boolean;
+  moverSpikePct: number;
+  notifyIntelFires: boolean;
+}
 
 export interface IntelAlertRule {
   id: string;
@@ -86,6 +96,7 @@ export interface IntelAlertRule {
   kind: IntelAlertKind;
   keyword?: string;
   thresholdPct?: number;
+  minNotionalUsd?: number;
   enabled: boolean;
   createdAt: string;
   lastFiredAt: string | null;

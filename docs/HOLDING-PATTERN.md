@@ -1,12 +1,13 @@
 # Holding Pattern — MS-S1 MAX Pending
 
-Hardware has not arrived. Appliance engineering is **feature-complete for v0.1.0 scaffold**; on-device validation is blocked.
+Hardware has not arrived. **On-device validation is blocked**, but software build is **active on the dev machine** — see [DAY-ONE-BUILD-PLAN.md](curxor-os/DAY-ONE-BUILD-PLAN.md).
 
 ## Status
 
 | Item | State |
 |------|-------|
-| Software stack (`curxor-os`) | Active but frozen for major refactors until hardware |
+| Software stack (`curxor-os`) | **Active build** — dev machine is source of truth; appliance install deferred |
+| Primary build track | Claw Cafe (Tier B) + Tier C Coming Soon shells |
 | GTM / storefront | Continue in **`../curxor storefront/`** repo |
 | First boot checklist | `docs/guides/01-installation.md` + `docs/guides/10-ms-s1-max-hardware-bios.md` |
 

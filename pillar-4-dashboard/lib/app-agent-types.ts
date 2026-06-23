@@ -1,5 +1,6 @@
 import { getAppAgent } from "./app-agent-catalog";
-import type { OotbAppId } from "./ootb-apps";
+import { isValidAppId } from "./ootb-apps";
+import { isForgedAppId } from "./workspace-app-id";
 
 export interface AgentChatTurn {
   role: "user" | "assistant";
@@ -7,7 +8,7 @@ export interface AgentChatTurn {
 }
 
 export interface AgentAssistRequest {
-  appId: OotbAppId;
+  appId: string;
   message: string;
   history?: AgentChatTurn[];
   config?: Record<string, unknown>;
@@ -20,6 +21,9 @@ export interface AgentAssistRequest {
 export interface AgentAssistResult {
   reply: string;
   suggestedSkill?: string;
+  /** Swarm Claw — run suggested skill after chat without manual tap. */
+  autoDispatchSkill?: boolean;
+  dispatchHints?: Record<string, unknown>;
   activity?: string;
   mesh?: {
     kind: "physical" | "digital" | "plan" | "none";
@@ -31,9 +35,14 @@ export interface AgentAssistResult {
   };
 }
 
-export function skillActivityLine(appId: OotbAppId, skillId: string): string {
-  const skill = getAppAgent(appId).skills.find((s) => s.id === skillId);
-  if (!skill) return `Unknown skill ${skillId}`;
+export function skillActivityLine(appId: string, skillId: string): string {
+  if (isValidAppId(appId)) {
+    const skill = getAppAgent(appId).skills.find((s) => s.id === skillId);
+    if (skill) {
+      const stamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      return `${stamp} · ${skill.label} · ${skill.kind}`;
+    }
+  }
   const stamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  return `${stamp} · ${skill.label} · ${skill.kind}`;
+  return `${stamp} · ${skillId}${isForgedAppId(appId) ? " · forged desk" : ""}`;
 }

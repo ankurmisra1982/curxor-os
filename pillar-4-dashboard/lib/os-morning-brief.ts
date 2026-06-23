@@ -4,6 +4,7 @@ import { evaluateDeskHealthAlerts } from "./capital-desk-alerts";
 import { fetchCapitalStatus } from "./capital-store";
 import { listApprovalQueue } from "./content-approval-service";
 import { fetchContentStatus } from "./content-queue-store";
+import { fetchVitalStatus } from "./vital-health-store";
 import { buildMorningBrief } from "./work-morning-brief";
 import { ensureWorkQueue } from "./work-store";
 
@@ -12,20 +13,22 @@ export interface OsBriefCounts {
   workActiveSequences: number;
   creatorOpenPosts: number;
   capitalOpenAlerts: number;
+  vitalProtocolSteps: number;
   crossClawHandoffs: number;
 }
 
 export async function readOsBriefCounts(): Promise<OsBriefCounts> {
-  const [file, approvalQueue, contentStatus, capitalStatus, deskAlerts] = await Promise.all([
+  const [file, approvalQueue, contentStatus, capitalStatus, deskAlerts, vitalState] = await Promise.all([
     ensureWorkQueue(),
     listApprovalQueue(),
     fetchContentStatus(),
     fetchCapitalStatus({ sync: false }),
     evaluateDeskHealthAlerts(),
+    fetchVitalStatus(),
   ]);
 
   const activeLeads = file.leads.filter((l) => !["won", "lost"].includes(l.stage)).length;
-  const draftPosts = contentStatus.posts.filter((p) => p.stage !== "PUBLISHED" && p.stage !== "ARCHIVED").length;
+  const draftPosts = contentStatus.posts.filter((p) => p.stage !== "PUBLISHED").length;
   const creatorOpenPosts = Math.max(
     approvalQueue.posts.length + approvalQueue.replies.length,
     draftPosts,
@@ -41,6 +44,7 @@ export async function readOsBriefCounts(): Promise<OsBriefCounts> {
     workActiveSequences: file.sequences.filter((s) => s.status === "active").length,
     creatorOpenPosts,
     capitalOpenAlerts,
+    vitalProtocolSteps: vitalState.protocol.length,
     crossClawHandoffs: file.leads.filter((l) => l.tags?.some((t) => t.startsWith("handoff:"))).length,
   };
 }
@@ -54,6 +58,7 @@ export async function buildOsMorningBrief(): Promise<string> {
     `Work: ${counts.workActiveLeads} active leads · ${counts.workActiveSequences} sequences`,
     `Creator: ${counts.creatorOpenPosts} posts/replies to review`,
     `Capital: ${counts.capitalOpenAlerts} open alert(s)`,
+    `Vital: ${counts.vitalProtocolSteps} protocol step(s) on-box`,
     counts.crossClawHandoffs > 0 ? `Cross-Claw handoffs: ${counts.crossClawHandoffs} open` : null,
     "",
     "── Work desk ──",

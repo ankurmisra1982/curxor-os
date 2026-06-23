@@ -436,6 +436,17 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
   ],
   "my-vital": [
     {
+      sectionId: "longevity-lab",
+      tips: [
+        {
+          id: "vital-lab-beginner",
+          minLevel: "beginner",
+          title: "Ask about longevity",
+          body: "Lab preview covers Sinclair, Bryan Johnson's Blueprint / Don't Die, Attia, and Huberman — tap sample questions or chat with Ask Longevity.",
+        },
+      ],
+    },
+    {
       sectionId: "protocol",
       tips: [
         {
@@ -465,8 +476,8 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "kin-members-beginner",
           minLevel: "beginner",
-          title: "Household profiles",
-          body: "Select a member to see their personality and shared scopes. Profiles feed Optimus, Vital, and Outreach.",
+          title: "Household identity layer",
+          body: "Add partner and kids — each profile is who Optimus and Vital will recognize. One CurXor box, many people; not one generic assistant for the whole home.",
         },
       ],
     },
@@ -476,8 +487,14 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "kin-profile-beginner",
           minLevel: "beginner",
+          title: "Per-person context",
+          body: "Role, traits, and shared scopes tell subscribed Claws how to personalize. Vital routes health per member; Optimus will use guest-aware tone when Signal family mode ships.",
+        },
+        {
+          id: "kin-profile-standard",
+          minLevel: "standard",
           title: "Channel handles",
-          body: "Link WhatsApp, Telegram, or iMessage handles so inbound messages route to the right family member.",
+          body: "At Helper level (L2+), link WhatsApp, Telegram, or iMessage so inbound messages route to the right family member.",
         },
       ],
     },
@@ -488,7 +505,7 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "kin-add-standard",
           minLevel: "standard",
           title: "Add members",
-          body: "New profiles sync across subscribed Claws. Use Resync mesh after linking handles.",
+          body: "New profiles sync to the Claw Context mesh. Use Resync on the Mesh tab after changes — Signal and Vital are the headline consumers.",
         },
       ],
     },
@@ -500,14 +517,25 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "shop-pipeline-beginner",
           minLevel: "beginner",
-          title: "Fulfillment stages",
-          body: "Select an order, then use Ingest Order, Sort SKU, Retry Pick, or Ship Bin skills to advance stages.",
+          title: "Preview pipeline",
+          body: "Demo canvas only — select an order and use skills to advance stages at Flipper level and above.",
         },
         {
           id: "shop-pipeline-standard",
           minLevel: "standard",
           title: "Margin watch",
-          body: "Arbitrage Claw tracks sort rate from motor telemetry — connect vision for pick verification.",
+          body: "Spread rows are local demo data until eno2 price scrape validates. Connect vision for pick verification later.",
+        },
+      ],
+    },
+    {
+      sectionId: "margin-watch",
+      tips: [
+        {
+          id: "shop-margin-beginner",
+          minLevel: "beginner",
+          title: "SKU spread desk",
+          body: "Tap a row to focus the agent. Alerts highlight at Operator level — still preview, not live marketplace data.",
         },
       ],
     },
@@ -520,7 +548,13 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "swarm-grid-beginner",
           minLevel: "beginner",
           title: "Dispatch grid",
-          body: "Click a cell to set the dispatch target, select a vehicle, then run Assign Route in the agent panel.",
+          body: "Click a cell to set the dispatch target, select a unit, then run Assign Route in the agent panel.",
+        },
+        {
+          id: "swarm-grid-growth-l1",
+          minLevel: "beginner",
+          title: "Observer mode",
+          body: "At L1 you see the grid and basic dispatch — fleet roster and rebalance unlock as you grow.",
         },
       ],
     },
@@ -532,6 +566,12 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           minLevel: "standard",
           title: "Fleet status",
           body: "Monitor latency and charge per unit. Recall Vehicle returns a unit to the depot grid cell.",
+        },
+        {
+          id: "swarm-forge-roster",
+          minLevel: "standard",
+          title: "Forge roster",
+          body: "Units link to Claws minted in The Forge when claw-profiles.json has entries — otherwise demo RX units show.",
         },
       ],
     },
@@ -562,6 +602,39 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
   ],
   "tesla-optimus-engine": [
     {
+      sectionId: "fleet",
+      tips: [
+        {
+          id: "humanoid-fleet-beginner",
+          minLevel: "beginner",
+          title: "Multi-robot home",
+          body: "Add humanoid, mobile, arm, or custom slots — run Pair day wizard to preview mesh handshake before hardware ships.",
+        },
+      ],
+    },
+    {
+      sectionId: "home-hub",
+      tips: [
+        {
+          id: "humanoid-home-beginner",
+          minLevel: "beginner",
+          title: "Teach before pair day",
+          body: "Name your humanoid, link Kin, add house rules — neural link readiness shows what's left before hardware arrives.",
+        },
+      ],
+    },
+    {
+      sectionId: "signals-desk",
+      tips: [
+        {
+          id: "signal-desk-beginner",
+          minLevel: "beginner",
+          title: "Unified feed",
+          body: "Signals tab is source of truth — dispatch to Outreach (lead + seq) or Creator (reactive draft).",
+        },
+      ],
+    },
+    {
       sectionId: "torque",
       tips: [
         {
@@ -589,10 +662,16 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
       sectionId: "intent",
       tips: [
         {
-          id: "forge-intent-beginner",
+          id: "forge-intent-l1",
           minLevel: "beginner",
-          title: "Forge a Claw",
-          body: "Describe your mission, attach a photo or enable live vision, then follow the wizard to provision.",
+          title: "Sketcher — first mint",
+          body: "Describe your mission in chat, attach a photo or enable live vision, then use Mint tab wizard.",
+        },
+        {
+          id: "forge-intent-l3",
+          minLevel: "standard",
+          title: "Smith — tune stacks",
+          body: "Stacks tab shows UMA budget tiers. Override auto-recommend when you know your model mix.",
         },
       ],
     },
@@ -600,10 +679,54 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
       sectionId: "fleet",
       tips: [
         {
-          id: "forge-fleet-standard",
+          id: "forge-fleet-l2",
           minLevel: "standard",
-          title: "Fleet registry",
-          body: "Every provisioned Claw gets a profile here. Active profile writes to engine.env.d on the appliance.",
+          title: "Builder — fleet registry",
+          body: "Every provisioned Claw appears here. Set active writes engine.env.d on the appliance.",
+        },
+      ],
+    },
+    {
+      sectionId: "templates",
+      tips: [
+        {
+          id: "forge-templates-l4",
+          minLevel: "expert",
+          title: "Fabricator — template mint",
+          body: "Pick Work, Creator, Capital, or kiosk skeletons — wizard pre-fills SOUL and FRE.",
+        },
+      ],
+    },
+    {
+      sectionId: "import",
+      tips: [
+        {
+          id: "forge-import-l4",
+          minLevel: "expert",
+          title: "Import bundles",
+          body: "Download template JSON, edit offline, upload from Import tab. Warnings require confirm.",
+        },
+      ],
+    },
+    {
+      sectionId: "go-live",
+      tips: [
+        {
+          id: "forge-go-live-l1",
+          minLevel: "beginner",
+          title: "Demo ready",
+          body: "FRE + one mint is enough for GTM. Run demo tour to mint a blank framework desk automatically.",
+        },
+      ],
+    },
+    {
+      sectionId: "ops",
+      tips: [
+        {
+          id: "forge-ops-l5",
+          minLevel: "expert",
+          title: "Foundry ops",
+          body: "Fleet counts, inference ping, and export hooks — governance scaffold at L5.",
         },
       ],
     },
@@ -615,14 +738,14 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "cap-go-live-beginner",
           minLevel: "beginner",
-          title: "Go live checklist",
-          body: "Demo mode is fine without Alpaca keys — create a rule, arm it, execute locally. Growth level: Learner (full leveling UX coming).",
+          title: "Get started",
+          body: "Run Guided practice from Get started — create a rule, turn it on, and log a practice buy. No broker account or keys needed.",
         },
         {
           id: "cap-demo-release",
           minLevel: "beginner",
-          title: "Demo release",
-          body: "Current build ships demo-only: sample portfolio, PFM, pilots, and trade log. Broker linking is on the RELEASE-NEXT todo when you are ready.",
+          title: "Learner desk",
+          body: "You are in Learner mode: watchlist, ticker research, and simulated practice buys only. Upgrade your persona in Settings when you want rules and pilots.",
         },
       ],
     },
@@ -632,8 +755,8 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
         {
           id: "cap-beginner",
           minLevel: "beginner",
-          title: "Paper trading first",
-          body: "Capital Claw defaults to demo mode without digital.env keys. Paper bridge and live money are optional — see Go Live when ready.",
+          title: "Practice rules first",
+          body: "Start with a simple dip rule on SPY or AAPL. Turn it on, then try a practice buy — everything stays local until you choose a higher persona.",
         },
         {
           id: "cap-standard",
@@ -650,7 +773,7 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "cap-research-beginner",
           minLevel: "beginner",
           title: "Start with a ticker",
-          body: "Enter a symbol or tap a watchlist chip. You get price, a one-line smart take, and top CNBC headlines — no account needed.",
+          body: "Enter a symbol or tap a watchlist chip. You get price, a one-line smart take, and top headlines — plain language, no trading jargon.",
         },
         {
           id: "cap-research-standard",

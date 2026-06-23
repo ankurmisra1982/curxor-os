@@ -1,80 +1,45 @@
 "use client";
 
-import type { ExperienceLevel } from "@/lib/experience-level";
+import type { GrowthLevel } from "@/lib/os-growth-level";
+import { capitalTabLabel } from "@/lib/capital-level-copy";
+import { capitalTabsForGrowth, defaultCapitalTabForGrowth } from "@/lib/capital-level-gates";
 
-export type CapitalWorkspaceTab = "trade" | "research" | "risk" | "agents" | "analytics";
+export type { CapitalWorkspaceTab } from "@/lib/capital-level-gates";
+export {
+  capitalSectionVisibleForGrowth as capitalSectionVisible,
+  defaultCapitalTabForGrowth as defaultCapitalTab,
+  CAPITAL_SECTION_TAB,
+  capitalFeatureVisible,
+  capitalTabsForGrowth,
+} from "@/lib/capital-level-gates";
 
-const TABS: { id: CapitalWorkspaceTab; label: string; minLevel: ExperienceLevel }[] = [
-  { id: "trade", label: "Trade", minLevel: "beginner" },
-  { id: "research", label: "Research", minLevel: "beginner" },
-  { id: "analytics", label: "Analytics", minLevel: "standard" },
-  { id: "risk", label: "Risk", minLevel: "beginner" },
-  { id: "agents", label: "Agents", minLevel: "beginner" },
-];
-
-function meetsLevel(current: ExperienceLevel, required: ExperienceLevel): boolean {
-  const order: ExperienceLevel[] = ["beginner", "standard", "expert"];
-  return order.indexOf(current) >= order.indexOf(required);
-}
+import type { CapitalWorkspaceTab } from "@/lib/capital-level-gates";
 
 interface CapitalWorkspaceTabsProps {
   active: CapitalWorkspaceTab;
   onChange: (tab: CapitalWorkspaceTab) => void;
-  experienceLevel: ExperienceLevel;
+  growthLevel: GrowthLevel;
 }
 
-export function CapitalWorkspaceTabs({ active, onChange, experienceLevel }: CapitalWorkspaceTabsProps) {
-  const visible = TABS.filter((t) => meetsLevel(experienceLevel, t.minLevel));
+export function CapitalWorkspaceTabs({ active, onChange, growthLevel }: CapitalWorkspaceTabsProps) {
+  const visible = capitalTabsForGrowth(growthLevel);
 
   return (
     <nav className="flex flex-wrap gap-1 border border-line bg-panel px-2 py-2 font-mono text-[10px]">
       {visible.map((tab) => (
         <button
-          key={tab.id}
+          key={tab}
           type="button"
-          onClick={() => onChange(tab.id)}
+          onClick={() => onChange(tab)}
           className={`px-3 py-1 uppercase tracking-widest ${
-            active === tab.id
+            active === tab
               ? "border border-cursor-glow text-cursor-glow"
               : "border border-transparent text-muted hover:border-line hover:text-stark"
           }`}
         >
-          {tab.label}
+          {capitalTabLabel(growthLevel, tab)}
         </button>
       ))}
     </nav>
   );
-}
-
-export function defaultCapitalTab(level: ExperienceLevel): CapitalWorkspaceTab {
-  return level === "beginner" ? "trade" : "trade";
-}
-
-/** Maps Capital desk section ids → workspace tab. */
-export const CAPITAL_SECTION_TAB: Record<string, CapitalWorkspaceTab> = {
-  "recent-trades": "trade",
-  "go-live": "trade",
-  portfolio: "trade",
-  trades: "trade",
-  recovery: "trade",
-  movers: "trade",
-  research: "research",
-  "intel-alerts": "research",
-  digest: "research",
-  risk: "risk",
-  "auto-approval": "risk",
-  brokers: "risk",
-  "portfolio-health": "risk",
-  pilots: "agents",
-  subscriptions: "agents",
-  "agent-trading": "agents",
-  pfm: "agents",
-  analytics: "analytics",
-  scorecard: "analytics",
-  "tax-lots": "analytics",
-  "nl-query": "analytics",
-};
-
-export function capitalSectionVisible(sectionId: string, active: CapitalWorkspaceTab): boolean {
-  return CAPITAL_SECTION_TAB[sectionId] === active;
 }

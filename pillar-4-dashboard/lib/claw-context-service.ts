@@ -4,12 +4,12 @@ import { randomUUID } from "node:crypto";
 
 import { publishClawContext, queryClawContext } from "./claw-context-store";
 import type { ClawContextScope } from "./claw-mesh-protocol";
-import { CCP_REGISTRY } from "./claw-mesh-protocol";
+import { subscriptionsForApp } from "./claw-mesh-protocol";
 import { listFamilyProfiles } from "./family-profiles";
 import { syncVitalContextToMesh } from "./vital-health-store";
 import type { OotbAppId } from "./ootb-apps";
 
-export { CCP_REGISTRY };
+export { CCP_REGISTRY } from "./claw-mesh-protocol";
 
 /** Publish all family profiles to the Claw Context mesh. */
 export async function syncFamilyContextToMesh(): Promise<void> {
@@ -64,8 +64,21 @@ export async function getMergedContextForAgent(
   await seedDefaultContextIfEmpty();
   const records = await queryClawContext({ appId, profileId, limit: 40 });
 
+  const subscribedScopes = subscriptionsForApp(appId)?.scopes ?? [];
+  const forgedRecords = await queryClawContext({
+    appId,
+    scopes: subscribedScopes,
+    profileId,
+    keyPrefix: "forged.",
+    limit: 20,
+  });
+
   const merged: Partial<Record<ClawContextScope, Record<string, unknown>>> = {};
-  for (const record of records) {
+  const seen = new Set<string>();
+  for (const record of [...records, ...forgedRecords]) {
+    const dedupeKey = `${record.envelope.scope}:${record.envelope.key}:${record.envelope.profileId ?? ""}`;
+    if (seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
     const scope = record.envelope.scope;
     if (!merged[scope]) merged[scope] = {};
     merged[scope]![record.envelope.key] = record.envelope.payload;

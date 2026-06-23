@@ -1,4 +1,11 @@
-export type WearableSource = "apple_health" | "garmin" | "oura" | "whoop" | "fitbit" | "manual";
+export type WearableSource =
+  | "apple_health"
+  | "garmin"
+  | "oura"
+  | "whoop"
+  | "fitbit"
+  | "samsung_health"
+  | "manual";
 
 export interface VitalReading {
   metric: string;
@@ -39,6 +46,12 @@ export interface LongevityProtocolStep {
   priority: "core" | "optional";
 }
 
+export interface VitalHealthMeta {
+  lastMeshPublishedAt?: string | null;
+  lastLabAt?: string | null;
+  lastWearableSyncAt?: string | null;
+}
+
 export interface VitalHealthState {
   version: 1;
   updatedAt: string;
@@ -47,4 +60,5 @@ export interface VitalHealthState {
   dietSync: DietSync[];
   healthAppSync: HealthAppSync[];
   protocol: LongevityProtocolStep[];
+  meta?: VitalHealthMeta;
 }

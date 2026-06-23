@@ -1,8 +1,11 @@
 {
   "initialized": true,
   "config": {
-    "wearableSources": ["oura", "apple_health"],
-    "longevityFocus": "metabolic"
+    "growthIntent": "optimize_protocol",
+    "growthLevel": "L3",
+    "wearableSources": ["oura", "apple_health", "garmin"],
+    "longevityFocus": "metabolic",
+    "shareWithOptimus": true
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

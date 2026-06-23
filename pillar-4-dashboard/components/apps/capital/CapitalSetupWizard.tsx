@@ -2,18 +2,30 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const STEPS = ["Risk & watchlist", "Create rule", "Arm & preview", "Execute", "Go Live"] as const;
+import type { GrowthLevel } from "@/lib/os-growth-level";
+
+const STEPS_L1 = ["Watchlist", "Practice rule", "Turn on rule", "Practice buy", "Get started"] as const;
+const STEPS_DEFAULT = ["Risk & watchlist", "Create rule", "Arm & preview", "Execute", "Go Live"] as const;
 
 interface CapitalSetupWizardProps {
   open: boolean;
   onClose: () => void;
   defaultAsset: string;
   onComplete: (result: { ruleId?: string; tradeId?: string }) => void;
+  growthLevel?: GrowthLevel;
 }
 
 type ApiJson = Record<string, unknown> & { ok?: boolean; error?: string };
 
-export function CapitalSetupWizard({ open, onClose, defaultAsset, onComplete }: CapitalSetupWizardProps) {
+export function CapitalSetupWizard({
+  open,
+  onClose,
+  defaultAsset,
+  onComplete,
+  growthLevel = "L3",
+}: CapitalSetupWizardProps) {
+  const learner = growthLevel === "L1";
+  const STEPS = learner ? STEPS_L1 : STEPS_DEFAULT;
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,7 +137,9 @@ export function CapitalSetupWizard({ open, onClose, defaultAsset, onComplete }: 
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto border border-line bg-panel p-4 font-mono text-xs shadow-xl">
         <div className="mb-3 flex items-center justify-between">
-          <p className="text-[10px] uppercase tracking-[0.35em] text-cursor-glow">Capital setup wizard</p>
+          <p className="text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
+            {learner ? "Capital quick start" : "Capital setup wizard"}
+          </p>
           <button type="button" onClick={onClose} className="text-muted hover:text-stark">
             ✕
           </button>
@@ -141,8 +155,17 @@ export function CapitalSetupWizard({ open, onClose, defaultAsset, onComplete }: 
 
         {step === 0 ? (
           <div className="space-y-2 text-[10px] text-muted">
-            <p>Paper mode · balanced risk · demo portfolio until Alpaca keys are set.</p>
-            <p>We will seed your watchlist and create your first dip-buy rule.</p>
+            {learner ? (
+              <>
+                <p>Practice mode — nothing connects to a real broker.</p>
+                <p>We will add a ticker to your watchlist and build your first practice rule.</p>
+              </>
+            ) : (
+              <>
+                <p>Paper mode · balanced risk · demo portfolio until Alpaca keys are set.</p>
+                <p>We will seed your watchlist and create your first dip-buy rule.</p>
+              </>
+            )}
           </div>
         ) : null}
 
@@ -169,19 +192,24 @@ export function CapitalSetupWizard({ open, onClose, defaultAsset, onComplete }: 
 
         {step === 2 ? (
           <p className="text-[10px] text-muted">
-            Rule {ruleId} will be armed. Preview estimates notional before execute.
+            {learner
+              ? `Rule ${ruleId} will be turned on. You can try a practice buy next.`
+              : `Rule ${ruleId} will be armed. Preview estimates notional before execute.`}
           </p>
         ) : null}
 
         {step === 3 ? (
           <p className="text-[10px] text-muted">
-            Execute now — simulated fill in demo mode, paper via Alpaca when configured. Preview:{" "}
-            {previewNotional ?? "—"}
+            {learner
+              ? `Try a practice buy — logged locally, no account needed.`
+              : `Execute now — simulated fill in demo mode, paper via Alpaca when configured. Preview: ${previewNotional ?? "—"}`}
           </p>
         ) : null}
 
         {step === 4 ? (
-          <p className="text-[10px] text-stark">{goLiveProgress ?? "Refresh Go Live checklist…"}</p>
+          <p className="text-[10px] text-stark">
+            {goLiveProgress ?? (learner ? "Refresh get-started checklist…" : "Refresh Go Live checklist…")}
+          </p>
         ) : null}
 
         {error ? <p className="mt-2 text-[10px] text-red-400">{error}</p> : null}
@@ -224,7 +252,7 @@ export function CapitalSetupWizard({ open, onClose, defaultAsset, onComplete }: 
               }}
               className="border border-line px-3 py-1 text-[10px] uppercase text-muted hover:text-stark"
             >
-              Or run demo tour
+              {learner ? "Or guided practice" : "Or run demo tour"}
             </button>
           ) : null}
         </div>

@@ -2,7 +2,10 @@ import "server-only";
 
 import type { AgentSkill, AppAgentDefinition } from "../app-agent-catalog";
 import { getAppAgent } from "../app-agent-catalog";
+import { resolveAppAgent } from "../forged-agent-resolve";
+import type { ResolvedAppAgent } from "../forged-agent-catalog";
 import type { OotbAppId } from "../ootb-apps";
+import { isForgedAppId, type WorkspaceAppId } from "../workspace-app-id";
 
 import { ensureWorkspace, readSkillFile, readWorkspace } from "./workspace-store";
 
@@ -57,7 +60,7 @@ export function parseSkillMarkdown(raw: string, fileName?: string): ParsedSkillD
   };
 }
 
-export async function loadWorkspaceSkills(appId: OotbAppId): Promise<ParsedSkillDoc[]> {
+export async function loadWorkspaceSkills(appId: WorkspaceAppId): Promise<ParsedSkillDoc[]> {
   await ensureWorkspace(appId);
   const ws = await readWorkspace(appId);
   const docs: ParsedSkillDoc[] = [];
@@ -80,8 +83,8 @@ export function catalogSkillsToDocs(agent: AppAgentDefinition): ParsedSkillDoc[]
   }));
 }
 
-export async function getResolvedSkills(appId: OotbAppId): Promise<AgentSkill[]> {
-  const agent = getAppAgent(appId);
+export async function getResolvedSkills(appId: WorkspaceAppId): Promise<AgentSkill[]> {
+  const agent = isForgedAppId(appId) ? await resolveAppAgent(appId) : getAppAgent(appId as OotbAppId);
   const catalog = agent.skills;
   const workspace = await loadWorkspaceSkills(appId);
   const byId = new Map<string, AgentSkill>();
@@ -102,13 +105,15 @@ export async function getResolvedSkills(appId: OotbAppId): Promise<AgentSkill[]>
   return [...byId.values()];
 }
 
-export async function getResolvedAgent(appId: OotbAppId): Promise<AppAgentDefinition> {
-  const base = getAppAgent(appId);
+export async function getResolvedAgent(appId: WorkspaceAppId): Promise<ResolvedAppAgent> {
+  const base = isForgedAppId(appId)
+    ? await resolveAppAgent(appId)
+    : getAppAgent(appId as OotbAppId);
   const skills = await getResolvedSkills(appId);
   return { ...base, skills };
 }
 
-export async function buildSkillsPromptBlock(appId: OotbAppId): Promise<string> {
+export async function buildSkillsPromptBlock(appId: WorkspaceAppId): Promise<string> {
   const ws = await readWorkspace(appId);
   const workspaceSkills = await loadWorkspaceSkills(appId);
   const custom = workspaceSkills
