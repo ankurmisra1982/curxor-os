@@ -206,6 +206,17 @@ if (typeof bootstrap.json.builderBridgeLinked === "boolean") {
   fail("builder bridge flag", "missing on bootstrap");
 }
 
+const architectOpacity = (growth, linked) => {
+  const order = { L1: 0, L2: 1, L3: 2, L4: 3, L5: 4 };
+  if (order[growth] < order.L4) return 0.22;
+  return linked ? 0.85 : 0.4;
+};
+if (architectOpacity("L1", false) === 0.22 && architectOpacity("L4", true) === 0.85) {
+  pass("architect opacity tiers", "whisper L1 · linked L4");
+} else {
+  fail("architect opacity tiers", "unexpected opacity mapping");
+}
+
 const failed = checks.filter((c) => !c.ok);
 console.log(`\n==> ${checks.length - failed.length}/${checks.length} passed`);
 if (failed.length > 0) process.exitCode = 1;

@@ -28,6 +28,7 @@ if (!BASE) {
     ["scripts/verify-forge-exit-demo-scaffold.mjs", BASE],
     ["scripts/qa-user-flows.mjs", BASE],
     ["scripts/qa-cafe-ascension.mjs", BASE],
+    ["scripts/cafe-checklist.mjs", BASE],
     ["scripts/qa-swarm-levels.mjs", BASE],
     ["scripts/verify-swarm-exit-demo-scaffold.mjs", BASE],
     ["scripts/qa-shop-levels.mjs", BASE],

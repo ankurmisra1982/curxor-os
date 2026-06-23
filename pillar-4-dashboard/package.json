@@ -26,6 +26,7 @@
     "demo:capture:kin": "node scripts/capture-kin-day-one.mjs",
     "qa:swarm-levels": "node scripts/qa-swarm-levels.mjs",
     "qa:cafe-ascension": "node scripts/qa-cafe-ascension.mjs",
+    "qa:cafe-checklist": "node scripts/cafe-checklist.mjs",
     "qa:shop-levels": "node scripts/qa-shop-levels.mjs",
     "qa:shop-bridges": "node scripts/qa-shop-bridges.mjs",
     "verify:shop-freeze": "node scripts/verify-shop-freeze-scaffold.mjs",

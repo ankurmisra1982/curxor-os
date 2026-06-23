@@ -1,7 +1,8 @@
 # Claw Cafe — Best-in-Class Landscape & Scorecard
 
 > **Build plan:** [BEST-IN-CLASS-BUILD-PLAN.md](./BEST-IN-CLASS-BUILD-PLAN.md)  
-> **PRD:** [CLAW-CAFE-PRD.md](../curxor-os/CLAW-CAFE-PRD.md)
+> **PRD:** [CLAW-CAFE-PRD.md](../curxor-os/CLAW-CAFE-PRD.md)  
+> **Exit demo:** [EXIT-DEMO.md](./EXIT-DEMO.md)
 
 ## Competitive position
 
@@ -14,43 +15,42 @@
 | Offline | Partial | Full appliance |
 | Endgame | None | **Master AI** + Infinity delegation (horizon) |
 
-## Ship state (v0.6.5 baseline)
+## Ship state (v0.7.0)
 
 | Area | Status |
 |------|--------|
-| Ascension math G1–G6 | Shipped |
-| Event bus + sync (Work/Swarm/Forge) | Shipped |
-| Spatial room | **CSS scaffold** — not pixel vision |
-| Patron avatar | Not started |
-| Creator/Capital ingest | Not started |
-| Go Live / demo tour | Not started |
-| Easter eggs | Not started |
+| Pixel Canvas room + patron walk | **Shipped** (C4) |
+| Creator/Capital ingest + sync | **Shipped** (C5) |
+| Level-up modal · epithet · default tab | **Shipped** (C6) |
+| Go Live · demo tour · easter eggs · yard dock · Architect | **Shipped** (C7) |
+| FRE `cafeGrowthIntent` · coach · nudge | **Shipped** (C8) |
+| cafe-checklist · EXIT-DEMO · captures | **Shipped** (C9) |
 
-## Scorecard (update after each wave)
+## Scorecard (post C4–C9)
 
 > Scale: 1 = missing · 3 = credible · 5 = best-in-class for sovereign OS gamification
 
 | Dimension | Score | Target | Notes |
 |-----------|-------|--------|-------|
-| **Vision fidelity (pixel room)** | **1.5** | 5.0 | CSS grid placeholder |
-| **Patron presence** | **—** | 4.5 | C4 |
-| **Cross-Claw events** | **3.0** | 4.5 | Work/Swarm/Forge; missing Creator/Capital |
-| **Ascension G1–G6** | **3.5** | 4.5 | Math shipped; ceremonies missing |
+| **Vision fidelity (pixel room)** | **4.0** | 5.0 | Canvas 2D room + stations; art pass later |
+| **Patron presence** | **4.0** | 4.5 | Walk, inspect, SSE lerp |
+| **Cross-Claw events** | **4.5** | 4.5 | Work/Swarm/Forge/Creator/Capital sync |
+| **Ascension G1–G6** | **4.0** | 4.5 | Math + modal + milestones |
 | **Forge integration** | **4.0** | 5.0 | Mint/archive wired |
-| **Delight / easter eggs** | **—** | 4.0 | C7 |
-| **Growth personas L1–L5** | **2.0** | 4.0 | Labels only; C8 |
-| **Go Live / GTM** | **—** | 4.0 | C7/C9 |
-| **QA depth** | **2.5** | 4.5 | ascension hooks only; C9 checklist |
-| **Master AI readiness** | **2.5** | 4.0 | Ledger exists; no patron UI |
-| **Overall** | **~2.5** | **4.5+** | Post C4–C9 |
+| **Delight / easter eggs** | **4.0** | 4.0 | Coffee · window · eno2 · Architect |
+| **Growth personas L1–L5** | **4.0** | 4.0 | FRE `cafeGrowthIntent` + gates |
+| **Go Live / GTM** | **4.0** | 4.0 | Checklist + demo tour + EXIT-DEMO |
+| **QA depth** | **4.5** | 4.5 | ascension + cafe-checklist in qa:local |
+| **Master AI readiness** | **2.5** | 4.0 | Ledger exists; no patron UI (v0.8) |
+| **Overall** | **~4.1** | **4.5+** | v0.7.0 best-in-class arc closed |
 
-**Last scored:** June 2026 (pre C4 arc)
+**Last scored:** June 2026 (C9)
 
 ## GTM proof gate (Overall ≥ 4.5)
 
-- [ ] Pixel room + patron walk in demo capture
-- [ ] Sync ingests Work + Creator + Capital + Forge
-- [ ] Level-up ceremony visible in demo tour
-- [ ] Forge mint → character enters room in recording
-- [ ] `qa:local` + cafe-checklist green
-- [ ] Storefront says Claw Cafe + honest Engage/kiosk sub-lane
+- [x] Pixel room + patron walk in demo capture
+- [x] Sync ingests Work + Creator + Capital + Forge (+ Swarm)
+- [x] Level-up ceremony visible in demo tour
+- [x] Forge mint → character enters room (sync path)
+- [x] `qa:local` + cafe-checklist green
+- [ ] Storefront says Claw Cafe + honest Engage/kiosk sub-lane (deferred rebrand)

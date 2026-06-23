@@ -88,9 +88,16 @@ async function main() {
       const cafeUrl = `${BASE.replace(/\/$/, "")}/claw-cafe`;
       console.log(`==> Claw Cafe Ascension → cafe/18-ascension-tab.png`);
       console.log(`    → ${cafeUrl}`);
+      await primeSession(page, BASE);
       await gotoApp(page, BASE, "/claw-cafe");
       await clickTab(page, "Ascension");
-      await page.getByText("Spatial room", { exact: false }).first().waitFor({ timeout: 20_000 });
+      const canvas = page.locator('canvas[aria-label="Claw Cafe pixel room"]');
+      await canvas.first().waitFor({ state: "visible", timeout: 45_000 });
+      await canvas.first().scrollIntoViewIfNeeded();
+      await page.waitForTimeout(800);
+      const pixelDest = path.join(CAFE_OUT, "19-pixel-room.png");
+      await canvas.first().screenshot({ path: pixelDest });
+      console.log(`    saved ${pixelDest}`);
       await page.getByText("ascension XP", { exact: false }).first().scrollIntoViewIfNeeded().catch(() => {});
       await page.waitForTimeout(1500);
       const cafeDest = path.join(CAFE_OUT, "18-ascension-tab.png");
