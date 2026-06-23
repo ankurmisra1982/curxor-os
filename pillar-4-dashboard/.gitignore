@@ -4,5 +4,17 @@ out/
 .env
 .env.local
 scripts/dev-qa/digital.env
+# QA-run forged desk pollution (forge-checklist / qa-smoke / user-flows)
+scripts/dev-qa/agent-workspace/forged-checklist-*/
+scripts/dev-qa/agent-workspace/forged-qa-*/
+scripts/dev-qa/agent-workspace/forged-flow-*/
+scripts/dev-qa/agent-workspace/checklist-*/
+scripts/dev-qa/agent-workspace/flow-*/
+scripts/dev-qa/agent-workspace/qa-*/
+scripts/dev-qa/app-fre/forged-checklist-*.json
+scripts/dev-qa/app-fre/forged-qa-*.json
+scripts/dev-qa/app-fre/forged-flow-*.json
+scripts/dev-qa/app-fre/checklist-*.json
+scripts/dev-qa/app-fre/flow-*.json
 *.log
 tsconfig.tsbuildinfo

@@ -1,5 +1,4 @@
-# Tools — Fabricator Work Desk Outreach Claw
+# Tools
 
-- **create_lead** (plan): Add lead to pipeline
-- **draft_sequence** (plan): Plan multi-step outreach
-- **publish_context** (plan): Share scoped work context
+- **create_lead** (work): Create a lead in the local queue
+- **draft_sequence** (work): Draft outreach sequence

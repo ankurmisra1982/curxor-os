@@ -1,11 +1,7 @@
 {
   "initialized": true,
   "config": {
-    "deskFocus": "",
-    "meshPublish": false,
-    "growthLevel": "L1",
-    "forgedIntent": "Forge demo tour — sovereign agent factory on bare metal",
-    "forgedTemplateId": "blank-desk"
+    "meshPublish": true
   },
-  "initializedAt": "2026-06-23T00:13:18.630Z"
+  "initializedAt": "2026-06-22T00:00:00.000Z"
 }

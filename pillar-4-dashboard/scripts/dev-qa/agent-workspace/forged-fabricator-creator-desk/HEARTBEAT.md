@@ -1,4 +1,3 @@
-# HEARTBEAT — Fabricator Creator Desk Creator Claw
+# Heartbeat
 
-## Daily at 09:00
-- message:Review content calendar
+- Monitor local desk queue on appliance

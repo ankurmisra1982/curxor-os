@@ -1,4 +1,3 @@
-# HEARTBEAT — Fabricator Work Desk Outreach Claw
+# Heartbeat
 
-## Every 30 minutes
-- skill:publish_context
+- Monitor local desk queue on appliance

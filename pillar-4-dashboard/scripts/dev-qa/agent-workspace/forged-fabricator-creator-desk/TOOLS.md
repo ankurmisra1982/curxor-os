@@ -1,5 +1,4 @@
-# Tools — Fabricator Creator Desk Creator Claw
+# Tools
 
-- **draft_post** (plan): Local LLM copy draft
-- **schedule_post** (plan): Queue publish via bridge
-- **publish_context** (plan): Share creator context
+- **draft_post** (content): Draft a post in the local queue
+- **schedule_post** (content): Schedule a draft post

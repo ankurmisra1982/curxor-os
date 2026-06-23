@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "ci:prepare-qa": "node scripts/ci-prepare-qa.mjs",
+    "prune:dev-qa-forge": "node scripts/prune-dev-qa-forge-pollution.mjs",
     "qa:smoke": "node scripts/qa-smoke.mjs",
     "qa:flows": "node scripts/qa-user-flows.mjs",
     "heartbeat:daemon": "node scripts/heartbeat-daemon.mjs",

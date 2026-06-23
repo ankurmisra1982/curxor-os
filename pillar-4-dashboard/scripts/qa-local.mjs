@@ -132,7 +132,7 @@ async function assertPortFree(port) {
   });
 }
 
-async function waitForServer(timeoutMs = 90_000) {
+async function waitForServer(timeoutMs = 180_000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     try {

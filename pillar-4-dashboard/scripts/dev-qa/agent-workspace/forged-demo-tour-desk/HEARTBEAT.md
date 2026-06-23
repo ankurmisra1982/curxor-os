@@ -1,4 +1,3 @@
-# HEARTBEAT — Demo Tour Desk Claw
+# Heartbeat
 
-## Daily at 08:00
-- message:Morning brief for Demo Tour Desk
+- Monitor local desk queue on appliance

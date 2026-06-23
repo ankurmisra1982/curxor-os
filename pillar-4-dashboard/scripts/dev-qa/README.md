@@ -37,3 +37,14 @@ npm run qa:local -- --port 3081
 | `content-queue.json` | Creator Claw demo queue — scheduled, published, and recovery candidate |
 
 Do not commit secrets. Production uses `/etc/curxor/`.
+
+## Forge QA pollution
+
+`forge-checklist.mjs`, `qa-smoke.mjs`, and user flows mint forged desks at runtime. Those artifacts land under `agent-workspace/forged-*` and `app-fre/forged-*.json` — **gitignored**. After heavy local QA, trim JSON registries:
+
+```bash
+node scripts/prune-dev-qa-forge-pollution.mjs --dry-run
+node scripts/prune-dev-qa-forge-pollution.mjs
+```
+
+Committed seed keeps only stable demo forged slugs: `demo-tour-desk`, `fabricator-work-desk`, `fabricator-creator-desk` (and `fabricator-capital-desk` when present). Their workspace dirs (`forged-demo-tour-desk`, etc.) and matching `app-fre/forged-*.json` **are** tracked; numbered checklist/smoke/flow artifacts are gitignored.
