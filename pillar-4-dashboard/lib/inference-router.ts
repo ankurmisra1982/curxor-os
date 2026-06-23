@@ -156,8 +156,13 @@ async function tryFrontierCompletion(
     headers["X-Title"] = "CurXor OS";
   }
 
+  const timeoutMs =
+    providerId === "sakana" && /^fugu-ultra/.test(model)
+      ? Math.max(env.inferenceTimeoutMs, 120_000)
+      : env.inferenceTimeoutMs;
+
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), env.inferenceTimeoutMs);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const endpoint =

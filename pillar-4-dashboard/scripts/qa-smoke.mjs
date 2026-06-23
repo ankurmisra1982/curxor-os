@@ -43,6 +43,19 @@ await check("settings GET", async () => {
   );
 });
 
+await check("settings sakana frontier provider", async () => {
+  const data = await getJson("/api/settings");
+  const sakana = data.providers?.find((p) => p.id === "sakana");
+  return (
+    sakana?.name === "Sakana Fugu" &&
+    Array.isArray(sakana.models) &&
+    sakana.models.length === 3 &&
+    sakana.models.some((m) => m.id === "fugu") &&
+    sakana.models.some((m) => m.id === "fugu-ultra") &&
+    sakana.models.some((m) => m.id === "fugu-ultra-20260615")
+  );
+});
+
 await check("build plane status", async () => {
   const data = await getJson("/api/build/status");
   return (
