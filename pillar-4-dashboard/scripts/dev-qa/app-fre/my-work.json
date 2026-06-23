@@ -8,7 +8,8 @@
       "mail"
     ],
     "clawLane": "A",
-    "deskRole": "operator"
+    "deskRole": "operator",
+    "requireSendApproval": false
   },
   "initializedAt": "2026-06-20T08:00:00.000Z"
 }

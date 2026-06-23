@@ -684,6 +684,18 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               notifyEnabled: boolean;
               chatIdCount: number;
             };
+            publishTrust?: {
+              minApprovals: number;
+              platforms: string[];
+              tiers: Array<{
+                platform: string;
+                label: string;
+                approvedCount: number;
+                minApprovals: number;
+                autoEligible: boolean;
+                enabled: boolean;
+              }>;
+            };
           };
           recovery?: { candidates?: RecoveryCandidateRow[] };
           studio?: { tts?: string; imageGen?: boolean };

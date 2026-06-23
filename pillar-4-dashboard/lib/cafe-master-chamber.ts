@@ -1,5 +1,3 @@
-import "server-only";
-
 import type { AscensionTierId } from "./claw-cafe-ascension";
 import { ASCENSION_TIER_INDEX } from "./claw-cafe-ascension";
 import { MASTER_CHAMBER_GRID } from "./claw-cafe-spatial";

@@ -3,10 +3,10 @@ export const dynamic = "force-dynamic";
 
 import { HomePageClient } from "@/components/desktop/HomePageClient";
 import { normalizeSelectedApps } from "@/lib/fre-routing";
-import { readFreState } from "@/lib/fre-state";
+import { readUserSettings } from "@/lib/user-settings";
 
 export default async function HomePage() {
-  const fre = await readFreState();
-  const selectedApps = normalizeSelectedApps(fre.selectedApps);
+  const settings = await readUserSettings();
+  const selectedApps = normalizeSelectedApps(settings.selectedApps);
   return <HomePageClient selectedApps={selectedApps} />;
 }
