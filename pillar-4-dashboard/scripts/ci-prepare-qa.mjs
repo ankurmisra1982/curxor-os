@@ -31,6 +31,7 @@ const optionalFiles = [
     "content-ops.json",
     '{"version":1,"publishingPaused":false,"autoSchedulePaused":false,"autoRepliesPaused":false,"metricsRulesPaused":false,"pauseReason":null,"pausedAt":null,"pausedBy":null,"lastDigestAt":null,"updatedAt":"2020-01-01T00:00:00.000Z"}',
   ],
+  ["signal-feed.json", '{"version":1,"items":[],"updatedAt":"2020-01-01T00:00:00.000Z"}'],
 ];
 
 for (const [name, fallback] of optionalFiles) {
