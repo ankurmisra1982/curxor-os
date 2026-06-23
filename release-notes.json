@@ -112,5 +112,12 @@
       "C8 — FRE cafeGrowthIntent persona, CafeLevelUpNudge milestones, ascension coach tips, unified Gamification toggle in Settings",
       "C9 — cafe-checklist in qa:local, BEST-IN-CLASS scorecard, EXIT-DEMO walkthrough, ascension + pixel captures; version 0.7.0"
     ]
+  },
+  "0.8.1": {
+    "highlights": [
+      "Claw Cafe C10 — walk-state approval bubbles, approval= deep links into Capital/Work/Creator desks, tuned Cafe SSE/poll intervals",
+      "Build Plane BP1 — inbound MCP at /api/build/mcp with five read-only tools (build status, CCP summary, Cafe snapshot, Forge fleet, desk status)",
+      "Bridge read policy + network path tags for outbound MCP gating; Settings connect instructions in Build Plane panel"
+    ]
   }
 }
