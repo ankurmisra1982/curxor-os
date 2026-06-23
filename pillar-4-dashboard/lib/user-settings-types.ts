@@ -25,7 +25,22 @@ export interface BuildPlaneSettings {
   webhookSecret: string | null;
   /** Outbound OS event bus webhook (Cursor Automations / n8n). */
   webhookUrl: string | null;
+  /** MS-S1 / appliance LAN host for remote worker SSH probe (eno1). */
+  workerHost: string | null;
+  workerSshPort: number;
+  workerSshUser: string;
+  workerLastProbeAt: string | null;
+  workerWizardCompletedAt: string | null;
+  workerCompletedSteps: BuildWorkerWizardStepId[];
 }
+
+export type BuildWorkerWizardStepId =
+  | "prerequisites"
+  | "install_cursor"
+  | "connect_mcp"
+  | "configure_worker"
+  | "probe_worker"
+  | "phone_control";
 
 /** Client-safe Build Plane view (no secrets). */
 export interface SanitizedBuildPlaneSettings {
@@ -37,6 +52,12 @@ export interface SanitizedBuildPlaneSettings {
   allowWriteTools: boolean;
   hasWebhookSecret: boolean;
   hasWebhookUrl: boolean;
+  workerHost: string | null;
+  workerSshPort: number;
+  workerSshUser: string;
+  workerLastProbeAt: string | null;
+  workerWizardCompletedAt: string | null;
+  workerWizardProgress: { complete: number; total: number };
 }
 
 export interface ConnectedProvider {
@@ -131,6 +152,12 @@ export const DEFAULT_BUILD_PLANE: BuildPlaneSettings = {
   allowWriteTools: false,
   webhookSecret: null,
   webhookUrl: null,
+  workerHost: null,
+  workerSshPort: 22,
+  workerSshUser: "curxor",
+  workerLastProbeAt: null,
+  workerWizardCompletedAt: null,
+  workerCompletedSteps: [],
 };
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {

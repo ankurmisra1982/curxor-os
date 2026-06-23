@@ -126,5 +126,12 @@
       "Signed outbound webhooks to Cursor Automations / n8n when Build Plane overlay enabled",
       "GET/POST /api/build/events event log, OTA/eno2 poll, Go Live failure hooks across flagship desks"
     ]
+  },
+  "0.9.0": {
+    "highlights": [
+      "Build Plane BP3 — remote worker setup wizard at /api/build/worker with 6-step MS-S1 devbox guide",
+      "TCP SSH probe, host config, MCP/SSH tunnel copy commands, delegation queue schema scaffold",
+      "BuildPlaneWorkerWizard in Settings for phone-control path on eno1"
+    ]
   }
 }

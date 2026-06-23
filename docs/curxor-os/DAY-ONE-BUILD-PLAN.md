@@ -214,7 +214,7 @@ flowchart LR
 | **Network path tags** | `network-path.ts` · operate / build / egress · outbound MCP client respects `buildPlane.enabled` |
 | **Settings panel** | MCP connect URL + BP1 copy in `BuildPlanePanel` |
 
-**Deferred (post-BP1):** ~~OS event bus webhooks (v0.8.2)~~ **Shipped (BP2)** · remote worker wizard (v0.9) · Master AI delegation queue.
+**Deferred (post-BP1):** ~~OS event bus webhooks (v0.8.2)~~ **Shipped (BP2)** · ~~remote worker wizard (v0.9)~~ **Shipped (BP3)** · Master AI delegation queue UI (v0.9+).
 
 ### Phase 4c — Build Plane OS event bus (BP2) · **v0.8.2** · **Shipped**
 
@@ -225,6 +225,15 @@ flowchart LR
 | **`GET/POST /api/build/events`** | Event log read · `poll` (OTA/eno2) · `emit_demo` for QA |
 | **Go Live hooks** | Capital/Work/Creator/Cafe/Swarm/Vital `go_live` actions emit on failure |
 | **Settings** | Webhook URL + signing secret in Build Plane panel |
+
+### Phase 4d — Build Plane remote worker wizard (BP3) · **v0.9.0** · **Shipped**
+
+| Item | Scope |
+|------|--------|
+| **`GET/POST /api/build/worker`** | 6-step wizard · SSH host config · TCP probe · demo mark-online |
+| **Settings UI** | `BuildPlaneWorkerWizard` in Build Plane panel |
+| **Delegation queue** | `build-delegation-queue.json` · enqueue/resolve API scaffold |
+| **Schema** | `workerHost`, `workerSshPort`, `workerSshUser`, `workerCompletedSteps` on `buildPlane` |
 
 ---
 
