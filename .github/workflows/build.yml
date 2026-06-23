@@ -59,15 +59,18 @@ jobs:
       run:
         working-directory: pillar-4-dashboard
     env:
+      CURXOR_DEV_QA_DIR: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa
       CURXOR_MESH_BROKER_IP: 127.0.0.1
       CURXOR_FRE_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/fre-state.json
       CURXOR_USER_SETTINGS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/user-settings.json
       CURXOR_LLM_CREDENTIALS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/llm-credentials.json
       CURXOR_CLAW_CONTEXT_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/claw-context.json
       CURXOR_FAMILY_PROFILES_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/family-profiles.json
+      CURXOR_HUMANOID_HUB_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/humanoid-hub.json
       CURXOR_VITAL_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/vital-health.json
       CURXOR_CONTENT_QUEUE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/content-queue.json
       CURXOR_WORK_QUEUE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/work-queue.json
+      CURXOR_WORK_OUTBOUND_LOCK: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/work-outbound.lock
       CURXOR_CAPITAL_QUEUE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/capital-queue.json
       CURXOR_CAPITAL_PFM_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/capital-pfm.json
       CURXOR_CAPITAL_INTEL_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/capital-intel.json
@@ -78,6 +81,7 @@ jobs:
       CURXOR_CLAW_PROFILES_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/claw-profiles.json
       CURXOR_APP_FRE_DIR: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/app-fre
       CURXOR_AGENT_WORKSPACE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/agent-workspace
+      CURXOR_FORGED_APPS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/forged-apps.json
       CURXOR_SCHEDULER_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/scheduler/jobs.json
       CURXOR_CHANNELS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/channels
       CURXOR_CCP_CONSENT_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/ccp-consent.json
@@ -85,6 +89,15 @@ jobs:
       CURXOR_CONTENT_AUDIT_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/content-audit.json
       CURXOR_BRIDGE_HEALTH_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/content-bridge-health.json
       CURXOR_CONTENT_OPS_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/content-ops.json
+      CURXOR_COMMERCE_SHOPIFY_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/commerce-shopify.json
+      CURXOR_COMMERCE_EBAY_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/commerce-ebay.json
+      CURXOR_COMMERCE_PRINTIFY_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/commerce-printify.json
+      CURXOR_SHOP_SYNC_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/shop-sync.json
+      CURXOR_SIGNAL_FEED_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/signal-feed.json
+      CURXOR_ACTIVE_CLAW_CONF: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/engine.env.d/active-claw.conf
+      CURXOR_SHOPIFY_MOCK: "1"
+      CURXOR_EBAY_MOCK: "1"
+      CURXOR_PRINTIFY_MOCK: "1"
       PORT: "3080"
       HOSTNAME: 127.0.0.1
     steps:

@@ -78,6 +78,14 @@ export async function validateFrontierApiKey(
         }
         return { ok: true };
       }
+      case "sakana": {
+        const res = await fetch(`${frontierApiBase(providerId)}/models`, {
+          headers: { Authorization: `Bearer ${key}` },
+          signal: controller.signal,
+        });
+        if (!res.ok) return { ok: false, error: "Sakana rejected this API key" };
+        return { ok: true };
+      }
       default:
         return { ok: false, error: "Validation not implemented for this provider" };
     }

@@ -82,6 +82,21 @@ export const FRONTIER_PROVIDERS: FrontierProvider[] = [
     authMethods: ["api_key"],
     supportsSubscriptionLogin: false,
   },
+  {
+    id: "sakana",
+    name: "Sakana Fugu",
+    tagline: "Optional cloud orchestrator (routes frontier models via Sakana API) — not local inference",
+    models: [
+      { id: "fugu", label: "Fugu (fast)" },
+      { id: "fugu-ultra", label: "Fugu Ultra" },
+      { id: "fugu-ultra-20260615", label: "Fugu Ultra (pinned)" },
+    ],
+    connectUrl: "https://console.sakana.ai/get-started",
+    purchaseUrl: "https://console.sakana.ai/pricing",
+    docsUrl: "https://console.sakana.ai/models",
+    authMethods: ["api_key"],
+    supportsSubscriptionLogin: false,
+  },
 ];
 
 export function getFrontierProvider(id: string): FrontierProvider | undefined {
@@ -98,6 +113,8 @@ export function frontierApiBase(providerId: string): string {
       return "https://generativelanguage.googleapis.com/v1beta/openai";
     case "openrouter":
       return "https://openrouter.ai/api/v1";
+    case "sakana":
+      return "https://api.sakana.ai/v1";
     case "cursor":
       return "https://api.cursor.com/v1";
     default:

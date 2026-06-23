@@ -80,6 +80,8 @@ export async function POST(request: Request): Promise<Response> {
     targetWeight?: number;
     driftThresholdPct?: number;
     query?: string;
+    description?: string;
+    defaultAsset?: string;
   };
 
   try {
