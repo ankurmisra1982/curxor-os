@@ -23,6 +23,8 @@ export interface BuildPlaneSettings {
   allowWriteTools: boolean;
   /** Inbound automation webhook secret — never exposed to client APIs. */
   webhookSecret: string | null;
+  /** Outbound OS event bus webhook (Cursor Automations / n8n). */
+  webhookUrl: string | null;
 }
 
 /** Client-safe Build Plane view (no secrets). */
@@ -34,6 +36,7 @@ export interface SanitizedBuildPlaneSettings {
   allowDelegation: boolean;
   allowWriteTools: boolean;
   hasWebhookSecret: boolean;
+  hasWebhookUrl: boolean;
 }
 
 export interface ConnectedProvider {
@@ -127,6 +130,7 @@ export const DEFAULT_BUILD_PLANE: BuildPlaneSettings = {
   allowDelegation: false,
   allowWriteTools: false,
   webhookSecret: null,
+  webhookUrl: null,
 };
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {

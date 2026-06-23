@@ -119,5 +119,12 @@
       "Build Plane BP1 — inbound MCP at /api/build/mcp with five read-only tools (build status, CCP summary, Cafe snapshot, Forge fleet, desk status)",
       "Bridge read policy + network path tags for outbound MCP gating; Settings connect instructions in Build Plane panel"
     ]
+  },
+  "0.8.2": {
+    "highlights": [
+      "Build Plane BP2 — OS event bus with emitOsEvent() for forge.claw_minted, go_live.failed, ota.available, eno2.down",
+      "Signed outbound webhooks to Cursor Automations / n8n when Build Plane overlay enabled",
+      "GET/POST /api/build/events event log, OTA/eno2 poll, Go Live failure hooks across flagship desks"
+    ]
   }
 }

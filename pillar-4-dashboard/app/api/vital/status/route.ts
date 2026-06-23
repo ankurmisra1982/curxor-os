@@ -51,6 +51,10 @@ export async function POST(request: Request): Promise<Response> {
 
   if (body.action === "go_live") {
     const goLive = await buildVitalGoLiveReport();
+    void (async () => {
+      const { maybeEmitGoLiveFailed } = await import("@/lib/go-live-os-events");
+      await maybeEmitGoLiveFailed("my-vital", goLive);
+    })();
     return Response.json({ ok: true, goLive });
   }
 

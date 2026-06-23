@@ -1364,6 +1364,10 @@ export async function POST(request: Request): Promise<Response> {
     case "go_live": {
       const { buildGoLiveReport } = await import("@/lib/content-go-live");
       const report = await buildGoLiveReport();
+      void (async () => {
+        const { maybeEmitGoLiveFailed } = await import("@/lib/go-live-os-events");
+        await maybeEmitGoLiveFailed("my-content-creator", report);
+      })();
       return Response.json({ ok: true, goLive: report });
     }
 

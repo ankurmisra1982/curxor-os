@@ -49,7 +49,10 @@ export type CafeEventKind =
   | "signal.knowledge_pushed"
   | "signal.context_synced"
   | "streak.day"
-  | "cross_claw.handshake";
+  | "cross_claw.handshake"
+  | "os.go_live_failed"
+  | "os.ota_available"
+  | "os.eno2_down";
 
 export interface CafeEventXp {
   ascension: number;

@@ -167,6 +167,11 @@ export async function POST(request: Request): Promise<Response> {
               detail: `demoReady ${goLive.progress.complete}/${goLive.progress.total}`,
             });
           })();
+        } else {
+          void (async () => {
+            const { maybeEmitGoLiveFailed } = await import("@/lib/go-live-os-events");
+            await maybeEmitGoLiveFailed("my-work", goLive);
+          })();
         }
         return Response.json({ ok: true, goLive, status: await fetchWorkStatus() });
       }

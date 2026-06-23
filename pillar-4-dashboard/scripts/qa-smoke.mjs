@@ -65,8 +65,29 @@ await check("build plane status", async () => {
     data.buildPlane.webhookSecret === undefined &&
     typeof data.bridgeLinked === "boolean" &&
     data.mcp?.endpoint === "/api/build/mcp" &&
-    data.mcp?.toolCount === 5
+    data.mcp?.toolCount === 5 &&
+    data.eventBus?.endpoint === "/api/build/events" &&
+    Array.isArray(data.eventBus?.kinds) &&
+    data.eventBus.kinds.includes("forge.claw_minted")
   );
+});
+
+await check("build plane event bus log", async () => {
+  const data = await getJson("/api/build/events?limit=8");
+  return data.ok === true && Array.isArray(data.events) && Array.isArray(data.kinds) && data.kinds.length === 4;
+});
+
+await check("build plane event bus emit demo", async () => {
+  await postJson("/api/settings", { buildPlane: { enabled: true } });
+  const { ok, json } = await postJson("/api/build/events", { action: "emit_demo" });
+  if (!ok || !json.result?.id) return false;
+  const log = await getJson("/api/build/events?limit=4");
+  return log.events?.some((e) => e.event === "go_live.failed" && e.id === json.result.id);
+});
+
+await check("build plane event bus poll", async () => {
+  const { ok, json } = await postJson("/api/build/events", { action: "poll" });
+  return ok && json.ok === true && json.ota && typeof json.eno2?.down === "boolean";
 });
 
 await check("build plane mcp catalog", async () => {
