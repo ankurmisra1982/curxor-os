@@ -214,7 +214,17 @@ flowchart LR
 | **Network path tags** | `network-path.ts` · operate / build / egress · outbound MCP client respects `buildPlane.enabled` |
 | **Settings panel** | MCP connect URL + BP1 copy in `BuildPlanePanel` |
 
-**Deferred (post-BP1):** OS event bus webhooks (v0.8.2) · remote worker wizard (v0.9) · Master AI delegation queue.
+**Deferred (post-BP1):** ~~OS event bus webhooks (v0.8.2)~~ **Shipped (BP2)** · remote worker wizard (v0.9) · Master AI delegation queue.
+
+### Phase 4c — Build Plane OS event bus (BP2) · **v0.8.2** · **Shipped**
+
+| Item | Scope |
+|------|--------|
+| **`emitOsEvent()`** | Central bus → Cafe ingest + signed outbound webhook |
+| **Event kinds** | `forge.claw_minted`, `go_live.failed`, `ota.available`, `eno2.down` |
+| **`GET/POST /api/build/events`** | Event log read · `poll` (OTA/eno2) · `emit_demo` for QA |
+| **Go Live hooks** | Capital/Work/Creator/Cafe/Swarm/Vital `go_live` actions emit on failure |
+| **Settings** | Webhook URL + signing secret in Build Plane panel |
 
 ---
 

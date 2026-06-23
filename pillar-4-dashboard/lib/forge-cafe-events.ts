@@ -86,6 +86,23 @@ export async function emitForgeCafeEvent(input: EmitForgeCafeEventInput): Promis
     label: event.name,
   });
 
+  if (event.kind === "forge.claw_minted" || event.kind === "forge.framework_provisioned") {
+    const { emitOsEvent } = await import("./os-event-bus");
+    void emitOsEvent(
+      "forge.claw_minted",
+      {
+        dedupeKey: `forge:${event.id}`,
+        forgeKind: event.kind,
+        mode: event.mode,
+        name: event.name,
+        appId: event.appId,
+        forgedSlug: event.forgedSlug,
+        templateId: event.templateId,
+      },
+      { skipCafe: true },
+    );
+  }
+
   return event;
 }
 

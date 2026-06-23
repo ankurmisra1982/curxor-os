@@ -9,6 +9,7 @@ export function sanitizeBuildPlane(buildPlane: BuildPlaneSettings): SanitizedBui
     allowDelegation: buildPlane.allowDelegation,
     allowWriteTools: buildPlane.allowWriteTools,
     hasWebhookSecret: Boolean(buildPlane.webhookSecret),
+    hasWebhookUrl: Boolean(buildPlane.webhookUrl?.trim()),
   };
 }
 

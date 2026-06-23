@@ -114,6 +114,10 @@ export async function POST(request: Request): Promise<Response> {
 
       case "go_live": {
         const goLive = await buildCapitalGoLiveReport();
+        void (async () => {
+          const { maybeEmitGoLiveFailed } = await import("@/lib/go-live-os-events");
+          await maybeEmitGoLiveFailed("my-capital", goLive);
+        })();
         return Response.json({ ok: true, goLive, status: await fetchCapitalStatus() });
       }
 

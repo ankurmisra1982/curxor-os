@@ -55,6 +55,10 @@ export async function POST(request: Request): Promise<Response> {
 
       case "go_live": {
         const goLive = await buildSwarmGoLiveReport();
+        void (async () => {
+          const { maybeEmitGoLiveFailed } = await import("@/lib/go-live-os-events");
+          await maybeEmitGoLiveFailed("swarm-preview", goLive);
+        })();
         return Response.json({ ok: true, goLive });
       }
 

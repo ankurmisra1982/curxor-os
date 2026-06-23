@@ -66,6 +66,12 @@ function mergeBuildPlane(
         : typeof src.webhookSecret === "string"
           ? src.webhookSecret
           : base.webhookSecret,
+    webhookUrl:
+      src.webhookUrl === null
+        ? null
+        : typeof src.webhookUrl === "string"
+          ? src.webhookUrl.trim()
+          : base.webhookUrl,
   };
 }
 
@@ -332,6 +338,7 @@ export async function sanitizeSettingsForClient(settings: UserSettings): Promise
       allowDelegation: sanitizedBp.allowDelegation,
       allowWriteTools: sanitizedBp.allowWriteTools,
       webhookSecret: null,
+      webhookUrl: null,
     },
     intelligence: {
       ...settings.intelligence,

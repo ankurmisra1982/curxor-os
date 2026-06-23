@@ -46,6 +46,9 @@ export function BuildPlanePanel({
   const [linkStatus, setLinkStatus] = useState(initialLinkStatus);
   const [allowDelegation, setAllowDelegation] = useState(initialAllowDelegation);
   const [allowWriteTools, setAllowWriteTools] = useState(initialAllowWriteTools);
+  const [webhookUrl, setWebhookUrl] = useState("");
+  const [webhookSecretDraft, setWebhookSecretDraft] = useState("");
+  const [hasWebhookUrl, setHasWebhookUrl] = useState(false);
   const [workerStatus, setWorkerStatus] = useState<SanitizedBuildPlaneSettings["workerStatus"]>("unknown");
   const [linkedAt, setLinkedAt] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -62,7 +65,10 @@ export function BuildPlanePanel({
   const refreshStatus = useCallback(async () => {
     const res = await fetch("/api/build/status", { cache: "no-store" });
     if (!res.ok) return;
-    const data = (await res.json()) as { buildPlane?: SanitizedBuildPlaneSettings };
+    const data = (await res.json()) as {
+      buildPlane?: SanitizedBuildPlaneSettings;
+      eventBus?: { endpoint?: string; recentCount?: number };
+    };
     if (!data.buildPlane) return;
     setLinkStatus(data.buildPlane.linkStatus);
     setWorkerStatus(data.buildPlane.workerStatus);
@@ -70,6 +76,7 @@ export function BuildPlanePanel({
     setEnabled(data.buildPlane.enabled);
     setAllowDelegation(data.buildPlane.allowDelegation);
     setAllowWriteTools(data.buildPlane.allowWriteTools);
+    setHasWebhookUrl(data.buildPlane.hasWebhookUrl);
   }, []);
 
   useEffect(() => {
@@ -116,6 +123,7 @@ export function BuildPlanePanel({
         </div>
         <div className="text-muted">
           Worker <span className="text-stark">{workerStatus}</span>
+          {hasWebhookUrl ? " · webhook configured" : ""}
         </div>
       </div>
 
@@ -186,6 +194,46 @@ export function BuildPlanePanel({
           <code className="text-stark">{typeof window !== "undefined" ? `${window.location.origin}/api/build/mcp` : "http://127.0.0.1:3080/api/build/mcp"}</code>
         </p>
         <p className="mt-1">Enable overlay above before tools respond. Read-only: CCP summary, Cafe snapshot, Forge fleet, desk status.</p>
+      </div>
+
+      <div className="space-y-2 border border-line/60 bg-void/30 px-3 py-2 font-mono text-[10px]">
+        <p className="uppercase tracking-widest text-cursor-glow">OS event bus (BP2 / v0.8.2)</p>
+        <p className="text-muted">
+          Outbound webhooks when Forge mints, Go Live fails, OTA is available, or eno2 drops. Events also append to{" "}
+          <code className="text-stark">/api/build/events</code> and ingest into Claw Cafe when relevant.
+        </p>
+        <label className="mt-2 block font-sans text-xs text-muted">
+          Webhook URL (Cursor Automation / n8n)
+          <input
+            type="url"
+            placeholder="https://…"
+            disabled={saving || !enabled}
+            className="mt-1 w-full border border-line bg-void px-2 py-1.5 font-mono text-[11px] text-stark"
+            value={webhookUrl}
+            onChange={(e) => setWebhookUrl(e.target.value)}
+            onBlur={() => {
+              if (webhookUrl.trim()) void save({ webhookUrl: webhookUrl.trim() });
+            }}
+          />
+        </label>
+        <label className="block font-sans text-xs text-muted">
+          Webhook signing secret (optional · HMAC sha256)
+          <input
+            type="password"
+            placeholder="Leave blank to keep existing"
+            disabled={saving || !enabled}
+            className="mt-1 w-full border border-line bg-void px-2 py-1.5 font-mono text-[11px] text-stark"
+            value={webhookSecretDraft}
+            onChange={(e) => setWebhookSecretDraft(e.target.value)}
+            onBlur={() => {
+              if (webhookSecretDraft.trim()) void save({ webhookSecret: webhookSecretDraft.trim() });
+            }}
+          />
+        </label>
+        <p className="text-muted">
+          Or set <code className="text-stark">CURXOR_BUILD_PLANE_WEBHOOK_URL</code> in digital.env. Poll OTA/eno2 via POST{" "}
+          <code className="text-stark">/api/build/events</code> action <code className="text-stark">poll</code>.
+        </p>
       </div>
 
       <div className="space-y-2 border-t border-line/60 pt-3">

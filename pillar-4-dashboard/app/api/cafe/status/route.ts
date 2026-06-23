@@ -51,6 +51,10 @@ export async function POST(request: Request): Promise<Response> {
 
   if (action === "go_live") {
     const goLive = await buildCafeGoLiveReport();
+    void (async () => {
+      const { maybeEmitGoLiveFailed } = await import("@/lib/go-live-os-events");
+      await maybeEmitGoLiveFailed("claw-cafe", goLive);
+    })();
     const bootstrap = await buildCafeAscensionBootstrap();
     return Response.json({ ...bootstrap, goLive, demoReady: goLive.demoReady });
   }

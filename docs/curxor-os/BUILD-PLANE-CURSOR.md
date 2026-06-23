@@ -70,7 +70,7 @@ flowchart TB
 |-------|------------|
 | **v0.8 spec (BP0)** | Settings panel · connection status · MCP schema doc · **Shipped** |
 | **v0.8.1 (BP1)** | MCP server on appliance: read CCP summary, Cafe ledger, Forge fleet, `/api/*/status` · **Shipped** |
-| **v0.8.2** | Webhook emitters: `forge.claw_minted`, `go_live.failed`, `ota.available`, `eno2.down` |
+| **v0.8.2 (BP2)** | Webhook emitters: `forge.claw_minted`, `go_live.failed`, `ota.available`, `eno2.down` · **Shipped** |
 | **v0.9** | Remote worker setup wizard (MS-S1 as devbox; control from phone) |
 | **v0.9+** | Master AI delegation: “open build task” with ascension + confirm gates |
 | **Deferred default** | Cursor **cloud** agents with write access to production Claw stores |
@@ -108,7 +108,7 @@ Build Plane is not a Cafe-only feature. These **OS-wide foundations** must exist
 | 2 | **`GET /api/build/status`** | Sanitized bridge state for Settings, Cafe, future Master AI | **BP0** · **Shipped** |
 | 3 | **Inbound MCP server** | Cursor connects **to** CurXor (read CCP, status, Cafe ledger) | v0.8.1 · **Shipped** |
 | 4 | **CCP bridge read policy** | Scope/matrix for what `bridge` may read vs write | v0.8.1 · **Shipped** |
-| 5 | **OS event bus** | `emitOsEvent()` → Cafe ledger + optional signed webhook | v0.8.2 |
+| 5 | **OS event bus** | `emitOsEvent()` → Cafe ledger + optional signed webhook | v0.8.2 · **Shipped** |
 | 6 | **Network path tags** | Classify fetch/git as `operate` \| `build` \| `egress` | v0.8.1 · **Shipped** |
 | 7 | **Delegation queue schema** | `/etc/curxor/build-delegation-queue.json` + audit log | v0.9 (schema early OK) |
 | 8 | **Cafe spatial hook** | `blueprint_nook` station + NPC opacity from `bridgeLinked` | Cafe **C7** |

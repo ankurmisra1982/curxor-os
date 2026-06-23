@@ -13,7 +13,7 @@
 | 1 | Local QA green | `cd pillar-4-dashboard && npm run qa:local -- --port 3081` | Run before unbox |
 | 2 | Typecheck | `npm run typecheck` | |
 | 3 | Production build | `npm run build` | Catches Next.js issues |
-| 4 | Tag known-good | `version.json` → bump after QA | Currently **0.8.1** (Cafe C10 + Build Plane BP1) |
+| 4 | Tag known-good | `version.json` → bump after QA | Currently **0.8.2** (Build Plane BP2 event bus) |
 | 5 | Repo rsync plan | `install-all.sh` from clean Ubuntu 24.04 | See [01-installation.md](../guides/01-installation.md) |
 | 6 | Seed script | `scripts/seed-appliance-data.sh` | Seeds `/etc/curxor` JSON + `digital.env` |
 | 7 | Data path fix | `lib/curxor-data-dir.ts` | Production XP/Cafe → `/etc/curxor` (not install tree) |
