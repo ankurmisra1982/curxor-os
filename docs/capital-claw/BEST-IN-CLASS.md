@@ -10,7 +10,7 @@ Research snapshot for Sprints 1–3 (June 2026). CurXor’s wedge: **sovereign o
 | [Autopilot](https://www.joinautopilot.com/landing) | Copy-trading marketplace — pick pilot, connect brokerage, proportional mirror | **Pilot marketplace** + subscriptions + proportional copy on sovereign bridge |
 | [fomo](https://fomo.family/) | Social crypto feed, leaderboards, thesis on trades, chart overlays | **Sovereign Alpha Feed** — local feed, thesis journal, pilot leaderboard, overlays (not cloud social graph) |
 | TradingView / CNBC / Reddit | Fundamentals, charts, headlines, WSB chatter | **Ticker research** — Yahoo basics + CNBC + Reddit + FinTwit digest, local LLM smart take |
-| [Composer](https://www.composer.trade/) | No-code strategy builder + auto execution | Rule engine + backtest on save |
+| [Composer](https://www.composer.trade/) · [Composer by SoFi](https://www.sofi.com/invest/composer) (Jun 2026) | NL strategy + community catalog + backtest → activate; rules-not-agentic | Rule engine + backtest + pilots · **Composer parity sprint** → [COMPOSER-PARITY-SPRINT.md](./COMPOSER-PARITY-SPRINT.md) |
 | [Robinhood Agentic Trading](https://robinhood.com/us/en/support/articles/agentic-trading-overview/) | Official MCP at `https://agent.robinhood.com/mcp/trading`, isolated agentic account | Listed in broker registry as **MCP tier** — user connects from agent settings |
 
 ## Institutional rails

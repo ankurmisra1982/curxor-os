@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { autoApprovalSummary, type AutoApprovalPolicy } from "@/lib/capital-auto-approval-types";
 import type { GrowthLevel } from "@/lib/os-growth-level";
 
 const STEPS_L1 = ["Watchlist", "Practice rule", "Turn on rule", "Practice buy", "Get started"] as const;
@@ -13,6 +14,7 @@ interface CapitalSetupWizardProps {
   defaultAsset: string;
   onComplete: (result: { ruleId?: string; tradeId?: string }) => void;
   growthLevel?: GrowthLevel;
+  autoApproval?: AutoApprovalPolicy;
 }
 
 type ApiJson = Record<string, unknown> & { ok?: boolean; error?: string };
@@ -23,6 +25,7 @@ export function CapitalSetupWizard({
   defaultAsset,
   onComplete,
   growthLevel = "L3",
+  autoApproval,
 }: CapitalSetupWizardProps) {
   const learner = growthLevel === "L1";
   const STEPS = learner ? STEPS_L1 : STEPS_DEFAULT;
@@ -53,6 +56,11 @@ export function CapitalSetupWizard({
   }, [open, defaultAsset]);
 
   if (!open) return null;
+
+  const policy = autoApproval;
+  const autoPath = Boolean(policy?.enabled && policy.autoApproveArmedRules);
+  const maxNotional = policy?.maxNotionalUsd ?? 500;
+  const approvalLine = policy ? autoApprovalSummary(policy) : null;
 
   const api = async (action: string, extra: Record<string, unknown> = {}): Promise<ApiJson> => {
     const res = await fetch("/api/capital/status", {
@@ -191,25 +199,55 @@ export function CapitalSetupWizard({
         ) : null}
 
         {step === 2 ? (
-          <p className="text-[10px] text-muted">
-            {learner
-              ? `Rule ${ruleId} will be turned on. You can try a practice buy next.`
-              : `Rule ${ruleId} will be armed. Preview estimates notional before execute.`}
-          </p>
+          <div className="space-y-1 text-[10px] text-muted">
+            <p>
+              {learner
+                ? `Rule ${ruleId} will be turned on. You can try a practice buy next.`
+                : `Rule ${ruleId} will be armed. Preview estimates notional before execute.`}
+            </p>
+            {autoPath && approvalLine ? (
+              <p className="text-cursor-glow">{approvalLine}</p>
+            ) : null}
+          </div>
         ) : null}
 
         {step === 3 ? (
-          <p className="text-[10px] text-muted">
-            {learner
-              ? `Try a practice buy — logged locally, no account needed.`
-              : `Execute now — simulated fill in demo mode, paper via Alpaca when configured. Preview: ${previewNotional ?? "—"}`}
-          </p>
+          <div className="space-y-1 text-[10px] text-muted">
+            {learner ? (
+              <p>Try a practice buy — logged locally, no account needed.</p>
+            ) : autoPath ? (
+              <>
+                <p>
+                  When this rule&apos;s conditions fire, auto-approval will submit paper trades if risk guard passes
+                  (max ${maxNotional}).
+                </p>
+                <p className="text-muted">
+                  Optional: execute once now to prove the bridge — preview {previewNotional ?? "—"}
+                </p>
+              </>
+            ) : (
+              <p>
+                Execute now — simulated fill in demo mode, paper via Alpaca when configured. Preview:{" "}
+                {previewNotional ?? "—"}
+              </p>
+            )}
+            {autoPath && approvalLine ? (
+              <p className="text-cursor-glow">{approvalLine}</p>
+            ) : null}
+          </div>
         ) : null}
 
         {step === 4 ? (
-          <p className="text-[10px] text-stark">
-            {goLiveProgress ?? (learner ? "Refresh get-started checklist…" : "Refresh Go Live checklist…")}
-          </p>
+          <div className="space-y-1 text-[10px]">
+            <p className="text-stark">
+              {goLiveProgress ?? (learner ? "Refresh get-started checklist…" : "Refresh Go Live checklist…")}
+            </p>
+            {autoPath ? (
+              <p className="text-muted">
+                Armed rules auto-run on paper when conditions fire — you don&apos;t need to click Execute every time.
+              </p>
+            ) : null}
+          </div>
         ) : null}
 
         {error ? <p className="mt-2 text-[10px] text-red-400">{error}</p> : null}

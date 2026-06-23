@@ -908,7 +908,7 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "cap-auto-approval-standard",
           minLevel: "standard",
           title: "Auto-approval stack",
-          body: "Set a max notional and keep paper-only on at launch. Armed rules and PFM suggestions skip pending_approval when risk guard passes.",
+          body: "Rules you can read — not a black-box agent. Paper-first notional caps skip pending_approval when risk guard passes; Composer runs in SoFi's cloud, Capital runs on your box.",
         },
         {
           id: "cap-auto-approval-expert",
@@ -997,7 +997,7 @@ const APP_TIPS: Partial<Record<OotbAppId, ExperienceCoachSection[]>> = {
           id: "cap-auto-approval-standard",
           minLevel: "standard",
           title: "Auto-approval stack",
-          body: "Paper-first notional caps skip pending_approval when risk guard passes. Pilot copy and TradingView stay off by default.",
+          body: "Paper-first notional caps skip pending_approval when risk guard passes. Pilot copy and TradingView stay off by default — Composer-style rules run locally, not in SoFi's cloud.",
         },
       ],
     },

@@ -30,6 +30,10 @@ Helper scripts: `npm run setup:capital-env` · `npm run configure:capital-keys` 
 - **Pilot leaderboard** — ranked 24h / 7d / 30d / 1Y
 - **Build plan** — [SOCIAL-ALPHA-BUILD-PLAN.md](./SOCIAL-ALPHA-BUILD-PLAN.md)
 
+## Next dev sprint
+
+- **Composer parity (Tier 1)** — [COMPOSER-PARITY-SPRINT.md](./COMPOSER-PARITY-SPRINT.md) · describe bar, backtest→arm, pilot filter, auto-approval UX
+
 ## Shipped (V4.6.2 — polish & exit-demo scaffold)
 
 - **EXIT-DEMO.md** — operator guide for Alpaca paper / Plaid / SnapTrade without changing demo policy

@@ -64,6 +64,9 @@ export function CapitalAutoApprovalPanel({ policy, tradingMode, onUpdate }: Capi
         ))}
       </div>
       <CapitalAgentPermissionsPanel policy={policy} />
+      <p className="border-t border-line/60 pt-2 text-[10px] text-muted">
+        Composer by SoFi runs rules in their cloud. Capital runs yours locally with risk guard.
+      </p>
     </div>
   );
 }

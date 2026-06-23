@@ -441,6 +441,8 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       .finally(() => setExecuteRunning(false));
   };
 
+  const autoApproval = status?.autoApproval ?? defaultAutoApprovalPolicy();
+
   const hasFill = (status?.trades ?? []).some((t) => t.status === "simulated" || t.status === "filled");
   const coachTip =
     !coachDismissed && growthLevel === "L1" && (status?.rules.length ?? 0) === 0
@@ -506,6 +508,11 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           <ExperienceLevelBadge />
           <CapitalLevelBadge growthLevel={growthLevel} />
         </p>
+        {autoApproval.enabled ? (
+          <p className="mt-1 font-mono text-[10px] text-cursor-glow/90">
+            Rules you can read — not a black-box agent. Composer-style automation on your appliance.
+          </p>
+        ) : null}
         <div className="mt-2 flex flex-wrap gap-2">
           <button
             type="button"
@@ -527,6 +534,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         onClose={() => setWizardOpen(false)}
         defaultAsset={status?.watchlist[0] ?? "SPY"}
         growthLevel={growthLevel}
+        autoApproval={autoApproval}
         onComplete={(r) => {
           setWizardOpen(false);
           if (r.ruleId) setSelectedRuleId(r.ruleId);
@@ -832,7 +840,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         hideWhen={hideCapitalSection("auto-approval")}
       >
         <CapitalAutoApprovalPanel
-          policy={status?.autoApproval ?? defaultAutoApprovalPolicy()}
+          policy={autoApproval}
           tradingMode={mode}
           onUpdate={(patch) => void action({ action: "set_auto_approval", autoApproval: patch })}
         />
@@ -1049,6 +1057,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           rules={status?.rules ?? []}
           selectedRuleId={selectedRuleId}
           defaultAsset={status?.watchlist[0] ?? "NVDA"}
+          autoApproval={autoApproval}
           onSelect={setSelectedRuleId}
           onToggle={(id) => void action({ action: "toggle_rule", ruleId: id })}
           onExecute={(id) =>
@@ -1061,6 +1070,19 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
               ),
             )
           }
+          onDescribeRule={async (description) => {
+            const j = await action({
+              action: "describe_rule",
+              description,
+              defaultAsset: status?.watchlist[0] ?? "SPY",
+            });
+            if (j.ok && j.rule?.id) {
+              setSelectedRuleId(j.rule.id);
+              setSignal(`Rule created · ${j.rule.name}`);
+              return { ok: true, ruleId: j.rule.id };
+            }
+            return { ok: false, error: typeof j.error === "string" ? j.error : "Describe failed" };
+          }}
           onCreateStructured={(input) =>
             void action({
               action: "create_rule",

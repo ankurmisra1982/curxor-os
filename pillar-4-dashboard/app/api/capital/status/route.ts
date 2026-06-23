@@ -121,6 +121,33 @@ export async function POST(request: Request): Promise<Response> {
         return Response.json({ ...tour, status: await fetchCapitalStatus() });
       }
 
+      case "describe_rule": {
+        const description = typeof body.description === "string" ? body.description.trim() : "";
+        if (!description) {
+          return Response.json({ ok: false, error: "description required" }, { status: 400 });
+        }
+        const { parseDescribeRule } = await import("@/lib/capital-nl-rule-parser");
+        const fallbackAsset =
+          typeof body.defaultAsset === "string" ? body.defaultAsset.trim().toUpperCase() : "SPY";
+        const parsed = parseDescribeRule(description, fallbackAsset);
+        if (!parsed) {
+          return Response.json({ ok: false, error: "Could not parse strategy description" }, { status: 400 });
+        }
+        const rule = await createRule({
+          name: parsed.name,
+          asset: parsed.asset,
+          conditionType: parsed.conditionType,
+          conditionParams: parsed.conditionParams,
+          action: parsed.action,
+          qty: parsed.qty,
+          note: parsed.note,
+          takeProfitPct: parsed.takeProfitPct,
+          stopLossPct: parsed.stopLossPct,
+        });
+        const backtested = await runRuleBacktest(rule.id);
+        return Response.json({ ok: true, rule: backtested ?? rule, parsed, status: await fetchCapitalStatus() });
+      }
+
       case "create_rule": {
         if (!body.name?.trim() || !body.asset?.trim()) {
           return Response.json({ ok: false, error: "name and asset required" }, { status: 400 });

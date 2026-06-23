@@ -1,6 +1,10 @@
 "use client";
 
-import type { CapitalPilot } from "@/lib/capital-queue-types";
+import { useMemo, useState } from "react";
+
+import type { CapitalPilot, PilotCategory } from "@/lib/capital-queue-types";
+
+const CATEGORIES: PilotCategory[] = ["tracker", "thematic", "ai", "index", "managed"];
 
 function perfLabel(p: CapitalPilot, key: keyof CapitalPilot["performance"]): string {
   const v = p.performance[key];
@@ -25,8 +29,29 @@ export function CapitalPilotMarketplacePanel({
   onSubscribe,
   onHoldingClick,
 }: CapitalPilotMarketplacePanelProps) {
-  const featured = pilots.filter((p) => p.featured);
-  const rest = pilots.filter((p) => !p.featured);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<PilotCategory | "all">("all");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return pilots.filter((p) => {
+      if (category !== "all" && p.category !== category) return false;
+      if (!q) return true;
+      const haystack = [
+        p.name,
+        p.description,
+        p.author,
+        p.category,
+        ...p.holdings.map((h) => h.symbol),
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [pilots, query, category]);
+
+  const featured = filtered.filter((p) => p.featured);
+  const rest = filtered.filter((p) => !p.featured);
 
   const renderCard = (p: CapitalPilot) => {
     const subscribed = subscribedPilotIds.includes(p.id);
@@ -123,16 +148,60 @@ export function CapitalPilotMarketplacePanel({
       <p className="text-[10px] text-muted">
         Pilot marketplace — choose a strategy, allocate capital, mirror trades in your linked brokerage (Autopilot-style, sovereign on-appliance).
       </p>
-      <div>
-        <p className="mb-2 text-[10px] uppercase tracking-widest text-muted">Featured</p>
-        <div className="grid gap-2 md:grid-cols-2">{featured.map(renderCard)}</div>
-      </div>
-      {rest.length > 0 ? (
-        <div>
-          <p className="mb-2 text-[10px] uppercase tracking-widest text-muted">More pilots</p>
-          <div className="grid gap-2 md:grid-cols-2">{rest.map(renderCard)}</div>
+
+      <div className="space-y-2">
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search name, description, tickers…"
+          className="w-full border border-line bg-transparent px-2 py-1 text-[10px] text-stark placeholder:text-muted"
+        />
+        <div className="flex flex-wrap gap-1">
+          <button
+            type="button"
+            onClick={() => setCategory("all")}
+            className={`border px-2 py-0.5 text-[9px] uppercase ${
+              category === "all" ? "border-cursor-glow text-cursor-glow" : "border-line text-muted"
+            }`}
+          >
+            All
+          </button>
+          {CATEGORIES.map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setCategory(c)}
+              className={`border px-2 py-0.5 text-[9px] uppercase ${
+                category === c ? "border-cursor-glow text-cursor-glow" : "border-line text-muted"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
         </div>
-      ) : null}
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className="border border-line/60 bg-panel px-3 py-3 text-[10px] text-muted">
+          No strategies match — try &apos;semiconductor&apos; or &apos;congress&apos;
+        </p>
+      ) : (
+        <>
+          {featured.length > 0 ? (
+            <div>
+              <p className="mb-2 text-[10px] uppercase tracking-widest text-muted">Featured</p>
+              <div className="grid gap-2 md:grid-cols-2">{featured.map(renderCard)}</div>
+            </div>
+          ) : null}
+          {rest.length > 0 ? (
+            <div>
+              <p className="mb-2 text-[10px] uppercase tracking-widest text-muted">More pilots</p>
+              <div className="grid gap-2 md:grid-cols-2">{rest.map(renderCard)}</div>
+            </div>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }
