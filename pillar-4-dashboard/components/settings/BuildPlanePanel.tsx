@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { BuildPlaneLinkStatus, SanitizedBuildPlaneSettings } from "@/lib/user-settings-types";
 
+import { BuildPlaneWorkerWizard } from "./BuildPlaneWorkerWizard";
+
 interface BuildPlanePanelProps {
   enabled: boolean;
   linkStatus: BuildPlaneLinkStatus;
@@ -181,9 +183,8 @@ export function BuildPlanePanel({
       </div>
 
       <p className="font-mono text-[10px] text-muted">
-        Real Cursor OAuth and remote worker setup ship in v0.9. This control only updates appliance state in{" "}
-        <code className="text-stark">user-settings.buildPlane</code> — separate from Intelligence → frontier
-        providers.
+        Configure inbound MCP and OS event webhooks below. Use the remote worker wizard to wire MS-S1 as a Cursor
+        devbox — separate from Intelligence → frontier providers.
       </p>
 
       <div className="border border-line/60 bg-void/30 px-3 py-2 font-mono text-[10px] text-muted">
@@ -235,6 +236,8 @@ export function BuildPlanePanel({
           <code className="text-stark">/api/build/events</code> action <code className="text-stark">poll</code>.
         </p>
       </div>
+
+      <BuildPlaneWorkerWizard enabled={enabled} onRefresh={() => void refreshStatus()} />
 
       <div className="space-y-2 border-t border-line/60 pt-3">
         <p className="font-mono text-[10px] uppercase tracking-widest text-muted">Policy (future gates)</p>

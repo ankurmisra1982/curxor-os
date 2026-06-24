@@ -17,6 +17,7 @@ import {
   getUserSettingsPath,
   isBuildPlaneLinkStatus,
   isBuildPlaneWorkerStatus,
+  type BuildWorkerWizardStepId,
   type ColorScheme,
   type IntelligenceSource,
   type ThemeMode,
@@ -39,39 +40,78 @@ function isThemeMode(v: unknown): v is ThemeMode {
   return v === "dark" || v === "light" || v === "system";
 }
 
+function isWorkerWizardStepId(v: unknown): v is BuildWorkerWizardStepId {
+  return (
+    v === "prerequisites" ||
+    v === "install_cursor" ||
+    v === "connect_mcp" ||
+    v === "configure_worker" ||
+    v === "probe_worker" ||
+    v === "phone_control"
+  );
+}
+
 function mergeBuildPlane(
   partial: UserSettingsPatch["buildPlane"],
   base: UserSettings["buildPlane"],
 ): UserSettings["buildPlane"] {
+  const baseResolved = { ...DEFAULT_BUILD_PLANE, ...base };
   const src = partial ?? {};
-  const linkStatus = isBuildPlaneLinkStatus(src.linkStatus) ? src.linkStatus : base.linkStatus;
+  const linkStatus = isBuildPlaneLinkStatus(src.linkStatus) ? src.linkStatus : baseResolved.linkStatus;
   const linkedAt =
     src.linkedAt === null
       ? null
       : typeof src.linkedAt === "string"
         ? src.linkedAt
-        : linkStatus === "linked" && !base.linkedAt
+        : linkStatus === "linked" && !baseResolved.linkedAt
           ? new Date().toISOString()
-          : base.linkedAt;
+          : baseResolved.linkedAt;
   return {
-    enabled: typeof src.enabled === "boolean" ? src.enabled : base.enabled,
+    enabled: typeof src.enabled === "boolean" ? src.enabled : baseResolved.enabled,
     linkStatus,
     linkedAt: linkStatus === "disconnected" ? null : linkedAt,
-    workerStatus: isBuildPlaneWorkerStatus(src.workerStatus) ? src.workerStatus : base.workerStatus,
-    allowDelegation: typeof src.allowDelegation === "boolean" ? src.allowDelegation : base.allowDelegation,
-    allowWriteTools: typeof src.allowWriteTools === "boolean" ? src.allowWriteTools : base.allowWriteTools,
+    workerStatus: isBuildPlaneWorkerStatus(src.workerStatus) ? src.workerStatus : baseResolved.workerStatus,
+    allowDelegation: typeof src.allowDelegation === "boolean" ? src.allowDelegation : baseResolved.allowDelegation,
+    allowWriteTools: typeof src.allowWriteTools === "boolean" ? src.allowWriteTools : baseResolved.allowWriteTools,
     webhookSecret:
       src.webhookSecret === null
         ? null
         : typeof src.webhookSecret === "string"
           ? src.webhookSecret
-          : base.webhookSecret,
+          : baseResolved.webhookSecret,
     webhookUrl:
       src.webhookUrl === null
         ? null
         : typeof src.webhookUrl === "string"
           ? src.webhookUrl.trim()
-          : base.webhookUrl,
+          : baseResolved.webhookUrl,
+    workerHost:
+      src.workerHost === null
+        ? null
+        : typeof src.workerHost === "string"
+          ? src.workerHost.trim()
+          : baseResolved.workerHost,
+    workerSshPort:
+      typeof src.workerSshPort === "number" && src.workerSshPort > 0 ? src.workerSshPort : baseResolved.workerSshPort,
+    workerSshUser:
+      typeof src.workerSshUser === "string" && src.workerSshUser.trim()
+        ? src.workerSshUser.trim()
+        : baseResolved.workerSshUser,
+    workerLastProbeAt:
+      src.workerLastProbeAt === null
+        ? null
+        : typeof src.workerLastProbeAt === "string"
+          ? src.workerLastProbeAt
+          : baseResolved.workerLastProbeAt,
+    workerWizardCompletedAt:
+      src.workerWizardCompletedAt === null
+        ? null
+        : typeof src.workerWizardCompletedAt === "string"
+          ? src.workerWizardCompletedAt
+          : baseResolved.workerWizardCompletedAt,
+    workerCompletedSteps: Array.isArray(src.workerCompletedSteps)
+      ? [...new Set(src.workerCompletedSteps.filter(isWorkerWizardStepId))]
+      : baseResolved.workerCompletedSteps ?? [],
   };
 }
 
@@ -339,6 +379,12 @@ export async function sanitizeSettingsForClient(settings: UserSettings): Promise
       allowWriteTools: sanitizedBp.allowWriteTools,
       webhookSecret: null,
       webhookUrl: null,
+      workerHost: sanitizedBp.workerHost,
+      workerSshPort: sanitizedBp.workerSshPort,
+      workerSshUser: sanitizedBp.workerSshUser,
+      workerLastProbeAt: sanitizedBp.workerLastProbeAt,
+      workerWizardCompletedAt: sanitizedBp.workerWizardCompletedAt,
+      workerCompletedSteps: settings.buildPlane?.workerCompletedSteps ?? [],
     },
     intelligence: {
       ...settings.intelligence,

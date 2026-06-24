@@ -68,8 +68,29 @@ await check("build plane status", async () => {
     data.mcp?.toolCount === 5 &&
     data.eventBus?.endpoint === "/api/build/events" &&
     Array.isArray(data.eventBus?.kinds) &&
-    data.eventBus.kinds.includes("forge.claw_minted")
+    data.eventBus.kinds.includes("forge.claw_minted") &&
+    data.worker?.endpoint === "/api/build/worker" &&
+    data.worker?.wizardSteps === 6
   );
+});
+
+await check("build plane worker wizard", async () => {
+  await postJson("/api/settings", { buildPlane: { enabled: true } });
+  const data = await getJson("/api/build/worker");
+  return (
+    data.ok === true &&
+    Array.isArray(data.steps) &&
+    data.steps.length === 6 &&
+    data.progress?.total === 6
+  );
+});
+
+await check("build plane worker probe demo", async () => {
+  const { ok, json } = await postJson("/api/build/worker", {
+    action: "mark_online_demo",
+    workerHost: "127.0.0.1",
+  });
+  return ok && json.workerStatus === "online";
 });
 
 await check("build plane event bus log", async () => {
