@@ -6,6 +6,7 @@ import type { SanitizedBuildPlaneSettings } from "./user-settings-types";
 import { OS_EVENT_KINDS } from "./os-event-bus-types";
 import { readOsEventLog } from "./os-event-log-store";
 import { BUILD_WORKER_WIZARD_STEP_IDS } from "./build-worker-wizard-steps";
+import { buildDelegationReport } from "./build-delegation-report";
 
 export interface BuildStatusPayload {
   ok: true;
@@ -25,12 +26,16 @@ export interface BuildStatusPayload {
     endpoint: string;
     wizardSteps: number;
   };
+  delegation: {
+    endpoint: string;
+    pendingCount: number;
+  };
 }
 
 export async function buildBuildStatus(): Promise<BuildStatusPayload> {
   const settings = await readUserSettings();
   const buildPlane = sanitizeBuildPlane(settings.buildPlane);
-  const recent = await readOsEventLog(12);
+  const [recent, delegation] = await Promise.all([readOsEventLog(12), buildDelegationReport(8)]);
   return {
     ok: true,
     buildPlane,
@@ -48,6 +53,10 @@ export async function buildBuildStatus(): Promise<BuildStatusPayload> {
     worker: {
       endpoint: "/api/build/worker",
       wizardSteps: BUILD_WORKER_WIZARD_STEP_IDS.length,
+    },
+    delegation: {
+      endpoint: "/api/build/delegation",
+      pendingCount: delegation.pendingCount,
     },
   };
 }

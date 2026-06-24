@@ -205,10 +205,6 @@ export function BuildPlaneWorkerWizard({ enabled, onRefresh }: BuildPlaneWorkerW
         </p>
       ) : null}
 
-      <p className="text-muted">
-        Delegation queue (audit scaffold): {report.delegationQueueCount} item(s) · Master AI delegation UI ships v0.9+.
-      </p>
-
       {error ? <p className="text-red-300">{error}</p> : null}
       {message ? <p className="text-cursor-glow">{message}</p> : null}
     </div>

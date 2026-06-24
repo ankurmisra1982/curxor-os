@@ -214,7 +214,7 @@ flowchart LR
 | **Network path tags** | `network-path.ts` · operate / build / egress · outbound MCP client respects `buildPlane.enabled` |
 | **Settings panel** | MCP connect URL + BP1 copy in `BuildPlanePanel` |
 
-**Deferred (post-BP1):** ~~OS event bus webhooks (v0.8.2)~~ **Shipped (BP2)** · ~~remote worker wizard (v0.9)~~ **Shipped (BP3)** · Master AI delegation queue UI (v0.9+).
+**Deferred (post-BP3):** ~~Master AI delegation queue UI (v0.9+)~~ **Shipped (BP4 v0.9.1)** · Real Cursor OAuth (v0.10+).
 
 ### Phase 4c — Build Plane OS event bus (BP2) · **v0.8.2** · **Shipped**
 
@@ -234,6 +234,15 @@ flowchart LR
 | **Settings UI** | `BuildPlaneWorkerWizard` in Build Plane panel |
 | **Delegation queue** | `build-delegation-queue.json` · enqueue/resolve API scaffold |
 | **Schema** | `workerHost`, `workerSshPort`, `workerSshUser`, `workerCompletedSteps` on `buildPlane` |
+
+### Phase 4e — Master AI delegation queue (BP4) · **v0.9.1** · **Shipped**
+
+| Item | Scope |
+|------|--------|
+| **`GET/POST /api/build/delegation`** | G5 suggest · G6 enqueue · approve/reject/complete with ascension gates |
+| **Settings UI** | `BuildPlaneDelegationQueue` in Build Plane panel |
+| **Cafe chamber** | Master AI flyout · suggest build task → confirm in Settings |
+| **Policy** | `build-delegation-policy.ts` · `allowDelegation` + ascension tier |
 
 ---
 

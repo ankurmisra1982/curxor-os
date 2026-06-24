@@ -15,6 +15,8 @@ export function CafeMasterAiFlyout({ mode, locked, onClose }: CafeMasterAiFlyout
   const [lines, setLines] = useState<string[]>([]);
   const [loading, setLoading] = useState(!locked);
   const [whisper, setWhisper] = useState<string | null>(locked ? "The chamber does not answer yet." : null);
+  const [suggestBusy, setSuggestBusy] = useState(false);
+  const [suggestMessage, setSuggestMessage] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (locked) return;
@@ -45,6 +47,25 @@ export function CafeMasterAiFlyout({ mode, locked, onClose }: CafeMasterAiFlyout
   useEffect(() => {
     void load();
   }, [load]);
+
+  const suggestBuildTask = useCallback(async () => {
+    setSuggestBusy(true);
+    setSuggestMessage(null);
+    try {
+      const res = await fetch("/api/build/delegation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "suggest_demo" }),
+      });
+      const json = (await res.json()) as { error?: string; pendingCount?: number };
+      if (!res.ok) throw new Error(json.error ?? "Suggest failed");
+      setSuggestMessage("Build task suggested — approve in Settings → Build Plane.");
+    } catch (err) {
+      setSuggestMessage(err instanceof Error ? err.message : "Suggest failed");
+    } finally {
+      setSuggestBusy(false);
+    }
+  }, []);
 
   return (
     <div className="border border-violet-500/50 bg-panel p-3 font-mono text-[10px] shadow-cursor">
@@ -77,10 +98,29 @@ export function CafeMasterAiFlyout({ mode, locked, onClose }: CafeMasterAiFlyout
       {!locked && mode !== "daily" ? (
         <p className="mt-3 text-muted">
           {mode === "orchestration"
-            ? "Cross-Claw orchestration hints — no autonomous Claw banter."
+            ? "Cross-Claw orchestration hints — suggest build tasks with confirm gate."
             : "Full patron memory — ledger + ascension on this box."}
         </p>
       ) : null}
+      {!locked && (mode === "orchestration" || mode === "full") ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={suggestBusy}
+            onClick={() => void suggestBuildTask()}
+            className="border border-violet-400/60 px-3 py-1 uppercase tracking-widest text-violet-200 hover:border-cursor-glow hover:text-cursor-glow disabled:opacity-40"
+          >
+            Suggest build task
+          </button>
+          <Link
+            href="/settings"
+            className="border border-line px-3 py-1 uppercase tracking-widest text-muted hover:border-cursor-glow hover:text-cursor-glow"
+          >
+            Delegation queue
+          </Link>
+        </div>
+      ) : null}
+      {suggestMessage ? <p className="mt-2 text-muted">{suggestMessage}</p> : null}
       <Link
         href="/claw-cafe"
         className="mt-3 inline-block border border-line px-3 py-1 uppercase tracking-widest text-muted hover:border-cursor-glow hover:text-cursor-glow"

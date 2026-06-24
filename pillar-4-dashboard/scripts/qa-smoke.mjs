@@ -70,8 +70,43 @@ await check("build plane status", async () => {
     Array.isArray(data.eventBus?.kinds) &&
     data.eventBus.kinds.includes("forge.claw_minted") &&
     data.worker?.endpoint === "/api/build/worker" &&
-    data.worker?.wizardSteps === 6
+    data.worker?.wizardSteps === 6 &&
+    data.delegation?.endpoint === "/api/build/delegation" &&
+    typeof data.delegation?.pendingCount === "number"
   );
+});
+
+await check("build plane delegation policy", async () => {
+  const data = await getJson("/api/build/delegation");
+  return (
+    data.ok === true &&
+    data.policy &&
+    typeof data.policy.accessTier === "string" &&
+    Array.isArray(data.items)
+  );
+});
+
+await check("build plane delegation suggest approve", async () => {
+  await postJson("/api/cafe/status", {
+    action: "ingest",
+    kind: "work.handshake",
+    appId: "my-work",
+    xp: { ascension: 750, knowledge: 50, wealth: 50 },
+    bubble: "QA G5 unlock",
+  });
+  await postJson("/api/settings", {
+    buildPlane: { enabled: true, allowDelegation: true },
+  });
+  const suggest = await postJson("/api/build/delegation", { action: "suggest_demo" });
+  if (!suggest.ok || !Array.isArray(suggest.json.items) || suggest.json.items.length === 0) return false;
+  const pending = suggest.json.items.find((i) => i.status === "pending");
+  if (!pending?.id) return false;
+  const resolve = await postJson("/api/build/delegation", {
+    action: "resolve",
+    delegationId: pending.id,
+    status: "approved",
+  });
+  return resolve.ok && resolve.json.items?.some((i) => i.id === pending.id && i.status === "approved");
 });
 
 await check("build plane worker wizard", async () => {
