@@ -72,7 +72,8 @@ flowchart TB
 | **v0.8.1 (BP1)** | MCP server on appliance: read CCP summary, Cafe ledger, Forge fleet, `/api/*/status` · **Shipped** |
 | **v0.8.2 (BP2)** | Webhook emitters: `forge.claw_minted`, `go_live.failed`, `ota.available`, `eno2.down` · **Shipped** |
 | **v0.9 (BP3)** | Remote worker setup wizard · delegation queue schema · `/api/build/worker` · **Shipped** |
-| **v0.9+** | Master AI delegation: “open build task” with ascension + confirm gates |
+| **v0.9.1 (BP4)** | Master AI delegation UI · ascension gates · `/api/build/delegation` · **Shipped** |
+| **v0.10+** | Real Cursor OAuth · inbound MCP write tools |
 | **Deferred default** | Cursor **cloud** agents with write access to production Claw stores |
 
 ### Sovereignty rules
@@ -162,7 +163,7 @@ flowchart LR
 
 - Cursor cloud agents with write access to production Claw stores
 - Full remote worker install (v0.9 — after hardware golden path)
-- Master AI delegate UI
+- Master AI delegate UI · **Shipped (BP4 v0.9.1)**
 - GTM / storefront Cursor mention
 - xAI / Grok in Build Plane
 

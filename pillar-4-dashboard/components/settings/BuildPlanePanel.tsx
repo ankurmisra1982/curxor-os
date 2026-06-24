@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { BuildPlaneLinkStatus, SanitizedBuildPlaneSettings } from "@/lib/user-settings-types";
 
 import { BuildPlaneWorkerWizard } from "./BuildPlaneWorkerWizard";
+import { BuildPlaneDelegationQueue } from "./BuildPlaneDelegationQueue";
 
 interface BuildPlanePanelProps {
   enabled: boolean;
@@ -239,6 +240,8 @@ export function BuildPlanePanel({
 
       <BuildPlaneWorkerWizard enabled={enabled} onRefresh={() => void refreshStatus()} />
 
+      <BuildPlaneDelegationQueue enabled={enabled} allowDelegation={allowDelegation} />
+
       <div className="space-y-2 border-t border-line/60 pt-3">
         <p className="font-mono text-[10px] uppercase tracking-widest text-muted">Policy (future gates)</p>
         <label className="flex cursor-pointer items-center gap-2 font-sans text-xs text-muted">
@@ -253,7 +256,7 @@ export function BuildPlanePanel({
             }}
             className="accent-[#bc13fe]"
           />
-          Allow Master AI delegation (G5+, default off)
+          Allow Master AI delegation (G5+ suggest · G6 full queue)
         </label>
         <label className="flex cursor-pointer items-center gap-2 font-sans text-xs text-muted">
           <input

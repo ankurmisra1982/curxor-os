@@ -133,5 +133,12 @@
       "TCP SSH probe, host config, MCP/SSH tunnel copy commands, delegation queue schema scaffold",
       "BuildPlaneWorkerWizard in Settings for phone-control path on eno1"
     ]
+  },
+  "0.9.1": {
+    "highlights": [
+      "Build Plane BP4 — Master AI delegation queue UI with G5 suggest and G6 full enqueue gates",
+      "GET/POST /api/build/delegation — approve/reject/complete audit trail on appliance",
+      "Cafe Master AI chamber — suggest build task from patron brief with confirm gate in Settings"
+    ]
   }
 }

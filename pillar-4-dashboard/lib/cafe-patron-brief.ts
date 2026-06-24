@@ -56,6 +56,12 @@ function summarizeEvents(events: CafeEvent[], mode: PatronBriefMode): string[] {
     lines.push(`Ascension earned today: ${xp} XP — your box remembers.`);
   }
 
+  if (mode === "orchestration" || mode === "full") {
+    lines.push("Builder overlay: Master AI may suggest Cursor Bridge tasks — confirm in Settings → Build Plane.");
+  } else if (mode === "daily") {
+    lines.push("Builder overlay available in Settings when you are ready to extend the box.");
+  }
+
   return lines;
 }
 
