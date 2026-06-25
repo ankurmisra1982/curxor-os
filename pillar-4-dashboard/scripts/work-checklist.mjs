@@ -520,7 +520,7 @@ console.log(`==> Outreach checklist · base=${BASE}\n`);
 // W21 — work_claw_rename
 {
   const { ok, json } = await get("/api/work/status");
-  if (ok && json.productName === "Work Claw") {
+  if (ok && json.productName === "Outreach Claw") {
     pass("work_claw_rename", json.productName);
   } else {
     fail("work_claw_rename", `productName=${json.productName}`);

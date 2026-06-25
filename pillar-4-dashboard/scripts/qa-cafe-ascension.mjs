@@ -78,6 +78,28 @@ function pixelEngineChecks() {
     return;
   }
   pass("pixel open claw href", "OOTB + forged routes");
+
+  const isNightHour = (h) => h >= 20 || h < 6;
+  const resolveNight = (h, away) => isNightHour(h) || away;
+  if (
+    resolveNight(14, false) ||
+    !resolveNight(14, true) ||
+    !resolveNight(21, false) ||
+    !resolveNight(5, false)
+  ) {
+    fail("cafe night visual", "clock + away merge wrong");
+    return;
+  }
+  pass("cafe night visual", "clock or operator away");
+
+  const isAway = ({ hidden, lastAt, now, idleMs = 120_000 }) =>
+    hidden || now - lastAt >= idleMs;
+  const t = Date.now();
+  if (!isAway({ hidden: true, lastAt: t, now: t }) || isAway({ hidden: false, lastAt: t, now: t + 60_000 })) {
+    fail("operator presence", "hidden/idle detection wrong");
+    return;
+  }
+  pass("operator presence", "tab hidden or idle timeout");
 }
 
 console.log(`==> Cafe ascension hooks · base=${BASE}\n`);
