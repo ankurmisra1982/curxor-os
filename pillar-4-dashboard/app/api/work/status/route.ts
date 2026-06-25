@@ -1164,7 +1164,7 @@ export async function POST(request: Request): Promise<Response> {
         const { handoffToSwarm } = await import("@/lib/swarm-handoff");
         const result = await handoffToSwarm({
           source: "my-work",
-          title: payload.title ?? payload.contextLabel ?? "Work Claw workload",
+          title: payload.title ?? payload.contextLabel ?? "Outreach Claw workload",
           detail: payload.detail,
           targetCell: payload.targetCell as import("@/lib/swarm-fleet").SwarmGridCell | undefined,
           priority:

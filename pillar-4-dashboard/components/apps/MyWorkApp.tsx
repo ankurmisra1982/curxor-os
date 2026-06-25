@@ -557,7 +557,7 @@ export function MyWorkApp({ config, skillTick, lastSkillId, updateWorkspaceConte
         </p>
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{workspace}</h1>
         <p className="mt-1 font-mono text-[10px] text-muted">
-          Work Claw · {status?.source === "live" ? "live SMTP" : "demo queue"} · mesh {motorUp ? "linked" : "idle"} · {signal}
+          Outreach Claw · {status?.source === "live" ? "live SMTP" : "demo queue"} · mesh {motorUp ? "linked" : "idle"} · {signal}
           {goLiveChip ? (
             <span className="ml-2 border border-cursor-glow/50 px-1 uppercase text-cursor-glow">{goLiveChip} ready</span>
           ) : null}

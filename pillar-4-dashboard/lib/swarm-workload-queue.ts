@@ -100,7 +100,7 @@ export async function seedSwarmDemoWorkloads(): Promise<SwarmWorkloadItem[]> {
     enqueueSwarmWorkload({
       source: "my-work",
       title: "Outreach sequence batch",
-      detail: "Work Claw handoff — 12 follow-ups queued for dispatch",
+      detail: "Outreach Claw handoff — 12 follow-ups queued for dispatch",
       targetCell: "B2",
       priority: "normal",
     }),

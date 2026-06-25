@@ -2370,7 +2370,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           <button
             type="button"
             onClick={() => {
-              const name = prompt("Contact name for Work Claw");
+              const name = prompt("Contact name for Outreach Claw");
               const email = prompt("Email");
               if (!name?.trim() || !email?.trim()) return;
               void fetch("/api/work/status", {

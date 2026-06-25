@@ -79,7 +79,7 @@ export interface UserSettings {
     uiMode: UiMode;
     /** Canonical UX tier — drives progressive disclosure across all Claw apps. */
     experienceLevel: ExperienceLevel;
-    /** Optional Work Claw growth override (L1–L5). */
+    /** Optional Outreach Claw growth override (L1–L5). */
     workGrowthLevel?: GrowthLevel | null;
     /** Optional Creator Claw growth override (L1–L5). */
     creatorGrowthLevel?: GrowthLevel | null;
@@ -95,7 +95,7 @@ export interface UserSettings {
     shopGrowthLevel?: GrowthLevel | null;
     /** Optional Kin Claw growth override (L1–L5). */
     kinGrowthLevel?: GrowthLevel | null;
-    /** Suppress Work Claw XP emit to Claw Cafe */
+    /** Suppress Outreach Claw XP emit to Claw Cafe */
     workGamificationOptOut?: boolean;
     /** Mythic vs neutral ascension titles in Claw Cafe */
     cafeTitleStyle?: "mythic" | "neutral";

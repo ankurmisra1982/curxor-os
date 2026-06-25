@@ -734,7 +734,7 @@ export function SettingsWorkspace() {
               </section>
 
               <section>
-                <h2 className="font-sans text-lg font-semibold text-stark">Work Claw growth level</h2>
+                <h2 className="font-sans text-lg font-semibold text-stark">Outreach Claw growth level</h2>
                 <p className="mt-1 font-sans text-xs text-muted">
                   Optional override for Outreach desk persona (Explorer → Executive). Leave default to use FRE persona.
                 </p>
