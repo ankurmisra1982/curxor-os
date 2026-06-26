@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-import { usePatronAsk } from "./PatronAskProvider";
+import { usePatronAskChat } from "./PatronAskChatProvider";
 import { PatronApprovalCards } from "./PatronApprovalCards";
 
 const STARTERS = [
@@ -12,7 +12,7 @@ const STARTERS = [
 ] as const;
 
 export function PatronAskThread({ compactApprovals = false }: { compactApprovals?: boolean }) {
-  const { messages, loading, send } = usePatronAsk();
+  const { messages, loading, send } = usePatronAskChat();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 

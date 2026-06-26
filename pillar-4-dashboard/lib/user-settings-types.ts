@@ -65,6 +65,11 @@ export interface PatronAskSettings {
   lastReadAt?: string | null;
 }
 
+export interface PatronWeeklyBundleSettings {
+  weekOf?: string | null;
+  lastConfirmedAt?: string | null;
+}
+
 export interface ConnectedProvider {
   connectedAt: string;
   label: string;
@@ -136,6 +141,8 @@ export interface UserSettings {
   buildPlane: BuildPlaneSettings;
   /** Patron Ask universal chat UI state (CH0). */
   patronAsk?: PatronAskSettings;
+  /** Patron weekly multi-Claw plan acknowledgment (CH5). */
+  patronWeeklyBundle?: PatronWeeklyBundleSettings;
   updatedAt: string;
 }
 
@@ -149,6 +156,7 @@ export type UserSettingsPatch = {
   egress?: Partial<UserSettings["egress"]>;
   buildPlane?: Partial<BuildPlaneSettings>;
   patronAsk?: Partial<PatronAskSettings>;
+  patronWeeklyBundle?: Partial<PatronWeeklyBundleSettings>;
 };
 
 export const DEFAULT_BUILD_PLANE: BuildPlaneSettings = {
@@ -202,6 +210,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   },
   buildPlane: { ...DEFAULT_BUILD_PLANE },
   patronAsk: { ui: "minimized", lastReadAt: null },
+  patronWeeklyBundle: { weekOf: null, lastConfirmedAt: null },
   updatedAt: new Date(0).toISOString(),
 };
 

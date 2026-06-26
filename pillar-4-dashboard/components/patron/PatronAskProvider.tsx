@@ -12,20 +12,20 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 
 import { appIdFromPathname } from "@/lib/fre-routing";
-import { getOotbApp, isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
+import { getOotbApp, type OotbAppId } from "@/lib/ootb-apps";
 import { ASK_PATH, HOME_PATH } from "@/lib/ui-categories";
-import type { AgentChatTurn } from "@/lib/app-agent-types";
 import type { PatronAskSettings } from "@/lib/user-settings-types";
 
+import { PatronAskChatProvider, usePatronAskChat, type PatronInference } from "./PatronAskChatProvider";
 import { PatronAskFab } from "./PatronAskFab";
 import { PatronAskSheet } from "./PatronAskSheet";
 
-export type PatronInference = "local" | "fallback" | "frontier";
+export type { PatronInference };
 
 interface PatronAskContextValue {
   open: boolean;
   isFullscreenRoute: boolean;
-  messages: AgentChatTurn[];
+  messages: ReturnType<typeof usePatronAskChat>["messages"];
   loading: boolean;
   inferenceStatus: PatronInference | null;
   routeAppId: OotbAppId | null;
@@ -57,67 +57,82 @@ async function patchPatronAsk(patch: Partial<PatronAskSettings>) {
 
 export function PatronAskProvider({ children }: { children?: ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const isFullscreenRoute = pathname === ASK_PATH || pathname.startsWith(`${ASK_PATH}/`);
   const routeAppId = useMemo(() => appIdFromPathname(pathname), [pathname]);
+  const isFullscreenRoute = pathname === ASK_PATH || pathname.startsWith(`${ASK_PATH}/`);
+  const [open, setOpen] = useState(false);
+  const [unread, setUnread] = useState(false);
+  const autoLoad = open || isFullscreenRoute;
+
+  return (
+    <PatronAskChatProvider
+      routeAppId={routeAppId}
+      autoLoadHistory={autoLoad}
+      onAssistantReply={() => {
+        if (!open && !isFullscreenRoute) setUnread(true);
+      }}
+    >
+      <PatronAskDesktopChrome
+        open={open}
+        setOpen={setOpen}
+        unread={unread}
+        setUnread={setUnread}
+        isFullscreenRoute={isFullscreenRoute}
+        routeAppId={routeAppId}
+      >
+        {children}
+      </PatronAskDesktopChrome>
+    </PatronAskChatProvider>
+  );
+}
+
+function PatronAskDesktopChrome({
+  children,
+  open,
+  setOpen,
+  unread,
+  setUnread,
+  isFullscreenRoute,
+  routeAppId,
+}: {
+  children?: ReactNode;
+  open: boolean;
+  setOpen: (v: boolean) => void;
+  unread: boolean;
+  setUnread: (v: boolean) => void;
+  isFullscreenRoute: boolean;
+  routeAppId: OotbAppId | null;
+}) {
+  const router = useRouter();
+  const chat = usePatronAskChat();
+  const [savedUi, setSavedUi] = useState<PatronAskSettings["ui"]>("minimized");
+
   const clawLabel = useMemo(() => {
     if (!routeAppId) return null;
     return getOotbApp(routeAppId).short;
   }, [routeAppId]);
-
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<AgentChatTurn[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [inferenceStatus, setInferenceStatus] = useState<PatronInference | null>(null);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
-  const [unread, setUnread] = useState(false);
-  const [localInferenceAvailable, setLocalInferenceAvailable] = useState(true);
-  const [savedUi, setSavedUi] = useState<PatronAskSettings["ui"]>("minimized");
-
-  const loadHistory = useCallback(async () => {
-    try {
-      const res = await fetch("/api/patron/history", { cache: "no-store" });
-      if (!res.ok) return;
-      const data = (await res.json()) as { turns?: AgentChatTurn[] };
-      if (Array.isArray(data.turns) && data.turns.length > 0) {
-        setMessages(data.turns);
-      }
-    } finally {
-      setHistoryLoaded(true);
-    }
-  }, []);
 
   const refreshContext = useCallback(async () => {
     const params = routeAppId ? `?routeAppId=${encodeURIComponent(routeAppId)}` : "";
     try {
       const res = await fetch(`/api/patron/context${params}`, { cache: "no-store" });
       if (!res.ok) return;
-      const data = (await res.json()) as {
-        inferenceAvailable?: boolean;
-        patronAsk?: PatronAskSettings;
-      };
-      setLocalInferenceAvailable(data.inferenceAvailable !== false);
+      const data = (await res.json()) as { patronAsk?: PatronAskSettings };
       const ui = data.patronAsk?.ui ?? "minimized";
       setSavedUi(ui);
-      if (ui === "sheet" && !isFullscreenRoute) {
-        setOpen(true);
-      }
-      if (ui === "fullscreen" && !isFullscreenRoute) {
-        router.push(ASK_PATH);
-      }
+      if (ui === "sheet" && !isFullscreenRoute) setOpen(true);
+      if (ui === "fullscreen" && !isFullscreenRoute) router.push(ASK_PATH);
     } catch {
       // ignore
     }
-  }, [routeAppId, isFullscreenRoute, router]);
+  }, [routeAppId, isFullscreenRoute, router, setOpen]);
 
   useEffect(() => {
     void refreshContext();
   }, [refreshContext]);
 
   useEffect(() => {
-    const shouldLoad = (open || isFullscreenRoute) && !historyLoaded;
-    if (shouldLoad) void loadHistory();
-  }, [open, isFullscreenRoute, historyLoaded, loadHistory]);
+    if ((open || isFullscreenRoute) && !chat.historyLoaded) void chat.loadHistory();
+  }, [open, isFullscreenRoute, chat.historyLoaded, chat.loadHistory]);
 
   useEffect(() => {
     if (isFullscreenRoute) {
@@ -125,37 +140,35 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
       setUnread(false);
       void patchPatronAsk({ ui: "fullscreen", lastReadAt: new Date().toISOString() });
     }
-  }, [isFullscreenRoute]);
+  }, [isFullscreenRoute, setOpen, setUnread]);
 
   const openSheet = useCallback(() => {
     setOpen(true);
     setUnread(false);
     void patchPatronAsk({ ui: "sheet", lastReadAt: new Date().toISOString() });
-    if (!historyLoaded) void loadHistory();
+    if (!chat.historyLoaded) void chat.loadHistory();
     if (isFullscreenRoute) router.push(HOME_PATH);
-  }, [historyLoaded, isFullscreenRoute, loadHistory, router]);
+  }, [chat, isFullscreenRoute, router, setOpen, setUnread]);
 
   const openFullscreen = useCallback(() => {
     setOpen(false);
     setUnread(false);
     void patchPatronAsk({ ui: "fullscreen", lastReadAt: new Date().toISOString() });
-    if (!historyLoaded) void loadHistory();
+    if (!chat.historyLoaded) void chat.loadHistory();
     router.push(ASK_PATH);
-  }, [historyLoaded, loadHistory, router]);
+  }, [chat, router, setOpen, setUnread]);
 
   const collapseToSheet = useCallback(() => {
     void patchPatronAsk({ ui: "sheet", lastReadAt: new Date().toISOString() });
     setOpen(true);
     router.push(HOME_PATH);
-  }, [router]);
+  }, [router, setOpen]);
 
   const minimize = useCallback(() => {
     setOpen(false);
     void patchPatronAsk({ ui: "minimized" });
-    if (isFullscreenRoute) {
-      router.push(HOME_PATH);
-    }
-  }, [isFullscreenRoute, router]);
+    if (isFullscreenRoute) router.push(HOME_PATH);
+  }, [isFullscreenRoute, router, setOpen]);
 
   const toggle = useCallback(() => {
     if (isFullscreenRoute) {
@@ -185,54 +198,12 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
     };
   }, [toggle, openSheet, openFullscreen, savedUi]);
 
-  const send = useCallback(
-    async (text: string) => {
-      const message = text.trim();
-      if (!message || loading) return;
-
-      const userTurn: AgentChatTurn = { role: "user", text: message };
-      setMessages((prev) => [...prev, userTurn]);
-      setLoading(true);
-
-      try {
-        const res = await fetch("/api/patron/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message,
-            routeAppId: routeAppId && isValidAppId(routeAppId) ? routeAppId : null,
-          }),
-        });
-        const data = (await res.json()) as {
-          reply?: string;
-          inference?: PatronInference;
-        };
-        const reply = typeof data.reply === "string" ? data.reply : "Patron could not reply.";
-        const assistantTurn: AgentChatTurn = { role: "assistant", text: reply };
-        setMessages((prev) => [...prev, assistantTurn]);
-        if (data.inference) setInferenceStatus(data.inference);
-        if (!open && !isFullscreenRoute) setUnread(true);
-      } catch {
-        setMessages((prev) => [
-          ...prev,
-          { role: "assistant", text: "Patron unreachable — check dashboard health." },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [loading, open, isFullscreenRoute, routeAppId],
-  );
-
-  const badgeInference: PatronInference =
-    inferenceStatus ?? (localInferenceAvailable ? "local" : "fallback");
-
   const value: PatronAskContextValue = {
     open,
     isFullscreenRoute,
-    messages,
-    loading,
-    inferenceStatus: badgeInference,
+    messages: chat.messages,
+    loading: chat.loading,
+    inferenceStatus: chat.inferenceStatus,
     routeAppId,
     clawLabel,
     unread,
@@ -241,7 +212,7 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
     openFullscreen,
     collapseToSheet,
     minimize,
-    send,
+    send: chat.send,
   };
 
   return (

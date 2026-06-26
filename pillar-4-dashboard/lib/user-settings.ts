@@ -23,6 +23,7 @@ import {
   type ThemeMode,
   type UiMode,
   type PatronAskSettings,
+  type PatronWeeklyBundleSettings,
   type UserSettings,
   type UserSettingsPatch,
   DEFAULT_BUILD_PLANE,
@@ -50,6 +51,26 @@ function isWorkerWizardStepId(v: unknown): v is BuildWorkerWizardStepId {
     v === "probe_worker" ||
     v === "phone_control"
   );
+}
+
+function mergePatronWeeklyBundle(
+  partial: UserSettingsPatch["patronWeeklyBundle"],
+  base: PatronWeeklyBundleSettings,
+): PatronWeeklyBundleSettings {
+  return {
+    weekOf:
+      partial?.weekOf === null
+        ? null
+        : typeof partial?.weekOf === "string"
+          ? partial.weekOf
+          : base.weekOf ?? null,
+    lastConfirmedAt:
+      partial?.lastConfirmedAt === null
+        ? null
+        : typeof partial?.lastConfirmedAt === "string"
+          ? partial.lastConfirmedAt
+          : base.lastConfirmedAt ?? null,
+  };
 }
 
 function mergePatronAsk(
@@ -303,6 +324,10 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
     },
     buildPlane: mergeBuildPlane(partial.buildPlane, base.buildPlane ?? DEFAULT_BUILD_PLANE),
     patronAsk: mergePatronAsk(partial.patronAsk, base.patronAsk ?? { ui: "minimized", lastReadAt: null }),
+    patronWeeklyBundle: mergePatronWeeklyBundle(
+      partial.patronWeeklyBundle,
+      base.patronWeeklyBundle ?? { weekOf: null, lastConfirmedAt: null },
+    ),
     updatedAt: new Date().toISOString(),
   };
 }

@@ -7,6 +7,7 @@ import { HOME_PATH } from "@/lib/ui-categories";
 import { usePatronAsk } from "./PatronAskProvider";
 import { PatronAskThread } from "./PatronAskThread";
 import { PatronOpsBoard } from "./PatronOpsBoard";
+import { PatronWeeklyBundlePanel } from "./PatronWeeklyBundlePanel";
 import { PatronAskHeaderBadges } from "./PatronAskHeaderBadges";
 
 export function PatronAskFullscreen() {
@@ -47,6 +48,7 @@ export function PatronAskFullscreen() {
         </div>
       </header>
 
+      <PatronWeeklyBundlePanel className="mt-4 shrink-0" />
       <div className="mt-4 flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
         <PatronOpsBoard className="min-h-[320px] lg:min-h-0 lg:flex-1" />
         <aside className="flex min-h-[420px] w-full flex-col border border-line bg-void shadow-[0_0_48px_rgba(188,19,254,0.12)] lg:max-w-md lg:shrink-0">

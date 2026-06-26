@@ -50,6 +50,7 @@ export async function POST(request: Request): Promise<Response> {
   if (body.egress) patch.egress = body.egress;
   if (body.buildPlane) patch.buildPlane = body.buildPlane;
   if (body.patronAsk) patch.patronAsk = body.patronAsk;
+  if (body.patronWeeklyBundle) patch.patronWeeklyBundle = body.patronWeeklyBundle;
 
   if (
     !patch.appearance &&
@@ -58,7 +59,8 @@ export async function POST(request: Request): Promise<Response> {
     !patch.mcp &&
     !patch.egress &&
     !patch.buildPlane &&
-    !patch.patronAsk
+    !patch.patronAsk &&
+    !patch.patronWeeklyBundle
   ) {
     return Response.json({ error: "Nothing to update" }, { status: 400 });
   }

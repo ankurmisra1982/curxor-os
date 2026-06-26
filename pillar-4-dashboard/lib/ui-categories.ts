@@ -5,6 +5,7 @@ import type { ForgedAppRecord } from "./forged-apps-types";
 export const HOME_PATH = "/home";
 export const SETTINGS_PATH = "/settings";
 export const ASK_PATH = "/ask";
+export const MOBILE_PATRON_PATH = "/m";
 
 export type ClawCategoryId = "home" | "wealth" | "work" | "physical" | "life" | "forge";
 

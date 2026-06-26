@@ -1482,6 +1482,21 @@ await check("mesh digital browser automate", async () => {
   return typeof json.ok === "boolean";
 });
 
+await check("mobile summary GET", async () => {
+  const data = await getJson("/api/mobile/summary");
+  return data.ok === true && typeof data.health === "string" && Array.isArray(data.briefLines);
+});
+
+await check("patron weekly-bundle GET", async () => {
+  const data = await getJson("/api/patron/weekly-bundle");
+  return data.ok === true && data.bundle?.weekOf && Array.isArray(data.bundle.claws);
+});
+
+await check("patron weekly-bundle confirm POST", async () => {
+  const { ok, json } = await postJson("/api/patron/weekly-bundle", { action: "confirm" });
+  return ok && json.ok === true && json.bundle?.confirmed === true;
+});
+
 await check("patron approvals GET", async () => {
   const data = await getJson("/api/patron/approvals");
   return data.ok === true && Array.isArray(data.items) && typeof data.total === "number";
