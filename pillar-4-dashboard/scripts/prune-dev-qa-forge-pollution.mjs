@@ -130,6 +130,13 @@ let keptClawIds = new Set();
   keptForgedIds = new Set(forged.apps.map((a) => a.id).filter(Boolean));
   keptClawIds = new Set(forged.apps.map((a) => a.clawProfileId).filter(Boolean));
   writeJson("forged-apps.json", forged);
+
+  const settings = readJson("user-settings.json");
+  const slugs = Array.isArray(settings.forgedAppSlugs) ? settings.forgedAppSlugs : [];
+  stats.forgedSlugsBefore = slugs.length;
+  settings.forgedAppSlugs = forged.apps.map((a) => a.slug).filter(Boolean);
+  stats.forgedSlugsAfter = settings.forgedAppSlugs.length;
+  writeJson("user-settings.json", settings);
 }
 
 // claw-profiles.json

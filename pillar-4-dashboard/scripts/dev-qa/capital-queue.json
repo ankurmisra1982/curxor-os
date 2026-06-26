@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-26T16:53:04.769Z",
+  "updatedAt": "2026-06-26T18:33:29.291Z",
   "tradingPaused": false,
   "permissions": {
     "autonomousMode": "off",
@@ -64,8 +64,8 @@
       "backtest": null,
       "lastEvaluatedAt": null,
       "lastFiredAt": null,
-      "createdAt": "2026-06-26T16:37:35.629Z",
-      "updatedAt": "2026-06-26T16:37:35.629Z"
+      "createdAt": "2026-06-26T18:33:21.570Z",
+      "updatedAt": "2026-06-26T18:33:21.570Z"
     },
     {
       "id": "RULE-02",
@@ -89,8 +89,8 @@
       "backtest": null,
       "lastEvaluatedAt": null,
       "lastFiredAt": null,
-      "createdAt": "2026-06-26T16:37:35.629Z",
-      "updatedAt": "2026-06-26T16:37:35.629Z"
+      "createdAt": "2026-06-26T18:33:21.570Z",
+      "updatedAt": "2026-06-26T18:33:21.570Z"
     },
     {
       "id": "RULE-03",
@@ -114,8 +114,8 @@
       "backtest": null,
       "lastEvaluatedAt": null,
       "lastFiredAt": null,
-      "createdAt": "2026-06-26T16:37:35.629Z",
-      "updatedAt": "2026-06-26T16:37:35.629Z"
+      "createdAt": "2026-06-26T18:33:21.570Z",
+      "updatedAt": "2026-06-26T18:33:21.570Z"
     }
   ],
   "trades": [],
@@ -143,7 +143,7 @@
       "rsi14": 42
     }
   ],
-  "quotesUpdatedAt": "2026-06-26T16:53:04.677Z",
+  "quotesUpdatedAt": "2026-06-26T18:33:29.260Z",
   "cachedPortfolioValue": null,
   "pilots": [
     {
@@ -180,7 +180,7 @@
         "m6": 52.1,
         "y1": 141.8
       },
-      "updatedAt": "2026-06-26T16:37:35.537Z"
+      "updatedAt": "2026-06-26T18:32:45.354Z"
     },
     {
       "id": "PILOT-NDAQ10",
@@ -240,7 +240,7 @@
         "m6": 34.5,
         "y1": 58.3
       },
-      "updatedAt": "2026-06-26T16:37:35.537Z"
+      "updatedAt": "2026-06-26T18:32:45.354Z"
     },
     {
       "id": "PILOT-CONGRESS-TRACKER",
@@ -292,7 +292,7 @@
         "m6": 31.2,
         "y1": 63.9
       },
-      "updatedAt": "2026-06-26T16:37:35.537Z"
+      "updatedAt": "2026-06-26T18:32:45.354Z"
     },
     {
       "id": "PILOT-AI-THEMATIC",
@@ -336,7 +336,7 @@
         "m6": 88.1,
         "y1": 149.9
       },
-      "updatedAt": "2026-06-26T16:37:35.537Z"
+      "updatedAt": "2026-06-26T18:32:45.354Z"
     },
     {
       "id": "PILOT-HF-QUANT",
@@ -384,7 +384,7 @@
         "m6": 24.6,
         "y1": 91.4
       },
-      "updatedAt": "2026-06-26T16:37:35.537Z"
+      "updatedAt": "2026-06-26T18:32:45.354Z"
     },
     {
       "id": "PILOT-ACTIVELY-MANAGED",
@@ -424,7 +424,7 @@
         "m6": 41.2,
         "y1": 72.5
       },
-      "updatedAt": "2026-06-26T16:37:35.537Z"
+      "updatedAt": "2026-06-26T18:32:45.354Z"
     }
   ],
   "subscriptions": [],

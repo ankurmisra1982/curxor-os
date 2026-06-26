@@ -1,6 +1,89 @@
 {
   "events": [
     {
+      "id": "CAFE-00256",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqtxtwtb",
+      "at": "2026-06-26T18:35:40.417Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "QA Island Mint entered the room",
+      "sourceRef": "forge:forge-1782418292850-2sfvam"
+    },
+    {
+      "id": "CAFE-00255",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqt44vk1",
+      "at": "2026-06-26T18:35:40.417Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Flow Island Claw entered the room",
+      "sourceRef": "forge:forge-1782368415964-bcwi0i"
+    },
+    {
+      "id": "CAFE-00254",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-capital-9",
+      "at": "2026-06-26T18:35:40.417Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Capital entered the room",
+      "sourceRef": "forge:forge-1782368403475-kzeran"
+    },
+    {
+      "id": "CAFE-00253",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-creator-9",
+      "at": "2026-06-26T18:35:40.417Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Creator entered the room",
+      "sourceRef": "forge:forge-1782368401854-kaizbm"
+    },
+    {
+      "id": "CAFE-00252",
+      "kind": "forge.framework_provisioned",
+      "appId": "forged-exit-demo-work-9",
+      "at": "2026-06-26T18:35:40.417Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Exit Demo Work entered the room",
+      "sourceRef": "forge:forge-1782368400257-fv45lo"
+    },
+    {
+      "id": "CAFE-00251",
+      "kind": "forge.claw_minted",
+      "appId": "claw-mqt44h8q",
+      "at": "2026-06-26T18:35:40.417Z",
+      "xp": {
+        "ascension": 25,
+        "knowledge": 15
+      },
+      "bubble": "Checklist Island Mint entered the room",
+      "sourceRef": "forge:forge-1782368397425-kw649r"
+    },
+    {
+      "id": "CAFE-00250",
+      "kind": "forge.claw_archived",
+      "appId": "claw-mqt44aqh",
+      "at": "2026-06-26T18:35:40.416Z",
+      "xp": {
+        "ascension": 5
+      },
+      "bubble": "Checklist Archive Claw left the room",
+      "sourceRef": "forge:forge-1782368388985-1lx8to"
+    },
+    {
       "id": "CAFE-00249",
       "kind": "shop.channel_sync",
       "appId": "my-shop",
@@ -2999,9 +3082,9 @@
       "sourceRef": "shop-live:channel_sync:1782461105200"
     }
   ],
-  "ascensionXp": 4234,
+  "ascensionXp": 4389,
   "affinities": {
-    "knowledge": 1482,
+    "knowledge": 1572,
     "wealth": 1083
   },
   "milestones": {
@@ -3559,7 +3642,70 @@
       "state": "act",
       "bubble": "Sync · printify",
       "lastEventAt": "2026-06-26T16:55:18.226Z"
+    },
+    {
+      "id": "char-claw-mqt44aqh",
+      "label": "Checklist Archive Claw",
+      "appId": "claw-mqt44aqh",
+      "station": "anvil",
+      "state": "walk",
+      "bubble": "Checklist Archive Claw left the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
+    },
+    {
+      "id": "char-claw-mqt44h8q",
+      "label": "Checklist Island Mint",
+      "appId": "claw-mqt44h8q",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Checklist Island Mint entered the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
+    },
+    {
+      "id": "char-forged-exit-demo-work-9",
+      "label": "Exit Demo Work",
+      "appId": "forged-exit-demo-work-9",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Work entered the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
+    },
+    {
+      "id": "char-forged-exit-demo-creator-9",
+      "label": "Exit Demo Creator",
+      "appId": "forged-exit-demo-creator-9",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Creator entered the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
+    },
+    {
+      "id": "char-forged-exit-demo-capital-9",
+      "label": "Exit Demo Capital",
+      "appId": "forged-exit-demo-capital-9",
+      "station": "anvil",
+      "state": "idle",
+      "bubble": "Exit Demo Capital entered the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
+    },
+    {
+      "id": "char-claw-mqt44vk1",
+      "label": "Flow Island Claw",
+      "appId": "claw-mqt44vk1",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "Flow Island Claw entered the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
+    },
+    {
+      "id": "char-claw-mqtxtwtb",
+      "label": "QA Island Mint",
+      "appId": "claw-mqtxtwtb",
+      "station": "anvil",
+      "state": "celebrate",
+      "bubble": "QA Island Mint entered the room",
+      "lastEventAt": "2026-06-26T18:35:40.417Z"
     }
   ],
-  "lastRoomPulseAt": "2026-06-26T16:55:18.226Z"
+  "lastRoomPulseAt": "2026-06-26T18:35:40.417Z"
 }
