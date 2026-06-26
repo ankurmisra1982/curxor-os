@@ -81,6 +81,14 @@ async function clickCapitalTab(page, tabLabel) {
   }
 }
 
+async function clickWorkTab(page, tabLabel) {
+  const btn = page.getByRole("button", { name: new RegExp(`^${tabLabel}$`, "i") });
+  if (await btn.count()) {
+    await btn.first().click();
+    await page.waitForTimeout(800);
+  }
+}
+
 async function primeStandardExperience(page) {
   await page.addInitScript(() => {
     localStorage.setItem("curxor-experience-level", "standard");
@@ -134,9 +142,11 @@ const OUTREACH_FLOWS_BEGINNER = [
   },
   {
     file: "21-pipeline.png",
-    label: "Lead pipeline",
+    label: "Pipeline",
+    growthLevel: "L3",
     setup: async (page) => {
-      await page.getByText("Lead pipeline", { exact: false }).first().scrollIntoViewIfNeeded();
+      await clickWorkTab(page, "Outreach");
+      await page.getByText(/^Pipeline$/i).first().scrollIntoViewIfNeeded();
     },
   },
 ];
@@ -147,13 +157,16 @@ const OUTREACH_FLOWS_STANDARD = [
     file: "22-sequences.png",
     label: "Sequences",
     setup: async (page) => {
-      await page.getByText("Sequences", { exact: false }).first().scrollIntoViewIfNeeded();
+      await clickWorkTab(page, "Outreach");
+      await page.getByText(/^Sequences$/i).first().scrollIntoViewIfNeeded();
     },
   },
   {
     file: "23-analytics.png",
     label: "Outreach analytics",
     setup: async (page) => {
+      await clickWorkTab(page, "Ops");
+      await page.getByText("Outreach analytics", { exact: false }).first().waitFor({ timeout: 20_000 });
       await page.getByText("Outreach analytics", { exact: false }).first().scrollIntoViewIfNeeded();
     },
   },
@@ -290,19 +303,26 @@ async function main() {
 
   console.log("==> Outreach Claw flows (beginner)\n");
   const outreachUrl = `${base}/my-work`;
-  await page.goto(outreachUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
-  await page.waitForTimeout(SETTLE_MS);
-  await waitForText(page, "Outreach Desk");
 
   for (const flow of OUTREACH_FLOWS_BEGINNER) {
     const dest = path.join(OUTREACH_OUT, flow.file);
     console.log(`==> ${flow.label} → outreach/${flow.file}`);
     try {
-      await flow.setup(page);
-      await page.waitForTimeout(1200);
-      await page.screenshot({ path: dest, fullPage: false });
-      copyToStorefront(path.join("outreach", flow.file));
-      console.log("");
+      const capture = async () => {
+        await page.goto(outreachUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
+        await page.waitForTimeout(SETTLE_MS);
+        await waitForText(page, "Outreach Desk");
+        await flow.setup(page);
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: dest, fullPage: false });
+        copyToStorefront(path.join("outreach", flow.file));
+        console.log("");
+      };
+      if (flow.growthLevel) {
+        await withWorkGrowthLevel(flow.growthLevel, capture);
+      } else {
+        await capture();
+      }
     } catch (err) {
       failed += 1;
       console.error(`    FAILED: ${err instanceof Error ? err.message : String(err)}\n`);
