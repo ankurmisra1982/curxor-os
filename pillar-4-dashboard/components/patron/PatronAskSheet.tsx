@@ -59,7 +59,7 @@ export function PatronAskSheet() {
             </button>
           </div>
         </header>
-        <PatronAskThread />
+        <PatronAskThread compactApprovals />
       </aside>
     </>
   );

@@ -53,7 +53,7 @@ export function PatronAskFullscreen() {
           <div className="border-b border-line bg-panel px-4 py-2">
             <p className="font-mono text-[9px] uppercase tracking-widest text-muted">Patron thread</p>
           </div>
-          <PatronAskThread />
+          <PatronAskThread compactApprovals={false} />
         </aside>
       </div>
     </div>

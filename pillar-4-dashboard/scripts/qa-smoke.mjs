@@ -1482,6 +1482,22 @@ await check("mesh digital browser automate", async () => {
   return typeof json.ok === "boolean";
 });
 
+await check("patron approvals GET", async () => {
+  const data = await getJson("/api/patron/approvals");
+  return data.ok === true && Array.isArray(data.items) && typeof data.total === "number";
+});
+
+await check("patron approvals POST invalid id", async () => {
+  const { status, json } = await postJson("/api/patron/approvals", {
+    appId: "my-capital",
+    kind: "trade",
+    id: "qa-nonexistent-trade",
+    action: "reject",
+    note: "qa smoke",
+  });
+  return status === 404 && json.ok === false;
+});
+
 await check("patron ops-board GET", async () => {
   const data = await getJson("/api/patron/ops-board");
   return (

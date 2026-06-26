@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 import { usePatronAsk } from "./PatronAskProvider";
+import { PatronApprovalCards } from "./PatronApprovalCards";
 
 const STARTERS = [
   "What can you help me with?",
@@ -10,7 +11,7 @@ const STARTERS = [
   "What Claw should I use for…",
 ] as const;
 
-export function PatronAskThread() {
+export function PatronAskThread({ compactApprovals = false }: { compactApprovals?: boolean }) {
   const { messages, loading, send } = usePatronAsk();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,7 @@ export function PatronAskThread() {
 
   return (
     <>
+      <PatronApprovalCards compact={compactApprovals} />
       <div ref={scrollRef} className="min-h-0 flex-1 space-y-2 overflow-y-auto px-3 py-3">
         {showStarters ? (
           <div className="space-y-2 py-4">

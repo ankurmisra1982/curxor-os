@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   patronOpsColumnLabel,
@@ -31,22 +31,28 @@ export function PatronOpsBoard({ className = "" }: PatronOpsBoardProps) {
   const [data, setData] = useState<OpsBoardPayload | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      try {
-        const res = await fetch("/api/patron/ops-board", { cache: "no-store" });
-        if (!res.ok) return;
-        const json = (await res.json()) as OpsBoardPayload;
-        if (!cancelled) setData(json);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/patron/ops-board", { cache: "no-store" });
+      if (!res.ok) return;
+      const json = (await res.json()) as OpsBoardPayload;
+      setData(json);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  useEffect(() => {
+    function onRefresh() {
+      void load();
+    }
+    window.addEventListener("curxor:patron-approvals-changed", onRefresh);
+    return () => window.removeEventListener("curxor:patron-approvals-changed", onRefresh);
+  }, [load]);
 
   if (loading) {
     return (
