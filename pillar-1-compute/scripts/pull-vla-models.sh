@@ -14,6 +14,35 @@ HF_CACHE="${CURXOR_HF_CACHE_DIR:-/var/lib/curxor/huggingface}"
 MODELS_DIR="${CURXOR_MODELS_DIR:-/var/lib/curxor/models}"
 VLLM_MODEL="${VLLM_MODEL:-OpenVLA/openvla-7b}"
 OLLAMA_VLA="${OLLAMA_VLA_MODEL:-moondream:1.8b}"
+OLLAMA_REASONING="${OLLAMA_REASONING_MODEL:-qwen3:8b}"
+OLLAMA_EXTRA="${OLLAMA_EXTRA_MODELS:-}"
+
+pull_ollama_model() {
+  local model="$1"
+  echo "==> Pulling Ollama model: ${model}"
+  docker exec curxor-ollama ollama pull "${model}"
+}
+
+# ── Ollama VLA (vision-language for clawbot perception) ─────────────────────
+stage_ollama() {
+  if docker ps --format '{{.Names}}' | grep -q '^curxor-ollama$'; then
+    pull_ollama_model "${OLLAMA_VLA}"
+    if [[ -n "${OLLAMA_REASONING}" ]]; then
+      pull_ollama_model "${OLLAMA_REASONING}"
+    fi
+    if [[ -n "${OLLAMA_EXTRA}" ]]; then
+      IFS=',' read -ra EXTRA <<< "${OLLAMA_EXTRA}"
+      for m in "${EXTRA[@]}"; do
+        m="$(echo "$m" | xargs)"
+        [[ -z "${m}" ]] && continue
+        pull_ollama_model "${m}"
+      done
+    fi
+    docker exec curxor-ollama ollama ps
+  else
+    echo "WARN: curxor-ollama not running. Start with: ./scripts/deploy.sh --pull-models"
+  fi
+}
 
 export HF_HOME="${HF_CACHE}"
 export HF_HUB_DISABLE_TELEMETRY=1
@@ -44,17 +73,6 @@ os.makedirs(dest, exist_ok=True)
 path = snapshot_download(repo_id=repo, local_dir=dest)
 print('Staged at:', path)
 \""
-}
-
-# ── Ollama VLA (vision-language for clawbot perception) ─────────────────────
-stage_ollama() {
-  if docker ps --format '{{.Names}}' | grep -q '^curxor-ollama$'; then
-    echo "==> Pulling Ollama VLA: ${OLLAMA_VLA}"
-    docker exec curxor-ollama ollama pull "${OLLAMA_VLA}"
-    docker exec curxor-ollama ollama ps
-  else
-    echo "WARN: curxor-ollama not running. Start with: ./scripts/deploy.sh --pull-models"
-  fi
 }
 
 case "${1:-all}" in

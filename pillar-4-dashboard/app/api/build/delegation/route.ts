@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 import { requireLanAuth } from "@/lib/lan-auth";
 import {
   enqueueBuildDelegation,
-  updateBuildDelegationStatus,
+  resolveBuildDelegationStatus,
   type BuildDelegationStatus,
 } from "@/lib/build-delegation-queue";
 import { assertCanEnqueue, assertCanResolve } from "@/lib/build-delegation-policy";
@@ -106,11 +106,16 @@ export async function POST(request: Request): Promise<Response> {
     const gate = assertCanResolve({ ...input, status: body.status });
     if (!gate.ok) return Response.json({ ok: false, error: gate.reason }, { status: 403 });
 
-    const item = await updateBuildDelegationStatus(body.delegationId, body.status);
-    if (!item) return Response.json({ ok: false, error: "Delegation not found" }, { status: 404 });
+    const result = await resolveBuildDelegationStatus(body.delegationId, body.status);
+    if (!result.ok) {
+      if (result.error === "not_found") {
+        return Response.json({ ok: false, error: "Delegation not found" }, { status: 404 });
+      }
+      return Response.json({ ok: false, error: "Invalid delegation status transition" }, { status: 409 });
+    }
 
     const report = await buildDelegationReport(24);
-    return Response.json({ ...report, delegationItem: item });
+    return Response.json({ ...report, delegationItem: result.item });
   }
 
   return Response.json({ ok: false, error: "Unknown action" }, { status: 400 });

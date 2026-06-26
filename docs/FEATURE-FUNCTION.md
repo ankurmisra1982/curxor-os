@@ -97,7 +97,7 @@ CurXor is a **two-repo product**:
 | vLLM container | Experimental OpenAI-compatible API, `:8000/v1` |
 | Model storage | `/var/lib/curxor/ollama`, `/var/lib/curxor/models` |
 | Systemd | `curxor-compute.service` — compose up on boot |
-| Recommended models | moondream (vision), qwen2.5 7B/14B/35B (reasoning), OpenVLA (VLA) |
+| Recommended models | moondream (vision), qwen3-vl:8b (spatial), qwen3 8B/14B/30B (reasoning), batiai/qwen3.6-35b (coding MoE), OpenVLA (VLA) |
 
 ### Pillar 2 — Engine (`pillar-2-engine/`)
 

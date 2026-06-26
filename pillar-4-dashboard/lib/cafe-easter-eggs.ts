@@ -27,6 +27,11 @@ export function isNightWindowHour(hour: number): boolean {
   return hour >= 20 || hour < 6;
 }
 
+/** Constellation window — clock night or operator stepped away from Flight Command. */
+export function resolveCafeNightVisual(clockHour: number, operatorAway: boolean): boolean {
+  return isNightWindowHour(clockHour) || operatorAway;
+}
+
 export function gridHitsStation(col: number, row: number): CafeStationId | null {
   for (const [id, cell] of Object.entries(CAFE_STATION_GRID)) {
     if (cell.col === col && cell.row === row) return id as CafeStationId;
@@ -49,7 +54,8 @@ export function architectInspectable(growth: GrowthLevel, patron: PatronState): 
   return patronNearStation(patron, "blueprint_nook");
 }
 
-export function nightWindowActive(patron: PatronState, hour: number): boolean {
+export function nightWindowActive(patron: PatronState, hour: number, operatorAway = false): boolean {
+  if (operatorAway) return true;
   return isNightWindowHour(hour) && patron.row === 0;
 }
 

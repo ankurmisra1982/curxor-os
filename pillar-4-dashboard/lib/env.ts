@@ -29,7 +29,7 @@ export function loadDashboardEnv(): DashboardEnv {
     inferenceBackend === "vllm" ? "http://127.0.0.1:8000/v1" : "http://127.0.0.1:11434";
 
   const defaultModel =
-    inferenceBackend === "vllm" ? "OpenVLA/openvla-7b" : "qwen2.5:7b-instruct-q4_K_M";
+    inferenceBackend === "vllm" ? "OpenVLA/openvla-7b" : "qwen3:8b";
 
   return {
     meshBrokerIp: process.env.CURXOR_MESH_BROKER_IP ?? "10.77.0.1",

@@ -101,7 +101,3662 @@
       "forgedAppId": "forged-exit-demo-capital",
       "forgedAppSlug": "exit-demo-capital",
       "meshConnected": false
+    },
+    {
+      "id": "claw-mqr6z7ai",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:17.706Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for-sort",
+      "forgedAppSlug": "qa-smoke-framework-desk-for-sort",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr6z8j7",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:19.315Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk",
+      "forgedAppSlug": "qa-smoke-work-desk",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6z9rs",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:20.920Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk",
+      "forgedAppSlug": "qa-smoke-creator-desk",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6zazs",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:22.504Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk",
+      "forgedAppSlug": "qa-smoke-capital-desk",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr6zdd6",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:25.578Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqr6zibp",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:32.005Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr6zjmf",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:33.687Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk",
+      "forgedAppSlug": "checklist-work-desk",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6zkuv",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:35.287Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk",
+      "forgedAppSlug": "checklist-creator-desk",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6zn87",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:38.359Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr6zplq",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:41.438Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-23T22:04:41.471Z"
+    },
+    {
+      "id": "claw-mqr6zqvw",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:43.100Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk",
+      "forgedAppSlug": "checklist-mesh-desk",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6zs4h",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:44.705Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint",
+      "forgedAppSlug": "checklist-cafe-mint",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6ztcx",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:46.305Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk",
+      "forgedAppSlug": "checklist-capital-desk",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr6zvql",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:49.389Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqr6zxuh",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:52.121Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-2",
+      "forgedAppSlug": "exit-demo-work-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr6zz22",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:53.690Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-2",
+      "forgedAppSlug": "exit-demo-creator-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr700a4",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:04:55.276Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-2",
+      "forgedAppSlug": "exit-demo-capital-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr709rc",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:07.560Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work",
+      "forgedAppSlug": "flow-forged-work",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr70azp",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:09.157Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator",
+      "forgedAppSlug": "flow-forged-creator",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr70c7e",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:10.730Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital",
+      "forgedAppSlug": "flow-forged-capital",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr70el5",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:13.817Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqr70fs5",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:15.365Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work",
+      "forgedAppSlug": "flow-assist-work",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqr70h0g",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:16.960Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip",
+      "forgedAppSlug": "flow-round-trip",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqr70hzw",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-23T22:05:18.236Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw",
+      "forgedAppSlug": "flow-reimport-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrfs71i",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:10:47.334Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--2",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrfs89p",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:10:48.925Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-2",
+      "forgedAppSlug": "qa-smoke-work-desk-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfs9ho",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:10:50.508Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-2",
+      "forgedAppSlug": "qa-smoke-creator-desk-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfsap0",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:10:52.068Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-2",
+      "forgedAppSlug": "qa-smoke-capital-desk-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrfsd2a",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:10:55.138Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrfshpi",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:01.158Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrfsizq",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:02.822Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-2",
+      "forgedAppSlug": "checklist-work-desk-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfsk7t",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:04.410Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-2",
+      "forgedAppSlug": "checklist-creator-desk-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfsml9",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:07.485Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-2",
+      "forgedAppSlug": "checklist-island-claw-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrfsoyc",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:10.548Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-24T02:11:10.576Z"
+    },
+    {
+      "id": "claw-mqrfsq8b",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:12.203Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-2",
+      "forgedAppSlug": "checklist-mesh-desk-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfsrgb",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:13.787Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-2",
+      "forgedAppSlug": "checklist-cafe-mint-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfssoe",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:15.374Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-2",
+      "forgedAppSlug": "checklist-capital-desk-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrfsv1q",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:18.446Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrfsx5u",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:21.186Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-3",
+      "forgedAppSlug": "exit-demo-work-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfsyda",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:22.750Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-3",
+      "forgedAppSlug": "exit-demo-creator-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrfszm1",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:24.361Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-3",
+      "forgedAppSlug": "exit-demo-capital-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrft3l4",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:29.512Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-2",
+      "forgedAppSlug": "flow-forged-work-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrft4tf",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:31.107Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-2",
+      "forgedAppSlug": "flow-forged-creator-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrft62p",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:32.737Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-2",
+      "forgedAppSlug": "flow-forged-capital-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrft8fw",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:35.804Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrft9nc",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:37.368Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-2",
+      "forgedAppSlug": "flow-assist-work-2",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrftavy",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:38.974Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-2",
+      "forgedAppSlug": "flow-round-trip-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrftbuh",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:11:40.217Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-2",
+      "forgedAppSlug": "flow-reimport-claw-2",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgr9yi",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:04.074Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--3",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgrb6o",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:05.664Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-3",
+      "forgedAppSlug": "qa-smoke-work-desk-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgrcer",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:07.251Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-3",
+      "forgedAppSlug": "qa-smoke-creator-desk-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgrdmx",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:08.841Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-3",
+      "forgedAppSlug": "qa-smoke-capital-desk-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgrg17",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:11.947Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrgrlj1",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:19.069Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgrmva",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:20.806Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-3",
+      "forgedAppSlug": "checklist-work-desk-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgro3h",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:22.397Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-3",
+      "forgedAppSlug": "checklist-creator-desk-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgrqgx",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:25.473Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-3",
+      "forgedAppSlug": "checklist-island-claw-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgrsuu",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:28.566Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-24T02:38:28.596Z"
+    },
+    {
+      "id": "claw-mqrgru6d",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:30.277Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-3",
+      "forgedAppSlug": "checklist-mesh-desk-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgrvew",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:31.880Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-3",
+      "forgedAppSlug": "checklist-cafe-mint-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgrwo0",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:33.504Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-3",
+      "forgedAppSlug": "checklist-capital-desk-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgrz1s",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:36.592Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrgs186",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:39.414Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-4",
+      "forgedAppSlug": "exit-demo-work-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgs2fl",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:40.977Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-4",
+      "forgedAppSlug": "exit-demo-creator-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgs3o6",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:42.582Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-4",
+      "forgedAppSlug": "exit-demo-capital-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgsag4",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:51.364Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-3",
+      "forgedAppSlug": "flow-forged-work-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgsboa",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:52.954Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-3",
+      "forgedAppSlug": "flow-forged-creator-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgscwr",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:54.555Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-3",
+      "forgedAppSlug": "flow-forged-capital-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgsfap",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:57.649Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrgsgi2",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:38:59.210Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-3",
+      "forgedAppSlug": "flow-assist-work-3",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrgshr1",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:39:00.829Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-3",
+      "forgedAppSlug": "flow-round-trip-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrgsiq5",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:39:02.093Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-3",
+      "forgedAppSlug": "flow-reimport-claw-3",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhj1u4",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:39.916Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--4",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhj31z",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:41.495Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-4",
+      "forgedAppSlug": "qa-smoke-work-desk-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhj4aa",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:43.090Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-4",
+      "forgedAppSlug": "qa-smoke-creator-desk-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhj5io",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:44.688Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-4",
+      "forgedAppSlug": "qa-smoke-capital-desk-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhj7wb",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:47.771Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrhjbz0",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:53.052Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhjd9t",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:54.737Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-4",
+      "forgedAppSlug": "checklist-work-desk-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhjein",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:56.351Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-4",
+      "forgedAppSlug": "checklist-creator-desk-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhjgvx",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T02:59:59.421Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-4",
+      "forgedAppSlug": "checklist-island-claw-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhjj96",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:02.490Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-24T03:00:02.524Z"
+    },
+    {
+      "id": "claw-mqrhjkks",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:04.204Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-4",
+      "forgedAppSlug": "checklist-mesh-desk-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhjlsj",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:05.779Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-4",
+      "forgedAppSlug": "checklist-cafe-mint-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhjn0u",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:07.374Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-4",
+      "forgedAppSlug": "checklist-capital-desk-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhjpei",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:10.458Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrhjrcq",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:12.986Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-5",
+      "forgedAppSlug": "exit-demo-work-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhjskg",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:14.560Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-5",
+      "forgedAppSlug": "exit-demo-creator-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhjtt1",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:16.165Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-5",
+      "forgedAppSlug": "exit-demo-capital-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhk3h8",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:28.700Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-4",
+      "forgedAppSlug": "flow-forged-work-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhk4px",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:30.309Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-4",
+      "forgedAppSlug": "flow-forged-creator-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhk5ym",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:31.918Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-4",
+      "forgedAppSlug": "flow-forged-capital-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhk8cb",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:35.003Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrhk9jd",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:36.553Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-4",
+      "forgedAppSlug": "flow-assist-work-4",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhkarm",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:38.146Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-4",
+      "forgedAppSlug": "flow-round-trip-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhkbqt",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:00:39.413Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-4",
+      "forgedAppSlug": "flow-reimport-claw-4",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhnacm",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:02:57.575Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--5",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhnbkp",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:02:59.161Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-5",
+      "forgedAppSlug": "qa-smoke-work-desk-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhnctc",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:00.768Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-5",
+      "forgedAppSlug": "qa-smoke-creator-desk-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhne18",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:02.348Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-5",
+      "forgedAppSlug": "qa-smoke-capital-desk-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhngf3",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:05.439Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrhnkvo",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:11.220Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhnm5y",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:12.886Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-5",
+      "forgedAppSlug": "checklist-work-desk-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhnner",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:14.499Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-5",
+      "forgedAppSlug": "checklist-creator-desk-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhnps5",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:17.573Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-5",
+      "forgedAppSlug": "checklist-island-claw-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhns5t",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:20.657Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-24T03:03:20.690Z"
+    },
+    {
+      "id": "claw-mqrhntht",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:22.385Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-5",
+      "forgedAppSlug": "checklist-mesh-desk-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhnuqj",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:23.995Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-5",
+      "forgedAppSlug": "checklist-cafe-mint-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhnvz5",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:25.601Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-5",
+      "forgedAppSlug": "checklist-capital-desk-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhnycw",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:28.688Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrho0fd",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:31.369Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-6",
+      "forgedAppSlug": "exit-demo-work-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrho1n5",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:32.945Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-6",
+      "forgedAppSlug": "exit-demo-creator-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrho2vd",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:34.537Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-6",
+      "forgedAppSlug": "exit-demo-capital-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhocqs",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:47.332Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-5",
+      "forgedAppSlug": "flow-forged-work-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhoe0g",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:48.976Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-5",
+      "forgedAppSlug": "flow-forged-creator-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhof8v",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:50.575Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-5",
+      "forgedAppSlug": "flow-forged-capital-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhohmy",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:53.674Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqrhoiuj",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:55.243Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-5",
+      "forgedAppSlug": "flow-assist-work-5",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqrhok30",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:56.844Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-5",
+      "forgedAppSlug": "flow-round-trip-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqrhol2z",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T03:03:58.139Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-5",
+      "forgedAppSlug": "flow-reimport-claw-5",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmtorl",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:40.449Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--6",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmtpzq",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:42.038Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-6",
+      "forgedAppSlug": "qa-smoke-work-desk-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmtr8i",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:43.650Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-6",
+      "forgedAppSlug": "qa-smoke-creator-desk-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmtsgm",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:45.238Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-6",
+      "forgedAppSlug": "qa-smoke-capital-desk-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmtuud",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:48.325Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqsmtz2b",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:53.795Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmu0dp",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:55.501Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-6",
+      "forgedAppSlug": "checklist-work-desk-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmu1m7",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:15:57.103Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-6",
+      "forgedAppSlug": "checklist-creator-desk-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmu3zo",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:00.180Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-6",
+      "forgedAppSlug": "checklist-island-claw-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmu6d7",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:03.259Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-24T22:16:03.292Z"
+    },
+    {
+      "id": "claw-mqsmu7se",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:05.102Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-6",
+      "forgedAppSlug": "checklist-mesh-desk-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmu91n",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:06.731Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-6",
+      "forgedAppSlug": "checklist-cafe-mint-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmuaa9",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:08.337Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-6",
+      "forgedAppSlug": "checklist-capital-desk-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmucoh",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:11.441Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqsmueo6",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:14.022Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-7",
+      "forgedAppSlug": "exit-demo-work-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmufw3",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:15.603Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-7",
+      "forgedAppSlug": "exit-demo-creator-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmuh4b",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:17.195Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-7",
+      "forgedAppSlug": "exit-demo-capital-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmumgw",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:24.128Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-6",
+      "forgedAppSlug": "flow-forged-work-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmunpd",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:25.729Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-6",
+      "forgedAppSlug": "flow-forged-creator-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmuoyv",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:27.367Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-6",
+      "forgedAppSlug": "flow-forged-capital-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmurc7",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:30.439Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqsmusjq",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:32.006Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-6",
+      "forgedAppSlug": "flow-assist-work-6",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmutrv",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:33.595Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-6",
+      "forgedAppSlug": "flow-round-trip-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmuuru",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:16:34.890Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-6",
+      "forgedAppSlug": "flow-reimport-claw-6",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmwweq",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:10.322Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--7",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmwxmr",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:11.907Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-7",
+      "forgedAppSlug": "qa-smoke-work-desk-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmwyvc",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:13.512Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-7",
+      "forgedAppSlug": "qa-smoke-creator-desk-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmx047",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:15.127Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-7",
+      "forgedAppSlug": "qa-smoke-capital-desk-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmx2hx",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:18.213Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqsmx6vf",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:23.883Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmx86h",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:25.577Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-7",
+      "forgedAppSlug": "checklist-work-desk-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmx9ft",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:27.209Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-7",
+      "forgedAppSlug": "checklist-creator-desk-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxbt8",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:30.284Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-7",
+      "forgedAppSlug": "checklist-island-claw-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmxe79",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:33.381Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-24T22:18:33.408Z"
+    },
+    {
+      "id": "claw-mqsmxfnd",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:35.257Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-7",
+      "forgedAppSlug": "checklist-mesh-desk-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxgvy",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:36.862Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-7",
+      "forgedAppSlug": "checklist-cafe-mint-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxi4q",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:38.474Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-7",
+      "forgedAppSlug": "checklist-capital-desk-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmxkin",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:41.567Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqsmxmj1",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:44.173Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-8",
+      "forgedAppSlug": "exit-demo-work-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxnrg",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:45.772Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-8",
+      "forgedAppSlug": "exit-demo-creator-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxp01",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:47.377Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-8",
+      "forgedAppSlug": "exit-demo-capital-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmxt9b",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:52.895Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-7",
+      "forgedAppSlug": "flow-forged-work-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxuhm",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:54.490Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-7",
+      "forgedAppSlug": "flow-forged-creator-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmxvr1",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:56.125Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-7",
+      "forgedAppSlug": "flow-forged-capital-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmxy4q",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:18:59.210Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqsmxzcs",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:19:00.796Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-7",
+      "forgedAppSlug": "flow-assist-work-7",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqsmy0kt",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:19:02.381Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-7",
+      "forgedAppSlug": "flow-round-trip-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqsmy1k8",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-24T22:19:03.656Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-7",
+      "forgedAppSlug": "flow-reimport-claw-7",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt43shj",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:25.303Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--8",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt43tqh",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:26.921Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-8",
+      "forgedAppSlug": "qa-smoke-work-desk-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt43v02",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:28.562Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-8",
+      "forgedAppSlug": "qa-smoke-creator-desk-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt43w8d",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:30.157Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-8",
+      "forgedAppSlug": "qa-smoke-capital-desk-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt43ymg",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:33.256Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqt443ds",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:39.424Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt444ra",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:41.206Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-8",
+      "forgedAppSlug": "checklist-work-desk-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt445zw",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:42.812Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-8",
+      "forgedAppSlug": "checklist-creator-desk-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt448d8",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:45.884Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-8",
+      "forgedAppSlug": "checklist-island-claw-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt44aqh",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:48.953Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-25T06:19:48.983Z"
+    },
+    {
+      "id": "claw-mqt44cbe",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:51.002Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-8",
+      "forgedAppSlug": "checklist-mesh-desk-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44dlo",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:52.668Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-8",
+      "forgedAppSlug": "checklist-cafe-mint-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44euo",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:54.288Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-8",
+      "forgedAppSlug": "checklist-capital-desk-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt44h8q",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:19:57.386Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqt44jfu",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:00.234Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-9",
+      "forgedAppSlug": "exit-demo-work-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44ko3",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:01.827Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-9",
+      "forgedAppSlug": "exit-demo-creator-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44lxc",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:03.456Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-9",
+      "forgedAppSlug": "exit-demo-capital-9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt44qmo",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:09.552Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-8",
+      "forgedAppSlug": "flow-forged-work-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44rw4",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:11.188Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-8",
+      "forgedAppSlug": "flow-forged-creator-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44t5u",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:12.834Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-8",
+      "forgedAppSlug": "flow-forged-capital-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt44vk1",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:15.937Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqt44wsr",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:17.547Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-8",
+      "forgedAppSlug": "flow-assist-work-8",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqt44y25",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:19.181Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-8",
+      "forgedAppSlug": "flow-round-trip-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqt44z1w",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T06:20:20.468Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-8",
+      "forgedAppSlug": "flow-reimport-claw-8",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtxtqpv",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:11:24.931Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--9",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtxtryx",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:11:26.553Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-9",
+      "forgedAppSlug": "qa-smoke-work-desk-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtxtt7e",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:11:28.154Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-9",
+      "forgedAppSlug": "qa-smoke-creator-desk-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtxtufj",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:11:29.743Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-9",
+      "forgedAppSlug": "qa-smoke-capital-desk-9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtxtwtb",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:11:32.831Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqtyyti4",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:21.436Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--10",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--10",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyyuq3",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:23.019Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-10",
+      "forgedAppSlug": "qa-smoke-work-desk-10",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyyvyu",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:24.630Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-10",
+      "forgedAppSlug": "qa-smoke-creator-desk-10",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyyx7u",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:26.250Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-10",
+      "forgedAppSlug": "qa-smoke-capital-desk-10",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyyzlm",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:29.338Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqtyz48a",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:35.338Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyz5k7",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:37.063Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-9",
+      "forgedAppSlug": "checklist-work-desk-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyz6t5",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:38.681Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-9",
+      "forgedAppSlug": "checklist-creator-desk-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyz969",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:41.745Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-9",
+      "forgedAppSlug": "checklist-island-claw-9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyzbk0",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:44.832Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-06-25T20:43:44.868Z"
+    },
+    {
+      "id": "claw-mqtyzd6x",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:46.953Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-9",
+      "forgedAppSlug": "checklist-mesh-desk-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzefn",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:48.563Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-9",
+      "forgedAppSlug": "checklist-cafe-mint-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzfot",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:50.189Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-9",
+      "forgedAppSlug": "checklist-capital-desk-9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyzi2o",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:53.280Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqtyzk2x",
+      "name": "Exit Demo Work",
+      "intent": "Exit demo scaffold work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:55.881Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-work-10",
+      "forgedAppSlug": "exit-demo-work-10",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzlai",
+      "name": "Exit Demo Creator",
+      "intent": "Exit demo scaffold creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:57.450Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-creator-10",
+      "forgedAppSlug": "exit-demo-creator-10",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzmix",
+      "name": "Exit Demo Capital",
+      "intent": "Exit demo scaffold capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:43:59.049Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-exit-demo-capital-10",
+      "forgedAppSlug": "exit-demo-capital-10",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyzqmy",
+      "name": "Flow Forged Work",
+      "intent": "User flow forged work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:04.378Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-work-9",
+      "forgedAppSlug": "flow-forged-work-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzrvg",
+      "name": "Flow Forged Creator",
+      "intent": "User flow forged creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:05.980Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-creator-9",
+      "forgedAppSlug": "flow-forged-creator-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzt44",
+      "name": "Flow Forged Capital",
+      "intent": "User flow forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:07.588Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-forged-capital-9",
+      "forgedAppSlug": "flow-forged-capital-9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyzvi5",
+      "name": "Flow Island Claw",
+      "intent": "User flow island mint",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:10.685Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mqtyzwqd",
+      "name": "Flow Assist Work",
+      "intent": "User flow forged assist work",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:12.277Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-assist-work-9",
+      "forgedAppSlug": "flow-assist-work-9",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mqtyzxys",
+      "name": "Flow Round Trip",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:13.876Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-flow-round-trip-9",
+      "forgedAppSlug": "flow-round-trip-9",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mqtyzyy3",
+      "name": "Flow Reimport Claw",
+      "intent": "User flow export import round trip",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen2.5-vl:7b",
+        "reasoning": "qwen2.5:14b-instruct-q4_K_M",
+        "vla": null
+      },
+      "createdAt": "2026-06-25T20:44:15.147Z",
+      "provisioningMode": "imported",
+      "forgedAppId": "forged-flow-reimport-claw-9",
+      "forgedAppSlug": "flow-reimport-claw-9",
+      "meshConnected": false
     }
   ],
-  "activeClawId": "claw-mqpvngrs"
+  "activeClawId": "claw-mqtyzyy3"
 }

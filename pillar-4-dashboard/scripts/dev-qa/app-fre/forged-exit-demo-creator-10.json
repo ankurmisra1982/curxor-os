@@ -1,0 +1,11 @@
+{
+  "initialized": true,
+  "config": {
+    "primaryChannel": "x",
+    "meshPublish": true,
+    "growthLevel": "L2",
+    "forgedIntent": "Exit demo scaffold creator desk",
+    "forgedTemplateId": "creator-desk"
+  },
+  "initializedAt": "2026-06-25T20:43:57.447Z"
+}

@@ -45,7 +45,7 @@ export function NewClawWizard({
   const [autoChoose, setAutoChoose] = useState(true);
   const [models, setModels] = useState<ClawModels>({
     vision: "moondream:1.8b",
-    reasoning: "qwen2.5:7b-instruct-q4_K_M",
+    reasoning: "qwen3:8b",
     vla: null,
   });
   const [rationale, setRationale] = useState("");

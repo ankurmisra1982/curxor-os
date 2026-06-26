@@ -54,7 +54,7 @@ export function loadConfig(): EngineConfig {
   }
 
   const defaultModel =
-    inferenceBackend === "vllm" ? "OpenVLA/openvla-7b" : "qwen2.5:7b-instruct-q4_K_M";
+    inferenceBackend === "vllm" ? "OpenVLA/openvla-7b" : "qwen3:8b";
 
   return {
     inferenceBackend,

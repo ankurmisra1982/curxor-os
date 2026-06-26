@@ -9,7 +9,7 @@
       "vendorLabel": "Humanoid-class · home assistant",
       "status": "standby",
       "safetyProfile": "standard",
-      "pairedAt": "2026-06-23T03:24:31.485Z",
+      "pairedAt": "2026-06-25T20:43:29.667Z",
       "meshNodeId": "mesh://curxor/HOME-HUMANOI-59E550",
       "discoverName": "CURXOR-HOME-HUMANOI",
       "createdAt": "2026-06-23T00:03:51.020Z"
@@ -86,7 +86,7 @@
       "id": "9965bf6d-b50e-489c-8874-cb01a6dbb77b",
       "text": "Shoes off at the door — preview rule",
       "priority": "essential",
-      "syncedAt": "2026-06-23T03:24:31.537Z",
+      "syncedAt": "2026-06-25T20:43:29.713Z",
       "createdAt": "2026-06-23T01:58:00.157Z"
     }
   ],
@@ -129,6 +129,105 @@
     }
   ],
   "routines": [
+    {
+      "id": "routine-7d45d4c4",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-2bb5f1f1",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-f6b4659b",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-83a197cc",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-ca19ed31",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-d1d47fc7",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-d0ab85fb",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-b58e0476",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-9c3ce112",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-c9fe1b4d",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-62070eb6",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
     {
       "id": "routine-e36712ca",
       "label": "When guests arrive, greet them warmly and offer ",
@@ -245,60 +344,6 @@
       "enabled": true,
       "previewOnly": true,
       "source": "composed"
-    },
-    {
-      "id": "routine-c833189a",
-      "label": "When guests arrive, greet them warmly by name an",
-      "description": "When guests arrive, greet them warmly by name and offer to take coats in the entryway.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-1aea92f6",
-      "label": "When guests arrive greet warmly and offer coats",
-      "description": "When guests arrive greet warmly and offer coats",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "morning-welcome",
-      "label": "Morning welcome",
-      "description": "Greet household members by name with today's Vital snapshot when shared.",
-      "trigger": "First motion after 6am",
-      "previewOnly": true,
-      "enabled": false,
-      "source": "template"
-    },
-    {
-      "id": "guest-arrival",
-      "label": "Guest arrival",
-      "description": "Switch to guest tone from Kin profiles — offer coat rack and beverage preference.",
-      "trigger": "Door signal or Kin guest profile",
-      "previewOnly": true,
-      "enabled": false,
-      "source": "template"
-    },
-    {
-      "id": "quiet-hours",
-      "label": "Quiet hours",
-      "description": "Lower voice, dim status lights, defer non-urgent Claw alerts.",
-      "trigger": "10pm – 7am local",
-      "previewOnly": true,
-      "enabled": false,
-      "source": "template"
-    },
-    {
-      "id": "help-handoff",
-      "label": "Help handoff",
-      "description": "When unsure, ask the operator before physical action — safety first.",
-      "trigger": "Low confidence gesture",
-      "previewOnly": true,
-      "enabled": true,
-      "source": "template"
     }
   ],
   "setupCompleted": [
@@ -307,8 +352,8 @@
     "teach_rules",
     "pair_hardware"
   ],
-  "lastKnowledgeSyncAt": "2026-06-23T03:24:31.537Z",
+  "lastKnowledgeSyncAt": "2026-06-25T20:43:29.713Z",
   "notifyWhenLive": false,
   "pairWizard": null,
-  "updatedAt": "2026-06-23T03:24:31.619Z"
+  "updatedAt": "2026-06-25T20:43:29.791Z"
 }

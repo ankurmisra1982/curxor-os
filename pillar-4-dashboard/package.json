@@ -17,6 +17,7 @@
     "work:outbound-worker": "node worker/outbound.mjs --once",
     "qa:wait": "node scripts/wait-for-server.mjs",
     "qa:local": "node scripts/qa-local.mjs",
+    "pre-unbox:gate": "node scripts/pre-unbox-gate.mjs",
     "qa:capital-checklist": "node scripts/capital-checklist.mjs",
     "qa:creator-checklist": "node scripts/creator-checklist.mjs",
     "qa:creator-levels": "node scripts/qa-creator-levels.mjs",

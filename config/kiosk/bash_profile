@@ -1,0 +1,6 @@
+# CurXor OS — start X on tty1 only (installed to ~curxor-display/.bash_profile)
+if [[ -z "${DISPLAY:-}" ]] && [[ "$(tty)" == "/dev/tty1" ]]; then
+  if [[ -f "${HOME}/.xinitrc" ]]; then
+    exec startx -- -nocursor 2>/dev/null || exec startx
+  fi
+fi

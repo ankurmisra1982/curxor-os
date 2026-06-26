@@ -21,9 +21,9 @@ import {
   buildYardClawSprites,
   EASTER_EGG_COPY,
   gridHitsStation,
-  isNightWindowHour,
   nightWindowActive,
   patronNearStation,
+  resolveCafeNightVisual,
   type CafeEasterEggId,
   type YardClawSprite,
 } from "@/lib/cafe-easter-eggs";
@@ -47,6 +47,7 @@ import {
 } from "@/lib/cafe-pixel-engine";
 import type { GrowthLevel } from "@/lib/os-growth-level";
 import type { AscensionTierId } from "@/lib/claw-cafe-ascension";
+import { useOperatorPresence } from "@/hooks/useOperatorPresence";
 
 interface CafePixelCanvasProps {
   characters: CafeCharacter[];
@@ -66,6 +67,7 @@ const CHAR_SIZE = 14;
 interface DrawRoomOptions {
   eno2Frozen: boolean;
   nightWindow: boolean;
+  operatorAway: boolean;
   builderBridgeLinked: boolean;
   yardSprites: YardClawSprite[];
   growthLevel: GrowthLevel;
@@ -192,17 +194,24 @@ function drawRoom(
     tile,
   });
 
-  const px = patron.col * tile + tile / 2;
-  const py = patron.row * tile + tile / 2;
-  const pSize = (CHAR_SIZE + 2) * scale;
-  ctx.fillStyle = PATRON_COLOR;
-  ctx.fillRect(px - pSize / 2, py - pSize / 2, pSize, pSize);
-  ctx.strokeStyle = PATRON_OUTLINE;
-  ctx.lineWidth = 2;
-  ctx.strokeRect(px - pSize / 2, py - pSize / 2, pSize, pSize);
-  ctx.fillStyle = PATRON_OUTLINE;
-  ctx.font = `bold ${7 * scale}px monospace`;
-  ctx.fillText("YOU", px, py);
+  if (!options.operatorAway) {
+    const px = patron.col * tile + tile / 2;
+    const py = patron.row * tile + tile / 2;
+    const pSize = (CHAR_SIZE + 2) * scale;
+    ctx.fillStyle = PATRON_COLOR;
+    ctx.fillRect(px - pSize / 2, py - pSize / 2, pSize, pSize);
+    ctx.strokeStyle = PATRON_OUTLINE;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px - pSize / 2, py - pSize / 2, pSize, pSize);
+    ctx.fillStyle = PATRON_OUTLINE;
+    ctx.font = `bold ${7 * scale}px monospace`;
+    ctx.fillText("YOU", px, py);
+  }
+
+  if (options.operatorAway) {
+    ctx.fillStyle = "rgba(0,0,24,0.28)";
+    ctx.fillRect(0, 0, width, height);
+  }
 }
 
 export function CafePixelCanvas({
@@ -229,13 +238,15 @@ export function CafePixelCanvas({
   const [eno2Frozen, setEno2Frozen] = useState(false);
   const [eggToast, setEggToast] = useState<CafeEasterEggId | null>(null);
   const [yardTick, setYardTick] = useState(0);
+  const wasAwayRef = useRef(false);
+  const { operatorAway } = useOperatorPresence();
 
   const yardSprites = useMemo(
     () => buildYardClawSprites(visionConnected, yardActUntilMs),
     [visionConnected, yardActUntilMs, yardTick],
   );
   const hour = new Date().getHours();
-  const nightWindow = isNightWindowHour(hour);
+  const nightWindow = resolveCafeNightVisual(hour, operatorAway);
 
   const showEgg = useCallback((id: CafeEasterEggId) => {
     setEggToast(id);
@@ -250,15 +261,23 @@ export function CafePixelCanvas({
     drawRoom(ctx, PIXEL_SCALE, animatedRef.current, patronRef.current, {
       eno2Frozen,
       nightWindow,
+      operatorAway,
       builderBridgeLinked,
       yardSprites,
       growthLevel,
       architectPulseMs: pulseMsRef.current,
       ascensionTier,
     });
-  }, [eno2Frozen, nightWindow, builderBridgeLinked, yardSprites, growthLevel, ascensionTier]);
+  }, [eno2Frozen, nightWindow, operatorAway, builderBridgeLinked, yardSprites, growthLevel, ascensionTier]);
 
   const syncInspectable = useCallback(() => {
+    if (operatorAway) {
+      setShowMasterAi(false);
+      setShowArchitect(false);
+      setInspectChar(null);
+      setMasterWhisper(null);
+      return;
+    }
     if (patronInMasterChamber(patronRef.current)) {
       setShowMasterAi(true);
       setShowArchitect(false);
@@ -289,7 +308,12 @@ export function CafePixelCanvas({
       return;
     }
     setInspectChar(found);
-  }, [dismissedInspectId, growthLevel, ascensionTier]);
+  }, [dismissedInspectId, growthLevel, ascensionTier, operatorAway]);
+
+  useEffect(() => {
+    if (operatorAway && !wasAwayRef.current) showEgg("window_night");
+    wasAwayRef.current = operatorAway;
+  }, [operatorAway, showEgg]);
 
   useEffect(() => {
     animatedRef.current = buildAnimatedCharacters(characters, animatedRef.current);
@@ -328,17 +352,19 @@ export function CafePixelCanvas({
 
   const handlePatronMove = useCallback(
     (next: PatronState) => {
+      if (operatorAway) return;
       patronRef.current = next;
       setDismissedInspectId(null);
-      if (nightWindowActive(next, hour)) showEgg("window_night");
+      if (nightWindowActive(next, hour, operatorAway)) showEgg("window_night");
       paint();
       syncInspectable();
     },
-    [hour, paint, showEgg, syncInspectable],
+    [hour, operatorAway, paint, showEgg, syncInspectable],
   );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (operatorAway) return;
       if (e.key === "e" || e.key === "E") {
         setEno2Frozen((prev) => {
           const next = !prev;
@@ -360,10 +386,11 @@ export function CafePixelCanvas({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [handlePatronMove, showEgg]);
+  }, [handlePatronMove, operatorAway, showEgg]);
 
   const onCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
+      if (operatorAway) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
@@ -415,7 +442,7 @@ export function CafePixelCanvas({
         handlePatronMove(next);
       }
     },
-    [growthLevel, ascensionTier, handlePatronMove, paint, showEgg, syncInspectable],
+    [growthLevel, ascensionTier, handlePatronMove, operatorAway, paint, showEgg, syncInspectable],
   );
 
   const { width, height } = canvasPixelSize(PIXEL_SCALE);
@@ -428,6 +455,7 @@ export function CafePixelCanvas({
         {builderBridgeLinked ? " · builder link" : ""}
         {architectWhisperTier(growthLevel) ? " · architect whisper" : ""}
         {eno2Frozen ? " · eno2 hold" : ""}
+        {operatorAway ? " · night watch" : ""}
         {lastPulseAt ? ` · pulse ${new Date(lastPulseAt).toLocaleTimeString()}` : ""}
       </p>
       {eggToast ? (

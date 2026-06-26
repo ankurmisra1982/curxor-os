@@ -172,7 +172,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   },
   intelligence: {
     primarySource: "local",
-    localModel: "qwen2.5:7b-instruct-q4_K_M",
+    localModel: "qwen3:8b",
     frontierProviderId: null,
     frontierModel: null,
     allowFrontierForChat: true,

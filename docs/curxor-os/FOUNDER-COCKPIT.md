@@ -18,6 +18,8 @@
 **Rule:** Code on laptop → gate green → deploy to box → UAT in browser.  
 **Don’t** treat `/opt/curxor` as your main editor; hotfixes on the box must be copied back to the laptop same day.
 
+**@curxorai posts:** draft queue + X-only Go Live → [X-CONTENT-QUEUE.md](./X-CONTENT-QUEUE.md)
+
 ---
 
 ## One-time setup (after Ubuntu + `install-all.sh`)

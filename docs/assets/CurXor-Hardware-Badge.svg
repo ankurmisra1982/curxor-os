@@ -1,0 +1,41 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" id="sticker-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200" class="w-full max-w-3xl drop-shadow-[0_0_15px_rgba(191,90,242,0.2)]">
+                <!-- 
+                  The aesthetic: 
+                  - Cursor AI's 2.5D Layered Diamond logo mark anchoring the left.
+                  - "cur" and "or" in stark white JetBrains Mono.
+                  - "X" custom drawn: Double-bar (X.com) + swooping trajectory arc (SpaceX) in Neon Purple.
+                  - A pulsing terminal caret at the end.
+                -->
+                
+                <!-- Cursor AI 2.5D Diamond Mark -->
+                <g transform="translate(65, 100)">
+                    <g transform="scale(1.2)">
+                        <!-- Background Purple Cube Layer -->
+                        <rect x="-22" y="-22" width="44" height="44" rx="8" transform="rotate(45) translate(8, 8)" fill="#BF5AF2"/>
+                        <!-- Foreground White Cube Layer -->
+                        <rect x="-22" y="-22" width="44" height="44" rx="8" transform="rotate(45)" fill="#ffffff"/>
+                    </g>
+                </g>
+
+                <!-- Text: cur -->
+                <text x="140" y="140" font-family="JetBrains Mono, monospace" font-size="110" font-weight="800" fill="#ffffff" letter-spacing="-5">cur</text>
+                
+                <!-- Custom X Graphic -->
+                <g transform="translate(418, 45)">
+                    <!-- Left-to-Right Double Bar (X.com brutalist influence) -->
+                    <path d="M 10 0 L 55 100 L 30 100 L -15 0 Z" fill="#BF5AF2"/>
+                    <path d="M 40 0 L 85 100 L 60 100 L 15 0 Z" fill="#BF5AF2"/>
+                    
+                    <!-- Right-to-Left Trajectory Arc (SpaceX influence) -->
+                    <path d="M 105 0 C 70 30 20 70 -20 100 L 5 100 C 45 70 95 30 130 0 Z" fill="#BF5AF2"/>
+                </g>
+
+                <!-- Text: or -->
+                <text x="548" y="140" font-family="JetBrains Mono, monospace" font-size="110" font-weight="800" fill="#ffffff" letter-spacing="-5">or</text>
+
+                <!-- Cursor Terminal Caret -->
+                <rect x="686" y="65" width="12" height="75" fill="#BF5AF2">
+                    <!-- Note: The animation will pulse in the browser, but render solid when sent to a sticker printer -->
+                    <animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite"/>
+                </rect>
+            </svg>

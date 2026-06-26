@@ -73,7 +73,9 @@ flowchart TB
 | **v0.8.2 (BP2)** | Webhook emitters: `forge.claw_minted`, `go_live.failed`, `ota.available`, `eno2.down` · **Shipped** |
 | **v0.9 (BP3)** | Remote worker setup wizard · delegation queue schema · `/api/build/worker` · **Shipped** |
 | **v0.9.1 (BP4)** | Master AI delegation UI · ascension gates · `/api/build/delegation` · **Shipped** |
-| **v0.10+** | Real Cursor OAuth · inbound MCP write tools |
+| **v0.10 (BP5)** | Real Cursor OAuth · live worker · delegation execution · MCP write · webhooks (B01–B05) |
+| **v0.10.1 (BP6)** | Delegation **Kanban board** · extended queue statuses (`running`, `waiting_review`) · [IDEA-B06](./FUTURE-ROADMAP.md#idea-b06-delegation-board-ui-kanban) |
+| **v0.10.2 (BP7)** | **Build Spaces** — per-repo worktree + shared context on box · [IDEA-B07](./FUTURE-ROADMAP.md#idea-b07-build-spaces-repo--shared-context) |
 | **Deferred default** | Cursor **cloud** agents with write access to production Claw stores |
 
 ### Sovereignty rules

@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-06-23T03:25:10.039Z",
+  "updatedAt": "2026-06-25T20:44:01.770Z",
   "digest": {
     "digest": [
       {
@@ -13,7 +13,7 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-23T03:17:18.929Z"
+        "publishedAt": "2026-06-25T20:43:11.546Z"
       },
       {
         "id": "f70709ef99f6d4",
@@ -24,160 +24,193 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-23T03:17:18.929Z"
+        "publishedAt": "2026-06-25T20:43:11.546Z"
       },
       {
-        "id": "cefdcfd87e69d2",
-        "headline": "&apos;I like their money&apos;: Trump threatens lawsuits against ABC for reporting on Reflecting Pool",
+        "id": "d08e9a6a5d8b84",
+        "headline": "Trump keeps turning Republican wins into loyalty tests — and political liabilities",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/23/trump-threatens-lawsuits-against-abc-network-for-reporting-on-reflecting-pool.html",
+        "url": "https://www.cnbc.com/2026/06/25/trump-gop-housing-bill-save-act-fisa.html",
         "tickers": [
-          "ABC"
+          "FISA"
         ],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-23T02:54:16.000Z"
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T20:36:27.000Z"
       },
       {
-        "id": "695ce2d18e1b87",
-        "headline": "Magnificent 7 stock pullback now looks like a buying opportunity, strategist says",
+        "id": "7446faf1ce7d1d",
+        "headline": "Ariel’s John Rogers likes these small-cap names as the market rally broadens",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/23/magnificent-7-stock-decline-offers-buying-opportunity-fundstrat.html",
-        "tickers": [
-          "US"
-        ],
+        "url": "https://www.cnbc.com/2026/06/25/ariels-john-rogers-likes-these-small-cap-names-as-the-market-rally-broadens.html",
+        "tickers": [],
         "sentiment": "bullish",
-        "publishedAt": "2026-06-23T02:13:04.000Z"
+        "publishedAt": "2026-06-25T20:30:15.000Z"
       },
       {
-        "id": "4a2f0fc4baeb39",
-        "headline": "Goldman Sachs picks best hedges for a rate-shock scenario",
+        "id": "56b77cc8b595bc",
+        "headline": "Nasdaq falls for a fourth day as a drop in Apple overshadows Micron&apos;s booming earnings: Live updates",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/23/goldman-sachs-picks-best-hedges-for-a-rate-shock-scenario.html",
-        "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-23T01:09:27.000Z"
-      },
-      {
-        "id": "7941564f1ef1f3",
-        "headline": "Oil prices rise as investors continue to watch U.S.-Iran moves, Citi sees &apos;overhang&apos; disappearing",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/23/oil-prices-rise-as-investors-mull-middle-east-developments-.html",
+        "url": "https://www.cnbc.com/2026/06/24/stock-market-today-live-updates.html",
         "tickers": [],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-23T00:49:10.000Z"
+        "publishedAt": "2026-06-25T20:23:44.000Z"
       },
       {
-        "id": "b8ae37efa1a06e",
-        "headline": "Tesla faces federal probe after Model 3 slams into Texas home, killing 76-year-old",
+        "id": "6e1dc88886dcd0",
+        "headline": "Microsoft lifts price of Xbox consoles due to soaring component costs",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/tesla-nhtsa-model-3-crash-autopilot-katy-texas.html",
+        "url": "https://www.cnbc.com/2026/06/25/microsoft-lifts-price-of-xbox-consoles-due-to-soaring-component-costs.html",
         "tickers": [],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-23T00:44:14.000Z"
+        "publishedAt": "2026-06-25T20:17:18.000Z"
       },
       {
-        "id": "e16d46f0c86a36",
-        "headline": "Beijing is summoning executives again, but here&apos;s why that&apos;s causing less worry than in 2021",
+        "id": "0d99bbb1febc14",
+        "headline": "Chicago Fed President Goolsbee says inflation is too high; Williams sees price pressures easing",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/23/china-tech-crackdown-antitrust-tripcom-meituan-food-delivery-anti-involution-deflation-.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-22T23:28:15.000Z"
-      },
-      {
-        "id": "26097f070a17a2",
-        "headline": "Ro Khanna challenges Elon Musk to televised debate after online DOGE battle",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/ro-khanna-challenges-elon-musk-to-televised-debate-after-doge-battle.html",
+        "url": "https://www.cnbc.com/2026/06/25/chicago-fed-president-goolsbee-says-inflation-is-too-high-calls-warsh-a-serious-guy.html",
         "tickers": [
-          "DOGE"
+          "CNBC"
+        ],
+        "sentiment": "bearish",
+        "publishedAt": "2026-06-25T19:52:13.000Z"
+      },
+      {
+        "id": "84be9e2f846a1e",
+        "headline": "Iran behind attack on cargo vessel near Oman in Strait of Hormuz, U.S. official tells MS NOW",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/iran-ghalibaf-trump-us-farm-products-assets.html",
+        "tickers": [
+          "MS",
+          "NOW"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-22T23:22:22.000Z"
+        "publishedAt": "2026-06-25T19:46:29.000Z"
       },
       {
-        "id": "9820ecbcb7b165",
-        "headline": "&apos;We&apos;ll see&apos; — Trump hedges on guarantee Iran won&apos;t use oil profits to rebuild military",
+        "id": "3d867db4c9e4f2",
+        "headline": "JPMorgan names Doug Petno and Troy Rohrbaugh co-presidents as longtime exec Marianne Lake exits",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/trump-iran-war-oil-profits-rebuild-military.html",
+        "url": "https://www.cnbc.com/2026/06/25/jpmorgan-chase-co-presidents-lake-exits.html",
         "tickers": [],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-22T23:09:43.000Z"
+        "publishedAt": "2026-06-25T19:34:09.000Z"
       },
       {
-        "id": "98f6c1e0bebef8",
-        "headline": "CNBC&apos;s The China Connection newsletter: Tackling EV trucks after success with cars",
+        "id": "f1a3074241cbab",
+        "headline": "Democrats probe Trump&apos;s troubled $16 million reflecting pool renovation",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/cnbcs-the-china-connection-newsletter-tackling-the-ev-truck-market.html",
+        "url": "https://www.cnbc.com/2026/06/25/trump-reflecting-pool-renovation-cost-congress.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T19:15:32.000Z"
+      },
+      {
+        "id": "7a52009280670e",
+        "headline": "Judge blocks Trump&apos;s rule limiting federal student loans for certain grad school borrowers",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/judge-blocks-trumps-rule-limiting-student-loans-for-grad-students-.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T18:47:36.000Z"
+      },
+      {
+        "id": "d6a627458155f7",
+        "headline": "Supreme Court limits Roundup cancer suits against Bayer&apos;s Monsanto",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/glyphosate-roundup-bayer-supreme-court-case-monsanto.html",
+        "tickers": [],
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-25T18:19:35.000Z"
+      },
+      {
+        "id": "29bd66cfa30029",
+        "headline": "Judge says lawsuit against Trump DOJ &apos;anti-weaponization&apos; fund will proceed",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/trump-doj-fund-lawsuit-blanche.html",
         "tickers": [
-          "CNBC",
-          "EV"
+          "DOJ",
+          "IRS"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-22T23:00:01.000Z"
+        "publishedAt": "2026-06-25T18:05:48.000Z"
       },
       {
-        "id": "7f62979aaaa19c",
-        "headline": "Senate advances housing bill to limit private equity purchases of single-family homes",
+        "id": "a1b6552e0530da",
+        "headline": "Rafael Nadal says he won&apos;t return to pro tennis following Serena Williams&apos; comeback",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/affordable-housing-bill-private-equity-single-family-homes.html",
-        "tickers": [],
+        "url": "https://www.cnbc.com/2026/06/25/rafael-nadal-tennis-comeback-serena-williams.html",
+        "tickers": [
+          "CNBC"
+        ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-22T22:38:59.000Z"
+        "publishedAt": "2026-06-25T17:29:10.000Z"
       },
       {
-        "id": "942ebf8370b097",
-        "headline": "Wall Street was once uber bullish on gold. Now it&apos;s changing its tune",
+        "id": "31082fd928df41",
+        "headline": "Luxury spending now driven by experiences and &apos;inheritourism&apos;",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/wall-street-was-once-uber-bullish-on-gold-now-its-changing-its-tune.html",
+        "url": "https://www.cnbc.com/2026/06/25/luxury-spending-now-driven-by-experiences-and-inheritourism.html",
         "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-22T21:23:17.000Z"
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-25T16:46:39.000Z"
       },
       {
-        "id": "e926a26c31c436",
-        "headline": "Alphabet has its worst day in over a year on AI concerns after high-profile exits",
+        "id": "582f9cdcd0aba9",
+        "headline": "GM reveals 2027 GMC Sierra pickup with new V-8 engines, redesigned styling",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/alphabet-goog-stock-ai-departures.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-22T21:04:29.000Z"
+        "url": "https://www.cnbc.com/2026/06/25/gm-gmc-sierra-pickup.html",
+        "tickers": [
+          "GM",
+          "GMC"
+        ],
+        "sentiment": "bearish",
+        "publishedAt": "2026-06-25T16:15:20.000Z"
       },
       {
-        "id": "e329dab4c716a1",
-        "headline": "SpaceX stock tanks 16%, extending slump following post-IPO rally",
+        "id": "dbf2c2e23bebff",
+        "headline": "Core inflation rate hit 3.4% in May, highest since October 2023, Fed’s preferred gauge shows",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/spacex-stock-ipo-rally-selloff.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-22T20:10:16.000Z"
-      },
-      {
-        "id": "0215a60fd1a8d7",
-        "headline": "Nvidia&apos;s stock struggles as Kalshi traders bet chip prices are coming down",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/nvidias-stock-struggles-as-kalshi-traders-bet-chip-prices-are-coming-down.html",
+        "url": "https://www.cnbc.com/2026/06/25/pce-inflation-report-may-2026-.html",
         "tickers": [],
         "sentiment": "bearish",
-        "publishedAt": "2026-06-22T20:09:04.000Z"
+        "publishedAt": "2026-06-25T13:30:56.000Z"
       },
       {
-        "id": "789218dcc0f205",
-        "headline": "Companies are demanding states cut red tape. Data center-wary voters may think differently",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/states-data-center-permitting-public-opposition.html",
-        "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-22T18:16:44.000Z"
-      },
-      {
-        "id": "6ff164f92f820d",
-        "headline": "Clive Davis, music industry starmaker, has died at 94",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/22/clive-davis-dies-at-94.html",
-        "tickers": [],
+        "id": "e1b4781fb3abbf",
+        "headline": "BMO 2026-5C15 Mortgage Trust  (CIK 0002128774) filed 8-K/A",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/2128774/000153949726001866/0001539497-26-001866-index.htm",
+        "tickers": [
+          "BMO",
+          "CIK"
+        ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-22T16:23:41.000Z"
+        "publishedAt": "2026-06-25T12:00:00.000Z"
+      },
+      {
+        "id": "cdfff5d1e41e1d",
+        "headline": "BGC Group, Inc.  (BGC)  (CIK 0001094831) filed 8-K",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/1094831/000162828026045358/0001628280-26-045358-index.htm",
+        "tickers": [
+          "BGC",
+          "CIK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T12:00:00.000Z"
+      },
+      {
+        "id": "97322fa0760d49",
+        "headline": "Clearwater Analytics Holdings, Inc.  (CWAN)  (CIK 0001866368) filed 8-K",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/1866368/000119312526282050/0001193125-26-282050-index.htm",
+        "tickers": [
+          "CWAN",
+          "CIK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T12:00:00.000Z"
       }
     ],
     "featuredTickers": [
@@ -186,7 +219,7 @@
       "NVDA",
       "SPY"
     ],
-    "updatedAt": "2026-06-23T03:17:19.836Z"
+    "updatedAt": "2026-06-25T20:43:14.406Z"
   },
   "tickerBySymbol": {
     "SPY": {
@@ -194,9 +227,9 @@
       "fundamentals": {
         "symbol": "SPY",
         "name": "State Street SPDR S&P 500 ETF Trust",
-        "price": 744.39,
+        "price": 734.3,
         "changePct1d": null,
-        "changePct5d": 0.3559150657229507,
+        "changePct5d": -0.8988368839286812,
         "marketCap": null,
         "peRatio": null,
         "fiftyTwoWeekHigh": null,
@@ -205,21 +238,6 @@
         "avgVolume": null
       },
       "chart": [
-        {
-          "t": "2026-03-23T13:30:00.000Z",
-          "close": 655.3800048828125,
-          "volume": 134802700
-        },
-        {
-          "t": "2026-03-24T13:30:00.000Z",
-          "close": 653.1799926757812,
-          "volume": 96457500
-        },
-        {
-          "t": "2026-03-25T13:30:00.000Z",
-          "close": 656.8200073242188,
-          "volume": 90653800
-        },
         {
           "t": "2026-03-26T13:30:00.000Z",
           "close": 645.0900268554688,
@@ -518,141 +536,156 @@
         {
           "t": "2026-06-22T13:30:00.000Z",
           "close": 744.3900146484375,
-          "volume": 45157614
+          "volume": 46628100
+        },
+        {
+          "t": "2026-06-23T13:30:00.000Z",
+          "close": 733.5800170898438,
+          "volume": 66846800
+        },
+        {
+          "t": "2026-06-24T13:30:00.000Z",
+          "close": 733.239990234375,
+          "volume": 57439500
+        },
+        {
+          "t": "2026-06-25T13:30:00.000Z",
+          "close": 734.2999877929688,
+          "volume": 47273505
         }
       ],
       "news": [
         {
-          "id": "bd502ebeb050a4",
+          "id": "d08e9a6a5d8b84",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "China&apos;s 618 shopping festival growth slows sharply as consumer spending malaise persists",
-          "excerpt": "The latest consumer data reinforce how consumption in China remains subdued.",
-          "url": "https://www.cnbc.com/2026/06/23/china-618-shopping-festival-sales-growth-consumer-spending-slowdown-syntun.html",
+          "title": "Trump keeps turning Republican wins into loyalty tests — and political liabilities",
+          "excerpt": "President Donald Trump’s moves on housing, FISA, Iran and Washington projects are creating new headaches for Republicans trying to show voters they can govern.",
+          "url": "https://www.cnbc.com/2026/06/25/trump-gop-housing-bill-save-act-fisa.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T20:36:27.000Z"
+        },
+        {
+          "id": "7446faf1ce7d1d",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Ariel’s John Rogers likes these small-cap names as the market rally broadens",
+          "excerpt": "Ariel Investments' John Rogers highlighted for-profit education company Covista as a small-cap stock he's currently bullish on.",
+          "url": "https://www.cnbc.com/2026/06/25/ariels-john-rogers-likes-these-small-cap-names-as-the-market-rally-broadens.html",
           "sentiment": "bullish",
           "score": 1,
-          "publishedAt": "2026-06-23T03:19:02.000Z"
+          "publishedAt": "2026-06-25T20:30:15.000Z"
         },
         {
-          "id": "cefdcfd87e69d2",
+          "id": "56b77cc8b595bc",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "&apos;I like their money&apos;: Trump threatens lawsuits against ABC for reporting on Reflecting Pool",
-          "excerpt": "The latest action against ABC comes as the broadcaster faces two investigations from the Federal Communications Commission.",
-          "url": "https://www.cnbc.com/2026/06/23/trump-threatens-lawsuits-against-abc-network-for-reporting-on-reflecting-pool.html",
+          "title": "Nasdaq falls for a fourth day as a drop in Apple overshadows Micron&apos;s booming earnings: Live updates",
+          "excerpt": "The Nasdaq Composite fell on Thursday, even after a blowout Micron Technology earnings report, as traders moved out of key technology stocks.",
+          "url": "https://www.cnbc.com/2026/06/24/stock-market-today-live-updates.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T20:23:44.000Z"
+        },
+        {
+          "id": "6e1dc88886dcd0",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Microsoft lifts price of Xbox consoles due to soaring component costs",
+          "excerpt": "Microsoft said it's increasing the price of Xbox game consoles after Apple announced price hikes for MacBooks and iPads.",
+          "url": "https://www.cnbc.com/2026/06/25/microsoft-lifts-price-of-xbox-consoles-due-to-soaring-component-costs.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T20:17:18.000Z"
+        },
+        {
+          "id": "0d99bbb1febc14",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Chicago Fed President Goolsbee says inflation is too high; Williams sees price pressures easing",
+          "excerpt": "In a live CNBC interview from his home district, Goolsbee declined to speculate on where he thinks interest rates are headed.",
+          "url": "https://www.cnbc.com/2026/06/25/chicago-fed-president-goolsbee-says-inflation-is-too-high-calls-warsh-a-serious-guy.html",
           "sentiment": "bearish",
           "score": -1,
-          "publishedAt": "2026-06-23T02:54:16.000Z"
+          "publishedAt": "2026-06-25T19:52:13.000Z"
         },
         {
-          "id": "695ce2d18e1b87",
+          "id": "84be9e2f846a1e",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Magnificent 7 stock pullback now looks like a buying opportunity, strategist says",
-          "excerpt": "Recent weakness in Magnificant 7 now looks to be an opportunity for investors, given that US equity trends remain bullish in the near term, Fundstrat says.",
-          "url": "https://www.cnbc.com/2026/06/23/magnificent-7-stock-decline-offers-buying-opportunity-fundstrat.html",
+          "title": "Iran behind attack on cargo vessel near Oman in Strait of Hormuz, U.S. official tells MS NOW",
+          "excerpt": "\"The only crop we're harvesting is what you planted: decades of mistrust,\" Iranian parliament speaker Mohammad Bagher Ghalibaf said in a social media post.",
+          "url": "https://www.cnbc.com/2026/06/25/iran-ghalibaf-trump-us-farm-products-assets.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T19:46:29.000Z"
+        },
+        {
+          "id": "f1a3074241cbab",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Democrats probe Trump&apos;s troubled $16 million reflecting pool renovation",
+          "excerpt": "President Donald Trump has attempted to spruce up Washington in advance of the country's 250th anniversary.",
+          "url": "https://www.cnbc.com/2026/06/25/trump-reflecting-pool-renovation-cost-congress.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T19:15:32.000Z"
+        },
+        {
+          "id": "d6a627458155f7",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Supreme Court limits Roundup cancer suits against Bayer&apos;s Monsanto",
+          "excerpt": "Glyphosate, used in Roundup weedkiller, is the most commonly utilized herbicide in agriculture, and it has long been linked to cancer claims.",
+          "url": "https://www.cnbc.com/2026/06/25/glyphosate-roundup-bayer-supreme-court-case-monsanto.html",
           "sentiment": "bullish",
           "score": 1,
-          "publishedAt": "2026-06-23T02:13:04.000Z"
+          "publishedAt": "2026-06-25T18:19:35.000Z"
         },
         {
-          "id": "4a2f0fc4baeb39",
+          "id": "29bd66cfa30029",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Goldman Sachs picks best hedges for a rate-shock scenario",
-          "excerpt": "The bank said last week's hawkish Federal Open Market Committee meeting has increased uncertainty over the outlook for short-term interest rates.",
-          "url": "https://www.cnbc.com/2026/06/23/goldman-sachs-picks-best-hedges-for-a-rate-shock-scenario.html",
+          "title": "Judge says lawsuit against Trump DOJ &apos;anti-weaponization&apos; fund will proceed",
+          "excerpt": "Acting Attorney General Todd Blanche originally set up the fund as part of a settlement of a lawsuit by President Donald Trump against the IRS.",
+          "url": "https://www.cnbc.com/2026/06/25/trump-doj-fund-lawsuit-blanche.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T18:05:48.000Z"
+        },
+        {
+          "id": "a1b6552e0530da",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Rafael Nadal says he won&apos;t return to pro tennis following Serena Williams&apos; comeback",
+          "excerpt": "Rafael Nadal told CNBC Sport he has closed the chapter on playing pro tennis forever.",
+          "url": "https://www.cnbc.com/2026/06/25/rafael-nadal-tennis-comeback-serena-williams.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-25T17:29:10.000Z"
+        },
+        {
+          "id": "31082fd928df41",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Luxury spending now driven by experiences and &apos;inheritourism&apos;",
+          "excerpt": "While luxury goods sales are expected to grow between 1% and 4%, experiences are on track for growth of between 3% and 7% this year, according to a new report.",
+          "url": "https://www.cnbc.com/2026/06/25/luxury-spending-now-driven-by-experiences-and-inheritourism.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-06-25T16:46:39.000Z"
+        },
+        {
+          "id": "582f9cdcd0aba9",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "GM reveals 2027 GMC Sierra pickup with new V-8 engines, redesigned styling",
+          "excerpt": "The new GMC Sierra trucks are crucial to GM's sales and earnings, especially highly profitable luxury Denali and off-road AT4 models.",
+          "url": "https://www.cnbc.com/2026/06/25/gm-gmc-sierra-pickup.html",
           "sentiment": "bearish",
           "score": -1,
-          "publishedAt": "2026-06-23T01:09:27.000Z"
-        },
-        {
-          "id": "b8ae37efa1a06e",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Tesla faces federal probe after Model 3 slams into Texas home, killing 76-year-old",
-          "excerpt": "Harris County authorities said that the driver, Michael Butler, said that he had been using Tesla's partially automated driving systems.",
-          "url": "https://www.cnbc.com/2026/06/22/tesla-nhtsa-model-3-crash-autopilot-katy-texas.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-23T00:44:14.000Z"
-        },
-        {
-          "id": "9820ecbcb7b165",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "&apos;We&apos;ll see&apos; — Trump hedges on guarantee Iran won&apos;t use oil profits to rebuild military",
-          "excerpt": "Treasury Secretary Scott Bessent authorized the import of Iranian oil and refined products into the U.S. through at least August.",
-          "url": "https://www.cnbc.com/2026/06/22/trump-iran-war-oil-profits-rebuild-military.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-22T23:09:43.000Z"
-        },
-        {
-          "id": "98f6c1e0bebef8",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "CNBC&apos;s The China Connection newsletter: Tackling EV trucks after success with cars",
-          "excerpt": "Beijing's latest push into electric trucks has echoes of measures announced more than a decade ago to develop new energy passenger cars.",
-          "url": "https://www.cnbc.com/2026/06/22/cnbcs-the-china-connection-newsletter-tackling-the-ev-truck-market.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-22T23:00:01.000Z"
-        },
-        {
-          "id": "942ebf8370b097",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Wall Street was once uber bullish on gold. Now it&apos;s changing its tune",
-          "excerpt": "The June Fed meeting set a hawkish tone. Now, several Wall Street firms don't believe gold will live up to their bullish targets.",
-          "url": "https://www.cnbc.com/2026/06/22/wall-street-was-once-uber-bullish-on-gold-now-its-changing-its-tune.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-22T21:23:17.000Z"
-        },
-        {
-          "id": "e926a26c31c436",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Alphabet has its worst day in over a year on AI concerns after high-profile exits",
-          "excerpt": "Google parent Alphabet has seen consecutive high-profile artificial intelligence researchers leave.",
-          "url": "https://www.cnbc.com/2026/06/22/alphabet-goog-stock-ai-departures.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-22T21:04:29.000Z"
-        },
-        {
-          "id": "e329dab4c716a1",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "SpaceX stock tanks 16%, extending slump following post-IPO rally",
-          "excerpt": "A rally following the company's record breaking IPO on June 12 has cooled, with stock dropping the past three days of trading.",
-          "url": "https://www.cnbc.com/2026/06/22/spacex-stock-ipo-rally-selloff.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-22T20:10:16.000Z"
-        },
-        {
-          "id": "789218dcc0f205",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Companies are demanding states cut red tape. Data center-wary voters may think differently",
-          "excerpt": "Pennsylvania Gov. Josh Shapiro touted a $20 billion economic development deal last June, the state's largest ever. It's caused Shapiro no shortage of grief.",
-          "url": "https://www.cnbc.com/2026/06/22/states-data-center-permitting-public-opposition.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-22T18:16:44.000Z"
-        },
-        {
-          "id": "6ff164f92f820d",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Clive Davis, music industry starmaker, has died at 94",
-          "excerpt": "Davis launched or resurrected the careers of superstars such as Janis Joplin, Whitney Houston, Carlos Santana and Alicia Keys.",
-          "url": "https://www.cnbc.com/2026/06/22/clive-davis-dies-at-94.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-22T16:23:41.000Z"
+          "publishedAt": "2026-06-25T16:15:20.000Z"
         }
       ],
       "chatter": [
@@ -665,25 +698,25 @@
           "url": null,
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-23T03:25:09.042Z"
+          "publishedAt": "2026-06-25T20:44:00.461Z"
         }
       ],
       "sentiment": {
         "label": "mixed",
-        "score": -0.0625,
-        "bullishPct": 13,
-        "bearishPct": 19,
-        "sampleSize": 16
+        "score": 0.06666666666666667,
+        "bullishPct": 20,
+        "bearishPct": 13,
+        "sampleSize": 15
       },
-      "smartTake": "SPY price updating · Chatter skews mixed (13% bull / 19% bear). CNBC: China&apos;s 618 shopping festival growth slows sharply as consumer spending mal",
+      "smartTake": "SPY price updating · Chatter skews mixed (20% bull / 13% bear). CNBC: Trump keeps turning Republican wins into loyalty tests — and political liabiliti",
       "citations": [
-        "CNBC: China&apos;s 618 shopping festival growth slows sharply as consumer spending mal",
-        "CNBC: &apos;I like their money&apos;: Trump threatens lawsuits against ABC for reporti",
+        "CNBC: Trump keeps turning Republican wins into loyalty tests — and political liabiliti",
+        "CNBC: Ariel’s John Rogers likes these small-cap names as the market rally broadens",
         "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
       ],
       "nextEarningsDate": null,
       "contradictionNote": null,
-      "updatedAt": "2026-06-23T03:25:10.036Z"
+      "updatedAt": "2026-06-25T20:44:01.767Z"
     },
     "BTCUSD": {
       "symbol": "BTCUSD",
@@ -1868,6 +1901,116 @@
     "notifyIntelFires": true
   },
   "thesisEntries": [
+    {
+      "id": "TH-037",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-25T20:43:15.822Z"
+    },
+    {
+      "id": "TH-036",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-25T20:11:19.398Z"
+    },
+    {
+      "id": "TH-035",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-25T06:19:17.969Z"
+    },
+    {
+      "id": "TH-034",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-24T22:18:04.070Z"
+    },
+    {
+      "id": "TH-033",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-24T22:15:34.146Z"
+    },
+    {
+      "id": "TH-032",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-24T03:02:42.143Z"
+    },
+    {
+      "id": "TH-031",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-24T02:59:33.807Z"
+    },
+    {
+      "id": "TH-030",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-24T02:37:59.821Z"
+    },
+    {
+      "id": "TH-029",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-24T02:10:33.538Z"
+    },
+    {
+      "id": "TH-028",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-23T22:04:12.285Z"
+    },
+    {
+      "id": "TH-027",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-23T21:56:53.933Z"
+    },
     {
       "id": "TH-026",
       "symbol": "SPY",

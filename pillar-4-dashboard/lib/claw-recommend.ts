@@ -1,6 +1,6 @@
 import type { ForgeProvisioningMode } from "./forge-provisioning";
 import type { BudgetTier } from "./local-llm-catalog";
-import { LOCAL_LLM_CATALOG } from "./local-llm-catalog";
+import { DEFAULT_REASONING_MODEL, LOCAL_LLM_CATALOG } from "./local-llm-catalog";
 
 export type { ForgeProvisioningMode };
 
@@ -54,46 +54,52 @@ const FLEET = /fleet|robotaxi|taxi|vehicle|route|dispatch/i;
 const KIOSK = /cafe|kiosk|prize|guest|demo|shop|retail/i;
 const CONTENT = /content|creator|social|youtube|tiktok|channel|headless|post|media|video|reel|stream/i;
 const CAPITAL = /capital|invest|stock|crypto|trading|portfolio|rule|market|finance|btc|eth|equity/i;
+const CODING = /code|coding|build|forge|develop|repo|git|debug|swe|typescript|python|rust/i;
+
+/** Best evidence-backed coding MoE on Strix Halo / MS-S1 UMA (pi-bench SWE-mini). */
+export const PERFORMANCE_CODING_MODEL = "batiai/qwen3.6-35b:q4";
 
 export function recommendModels(intent: string, budgetTier: BudgetTier): RecommendResult {
   const text = intent.toLowerCase();
 
   let vision = "moondream:1.8b";
-  let reasoning = "qwen2.5:7b-instruct-q4_K_M";
+  let reasoning = DEFAULT_REASONING_MODEL;
   let vla: string | null = null;
   let rationale = "Default balanced stack for general claw coordination.";
 
   if (budgetTier === "economy") {
     vision = "moondream:1.8b";
-    reasoning = "qwen2.5:7b-instruct-q4_K_M";
-    rationale = "Economy tier — smallest local models within UMA budget.";
+    reasoning = DEFAULT_REASONING_MODEL;
+    rationale = "Economy tier — moondream vision + qwen3:8b within UMA budget.";
   } else if (budgetTier === "performance" || MANIPULATION.test(text)) {
-    vision = "qwen2.5-vl:7b";
-    reasoning = "qwen2.5:35b";
+    vision = "qwen3-vl:8b";
+    reasoning = CODING.test(text) ? PERFORMANCE_CODING_MODEL : "qwen3:30b";
     vla = MANIPULATION.test(text) ? "OpenVLA/openvla-7b" : null;
     rationale = MANIPULATION.test(text)
-      ? "Manipulation intent detected — VLA + strong reasoning selected."
-      : "Performance tier — maximum local quality within 48 GB GPU heap.";
+      ? "Manipulation intent detected — VLA + qwen3.6 MoE reasoning selected."
+      : CODING.test(text)
+        ? "Coding/build intent — qwen3.6 MoE (Strix Halo pi-bench leader) within 48 GB heap."
+        : "Performance tier — qwen3-vl + qwen3:30b MoE within 48 GB GPU heap.";
   } else if (FLEET.test(text)) {
     vision = "moondream:1.8b";
-    reasoning = "qwen2.5:14b-instruct-q4_K_M";
-    rationale = "Fleet/dispatch intent — lightweight vision, stronger planning model.";
+    reasoning = "qwen3:14b";
+    rationale = "Fleet/dispatch intent — lightweight vision, qwen3:14b planning.";
   } else if (KIOSK.test(text)) {
     vision = "moondream:1.8b";
-    reasoning = "qwen2.5:7b-instruct-q4_K_M";
-    rationale = "Kiosk/retail intent — fast vision + responsive chat backbone.";
+    reasoning = DEFAULT_REASONING_MODEL;
+    rationale = "Kiosk/retail intent — fast moondream vision + responsive qwen3:8b chat.";
   } else if (CONTENT.test(text)) {
-    vision = "qwen2.5-vl:7b";
-    reasoning = "qwen2.5:14b-instruct-q4_K_M";
-    rationale = "Content/social intent — vision for thumbnails + stronger copy/script reasoning.";
+    vision = "qwen3-vl:8b";
+    reasoning = "qwen3:14b";
+    rationale = "Content/social intent — qwen3-vl for thumbnails + qwen3:14b copy/scripts.";
   } else if (CAPITAL.test(text)) {
     vision = "moondream:1.8b";
-    reasoning = "qwen2.5:14b-instruct-q4_K_M";
-    rationale = "Capital/trading intent — lightweight vision, planning-heavy rule evaluation.";
+    reasoning = "qwen3:14b";
+    rationale = "Capital/trading intent — lightweight vision, qwen3:14b rule evaluation.";
   } else if (budgetTier === "balanced") {
-    vision = "qwen2.5-vl:7b";
-    reasoning = "qwen2.5:14b-instruct-q4_K_M";
-    rationale = "Balanced tier — spatial vision + mid-size reasoning on UMA.";
+    vision = "qwen3-vl:8b";
+    reasoning = "qwen3:14b";
+    rationale = "Balanced tier — qwen3-vl spatial vision + qwen3:14b reasoning on UMA.";
   }
 
   const models: ClawModels = { vision, reasoning, vla };

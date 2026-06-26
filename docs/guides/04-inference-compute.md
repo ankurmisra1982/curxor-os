@@ -15,19 +15,37 @@ Set in `/etc/curxor/compute.env`:
 CURXOR_INFERENCE_BACKEND=ollama   # or vllm
 ```
 
-## UMA tuning (64 GB)
+## UMA tuning
 
 The Ryzen AI Max+ 395 uses unified memory — GPU and CPU share the same physical RAM.
+
+### Standard 64 GB
 
 1. **BIOS** — set GPU UMA frame buffer to maximum (~48 GB) — [Hardware & BIOS guide](10-ms-s1-max-hardware-bios.md)
 2. **Leave headroom** — ~12–16 GB for Ubuntu, broker, engine, dashboard
 3. **Kernel** — `setup-rocm-host.sh` may apply `amdgpu.gttsize=49152`
 
-Key env knobs in `compute.env`:
-
 ```bash
 CURXOR_TOTAL_RAM_GB=64
 CURXOR_GPU_HEAP_GB=48
+```
+
+### Pro 128 GB
+
+1. **BIOS** — UMA **Maximum** (~96 GB GPU heap typical)
+2. **Leave headroom** — ~16–32 GB for OS + Pillars 2–4
+3. **Kernel** — `configure-uma.sh --apply-grub` with `CURXOR_GPU_HEAP_GB=96` → `amdgpu.gttsize=98304`
+
+```bash
+CURXOR_TOTAL_RAM_GB=128
+CURXOR_GPU_HEAP_GB=96
+```
+
+Full unbox steps: [MS-S1-128GB-UNBOX-CHEATSHEET.md](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md)
+
+Key env knobs in `compute.env` (both SKUs):
+
+```bash
 CURXOR_MODELS_DIR=/var/lib/curxor/models
 ```
 
@@ -57,11 +75,17 @@ curl -s http://127.0.0.1:8000/v1/models    # vLLM
 
 | Role | Model | Notes |
 |------|-------|-------|
-| Vision | `moondream:1.8b` | Lightweight spatial vision |
-| Reasoning | `qwen2.5:7b-instruct-q4_K_M` | Agent backbone |
+| Vision (light) | `moondream:1.8b` | Kiosks, fleet, capital — lowest UMA |
+| Vision (spatial) | `qwen3-vl:8b` | Balanced/performance — agentic scenes, 256K context |
+| Reasoning (default) | `qwen3:8b` | Agent backbone — tool-calling on gfx1151 |
+| Reasoning (mid) | `qwen3:14b` | Content, capital, fleet planning |
+| Reasoning (max 64 GB) | `qwen3:30b` or `batiai/qwen3.6-35b:q4` | MoE — qwen3.6 leads Strix Halo coding benchmarks ([pi-bench](https://pi-local-coding-bench.dev/)) |
+| Reasoning (Pro 128 GB) | `batiai/qwen3.6-35b:q6` or `batiai/qwen3.6-27b:q4` | Dense or high-bit Qwen3.6 for Build Plane / heavy coding |
 | VLA (optional) | `OpenVLA/openvla-7b` via vLLM | Manipulation workloads |
 
-Configured in `compute.env` as `OLLAMA_VLA_MODEL`, `OLLAMA_REASONING_MODEL`, etc.
+Qwen2.5 tags remain supported for legacy claw profiles. Frontier models (GLM 5.2, DeepSeek V4, etc.) are **not** local defaults — they exceed MS-S1 UMA; use optional BYOK if needed.
+
+Configured in `compute.env` as `OLLAMA_VLA_MODEL`, `OLLAMA_REASONING_MODEL`, `OLLAMA_EXTRA_MODELS` (Pro 128). Template: `pillar-1-compute/config/compute.env.pro128.example`.
 
 ## Systemd integration
 

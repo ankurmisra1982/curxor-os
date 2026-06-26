@@ -14,7 +14,7 @@ The **npm/Next.js build** ships UI and API routes. **Model weights are not bundl
 
 1. **BIOS** — GPU UMA frame buffer **MAX** (~48 GB on 64 GB SKU). See [Hardware & BIOS](10-ms-s1-max-hardware-bios.md).
 2. **Install stack** — `sudo /opt/curxor/scripts/install-all.sh`
-3. **Deploy local LLM** — `sudo /opt/curxor/pillar-1-compute/scripts/deploy.sh --pull-models` (30+ min first time)
+3. **Deploy local LLM** — `sudo /opt/curxor/pillar-1-compute/scripts/deploy.sh --pull-models` (30–90 min first time; Pro 128 pulls Qwen3 + Qwen3.6 extras — see [128GB cheat sheet](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md))
 4. **Verify inference** — `curl -sf http://127.0.0.1:11434/api/tags`
 5. **Open dashboard** — `http://<appliance-ip>:3080` → complete **FRE** at `/setup`
 
@@ -44,7 +44,7 @@ Canonical names (storefront and dashboard aligned):
 | `/my-content` | **Creator Claw** | Draft/schedule/publish (X bridge) |
 | `/my-work` | **Outreach Claw** | Outbound / CRM-style workflows |
 | `/my-shop` | **Arbitrage Claw** | Margin / fulfillment desk |
-| `/optimus` | **Signal Claw** | Feed and alert triggers |
+| `/optimus` | **Signal Claw** | The Neural Link — humanoid preview · AI device hub horizon |
 | `/robotaxi` | **Swarm Claw** | Multi-Claw orchestration grid |
 | `/claw-cafe` | **Engage Claw** | Community / DM engagement demos |
 
@@ -72,7 +72,7 @@ Align env across pillars:
 ```bash
 # /etc/curxor/compute.env + engine.env + dashboard.env
 CURXOR_INFERENCE_BACKEND=ollama
-CURXOR_INFERENCE_MODEL=qwen2.5:7b-instruct-q4_K_M
+CURXOR_INFERENCE_MODEL=qwen3:8b
 CURXOR_OLLAMA_URL=http://127.0.0.1:11434
 CURXOR_DASHBOARD_INFERENCE_ENABLED=1   # set 0 to disable dashboard LLM calls
 ```

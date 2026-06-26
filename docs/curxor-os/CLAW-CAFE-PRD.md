@@ -3,7 +3,8 @@
 > **Status:** C0 locked · ready for C1 build chat  
 > **Owner:** Ankur (product vision) · CTO agent (architecture)  
 > **Working name:** **Claw Cafe** (rename candidates below)  
-> **Route today:** `/claw-cafe` (currently mislabeled **Engage Claw** — will be reframed)
+> **Route today:** `/claw-cafe` (currently mislabeled **Engage Claw** — will be reframed)  
+> **OS layer:** Cafe is **not an operate Claw** — see [CAFE-OS-LAYER-MODEL.md](./CAFE-OS-LAYER-MODEL.md)
 
 ---
 
@@ -42,13 +43,13 @@ Developers have shipped dozens of **“agents in a room”** experiences in 2024
 | [Pixel Agents](https://github.com/pixel-agents-hq/pixel-agents) / [agents-in-the-office](https://github.com/gukosowa/agents-in-the-office) | Pixel office; NPC walks to desk/bookshelf based on **Claude Code JSONL** tool events | **Observational mirroring** — animate from real telemetry, not fake loops |
 | [AgentRoom](https://github.com/liuyixin-louis/agentroom) | Tauri + Canvas 2D; work room vs break room; per-project layouts | **Room zones** + persist layout per household |
 | [Cursor Office](https://github.com/ofershap/cursor-office) | Idle life (coffee, cat, arcade); celebrate on real edits; clickable easter eggs | **Delight when idle** + **objects with secrets** |
-| [AgentOffice](https://github.com/harishkotra/agent-office) | Phaser + Ollama; agents **autonomously** talk, hire, assign tasks | **Defer** autonomous LLM social sim to v2 — too heavy for day-one |
+| [AgentOffice](https://github.com/harishkotra/agent-office) | Phaser + Ollama; agents **autonomously** talk, hire, assign tasks | **Deferred** to [CLAW-COMMONS-VISION.md](./CLAW-COMMONS-VISION.md) Program CL (G5+) — bounded federated social, not personal Cafe default |
 | [AI Agent Cafe](https://github.com/koosoli/AI-Agent-Cafe) | Walk between rooms; **proximity chat**; mastery stars per room; final Architect secret | **Proximity inspect** + **room mastery** + **meta endgame** |
 | [AgentCafe](https://agentcafe.dev) | Multiplayer MCP — agents appear when connected | Future: optional **local mesh** presence (eno2 story) |
 
 **CurXor moat (what none of them have):**
 
-1. **Ten Claws + Forge** — OOTB employees *and* user-minted Claws in one world  
+1. **Ten operate Claws + Forge** — OOTB employees *and* user-minted / **fusion-born** Claws in one world  
 2. **Dual progression** — per-app life-stage titles (L1–L5) **feed** OS-wide ascension (Sprout → Infinity)  
 3. **Sovereign appliance** — Cafe runs offline; XP from local stores, not cloud leaderboards  
 4. **Growth philosophy** — levels reflect **use and responsibility**, not skill flex  
@@ -77,10 +78,25 @@ Developers have shipped dozens of **“agents in a room”** experiences in 2024
 
 - When Pillar 2 vision stream connected (`useVisionStream`), spawn **mesh Claw sprites** (CLAW-01…) at a **yard / dock zone** — separate from digital Claw desks
 - Motor events (`drop_claw`, lane activity) → short animation + bubble only; **no** full arcade game loop at MVP
+- **Gamer Claw horizon (GM6):** **arcade station** — when operator plays (platform session or `/play/{id}` micro-game), Gamer character at cabinet; scores → Cafe XP · [GAMER-CLAW-VISION.md](./GAMER-CLAW-VISION.md)
 - Reuse telemetry hooks from today’s `ClawCafeApp.tsx`; retire arcade-first UX over time
 
 **MVP:** one primary room (“The Cafe”).  
 **v2:** Forge annex, Capital floor, Break room when eno2 offline.
+
+### 1b. VR Cafe horizon (G4+ · not MVP)
+
+**Meet your Claws in VR** — the killer immersive payoff. Same `cafe-state` ledger as 2D; spatial renderer at `/display/cafe` on eno1; enter via **portal arch** from Signal Overlays or Cafe UI.
+
+| Layer | What you get |
+|-------|----------------|
+| **AD7** | Step into the room (Vision Pro / Quest on LAN) |
+| **AD8** | Walk to Claws · proximity inspect · patron menu |
+| **AD9** | Handshake ceremonies in space — bro-hug, brightness, Discover paths |
+| **AD10** | Shared household Cafe (stretch) |
+
+Full spec: [VR-CAFE-MEETINGS.md](./VR-CAFE-MEETINGS.md). **Not** autonomous agent social sim — real telemetry bubbles only, same honesty as 2D.
+
 
 ### 2. Dual progression system
 
@@ -169,6 +185,7 @@ Structured as **discoverable objects + behavioral triggers**, not random jokes.
 
 - Every profile in `claw-profiles.json` with `status: active` spawns a **distinct sprite** (palette swap minimum; custom icon ideal)
 - Mint event → character **enters through door** with bubble “Born on bare metal”
+- **Fusion mint** → both parents meet at center · bro-hug · child enters — [CAFE-OS-LAYER-MODEL](./CAFE-OS-LAYER-MODEL.md) § Forge Fusion
 - Custom Claws sit at **user-assigned station** (desk slot in layout editor v2)
 - Inactive / archived Claws walk out through door (AgentRoom pattern)
 
@@ -176,11 +193,11 @@ Structured as **discoverable objects + behavioral triggers**, not random jokes.
 
 ## Non-goals (C0 / MVP)
 
-- Autonomous agent-to-agent LLM conversations (AgentOffice-class)
-- Multiplayer / online leaderboards
-- Full RPG combat or inventory
 - Replacing per-app FRE or growth gates
-- 3D / VR (Deverse-class — post-MVP research only)
+- Autonomous agent-to-agent LLM conversations in VR (AgentOffice-class)
+- Multiplayer / online leaderboards at MVP (AD10 horizon only)
+- Full RPG combat or inventory
+- Native visionOS Cafe app before web-first AD7
 
 ---
 

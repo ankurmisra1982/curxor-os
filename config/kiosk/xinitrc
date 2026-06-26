@@ -1,0 +1,10 @@
+#!/bin/sh
+# CurXor OS — X session for monitor-first kiosk (installed to ~curxor-display/.xinitrc)
+# Restarts Chromium if it exits (dashboard crash, OOM, operator closes window).
+export CURXOR_ROOT="${CURXOR_ROOT:-/opt/curxor}"
+RESTART_SEC="${CURXOR_KIOSK_RESTART_SEC:-3}"
+
+while true; do
+  "${CURXOR_ROOT}/scripts/kiosk-launch.sh" || true
+  sleep "${RESTART_SEC}"
+done

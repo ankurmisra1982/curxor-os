@@ -8,7 +8,7 @@ Hardware-specific setup for the **MINISFORUM MS-S1 MAX** running CurXor OS.
 |------|-------|
 | CPU / APU | AMD Ryzen AI Max+ 395 |
 | GPU | Radeon 8060S (integrated, gfx1151) |
-| Memory | 64 GB LPDDR5X **UMA** (single pool) |
+| Memory | 64 GB or **128 GB** LPDDR5X **UMA** (single pool, soldered SKU) |
 | ROCm arch | `gfx1151` (`HSA_OVERRIDE_GFX_VERSION=11.5.1`) |
 | Networking | Dual 10GbE — **eno1** (user LAN), **eno2** (robotics mesh) |
 | OS target | Ubuntu 24.04 LTS minimal |
@@ -50,7 +50,7 @@ Firmware menu names vary by revision. Look for **Advanced**, **Chipset**, **AMD 
 
 | Setting | Recommended | Why |
 |---------|-------------|-----|
-| UMA Frame Buffer / GPU Memory | **Maximum** (~48 GB on 64 GB SKU) | VLA + vision models need GPU-addressable UMA |
+| UMA Frame Buffer / GPU Memory | **Maximum** (~48 GB on 64 GB · **~96 GB on 128 GB**) | VLA + vision models need GPU-addressable UMA |
 | iGPU | **Enabled** | Required for ROCm inference |
 | Shared memory above 512 MB | **Enabled** if offered | Allows large heap |
 
@@ -142,7 +142,9 @@ ip addr | grep -E '10\.0\.0\.1|10\.77\.0\.1'
 systemctl status curxor-os.target
 ```
 
-## Memory budget (64 GB reference)
+## Memory budget by SKU
+
+### Standard 64 GB ($3,999 tier)
 
 | Consumer | Typical allocation |
 |----------|-------------------|
@@ -152,6 +154,17 @@ systemctl status curxor-os.target
 | vLLM OpenVLA | 0.88 × heap (`VLLM_GPU_MEMORY_UTILIZATION`) |
 
 Use **Economy** claw tier in Flight Command if operating closer to 32 GB effective heap.
+
+### Pro 128 GB ($4,999 tier)
+
+| Consumer | Typical allocation |
+|----------|-------------------|
+| GPU heap (BIOS UMA) | **~96 GB** (BIOS Maximum — verify with `rocm-smi`) |
+| Ubuntu + services | ~16–32 GB |
+| Ollama hot model(s) | Fits in GPU heap; **two hot models** possible after verify |
+| vLLM / 70B-class Q4 | Realistic on Pro 128; tight on Standard 64 |
+
+**128 GB unbox cheat sheet:** [MS-S1-128GB-UNBOX-CHEATSHEET.md](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md)
 
 ## Storage
 

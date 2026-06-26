@@ -26,7 +26,7 @@ ip addr show eno2
 curl -sf http://127.0.0.1:11434/api/tags && echo "Ollama OK"
 curl -sf http://127.0.0.1:8000/v1/models && echo "vLLM OK"
 
-# Dashboard
+# Dashboard (on-box health — same whether browser is local or laptop over network)
 curl -sf http://127.0.0.1:3080/api/setup/status
 
 # Mesh
@@ -78,7 +78,7 @@ sudo systemctl restart curxor-telemetry-broker curxor-engine curxor-dashboard
 ### Ollama model not loaded / OOM
 
 1. Reduce loaded models: `OLLAMA_MAX_LOADED_MODELS=1`
-2. Use smaller quant: `qwen2.5:7b-instruct-q4_K_M`
+2. Use smaller quant or legacy model: `qwen3:8b` (or `qwen2.5:7b-instruct-q4_K_M` for old profiles)
 3. Verify BIOS GPU heap ≥ 48 GB for VLA stacks
 4. Check UMA usage in dashboard Compute widget or `free -h`
 

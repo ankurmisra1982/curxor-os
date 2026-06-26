@@ -116,7 +116,13 @@
 **Release 7 (lite) — Cross-Claw**
 - **Signal feed** — `/etc/curxor/signal-feed.json` · reactive draft + schedule from Signal Claw items
 
-**Deferred (not needed for 90% day-one):** MCP server · multi-brand workspaces · blog atomization · X streaming webhook · Reddit/Discord reply bridges · mobile PWA · compliance archive · dedicated job worker unit
+**Release 8 — Explainable Repurpose** *(roadmap — build after MS-S1 unbox + hw install)*
+- **Explainable Repurpose Studio** — long video → 3–5 ranked moments (hook, confidence, type, reason) → existing publish loop
+- **Local-only ingest** — upload / appliance asset path (no cloud link dependency)
+- **L2–L5 gated** — preview at Maker, queue at Publisher, brand plate + multi-ratio at Brand+
+- **Build plan:** [EXPLAINABLE-REPURPOSE-BUILD-PLAN.md](./EXPLAINABLE-REPURPOSE-BUILD-PLAN.md)
+
+**Deferred (not needed for 90% day-one):** MCP server · multi-brand workspaces · blog atomization · X streaming webhook · Reddit/Discord reply bridges · mobile PWA · compliance archive · dedicated job worker unit · active-speaker reframe (until MS-S1 compute profiled)
 
 **Day-one release polish (v0.3.0 — shipped)**
 - **Go Live checklist** — strict `ready` vs `partiallyReady`; public base URL probe

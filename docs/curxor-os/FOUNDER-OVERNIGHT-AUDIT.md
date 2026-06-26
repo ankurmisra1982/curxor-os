@@ -134,8 +134,15 @@ On **appliance** (predicted):
 
 - [ ] OTA tag only after on-device smoke
 - [ ] Appliance demo captures for storefront
+- [ ] Optional kiosk (monitor-first): `install-kiosk-mode.sh` → reboot — [19-kiosk-mode.md](../guides/19-kiosk-mode.md)
 - [ ] Master AI patron panel (v0.8)
 - [x] Build Plane inbound MCP (v0.8.1) — PR #2 · merge pending approval
+
+```bash
+sudo /opt/curxor/scripts/install-kiosk-mode.sh
+# or: sudo CURXOR_ENABLE_KIOSK=1 /opt/curxor/scripts/install-all.sh
+sudo reboot
+```
 
 ---
 

@@ -61,7 +61,7 @@ Settings may store `growthLevel` per user; FRE may store `growthIntent` per app.
 | App | Leveling build priority | Core customer levels |
 |-----|-------------------------|----------------------|
 | **Work Claw** | **P0 — first full implementation** | L1–L3 |
-| Creator Claw | P1 — placeholder labels + coach copy | L1–L3 |
+| **Creator Claw** | **P1 — leveling shipped** · R8 post-HW: [EXPLAINABLE-REPURPOSE-BUILD-PLAN.md](../creator-claw/EXPLAINABLE-REPURPOSE-BUILD-PLAN.md) | L1–L3 core |
 | **Capital Claw** | **P1 — build plan ready** · [LEVELING-BUILD-PLAN.md](../capital-claw/LEVELING-BUILD-PLAN.md) | L1–L4 core |
 | **Swarm Claw** | **P2 — Frozen (Tier C preview)** · [FREEZE.md](../swarm-claw/FREEZE.md) | L1–L3 core |
 | Vital / Kin | **P2 — Kin leveling UX shipped** · [LEVELING-BUILD-PLAN.md](../kin-claw/LEVELING-BUILD-PLAN.md) | L1–L4 |
@@ -74,4 +74,5 @@ Settings may store `growthLevel` per user; FRE may store `growthIntent` per app.
 - Swarm implementation plan: [../swarm-claw/LEVELING-BUILD-PLAN.md](../swarm-claw/LEVELING-BUILD-PLAN.md)
 - Claw Cafe implementation plan: [../claw-cafe/LEVELING-BUILD-PLAN.md](../claw-cafe/LEVELING-BUILD-PLAN.md)
 - Kin implementation plan: [../kin-claw/LEVELING-BUILD-PLAN.md](../kin-claw/LEVELING-BUILD-PLAN.md)
+- Creator Release 8 (post-HW): [../creator-claw/EXPLAINABLE-REPURPOSE-BUILD-PLAN.md](../creator-claw/EXPLAINABLE-REPURPOSE-BUILD-PLAN.md)
 - Work competitive positioning: [../outreach-claw/BEST-IN-CLASS.md](../outreach-claw/BEST-IN-CLASS.md)

@@ -30,7 +30,7 @@ echo "    Root: ${CURXOR_ROOT}"
 
 mkdir -p "${CURXOR_ROOT}/scripts" /etc/curxor/engine.env.d
 
-chmod +x "${SCRIPT_DIR}/setup-mesh-network.sh" "${SCRIPT_DIR}/apply-active-claw.sh" "${SCRIPT_DIR}/ota-updater.sh" "${SCRIPT_DIR}/install-ota-cron.sh" "${SCRIPT_DIR}/post-update.sh" "${SCRIPT_DIR}/ensure-app-fre-dir.sh" "${SCRIPT_DIR}/patch-app-fre-dir.sh" 2>/dev/null || true
+chmod +x "${SCRIPT_DIR}/setup-mesh-network.sh" "${SCRIPT_DIR}/apply-active-claw.sh" "${SCRIPT_DIR}/ota-updater.sh" "${SCRIPT_DIR}/install-ota-cron.sh" "${SCRIPT_DIR}/post-update.sh" "${SCRIPT_DIR}/ensure-app-fre-dir.sh" "${SCRIPT_DIR}/patch-app-fre-dir.sh" "${SCRIPT_DIR}/install-kiosk-mode.sh" "${SCRIPT_DIR}/kiosk-launch.sh" "${SCRIPT_DIR}/verify-kiosk-mode.sh" 2>/dev/null || true
 chmod +x "${CURXOR_ROOT}/docs/scripts/export-guides-pdf.sh" 2>/dev/null || true
 
 echo ""
@@ -158,4 +158,14 @@ systemctl list-dependencies curxor-os.target --no-pager || true
 echo ""
 echo "==> Optional: enable nightly OTA updates (03:00)"
 echo "    ${SCRIPT_DIR}/install-ota-cron.sh"
+echo ""
+echo "==> Optional: monitor-first kiosk (Flight Command on boot)"
+echo "    ${SCRIPT_DIR}/install-kiosk-mode.sh"
+echo "    or: CURXOR_ENABLE_KIOSK=1 ${SCRIPT_DIR}/install-all.sh"
+
+if [[ "${CURXOR_ENABLE_KIOSK:-0}" == "1" ]]; then
+  echo ""
+  echo "==> CURXOR_ENABLE_KIOSK=1 — installing kiosk mode"
+  "${SCRIPT_DIR}/install-kiosk-mode.sh"
+fi
 

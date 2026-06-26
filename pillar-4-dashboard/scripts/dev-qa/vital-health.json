@@ -1,33 +1,33 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-23T03:25:29.449Z",
+  "updatedAt": "2026-06-25T20:44:19.128Z",
   "vitals": [
     {
       "metric": "resting_hr",
-      "value": 59,
+      "value": 61,
       "unit": "bpm",
-      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "recordedAt": "2026-06-25T20:43:59.912Z",
       "source": "oura"
     },
     {
       "metric": "hrv",
-      "value": 44,
+      "value": 45,
       "unit": "ms",
-      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "recordedAt": "2026-06-25T20:43:59.912Z",
       "source": "oura"
     },
     {
       "metric": "sleep_score",
-      "value": 79,
+      "value": 85,
       "unit": "score",
-      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "recordedAt": "2026-06-25T20:43:59.912Z",
       "source": "oura"
     },
     {
       "metric": "steps",
-      "value": 8220,
+      "value": 8720,
       "unit": "count",
-      "recordedAt": "2026-06-23T03:25:08.014Z",
+      "recordedAt": "2026-06-25T20:43:59.912Z",
       "source": "apple_health"
     }
   ],
@@ -88,7 +88,7 @@
   "healthAppSync": [
     {
       "app": "Apple Health",
-      "lastSyncAt": "2026-06-23T03:25:08.014Z",
+      "lastSyncAt": "2026-06-25T20:43:59.912Z",
       "connected": true
     },
     {
@@ -103,7 +103,7 @@
     },
     {
       "app": "Oura",
-      "lastSyncAt": "2026-06-23T03:25:08.014Z",
+      "lastSyncAt": "2026-06-25T20:43:59.912Z",
       "connected": true
     }
   ],
@@ -134,8 +134,8 @@
     }
   ],
   "meta": {
-    "lastLabAt": "2026-06-23T03:25:29.449Z",
-    "lastWearableSyncAt": "2026-06-23T03:25:08.014Z",
-    "lastMeshPublishedAt": "2026-06-23T03:25:08.040Z"
+    "lastLabAt": "2026-06-25T20:44:19.128Z",
+    "lastWearableSyncAt": "2026-06-25T20:43:59.912Z",
+    "lastMeshPublishedAt": "2026-06-25T20:43:59.920Z"
   }
 }

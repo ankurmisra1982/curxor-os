@@ -14,7 +14,7 @@ import { BUILD_WORKER_WIZARD_STEP_IDS } from "@/lib/build-worker-wizard-steps";
 import {
   enqueueBuildDelegation,
   readBuildDelegationQueue,
-  updateBuildDelegationStatus,
+  resolveBuildDelegationStatus,
 } from "@/lib/build-delegation-queue";
 
 function isStepId(v: unknown): v is BuildWorkerWizardStepId {
@@ -108,9 +108,15 @@ export async function POST(request: Request): Promise<Response> {
     body.delegationId &&
     (body.status === "approved" || body.status === "rejected" || body.status === "completed")
   ) {
-    const item = await updateBuildDelegationStatus(body.delegationId, body.status);
+    const result = await resolveBuildDelegationStatus(body.delegationId, body.status);
+    if (!result.ok) {
+      if (result.error === "not_found") {
+        return Response.json({ ok: false, error: "Delegation not found" }, { status: 404 });
+      }
+      return Response.json({ ok: false, error: "Invalid delegation status transition" }, { status: 409 });
+    }
     const report = await buildWorkerWizardReport(origin);
-    return Response.json({ ...report, delegationItem: item });
+    return Response.json({ ...report, delegationItem: result.item });
   }
 
   return Response.json({ ok: false, error: "Unknown action" }, { status: 400 });

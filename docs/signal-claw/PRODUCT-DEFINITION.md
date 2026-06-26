@@ -1,22 +1,36 @@
-# Signal Claw — Product Definition
+# Signal Claw — The Neural Link
 
-**Status:** Preview module (Tier C) · Humanoid Home Hub shipped in software · hardware pairing pending  
+**Status:** Preview module (Tier C) · Universal app · **not** one of the ten operate claws  
 **Route:** `/optimus` · **Appliance ID:** `tesla-optimus-engine`  
-**Display name:** Signal Claw · **Workspace title:** Humanoid Home Hub
+**Display name:** **Signal Claw — The Neural Link**  
+**Workspace title (preview):** Humanoid Home Hub → migrates to **The Neural Link**
+
+---
+
+## GTM (locked)
+
+| | |
+|--|--|
+| **Hero** | *What is the next interface? Wrong question.* |
+| **Payoff** | *Interfaces drift. Your desk conducts.* |
+
+Signal is CurXor’s **orchestration engine** for embodied, worn, and ambient interfaces — not a vertical operate desk like Capital or Work.
 
 ---
 
 ## North star
 
-Signal Claw is the **neural link between your sovereign appliance and the humanoid (and later, other robots) in your home.**
+Signal **conducts** the interface layer: pair devices, enforce Kin policy, route overlays, push knowledge to robots, and synchronize smart home / gaming endpoints with the sovereign appliance.
 
-Primary job today (preview):
+Operate claws **think and act**; Signal **delivers** to the right surface.
+
+Primary jobs today (humanoid preview):
 
 1. **Instruct** — house rules, routines, safety boundaries  
-2. **Pass knowledge** — package Kin, Vital, and relationship context via CCP  
-3. **Relate** — name, tone, guest mode, how the robot addresses the operator  
+2. **Pass knowledge** — Kin, Vital, relationship context via CCP  
+3. **Relate** — tone, guest mode, per-person boundaries  
 
-Secondary (horizon): ambient world context feeds digital Claws; future humanoids may react to home-relevant signals.
+Horizon: full device-class registry — [SIGNAL-AI-DEVICE-HUB.md](../curxor-os/SIGNAL-AI-DEVICE-HUB.md) · OS layers [CAFE-OS-LAYER-MODEL.md](../curxor-os/CAFE-OS-LAYER-MODEL.md).
 
 ---
 

@@ -57,6 +57,7 @@ services:
       OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-8192}
       # Pin flash-attention friendly paths on RDNA 3.5
       OLLAMA_FLASH_ATTENTION: "1"
+      OLLAMA_KV_CACHE_TYPE: ${OLLAMA_KV_CACHE_TYPE:-q8_0}
     ports:
       - "${CURXOR_BIND_ADDRESS:-127.0.0.1}:${OLLAMA_HOST_PORT:-11434}:11434"
     volumes:
@@ -135,7 +136,8 @@ services:
       <<: *rocm_env
       OLLAMA_HOST: 127.0.0.1:11434
       OLLAMA_VLA_MODEL: ${OLLAMA_VLA_MODEL:-moondream:1.8b}
-      OLLAMA_REASONING_MODEL: ${OLLAMA_REASONING_MODEL:-}
+      OLLAMA_REASONING_MODEL: ${OLLAMA_REASONING_MODEL:-qwen3:8b}
+      OLLAMA_EXTRA_MODELS: ${OLLAMA_EXTRA_MODELS:-}
     volumes:
       - type: bind
         source: ${CURXOR_OLLAMA_DIR:-/var/lib/curxor/ollama}
@@ -149,6 +151,16 @@ services:
         if [[ -n "$${OLLAMA_REASONING_MODEL}" ]]; then
           echo "[curxor] Pulling reasoning model: $${OLLAMA_REASONING_MODEL}"
           ollama pull "$${OLLAMA_REASONING_MODEL}"
+        fi
+        if [[ -n "$${OLLAMA_EXTRA_MODELS:-}" ]]; then
+          IFS=',' read -ra EXTRA <<< "$${OLLAMA_EXTRA_MODELS}"
+          for m in "$${EXTRA[@]}"; do
+            m="$${m#"${m%%[![:space:]]*}"}"
+            m="$${m%"${m##*[![:space:]]}"}"
+            [[ -z "$$m" ]] && continue
+            echo "[curxor] Pulling extra model: $$m"
+            ollama pull "$$m"
+          done
         fi
         echo "[curxor] Warming VLA weights into UMA heap..."
         ollama run "$${OLLAMA_VLA_MODEL}" "ready" --verbose || true

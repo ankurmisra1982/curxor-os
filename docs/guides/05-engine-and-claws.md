@@ -30,7 +30,7 @@ Digital integrations (email, web scrape, cloud APIs) are purged. Available tools
 
 ```bash
 CURXOR_INFERENCE_BACKEND=ollama
-CURXOR_INFERENCE_MODEL=qwen2.5:7b-instruct-q4_K_M
+CURXOR_INFERENCE_MODEL=qwen3:8b
 CURXOR_MESH_BROKER_IP=10.77.0.1
 CURXOR_VISION_XPUB_PORT=9101
 CURXOR_MOTOR_XSUB_PORT=9200
@@ -65,7 +65,7 @@ Profile fields:
   "budgetTier": "balanced",
   "models": {
     "vision": "moondream:1.8b",
-    "reasoning": "qwen2.5:7b-instruct-q4_K_M",
+    "reasoning": "qwen3:8b",
     "vla": null
   }
 }

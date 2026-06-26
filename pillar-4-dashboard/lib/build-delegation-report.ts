@@ -2,7 +2,8 @@ import "server-only";
 
 import { buildCafeAscensionBootstrap } from "./claw-cafe-events";
 import {
-  readBuildDelegationQueue,
+  countPendingBuildDelegations,
+  readBuildDelegationReportItems,
   type BuildDelegationItem,
 } from "./build-delegation-queue";
 import { resolveBuildDelegationPolicy, type BuildDelegationPolicyView } from "./build-delegation-policy";
@@ -18,10 +19,11 @@ export interface BuildDelegationReport {
 }
 
 export async function buildDelegationReport(limit = 24): Promise<BuildDelegationReport> {
-  const [settings, bootstrap, items] = await Promise.all([
+  const [settings, bootstrap, items, pendingCount] = await Promise.all([
     readUserSettings(),
     buildCafeAscensionBootstrap({ autoSync: false }),
-    readBuildDelegationQueue(limit),
+    readBuildDelegationReportItems(limit),
+    countPendingBuildDelegations(),
   ]);
 
   const ascensionTier: AscensionTierId = bootstrap.ascension?.tier ?? "sprout";
@@ -36,6 +38,6 @@ export async function buildDelegationReport(limit = 24): Promise<BuildDelegation
     policy,
     ascensionTitle: bootstrap.ascension?.title ?? null,
     items,
-    pendingCount: items.filter((i) => i.status === "pending").length,
+    pendingCount,
   };
 }

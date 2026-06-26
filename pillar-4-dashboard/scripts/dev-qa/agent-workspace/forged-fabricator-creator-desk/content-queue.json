@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-23T05:13:23.200Z",
+  "posts": [
+    {
+      "id": "POST-001",
+      "channel": "CurXor Dev Log",
+      "platform": "x",
+      "stage": "SCRIPT",
+      "draftText": "Sovereign creator desk on CurXor — draft locally, schedule on appliance, publish via eno2 bridge when wired.",
+      "scheduledAt": null,
+      "createdAt": "2026-06-23T05:13:23.200Z",
+      "updatedAt": "2026-06-23T05:13:23.200Z"
+    }
+  ]
+}

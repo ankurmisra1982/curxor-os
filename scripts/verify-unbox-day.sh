@@ -165,8 +165,35 @@ fi
 section "E. Inference smoke"
 if curl -sf "http://127.0.0.1:11434/api/tags" &>/dev/null; then
   pass "Ollama responding on :11434"
-  curl -s "http://127.0.0.1:11434/api/tags" | head -c 400
+  TAGS_JSON="$(curl -s "http://127.0.0.1:11434/api/tags")"
+  echo "${TAGS_JSON}" | head -c 400
   echo ""
+  if [[ "${POST_MODELS}" == true ]]; then
+    for EXPECT in moondream qwen3; do
+      if echo "${TAGS_JSON}" | grep -q "${EXPECT}"; then
+        pass "Ollama has ${EXPECT} family weights"
+      else
+        fail "Ollama missing ${EXPECT} — check compute.env + deploy.sh --pull-models"
+      fi
+    done
+    if [[ -f /etc/curxor/compute.env ]]; then
+      # shellcheck disable=SC1091
+      set -a; source /etc/curxor/compute.env; set +a
+      if [[ "${CURXOR_TOTAL_RAM_GB:-64}" -ge 128 && -n "${OLLAMA_EXTRA_MODELS:-}" ]]; then
+        IFS=',' read -ra EXTRA <<< "${OLLAMA_EXTRA_MODELS}"
+        for m in "${EXTRA[@]}"; do
+          m="$(echo "$m" | xargs)"
+          [[ -z "${m}" ]] && continue
+          key="${m%%:*}"
+          if echo "${TAGS_JSON}" | grep -q "${key}"; then
+            pass "Ollama has extra model ${m}"
+          else
+            warn "Ollama missing Pro 128 extra model ${m}"
+          fi
+        done
+      fi
+    fi
+  fi
 else
   if [[ "${POST_MODELS}" == true ]]; then
     fail "Ollama not responding — deploy.sh --pull-models may have failed"

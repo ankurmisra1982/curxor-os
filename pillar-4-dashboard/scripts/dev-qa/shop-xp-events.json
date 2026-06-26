@@ -1,1 +1,12 @@
-{"events":[]}
+{
+  "events": [
+    {
+      "id": "SHP-0001",
+      "kind": "channel_sync",
+      "at": "2026-06-25T20:44:18.794Z",
+      "payload": {
+        "channel": "ebay"
+      }
+    }
+  ]
+}

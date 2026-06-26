@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600">
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#141414" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="heroGlow" cx="42%" cy="48%" r="55%">
+      <stop offset="0%" stop-color="#BF5AF2" stop-opacity="0.22"/>
+      <stop offset="50%" stop-color="#BF5AF2" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edgeL" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.6"/>
+      <stop offset="12%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="edgeR" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.6"/>
+      <stop offset="12%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cmdBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#BF5AF2" stop-opacity="0"/>
+      <stop offset="15%" stop-color="#BF5AF2" stop-opacity="0.85"/>
+      <stop offset="85%" stop-color="#BF5AF2" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#BF5AF2" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="titleGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1500" height="600" fill="#050505"/>
+  <rect width="1500" height="600" fill="url(#grid)"/>
+  <rect width="1500" height="600" fill="url(#heroGlow)"/>
+  <rect width="1500" height="600" fill="url(#edgeL)"/>
+  <rect width="1500" height="600" fill="url(#edgeR)"/>
+
+  <g transform="translate(118 300)" filter="url(#titleGlow)">
+    <g transform="translate(-335 -58) scale(0.78)">
+      <g transform="translate(65 100)">
+        <g transform="scale(1.2)">
+          <rect x="-22" y="-22" width="44" height="44" rx="8" transform="rotate(45) translate(8, 8)" fill="#BF5AF2"/>
+          <rect x="-22" y="-22" width="44" height="44" rx="8" transform="rotate(45)" fill="#ffffff"/>
+        </g>
+      </g>
+      <text x="140" y="140" font-family="JetBrains Mono, ui-monospace, monospace" font-size="110" font-weight="800" fill="#ffffff" letter-spacing="-5">cur</text>
+      <g transform="translate(418 45)">
+        <path d="M 10 0 L 55 100 L 30 100 L -15 0 Z" fill="#BF5AF2"/>
+        <path d="M 40 0 L 85 100 L 60 100 L 15 0 Z" fill="#BF5AF2"/>
+        <path d="M 105 0 C 70 30 20 70 -20 100 L 5 100 C 45 70 95 30 130 0 Z" fill="#BF5AF2"/>
+      </g>
+      <text x="548" y="140" font-family="JetBrains Mono, ui-monospace, monospace" font-size="110" font-weight="800" fill="#ffffff" letter-spacing="-5">or</text>
+      <rect x="686" y="65" width="12" height="75" fill="#BF5AF2"/>
+    </g>
+  </g>
+
+  <g transform="translate(720 300)">
+    <text x="0" y="-72" font-family="JetBrains Mono, ui-monospace, monospace" font-size="13" font-weight="700" fill="#BF5AF2" letter-spacing="6">FOUNDER ESSAY</text>
+    <text x="0" y="-18" font-family="JetBrains Mono, ui-monospace, monospace" font-size="46" font-weight="800" fill="#f0f0f0" letter-spacing="1">WHY I&apos;M BUILDING</text>
+    <text x="0" y="42" font-family="JetBrains Mono, ui-monospace, monospace" font-size="46" font-weight="800" fill="#BF5AF2" letter-spacing="1">CURXOR</text>
+    <line x1="0" y1="72" x2="420" y2="72" stroke="url(#cmdBar)" stroke-width="2"/>
+    <text x="0" y="108" font-family="JetBrains Mono, ui-monospace, monospace" font-size="16" font-weight="600" fill="#7a7a7a" letter-spacing="0.5">Sovereign AI on metal you own.</text>
+    <text x="0" y="136" font-family="JetBrains Mono, ui-monospace, monospace" font-size="14" font-weight="500" fill="#505050" letter-spacing="0.5">Ten Claws / $0/mo inference / $3,999 once</text>
+  </g>
+
+  <text x="1468" y="578" text-anchor="end" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" fill="#333333" letter-spacing="2">ANKUR MISRA / JUN 2026</text>
+</svg>

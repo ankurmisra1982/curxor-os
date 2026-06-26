@@ -1,6 +1,8 @@
 # CurXor OS — Operator Quick Reference
 
-**MINISFORUM MS-S1 MAX · Ubuntu 24.04 · Sovereign Edge · Local LLM**
+**curXor** · MINISFORUM MS-S1 MAX · Ubuntu 24.04 · Sovereign Edge · Local LLM
+
+Chassis badge: [docs/assets/CurXor-Hardware-Badge.svg](../assets/CurXor-Hardware-Badge.svg)
 
 Print this card at the rack. Expanded quick start: [guides/00-quick-start.md](../guides/00-quick-start.md)
 
@@ -10,7 +12,9 @@ Print this card at the rack. Expanded quick start: [guides/00-quick-start.md](..
 
 | What | Where |
 |------|-------|
-| Dashboard | `http://<appliance-ip>:3080` |
+| Dashboard (laptop) | `http://<appliance-ip>:3080` |
+| Dashboard (on-box display, optional) | `http://127.0.0.1:3080` |
+| Kiosk (tty1 fullscreen) | `install-kiosk-mode.sh` → reboot — [19-kiosk-mode.md](../guides/19-kiosk-mode.md) |
 | Captive (eno1) | Any URL → `http://10.0.0.1` |
 | FRE wizard | `/setup` (first boot) |
 | The Forge | `/claw-forge` or header **+ Forge** |
@@ -50,9 +54,12 @@ Mesh: vision **9100/9101** · motor **9200/9201** · digital **9200/9101**
 
 | Step | Command |
 |------|---------|
+| Pro 128 profile | `sudo cp …/config/compute.env.pro128.example /etc/curxor/compute.env` |
 | Deploy (first boot) | `sudo …/pillar-1-compute/scripts/deploy.sh --pull-models` |
 | Verify | `curl -sf http://127.0.0.1:11434/api/tags` |
 | Restart | `sudo systemctl restart curxor-compute` |
+
+**Default stack:** `moondream:1.8b` + `qwen3:8b` · Pro 128 adds `qwen3-vl:8b`, `qwen3:14b`, `batiai/qwen3.6-35b:q4` via `OLLAMA_EXTRA_MODELS`
 
 **Uses inference:** engine loop · Forge chat · Creator/Capital/Outreach/Arbitrage chat · plan skills  
 **Skills only (no LLM→internet):** Execute Trade · Publish Post → mesh → bridge
@@ -81,11 +88,24 @@ journalctl -u curxor-dashboard -f
 
 ## First boot
 
-1. BIOS UMA **MAX** (~48 GB)
+| SKU | BIOS UMA | Env |
+|-----|----------|-----|
+| **Standard 64** ($3,999) | MAX (~48 GB) | `CURXOR_TOTAL_RAM_GB=64` · `CURXOR_GPU_HEAP_GB=48` |
+| **Pro 128** ($4,999) | MAX (~96 GB) | `CURXOR_TOTAL_RAM_GB=128` · `CURXOR_GPU_HEAP_GB=96` — [cheat sheet](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md) |
+
+1. BIOS UMA **MAX** (see row above)
 2. `sudo /opt/curxor/scripts/install-all.sh`
 3. `sudo …/deploy.sh --pull-models`
 4. Dashboard → FRE (`/setup`) — pick Claw modules
 5. Optional: captive portal · OTA cron
+
+**After golden path** — optional kiosk (tty1 fullscreen):
+
+```bash
+sudo /opt/curxor/scripts/install-kiosk-mode.sh
+# or: sudo CURXOR_ENABLE_KIOSK=1 /opt/curxor/scripts/install-all.sh
+sudo reboot
+```
 
 ---
 

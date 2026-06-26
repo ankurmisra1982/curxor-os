@@ -28,6 +28,10 @@ npm run qa:creator-levels
 npm run qa:creator-checklist
 ```
 
+## Roadmap (post-hardware)
+
+- **Release 8 — Explainable Repurpose** — [EXPLAINABLE-REPURPOSE-BUILD-PLAN.md](./EXPLAINABLE-REPURPOSE-BUILD-PLAN.md) *(build after MS-S1 unbox + install)*
+
 ## Agent workspace
 
 `/etc/curxor/agent-workspace/my-content-creator/` — `SOUL.md`, `TOOLS.md`, `HEARTBEAT.md`, `skills/*.md`

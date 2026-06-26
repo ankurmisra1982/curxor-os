@@ -433,7 +433,7 @@ export function SettingsWorkspace() {
                   value={localModel}
                   onChange={(e) => setLocalModel(e.target.value)}
                   className="mt-2 w-full border border-line bg-void px-3 py-2 font-mono text-sm text-stark"
-                  placeholder="qwen2.5:7b-instruct-q4_K_M"
+                  placeholder="qwen3:8b"
                 />
               </section>
 

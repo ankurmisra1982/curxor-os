@@ -43,4 +43,7 @@ chown -R "${SERVICE_USER}:${SERVICE_USER}" /var/lib/curxor "${INSTALL_ROOT}" 2>/
 echo ""
 echo "==> Pillar 1 install complete."
 echo "    Configure ${ENV_FILE} and BIOS UMA, then deploy inference:"
+if [[ -f "${INSTALL_ROOT}/config/compute.env.pro128.example" ]]; then
+  echo "    Pro 128: sudo cp ${INSTALL_ROOT}/config/compute.env.pro128.example ${ENV_FILE}"
+fi
 echo "    ${INSTALL_ROOT}/scripts/deploy.sh --pull-models"

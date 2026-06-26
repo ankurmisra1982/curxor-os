@@ -8,9 +8,12 @@
 
 ## Pre-arrival (dev machine — do now)
 
+> **48-hour playbook:** [PRE-UNBOX-48H.md](./PRE-UNBOX-48H.md) · one command: `npm.cmd run pre-unbox:gate` (Windows) or `npm run pre-unbox:gate`
+
 | # | Task | Command / artifact | Status |
 |---|------|-------------------|--------|
-| 1 | Local QA green | `cd pillar-4-dashboard && npm run qa:local -- --port 3081` | Run before unbox |
+| 1 | Pre-unbox gate | `cd pillar-4-dashboard && npm run pre-unbox:gate` | typecheck + build + qa:local |
+| 1b | Local QA only | `npm run qa:local -- --port 3081` | If gate already built |
 | 2 | Typecheck | `npm run typecheck` | |
 | 3 | Production build | `npm run build` | Catches Next.js issues |
 | 4 | Tag known-good | `version.json` → bump after QA | Currently **0.9.1** (Build Plane BP4 Master AI delegation UI) |
@@ -41,7 +44,8 @@ Paste the **GOLDEN PATH NOTES** block from script output into install addendum /
 
 Follow [10-ms-s1-max-hardware-bios.md](../guides/10-ms-s1-max-hardware-bios.md):
 
-- UMA / GPU memory → **Maximum**
+- UMA / GPU memory → **Maximum** (~48 GB on 64 · **~96 GB on 128**)
+- **Pro 128 SKU:** [MS-S1-128GB-UNBOX-CHEATSHEET.md](./MS-S1-128GB-UNBOX-CHEATSHEET.md)
 - Label **eno1** = Command Port (operator LAN)
 - Label **eno2** = Egress Port (mesh + bridges)
 
@@ -62,7 +66,7 @@ curl -s http://127.0.0.1:3080/api/setup/status | jq .
 
 ### D. First boot UX (30 min)
 
-1. Browse to `http://<eno1-ip>:3080` from laptop on Command Port
+1. Browse to `http://<eno1-ip>:3080` from laptop on Command Port *(optional alt: on-box browser → `http://127.0.0.1:3080` — see [Flight Command guide](../guides/07-flight-command-dashboard.md); not prioritized vs laptop path)*
 2. Complete **FRE** (`/setup`) — pick Capital, Creator, Work, Forge
 3. Open each flagship Claw — confirm FRE wizards, no 500s
 4. **Claw Cafe** — Ascension tab → Sync → pixel room populates
@@ -84,6 +88,18 @@ cd /opt/curxor/pillar-4-dashboard
 # Point env at /etc/curxor (production default — do NOT set CURXOR_DEV_QA_DIR)
 sudo -u curxor NODE_ENV=production node scripts/qa-smoke.mjs http://127.0.0.1:3080
 ```
+
+### G. After golden path — optional kiosk (monitor-first)
+
+Only after UAT smile + on-device smoke pass. Not required Thursday; not storefront.
+
+```bash
+sudo /opt/curxor/scripts/install-kiosk-mode.sh
+# or: sudo CURXOR_ENABLE_KIOSK=1 /opt/curxor/scripts/install-all.sh
+sudo reboot
+```
+
+See [19-kiosk-mode.md](../guides/19-kiosk-mode.md) · `verify-kiosk-mode.sh` before reboot.
 
 ---
 
@@ -117,8 +133,27 @@ sudo -u curxor NODE_ENV=production node scripts/qa-smoke.mjs http://127.0.0.1:30
 
 ---
 
+## Post-hardware — founder cockpit
+
+> **Playbook:** [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) — laptop + box daily loop (internal, not GTM)
+
+Do this once UAT smile + on-device smoke pass — before heavy demo captures or daily dogfooding.
+
+| # | Task | Done |
+|---|------|------|
+| F1 | Note **`BOX_IP`** (eno1 LAN) in your notes | [ ] |
+| F2 | Enable SSH on box · `openssh-server` | [ ] |
+| F3 | SSH key from Windows laptop → passwordless `ssh ankur@BOX_IP` | [ ] |
+| F4 | Bookmark `http://BOX_IP:3080` (dogfood UI) | [ ] |
+| F5 | Test deploy loop: laptop `qa:local` → `scp`/rsync → `post-update.sh` → restart → browser UAT | [ ] |
+| F6 | Confirm operator data in `/etc/curxor/` survives one deploy | [ ] |
+| F7 | Optional: Cursor Remote-SSH to box · optional kiosk (`install-kiosk-mode.sh`) | [ ] |
+
+---
+
 ## Post-validation
 
+- [ ] Founder cockpit (F1–F6 above)
 - [ ] Re-capture demo screenshots from appliance IP
 - [ ] Add one line to `docs/claw-cafe/EXIT-DEMO.md` — “verified on MS-S1”
 - [ ] Update `docs/guides/01-installation.md` addendum with actual NIC names
@@ -141,6 +176,7 @@ OTA rollback: `ota-updater.sh` — see [guides/09-ota-updates.md](../guides/09-o
 
 ## References
 
+- [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) — post-HW laptop + box loop
 - [DAY-ONE-BUILD-PLAN.md](./DAY-ONE-BUILD-PLAN.md)
 - [FOUNDER-OVERNIGHT-AUDIT.md](./FOUNDER-OVERNIGHT-AUDIT.md)
 - [03-networking.md](../guides/03-networking.md)

@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" width="1500" height="500">
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#141414" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="heroGlow" cx="48%" cy="42%" r="50%">
+      <stop offset="0%" stop-color="#BF5AF2" stop-opacity="0.14"/>
+      <stop offset="55%" stop-color="#080808" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edgeL" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.55"/>
+      <stop offset="14%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="edgeR" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.55"/>
+      <stop offset="14%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="quoteGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1500" height="500" fill="#050505"/>
+  <rect width="1500" height="500" fill="url(#grid)"/>
+  <rect width="1500" height="500" fill="url(#heroGlow)"/>
+  <rect width="1500" height="500" fill="url(#edgeL)"/>
+  <rect width="1500" height="500" fill="url(#edgeR)"/>
+
+  <!-- founder label -->
+  <text
+    x="750"
+    y="118"
+    text-anchor="middle"
+    font-family="JetBrains Mono, ui-monospace, monospace"
+    font-size="11"
+    font-weight="700"
+    fill="#BF5AF2"
+    letter-spacing="6"
+  >FOUNDER</text>
+
+  <!-- quote -->
+  <g filter="url(#quoteGlow)">
+    <text
+      x="750"
+      y="186"
+      text-anchor="middle"
+      font-family="JetBrains Mono, ui-monospace, monospace"
+      font-size="28"
+      font-weight="600"
+      fill="#8a8a8a"
+      letter-spacing="0.5"
+    >The demo went viral months ago.</text>
+    <text
+      x="750"
+      y="234"
+      text-anchor="middle"
+      font-family="JetBrains Mono, ui-monospace, monospace"
+      font-size="28"
+      font-weight="600"
+      fill="#9a9a9a"
+      letter-spacing="0.5"
+    >The headline was Tuesday.</text>
+    <text
+      x="750"
+      y="288"
+      text-anchor="middle"
+      font-family="JetBrains Mono, ui-monospace, monospace"
+      font-size="32"
+      font-weight="700"
+      fill="#e8e8e8"
+      letter-spacing="0.5"
+    >I started shipping the box on Wednesday.</text>
+  </g>
+
+  <!-- accent rule -->
+  <line x1="580" y1="322" x2="920" y2="322" stroke="#BF5AF2" stroke-width="1" opacity="0.45"/>
+
+  <text
+    x="750"
+    y="358"
+    text-anchor="middle"
+    font-family="JetBrains Mono, ui-monospace, monospace"
+    font-size="11"
+    fill="#444444"
+    letter-spacing="2"
+  >SOVEREIGN AI ON METAL YOU OWN</text>
+
+  <!-- compact wordmark bottom-right -->
+  <g transform="translate(1288 418) scale(0.22)">
+    <g transform="translate(65 100)">
+      <g transform="scale(1.2)">
+        <rect x="-22" y="-22" width="44" height="44" rx="8" transform="rotate(45) translate(8, 8)" fill="#BF5AF2"/>
+        <rect x="-22" y="-22" width="44" height="44" rx="8" transform="rotate(45)" fill="#ffffff"/>
+      </g>
+    </g>
+    <text x="140" y="140" font-family="JetBrains Mono, ui-monospace, monospace" font-size="110" font-weight="800" fill="#ffffff" letter-spacing="-5">cur</text>
+    <g transform="translate(418 45)">
+      <path d="M 10 0 L 55 100 L 30 100 L -15 0 Z" fill="#BF5AF2"/>
+      <path d="M 40 0 L 85 100 L 60 100 L 15 0 Z" fill="#BF5AF2"/>
+      <path d="M 105 0 C 70 30 20 70 -20 100 L 5 100 C 45 70 95 30 130 0 Z" fill="#BF5AF2"/>
+    </g>
+    <text x="548" y="140" font-family="JetBrains Mono, ui-monospace, monospace" font-size="110" font-weight="800" fill="#ffffff" letter-spacing="-5">or</text>
+    <rect x="686" y="65" width="12" height="75" fill="#BF5AF2"/>
+  </g>
+
+  <text
+    x="1468"
+    y="478"
+    text-anchor="end"
+    font-family="JetBrains Mono, ui-monospace, monospace"
+    font-size="9"
+    fill="#2a2a2a"
+    letter-spacing="2"
+  >JUN 2026</text>
+</svg>

@@ -6,9 +6,9 @@ Deploy CurXor OS on an MS-S1 MAX appliance running **Ubuntu 24.04 LTS**.
 
 | Requirement | Notes |
 |-------------|-------|
-| Hardware | MINISFORUM MS-S1 MAX, 64 GB UMA recommended |
+| Hardware | MINISFORUM MS-S1 MAX — **Standard 64 GB** ($3,999) or **Pro 128 GB** ($4,999) UMA |
 | OS | Ubuntu 24.04 minimal, cloud-init or manual install |
-| BIOS | Set GPU UMA heap to maximum (~48 GB) — see [MS-S1 MAX BIOS guide](docs/guides/10-ms-s1-max-hardware-bios.md) |
+| BIOS | Set GPU UMA heap to maximum (~48 GB on 64 · **~96 GB on 128**) — see [MS-S1 MAX BIOS guide](10-ms-s1-max-hardware-bios.md) · [128GB cheat sheet](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md) |
 | Network | Two NICs: **eno1** (user LAN), **eno2** (robotics mesh) |
 
 ## Method A — Copy tree and run meta-installer
@@ -40,12 +40,20 @@ Do **not** use `git clone /opt/curxor` in cloud-init — copy the payload from C
 
 ## Post-install checklist
 
+**Pro 128 GB:** copy the inference profile before model pull:
+
 ```bash
-# 1. Pull inference models (first boot — can take 30+ minutes)
+sudo cp /opt/curxor/pillar-1-compute/config/compute.env.pro128.example /etc/curxor/compute.env
+sudo ln -sfn /etc/curxor/compute.env /opt/curxor/pillar-1-compute/.env
+```
+
+```bash
+# 1. Pull inference models (first boot — 30–90 minutes)
 sudo /opt/curxor/pillar-1-compute/scripts/deploy.sh --pull-models
 
 # 2. Verify local LLM (required for engine + dashboard chat)
 curl -sf http://127.0.0.1:11434/api/tags && echo "Ollama OK"
+# Expect: moondream + qwen3:8b (all SKUs); Pro 128 also qwen3-vl, qwen3:14b, qwen3.6
 
 # 3. Verify systemd stack
 systemctl status curxor-os.target
@@ -63,6 +71,16 @@ sudo /opt/curxor/scripts/install-ota-cron.sh
 # 7. Align dashboard inference with compute (if not already set)
 grep CURXOR_INFERENCE /etc/curxor/dashboard.env /etc/curxor/compute.env
 ```
+
+**After golden path** (optional kiosk — not day-one required):
+
+```bash
+sudo /opt/curxor/scripts/install-kiosk-mode.sh
+# or: sudo CURXOR_ENABLE_KIOSK=1 /opt/curxor/scripts/install-all.sh
+sudo reboot
+```
+
+See [Kiosk Mode](19-kiosk-mode.md).
 
 ## Configuration files created on install
 
@@ -107,3 +125,4 @@ journalctl -u curxor-telemetry-broker -f
 - [Networking](03-networking.md) — eno1 vs eno2
 - [Inference & Compute](04-inference-compute.md) — models and UMA
 - [MS-S1 MAX Hardware & BIOS](10-ms-s1-max-hardware-bios.md)
+- [Kiosk Mode](19-kiosk-mode.md) — optional monitor-first boot

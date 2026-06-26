@@ -68,8 +68,15 @@ sudo systemctl enable --now curxor-compute
 | Model | Stack | Role |
 |-------|-------|------|
 | `moondream:1.8b` | Ollama | Lightweight vision-language for clawbot cameras |
-| `qwen2.5:7b-instruct-q4_K_M` | Ollama | Reasoning / planning backbone |
+| `qwen3-vl:8b` | Ollama | Spatial vision + 256K context for complex scenes |
+| `qwen3:8b` | Ollama | Default reasoning / planning backbone |
+| `qwen3:14b` | Ollama | Mid-size reasoning for multi-step claws |
+| `qwen3:30b` | Ollama | MoE general agent backbone on 64 GB UMA |
+| `batiai/qwen3.6-35b:q4` | Ollama | Strix Halo coding MoE (pi-bench leader) |
+| `qwen3:32b` | Ollama | Dense flagship for Pro 128 GB stacks |
 | `OpenVLA/openvla-7b` | vLLM | Robotics VLA (action head for manipulation) |
+
+Legacy Qwen2.5 tags remain in the Forge catalog for existing claw profiles.
 
 Change models in `.env` — no cloud APIs required after initial weight pull.
 

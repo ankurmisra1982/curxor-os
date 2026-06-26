@@ -21,8 +21,7 @@ This is the "central communication interface" — not a cloud hub, but an on-app
 | `work` | Outreach | pipeline.*, crm.* |
 | `finance` | Capital | portfolio.*, rules.* |
 | `family` | Kin | members.*, devices.* |
-| `hardware` | Signal / Optimus | optimus.*, motor state |
-| `signals` | Signal | feeds.*, triggers.* |
+| `hardware` | Signal Claw | robot.*, display.*, vr.*, smart_home.*, voice.*, vehicle.*, motor state |
 
 Registry: `pillar-4-dashboard/lib/claw-mesh-protocol.ts`
 

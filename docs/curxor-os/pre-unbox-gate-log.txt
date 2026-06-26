@@ -1,0 +1,110 @@
+
+=== pre-unbox gate 2026-06-24T02:39:00.000Z (manual qa:local completion) ===
+port: 3084
+result: PASS
+  PASS  version.json pin (0.9.1)
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3084) — 184 smoke + all checklists green
+
+=== pre-unbox gate 2026-06-24T02:37:00.744Z ===
+port: 3082
+result: FAIL
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  FAIL  qa:local (port 3082) — port in use
+
+=== pre-unbox gate 2026-06-24T02:35:24.762Z ===
+port: 3081
+result: FAIL
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  FAIL  qa:local (port 3081) — port in use
+
+=== pre-unbox gate 2026-06-24T03:00:45.993Z ===
+port: 3086
+result: PASS
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3086)
+
+=== pre-unbox gate 2026-06-24T03:04:04.952Z ===
+port: 3087
+result: PASS
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3087)
+
+=== pre-unbox gate 2026-06-24T22:16:38.004Z ===
+port: 3081
+result: FAIL
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  FAIL  qa:local (port 3081) — npm run qa:local exited 1
+
+=== pre-unbox gate 2026-06-24T22:19:10.456Z ===
+port: 3082
+result: PASS
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3082)
+
+=== pre-unbox gate 2026-06-25T06:20:29.016Z ===
+port: 3083
+result: PASS
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3083)
+
+=== pre-unbox gate 2026-06-25T20:11:40.494Z ===
+port: 3084
+result: FAIL
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  FAIL  qa:local (port 3084) — npm run qa:local exited 1
+
+=== pre-unbox gate 2026-06-25T20:44:22.383Z ===
+port: 3085
+result: PASS
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3085)

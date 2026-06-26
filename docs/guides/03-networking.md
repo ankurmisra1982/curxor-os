@@ -83,6 +83,8 @@ Template: `config/captive-portal/dnsmasq-captive.conf`
 4. HTTP/HTTPS hits dashboard on port 3080
 5. FRE wizard at `/setup` runs on first visit
 
+**Optional:** With a monitor on the MS-S1, operators can skip the laptop path and open `http://127.0.0.1:3080` in a local browser — same dashboard, same FRE. Not the default golden path; see [Flight Command — on-box local display](07-flight-command-dashboard.md#on-box-local-display-optional--not-default).
+
 ## Firewall considerations
 
 - Dashboard binds `0.0.0.0:3080` for captive access; inference stays on `127.0.0.1`
