@@ -16,6 +16,7 @@
 │  · Signal Claw — The Neural Link                              │
 │  · Kin — household mapper (profiles · scopes · devices)       │
 │  · Patron Link — mobile pull/push (/m)                        │
+│  · Patron Ask — chat FAB / fullscreen (Master AI UI)          │
 ├──────────────────────────────────────────────────────────────┤
 │  TEN OPERATE CLAWS (vertical desks)                           │
 │  1 Capital   2 Work   3 Creator*   4 Arbitrage   5 Vital    │
@@ -34,7 +35,8 @@
 | **Claw Cafe** | Patron Hall | `/claw-cafe` | Always on |
 | **Signal Claw — The Neural Link** | Orchestration · devices | `/optimus` | Always on |
 | **Kin** | Household mapper | `/my-family` | Always on · not an “employee” |
-| **Patron Link** | Mobile companion (pull + push) | `/m` | Pair per device · [MOBILE-PATRON-LINK](./MOBILE-PATRON-LINK.md) |
+| **Patron Link** | Mobile companion | `/m` | Pair per device · [MOBILE-PATRON-LINK](./MOBILE-PATRON-LINK.md) |
+| **Patron Ask** | Master AI chat (FAB → fullscreen) | `/ask` + global chrome | Always on · [PATRON-CHAT-UI](./PATRON-CHAT-UI.md) |
 | **Ten operate claws** | “Ten Claws” | `/my-*`, `/claw-forge` | Enable per desk |
 | **Forged / fusion** | Specialists you mint | `/my-claw/{slug}` | Per mint |
 
@@ -203,6 +205,7 @@ Parent A ──handshake── Parent B (v1: Cap×Cre | Work×Cre | Vital×Kin)
 | “Interfaces drift. Your desk conducts.” | “AI Device Hub” as hero |
 | “Forge fusion — specialist from two claws” | Auto-spawn agents |
 | “Patron Link — confirm and brief from your phone” | “Full CurXor mobile app” |
+| “**Ask** — patron chat anywhere · expand when you need depth” | “Another Claw” |
 
 ---
 

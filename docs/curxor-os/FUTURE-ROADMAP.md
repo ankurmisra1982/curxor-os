@@ -62,6 +62,7 @@ Ordered initiatives after golden path. Each has a **spec doc** + **phased waves*
 | **Estate Claw** (Legal · Property · Tax) | ES | **P2** | G4 | § [IDEA-ES0](#idea-es0-estate-claw--legal--property--tax) | ES0–ES2 |
 | **Learn Claw** (tutor desk) | LR | **P2** | G4 | § [IDEA-LR0](#idea-lr0-learn-claw--tutor-desk) | LR0–LR1 |
 | **Patron Link (mobile)** | MO | **P2** | G3 | [MOBILE-PATRON-LINK.md](./MOBILE-PATRON-LINK.md) | MO0–MO6 |
+| **Patron Ask (chat UI)** | CH | **P2** | G3 | [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md) | CH0–CH5 · MA-COS |
 | **Loop GTM narrative** | GTM-LOOP | **P0** | G3 | `../curxor storefront/docs/LOOP-POSITIONING.md` | G11–G12 |
 | **Master AI horizontal (Chief of Staff)** | MA-COS | **P2** | G4 | § [IDEA-C07](#idea-c07-chief-of-staff--master-ai-horizontal-generic-ops) | COS0–COS2 |
 | **Vital — Insurance / Medicare** | VT-IN | **P2** | G4 | § [IDEA-E09](#idea-e09-vital--insurance--medicare-extension) | VT-IN0–VT-IN2 |
@@ -256,7 +257,23 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 
 **COS0 board feeds from:** OS approvals · channel inbox · Claw queue summaries (CCP scopes) · HS Discover snoozes. **Not** coding-agent sessions — that is **BP6**.
 
-**Pairs:** IDEA-C02 (patron chamber) · HS H6 (multi-claw weekly bundles) · MO approvals pull · IDEA-C07.
+**Pairs:** IDEA-C02 (patron chamber) · HS H6 (multi-claw weekly bundles) · MO approvals pull · IDEA-C07 · **CH** [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md).
+
+### Program CH — Patron Ask (universal chat UI)
+
+**Vision:** Messenger **FAB → sheet → expanded → fullscreen** · one patron thread · routes to Claws · MA-COS backend. Replaces orphaned `MasterClawSidebar` PoC.  
+**Status:** scoped · CH0 at G3.
+
+| Wave | Scope | Gate |
+|------|-------|------|
+| **CH0** | FAB + sheet · local LLM | G3 |
+| **CH1** | Route `appId` context · right panel | G3+ |
+| **CH2** | Fullscreen `/ask` + ops board stub | G4 |
+| **CH3** | Inline approval cards | G4+ |
+| **CH4** | Patron Link Ask tab | G4+ |
+| **CH5** | Multi-claw weekly UI | G5 |
+
+**Spec:** [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md)
 
 ### Program VT-IN — Vital Insurance / Medicare extension
 
@@ -508,6 +525,14 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Trigger gate:** G3
 - **Outcome:** Replace placeholder rectangles with cohesive pixel art; vision fidelity 3.5 → 4+.
 - **Status:** captured
+
+### [IDEA-C08] Patron Ask — universal chat UI (Program CH)
+- **Lane:** C · F
+- **Priority:** P2
+- **Trigger gate:** G3 (CH0–CH1) · G4+ (CH2–CH4)
+- **Outcome:** Messenger-style **Ask** FAB on all routes · expand to fullscreen · Master AI patron thread · routes to claw agents.
+- **Notes:** [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md). Replaces unused `MasterClawSidebar`. Not a claw · not Signal. Pairs MA-COS.
+- **Status:** scoped
 
 ### [IDEA-C02] Master AI patron brief chamber (G4+ depth)
 - **Lane:** C
@@ -993,6 +1018,7 @@ Operate-claw candidates evaluated Jun 2026 — **not** tenth-desk slots. Some co
 - External bridges (Firecrawl · Grok): [EXTERNAL-BRIDGES-ROADMAP.md](./EXTERNAL-BRIDGES-ROADMAP.md)
 - Signal AI Device Hub: [SIGNAL-AI-DEVICE-HUB.md](./SIGNAL-AI-DEVICE-HUB.md)
 - Home automation bridges: [HOME-AUTOMATION-BRIDGES.md](./HOME-AUTOMATION-BRIDGES.md)
+- Patron Ask (chat UI): [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md)
 - Mobile Patron Link: [MOBILE-PATRON-LINK.md](./MOBILE-PATRON-LINK.md)
 - OS layers · Cafe · Forge Fusion: [CAFE-OS-LAYER-MODEL.md](./CAFE-OS-LAYER-MODEL.md)
 - **Universal OS map:** [UNIVERSAL-OS-LAYER.md](./UNIVERSAL-OS-LAYER.md)
