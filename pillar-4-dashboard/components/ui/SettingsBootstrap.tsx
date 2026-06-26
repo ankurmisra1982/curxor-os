@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
@@ -23,22 +23,24 @@ export function SettingsBootstrap({
   const { setLevel, setMode } = useExperienceLevel();
   const { setColorScheme, setThemeMode } = useTheme();
 
-  useEffect(() => {
-    if (initialExperienceLevel) setLevel(initialExperienceLevel);
-    else if (initialUiMode) setMode(initialUiMode);
-    if (initialColorScheme) setColorScheme(initialColorScheme);
-    if (initialThemeMode) setThemeMode(initialThemeMode);
-  }, [
-    initialExperienceLevel,
-    initialUiMode,
-    initialColorScheme,
-    initialThemeMode,
-    setLevel,
-    setMode,
-    setColorScheme,
-    setThemeMode,
-  ]);
+  const setLevelRef = useRef(setLevel);
+  const setModeRef = useRef(setMode);
+  const setColorSchemeRef = useRef(setColorScheme);
+  const setThemeModeRef = useRef(setThemeMode);
+  setLevelRef.current = setLevel;
+  setModeRef.current = setMode;
+  setColorSchemeRef.current = setColorScheme;
+  setThemeModeRef.current = setThemeMode;
 
+  // Layout SSR props — applied once before the API round-trip.
+  useEffect(() => {
+    if (initialExperienceLevel) setLevelRef.current(initialExperienceLevel);
+    else if (initialUiMode) setModeRef.current(initialUiMode);
+    if (initialColorScheme) setColorSchemeRef.current(initialColorScheme);
+    if (initialThemeMode) setThemeModeRef.current(initialThemeMode);
+  }, [initialExperienceLevel, initialUiMode, initialColorScheme, initialThemeMode]);
+
+  // Saved server settings win on cold load (over layout props and localStorage).
   useEffect(() => {
     let cancelled = false;
 
@@ -57,10 +59,10 @@ export function SettingsBootstrap({
           };
         };
         const appearance = data.settings?.appearance;
-        if (appearance?.experienceLevel) setLevel(appearance.experienceLevel);
-        else if (appearance?.uiMode) setMode(appearance.uiMode);
-        if (appearance?.colorScheme) setColorScheme(appearance.colorScheme);
-        if (appearance?.themeMode) setThemeMode(appearance.themeMode);
+        if (appearance?.experienceLevel) setLevelRef.current(appearance.experienceLevel);
+        else if (appearance?.uiMode) setModeRef.current(appearance.uiMode);
+        if (appearance?.colorScheme) setColorSchemeRef.current(appearance.colorScheme);
+        if (appearance?.themeMode) setThemeModeRef.current(appearance.themeMode);
       } catch {
         /* offline */
       }
@@ -70,7 +72,7 @@ export function SettingsBootstrap({
     return () => {
       cancelled = true;
     };
-  }, [setLevel, setMode, setColorScheme, setThemeMode]);
+  }, []);
 
   return null;
 }

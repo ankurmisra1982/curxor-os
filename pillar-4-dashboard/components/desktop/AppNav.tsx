@@ -22,20 +22,23 @@ export function AppNav({ selectedApps, forgedApps = [] }: AppNavProps) {
 
   return (
     <nav className="shrink-0 border-b border-line bg-surface">
-      <div className="hidden overflow-x-auto px-4 py-2 md:block">
-        {groups.map(({ category, items: groupItems }) => (
-          <div key={category.id} className="mb-2 last:mb-0">
-            {isExpert ? (
-              <p className="mb-1 font-mono text-[9px] uppercase tracking-widest text-muted">{category.label}</p>
-            ) : null}
-            <div className="flex flex-wrap items-center gap-1">
+      <div className="hidden px-4 py-1.5 md:block">
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-1">
+          {groups.map(({ category, items: groupItems }, groupIndex) => (
+            <div key={category.id} className="flex shrink-0 items-center gap-1">
+              {groupIndex > 0 ? <span className="mx-1 h-4 w-px shrink-0 bg-line" aria-hidden /> : null}
+              {isExpert ? (
+                <span className="shrink-0 px-0.5 font-mono text-[9px] uppercase tracking-widest text-muted">
+                  {category.label}
+                </span>
+              ) : null}
               {groupItems.map((route) => {
                 const active = pathname === route.href;
                 return (
                   <Link
                     key={route.href}
                     href={route.href}
-                    className={`rounded-sm border px-3 py-1.5 font-sans text-xs transition ${
+                    className={`shrink-0 rounded-sm border px-2.5 py-1 font-sans text-xs transition ${
                       active
                         ? "border-cursor-glow bg-panel font-medium text-cursor-glow"
                         : "border-transparent text-muted hover:border-line hover:bg-void hover:text-stark"
@@ -49,8 +52,8 @@ export function AppNav({ selectedApps, forgedApps = [] }: AppNavProps) {
                 );
               })}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div className="flex gap-1 overflow-x-auto px-3 py-2 md:hidden">
