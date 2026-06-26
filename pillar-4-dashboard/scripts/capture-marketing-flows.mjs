@@ -8,6 +8,7 @@
  *
  * Usage:
  *   node scripts/capture-marketing-flows.mjs
+ *   node scripts/capture-marketing-flows.mjs --creator-only
  *   node scripts/capture-marketing-flows.mjs --base http://127.0.0.1:3100
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -24,6 +25,7 @@ const USER_SETTINGS = path.join(DASHBOARD, "scripts", "dev-qa", "user-settings.j
 const args = process.argv.slice(2);
 const baseIdx = args.indexOf("--base");
 const BASE = baseIdx >= 0 ? args[baseIdx + 1] : (process.env.CURXOR_DEMO_BASE ?? "http://127.0.0.1:3080");
+const CREATOR_ONLY = args.includes("--creator-only");
 
 const VIEWPORT = { width: 1440, height: 900 };
 const SETTLE_MS = 5000;
@@ -107,7 +109,12 @@ const CREATOR_FLOWS = [
     file: "09-go-live-checklist.png",
     label: "Go Live checklist",
     setup: async (page) => {
-      await page.getByText("Go Live", { exact: false }).first().scrollIntoViewIfNeeded();
+      const goLive = page.getByText(/Go Live/i).first();
+      if (await goLive.count()) {
+        await goLive.scrollIntoViewIfNeeded().catch(() => {});
+      } else {
+        await page.getByText(/Creator Claw/i).first().scrollIntoViewIfNeeded().catch(() => {});
+      }
     },
   },
   {
@@ -206,6 +213,7 @@ async function main() {
 
   let failed = 0;
 
+  if (!CREATOR_ONLY) {
   console.log("==> Core Claw routes\n");
   for (const target of ROUTES) {
     const url = `${BASE.replace(/\/$/, "")}${target.route}`;
@@ -245,6 +253,7 @@ async function main() {
       console.error(`    FAILED: ${err instanceof Error ? err.message : String(err)}\n`);
     }
   }
+  }
 
   console.log("==> Creator Claw flows\n");
   const creatorUrl = `${BASE.replace(/\/$/, "")}/my-content`;
@@ -254,7 +263,7 @@ async function main() {
     console.log(`==> ${flow.label} → creator/${flow.file}`);
     try {
       console.log(`    → ${creatorUrl}`);
-      await page.goto(creatorUrl, { waitUntil: "networkidle", timeout: 90_000 });
+      await page.goto(creatorUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
       await page.waitForTimeout(CREATOR_SETTLE_MS);
       await waitForCreatorDesk(page);
       await flow.setup(page);
@@ -269,7 +278,8 @@ async function main() {
 
   await browser.close();
 
-  console.log(`Done. ${ROUTES.length + CREATOR_FLOWS.length} targets · ${failed} failed`);
+  const targetCount = (CREATOR_ONLY ? 0 : ROUTES.length) + CREATOR_FLOWS.length;
+  console.log(`Done. ${targetCount} targets · ${failed} failed`);
   console.log(`  ${OUT}`);
   console.log(`  ${CREATOR_OUT}`);
   if (failed > 0) process.exitCode = 1;
