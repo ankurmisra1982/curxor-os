@@ -6,24 +6,23 @@ import { usePathname } from "next/navigation";
 import { useUiMode } from "@/components/ui/UiModeProvider";
 import { previewNavSuffix } from "@/lib/claw-preview-apps";
 import { buildNavItems, groupedNavItems } from "@/lib/ui-categories";
-import type { ForgedAppRecord } from "@/lib/forged-apps-types";
 import type { OotbAppId } from "@/lib/ootb-apps";
 
 interface AppNavProps {
   selectedApps: OotbAppId[];
-  forgedApps?: ForgedAppRecord[];
 }
 
-export function AppNav({ selectedApps, forgedApps = [] }: AppNavProps) {
+export function AppNav({ selectedApps }: AppNavProps) {
   const pathname = usePathname();
   const { isExpert } = useUiMode();
-  const items = buildNavItems(selectedApps, forgedApps);
+  // OOTB claws only — forged desks live in The Forge fleet + Ctrl+K (not the primary bar).
+  const items = buildNavItems(selectedApps);
   const groups = groupedNavItems(items);
 
   return (
     <nav className="shrink-0 border-b border-line bg-surface">
       <div className="hidden px-4 py-1.5 md:block">
-        <div className="flex flex-wrap items-center gap-x-1 gap-y-1">
+        <div className="flex flex-nowrap items-center gap-x-1 overflow-x-auto">
           {groups.map(({ category, items: groupItems }, groupIndex) => (
             <div key={category.id} className="flex shrink-0 items-center gap-1">
               {groupIndex > 0 ? <span className="mx-1 h-4 w-px shrink-0 bg-line" aria-hidden /> : null}

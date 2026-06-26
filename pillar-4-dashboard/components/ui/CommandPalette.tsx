@@ -4,12 +4,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { buildNavItems, SETTINGS_PATH } from "@/lib/ui-categories";
+import type { ForgedAppRecord } from "@/lib/forged-apps-types";
 import type { OotbAppId } from "@/lib/ootb-apps";
 
 interface CommandPaletteProps {
   open: boolean;
   onClose: () => void;
   selectedApps: OotbAppId[];
+  forgedApps?: ForgedAppRecord[];
   onOpenHealth: () => void;
   onToggleMode: () => void;
   isExpert: boolean;
@@ -19,6 +21,7 @@ export function CommandPalette({
   open,
   onClose,
   selectedApps,
+  forgedApps = [],
   onOpenHealth,
   onToggleMode,
   isExpert,
@@ -27,7 +30,7 @@ export function CommandPalette({
   const [query, setQuery] = useState("");
 
   const actions = useMemo(() => {
-    const nav = buildNavItems(selectedApps).map((item) => ({
+    const nav = buildNavItems(selectedApps, forgedApps).map((item) => ({
       id: item.href,
       label: item.name,
       hint: item.noviceLabel,
@@ -55,7 +58,7 @@ export function CommandPalette({
         run: onToggleMode,
       },
     ];
-  }, [selectedApps, router, onOpenHealth, onToggleMode, isExpert]);
+  }, [selectedApps, forgedApps, router, onOpenHealth, onToggleMode, isExpert]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

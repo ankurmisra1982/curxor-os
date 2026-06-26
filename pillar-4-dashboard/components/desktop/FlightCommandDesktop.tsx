@@ -172,7 +172,7 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
 
 
-        <AppNav selectedApps={selectedApps} forgedApps={forgedApps} />
+        <AppNav selectedApps={selectedApps} />
 
         <ContextHintBar />
 
@@ -195,6 +195,7 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
         onClose={() => setPaletteOpen(false)}
 
         selectedApps={selectedApps}
+        forgedApps={forgedApps}
 
         onOpenHealth={openHealth}
 

@@ -84,6 +84,7 @@ export function buildNavItems(selectedAppIds: OotbAppId[], forgedApps: ForgedApp
     noviceLabel: r.name,
   }));
 
+  // Forged desks are optional — primary AppNav omits them; Command Palette + Forge fleet include them.
   return [home, ...items, ...forgedNavItems(forgedApps)];
 }
 
