@@ -22,6 +22,7 @@ import {
   type IntelligenceSource,
   type ThemeMode,
   type UiMode,
+  type PatronAskSettings,
   type UserSettings,
   type UserSettingsPatch,
   DEFAULT_BUILD_PLANE,
@@ -49,6 +50,21 @@ function isWorkerWizardStepId(v: unknown): v is BuildWorkerWizardStepId {
     v === "probe_worker" ||
     v === "phone_control"
   );
+}
+
+function mergePatronAsk(
+  partial: UserSettingsPatch["patronAsk"],
+  base: PatronAskSettings,
+): PatronAskSettings {
+  return {
+    ui: partial?.ui === "sheet" || partial?.ui === "minimized" ? partial.ui : base.ui,
+    lastReadAt:
+      partial?.lastReadAt === null
+        ? null
+        : typeof partial?.lastReadAt === "string"
+          ? partial.lastReadAt
+          : base.lastReadAt ?? null,
+  };
 }
 
 function mergeBuildPlane(
@@ -283,6 +299,7 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
         : base.egress.allowHosts,
     },
     buildPlane: mergeBuildPlane(partial.buildPlane, base.buildPlane ?? DEFAULT_BUILD_PLANE),
+    patronAsk: mergePatronAsk(partial.patronAsk, base.patronAsk ?? { ui: "minimized", lastReadAt: null }),
     updatedAt: new Date().toISOString(),
   };
 }

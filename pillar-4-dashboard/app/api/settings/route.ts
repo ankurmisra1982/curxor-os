@@ -49,8 +49,17 @@ export async function POST(request: Request): Promise<Response> {
   if (body.mcp) patch.mcp = body.mcp;
   if (body.egress) patch.egress = body.egress;
   if (body.buildPlane) patch.buildPlane = body.buildPlane;
+  if (body.patronAsk) patch.patronAsk = body.patronAsk;
 
-  if (!patch.appearance && !patch.intelligence && !patch.multiModel && !patch.mcp && !patch.egress && !patch.buildPlane) {
+  if (
+    !patch.appearance &&
+    !patch.intelligence &&
+    !patch.multiModel &&
+    !patch.mcp &&
+    !patch.egress &&
+    !patch.buildPlane &&
+    !patch.patronAsk
+  ) {
     return Response.json({ error: "Nothing to update" }, { status: 400 });
   }
 

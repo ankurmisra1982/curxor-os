@@ -1482,6 +1482,16 @@ await check("mesh digital browser automate", async () => {
   return typeof json.ok === "boolean";
 });
 
+await check("patron chat POST", async () => {
+  const { ok, json } = await postJson("/api/patron/chat", { message: "hello" });
+  return ok && typeof json.reply === "string" && json.reply.length > 0;
+});
+
+await check("patron history GET", async () => {
+  const data = await getJson("/api/patron/history");
+  return Array.isArray(data.turns);
+});
+
 await check("channels webchat session history", async () => {
   await postJson("/api/channels/webchat", { appId: "my-shop", message: "margin check" });
   await postJson("/api/channels/webchat", { appId: "my-shop", message: "any alerts?" });

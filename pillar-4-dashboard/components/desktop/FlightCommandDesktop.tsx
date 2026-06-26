@@ -18,6 +18,8 @@ import { ExpertBodyClass } from "@/components/ui/ExpertBodyClass";
 import { SettingsBootstrap } from "@/components/ui/SettingsBootstrap";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 
+import { PatronAskProvider } from "@/components/patron/PatronAskProvider";
+
 import { SystemHealthDrawer } from "@/components/system/SystemHealthDrawer";
 
 import { TelemetryProvider } from "@/components/telemetry/TelemetryProvider";
@@ -187,6 +189,8 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
 
       <SystemHealthDrawer open={healthOpen} onClose={() => setHealthOpen(false)} />
+
+      <PatronAskProvider />
 
       <CommandPalette
 

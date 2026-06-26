@@ -60,6 +60,11 @@ export interface SanitizedBuildPlaneSettings {
   workerWizardProgress: { complete: number; total: number };
 }
 
+export interface PatronAskSettings {
+  ui: "minimized" | "sheet";
+  lastReadAt?: string | null;
+}
+
 export interface ConnectedProvider {
   connectedAt: string;
   label: string;
@@ -129,6 +134,8 @@ export interface UserSettings {
   };
   /** Optional Build Plane / Cursor Bridge overlay (not required for Claws). */
   buildPlane: BuildPlaneSettings;
+  /** Patron Ask universal chat UI state (CH0). */
+  patronAsk?: PatronAskSettings;
   updatedAt: string;
 }
 
@@ -141,6 +148,7 @@ export type UserSettingsPatch = {
   mcp?: Partial<UserSettings["mcp"]>;
   egress?: Partial<UserSettings["egress"]>;
   buildPlane?: Partial<BuildPlaneSettings>;
+  patronAsk?: Partial<PatronAskSettings>;
 };
 
 export const DEFAULT_BUILD_PLANE: BuildPlaneSettings = {
@@ -193,6 +201,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     allowHosts: [],
   },
   buildPlane: { ...DEFAULT_BUILD_PLANE },
+  patronAsk: { ui: "minimized", lastReadAt: null },
   updatedAt: new Date(0).toISOString(),
 };
 
