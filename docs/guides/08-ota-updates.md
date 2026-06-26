@@ -1,5 +1,8 @@
 # OTA Updates Guide
 
+> **Product roadmap:** End-user delivery program — [UPDATE-DELIVERY-ROADMAP.md](../curxor-os/UPDATE-DELIVERY-ROADMAP.md) (CI, signing, Settings UI).  
+> **This guide:** What is **already on the appliance** today.
+
 CurXor OS includes a secure **over-the-air update daemon** with backup, checksum verification, rollback, and nightly scheduling.
 
 ## Components

@@ -3,7 +3,7 @@
 > **Room:** Vision & Strategy · capture only · **no build** until gated  
 > **Parent:** **Master AI patron** · Program **MA-COS** [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
 > **Related:** [MOBILE-PATRON-LINK.md](./MOBILE-PATRON-LINK.md) · [CAFE-OS-LAYER-MODEL.md](./CAFE-OS-LAYER-MODEL.md) · [CLAW-CAFE-PRD.md](./CLAW-CAFE-PRD.md)  
-> **Status:** scoped · **Last updated:** June 2026
+> **Status:** CH0–CH5 shipped · **Last updated:** June 2026
 
 ---
 
@@ -19,14 +19,14 @@
 
 | Piece | Status | Gap |
 |-------|--------|-----|
-| `MasterClawSidebar.tsx` | **Orphaned PoC** — mock replies · **not mounted** in `FlightCommandDesktop` | Replace with Patron Ask |
-| `ClawAgentConsole` | **Per-claw** chat inside each app | Not global · context trapped in one desk |
-| `POST /api/channels/webchat` | **Shipped** — same router as Telegram/Slack | No global UI shell |
-| `assistAppAgent` | Per `appId` assist | No cross-claw **patron** orchestrator UI |
-| MA-COS / IDEA-C07 | Scoped — ops board · triage | **UI pattern not specified** |
-| Cafe patron brief | Flyout / chamber horizon | Not a persistent chat |
+| **Patron Ask (CH0–CH5)** | **Shipped** — FAB + sheet · `/ask` fullscreen · `/m/ask` mobile · approval cards · weekly bundle | Streaming SSE · expanded docked panel (between sheet/fullscreen) |
+| `PatronAskProvider` + APIs | **Shipped** — `/api/patron/chat`, `history`, `context`, `approvals`, `ops-board`, `weekly-bundle` | MA-COS full orchestration · delegation suggest |
+| `MasterClawSidebar.tsx` | **Removed** — superseded by Patron Ask | — |
+| `ClawAgentConsole` | **Per-claw** chat inside each app | Complement only — not replaced |
+| Session `webchat:patron:main` | **Shipped** — channel store persistence | Multi-thread by topic (horizon) |
+| Patron Link `/m` | **MO0 shell shipped** — Home · Ask · Act · More | QR pair · Web Push (MO2+) · Kin child scope (MO3) |
 
-**Verdict:** Backend pieces exist; **universal messenger UX does not.** This doc locks the shell.
+**Verdict:** Universal messenger UX **shipped** (CH0–CH5). Horizon: streaming, MO push, deeper MA-COS handoffs.
 
 ---
 

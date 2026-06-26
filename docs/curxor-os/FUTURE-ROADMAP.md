@@ -67,8 +67,28 @@ Ordered initiatives after golden path. Each has a **spec doc** + **phased waves*
 | **Master AI horizontal (Chief of Staff)** | MA-COS | **P2** | G4 | § [IDEA-C07](#idea-c07-chief-of-staff--master-ai-horizontal-generic-ops) | COS0–COS2 |
 | **Vital — Insurance / Medicare** | VT-IN | **P2** | G4 | § [IDEA-E09](#idea-e09-vital--insurance--medicare-extension) | VT-IN0–VT-IN2 |
 | **Claw Commons (forums + Clawverse)** | CL | **P3** | G4→G5 | [CLAW-COMMONS-VISION.md](./CLAW-COMMONS-VISION.md) · [IDEA-G14](#idea-g14-operator-forum-storefront) · [IDEA-H04](#idea-h04-claw-commons--clawverse-federated-social) | CL0–CL5 |
-| Golden release | GR | P0 | G1→G2 | IDEA-A01–A02 | Tag · OTA · USB |
+| Golden release | GR | P0 | G1→G2 | IDEA-A01–A02 · [UPDATE-DELIVERY](./UPDATE-DELIVERY-ROADMAP.md) | UP0–UP2 · Tag · USB |
 | Tier C unlock | TC | P2 | G4 | IDEA-E01–E04 | Per-claw go-live |
+
+### Program UP — Update & patch delivery (nested GR)
+
+**Vision:** Safe OTA + USB recovery for paying operators — backup · verify · rollback · Settings UI · CI-signed releases.  
+**Foundation:** `ota-updater.sh` **already shipped** — see [08-ota-updates.md](../guides/08-ota-updates.md).  
+**Status:** UP0 at G1 · UP1–UP2 at G2 (ship with v1.0.0).
+
+| Wave | Scope | Gate |
+|------|-------|------|
+| **UP0** | MS-S1 OTA smoke + rollback test | G1 |
+| **UP1** | CI release · signed manifest · `releases.curxor.ai` | G2 |
+| **UP2** | Settings **Updates** — Check / Install / log | G2 |
+| **UP3** | stable/beta channel · defer | G2+ |
+| **UP4** | `ota.available` → Patron Link + Cafe | G3 |
+| **UP5** | One-click rollback UI | G3+ |
+| **UP6** | Migration scripts in post-update | G3 |
+| **UP7** | Manifest ed25519 verify | G3+ |
+| **UP8** | Factory USB = latest stable (IDEA-A03) | G2 |
+
+**Spec:** [UPDATE-DELIVERY-ROADMAP.md](./UPDATE-DELIVERY-ROADMAP.md)
 
 ### Program HS — Inter-Claw Handshakes (slotted)
 
@@ -262,16 +282,16 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 ### Program CH — Patron Ask (universal chat UI)
 
 **Vision:** Messenger **FAB → sheet → expanded → fullscreen** · one patron thread · routes to Claws · MA-COS backend. Replaces orphaned `MasterClawSidebar` PoC.  
-**Status:** scoped · CH0 at G3.
+**Status:** **CH0–CH5 shipped** (Jun 2026) · horizon: streaming · expanded dock panel.
 
-| Wave | Scope | Gate |
-|------|-------|------|
-| **CH0** | FAB + sheet · local LLM | G3 |
-| **CH1** | Route `appId` context · right panel | G3+ |
-| **CH2** | Fullscreen `/ask` + ops board stub | G4 |
-| **CH3** | Inline approval cards | G4+ |
-| **CH4** | Patron Link Ask tab | G4+ |
-| **CH5** | Multi-claw weekly UI | G5 |
+| Wave | Scope | Gate | Status |
+|------|-------|------|--------|
+| **CH0** | FAB + sheet · local LLM | G3 | **Shipped** |
+| **CH1** | Route `appId` context | G3+ | **Shipped** |
+| **CH2** | Fullscreen `/ask` + ops board stub | G4 | **Shipped** |
+| **CH3** | Inline approval cards | G4+ | **Shipped** |
+| **CH4** | Patron Link Ask tab (`/m/ask`) | G4+ | **Shipped** |
+| **CH5** | Multi-claw weekly UI | G5 | **Shipped** |
 
 **Spec:** [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md)
 
@@ -395,7 +415,7 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Priority:** P0
 - **Trigger gate:** G2
 - **Outcome:** Signed OTA artifacts; `ota-updater.sh` smoke on appliance; `version.json` → 1.0.0 stable.
-- **Notes:** Closes FEATURE-FUNCTION P1 gap.
+- **Notes:** Program **UP1** · [UPDATE-DELIVERY-ROADMAP.md](./UPDATE-DELIVERY-ROADMAP.md). Closes FEATURE-FUNCTION P1 gap.
 - **Status:** captured
 
 ### [IDEA-A03] Factory USB golden image
@@ -532,7 +552,7 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Trigger gate:** G3 (CH0–CH1) · G4+ (CH2–CH4)
 - **Outcome:** Messenger-style **Ask** FAB on all routes · expand to fullscreen · Master AI patron thread · routes to claw agents.
 - **Notes:** [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md). Replaces unused `MasterClawSidebar`. Not a claw · not Signal. Pairs MA-COS.
-- **Status:** scoped
+- **Status:** **shipped** (CH0–CH5 · Jun 2026)
 
 ### [IDEA-C02] Master AI patron brief chamber (G4+ depth)
 - **Lane:** C
@@ -724,7 +744,8 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Lane:** F
 - **Priority:** P1
 - **Trigger gate:** G2
-- **Outcome:** CI builds signed manifest; matches FEATURE-FUNCTION P1.
+- **Outcome:** CI builds signed manifest + tarball; publishes to release mirror; matches UP1.
+- **Notes:** [UPDATE-DELIVERY-ROADMAP.md](./UPDATE-DELIVERY-ROADMAP.md) · pairs IDEA-A02.
 - **Status:** captured
 
 ### [IDEA-F03] LAN auth coverage audit
@@ -1007,6 +1028,7 @@ Operate-claw candidates evaluated Jun 2026 — **not** tenth-desk slots. Some co
 
 ## References
 
+- OTA & patch delivery: [UPDATE-DELIVERY-ROADMAP.md](./UPDATE-DELIVERY-ROADMAP.md) · operator [08-ota-updates.md](../guides/08-ota-updates.md)
 - Active sequencing: [DAY-ONE-BUILD-PLAN.md](./DAY-ONE-BUILD-PLAN.md)
 - Build freeze: [PRE-UNBOX-48H.md](./PRE-UNBOX-48H.md)
 - Hardware session: [HW-READINESS-CHECKLIST.md](./HW-READINESS-CHECKLIST.md)
