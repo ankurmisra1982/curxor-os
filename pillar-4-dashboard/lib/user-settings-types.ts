@@ -61,7 +61,7 @@ export interface SanitizedBuildPlaneSettings {
 }
 
 export interface PatronAskSettings {
-  ui: "minimized" | "sheet";
+  ui: "minimized" | "sheet" | "fullscreen";
   lastReadAt?: string | null;
 }
 

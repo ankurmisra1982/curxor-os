@@ -9,10 +9,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { appIdFromPathname } from "@/lib/fre-routing";
 import { getOotbApp, isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
+import { ASK_PATH, HOME_PATH } from "@/lib/ui-categories";
 import type { AgentChatTurn } from "@/lib/app-agent-types";
 import type { PatronAskSettings } from "@/lib/user-settings-types";
 
@@ -23,6 +24,7 @@ export type PatronInference = "local" | "fallback" | "frontier";
 
 interface PatronAskContextValue {
   open: boolean;
+  isFullscreenRoute: boolean;
   messages: AgentChatTurn[];
   loading: boolean;
   inferenceStatus: PatronInference | null;
@@ -31,6 +33,8 @@ interface PatronAskContextValue {
   unread: boolean;
   toggle: () => void;
   openSheet: () => void;
+  openFullscreen: () => void;
+  collapseToSheet: () => void;
   minimize: () => void;
   send: (text: string) => Promise<void>;
 }
@@ -53,6 +57,8 @@ async function patchPatronAsk(patch: Partial<PatronAskSettings>) {
 
 export function PatronAskProvider({ children }: { children?: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const isFullscreenRoute = pathname === ASK_PATH || pathname.startsWith(`${ASK_PATH}/`);
   const routeAppId = useMemo(() => appIdFromPathname(pathname), [pathname]);
   const clawLabel = useMemo(() => {
     if (!routeAppId) return null;
@@ -66,6 +72,7 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
   const [historyLoaded, setHistoryLoaded] = useState(false);
   const [unread, setUnread] = useState(false);
   const [localInferenceAvailable, setLocalInferenceAvailable] = useState(true);
+  const [savedUi, setSavedUi] = useState<PatronAskSettings["ui"]>("minimized");
 
   const loadHistory = useCallback(async () => {
     try {
@@ -90,40 +97,74 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
         patronAsk?: PatronAskSettings;
       };
       setLocalInferenceAvailable(data.inferenceAvailable !== false);
-      if (data.patronAsk?.ui === "sheet") {
+      const ui = data.patronAsk?.ui ?? "minimized";
+      setSavedUi(ui);
+      if (ui === "sheet" && !isFullscreenRoute) {
         setOpen(true);
+      }
+      if (ui === "fullscreen" && !isFullscreenRoute) {
+        router.push(ASK_PATH);
       }
     } catch {
       // ignore
     }
-  }, [routeAppId]);
+  }, [routeAppId, isFullscreenRoute, router]);
 
   useEffect(() => {
     void refreshContext();
   }, [refreshContext]);
 
   useEffect(() => {
-    if (open && !historyLoaded) {
-      void loadHistory();
+    const shouldLoad = (open || isFullscreenRoute) && !historyLoaded;
+    if (shouldLoad) void loadHistory();
+  }, [open, isFullscreenRoute, historyLoaded, loadHistory]);
+
+  useEffect(() => {
+    if (isFullscreenRoute) {
+      setOpen(false);
+      setUnread(false);
+      void patchPatronAsk({ ui: "fullscreen", lastReadAt: new Date().toISOString() });
     }
-  }, [open, historyLoaded, loadHistory]);
+  }, [isFullscreenRoute]);
 
   const openSheet = useCallback(() => {
     setOpen(true);
     setUnread(false);
     void patchPatronAsk({ ui: "sheet", lastReadAt: new Date().toISOString() });
     if (!historyLoaded) void loadHistory();
-  }, [historyLoaded, loadHistory]);
+    if (isFullscreenRoute) router.push(HOME_PATH);
+  }, [historyLoaded, isFullscreenRoute, loadHistory, router]);
+
+  const openFullscreen = useCallback(() => {
+    setOpen(false);
+    setUnread(false);
+    void patchPatronAsk({ ui: "fullscreen", lastReadAt: new Date().toISOString() });
+    if (!historyLoaded) void loadHistory();
+    router.push(ASK_PATH);
+  }, [historyLoaded, loadHistory, router]);
+
+  const collapseToSheet = useCallback(() => {
+    void patchPatronAsk({ ui: "sheet", lastReadAt: new Date().toISOString() });
+    setOpen(true);
+    router.push(HOME_PATH);
+  }, [router]);
 
   const minimize = useCallback(() => {
     setOpen(false);
     void patchPatronAsk({ ui: "minimized" });
-  }, []);
+    if (isFullscreenRoute) {
+      router.push(HOME_PATH);
+    }
+  }, [isFullscreenRoute, router]);
 
   const toggle = useCallback(() => {
+    if (isFullscreenRoute) {
+      minimize();
+      return;
+    }
     if (open) minimize();
     else openSheet();
-  }, [open, minimize, openSheet]);
+  }, [isFullscreenRoute, open, minimize, openSheet]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -133,7 +174,8 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
       }
     }
     function onOpenAsk() {
-      openSheet();
+      if (savedUi === "fullscreen") openFullscreen();
+      else openSheet();
     }
     window.addEventListener("keydown", onKey);
     window.addEventListener("curxor:open-ask", onOpenAsk);
@@ -141,7 +183,7 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("curxor:open-ask", onOpenAsk);
     };
-  }, [toggle, openSheet]);
+  }, [toggle, openSheet, openFullscreen, savedUi]);
 
   const send = useCallback(
     async (text: string) => {
@@ -158,7 +200,6 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             message,
-            history: messages,
             routeAppId: routeAppId && isValidAppId(routeAppId) ? routeAppId : null,
           }),
         });
@@ -170,7 +211,7 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
         const assistantTurn: AgentChatTurn = { role: "assistant", text: reply };
         setMessages((prev) => [...prev, assistantTurn]);
         if (data.inference) setInferenceStatus(data.inference);
-        if (!open) setUnread(true);
+        if (!open && !isFullscreenRoute) setUnread(true);
       } catch {
         setMessages((prev) => [
           ...prev,
@@ -180,7 +221,7 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
         setLoading(false);
       }
     },
-    [loading, messages, open, routeAppId],
+    [loading, open, isFullscreenRoute, routeAppId],
   );
 
   const badgeInference: PatronInference =
@@ -188,6 +229,7 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
 
   const value: PatronAskContextValue = {
     open,
+    isFullscreenRoute,
     messages,
     loading,
     inferenceStatus: badgeInference,
@@ -196,6 +238,8 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
     unread,
     toggle,
     openSheet,
+    openFullscreen,
+    collapseToSheet,
     minimize,
     send,
   };
@@ -203,8 +247,12 @@ export function PatronAskProvider({ children }: { children?: ReactNode }) {
   return (
     <PatronAskContext.Provider value={value}>
       {children}
-      <PatronAskFab />
-      <PatronAskSheet />
+      {!isFullscreenRoute ? (
+        <>
+          <PatronAskFab />
+          <PatronAskSheet />
+        </>
+      ) : null}
     </PatronAskContext.Provider>
   );
 }

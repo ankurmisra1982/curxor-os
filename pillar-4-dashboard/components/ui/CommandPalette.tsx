@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { buildNavItems, SETTINGS_PATH } from "@/lib/ui-categories";
+import { buildNavItems, SETTINGS_PATH, ASK_PATH } from "@/lib/ui-categories";
 import type { ForgedAppRecord } from "@/lib/forged-apps-types";
 import type { OotbAppId } from "@/lib/ootb-apps";
 
@@ -38,6 +38,12 @@ export function CommandPalette({
     }));
 
     return [
+      {
+        id: "patron-ask",
+        label: "Patron Ask",
+        hint: "Fullscreen ops board + chat · Ctrl+J",
+        run: () => router.push(ASK_PATH),
+      },
       ...nav,
       {
         id: "settings",

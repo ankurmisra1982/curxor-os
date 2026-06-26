@@ -57,7 +57,10 @@ function mergePatronAsk(
   base: PatronAskSettings,
 ): PatronAskSettings {
   return {
-    ui: partial?.ui === "sheet" || partial?.ui === "minimized" ? partial.ui : base.ui,
+    ui:
+      partial?.ui === "sheet" || partial?.ui === "minimized" || partial?.ui === "fullscreen"
+        ? partial.ui
+        : base.ui,
     lastReadAt:
       partial?.lastReadAt === null
         ? null

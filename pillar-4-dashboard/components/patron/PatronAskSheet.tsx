@@ -2,24 +2,12 @@
 
 import { useEffect } from "react";
 
-import type { PatronInference } from "./PatronAskProvider";
 import { usePatronAsk } from "./PatronAskProvider";
 import { PatronAskThread } from "./PatronAskThread";
-
-function inferenceBadgeLabel(inference: PatronInference | null): string {
-  if (inference === "frontier") return "FRONTIER";
-  if (inference === "fallback") return "FALLBACK";
-  return "LOCAL";
-}
-
-function inferenceBadgeClass(inference: PatronInference | null): string {
-  if (inference === "frontier") return "text-cursor-glow";
-  if (inference === "fallback") return "text-amber-400/80";
-  return "text-emerald-400/80";
-}
+import { PatronAskHeaderBadges } from "./PatronAskHeaderBadges";
 
 export function PatronAskSheet() {
-  const { open, minimize, clawLabel, inferenceStatus } = usePatronAsk();
+  const { open, minimize, openFullscreen, clawLabel, inferenceStatus } = usePatronAsk();
 
   useEffect(() => {
     if (!open) return;
@@ -50,25 +38,26 @@ export function PatronAskSheet() {
             <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">Patron</p>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="font-sans text-sm font-semibold text-stark">Ask</h2>
-              {clawLabel ? (
-                <span className="font-mono text-[9px] uppercase tracking-widest text-muted">
-                  CONTEXT · {clawLabel}
-                </span>
-              ) : null}
-              <span
-                className={`font-mono text-[9px] uppercase tracking-widest ${inferenceBadgeClass(inferenceStatus)}`}
-              >
-                {inferenceBadgeLabel(inferenceStatus)}
-              </span>
+              <PatronAskHeaderBadges clawLabel={clawLabel} inferenceStatus={inferenceStatus} />
             </div>
           </div>
-          <button
-            type="button"
-            onClick={minimize}
-            className="shrink-0 border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted transition hover:border-cursor-glow hover:text-cursor-glow"
-          >
-            Close
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={openFullscreen}
+              className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted transition hover:border-cursor-glow hover:text-cursor-glow"
+              title="Open fullscreen ops board"
+            >
+              Expand
+            </button>
+            <button
+              type="button"
+              onClick={minimize}
+              className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted transition hover:border-cursor-glow hover:text-cursor-glow"
+            >
+              Close
+            </button>
+          </div>
         </header>
         <PatronAskThread />
       </aside>

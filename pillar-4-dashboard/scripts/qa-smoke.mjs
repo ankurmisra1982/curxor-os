@@ -1482,6 +1482,16 @@ await check("mesh digital browser automate", async () => {
   return typeof json.ok === "boolean";
 });
 
+await check("patron ops-board GET", async () => {
+  const data = await getJson("/api/patron/ops-board");
+  return (
+    data.ok === true &&
+    data.columns?.needs_you &&
+    data.columns?.waiting_confirm &&
+    Array.isArray(data.topActions)
+  );
+});
+
 await check("patron chat POST", async () => {
   const { ok, json } = await postJson("/api/patron/chat", { message: "hello" });
   return ok && typeof json.reply === "string" && json.reply.length > 0;
