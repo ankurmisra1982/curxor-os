@@ -2689,6 +2689,266 @@
       "forgedSlug": "flow-reimport-claw-9",
       "templateId": "blank-desk",
       "at": "2026-06-25T20:44:15.182Z"
+    },
+    {
+      "id": "forge-1782461050125-tbpyxs",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "appId": "forged-qa-smoke-framework-desk-for--11",
+      "forgedSlug": "qa-smoke-framework-desk-for--11",
+      "templateId": "blank-desk",
+      "at": "2026-06-26T08:04:10.125Z"
+    },
+    {
+      "id": "forge-1782461051718-7a2fyd",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "QA Smoke Work Desk",
+      "appId": "forged-qa-smoke-work-desk-11",
+      "forgedSlug": "qa-smoke-work-desk-11",
+      "templateId": "work-desk",
+      "at": "2026-06-26T08:04:11.718Z"
+    },
+    {
+      "id": "forge-1782461053332-zblsre",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "QA Smoke Creator Desk",
+      "appId": "forged-qa-smoke-creator-desk-11",
+      "forgedSlug": "qa-smoke-creator-desk-11",
+      "templateId": "creator-desk",
+      "at": "2026-06-26T08:04:13.332Z"
+    },
+    {
+      "id": "forge-1782461054938-8xo66t",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "QA Smoke Capital Desk",
+      "appId": "forged-qa-smoke-capital-desk-11",
+      "forgedSlug": "qa-smoke-capital-desk-11",
+      "templateId": "capital-desk",
+      "at": "2026-06-26T08:04:14.938Z"
+    },
+    {
+      "id": "forge-1782461058028-b39mxg",
+      "kind": "forge.claw_minted",
+      "mode": "island",
+      "name": "QA Island Mint",
+      "appId": "claw-mqunaims",
+      "forgedSlug": null,
+      "templateId": null,
+      "at": "2026-06-26T08:04:18.028Z"
+    },
+    {
+      "id": "forge-1782461063542-uh5anw",
+      "kind": "forge.import_completed",
+      "mode": "imported",
+      "name": "Checklist Island Claw",
+      "appId": "claw-mqunamw5",
+      "forgedSlug": "checklist-island-claw",
+      "templateId": null,
+      "at": "2026-06-26T08:04:23.542Z"
+    },
+    {
+      "id": "forge-1782461065230-drdgam",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Checklist Work Desk",
+      "appId": "forged-checklist-work-desk-10",
+      "forgedSlug": "checklist-work-desk-10",
+      "templateId": "work-desk",
+      "at": "2026-06-26T08:04:25.230Z"
+    },
+    {
+      "id": "forge-1782461066846-sff4up",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Checklist Creator Desk",
+      "appId": "forged-checklist-creator-desk-10",
+      "forgedSlug": "checklist-creator-desk-10",
+      "templateId": "creator-desk",
+      "at": "2026-06-26T08:04:26.846Z"
+    },
+    {
+      "id": "forge-1782461069908-4qhai5",
+      "kind": "forge.claw_minted",
+      "mode": "island",
+      "name": "Checklist Island Claw",
+      "appId": "claw-mqunarsw",
+      "forgedSlug": null,
+      "templateId": null,
+      "at": "2026-06-26T08:04:29.908Z"
+    },
+    {
+      "id": "forge-1782461069929-7kmz3h",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Checklist Island Claw",
+      "appId": "forged-checklist-island-claw-10",
+      "forgedSlug": "checklist-island-claw-10",
+      "templateId": "blank-desk",
+      "at": "2026-06-26T08:04:29.929Z"
+    },
+    {
+      "id": "forge-1782461072976-dp5xkb",
+      "kind": "forge.claw_minted",
+      "mode": "island",
+      "name": "Checklist Archive Claw",
+      "appId": "claw-mqunau64",
+      "forgedSlug": null,
+      "templateId": null,
+      "at": "2026-06-26T08:04:32.976Z"
+    },
+    {
+      "id": "forge-1782461072992-4f3ltj",
+      "kind": "forge.claw_archived",
+      "mode": "island",
+      "name": "Checklist Archive Claw",
+      "appId": "claw-mqunau64",
+      "forgedSlug": null,
+      "templateId": null,
+      "at": "2026-06-26T08:04:32.992Z"
+    },
+    {
+      "id": "forge-1782461075030-s9dzad",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Checklist Mesh Desk",
+      "appId": "forged-checklist-mesh-desk-10",
+      "forgedSlug": "checklist-mesh-desk-10",
+      "templateId": "work-desk",
+      "at": "2026-06-26T08:04:35.030Z"
+    },
+    {
+      "id": "forge-1782461076666-nbmym0",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Checklist Cafe Mint",
+      "appId": "forged-checklist-cafe-mint-10",
+      "forgedSlug": "checklist-cafe-mint-10",
+      "templateId": "creator-desk",
+      "at": "2026-06-26T08:04:36.666Z"
+    },
+    {
+      "id": "forge-1782461078289-uxbppz",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Checklist Capital Desk",
+      "appId": "forged-checklist-capital-desk-10",
+      "forgedSlug": "checklist-capital-desk-10",
+      "templateId": "capital-desk",
+      "at": "2026-06-26T08:04:38.289Z"
+    },
+    {
+      "id": "forge-1782461081380-z0hxm0",
+      "kind": "forge.claw_minted",
+      "mode": "island",
+      "name": "Checklist Island Mint",
+      "appId": "claw-mqunb0ne",
+      "forgedSlug": null,
+      "templateId": null,
+      "at": "2026-06-26T08:04:41.380Z"
+    },
+    {
+      "id": "forge-1782461083882-ee89yr",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Exit Demo Work",
+      "appId": "forged-exit-demo-work-11",
+      "forgedSlug": "exit-demo-work-11",
+      "templateId": "work-desk",
+      "at": "2026-06-26T08:04:43.882Z"
+    },
+    {
+      "id": "forge-1782461085479-jk8zfs",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Exit Demo Creator",
+      "appId": "forged-exit-demo-creator-11",
+      "forgedSlug": "exit-demo-creator-11",
+      "templateId": "creator-desk",
+      "at": "2026-06-26T08:04:45.479Z"
+    },
+    {
+      "id": "forge-1782461087101-lub225",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Exit Demo Capital",
+      "appId": "forged-exit-demo-capital-11",
+      "forgedSlug": "exit-demo-capital-11",
+      "templateId": "capital-desk",
+      "at": "2026-06-26T08:04:47.101Z"
+    },
+    {
+      "id": "forge-1782461091135-8fdrba",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Flow Forged Work",
+      "appId": "forged-flow-forged-work-10",
+      "forgedSlug": "flow-forged-work-10",
+      "templateId": "work-desk",
+      "at": "2026-06-26T08:04:51.135Z"
+    },
+    {
+      "id": "forge-1782461092746-6vci0u",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Flow Forged Creator",
+      "appId": "forged-flow-forged-creator-10",
+      "forgedSlug": "flow-forged-creator-10",
+      "templateId": "creator-desk",
+      "at": "2026-06-26T08:04:52.746Z"
+    },
+    {
+      "id": "forge-1782461094385-9qz2w2",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Flow Forged Capital",
+      "appId": "forged-flow-forged-capital-10",
+      "forgedSlug": "flow-forged-capital-10",
+      "templateId": "capital-desk",
+      "at": "2026-06-26T08:04:54.385Z"
+    },
+    {
+      "id": "forge-1782461097481-aapein",
+      "kind": "forge.claw_minted",
+      "mode": "island",
+      "name": "Flow Island Claw",
+      "appId": "claw-mqunbd2q",
+      "forgedSlug": null,
+      "templateId": null,
+      "at": "2026-06-26T08:04:57.481Z"
+    },
+    {
+      "id": "forge-1782461099069-gpmn43",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Flow Assist Work",
+      "appId": "forged-flow-assist-work-10",
+      "forgedSlug": "flow-assist-work-10",
+      "templateId": "work-desk",
+      "at": "2026-06-26T08:04:59.069Z"
+    },
+    {
+      "id": "forge-1782461100659-r7o8ex",
+      "kind": "forge.framework_provisioned",
+      "mode": "framework",
+      "name": "Flow Round Trip",
+      "appId": "forged-flow-round-trip-10",
+      "forgedSlug": "flow-round-trip-10",
+      "templateId": "blank-desk",
+      "at": "2026-06-26T08:05:00.659Z"
+    },
+    {
+      "id": "forge-1782461101931-lxj4ij",
+      "kind": "forge.import_completed",
+      "mode": "imported",
+      "name": "Flow Reimport Claw",
+      "appId": "forged-flow-reimport-claw-10",
+      "forgedSlug": "flow-reimport-claw-10",
+      "templateId": "blank-desk",
+      "at": "2026-06-26T08:05:01.931Z"
     }
   ]
 }

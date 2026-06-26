@@ -1,6 +1,15 @@
 {
   "events": [
     {
+      "id": "KXP-0010",
+      "kind": "profile_updated",
+      "at": "2026-06-26T08:04:47.343Z",
+      "payload": {
+        "displayName": "Ankur",
+        "profileId": "demo-owner-001"
+      }
+    },
+    {
       "id": "KXP-0009",
       "kind": "profile_updated",
       "at": "2026-06-25T20:43:59.328Z",

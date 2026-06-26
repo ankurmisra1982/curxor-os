@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-25T20:44:17.436Z",
+  "updatedAt": "2026-06-26T08:05:04.027Z",
   "tradingPaused": false,
   "permissions": {
     "autonomousMode": "off",
@@ -38,7 +38,7 @@
   },
   "dailyPnlPct": 0,
   "autoTradesToday": 0,
-  "autoTradesDay": "2026-06-25",
+  "autoTradesDay": "2026-06-26",
   "rules": [
     {
       "id": "RULE-01",
@@ -63,15 +63,15 @@
       "note": "Demo rule — buy on 5% dip with bracket",
       "backtest": {
         "fires90d": 0,
-        "lastRunAt": "2026-06-25T20:43:17.884Z",
+        "lastRunAt": "2026-06-26T08:04:06.811Z",
         "note": "No fires in lookback window",
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.753Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.478Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:30:33.447Z",
-      "updatedAt": "2026-06-25T20:43:17.887Z"
+      "updatedAt": "2026-06-26T08:04:06.816Z"
     },
     {
       "id": "RULE-02",
@@ -93,10 +93,10 @@
       "schedule": "market_close",
       "note": "Paused until earnings pass",
       "backtest": null,
-      "lastEvaluatedAt": "2026-06-25T20:43:10.760Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.485Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:30:33.447Z",
-      "updatedAt": "2026-06-25T20:43:10.760Z"
+      "updatedAt": "2026-06-26T08:04:00.485Z"
     },
     {
       "id": "RULE-03",
@@ -118,10 +118,10 @@
       "schedule": "market_close",
       "note": "Trim when SPY drifts above target weight",
       "backtest": null,
-      "lastEvaluatedAt": "2026-06-25T20:43:10.769Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.491Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:30:33.447Z",
-      "updatedAt": "2026-06-25T20:43:10.769Z"
+      "updatedAt": "2026-06-26T08:04:00.491Z"
     },
     {
       "id": "RULE-04",
@@ -180,10 +180,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.776Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.496Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:33:46.073Z",
-      "updatedAt": "2026-06-25T20:43:10.776Z"
+      "updatedAt": "2026-06-26T08:04:00.496Z"
     },
     {
       "id": "RULE-06",
@@ -250,10 +250,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.783Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.502Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:33:59.270Z",
-      "updatedAt": "2026-06-25T20:43:10.783Z"
+      "updatedAt": "2026-06-26T08:04:00.502Z"
     },
     {
       "id": "RULE-08",
@@ -283,10 +283,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.789Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.507Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:33:59.502Z",
-      "updatedAt": "2026-06-25T20:43:10.789Z"
+      "updatedAt": "2026-06-26T08:04:00.507Z"
     },
     {
       "id": "RULE-09",
@@ -382,10 +382,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.796Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.513Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:36:57.453Z",
-      "updatedAt": "2026-06-25T20:43:10.796Z"
+      "updatedAt": "2026-06-26T08:04:00.513Z"
     },
     {
       "id": "RULE-12",
@@ -452,10 +452,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.801Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.518Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:37:09.840Z",
-      "updatedAt": "2026-06-25T20:43:10.801Z"
+      "updatedAt": "2026-06-26T08:04:00.518Z"
     },
     {
       "id": "RULE-14",
@@ -485,10 +485,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.809Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.523Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:37:10.272Z",
-      "updatedAt": "2026-06-25T20:43:10.809Z"
+      "updatedAt": "2026-06-26T08:04:00.523Z"
     },
     {
       "id": "RULE-15",
@@ -547,10 +547,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.814Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.529Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:43:42.704Z",
-      "updatedAt": "2026-06-25T20:43:10.814Z"
+      "updatedAt": "2026-06-26T08:04:00.529Z"
     },
     {
       "id": "RULE-17",
@@ -617,10 +617,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.820Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.534Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:43:45.024Z",
-      "updatedAt": "2026-06-25T20:43:10.820Z"
+      "updatedAt": "2026-06-26T08:04:00.534Z"
     },
     {
       "id": "RULE-19",
@@ -650,10 +650,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.827Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.540Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:43:45.075Z",
-      "updatedAt": "2026-06-25T20:43:10.827Z"
+      "updatedAt": "2026-06-26T08:04:00.540Z"
     },
     {
       "id": "RULE-20",
@@ -782,10 +782,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.832Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.545Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:43:59.245Z",
-      "updatedAt": "2026-06-25T20:43:10.832Z"
+      "updatedAt": "2026-06-26T08:04:00.545Z"
     },
     {
       "id": "RULE-24",
@@ -819,10 +819,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.837Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.554Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:43:59.344Z",
-      "updatedAt": "2026-06-25T20:43:10.837Z"
+      "updatedAt": "2026-06-26T08:04:00.554Z"
     },
     {
       "id": "RULE-25",
@@ -856,10 +856,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.843Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.559Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:55:46.593Z",
-      "updatedAt": "2026-06-25T20:43:10.843Z"
+      "updatedAt": "2026-06-26T08:04:00.559Z"
     },
     {
       "id": "RULE-26",
@@ -926,10 +926,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.852Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.564Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:55:49.115Z",
-      "updatedAt": "2026-06-25T20:43:10.852Z"
+      "updatedAt": "2026-06-26T08:04:00.564Z"
     },
     {
       "id": "RULE-28",
@@ -959,10 +959,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.858Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.570Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T20:55:49.191Z",
-      "updatedAt": "2026-06-25T20:43:10.858Z"
+      "updatedAt": "2026-06-26T08:04:00.570Z"
     },
     {
       "id": "RULE-29",
@@ -1058,10 +1058,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.863Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.575Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T21:02:46.436Z",
-      "updatedAt": "2026-06-25T20:43:10.863Z"
+      "updatedAt": "2026-06-26T08:04:00.575Z"
     },
     {
       "id": "RULE-32",
@@ -1128,10 +1128,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.869Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.581Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T21:02:51.508Z",
-      "updatedAt": "2026-06-25T20:43:10.869Z"
+      "updatedAt": "2026-06-26T08:04:00.581Z"
     },
     {
       "id": "RULE-34",
@@ -1161,10 +1161,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.876Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.586Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T21:02:51.579Z",
-      "updatedAt": "2026-06-25T20:43:10.876Z"
+      "updatedAt": "2026-06-26T08:04:00.586Z"
     },
     {
       "id": "RULE-35",
@@ -1293,10 +1293,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.881Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.592Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T21:05:07.888Z",
-      "updatedAt": "2026-06-25T20:43:10.881Z"
+      "updatedAt": "2026-06-26T08:04:00.592Z"
     },
     {
       "id": "RULE-39",
@@ -1330,10 +1330,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.887Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.598Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T21:05:08.102Z",
-      "updatedAt": "2026-06-25T20:43:10.887Z"
+      "updatedAt": "2026-06-26T08:04:00.598Z"
     },
     {
       "id": "RULE-40",
@@ -1367,10 +1367,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.894Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.604Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:04:58.185Z",
-      "updatedAt": "2026-06-25T20:43:10.894Z"
+      "updatedAt": "2026-06-26T08:04:00.604Z"
     },
     {
       "id": "RULE-41",
@@ -1437,10 +1437,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.900Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.609Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:05:08.135Z",
-      "updatedAt": "2026-06-25T20:43:10.900Z"
+      "updatedAt": "2026-06-26T08:04:00.609Z"
     },
     {
       "id": "RULE-43",
@@ -1470,10 +1470,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.905Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.615Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:05:08.257Z",
-      "updatedAt": "2026-06-25T20:43:10.905Z"
+      "updatedAt": "2026-06-26T08:04:00.615Z"
     },
     {
       "id": "RULE-44",
@@ -1532,10 +1532,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.912Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.624Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:08:52.635Z",
-      "updatedAt": "2026-06-25T20:43:10.912Z"
+      "updatedAt": "2026-06-26T08:04:00.624Z"
     },
     {
       "id": "RULE-46",
@@ -1587,7 +1587,7 @@
       "action": "buy",
       "qty": 1,
       "qtyMode": "fixed",
-      "state": "PAUSED",
+      "state": "ARMED",
       "brokerId": "alpaca",
       "takeProfitPct": null,
       "stopLossPct": null,
@@ -1605,7 +1605,7 @@
       "lastEvaluatedAt": null,
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:08:57.899Z",
-      "updatedAt": "2026-06-22T22:08:57.907Z"
+      "updatedAt": "2026-06-26T08:04:08.316Z"
     },
     {
       "id": "RULE-48",
@@ -1969,10 +1969,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.917Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.629Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:11:37.977Z",
-      "updatedAt": "2026-06-25T20:43:10.917Z"
+      "updatedAt": "2026-06-26T08:04:00.629Z"
     },
     {
       "id": "RULE-59",
@@ -2006,10 +2006,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.926Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.634Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:11:38.086Z",
-      "updatedAt": "2026-06-25T20:43:10.926Z"
+      "updatedAt": "2026-06-26T08:04:00.634Z"
     },
     {
       "id": "RULE-60",
@@ -2480,10 +2480,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.933Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.641Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:26:56.750Z",
-      "updatedAt": "2026-06-25T20:43:10.933Z"
+      "updatedAt": "2026-06-26T08:04:00.641Z"
     },
     {
       "id": "RULE-74",
@@ -2517,10 +2517,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.939Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.647Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-22T22:26:56.845Z",
-      "updatedAt": "2026-06-25T20:43:10.939Z"
+      "updatedAt": "2026-06-26T08:04:00.647Z"
     },
     {
       "id": "RULE-75",
@@ -2587,10 +2587,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.945Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.652Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T00:13:11.693Z",
-      "updatedAt": "2026-06-25T20:43:10.945Z"
+      "updatedAt": "2026-06-26T08:04:00.652Z"
     },
     {
       "id": "RULE-77",
@@ -2624,10 +2624,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.951Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.658Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T00:13:12.232Z",
-      "updatedAt": "2026-06-25T20:43:10.951Z"
+      "updatedAt": "2026-06-26T08:04:00.658Z"
     },
     {
       "id": "RULE-78",
@@ -2694,10 +2694,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.957Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.663Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T01:38:18.997Z",
-      "updatedAt": "2026-06-25T20:43:10.957Z"
+      "updatedAt": "2026-06-26T08:04:00.663Z"
     },
     {
       "id": "RULE-80",
@@ -2731,10 +2731,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.963Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.668Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T01:38:19.451Z",
-      "updatedAt": "2026-06-25T20:43:10.963Z"
+      "updatedAt": "2026-06-26T08:04:00.668Z"
     },
     {
       "id": "RULE-81",
@@ -2801,10 +2801,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.969Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.673Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T01:43:38.199Z",
-      "updatedAt": "2026-06-25T20:43:10.969Z"
+      "updatedAt": "2026-06-26T08:04:00.673Z"
     },
     {
       "id": "RULE-83",
@@ -2838,10 +2838,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.975Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.678Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T01:43:38.612Z",
-      "updatedAt": "2026-06-25T20:43:10.975Z"
+      "updatedAt": "2026-06-26T08:04:00.678Z"
     },
     {
       "id": "RULE-84",
@@ -4652,10 +4652,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.981Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.683Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:04:59.726Z",
-      "updatedAt": "2026-06-25T20:43:10.981Z"
+      "updatedAt": "2026-06-26T08:04:00.683Z"
     },
     {
       "id": "RULE-138",
@@ -4689,10 +4689,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.986Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.691Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:05:00.073Z",
-      "updatedAt": "2026-06-25T20:43:10.986Z"
+      "updatedAt": "2026-06-26T08:04:00.691Z"
     },
     {
       "id": "RULE-139",
@@ -4961,10 +4961,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:10.994Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.696Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:08:45.835Z",
-      "updatedAt": "2026-06-25T20:43:10.994Z"
+      "updatedAt": "2026-06-26T08:04:00.696Z"
     },
     {
       "id": "RULE-147",
@@ -4998,10 +4998,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.000Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.703Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:08:46.059Z",
-      "updatedAt": "2026-06-25T20:43:11.000Z"
+      "updatedAt": "2026-06-26T08:04:00.703Z"
     },
     {
       "id": "RULE-148",
@@ -5270,10 +5270,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.011Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.709Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:11:13.090Z",
-      "updatedAt": "2026-06-25T20:43:11.011Z"
+      "updatedAt": "2026-06-26T08:04:00.709Z"
     },
     {
       "id": "RULE-156",
@@ -5307,10 +5307,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.020Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.714Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:11:13.352Z",
-      "updatedAt": "2026-06-25T20:43:11.020Z"
+      "updatedAt": "2026-06-26T08:04:00.714Z"
     },
     {
       "id": "RULE-157",
@@ -5579,10 +5579,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.028Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.720Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:18:15.114Z",
-      "updatedAt": "2026-06-25T20:43:11.028Z"
+      "updatedAt": "2026-06-26T08:04:00.720Z"
     },
     {
       "id": "RULE-165",
@@ -5616,10 +5616,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.036Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.725Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:18:15.287Z",
-      "updatedAt": "2026-06-25T20:43:11.036Z"
+      "updatedAt": "2026-06-26T08:04:00.725Z"
     },
     {
       "id": "RULE-166",
@@ -5888,10 +5888,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.043Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.730Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:25:10.054Z",
-      "updatedAt": "2026-06-25T20:43:11.043Z"
+      "updatedAt": "2026-06-26T08:04:00.730Z"
     },
     {
       "id": "RULE-174",
@@ -5925,10 +5925,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.049Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.736Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T03:25:10.382Z",
-      "updatedAt": "2026-06-25T20:43:11.049Z"
+      "updatedAt": "2026-06-26T08:04:00.736Z"
     },
     {
       "id": "RULE-175",
@@ -6362,10 +6362,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.055Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.741Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T22:05:04.986Z",
-      "updatedAt": "2026-06-25T20:43:11.055Z"
+      "updatedAt": "2026-06-26T08:04:00.741Z"
     },
     {
       "id": "RULE-188",
@@ -6399,10 +6399,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.061Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.746Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-23T22:05:05.140Z",
-      "updatedAt": "2026-06-25T20:43:11.061Z"
+      "updatedAt": "2026-06-26T08:04:00.746Z"
     },
     {
       "id": "RULE-189",
@@ -6671,10 +6671,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.066Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.751Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T02:11:26.902Z",
-      "updatedAt": "2026-06-25T20:43:11.066Z"
+      "updatedAt": "2026-06-26T08:04:00.751Z"
     },
     {
       "id": "RULE-197",
@@ -6708,10 +6708,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.071Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.756Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T02:11:27.078Z",
-      "updatedAt": "2026-06-25T20:43:11.071Z"
+      "updatedAt": "2026-06-26T08:04:00.756Z"
     },
     {
       "id": "RULE-198",
@@ -6980,10 +6980,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.077Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.763Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T02:38:48.695Z",
-      "updatedAt": "2026-06-25T20:43:11.077Z"
+      "updatedAt": "2026-06-26T08:04:00.763Z"
     },
     {
       "id": "RULE-206",
@@ -7017,10 +7017,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.083Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.769Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T02:38:48.861Z",
-      "updatedAt": "2026-06-25T20:43:11.083Z"
+      "updatedAt": "2026-06-26T08:04:00.769Z"
     },
     {
       "id": "RULE-207",
@@ -7289,10 +7289,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.088Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.774Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T03:00:26.206Z",
-      "updatedAt": "2026-06-25T20:43:11.088Z"
+      "updatedAt": "2026-06-26T08:04:00.774Z"
     },
     {
       "id": "RULE-215",
@@ -7326,10 +7326,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.097Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.779Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T03:00:26.321Z",
-      "updatedAt": "2026-06-25T20:43:11.097Z"
+      "updatedAt": "2026-06-26T08:04:00.779Z"
     },
     {
       "id": "RULE-216",
@@ -7598,10 +7598,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.102Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.784Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T03:03:44.797Z",
-      "updatedAt": "2026-06-25T20:43:11.102Z"
+      "updatedAt": "2026-06-26T08:04:00.784Z"
     },
     {
       "id": "RULE-224",
@@ -7635,10 +7635,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.109Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.790Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T03:03:44.910Z",
-      "updatedAt": "2026-06-25T20:43:11.109Z"
+      "updatedAt": "2026-06-26T08:04:00.790Z"
     },
     {
       "id": "RULE-225",
@@ -7907,10 +7907,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.116Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.795Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T22:16:21.514Z",
-      "updatedAt": "2026-06-25T20:43:11.116Z"
+      "updatedAt": "2026-06-26T08:04:00.795Z"
     },
     {
       "id": "RULE-233",
@@ -7944,10 +7944,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.122Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.800Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T22:16:21.681Z",
-      "updatedAt": "2026-06-25T20:43:11.122Z"
+      "updatedAt": "2026-06-26T08:04:00.800Z"
     },
     {
       "id": "RULE-234",
@@ -8216,10 +8216,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.128Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.806Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T22:18:50.342Z",
-      "updatedAt": "2026-06-25T20:43:11.128Z"
+      "updatedAt": "2026-06-26T08:04:00.806Z"
     },
     {
       "id": "RULE-242",
@@ -8253,10 +8253,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.133Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.811Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-24T22:18:50.488Z",
-      "updatedAt": "2026-06-25T20:43:11.133Z"
+      "updatedAt": "2026-06-26T08:04:00.811Z"
     },
     {
       "id": "RULE-243",
@@ -8525,10 +8525,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.139Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.816Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-25T06:20:06.858Z",
-      "updatedAt": "2026-06-25T20:43:11.139Z"
+      "updatedAt": "2026-06-26T08:04:00.816Z"
     },
     {
       "id": "RULE-251",
@@ -8562,10 +8562,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": "2026-06-25T20:43:11.145Z",
+      "lastEvaluatedAt": "2026-06-26T08:04:00.822Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-25T06:20:07.019Z",
-      "updatedAt": "2026-06-25T20:43:11.145Z"
+      "updatedAt": "2026-06-26T08:04:00.822Z"
     },
     {
       "id": "RULE-252",
@@ -9036,10 +9036,10 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": null,
+      "lastEvaluatedAt": "2026-06-26T08:04:00.830Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-25T20:44:01.777Z",
-      "updatedAt": "2026-06-25T20:44:01.821Z"
+      "updatedAt": "2026-06-26T08:04:00.830Z"
     },
     {
       "id": "RULE-266",
@@ -9073,13 +9073,547 @@
         "benchmarkReturnPct": 0,
         "strategyReturnPct": 0
       },
-      "lastEvaluatedAt": null,
+      "lastEvaluatedAt": "2026-06-26T08:04:00.836Z",
       "lastFiredAt": null,
       "createdAt": "2026-06-25T20:44:01.944Z",
-      "updatedAt": "2026-06-25T20:44:01.975Z"
+      "updatedAt": "2026-06-26T08:04:00.836Z"
+    },
+    {
+      "id": "RULE-267",
+      "name": "QA rebalance",
+      "asset": "SPY",
+      "kind": "rebalance",
+      "condition": "manual_trigger",
+      "conditionType": "manual_trigger",
+      "conditionParams": {},
+      "action": "sell",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "PAUSED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": 20,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "",
+      "backtest": {
+        "fires90d": 1,
+        "lastRunAt": "2026-06-26T08:04:00.172Z",
+        "note": "Would have fired 1 time(s) in lookback",
+        "equityCurve": [
+          {
+            "t": "2026-06-26T08:04:00.172Z",
+            "value": 10302
+          }
+        ],
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:00.162Z",
+      "updatedAt": "2026-06-26T08:04:00.175Z"
+    },
+    {
+      "id": "RULE-268",
+      "name": "QA rule",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "manual_trigger",
+      "conditionType": "manual_trigger",
+      "conditionParams": {},
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "PAUSED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "",
+      "backtest": {
+        "fires90d": 1,
+        "lastRunAt": "2026-06-26T08:04:00.310Z",
+        "note": "Would have fired 1 time(s) in lookback",
+        "equityCurve": [
+          {
+            "t": "2026-06-26T08:04:00.310Z",
+            "value": 9698
+          }
+        ],
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:00.305Z",
+      "updatedAt": "2026-06-26T08:04:00.313Z"
+    },
+    {
+      "id": "RULE-269",
+      "name": "SPY dip 5%",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "price_drop_pct",
+      "conditionType": "price_drop_pct",
+      "conditionParams": {
+        "pct": 5
+      },
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "PAUSED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "Auto from intel · smart take: SPY price updating · Chatter skews mixed (14% bull / 29% bear). CNBC: Global tech sell-off deepens as South Korea&apos;s",
+      "backtest": {
+        "fires90d": 0,
+        "lastRunAt": "2026-06-26T08:04:04.718Z",
+        "note": "No fires in lookback window",
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:04.710Z",
+      "updatedAt": "2026-06-26T08:04:04.721Z"
+    },
+    {
+      "id": "RULE-270",
+      "name": "SPY dip 5%",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "price_drop_pct",
+      "conditionType": "price_drop_pct",
+      "conditionParams": {
+        "pct": 5
+      },
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "PAUSED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "Auto from intel · smart take: SPY price updating · Chatter skews mixed (14% bull / 29% bear). CNBC: Global tech sell-off deepens as South Korea&apos;s",
+      "backtest": {
+        "fires90d": 0,
+        "lastRunAt": "2026-06-26T08:04:04.778Z",
+        "note": "No fires in lookback window",
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:04.773Z",
+      "updatedAt": "2026-06-26T08:04:04.781Z"
+    },
+    {
+      "id": "RULE-271",
+      "name": "SPY chat rule",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "manual_trigger",
+      "conditionType": "manual_trigger",
+      "conditionParams": {},
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "PAUSED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "",
+      "backtest": null,
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:08.298Z",
+      "updatedAt": "2026-06-26T08:04:08.298Z"
+    },
+    {
+      "id": "RULE-272",
+      "name": "Checklist execute 1782461059183",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "manual_trigger",
+      "conditionType": "manual_trigger",
+      "conditionParams": {},
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "ARMED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "",
+      "backtest": {
+        "fires90d": 1,
+        "lastRunAt": "2026-06-26T08:04:19.197Z",
+        "note": "Would have fired 1 time(s) in lookback",
+        "equityCurve": [
+          {
+            "t": "2026-06-26T08:04:19.197Z",
+            "value": 9698
+          }
+        ],
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:19.191Z",
+      "updatedAt": "2026-06-26T08:04:19.233Z"
+    },
+    {
+      "id": "RULE-273",
+      "name": "QA flow rule",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "manual_trigger",
+      "conditionType": "manual_trigger",
+      "conditionParams": {},
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "ARMED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "",
+      "backtest": {
+        "fires90d": 1,
+        "lastRunAt": "2026-06-26T08:04:48.148Z",
+        "note": "Would have fired 1 time(s) in lookback",
+        "equityCurve": [
+          {
+            "t": "2026-06-26T08:04:48.148Z",
+            "value": 9698
+          }
+        ],
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:48.142Z",
+      "updatedAt": "2026-06-26T08:04:48.173Z"
+    },
+    {
+      "id": "RULE-274",
+      "name": "SPY dip 5%",
+      "asset": "SPY",
+      "kind": "signal",
+      "condition": "price_drop_pct",
+      "conditionType": "price_drop_pct",
+      "conditionParams": {
+        "pct": 5
+      },
+      "action": "buy",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "ARMED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": null,
+      "driftThresholdPct": 10,
+      "schedule": "market_close",
+      "note": "Auto from intel · smart take: SPY price updating · Chatter skews mixed (14% bull / 29% bear). CNBC: Global tech sell-off deepens as South Korea&apos;s",
+      "backtest": {
+        "fires90d": 0,
+        "lastRunAt": "2026-06-26T08:04:48.594Z",
+        "note": "No fires in lookback window",
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:48.589Z",
+      "updatedAt": "2026-06-26T08:04:48.624Z"
+    },
+    {
+      "id": "RULE-275",
+      "name": "Flow rebalance",
+      "asset": "NVDA",
+      "kind": "rebalance",
+      "condition": "manual_trigger",
+      "conditionType": "manual_trigger",
+      "conditionParams": {},
+      "action": "sell",
+      "qty": 1,
+      "qtyMode": "fixed",
+      "state": "ARMED",
+      "brokerId": "alpaca",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "targetWeight": 15,
+      "driftThresholdPct": 8,
+      "schedule": "market_close",
+      "note": "",
+      "backtest": {
+        "fires90d": 1,
+        "lastRunAt": "2026-06-26T08:04:48.730Z",
+        "note": "Would have fired 1 time(s) in lookback",
+        "equityCurve": [
+          {
+            "t": "2026-06-26T08:04:48.730Z",
+            "value": 10347
+          }
+        ],
+        "benchmarkReturnPct": 0,
+        "strategyReturnPct": 0
+      },
+      "lastEvaluatedAt": null,
+      "lastFiredAt": null,
+      "createdAt": "2026-06-26T08:04:48.724Z",
+      "updatedAt": "2026-06-26T08:04:48.758Z"
     }
   ],
   "trades": [
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-274",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "SPY",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 302,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:48.667Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:48.675Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-273",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "SPY",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 302,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:48.214Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:48.222Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-04",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "QQQ",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 293,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$293 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:48.078Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:48.086Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": null,
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "SPY",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 302,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "agent",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:19.453Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:19.461Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-272",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "SPY",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 302,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:19.277Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:19.285Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-04",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "QQQ",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 293,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$293 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:19.140Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:19.148Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-01",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "BTC-USD",
+      "action": "buy",
+      "qty": 0.01,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 103,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": 8,
+      "stopLossPct": 3,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$1 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:00.401Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:00.409Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-01",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "BTC-USD",
+      "action": "buy",
+      "qty": 0.01,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 103,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": 8,
+      "stopLossPct": 3,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$1 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:04:00.057Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:04:00.065Z"
+    },
+    {
+      "id": "TRD-201",
+      "ruleId": "RULE-04",
+      "pilotId": null,
+      "subscriptionId": null,
+      "ticker": "QQQ",
+      "action": "buy",
+      "qty": 1,
+      "status": "simulated",
+      "mode": "paper",
+      "brokerId": "alpaca",
+      "orderId": "SIM-RD-201",
+      "filledPrice": 293,
+      "error": null,
+      "intentId": null,
+      "idempotencyKey": null,
+      "riskDecision": "ok",
+      "takeProfitPct": null,
+      "stopLossPct": null,
+      "source": "manual",
+      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$293 notional · simulated fill · not sent to broker",
+      "createdAt": "2026-06-26T08:03:59.964Z",
+      "submittedAt": null,
+      "filledAt": "2026-06-26T08:03:59.974Z"
+    },
     {
       "id": "TRD-201",
       "ruleId": "RULE-265",
@@ -13854,231 +14388,6 @@
       "createdAt": "2026-06-22T22:26:49.158Z",
       "submittedAt": null,
       "filledAt": "2026-06-22T22:26:49.163Z"
-    },
-    {
-      "id": "TRD-064",
-      "ruleId": "RULE-04",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "QQQ",
-      "action": "buy",
-      "qty": 1,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-064",
-      "filledPrice": 293,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": null,
-      "stopLossPct": null,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$293 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:26:49.048Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:26:49.052Z"
-    },
-    {
-      "id": "TRD-063",
-      "ruleId": "RULE-01",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "BTC-USD",
-      "action": "buy",
-      "qty": 0.01,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-063",
-      "filledPrice": 103,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": 8,
-      "stopLossPct": 3,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$1 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:26:38.753Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:26:38.762Z"
-    },
-    {
-      "id": "TRD-062",
-      "ruleId": "RULE-01",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "BTC-USD",
-      "action": "buy",
-      "qty": 0.01,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-062",
-      "filledPrice": 103,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": 8,
-      "stopLossPct": 3,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$1 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:26:38.473Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:26:38.478Z"
-    },
-    {
-      "id": "TRD-061",
-      "ruleId": "RULE-04",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "QQQ",
-      "action": "buy",
-      "qty": 1,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-061",
-      "filledPrice": 293,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": null,
-      "stopLossPct": null,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$293 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:26:38.412Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:26:38.417Z"
-    },
-    {
-      "id": "TRD-060",
-      "ruleId": null,
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "SPY",
-      "action": "buy",
-      "qty": 1,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-060",
-      "filledPrice": 302,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": null,
-      "stopLossPct": null,
-      "source": "agent",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:19:41.012Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:19:41.016Z"
-    },
-    {
-      "id": "TRD-059",
-      "ruleId": "RULE-65",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "SPY",
-      "action": "buy",
-      "qty": 1,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-059",
-      "filledPrice": 302,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": null,
-      "stopLossPct": null,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:19:40.907Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:19:40.912Z"
-    },
-    {
-      "id": "TRD-058",
-      "ruleId": "RULE-04",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "QQQ",
-      "action": "buy",
-      "qty": 1,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-058",
-      "filledPrice": 293,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": null,
-      "stopLossPct": null,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$293 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:19:40.798Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:19:40.802Z"
-    },
-    {
-      "id": "TRD-057",
-      "ruleId": "RULE-01",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "BTC-USD",
-      "action": "buy",
-      "qty": 0.01,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-057",
-      "filledPrice": 103,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": 8,
-      "stopLossPct": 3,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$1 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:19:28.002Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:19:28.014Z"
-    },
-    {
-      "id": "TRD-056",
-      "ruleId": "RULE-01",
-      "pilotId": null,
-      "subscriptionId": null,
-      "ticker": "BTC-USD",
-      "action": "buy",
-      "qty": 0.01,
-      "status": "simulated",
-      "mode": "paper",
-      "brokerId": "alpaca",
-      "orderId": "SIM-RD-056",
-      "filledPrice": 103,
-      "error": null,
-      "intentId": null,
-      "idempotencyKey": null,
-      "riskDecision": "ok",
-      "takeProfitPct": 8,
-      "stopLossPct": 3,
-      "source": "manual",
-      "approvalNote": "auto-approved · paper-only · ≤$750 · ~$1 notional · simulated fill · not sent to broker",
-      "createdAt": "2026-06-22T22:19:27.464Z",
-      "submittedAt": null,
-      "filledAt": "2026-06-22T22:19:27.478Z"
     }
   ],
   "positions": [],
@@ -14112,7 +14421,7 @@
       "rsi14": 33
     }
   ],
-  "quotesUpdatedAt": "2026-06-25T20:43:10.717Z",
+  "quotesUpdatedAt": "2026-06-26T08:04:00.438Z",
   "cachedPortfolioValue": null,
   "pilots": [
     {
@@ -14222,20 +14531,8 @@
       "minAllocationUsd": 500,
       "holdings": [
         {
-          "symbol": "CIK",
-          "weightPct": 61
-        },
-        {
-          "symbol": "DAVID",
-          "weightPct": 23
-        },
-        {
-          "symbol": "POSEY",
-          "weightPct": 8
-        },
-        {
-          "symbol": "BRUCE",
-          "weightPct": 8
+          "symbol": "SPY",
+          "weightPct": 100
         }
       ],
       "performance": {
@@ -14245,10 +14542,10 @@
         "m6": 31.2,
         "y1": 63.9
       },
-      "updatedAt": "2026-06-25T20:43:17.784Z",
+      "updatedAt": "2026-06-26T08:04:06.728Z",
       "feedSource": "live_sec",
-      "lastFeedAt": "2026-06-25T20:43:17.784Z",
-      "feedNote": "Live SEC Form 4 aggregation · 4 names",
+      "lastFeedAt": "2026-06-26T08:04:06.728Z",
+      "feedNote": "Live SEC Form 4 aggregation · 0 names",
       "disclosureLagDays": 45,
       "recentDisclosures": []
     },
@@ -14342,9 +14639,9 @@
         "m6": 24.6,
         "y1": 91.4
       },
-      "updatedAt": "2026-06-25T20:43:17.784Z",
+      "updatedAt": "2026-06-26T08:04:06.728Z",
       "feedSource": "live_sec",
-      "lastFeedAt": "2026-06-25T20:43:17.784Z",
+      "lastFeedAt": "2026-06-26T08:04:06.728Z",
       "feedNote": "Live 13F/8-K signal basket · 7 names",
       "disclosureLagDays": null,
       "recentDisclosures": []
@@ -14405,6 +14702,70 @@
   ],
   "pilotSignals": [],
   "agentAuditLog": [
+    {
+      "id": "AGT-0101",
+      "at": "2026-06-26T08:04:19.469Z",
+      "kind": "execute",
+      "source": "claw",
+      "tool": "place_equity_order",
+      "ticker": "SPY",
+      "qty": 1,
+      "action": "buy",
+      "note": "executed · simulated · auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
+      "tradeId": "TRD-201"
+    },
+    {
+      "id": "AGT-0101",
+      "at": "2026-06-26T08:04:19.433Z",
+      "kind": "preview",
+      "source": "claw",
+      "tool": "review_equity_order",
+      "ticker": "SPY",
+      "qty": 1,
+      "action": "buy",
+      "note": "preview buy 1 SPY · auto-eligible",
+      "tradeId": null
+    },
+    {
+      "id": "AGT-0101",
+      "at": "2026-06-26T08:04:19.399Z",
+      "kind": "preview",
+      "source": "claw",
+      "tool": "review_equity_order",
+      "ticker": "SPY",
+      "qty": 1,
+      "action": "buy",
+      "note": "preview buy 1 SPY · auto-eligible",
+      "tradeId": null
+    },
+    {
+      "id": "AGT-0101",
+      "at": "2026-06-26T08:04:01.145Z",
+      "kind": "kill_switch",
+      "source": "claw",
+      "note": "Agent kill switch cleared",
+      "tradeId": null
+    },
+    {
+      "id": "AGT-0101",
+      "at": "2026-06-26T08:04:01.114Z",
+      "kind": "kill_switch",
+      "source": "claw",
+      "note": "Agent kill switch ENABLED — all agent/MCP trades blocked",
+      "tradeId": null
+    },
+    {
+      "id": "AGT-0101",
+      "at": "2026-06-26T08:04:01.072Z",
+      "kind": "preview",
+      "source": "claw",
+      "tool": "review_equity_order",
+      "ticker": "SPY",
+      "qty": 1,
+      "action": "buy",
+      "note": "preview buy 1 SPY · auto-eligible",
+      "tradeId": null
+    },
     {
       "id": "AGT-0101",
       "at": "2026-06-25T20:43:30.865Z",
@@ -15404,70 +15765,6 @@
       "action": "buy",
       "note": "executed · simulated · auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
       "tradeId": "TRD-120"
-    },
-    {
-      "id": "AGT-0095",
-      "at": "2026-06-23T03:00:27.428Z",
-      "kind": "preview",
-      "source": "claw",
-      "tool": "review_equity_order",
-      "ticker": "SPY",
-      "qty": 1,
-      "action": "buy",
-      "note": "preview buy 1 SPY · auto-eligible",
-      "tradeId": null
-    },
-    {
-      "id": "AGT-0094",
-      "at": "2026-06-23T03:00:27.339Z",
-      "kind": "preview",
-      "source": "claw",
-      "tool": "review_equity_order",
-      "ticker": "SPY",
-      "qty": 1,
-      "action": "buy",
-      "note": "preview buy 1 SPY · auto-eligible",
-      "tradeId": null
-    },
-    {
-      "id": "AGT-0093",
-      "at": "2026-06-23T03:00:08.170Z",
-      "kind": "kill_switch",
-      "source": "claw",
-      "note": "Agent kill switch cleared",
-      "tradeId": null
-    },
-    {
-      "id": "AGT-0092",
-      "at": "2026-06-23T03:00:08.086Z",
-      "kind": "kill_switch",
-      "source": "claw",
-      "note": "Agent kill switch ENABLED — all agent/MCP trades blocked",
-      "tradeId": null
-    },
-    {
-      "id": "AGT-0091",
-      "at": "2026-06-23T03:00:08.039Z",
-      "kind": "preview",
-      "source": "claw",
-      "tool": "review_equity_order",
-      "ticker": "SPY",
-      "qty": 1,
-      "action": "buy",
-      "note": "preview buy 1 SPY · auto-eligible",
-      "tradeId": null
-    },
-    {
-      "id": "AGT-0090",
-      "at": "2026-06-23T02:58:17.331Z",
-      "kind": "execute",
-      "source": "claw",
-      "tool": "place_equity_order",
-      "ticker": "SPY",
-      "qty": 1,
-      "action": "buy",
-      "note": "executed · simulated · auto-approved · paper-only · ≤$750 · ~$302 notional · simulated fill · not sent to broker",
-      "tradeId": "TRD-114"
     }
   ]
 }

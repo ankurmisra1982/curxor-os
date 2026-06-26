@@ -1,22 +1,46 @@
 {
   "events": [
     {
-      "id": "CAFE-00001",
+      "id": "CAFE-00003",
       "kind": "shop.channel_sync",
       "appId": "my-shop",
-      "at": "2026-06-25T20:44:18.797Z",
+      "at": "2026-06-26T08:05:05.358Z",
       "xp": {
         "ascension": 8,
         "wealth": 5
       },
       "bubble": "Sync · shopify",
-      "sourceRef": "shop-live:channel_sync:1782420258795"
+      "sourceRef": "shop-live:channel_sync:1782461105356"
+    },
+    {
+      "id": "CAFE-00002",
+      "kind": "shop.channel_sync",
+      "appId": "my-shop",
+      "at": "2026-06-26T08:05:05.356Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Sync · printify",
+      "sourceRef": "shop-live:channel_sync:1782461105352"
+    },
+    {
+      "id": "CAFE-00001",
+      "kind": "shop.channel_sync",
+      "appId": "my-shop",
+      "at": "2026-06-26T08:05:05.205Z",
+      "xp": {
+        "ascension": 8,
+        "wealth": 5
+      },
+      "bubble": "Sync · printify",
+      "sourceRef": "shop-live:channel_sync:1782461105200"
     }
   ],
-  "ascensionXp": 8,
+  "ascensionXp": 24,
   "affinities": {
     "knowledge": 0,
-    "wealth": 5
+    "wealth": 15
   },
   "milestones": {
     "knowledgeEvent": false,
@@ -140,8 +164,8 @@
       "station": "mailbox",
       "state": "act",
       "bubble": "Sync · shopify",
-      "lastEventAt": "2026-06-25T20:44:18.798Z"
+      "lastEventAt": "2026-06-26T08:05:05.358Z"
     }
   ],
-  "lastRoomPulseAt": "2026-06-25T20:44:18.797Z"
+  "lastRoomPulseAt": "2026-06-26T08:05:05.358Z"
 }

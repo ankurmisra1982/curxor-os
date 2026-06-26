@@ -9,7 +9,7 @@
       "vendorLabel": "Humanoid-class · home assistant",
       "status": "standby",
       "safetyProfile": "standard",
-      "pairedAt": "2026-06-25T20:43:29.667Z",
+      "pairedAt": "2026-06-26T08:04:18.335Z",
       "meshNodeId": "mesh://curxor/HOME-HUMANOI-59E550",
       "discoverName": "CURXOR-HOME-HUMANOI",
       "createdAt": "2026-06-23T00:03:51.020Z"
@@ -86,7 +86,7 @@
       "id": "9965bf6d-b50e-489c-8874-cb01a6dbb77b",
       "text": "Shoes off at the door — preview rule",
       "priority": "essential",
-      "syncedAt": "2026-06-25T20:43:29.713Z",
+      "syncedAt": "2026-06-26T08:04:18.360Z",
       "createdAt": "2026-06-23T01:58:00.157Z"
     }
   ],
@@ -129,6 +129,15 @@
     }
   ],
   "routines": [
+    {
+      "id": "routine-eddf3208",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
     {
       "id": "routine-7d45d4c4",
       "label": "When guests arrive, greet them warmly and offer ",
@@ -335,15 +344,6 @@
       "enabled": true,
       "previewOnly": true,
       "source": "composed"
-    },
-    {
-      "id": "routine-2336d107",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
     }
   ],
   "setupCompleted": [
@@ -352,8 +352,8 @@
     "teach_rules",
     "pair_hardware"
   ],
-  "lastKnowledgeSyncAt": "2026-06-25T20:43:29.713Z",
+  "lastKnowledgeSyncAt": "2026-06-26T08:04:18.360Z",
   "notifyWhenLive": false,
   "pairWizard": null,
-  "updatedAt": "2026-06-25T20:43:29.791Z"
+  "updatedAt": "2026-06-26T08:04:18.441Z"
 }

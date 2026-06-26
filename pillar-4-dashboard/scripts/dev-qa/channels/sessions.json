@@ -162,7 +162,7 @@
           "text": "Preview margin watch — local spread demo only. Tap Ingest Order for a brief or unlock Sort SKU at Flipper level."
         }
       ],
-      "updatedAt": "2026-06-25T20:43:30.170Z"
+      "updatedAt": "2026-06-26T08:04:18.840Z"
     },
     {
       "id": "webchat:my-work",
@@ -207,6 +207,14 @@
         },
         {
           "role": "user",
+          "text": "inbox sync test"
+        },
+        {
+          "role": "assistant",
+          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
+        },
+        {
+          "role": "user",
           "text": "Draft outreach priority for today"
         },
         {
@@ -216,14 +224,6 @@
         {
           "role": "user",
           "text": "Remember to follow up with Acme Corp tomorrow morning"
-        },
-        {
-          "role": "assistant",
-          "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
-        },
-        {
-          "role": "user",
-          "text": "inbox sync test"
         },
         {
           "role": "assistant",
@@ -254,7 +254,7 @@
           "text": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step."
         }
       ],
-      "updatedAt": "2026-06-25T20:43:59.482Z"
+      "updatedAt": "2026-06-26T08:04:47.459Z"
     },
     {
       "id": "webchat:my-vital",
@@ -346,7 +346,7 @@
           "text": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context, but stresses sleep, exercise, and fasting as the foundation. Vital Lab maps this to your vitals and lab vault when you Ask.\n\nOpen the Ask / Lab tab for more preview Q&A. Educational only — not medical advice. Vital Claw runs on your appliance; confirm changes with a qualified clinician."
         }
       ],
-      "updatedAt": "2026-06-25T20:43:59.838Z"
+      "updatedAt": "2026-06-26T08:04:47.763Z"
     },
     {
       "id": "webchat:my-capital",
@@ -407,7 +407,7 @@
         },
         {
           "role": "user",
-          "text": "What is my trading mode?"
+          "text": "/execute_trade"
         },
         {
           "role": "assistant",
@@ -415,7 +415,7 @@
         },
         {
           "role": "user",
-          "text": "/execute_trade"
+          "text": "What is my trading mode?"
         },
         {
           "role": "assistant",
@@ -438,7 +438,7 @@
           "text": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute."
         }
       ],
-      "updatedAt": "2026-06-25T20:43:59.276Z"
+      "updatedAt": "2026-06-26T08:04:47.293Z"
     },
     {
       "id": "webchat:tesla-optimus-engine",
@@ -530,7 +530,7 @@
           "text": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance."
         }
       ],
-      "updatedAt": "2026-06-25T20:43:59.965Z"
+      "updatedAt": "2026-06-26T08:04:47.908Z"
     },
     {
       "id": "webchat:robotaxi-fleet-manager",
@@ -555,7 +555,7 @@
         },
         {
           "role": "assistant",
-          "text": "Dispatching RX-01 → B3 (latency policy)."
+          "text": "Dispatching SW-MQPV → B3 (latency policy)."
         },
         {
           "role": "user",
@@ -622,7 +622,7 @@
           "text": "Dispatching SW-MQPV → B3 (latency policy)."
         }
       ],
-      "updatedAt": "2026-06-25T20:44:17.214Z"
+      "updatedAt": "2026-06-26T08:05:03.854Z"
     }
   ]
 }

@@ -1,6 +1,66 @@
 {
   "items": [
     {
+      "id": "WL-0073",
+      "source": "my-capital",
+      "title": "Scaffold rule sweep",
+      "detail": "Capital Claw handoff to Swarm fleet",
+      "targetCell": "B3",
+      "priority": "high",
+      "status": "pending",
+      "assignedUnitId": null,
+      "createdAt": "2026-06-26T08:05:04.020Z",
+      "completedAt": null
+    },
+    {
+      "id": "WL-0072",
+      "source": "my-work",
+      "title": "Scaffold work batch",
+      "detail": "",
+      "targetCell": "B2",
+      "priority": "normal",
+      "status": "pending",
+      "assignedUnitId": null,
+      "createdAt": "2026-06-26T08:05:04.001Z",
+      "completedAt": null
+    },
+    {
+      "id": "WL-0071",
+      "source": "my-capital",
+      "title": "Scaffold capital sweep",
+      "detail": "",
+      "targetCell": "C2",
+      "priority": "normal",
+      "status": "pending",
+      "assignedUnitId": null,
+      "createdAt": "2026-06-26T08:05:03.985Z",
+      "completedAt": null
+    },
+    {
+      "id": "WL-0070",
+      "source": "my-work",
+      "title": "QA swarm handoff",
+      "detail": "",
+      "targetCell": "B2",
+      "priority": "normal",
+      "status": "pending",
+      "assignedUnitId": null,
+      "createdAt": "2026-06-26T08:05:03.879Z",
+      "completedAt": null
+    },
+    {
+      "id": "WL-0069",
+      "source": "my-work",
+      "title": "Freeze QA handoff",
+      "detail": "",
+      "targetCell": "C3",
+      "priority": "normal",
+      "status": "pending",
+      "assignedUnitId": null,
+      "createdAt": "2026-06-26T08:04:49.505Z",
+      "completedAt": null
+    },
+    {
       "id": "WL-0068",
       "source": "my-capital",
       "title": "Scaffold rule sweep",

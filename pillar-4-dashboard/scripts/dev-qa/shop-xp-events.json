@@ -1,11 +1,27 @@
 {
   "events": [
     {
-      "id": "SHP-0001",
+      "id": "SHP-0003",
       "kind": "channel_sync",
-      "at": "2026-06-25T20:44:18.794Z",
+      "at": "2026-06-26T08:05:05.352Z",
+      "payload": {
+        "channel": "shopify"
+      }
+    },
+    {
+      "id": "SHP-0002",
+      "kind": "channel_sync",
+      "at": "2026-06-26T08:05:05.349Z",
       "payload": {
         "channel": "ebay"
+      }
+    },
+    {
+      "id": "SHP-0001",
+      "kind": "channel_sync",
+      "at": "2026-06-26T08:05:05.199Z",
+      "payload": {
+        "channel": "printify"
       }
     }
   ]

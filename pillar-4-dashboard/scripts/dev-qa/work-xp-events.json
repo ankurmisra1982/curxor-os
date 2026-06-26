@@ -1,1046 +1,202 @@
 {
   "events": [
     {
-      "id": "WXP-0126",
-      "kind": "handoff_received",
-      "at": "2026-06-25T20:44:02.239Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0125",
-      "kind": "sequence_activated",
-      "at": "2026-06-25T20:44:02.173Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0124",
-      "kind": "handoff_received",
-      "at": "2026-06-25T20:44:02.157Z",
-      "payload": {
-        "source": "playbook:capital-alert",
-        "leadId": "LEAD-004"
-      }
-    },
-    {
-      "id": "WXP-0123",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:44:02.152Z",
-      "payload": {
-        "leadId": "LEAD-004",
-        "name": "QQQ alert follow-up",
-        "email": "playbook-capital-1782420242148@example.com"
-      }
-    },
-    {
-      "id": "WXP-0122",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:44:02.117Z",
-      "payload": {
-        "leadId": "LEAD-018",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782420242115@example.com"
-      }
-    },
-    {
-      "id": "WXP-0121",
-      "kind": "handoff_received",
-      "at": "2026-06-25T20:44:02.054Z",
-      "payload": {
-        "source": "my-capital",
-        "leadId": "LEAD-017"
-      }
-    },
-    {
-      "id": "WXP-0120",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:44:02.051Z",
-      "payload": {
-        "leadId": "LEAD-017",
-        "name": "Capital Intel Lead",
-        "email": "capital-handoff-1782420242044@example.com"
-      }
-    },
-    {
-      "id": "WXP-0119",
-      "kind": "handoff_received",
-      "at": "2026-06-25T20:44:02.009Z",
-      "payload": {
-        "source": "my-content",
-        "leadId": "LEAD-016"
-      }
-    },
-    {
-      "id": "WXP-0118",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:44:02.005Z",
-      "payload": {
-        "leadId": "LEAD-016",
-        "name": "Creator Collab",
-        "email": "handoff-1782420241994@example.com"
-      }
-    },
-    {
-      "id": "WXP-0117",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:43:59.743Z",
-      "payload": {
-        "mailId": "MAIL-e29bb8fe",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0116",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:59.698Z",
-      "payload": {
-        "leadId": "LEAD-015",
-        "email": "flow-l1-1782420239677@example.com"
-      }
-    },
-    {
-      "id": "WXP-0115",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:59.697Z",
-      "payload": {
-        "leadId": "LEAD-015",
-        "name": "Flow L1 Opportunity",
-        "email": "flow-l1-1782420239677@example.com"
-      }
-    },
-    {
-      "id": "WXP-0114",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:43:59.666Z",
-      "payload": {
-        "mailId": "MAIL-e29bb8fe",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0113",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:59.512Z",
-      "payload": {
-        "leadId": "LEAD-014",
-        "email": "flow-1782420239490@example.com"
-      }
-    },
-    {
-      "id": "WXP-0112",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:43:54.144Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0111",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:43:53.957Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0110",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:53.629Z",
-      "payload": {
-        "leadId": "LEAD-013",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0109",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:53.549Z",
-      "payload": {
-        "leadId": "LEAD-012",
-        "name": "Demo tour · Etsy buyer",
-        "email": "buyer@example.com"
-      }
-    },
-    {
-      "id": "WXP-0108",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:53.489Z",
-      "payload": {
-        "leadId": "LEAD-011",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0107",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:32.995Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0106",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:32.780Z",
-      "payload": {
-        "leadId": "LEAD-010",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0105",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:32.749Z",
-      "payload": {
-        "leadId": "LEAD-009",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782420212747@example.com"
-      }
-    },
-    {
-      "id": "WXP-0104",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:32.673Z",
-      "payload": {
-        "leadId": "LEAD-008",
-        "name": "Won pause QA",
-        "email": "won-pause-qa-1782420212670@example.com"
-      }
-    },
-    {
-      "id": "WXP-0103",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:43:32.417Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0102",
-      "kind": "approval_pending",
-      "at": "2026-06-25T20:43:32.402Z",
-      "payload": {
-        "sendId": "SEND-002",
-        "to": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0101",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:32.181Z",
-      "payload": {
-        "leadId": "LEAD-007",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0100",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:43:32.149Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0099",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:43:32.084Z",
-      "payload": {
-        "mailId": "MAIL-d2195926",
-        "leadId": "LEAD-006"
-      }
-    },
-    {
-      "id": "WXP-0098",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:32.043Z",
-      "payload": {
-        "leadId": "LEAD-006",
-        "email": "l1-1782420212016@example.com"
-      }
-    },
-    {
-      "id": "WXP-0097",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:43:31.898Z",
-      "payload": {
-        "mailId": "MAIL-d2195926",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0096",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:31.623Z",
-      "payload": {
-        "leadId": "LEAD-005",
-        "email": "checklist-1782420211605@example.com"
-      }
-    },
-    {
-      "id": "WXP-0095",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:31.620Z",
-      "payload": {
-        "leadId": "LEAD-005",
-        "name": "Checklist Prospect",
-        "email": "checklist-1782420211605@example.com"
-      }
-    },
-    {
-      "id": "WXP-0094",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:43:31.529Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0093",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:31.490Z",
-      "payload": {
-        "leadId": "LEAD-004",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0092",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:43:19.465Z",
-      "payload": {
-        "mailId": "MAIL-bd755652",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0091",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:19.079Z",
-      "payload": {
-        "leadId": "LEAD-012",
-        "name": "QA TierB",
-        "email": "qa-tierb-1782420199056@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0090",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:43:18.941Z",
-      "payload": {
-        "leadId": "LEAD-011",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0089",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:43:18.913Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0088",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:36.524Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0087",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:36.297Z",
-      "payload": {
-        "leadId": "LEAD-010",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0086",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:36.277Z",
-      "payload": {
-        "leadId": "LEAD-009",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782418296276@example.com"
-      }
-    },
-    {
-      "id": "WXP-0085",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:36.203Z",
-      "payload": {
-        "leadId": "LEAD-008",
-        "name": "Won pause QA",
-        "email": "won-pause-qa-1782418296200@example.com"
-      }
-    },
-    {
-      "id": "WXP-0084",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:11:35.951Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0083",
-      "kind": "approval_pending",
-      "at": "2026-06-25T20:11:35.929Z",
-      "payload": {
-        "sendId": "SEND-002",
-        "to": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0082",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:35.706Z",
-      "payload": {
-        "leadId": "LEAD-007",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0081",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:11:35.675Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0080",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:11:35.611Z",
-      "payload": {
-        "mailId": "MAIL-b537e8c5",
-        "leadId": "LEAD-006"
-      }
-    },
-    {
-      "id": "WXP-0079",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:35.550Z",
-      "payload": {
-        "leadId": "LEAD-006",
-        "email": "l1-1782418295541@example.com"
-      }
-    },
-    {
-      "id": "WXP-0078",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:11:35.391Z",
-      "payload": {
-        "mailId": "MAIL-b537e8c5",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0077",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:35.114Z",
-      "payload": {
-        "leadId": "LEAD-005",
-        "email": "checklist-1782418295097@example.com"
-      }
-    },
-    {
-      "id": "WXP-0076",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:11:35.039Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0075",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:35.006Z",
-      "payload": {
-        "leadId": "LEAD-004",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0074",
-      "kind": "draft_reply",
-      "at": "2026-06-25T20:11:23.032Z",
-      "payload": {
-        "mailId": "MAIL-3f0c7610",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0073",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:22.662Z",
-      "payload": {
-        "leadId": "LEAD-021",
-        "name": "QA TierB",
-        "email": "qa-tierb-1782418282656@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0072",
-      "kind": "create_lead",
-      "at": "2026-06-25T20:11:22.528Z",
-      "payload": {
-        "leadId": "LEAD-020",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0071",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T20:11:22.498Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0070",
-      "kind": "handoff_received",
-      "at": "2026-06-25T06:20:07.402Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0069",
-      "kind": "sequence_activated",
-      "at": "2026-06-25T06:20:07.309Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0068",
-      "kind": "handoff_received",
-      "at": "2026-06-25T06:20:07.274Z",
-      "payload": {
-        "source": "playbook:capital-alert",
-        "leadId": "LEAD-019"
-      }
-    },
-    {
-      "id": "WXP-0067",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:07.270Z",
-      "payload": {
-        "leadId": "LEAD-019",
-        "name": "QQQ alert follow-up",
-        "email": "playbook-capital-1782368407267@example.com"
-      }
-    },
-    {
-      "id": "WXP-0066",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:07.225Z",
-      "payload": {
-        "leadId": "LEAD-018",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782368407222@example.com"
-      }
-    },
-    {
-      "id": "WXP-0065",
-      "kind": "handoff_received",
-      "at": "2026-06-25T06:20:07.139Z",
-      "payload": {
-        "source": "my-capital",
-        "leadId": "LEAD-017"
-      }
-    },
-    {
-      "id": "WXP-0064",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:07.137Z",
-      "payload": {
-        "leadId": "LEAD-017",
-        "name": "Capital Intel Lead",
-        "email": "capital-handoff-1782368407128@example.com"
-      }
-    },
-    {
-      "id": "WXP-0063",
-      "kind": "handoff_received",
-      "at": "2026-06-25T06:20:07.097Z",
-      "payload": {
-        "source": "my-content",
-        "leadId": "LEAD-016"
-      }
-    },
-    {
-      "id": "WXP-0062",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:07.093Z",
-      "payload": {
-        "leadId": "LEAD-016",
-        "name": "Creator Collab",
-        "email": "handoff-1782368407081@example.com"
-      }
-    },
-    {
-      "id": "WXP-0061",
-      "kind": "draft_reply",
-      "at": "2026-06-25T06:20:04.163Z",
-      "payload": {
-        "mailId": "MAIL-7c2e5c95",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0060",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:04.119Z",
-      "payload": {
-        "leadId": "LEAD-015",
-        "email": "flow-l1-1782368404098@example.com"
-      }
-    },
-    {
-      "id": "WXP-0059",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:04.118Z",
-      "payload": {
-        "leadId": "LEAD-015",
-        "name": "Flow L1 Opportunity",
-        "email": "flow-l1-1782368404098@example.com"
-      }
-    },
-    {
-      "id": "WXP-0058",
-      "kind": "draft_reply",
-      "at": "2026-06-25T06:20:04.086Z",
-      "payload": {
-        "mailId": "MAIL-7c2e5c95",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0057",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:03.919Z",
-      "payload": {
-        "leadId": "LEAD-014",
-        "email": "flow-1782368403895@example.com"
-      }
-    },
-    {
-      "id": "WXP-0056",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:20:03.918Z",
-      "payload": {
-        "leadId": "LEAD-014",
-        "name": "Flow Prospect",
-        "email": "flow-1782368403895@example.com"
-      }
-    },
-    {
-      "id": "WXP-0055",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T06:19:58.453Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0054",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T06:19:58.263Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0053",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:57.912Z",
-      "payload": {
-        "leadId": "LEAD-013",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0052",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:57.820Z",
-      "payload": {
-        "leadId": "LEAD-012",
-        "name": "Demo tour · Etsy buyer",
-        "email": "buyer@example.com"
-      }
-    },
-    {
-      "id": "WXP-0051",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:57.701Z",
-      "payload": {
-        "leadId": "LEAD-011",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0050",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:37.051Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0049",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:36.805Z",
-      "payload": {
-        "leadId": "LEAD-010",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0048",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:36.773Z",
-      "payload": {
-        "leadId": "LEAD-009",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782368376771@example.com"
-      }
-    },
-    {
-      "id": "WXP-0047",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:36.680Z",
-      "payload": {
-        "leadId": "LEAD-008",
-        "name": "Won pause QA",
-        "email": "won-pause-qa-1782368376677@example.com"
-      }
-    },
-    {
-      "id": "WXP-0046",
-      "kind": "draft_reply",
-      "at": "2026-06-25T06:19:36.393Z",
-      "payload": {
-        "source": "checklist"
-      }
-    },
-    {
-      "id": "WXP-0045",
-      "kind": "approval_pending",
-      "at": "2026-06-25T06:19:36.375Z",
-      "payload": {
-        "sendId": "SEND-002",
-        "to": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0044",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:36.173Z",
-      "payload": {
-        "leadId": "LEAD-007",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
-      }
-    },
-    {
-      "id": "WXP-0043",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T06:19:36.139Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0042",
-      "kind": "draft_reply",
-      "at": "2026-06-25T06:19:36.058Z",
-      "payload": {
-        "mailId": "MAIL-8736a47a",
-        "leadId": "LEAD-006"
-      }
-    },
-    {
-      "id": "WXP-0041",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:36.015Z",
-      "payload": {
-        "leadId": "LEAD-006",
-        "email": "l1-1782368375992@example.com"
-      }
-    },
-    {
-      "id": "WXP-0040",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:36.014Z",
-      "payload": {
-        "leadId": "LEAD-006",
-        "name": "L1 Opportunity",
-        "email": "l1-1782368375992@example.com"
-      }
-    },
-    {
-      "id": "WXP-0039",
-      "kind": "draft_reply",
-      "at": "2026-06-25T06:19:35.857Z",
-      "payload": {
-        "mailId": "MAIL-8736a47a",
-        "leadId": ""
-      }
-    },
-    {
-      "id": "WXP-0038",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:35.580Z",
-      "payload": {
-        "leadId": "LEAD-005",
-        "email": "checklist-1782368375567@example.com"
-      }
-    },
-    {
-      "id": "WXP-0037",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:35.579Z",
-      "payload": {
-        "leadId": "LEAD-005",
-        "name": "Checklist Prospect",
-        "email": "checklist-1782368375567@example.com"
-      }
-    },
-    {
-      "id": "WXP-0036",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T06:19:35.507Z",
-      "payload": {
-        "detail": "demoReady 6/7"
-      }
-    },
-    {
-      "id": "WXP-0035",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:35.475Z",
-      "payload": {
-        "leadId": "LEAD-004",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
-      }
-    },
-    {
-      "id": "WXP-0034",
-      "kind": "draft_reply",
-      "at": "2026-06-25T06:19:23.427Z",
-      "payload": {
-        "mailId": "MAIL-f769cc36",
-        "leadId": ""
-      }
-    },
-    {
       "id": "WXP-0033",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:23.018Z",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:04:49.002Z",
       "payload": {
-        "leadId": "LEAD-021",
-        "name": "QA TierB",
-        "email": "qa-tierb-1782368363000@curxor.dev"
+        "source": "checklist"
       }
     },
     {
       "id": "WXP-0032",
-      "kind": "create_lead",
-      "at": "2026-06-25T06:19:22.893Z",
+      "kind": "sequence_activated",
+      "at": "2026-06-26T08:04:48.953Z",
       "payload": {
-        "leadId": "LEAD-020",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
+        "source": "checklist"
       }
     },
     {
       "id": "WXP-0031",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-25T06:19:22.875Z",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:04:48.932Z",
       "payload": {
-        "detail": "demoReady 7/7"
+        "source": "playbook:capital-alert",
+        "leadId": "LEAD-022"
       }
     },
     {
       "id": "WXP-0030",
-      "kind": "handoff_received",
-      "at": "2026-06-24T22:18:50.803Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:48.928Z",
       "payload": {
-        "source": "checklist"
+        "leadId": "LEAD-022",
+        "name": "QQQ alert follow-up",
+        "email": "playbook-capital-1782461088923@example.com"
       }
     },
     {
       "id": "WXP-0029",
-      "kind": "sequence_activated",
-      "at": "2026-06-24T22:18:50.720Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:48.895Z",
       "payload": {
-        "source": "checklist"
+        "leadId": "LEAD-021",
+        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
+        "email": "signal-edgecompute-posted-3-sdr-1782461088893@example.com"
       }
     },
     {
       "id": "WXP-0028",
       "kind": "handoff_received",
-      "at": "2026-06-24T22:18:50.701Z",
+      "at": "2026-06-26T08:04:48.829Z",
       "payload": {
-        "source": "playbook:capital-alert",
-        "leadId": "LEAD-019"
+        "source": "my-capital",
+        "leadId": "LEAD-020"
       }
     },
     {
       "id": "WXP-0027",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:50.696Z",
+      "at": "2026-06-26T08:04:48.826Z",
       "payload": {
-        "leadId": "LEAD-019",
-        "name": "QQQ alert follow-up",
-        "email": "playbook-capital-1782339530694@example.com"
+        "leadId": "LEAD-020",
+        "name": "Capital Intel Lead",
+        "email": "capital-handoff-1782461088814@example.com"
       }
     },
     {
       "id": "WXP-0026",
-      "kind": "create_lead",
-      "at": "2026-06-24T22:18:50.656Z",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:04:48.793Z",
       "payload": {
-        "leadId": "LEAD-018",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782339530654@example.com"
+        "source": "my-content",
+        "leadId": "LEAD-019"
       }
     },
     {
       "id": "WXP-0025",
-      "kind": "handoff_received",
-      "at": "2026-06-24T22:18:50.605Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:48.791Z",
       "payload": {
-        "source": "my-capital",
-        "leadId": "LEAD-017"
+        "leadId": "LEAD-019",
+        "name": "Creator Collab",
+        "email": "handoff-1782461088774@example.com"
       }
     },
     {
       "id": "WXP-0024",
-      "kind": "create_lead",
-      "at": "2026-06-24T22:18:50.603Z",
+      "kind": "draft_reply",
+      "at": "2026-06-26T08:04:47.673Z",
       "payload": {
-        "leadId": "LEAD-017",
-        "name": "Capital Intel Lead",
-        "email": "capital-handoff-1782339530597@example.com"
+        "mailId": "MAIL-5dea2133",
+        "leadId": ""
       }
     },
     {
       "id": "WXP-0023",
-      "kind": "handoff_received",
-      "at": "2026-06-24T22:18:50.572Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:47.639Z",
       "payload": {
-        "source": "my-content",
-        "leadId": "LEAD-016"
+        "leadId": "LEAD-018",
+        "email": "flow-l1-1782461087619@example.com"
       }
     },
     {
       "id": "WXP-0022",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:50.570Z",
+      "at": "2026-06-26T08:04:47.638Z",
       "payload": {
-        "leadId": "LEAD-016",
-        "name": "Creator Collab",
-        "email": "handoff-1782339530558@example.com"
+        "leadId": "LEAD-018",
+        "name": "Flow L1 Opportunity",
+        "email": "flow-l1-1782461087619@example.com"
       }
     },
     {
       "id": "WXP-0021",
       "kind": "draft_reply",
-      "at": "2026-06-24T22:18:47.973Z",
+      "at": "2026-06-26T08:04:47.609Z",
       "payload": {
-        "mailId": "MAIL-ace2b38c",
+        "mailId": "MAIL-5dea2133",
         "leadId": ""
       }
     },
     {
       "id": "WXP-0020",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:47.921Z",
+      "at": "2026-06-26T08:04:47.476Z",
       "payload": {
-        "leadId": "LEAD-015",
-        "email": "flow-l1-1782339527916@example.com"
+        "leadId": "LEAD-017",
+        "email": "flow-1782461087467@example.com"
       }
     },
     {
       "id": "WXP-0019",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:47.920Z",
+      "at": "2026-06-26T08:04:47.475Z",
       "payload": {
-        "leadId": "LEAD-015",
-        "name": "Flow L1 Opportunity",
-        "email": "flow-l1-1782339527916@example.com"
+        "leadId": "LEAD-017",
+        "name": "Flow Prospect",
+        "email": "flow-1782461087467@example.com"
       }
     },
     {
       "id": "WXP-0018",
-      "kind": "draft_reply",
-      "at": "2026-06-24T22:18:47.903Z",
+      "kind": "go_live_demo_ready",
+      "at": "2026-06-26T08:04:42.135Z",
       "payload": {
-        "mailId": "MAIL-ace2b38c",
-        "leadId": ""
+        "detail": "demoReady 6/7"
       }
     },
     {
       "id": "WXP-0017",
-      "kind": "create_lead",
-      "at": "2026-06-24T22:18:47.769Z",
+      "kind": "go_live_demo_ready",
+      "at": "2026-06-26T08:04:41.956Z",
       "payload": {
-        "leadId": "LEAD-014",
-        "email": "flow-1782339527765@example.com"
+        "detail": "demoReady 6/7"
       }
     },
     {
       "id": "WXP-0016",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:47.768Z",
+      "at": "2026-06-26T08:04:41.674Z",
       "payload": {
-        "leadId": "LEAD-014",
-        "name": "Flow Prospect",
-        "email": "flow-1782339527765@example.com"
+        "leadId": "LEAD-016",
+        "name": "Demo tour · Jordan",
+        "email": "demo@curxor.dev"
       }
     },
     {
       "id": "WXP-0015",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-24T22:18:42.455Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:41.604Z",
       "payload": {
-        "detail": "demoReady 7/7"
+        "leadId": "LEAD-015",
+        "name": "Demo tour · Etsy buyer",
+        "email": "buyer@example.com"
       }
     },
     {
       "id": "WXP-0014",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-24T22:18:42.248Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:41.542Z",
       "payload": {
-        "detail": "demoReady 7/7"
+        "leadId": "LEAD-014",
+        "name": "Demo tour · internship inquiry",
+        "email": "coach@school.edu"
       }
     },
     {
       "id": "WXP-0013",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:41.937Z",
+      "at": "2026-06-26T08:04:21.318Z",
+      "payload": {
+        "source": "checklist"
+      }
+    },
+    {
+      "id": "WXP-0012",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:21.121Z",
       "payload": {
         "leadId": "LEAD-013",
         "name": "Demo tour · Jordan",
@@ -1048,37 +204,46 @@
       }
     },
     {
-      "id": "WXP-0012",
-      "kind": "create_lead",
-      "at": "2026-06-24T22:18:41.888Z",
-      "payload": {
-        "leadId": "LEAD-012",
-        "name": "Demo tour · Etsy buyer",
-        "email": "buyer@example.com"
-      }
-    },
-    {
       "id": "WXP-0011",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:41.806Z",
+      "at": "2026-06-26T08:04:21.090Z",
       "payload": {
-        "leadId": "LEAD-011",
-        "name": "Demo tour · internship inquiry",
-        "email": "coach@school.edu"
+        "leadId": "LEAD-012",
+        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
+        "email": "signal-edgecompute-posted-3-sdr-1782461061088@example.com"
       }
     },
     {
       "id": "WXP-0010",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:21.636Z",
+      "at": "2026-06-26T08:04:21.022Z",
+      "payload": {
+        "leadId": "LEAD-011",
+        "name": "Won pause QA",
+        "email": "won-pause-qa-1782461061020@example.com"
+      }
+    },
+    {
+      "id": "WXP-0009",
+      "kind": "draft_reply",
+      "at": "2026-06-26T08:04:20.824Z",
       "payload": {
         "source": "checklist"
       }
     },
     {
-      "id": "WXP-0009",
+      "id": "WXP-0008",
+      "kind": "approval_pending",
+      "at": "2026-06-26T08:04:20.812Z",
+      "payload": {
+        "sendId": "SEND-002",
+        "to": "demo@curxor.dev"
+      }
+    },
+    {
+      "id": "WXP-0007",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:21.452Z",
+      "at": "2026-06-26T08:04:20.603Z",
       "payload": {
         "leadId": "LEAD-010",
         "name": "Demo tour · Jordan",
@@ -1086,76 +251,57 @@
       }
     },
     {
-      "id": "WXP-0008",
-      "kind": "create_lead",
-      "at": "2026-06-24T22:18:21.421Z",
-      "payload": {
-        "leadId": "LEAD-009",
-        "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-        "email": "signal-edgecompute-posted-3-sdr-1782339501419@example.com"
-      }
-    },
-    {
-      "id": "WXP-0007",
-      "kind": "create_lead",
-      "at": "2026-06-24T22:18:21.353Z",
-      "payload": {
-        "leadId": "LEAD-008",
-        "name": "Won pause QA",
-        "email": "won-pause-qa-1782339501351@example.com"
-      }
-    },
-    {
       "id": "WXP-0006",
-      "kind": "draft_reply",
-      "at": "2026-06-24T22:18:21.103Z",
+      "kind": "go_live_demo_ready",
+      "at": "2026-06-26T08:04:20.588Z",
       "payload": {
-        "source": "checklist"
+        "detail": "demoReady 6/7"
       }
     },
     {
       "id": "WXP-0005",
-      "kind": "approval_pending",
-      "at": "2026-06-24T22:18:21.077Z",
+      "kind": "draft_reply",
+      "at": "2026-06-26T08:04:20.522Z",
       "payload": {
-        "sendId": "SEND-002",
-        "to": "demo@curxor.dev"
+        "mailId": "MAIL-5643bb26",
+        "leadId": "LEAD-009"
       }
     },
     {
       "id": "WXP-0004",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:20.871Z",
+      "at": "2026-06-26T08:04:20.485Z",
       "payload": {
-        "leadId": "LEAD-007",
-        "name": "Demo tour · Jordan",
-        "email": "demo@curxor.dev"
+        "leadId": "LEAD-009",
+        "email": "l1-1782461060478@example.com"
       }
     },
     {
       "id": "WXP-0003",
-      "kind": "go_live_demo_ready",
-      "at": "2026-06-24T22:18:20.841Z",
+      "kind": "create_lead",
+      "at": "2026-06-26T08:04:20.484Z",
       "payload": {
-        "detail": "demoReady 7/7"
+        "leadId": "LEAD-009",
+        "name": "L1 Opportunity",
+        "email": "l1-1782461060478@example.com"
       }
     },
     {
       "id": "WXP-0002",
       "kind": "draft_reply",
-      "at": "2026-06-24T22:18:20.767Z",
+      "at": "2026-06-26T08:04:20.372Z",
       "payload": {
-        "mailId": "MAIL-cb8488c0",
-        "leadId": "LEAD-006"
+        "mailId": "MAIL-5643bb26",
+        "leadId": ""
       }
     },
     {
       "id": "WXP-0001",
       "kind": "create_lead",
-      "at": "2026-06-24T22:18:20.735Z",
+      "at": "2026-06-26T08:04:20.137Z",
       "payload": {
-        "leadId": "LEAD-006",
-        "email": "l1-1782339500726@example.com"
+        "leadId": "LEAD-008",
+        "email": "checklist-1782461060116@example.com"
       }
     }
   ]

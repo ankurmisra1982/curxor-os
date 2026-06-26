@@ -108,3 +108,14 @@ result: PASS
   PASS  typecheck
   PASS  production build
   PASS  qa:local (port 3085)
+
+=== pre-unbox gate 2026-06-26T08:05:08.659Z ===
+port: 3081
+result: PASS
+  PASS  version.json pin
+  PASS  curxor-data-dir production path
+  PASS  seed-appliance-data.sh
+  PASS  verify-unbox-day.sh
+  PASS  typecheck
+  PASS  production build
+  PASS  qa:local (port 3081)

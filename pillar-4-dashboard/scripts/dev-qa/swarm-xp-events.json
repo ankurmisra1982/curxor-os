@@ -1,6 +1,110 @@
 {
   "events": [
     {
+      "id": "SXP-0163",
+      "kind": "ping_mesh",
+      "at": "2026-06-26T08:05:04.887Z",
+      "payload": {
+        "unitId": "claw-mqpscfbc",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0162",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:05:04.022Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0073",
+        "title": "Scaffold rule sweep"
+      }
+    },
+    {
+      "id": "SXP-0161",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:05:04.003Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0072",
+        "title": "Scaffold work batch"
+      }
+    },
+    {
+      "id": "SXP-0160",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:05:03.987Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0071",
+        "title": "Scaffold capital sweep"
+      }
+    },
+    {
+      "id": "SXP-0159",
+      "kind": "exit_demo_ready",
+      "at": "2026-06-26T08:05:03.975Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0158",
+      "kind": "fleet_milestone",
+      "at": "2026-06-26T08:05:03.973Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0157",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:05:03.881Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0070",
+        "title": "QA swarm handoff"
+      }
+    },
+    {
+      "id": "SXP-0156",
+      "kind": "exit_demo_ready",
+      "at": "2026-06-26T08:05:03.867Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0155",
+      "kind": "fleet_milestone",
+      "at": "2026-06-26T08:05:03.865Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0154",
+      "kind": "ping_mesh",
+      "at": "2026-06-26T08:05:03.836Z",
+      "payload": {
+        "unitId": "RX-01",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0153",
+      "kind": "handoff_received",
+      "at": "2026-06-26T08:04:49.507Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0069",
+        "title": "Freeze QA handoff"
+      }
+    },
+    {
       "id": "SXP-0152",
       "kind": "ping_mesh",
       "at": "2026-06-25T20:44:18.291Z",

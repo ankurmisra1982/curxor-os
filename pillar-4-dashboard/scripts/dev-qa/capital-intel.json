@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-06-25T20:44:01.770Z",
+  "updatedAt": "2026-06-26T08:04:48.583Z",
   "digest": {
     "digest": [
       {
@@ -13,7 +13,7 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-25T20:43:11.546Z"
+        "publishedAt": "2026-06-26T08:04:01.252Z"
       },
       {
         "id": "f70709ef99f6d4",
@@ -24,18 +24,118 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-25T20:43:11.546Z"
+        "publishedAt": "2026-06-26T08:04:01.252Z"
       },
       {
-        "id": "d08e9a6a5d8b84",
-        "headline": "Trump keeps turning Republican wins into loyalty tests — and political liabilities",
+        "id": "41b1a51528f358",
+        "headline": "Tumbling AI stocks signal another day of turmoil for tech companies",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/trump-gop-housing-bill-save-act-fisa.html",
+        "url": "https://www.cnbc.com/2026/06/26/global-tech-stocks-ai-infrastructure-costs-selloff-softbank-apple.html",
+        "tickers": [],
+        "sentiment": "bearish",
+        "publishedAt": "2026-06-26T07:44:12.000Z"
+      },
+      {
+        "id": "95bb21ccc0a2f5",
+        "headline": "Global tech sell-off deepens as South Korea&apos;s Kospi sinks nearly 6%, S&amp;P 500 futures fall: Live updates",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/stock-market-today-live-updates.html",
+        "tickers": [],
+        "sentiment": "bearish",
+        "publishedAt": "2026-06-26T07:44:12.000Z"
+      },
+      {
+        "id": "caf1ffc70326b9",
+        "headline": "SK Hynix prepares U.S. listing at $166 per share — here&apos;s why HSBC says it could be worth 20% more",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/sk-hynix-us-listing-ipo-hsbc-price-target.html",
         "tickers": [
-          "FISA"
+          "SK",
+          "HSBC"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-25T20:36:27.000Z"
+        "publishedAt": "2026-06-26T07:38:44.000Z"
+      },
+      {
+        "id": "c71b36ae03c6a1",
+        "headline": "Binance to stop providing services to European clients after failing to obtain license: Financial Times",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/binance-to-stop-providing-services-to-european-clients-after-failing-to-obtain-license-ft.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-26T07:23:50.000Z"
+      },
+      {
+        "id": "677bba4c05169d",
+        "headline": "U.S.-Iran peace deal grants access to Tehran&apos;s nuclear sites, UN watchdog says",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/us-iran-peace-deal-nuclear-access.html",
+        "tickers": [
+          "UN",
+          "IAEA"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-26T06:41:38.000Z"
+      },
+      {
+        "id": "6014087895696a",
+        "headline": "NBA targets Asian resurgence with technology and talent push",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/nba-targets-asian-resurgence-with-technology-and-talent-push-.html",
+        "tickers": [
+          "NBA"
+        ],
+        "sentiment": "bullish",
+        "publishedAt": "2026-06-26T05:50:42.000Z"
+      },
+      {
+        "id": "dd353555de3b60",
+        "headline": "Goldman says private credit may invest a lot of &apos;dry powder&apos; in this sector",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/goldman-says-private-credit-may-invest-dry-powder-in-this-sector-.html",
+        "tickers": [],
+        "sentiment": "bearish",
+        "publishedAt": "2026-06-26T05:11:02.000Z"
+      },
+      {
+        "id": "76e9feb4061eb1",
+        "headline": "Oil slides 2% as markets look past fresh Iran tensions and focus on supply outlook",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/oil-prices-middle-east-iran-strait-of-hormuz-opec-iraq-wti-brent-crude.html",
+        "tickers": [],
+        "sentiment": "bearish",
+        "publishedAt": "2026-06-26T05:01:21.000Z"
+      },
+      {
+        "id": "3220aab608fd2a",
+        "headline": "Airwallex hits $11 billion valuation with $320 million raise as fintech pushes into finance run by AI agents",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/airwallex-series-h-funding-11-billion-valuation-ai-finance.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-26T04:48:25.000Z"
+      },
+      {
+        "id": "2b702ecb37bdbb",
+        "headline": "UN agency pauses Hormuz ship evacuation plan after first vessel attack under peace deal",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/26/strait-of-hormuz-vessel-attack-evacuation-pauses-iran-united-states-peace-deal-negotiation-.html",
+        "tickers": [
+          "UN"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-26T02:07:59.000Z"
+      },
+      {
+        "id": "320352f0dec007",
+        "headline": "ON Semiconductor strikes $7 billion deal for Synaptics in physical AI push",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/on-semi-synaptics-deal-physical-ai.html",
+        "tickers": [
+          "ON"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T22:59:43.000Z"
       },
       {
         "id": "7446faf1ce7d1d",
@@ -45,35 +145,6 @@
         "tickers": [],
         "sentiment": "bullish",
         "publishedAt": "2026-06-25T20:30:15.000Z"
-      },
-      {
-        "id": "56b77cc8b595bc",
-        "headline": "Nasdaq falls for a fourth day as a drop in Apple overshadows Micron&apos;s booming earnings: Live updates",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/24/stock-market-today-live-updates.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T20:23:44.000Z"
-      },
-      {
-        "id": "6e1dc88886dcd0",
-        "headline": "Microsoft lifts price of Xbox consoles due to soaring component costs",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/microsoft-lifts-price-of-xbox-consoles-due-to-soaring-component-costs.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T20:17:18.000Z"
-      },
-      {
-        "id": "0d99bbb1febc14",
-        "headline": "Chicago Fed President Goolsbee says inflation is too high; Williams sees price pressures easing",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/chicago-fed-president-goolsbee-says-inflation-is-too-high-calls-warsh-a-serious-guy.html",
-        "tickers": [
-          "CNBC"
-        ],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-25T19:52:13.000Z"
       },
       {
         "id": "84be9e2f846a1e",
@@ -88,65 +159,6 @@
         "publishedAt": "2026-06-25T19:46:29.000Z"
       },
       {
-        "id": "3d867db4c9e4f2",
-        "headline": "JPMorgan names Doug Petno and Troy Rohrbaugh co-presidents as longtime exec Marianne Lake exits",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/jpmorgan-chase-co-presidents-lake-exits.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T19:34:09.000Z"
-      },
-      {
-        "id": "f1a3074241cbab",
-        "headline": "Democrats probe Trump&apos;s troubled $16 million reflecting pool renovation",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/trump-reflecting-pool-renovation-cost-congress.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T19:15:32.000Z"
-      },
-      {
-        "id": "7a52009280670e",
-        "headline": "Judge blocks Trump&apos;s rule limiting federal student loans for certain grad school borrowers",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/judge-blocks-trumps-rule-limiting-student-loans-for-grad-students-.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T18:47:36.000Z"
-      },
-      {
-        "id": "d6a627458155f7",
-        "headline": "Supreme Court limits Roundup cancer suits against Bayer&apos;s Monsanto",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/glyphosate-roundup-bayer-supreme-court-case-monsanto.html",
-        "tickers": [],
-        "sentiment": "bullish",
-        "publishedAt": "2026-06-25T18:19:35.000Z"
-      },
-      {
-        "id": "29bd66cfa30029",
-        "headline": "Judge says lawsuit against Trump DOJ &apos;anti-weaponization&apos; fund will proceed",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/trump-doj-fund-lawsuit-blanche.html",
-        "tickers": [
-          "DOJ",
-          "IRS"
-        ],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T18:05:48.000Z"
-      },
-      {
-        "id": "a1b6552e0530da",
-        "headline": "Rafael Nadal says he won&apos;t return to pro tennis following Serena Williams&apos; comeback",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/rafael-nadal-tennis-comeback-serena-williams.html",
-        "tickers": [
-          "CNBC"
-        ],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T17:29:10.000Z"
-      },
-      {
         "id": "31082fd928df41",
         "headline": "Luxury spending now driven by experiences and &apos;inheritourism&apos;",
         "source": "CNBC",
@@ -156,61 +168,22 @@
         "publishedAt": "2026-06-25T16:46:39.000Z"
       },
       {
-        "id": "582f9cdcd0aba9",
-        "headline": "GM reveals 2027 GMC Sierra pickup with new V-8 engines, redesigned styling",
+        "id": "8143b7ab4c1511",
+        "headline": "One of India&apos;s largest gold exporters paid its managing director just $180 a month, investigators say in accounting probe",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/gm-gmc-sierra-pickup.html",
-        "tickers": [
-          "GM",
-          "GMC"
-        ],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-25T16:15:20.000Z"
-      },
-      {
-        "id": "dbf2c2e23bebff",
-        "headline": "Core inflation rate hit 3.4% in May, highest since October 2023, Fed’s preferred gauge shows",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/25/pce-inflation-report-may-2026-.html",
+        "url": "https://www.cnbc.com/2026/06/25/india-rajesh-exports-investigation-accounting-irregularities-valcambi.html",
         "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-25T13:30:56.000Z"
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-25T07:23:53.000Z"
       },
       {
-        "id": "e1b4781fb3abbf",
-        "headline": "BMO 2026-5C15 Mortgage Trust  (CIK 0002128774) filed 8-K/A",
-        "source": "SEC · 8-K",
-        "url": "https://www.sec.gov/Archives/edgar/data/2128774/000153949726001866/0001539497-26-001866-index.htm",
-        "tickers": [
-          "BMO",
-          "CIK"
-        ],
+        "id": "1db81f9d1d4374",
+        "headline": "Anthropic&apos;s latest hiring spree reveals where it&apos;s building AI data centers next",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/25/anthropic-global-ai-data-center-push.html",
+        "tickers": [],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-25T12:00:00.000Z"
-      },
-      {
-        "id": "cdfff5d1e41e1d",
-        "headline": "BGC Group, Inc.  (BGC)  (CIK 0001094831) filed 8-K",
-        "source": "SEC · 8-K",
-        "url": "https://www.sec.gov/Archives/edgar/data/1094831/000162828026045358/0001628280-26-045358-index.htm",
-        "tickers": [
-          "BGC",
-          "CIK"
-        ],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T12:00:00.000Z"
-      },
-      {
-        "id": "97322fa0760d49",
-        "headline": "Clearwater Analytics Holdings, Inc.  (CWAN)  (CIK 0001866368) filed 8-K",
-        "source": "SEC · 8-K",
-        "url": "https://www.sec.gov/Archives/edgar/data/1866368/000119312526282050/0001193125-26-282050-index.htm",
-        "tickers": [
-          "CWAN",
-          "CIK"
-        ],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-25T12:00:00.000Z"
+        "publishedAt": "2026-06-25T05:00:01.000Z"
       }
     ],
     "featuredTickers": [
@@ -219,7 +192,7 @@
       "NVDA",
       "SPY"
     ],
-    "updatedAt": "2026-06-25T20:43:14.406Z"
+    "updatedAt": "2026-06-26T08:04:01.614Z"
   },
   "tickerBySymbol": {
     "SPY": {
@@ -551,20 +524,108 @@
         {
           "t": "2026-06-25T13:30:00.000Z",
           "close": 734.2999877929688,
-          "volume": 47273505
+          "volume": 53934400
         }
       ],
       "news": [
         {
-          "id": "d08e9a6a5d8b84",
+          "id": "95bb21ccc0a2f5",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Trump keeps turning Republican wins into loyalty tests — and political liabilities",
-          "excerpt": "President Donald Trump’s moves on housing, FISA, Iran and Washington projects are creating new headaches for Republicans trying to show voters they can govern.",
-          "url": "https://www.cnbc.com/2026/06/25/trump-gop-housing-bill-save-act-fisa.html",
+          "title": "Global tech sell-off deepens as South Korea&apos;s Kospi sinks nearly 6%, S&amp;P 500 futures fall: Live updates",
+          "excerpt": "The technology-dominant Nasdaq Composite and broad S&P 500 index are both on pace to end the trading week in the red.",
+          "url": "https://www.cnbc.com/2026/06/25/stock-market-today-live-updates.html",
+          "sentiment": "bearish",
+          "score": -1,
+          "publishedAt": "2026-06-26T07:44:12.000Z"
+        },
+        {
+          "id": "41b1a51528f358",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Tumbling AI stocks signal another day of turmoil for tech companies",
+          "excerpt": "SoftBank Group plunged, leading a broad selloff in Asian technology stocks amid mounting concerns over the rising cost of artificial intelligence infrastructure.",
+          "url": "https://www.cnbc.com/2026/06/26/global-tech-stocks-ai-infrastructure-costs-selloff-softbank-apple.html",
+          "sentiment": "bearish",
+          "score": -1,
+          "publishedAt": "2026-06-26T07:44:12.000Z"
+        },
+        {
+          "id": "caf1ffc70326b9",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "SK Hynix prepares U.S. listing at $166 per share — here&apos;s why HSBC says it could be worth 20% more",
+          "excerpt": "HSBC analysts see the South Korean chipmaker's foray into U.S. markets as the catalyst to narrow the valuation gap with rival Micron Technology.",
+          "url": "https://www.cnbc.com/2026/06/26/sk-hynix-us-listing-ipo-hsbc-price-target.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-25T20:36:27.000Z"
+          "publishedAt": "2026-06-26T07:38:44.000Z"
+        },
+        {
+          "id": "c71b36ae03c6a1",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Binance to stop providing services to European clients after failing to obtain license: Financial Times",
+          "excerpt": "All crypto companies have to obtain a license under the bloc's Markets in Crypto-Assets Regulation by July 1, or risk penalties.",
+          "url": "https://www.cnbc.com/2026/06/26/binance-to-stop-providing-services-to-european-clients-after-failing-to-obtain-license-ft.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-26T07:23:50.000Z"
+        },
+        {
+          "id": "677bba4c05169d",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "U.S.-Iran peace deal grants access to Tehran&apos;s nuclear sites, UN watchdog says",
+          "excerpt": "\"The technical work has started, and we hope to be there soon,\" IAEA chief Rafael Grossi said at a news conference in Japan on Friday.",
+          "url": "https://www.cnbc.com/2026/06/26/us-iran-peace-deal-nuclear-access.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-26T06:41:38.000Z"
+        },
+        {
+          "id": "6014087895696a",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "NBA targets Asian resurgence with technology and talent push",
+          "excerpt": "Southeast Asia has emerged as one of the NBA's fastest-growing markets for fan engagement, making the region a focal point for both player development and business expansion.",
+          "url": "https://www.cnbc.com/2026/06/26/nba-targets-asian-resurgence-with-technology-and-talent-push-.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-06-26T05:50:42.000Z"
+        },
+        {
+          "id": "dd353555de3b60",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Goldman says private credit may invest a lot of &apos;dry powder&apos; in this sector",
+          "excerpt": "Private credit may use its sizable amount of \"dry powder\" to combat potential financing market dislocations in this sector, according to Goldman Sachs.",
+          "url": "https://www.cnbc.com/2026/06/26/goldman-says-private-credit-may-invest-dry-powder-in-this-sector-.html",
+          "sentiment": "bearish",
+          "score": -1,
+          "publishedAt": "2026-06-26T05:11:02.000Z"
+        },
+        {
+          "id": "76e9feb4061eb1",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Oil slides 2% as markets look past fresh Iran tensions and focus on supply outlook",
+          "excerpt": "Oil extended declines on Friday, with markets focused any further breakthroughs in the Middle East conflict, while digesting a flurry of news from the region.",
+          "url": "https://www.cnbc.com/2026/06/26/oil-prices-middle-east-iran-strait-of-hormuz-opec-iraq-wti-brent-crude.html",
+          "sentiment": "bearish",
+          "score": -1,
+          "publishedAt": "2026-06-26T05:01:21.000Z"
+        },
+        {
+          "id": "2b702ecb37bdbb",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "UN agency pauses Hormuz ship evacuation plan after first vessel attack under peace deal",
+          "excerpt": "The pause follows a container ship being struck near the coast of Oman on Thursday, with a U.S. official saying that Iran was responsible for the attack.",
+          "url": "https://www.cnbc.com/2026/06/26/strait-of-hormuz-vessel-attack-evacuation-pauses-iran-united-states-peace-deal-negotiation-.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-26T02:07:59.000Z"
         },
         {
           "id": "7446faf1ce7d1d",
@@ -578,114 +639,26 @@
           "publishedAt": "2026-06-25T20:30:15.000Z"
         },
         {
-          "id": "56b77cc8b595bc",
+          "id": "8143b7ab4c1511",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Nasdaq falls for a fourth day as a drop in Apple overshadows Micron&apos;s booming earnings: Live updates",
-          "excerpt": "The Nasdaq Composite fell on Thursday, even after a blowout Micron Technology earnings report, as traders moved out of key technology stocks.",
-          "url": "https://www.cnbc.com/2026/06/24/stock-market-today-live-updates.html",
+          "title": "One of India&apos;s largest gold exporters paid its managing director just $180 a month, investigators say in accounting probe",
+          "excerpt": "Indian authorities have found accounting discrepancies in books of Indian gold company Rajesh Exports, and owner of Swiss refiner Valcambi.",
+          "url": "https://www.cnbc.com/2026/06/25/india-rajesh-exports-investigation-accounting-irregularities-valcambi.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-25T20:23:44.000Z"
+          "publishedAt": "2026-06-25T07:23:53.000Z"
         },
         {
-          "id": "6e1dc88886dcd0",
+          "id": "1db81f9d1d4374",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Microsoft lifts price of Xbox consoles due to soaring component costs",
-          "excerpt": "Microsoft said it's increasing the price of Xbox game consoles after Apple announced price hikes for MacBooks and iPads.",
-          "url": "https://www.cnbc.com/2026/06/25/microsoft-lifts-price-of-xbox-consoles-due-to-soaring-component-costs.html",
+          "title": "Anthropic&apos;s latest hiring spree reveals where it&apos;s building AI data centers next",
+          "excerpt": "The AI lab is hiring for AI data center roles in Australia and Japan as it rushes to expand compute capacity overseas.",
+          "url": "https://www.cnbc.com/2026/06/25/anthropic-global-ai-data-center-push.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-25T20:17:18.000Z"
-        },
-        {
-          "id": "0d99bbb1febc14",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Chicago Fed President Goolsbee says inflation is too high; Williams sees price pressures easing",
-          "excerpt": "In a live CNBC interview from his home district, Goolsbee declined to speculate on where he thinks interest rates are headed.",
-          "url": "https://www.cnbc.com/2026/06/25/chicago-fed-president-goolsbee-says-inflation-is-too-high-calls-warsh-a-serious-guy.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-25T19:52:13.000Z"
-        },
-        {
-          "id": "84be9e2f846a1e",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Iran behind attack on cargo vessel near Oman in Strait of Hormuz, U.S. official tells MS NOW",
-          "excerpt": "\"The only crop we're harvesting is what you planted: decades of mistrust,\" Iranian parliament speaker Mohammad Bagher Ghalibaf said in a social media post.",
-          "url": "https://www.cnbc.com/2026/06/25/iran-ghalibaf-trump-us-farm-products-assets.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-25T19:46:29.000Z"
-        },
-        {
-          "id": "f1a3074241cbab",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Democrats probe Trump&apos;s troubled $16 million reflecting pool renovation",
-          "excerpt": "President Donald Trump has attempted to spruce up Washington in advance of the country's 250th anniversary.",
-          "url": "https://www.cnbc.com/2026/06/25/trump-reflecting-pool-renovation-cost-congress.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-25T19:15:32.000Z"
-        },
-        {
-          "id": "d6a627458155f7",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Supreme Court limits Roundup cancer suits against Bayer&apos;s Monsanto",
-          "excerpt": "Glyphosate, used in Roundup weedkiller, is the most commonly utilized herbicide in agriculture, and it has long been linked to cancer claims.",
-          "url": "https://www.cnbc.com/2026/06/25/glyphosate-roundup-bayer-supreme-court-case-monsanto.html",
-          "sentiment": "bullish",
-          "score": 1,
-          "publishedAt": "2026-06-25T18:19:35.000Z"
-        },
-        {
-          "id": "29bd66cfa30029",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Judge says lawsuit against Trump DOJ &apos;anti-weaponization&apos; fund will proceed",
-          "excerpt": "Acting Attorney General Todd Blanche originally set up the fund as part of a settlement of a lawsuit by President Donald Trump against the IRS.",
-          "url": "https://www.cnbc.com/2026/06/25/trump-doj-fund-lawsuit-blanche.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-25T18:05:48.000Z"
-        },
-        {
-          "id": "a1b6552e0530da",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Rafael Nadal says he won&apos;t return to pro tennis following Serena Williams&apos; comeback",
-          "excerpt": "Rafael Nadal told CNBC Sport he has closed the chapter on playing pro tennis forever.",
-          "url": "https://www.cnbc.com/2026/06/25/rafael-nadal-tennis-comeback-serena-williams.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-25T17:29:10.000Z"
-        },
-        {
-          "id": "31082fd928df41",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Luxury spending now driven by experiences and &apos;inheritourism&apos;",
-          "excerpt": "While luxury goods sales are expected to grow between 1% and 4%, experiences are on track for growth of between 3% and 7% this year, according to a new report.",
-          "url": "https://www.cnbc.com/2026/06/25/luxury-spending-now-driven-by-experiences-and-inheritourism.html",
-          "sentiment": "bullish",
-          "score": 1,
-          "publishedAt": "2026-06-25T16:46:39.000Z"
-        },
-        {
-          "id": "582f9cdcd0aba9",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "GM reveals 2027 GMC Sierra pickup with new V-8 engines, redesigned styling",
-          "excerpt": "The new GMC Sierra trucks are crucial to GM's sales and earnings, especially highly profitable luxury Denali and off-road AT4 models.",
-          "url": "https://www.cnbc.com/2026/06/25/gm-gmc-sierra-pickup.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-25T16:15:20.000Z"
+          "publishedAt": "2026-06-25T05:00:01.000Z"
         }
       ],
       "chatter": [
@@ -698,25 +671,25 @@
           "url": null,
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-25T20:44:00.461Z"
+          "publishedAt": "2026-06-26T08:04:48.323Z"
         }
       ],
       "sentiment": {
         "label": "mixed",
-        "score": 0.06666666666666667,
-        "bullishPct": 20,
-        "bearishPct": 13,
-        "sampleSize": 15
+        "score": -0.14285714285714285,
+        "bullishPct": 14,
+        "bearishPct": 29,
+        "sampleSize": 14
       },
-      "smartTake": "SPY price updating · Chatter skews mixed (20% bull / 13% bear). CNBC: Trump keeps turning Republican wins into loyalty tests — and political liabiliti",
+      "smartTake": "SPY price updating · Chatter skews mixed (14% bull / 29% bear). CNBC: Global tech sell-off deepens as South Korea&apos;s Kospi sinks nearly 6%, S&amp;",
       "citations": [
-        "CNBC: Trump keeps turning Republican wins into loyalty tests — and political liabiliti",
-        "CNBC: Ariel’s John Rogers likes these small-cap names as the market rally broadens",
+        "CNBC: Global tech sell-off deepens as South Korea&apos;s Kospi sinks nearly 6%, S&amp;",
+        "CNBC: Tumbling AI stocks signal another day of turmoil for tech companies",
         "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
       ],
       "nextEarningsDate": null,
       "contradictionNote": null,
-      "updatedAt": "2026-06-25T20:44:01.767Z"
+      "updatedAt": "2026-06-26T08:04:48.581Z"
     },
     "BTCUSD": {
       "symbol": "BTCUSD",
@@ -1901,6 +1874,16 @@
     "notifyIntelFires": true
   },
   "thesisEntries": [
+    {
+      "id": "TH-038",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-06-26T08:04:03.791Z"
+    },
     {
       "id": "TH-037",
       "symbol": "SPY",

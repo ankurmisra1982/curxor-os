@@ -1,6 +1,119 @@
 {
   "events": [
     {
+      "id": "CXP-0125",
+      "kind": "post_scheduled",
+      "at": "2026-06-26T08:04:47.980Z",
+      "payload": {
+        "postId": "POST-1226",
+        "channel": "User flow QA",
+        "platform": "x",
+        "scheduledAt": "2026-06-30T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0124",
+      "kind": "post_published",
+      "at": "2026-06-26T08:04:19.860Z",
+      "payload": {
+        "postId": "POST-1225",
+        "platform": "x",
+        "channel": "Checklist publish_now"
+      }
+    },
+    {
+      "id": "CXP-0123",
+      "kind": "demo_tour_complete",
+      "at": "2026-06-26T08:04:19.807Z",
+      "payload": {
+        "postId": "POST-922",
+        "platform": "x"
+      }
+    },
+    {
+      "id": "CXP-0122",
+      "kind": "post_published",
+      "at": "2026-06-26T08:04:19.804Z",
+      "payload": {
+        "postId": "POST-922",
+        "platform": "x",
+        "channel": "Demo tour · x"
+      }
+    },
+    {
+      "id": "CXP-0121",
+      "kind": "post_scheduled",
+      "at": "2026-06-26T08:04:19.797Z",
+      "payload": {
+        "postId": "POST-922",
+        "channel": "Demo tour · x",
+        "platform": "x",
+        "scheduledAt": "2026-06-30T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0120",
+      "kind": "post_scheduled",
+      "at": "2026-06-26T08:04:19.763Z",
+      "payload": {
+        "postId": "POST-1224",
+        "channel": "Creator checklist",
+        "platform": "x",
+        "scheduledAt": "2026-06-30T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0119",
+      "kind": "post_published",
+      "at": "2026-06-26T08:04:07.703Z",
+      "payload": {
+        "postId": "POST-1223",
+        "platform": "x",
+        "channel": "QA publish_now smoke"
+      }
+    },
+    {
+      "id": "CXP-0118",
+      "kind": "post_scheduled",
+      "at": "2026-06-26T08:04:07.615Z",
+      "payload": {
+        "postId": "POST-1222",
+        "channel": "QA smoke create",
+        "platform": "x",
+        "scheduledAt": "2026-06-30T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0117",
+      "kind": "demo_tour_complete",
+      "at": "2026-06-26T08:04:07.491Z",
+      "payload": {
+        "postId": "POST-922",
+        "platform": "x"
+      }
+    },
+    {
+      "id": "CXP-0116",
+      "kind": "post_published",
+      "at": "2026-06-26T08:04:07.486Z",
+      "payload": {
+        "postId": "POST-922",
+        "platform": "x",
+        "channel": "Demo tour · x"
+      }
+    },
+    {
+      "id": "CXP-0115",
+      "kind": "post_scheduled",
+      "at": "2026-06-26T08:04:07.478Z",
+      "payload": {
+        "postId": "POST-922",
+        "channel": "Demo tour · x",
+        "platform": "x",
+        "scheduledAt": "2026-06-30T13:00:00.000Z"
+      }
+    },
+    {
       "id": "CXP-0114",
       "kind": "post_scheduled",
       "at": "2026-06-25T20:44:00.096Z",

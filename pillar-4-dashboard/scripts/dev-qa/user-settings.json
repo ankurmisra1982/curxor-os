@@ -246,7 +246,16 @@
     "flow-forged-capital-9",
     "flow-assist-work-9",
     "flow-round-trip-9",
-    "flow-reimport-claw-9"
+    "flow-reimport-claw-9",
+    "exit-demo-work-11",
+    "exit-demo-creator-11",
+    "exit-demo-capital-11",
+    "flow-forged-work-10",
+    "flow-forged-creator-10",
+    "flow-forged-capital-10",
+    "flow-assist-work-10",
+    "flow-round-trip-10",
+    "flow-reimport-claw-10"
   ],
   "appearance": {
     "uiMode": "simple",
@@ -289,7 +298,7 @@
   "buildPlane": {
     "enabled": true,
     "linkStatus": "linked",
-    "linkedAt": "2026-06-25T20:43:09.643Z",
+    "linkedAt": "2026-06-26T08:03:59.405Z",
     "workerStatus": "online",
     "allowDelegation": true,
     "allowWriteTools": false,
@@ -298,9 +307,9 @@
     "workerHost": "127.0.0.1",
     "workerSshPort": 22,
     "workerSshUser": "curxor",
-    "workerLastProbeAt": "2026-06-25T20:43:09.643Z",
+    "workerLastProbeAt": "2026-06-26T08:03:59.405Z",
     "workerWizardCompletedAt": null,
     "workerCompletedSteps": []
   },
-  "updatedAt": "2026-06-25T20:44:15.161Z"
+  "updatedAt": "2026-06-26T08:05:01.917Z"
 }
