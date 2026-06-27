@@ -67,6 +67,7 @@ Ordered initiatives after golden path. Each has a **spec doc** + **phased waves*
 | **Master AI horizontal (Chief of Staff)** | MA-COS | **P2** | G4 | § [IDEA-C07](#idea-c07-chief-of-staff--master-ai-horizontal-generic-ops) | COS0–COS2 |
 | **Vital — Insurance / Medicare** | VT-IN | **P2** | G4 | § [IDEA-E09](#idea-e09-vital--insurance--medicare-extension) | VT-IN0–VT-IN2 |
 | **Claw Commons (forums + Clawverse)** | CL | **P3** | G4→G5 | [CLAW-COMMONS-VISION.md](./CLAW-COMMONS-VISION.md) · [IDEA-G14](#idea-g14-operator-forum-storefront) · [IDEA-H04](#idea-h04-claw-commons--clawverse-federated-social) | CL0–CL5 |
+| **Open-Weight Compute Ladder** | HW | **P1** (narrative) · **P2** (Pro) · **P3** (Studio) | G1→G3→G4 | [COMPUTE-LADDER.md](./COMPUTE-LADDER.md) · IDEA-H05 | HW0–HW3 |
 | Golden release | GR | P0 | G1→G2 | IDEA-A01–A02 · [UPDATE-DELIVERY](./UPDATE-DELIVERY-ROADMAP.md) | UP0–UP2 · Tag · USB |
 | Tier C unlock | TC | P2 | G4 | IDEA-E01–E04 | Per-claw go-live |
 
@@ -874,7 +875,7 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Priority:** P2
 - **Trigger gate:** G3 (investor deck · founder content) · G4 (storefront only if hardware-proven)
 - **Outcome:** One honest economics slide + optional founder post: frontier API bills at agent scale → OSS on owned/rented compute → CurXor = **buy GPU once, $0/mo operate inference**.
-- **Notes:** Category moment (Jun 2026): Ben Cera / Polsia public pivot after $1M+/mo API · **not** Polsia partnership or co-brand. Different layer: Polsia = cloud autopilot factory · CurXor = sovereign desk. No “100x” claims without MS-S1 token/$ data from G1.
+- **Notes:** Category moment (Jun 2026): Ben Cera / Polsia public pivot after $1M+/mo API · **not** Polsia partnership or co-brand. Different layer: Polsia = cloud autopilot factory · CurXor = sovereign desk. No “100x” claims without MS-S1 token/$ data from G1. Pairs [COMPUTE-LADDER.md](./COMPUTE-LADDER.md) · IDEA-H05.
 - **Status:** captured
 
 ### [IDEA-G10] GTM-LIVE-01 — Honest appliance live status
@@ -925,8 +926,32 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Lane:** H
 - **Priority:** P3
 - **Trigger gate:** G4 + traction
-- **Outcome:** Raise for CurXor-branded box post MS-S1 MAX validation.
+- **Outcome:** Raise for CurXor-branded box post MS-S1 MAX validation — **Studio tier** on the [Compute Ladder](./COMPUTE-LADDER.md).
+- **Notes:** Nested under [IDEA-H05](#idea-h05-open-weight-compute-ladder-hardware--os). Not before G1 golden path.
 - **Status:** captured
+
+### [IDEA-H05] Open-Weight Compute Ladder (hardware + OS)
+- **Lane:** H · F · A (Pillar 1 inference)
+- **Priority:** P1 (narrative G3) · P2 (Pro SKU G4) · P3 (Studio / IDEA-H01)
+- **Trigger gate:** G1 (64 GB validated) → G3 (storefront ladder copy) → G4 (Pro 128 SKU live) → G4+ traction (CurXor Studio fundraise)
+- **Outcome:** Documented, shippable **compute ladder** — each tier maps to honest open-model class + CurXor OS profile; OS catalog updates without breaking sovereign story.
+- **Spec:** [COMPUTE-LADDER.md](./COMPUTE-LADDER.md)
+- **Tiers:**
+  | Tier | Hardware | Open-model class (local) | CurXor OS |
+  |------|----------|---------------------------|-----------|
+  | **Standard** | MS-S1 Max 64 GB | Qwen3 8B backbone · Moondream · optional Qwen3.6 MoE | `.env.example` |
+  | **Pro** | MS-S1 Max 128 GB | + Qwen3-VL · Qwen3 14B · Qwen3.6 coding MoE · dual hot-load | `compute.env.pro128.example` |
+  | **Studio** | CurXor-branded · 256 GB+ UMA | Frontier OSS quants (GLM / DeepSeek-class MoE at usable quant) | Factory profile (TBD) |
+- **Waves:**
+  | Wave | Scope | Gate |
+  |------|-------|------|
+  | **HW0** | `COMPUTE-LADDER.md` + FUTURE-ROADMAP · storefront handoff | G0 |
+  | **HW1** | `/press` + pricing compare · pi-bench cite · honest footnotes | G3 |
+  | **HW2** | Pro 128 live SKU · storefront selector · on-box validation notes | G4 |
+  | **HW3** | CurXor Studio spec · fundraise deck · custom box (→ IDEA-H01) | G4+ traction |
+- **OS obligations (ongoing):** `LOCAL_LLM_CATALOG` · env templates · `deploy.sh` pull sets · Forge recommend · unbox docs · tier validation on target silicon.
+- **Out of scope:** Claiming 64 GB runs 744B models · bundling cloud API · “runs everything” marketing.
+- **Status:** **scoped** (Jun 2026 — post Qwen3 stack + pi-bench alignment · doc shipped HW0)
 
 ### [IDEA-H02] Cursor / builder strategic optionality
 - **Lane:** H · B

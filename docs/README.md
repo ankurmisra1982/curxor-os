@@ -12,6 +12,7 @@ Guides for deploying, operating, and extending the CurXor OS sovereign edge appl
 |-------|-------------------|
 | **[Feature & Function](FEATURE-FUNCTION.md)** | **Full product scope, maturity matrix, API catalog, Claws** |
 | **[Future roadmap](curxor-os/FUTURE-ROADMAP.md)** | **Ideas capture, gates, Program CL / HS / SIG / …** |
+| **[Compute ladder](curxor-os/COMPUTE-LADDER.md)** | **Standard · Pro 128 · Studio — open-weight tiers · press copy (→ storefront)** |
 | **[Claw Commons vision](curxor-os/CLAW-COMMONS-VISION.md)** | **Operator Forum + Clawverse — persona capsules, portal UX, moderation** |
 | **[Universal OS layer](curxor-os/UNIVERSAL-OS-LAYER.md)** | **Cafe · Signal · Kin · shell · platform · infra — not operate Claws** |
 | **[Founder profile](founder/profile.md)** | Origin story, quote, mission — [JSON](founder/profile.json) for storefront |
