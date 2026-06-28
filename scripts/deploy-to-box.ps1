@@ -4,13 +4,15 @@
 # Prerequisite: SSH key auth to the box (see docs/curxor-os/FOUNDER-COCKPIT.md).
 #
 # Usage:
-#   .\scripts\deploy-to-box.ps1 -BoxIp 10.0.0.42
-#   .\scripts\deploy-to-box.ps1 -BoxIp 10.0.0.42 -BoxUser ankur
-#   .\scripts\deploy-to-box.ps1 -BoxIp 10.0.0.42 -SkipScp
-#   .\scripts\deploy-to-box.ps1 -BoxIp 10.0.0.42 -WhatIf
+#   .\scripts\deploy-to-box.ps1                          # default: ~/.ssh/config Host curxor
+#   .\scripts\deploy-to-box.ps1 -SshHost curxor -BoxIp 192.168.86.211
+#   .\scripts\deploy-to-box.ps1 -BoxIp 10.0.0.42 -BoxUser ankur   # legacy IP form
+#   .\scripts\deploy-to-box.ps1 -SshHost curxor -SkipScp
+#   .\scripts\deploy-to-box.ps1 -SshHost curxor -WhatIf
 #
 param(
-    [Parameter(Mandatory = $true)]
+    [string] $SshHost = "curxor",
+
     [string] $BoxIp,
 
     [string] $BoxUser = "ankur",
@@ -32,7 +34,12 @@ if (-not (Test-Path -LiteralPath $RepoRoot)) {
     throw "RepoRoot not found: $RepoRoot"
 }
 
-$sshTarget = "${BoxUser}@${BoxIp}"
+if ($BoxIp) {
+    $sshTarget = "${BoxUser}@${BoxIp}"
+}
+else {
+    $sshTarget = $SshHost
+}
 $remotePostUpdate = @"
 set -euo pipefail
 sudo rsync -a --delete '${RemoteTmp}/' '${RemoteOpt}/'
@@ -73,6 +80,11 @@ ssh $sshTarget $remotePostUpdate
 
 Write-Host ""
 Write-Host "==> Deploy complete"
-Write-Host "    Browser: http://${BoxIp}:3080"
+if ($BoxIp) {
+    Write-Host "    Browser: http://${BoxIp}:3080"
+}
+else {
+    Write-Host "    Browser: http://<BOX_IP>:3080  (see FOUNDER-COCKPIT.md — SSH host is $SshHost)"
+}
 $logHint = "journalctl -u curxor-dashboard -n 50 --no-pager"
 Write-Host "    Logs:    ssh $sshTarget $logHint"

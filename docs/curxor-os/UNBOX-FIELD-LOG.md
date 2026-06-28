@@ -13,7 +13,7 @@
 | **0** | Unbox · power · monitor | **Done** | HDMI + USB keyboard/mouse; ran Windows briefly before Ubuntu |
 | **1** | BIOS UMA ~48 GB | **Done** | MINISFORUM AMI `02.22.0058` · **Advanced → AMD CBS → NBIO Common Options → GFX Configuration** · UMA Mode **UMA_SPECIFIED** · Frame buffer **48 GB** · Secure Boot **Disabled** |
 | **2** | Ubuntu 24.04 USB | **Done** | ISO: `ubuntu-24.04.4-desktop-amd64.iso` · Rufus **GPT + UEFI + ISO mode** · **Interactive** install · **Default** apps · 3rd-party graphics/Wi‑Fi **yes** · media codecs **no** · hostname **`curxor`** · user **`ankur`** |
-| **2.2** | First login · SSH | **Done** | `openssh-server` enabled · **BOX_IP:** `192.168.86.211` · NIC: `enp97s0` (USB LAN dongle to router) |
+| **2.2** | First login · SSH | **Done** | `openssh-server` enabled · **BOX_IP:** `192.168.86.211` · **SSH:** `ssh curxor` (laptop `~/.ssh/config`) · NIC: `enp97s0` (USB LAN dongle to router) |
 | **3** | Copy + `install-all.sh` | **Done** | Laptop `scp` → `/tmp/curxor-os` → `/opt/curxor` · see **Pitfalls** below |
 | **3.2** | `deploy.sh --pull-models` | **Done** | `moondream:1.8b` + `qwen3:8b` pulled · warm step slow but **init exited 0** |
 | **4** | eno cables + network scripts | **Pending** | `eno2 not found` during install (expected until built-in ports cabled) |
@@ -46,7 +46,7 @@
 
 | Guide item | Actual |
 |------------|--------|
-| First copy | `scp -r C:\Users\ankur\curxor-os ankur@192.168.86.211:/tmp/curxor-os` from **laptop** |
+| First copy | `scp -r C:\Users\ankur\curxor-os curxor:/tmp/curxor-os` from **laptop** (or `ankur@192.168.86.211` before Host alias) |
 | `deploy-to-box.ps1` | **Updates only** — not first-time install |
 | `install-all.sh` | Ran after `dos2unix` on `*.sh` |
 | ROCm apt conflict | Remove Ubuntu `rocminfo`; install from AMD ROCm 7.2 repo |
@@ -128,9 +128,9 @@ sudo docker ps | grep ollama
 |-------|--------|
 | Hostname | `curxor` |
 | User | `ankur` |
-| LAN IP | `192.168.86.211` (router DHCP; may change) |
+| LAN IP | `192.168.86.211` (router DHCP; may change — update `HostName` in `~/.ssh/config`) |
 | Dashboard | http://192.168.86.211:3080 |
-| SSH | `ssh ankur@192.168.86.211` |
+| SSH | **`ssh curxor`** (key auth · Host **curxor** → `192.168.86.211`) |
 | SKU | Standard 64 GB · UMA 48 GB |
 | Inference | Ollama ROCm · `moondream:1.8b` · `qwen3:8b` |
 

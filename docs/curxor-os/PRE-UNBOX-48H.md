@@ -173,7 +173,7 @@ sudo reboot
 
 | # | Task | Blocked until |
 |---|------|----------------|
-| P0 | **Founder cockpit** — SSH, `BOX_IP`, deploy loop ([FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) F1–F6) | smoke green |
+| P0 | **Founder cockpit** — **`ssh curxor`**, `BOX_IP`, deploy loop ([FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) F1–F6) | smoke green |
 | P1 | Appliance demo captures (storefront) | UAT smile · P0 |
 | P2 | `EXIT-DEMO.md` line “verified on MS-S1” | smoke green |
 | P3 | Version bump + git tag | on-device qa-smoke |

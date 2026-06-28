@@ -176,7 +176,7 @@ sudo systemctl enable --now ssh
 ip addr | grep "inet "
 ```
 
-Note the IP (e.g. `192.168.1.x`) — that's **BOX_IP** for copy commands below.
+Note the IP (e.g. `192.168.1.x`) — that's **BOX_IP** for browser URLs. On the laptop, add **`Host curxor`** to `~/.ssh/config` so deploy uses **`ssh curxor`** (see [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) §3b).
 
 ---
 
@@ -201,13 +201,15 @@ sudo cp -a /media/$USER/*/curxor-os/* /opt/curxor/
 
 ```powershell
 cd C:\Users\ankur\curxor-os
-.\scripts\deploy-to-box.ps1 -BoxIp BOX_IP -BoxUser YOUR_UBUNTU_USER
+.\scripts\deploy-to-box.ps1
 ```
+
+Legacy IP form: `.\scripts\deploy-to-box.ps1 -BoxIp BOX_IP -BoxUser YOUR_UBUNTU_USER`
 
 **Or manual SCP:**
 
 ```powershell
-scp -r C:\Users\ankur\curxor-os YOUR_USER@BOX_IP:/tmp/curxor-os
+scp -r C:\Users\ankur\curxor-os curxor:/tmp/curxor-os
 ```
 
 **MS-S1:**

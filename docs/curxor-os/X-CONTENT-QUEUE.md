@@ -2,8 +2,9 @@
 
 > **Audience:** Ankur only · internal · **not** storefront  
 > **Account:** [@curxorai](https://x.com/curxorai)  
+> **Agent:** **Founder Public Voice** — `.cursor/skills/founder-public-voice/` · say `daily X post` in that chat  
 > **Status:** Bootstrapping — manual post from phone/web until Creator Claw live on MS-S1  
-> **Related:** [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) · [IDEA-G09](./FUTURE-ROADMAP.md#idea-g09-gtm-econ-02--api-rent--oss-on-metal-narrative-ammo) · Creator [STARTUP-GUIDE.md](../creator-claw/STARTUP-GUIDE.md)
+> **Related:** [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) · [essay-playbook.md](../founder/essay-playbook.md) · Creator [STARTUP-GUIDE.md](../creator-claw/STARTUP-GUIDE.md)
 
 ---
 
@@ -53,7 +54,7 @@ Unboxed the MS-S1. Flight Command on the desk — local inference, no API meter 
 
 Ten Claws on metal you own. Golden path in progress.
 
-[attach: browser screenshot http://BOX_IP:3080/home — real hardware only]
+[attach: browser screenshot http://BOX_IP:3080/home — real hardware only; SSH: ssh curxor]
 ```
 
 ---
@@ -182,11 +183,12 @@ Telegram or Slack approval wiring — see [STARTUP-GUIDE.md](../creator-claw/STA
 *Add new drafts below with status `ready` / `hold`.*
 
 
-| Date     | Hook                  | Status                | Notes       |
-| -------- | --------------------- | --------------------- | ----------- |
-| Jun 2026 | Ben reply             | **posted** 2026-06-24 | §1 above    |
-| Jun 2026 | HW smoke screenshot   | hold                  | G1          |
-| Jun 2026 | API rent narrative    | hold                  | GTM-ECON-02 |
-| Jun 2026 | First Creator publish | hold                  | Go Live     |
+| Date     | Hook                  | Status  | Notes                          |
+| -------- | --------------------- | ------- | ------------------------------ |
+| Jun 2026 | Ben reply             | posted  | §1 above                       |
+| Jun 2026 | HW smoke screenshot   | hold    | G1                             |
+| Jun 2026 | API rent narrative    | hold    | GTM-ECON-02                    |
+| Jun 2026 | First Creator publish | hold    | Go Live                        |
+| 2026-06-27 | Grammar gap / shallow usage | ready | Founder Public Voice v0.2 · @ankurmisra thread + @curxorai pair |
 
 

@@ -13,7 +13,8 @@
 | **Laptop** `C:\Users\ankur\curxor-os` | Source of truth · Cursor · `git` · `npm run qa:local` |
 | **MS-S1** `/opt/curxor/` | Shipped code (replace on deploy) |
 | **MS-S1** `/etc/curxor/` | **Your** operator data (persists across code deploys) |
-| **Browser** `http://<BOX_IP>:3080` | Dogfood UI — same as end user |
+| **SSH** `ssh curxor` | Laptop → box (key auth via `~/.ssh/config` Host **curxor**) |
+| **Browser** `http://<BOX_IP>:3080` | Dogfood UI — same as end user (IP in field log; DHCP may change) |
 
 **Rule:** Code on laptop → gate green → deploy to box → UAT in browser.  
 **Don’t** treat `/opt/curxor` as your main editor; hotfixes on the box must be copied back to the laptop same day.
@@ -32,7 +33,8 @@ On the MS-S1:
 ip addr | grep "inet "
 ```
 
-Write down **eno1** LAN IP (e.g. `10.0.0.x` captive mode or DHCP from router). Call this **`BOX_IP`**.
+Write down **eno1** LAN IP (e.g. `10.0.0.x` captive mode or DHCP from router). Call this **`BOX_IP`**.  
+Example (Jun 28 unbox, USB dongle): `192.168.86.211` — see [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md).
 
 ### 2. Enable SSH (on the box)
 
@@ -56,15 +58,30 @@ PowerShell:
 # If you don't have a key yet:
 ssh-keygen -t ed25519 -f $env:USERPROFILE\.ssh\id_ed25519 -N '""'
 
-# Copy key to box (enter password once):
+# Copy key to box (enter password once — use IP before Host alias exists):
 type $env:USERPROFILE\.ssh\id_ed25519.pub | ssh ankur@BOX_IP "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
 ```
+
+### 3b. SSH Host alias (recommended — one-time on laptop)
+
+Add to **`%USERPROFILE%\.ssh\config`** (Windows) so deploy + daily ops use **`ssh curxor`** instead of remembering IP:
+
+```
+Host curxor
+    HostName 192.168.86.211
+    User ankur
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+Update **`HostName`** when DHCP changes (check `ip addr` on box or router lease table).
 
 Test:
 
 ```powershell
-ssh ankur@BOX_IP "hostname && systemctl is-active curxor-dashboard"
+ssh curxor "hostname && systemctl is-active curxor-dashboard"
 ```
+
+All commands below use **`ssh curxor`** / **`scp … curxor:`** when this block is present. Legacy form `ankur@BOX_IP` still works.
 
 ### 4. Bookmarks
 
@@ -79,7 +96,7 @@ ssh ankur@BOX_IP "hostname && systemctl is-active curxor-dashboard"
 
 Keep **`C:\Users\ankur\curxor-os`** as the primary Agent workspace for all product work.
 
-Optional second window: **Remote-SSH** to `ankur@BOX_IP` → open `/opt/curxor` only when debugging appliance-only issues (ROCm, mesh, systemd).
+Optional second window: **Remote-SSH** to **`curxor`** → open `/opt/curxor` only when debugging appliance-only issues (ROCm, mesh, systemd).
 
 ---
 
@@ -113,17 +130,19 @@ From repo root on the laptop (after `qa:local` is green):
 
 ```powershell
 cd C:\Users\ankur\curxor-os
-.\scripts\deploy-to-box.ps1 -BoxIp BOX_IP
+.\scripts\deploy-to-box.ps1
 ```
+
+Default target: **`curxor`** (`~/.ssh/config` Host). Optional `-BoxIp BOX_IP` only for browser URL hint in script output.
 
 The script: `scp` whole tree → on-box `rsync` to `/opt/curxor/` → `post-update.sh` → `systemctl restart curxor-os.target` → quick curl smoke.
 
-Flags: `-BoxUser ankur` (default) · `-SkipScp` if payload is already in `/tmp/curxor-os` · `-WhatIf` to print steps without running.
+Flags: `-SshHost curxor` (default) · `-BoxIp` legacy IP form · `-SkipScp` if payload is already in `/tmp/curxor-os` · `-WhatIf` to print steps without running.
 
 **Option A2 — Manual SCP** (same steps as the script)
 
 ```powershell
-scp -r C:\Users\ankur\curxor-os ankur@BOX_IP:/tmp/curxor-os
+scp -r C:\Users\ankur\curxor-os curxor:/tmp/curxor-os
 ```
 
 On the box:
@@ -153,7 +172,7 @@ sudo bash /opt/curxor/scripts/install-all.sh
 
 ### Step 3 — Smoke on box
 
-SSH:
+SSH (`ssh curxor`):
 
 ```bash
 curl -sf http://127.0.0.1:3080/api/setup/status
@@ -186,15 +205,15 @@ If you need a clean slate: backup `/etc/curxor` first, then `seed-appliance-data
 The agent does **not** auto-watch the box. In an Agent chat, provide:
 
 ```
-Box IP: <BOX_IP>
-SSH: ankur@BOX_IP (key auth works)
+SSH: curxor (key auth · ~/.ssh/config Host curxor → BOX_IP)
+Box IP: <BOX_IP>  (browser only — http://BOX_IP:3080)
 Issue: [what you see in browser + what you changed]
 ```
 
 | Layer | How agent helps |
 |-------|-----------------|
 | **Backend code** | `@` files in `curxor-os` on laptop |
-| **Backend runtime** | Agent runs `ssh ankur@BOX_IP 'journalctl -u curxor-dashboard -n 50'` etc. |
+| **Backend runtime** | Agent runs `ssh curxor 'journalctl -u curxor-dashboard -n 50'` etc. |
 | **API** | `curl http://BOX_IP:3080/api/...` from laptop or via SSH |
 | **Frontend** | Ask agent to open `http://BOX_IP:3080/...` with browser tools |
 
@@ -281,7 +300,7 @@ Until OTA URL is live, **rsync + post-update** is correct.
 | 500 after deploy | `journalctl -u curxor-dashboard` · re-run `post-update.sh` |
 | QA green on laptop, broken on box | ROCm/Ollama · env in `/etc/curxor/*.env` · paths differ from dev-qa |
 | Data “reset” after deploy | Should not happen — if it did, check writes going to `/etc/curxor` not `/opt/curxor/scripts/dev-qa` |
-| SSH refused | `sudo systemctl status ssh` · box IP changed |
+| SSH refused | `sudo systemctl status ssh` · update **`HostName`** in `~/.ssh/config` if DHCP changed |
 
 ---
 
@@ -296,4 +315,4 @@ Until OTA URL is live, **rsync + post-update** is correct.
 
 ---
 
-*Update `BOX_IP` at the top of your notes when DHCP changes.*
+*When DHCP changes: update **`HostName`** in `~/.ssh/config` (Host **curxor**) and **`BOX_IP`** in browser bookmarks / [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md).*

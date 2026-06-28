@@ -141,9 +141,9 @@ Do this once UAT smile + on-device smoke pass — before heavy demo captures or 
 
 | # | Task | Done |
 |---|------|------|
-| F1 | Note **`BOX_IP`** (eno1 LAN) in your notes | [ ] |
-| F2 | Enable SSH on box · `openssh-server` | [ ] |
-| F3 | SSH key from Windows laptop → passwordless `ssh ankur@BOX_IP` | [ ] |
+| F1 | Note **`BOX_IP`** (eno1 LAN) · set **`Host curxor`** in laptop `~/.ssh/config` | [x] |
+| F2 | Enable SSH on box · `openssh-server` | [x] |
+| F3 | SSH key → passwordless **`ssh curxor`** | [x] |
 | F4 | Bookmark `http://BOX_IP:3080` (dogfood UI) | [ ] |
 | F5 | Test deploy loop: laptop `qa:local` → `scp`/rsync → `post-update.sh` → restart → browser UAT | [ ] |
 | F6 | Confirm operator data in `/etc/curxor/` survives one deploy | [ ] |
