@@ -88,6 +88,11 @@ chown -R "${CURXOR_USER}:${CURXOR_USER}" /var/lib/curxor
 getent group render >/dev/null || groupadd -r render
 usermod -aG render "${CURXOR_USER}" 2>/dev/null || true
 
+# Docker caches /etc/group at startup — refresh after creating render/video
+if command -v systemctl &>/dev/null && systemctl is-active --quiet docker 2>/dev/null; then
+  systemctl restart docker
+fi
+
 # ── 7. Sysctl: reduce swap thrashing on large UMA models ────────────────────
 cat > /etc/sysctl.d/99-curxor-uma.conf <<'EOF'
 # Prefer keeping hot VLA weights in RAM over swap

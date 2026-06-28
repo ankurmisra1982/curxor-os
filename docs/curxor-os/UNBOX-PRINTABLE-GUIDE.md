@@ -423,10 +423,19 @@ Or: `node scripts/pre-unbox-gate.mjs` — look for `result: PASS`.
 
 ---
 
+## First unbox field notes (Jun 2026)
+
+Real MS-S1 path proved on metal — see **[UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md)** for step mapping, box IP/hostname, and Windows→Linux pitfalls (`dos2unix`, BitLocker, Docker `render` group, Ollama healthcheck, dashboard permissions).
+
+**Copying from Windows laptop:** run `dos2unix` on all `*.sh` and `/etc/curxor/*.env` before `install-all.sh`. Use **manual SCP + `install-all.sh`** for first install — not `deploy-to-box.ps1` (that script is for updates after the stack exists).
+
+---
+
 ## Related docs (CTO / later)
 
 | Doc | Purpose |
 |-----|---------|
+| [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md) | **First hardware unbox — status map + fixes** |
 | [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) | Daily laptop ↔ box loop after today |
 | [PRE-UNBOX-48H.md](./PRE-UNBOX-48H.md) | Technical gate playbook |
 | [HW-READINESS-CHECKLIST.md](./HW-READINESS-CHECKLIST.md) | Persistence + smoke |

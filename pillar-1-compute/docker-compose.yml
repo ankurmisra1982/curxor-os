@@ -30,6 +30,8 @@ x-rocm-env: &rocm_env
   PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
   # Ollama ROCm path inside official image
   OLLAMA_VULKAN: "0"
+  # Strix Halo / gfx1151 iGPU — required for UMA VRAM detection in Ollama 0.30+
+  OLLAMA_IGPU_ENABLE: "1"
 
 x-uma-volumes: &uma_volumes
   - type: bind
@@ -69,11 +71,12 @@ services:
         target: /models
     shm_size: ${DOCKER_SHM_SIZE:-16g}
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:11434/ >/dev/null || exit 1"]
+      # ollama/ollama image has no curl — use the bundled CLI
+      test: ["CMD", "ollama", "list"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 120s
     logging:
       driver: json-file
       options:
@@ -142,27 +145,9 @@ services:
       - type: bind
         source: ${CURXOR_OLLAMA_DIR:-/var/lib/curxor/ollama}
         target: /root/.ollama
-    entrypoint: ["/bin/bash", "-c"]
-    command:
-      - |
-        set -euo pipefail
-        echo "[curxor] Pulling VLA model: $${OLLAMA_VLA_MODEL}"
-        ollama pull "$${OLLAMA_VLA_MODEL}"
-        if [[ -n "$${OLLAMA_REASONING_MODEL}" ]]; then
-          echo "[curxor] Pulling reasoning model: $${OLLAMA_REASONING_MODEL}"
-          ollama pull "$${OLLAMA_REASONING_MODEL}"
-        fi
-        if [[ -n "$${OLLAMA_EXTRA_MODELS:-}" ]]; then
-          IFS=',' read -ra EXTRA <<< "$${OLLAMA_EXTRA_MODELS}"
-          for m in "$${EXTRA[@]}"; do
-            m="$${m#"${m%%[![:space:]]*}"}"
-            m="$${m%"${m##*[![:space:]]}"}"
-            [[ -z "$$m" ]] && continue
-            echo "[curxor] Pulling extra model: $$m"
-            ollama pull "$$m"
-          done
-        fi
-        echo "[curxor] Warming VLA weights into UMA heap..."
-        ollama run "$${OLLAMA_VLA_MODEL}" "ready" --verbose || true
-        ollama ps
+      - type: bind
+        source: ./config/ollama/init-models.sh
+        target: /opt/curxor/ollama-init.sh
+        read_only: true
+    entrypoint: ["/bin/bash", "/opt/curxor/ollama-init.sh"]
     restart: "no"
