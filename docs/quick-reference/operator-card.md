@@ -84,6 +84,8 @@ journalctl -u curxor-engine -f
 journalctl -u curxor-dashboard -f
 ```
 
+**Shut down / reboot whole box (monitor):** Ubuntu **Power** menu · or hold MS-S1 **power button**. Kiosk tty1: **Ctrl+Alt+F3** → `sudo reboot` / `sudo shutdown -h now`. No in-app power UI yet — [UNBOX-PRINTABLE-GUIDE.md](../curxor-os/UNBOX-PRINTABLE-GUIDE.md) §5.4 · roadmap IDEA-A06.
+
 ---
 
 ## First boot

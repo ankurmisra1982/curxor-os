@@ -338,6 +338,20 @@ sudo apt update && sudo apt install -y firefox
 
 **Smile test:** Forge mint → Cafe → ascension XP moves. **You won.**
 
+### Step 5.4 — Restart or shut down (monitor connected)
+
+Flight Command **does not** ship Shut down / Restart buttons yet (roadmap [IDEA-A06](./FUTURE-ROADMAP.md#idea-a06-settings--appliance-power-controls)). Until then:
+
+| You want… | Ubuntu desktop (default install) | Kiosk fullscreen ([19-kiosk-mode.md](../guides/19-kiosk-mode.md)) |
+|-----------|-----------------------------------|-------------------------------------------------------------------|
+| **Shut down the box** | Top-right **Power** → Shut Down | **Ctrl+Alt+F3** → log in → `sudo shutdown -h now` · or hold **power button** |
+| **Restart the whole box** | Top-right **Power** → Restart | **Ctrl+Alt+F3** → `sudo reboot` · or power button cycle |
+| **Restart CurXor only** (software stack) | Terminal: `sudo systemctl restart curxor-os.target` | Same via **Ctrl+Alt+F3** terminal |
+
+**Buyer-safe one-liner:** *Flight Command runs in the browser. To power off the machine, use Ubuntu’s power menu or the button on the box. To restart just the AI stack, use Settings → System Health logs or the operator card command above.*
+
+☐ Test: open Flight Command on the monitor → confirm you know how to shut down before leaving the desk.
+
 ---
 
 ## Part 6 — Success checklist
@@ -404,7 +418,9 @@ See [19-kiosk-mode.md](../guides/19-kiosk-mode.md).
 │                                                         │
 │  Verify:     sudo /opt/curxor/scripts/verify-unbox-day.sh │
 │              --post-models                                │
-│  Restart UI: sudo systemctl restart curxor-dashboard      │
+│  Restart UI: sudo systemctl restart curxor-os.target      │
+│  Shut down:   Ubuntu Power menu · or hold power button    │
+│  Kiosk exit:  Ctrl+Alt+F3 → terminal → sudo reboot        │
 │                                                         │
 │  Version: 0.9.1 · laptop pre-unbox gate: PASS             │
 └─────────────────────────────────────────────────────────┘

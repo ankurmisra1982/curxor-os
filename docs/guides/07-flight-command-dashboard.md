@@ -46,6 +46,8 @@ You do **not** need a laptop if you are happy operating from the local display. 
    - `http://127.0.0.1:3080` or `http://localhost:3080`
    - First boot: complete **FRE** at `/setup`, then use Claws like anywhere else.
 
+**Restart or shut down (monitor):** Flight Command has no power buttons yet — see [UNBOX-PRINTABLE-GUIDE.md](../curxor-os/UNBOX-PRINTABLE-GUIDE.md) §5.4 (Ubuntu Power menu · `sudo systemctl restart curxor-os.target` · kiosk `Ctrl+Alt+F3`). Product UI tracked as [IDEA-A06](../curxor-os/FUTURE-ROADMAP.md#idea-a06-settings--appliance-power-controls).
+
 **When to prefer laptop on eno1:** captive-portal onboarding, labeling Command vs Egress cables, or keeping the operator UI off the appliance display during bench/debug.
 
 **Monitor-first boot (optional):** After golden path (UAT smile + on-device smoke), run `install-kiosk-mode.sh` → reboot — see [Kiosk Mode](19-kiosk-mode.md). Not default install; not storefront until G3+.

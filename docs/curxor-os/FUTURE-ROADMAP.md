@@ -53,6 +53,7 @@ Ordered initiatives after golden path. Each has a **spec doc** + **phased waves*
 | **Signal AI Device Hub** | SIG | **P2** | G4 | [SIGNAL-AI-DEVICE-HUB.md](./SIGNAL-AI-DEVICE-HUB.md) | SIG1–SIG6 · AD nested |
 | **Firecrawl Web Context** | FC | **P1** | G2 | [EXTERNAL-BRIDGES-ROADMAP.md](./EXTERNAL-BRIDGES-ROADMAP.md) | FC1–FC6 |
 | **Grok ecosystem** | GK | **P2** | G2 | [EXTERNAL-BRIDGES-ROADMAP.md](./EXTERNAL-BRIDGES-ROADMAP.md) | GK1–GK6 |
+| **Forge skill security (SkillSpector)** | SS | **P1** | G2 | § [IDEA-F14](#idea-f14-forge-skill-security--skillspector) | SS0–SS2 |
 | Build Plane runtime | BP5 | P1 | G2 | [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md) | B01–B05 |
 | **Build Plane delegation board** | BP6 | **P2** | G2 | [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md) · § [IDEA-B06](#idea-b06-delegation-board-ui-kanban) | BP6 |
 | **Build Plane Spaces** | BP7 | **P2** | G2 | [BUILD-PLANE-CURSOR.md](./BUILD-PLANE-CURSOR.md) · [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) · § [IDEA-B07](#idea-b07-build-spaces-repo--shared-context) | BP7 |
@@ -438,8 +439,34 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Priority:** P3
 - **Trigger gate:** G1 (document) · G4 (polish if operators adopt)
 - **Outcome:** Operator can run Flight Command from Firefox/Chromium on the MS-S1 (`http://127.0.0.1:3080`) — FRE + Claws without a laptop; `curl …/api/setup/status` as on-box health check.
-- **Notes:** **Optional path only** — not prioritized vs laptop-on-eno1 golden path. **Not storefront/GTM** until explicitly promoted at G3+. Manual browser: [07-flight-command-dashboard.md](../guides/07-flight-command-dashboard.md). **Kiosk v1** (tty1 autologin + Chromium fullscreen): [19-kiosk-mode.md](../guides/19-kiosk-mode.md) · `install-kiosk-mode.sh`.
+- **Notes:** **Optional path only** — not prioritized vs laptop-on-eno1 golden path. **Not storefront/GTM** until explicitly promoted at G3+. Manual browser: [07-flight-command-dashboard.md](../guides/07-flight-command-dashboard.md). **Kiosk v1** (tty1 autologin + Chromium fullscreen): [19-kiosk-mode.md](../guides/19-kiosk-mode.md) · `install-kiosk-mode.sh`. Power/shutdown interim copy: [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md) §5.4 · product UI → [IDEA-A06](#idea-a06-settings--appliance-power-controls).
 - **Status:** captured (docs + kiosk v1 scripts)
+
+### [IDEA-A06] Settings — appliance power controls
+- **Lane:** A · F
+- **Priority:** P2
+- **Trigger gate:** G2 (UI) · G1 (operator doc — shipped in unbox guide §5.4)
+- **Outcome:** Settings → **System** exposes confirm-gated **Restart CurXor** (`systemctl restart curxor-os.target`), **Restart appliance** (`reboot`), and **Shut down** (`shutdown -h now`) for monitor-first operators — no SSH required.
+- **Notes:** v0.9.1 gap: Flight Command has System Health + OTA service restart only; no OS power UI. Interim paths documented in [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md) §5.4 (Ubuntu Power menu · kiosk `Ctrl+Alt+F3` · physical button). Implementation: polkit/`sudo` wrapper API + audit log to os-event bus · **not** remote wake · pairs kiosk v1 · operator card. **Not GTM** until hardware-validated.
+- **Status:** captured
+
+| Wave | Scope | Gate | Done when |
+|------|-------|------|-----------|
+| **PM0** | Unbox + operator card interim copy (Ubuntu / kiosk / button) | G1 | §5.4 in printable guide |
+| **PM1** | Settings **Restart CurXor stack** — API + confirm | G2 | `curxor-os.target` restart from UI · logged |
+| **PM2** | **Restart appliance** + **Shut down** — polkit-gated | G2 | Monitor-only operator can power off without SSH |
+
+**Build chat handoff template:**
+
+```
+Sprint: PM1 Settings Restart CurXor stack
+Goal: Settings → System → Restart CurXor with confirm + os-event audit
+Done when: qa:local + manual restart from UI · stack healthy after
+@ docs/curxor-os/FUTURE-ROADMAP.md § IDEA-A06
+@ pillar-4-dashboard/components/settings/SettingsWorkspace.tsx
+@ pillar-4-dashboard/app/api/os/ (new restart route)
+Out of scope: PM2 reboot/shutdown (polkit), kiosk changes
+```
 
 ---
 
@@ -730,7 +757,7 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Priority:** P2
 - **Trigger gate:** G2 (GK1–GK2) · G3–G4 (GK3–GK6)
 - **Outcome:** Optional xAI/Grok BYOK inference; SHA-pinned Forge Skill Pack catalog inspired by Grok marketplace — **not** Grok Build as Build Plane.
-- **Notes:** [EXTERNAL-BRIDGES-ROADMAP.md](./EXTERNAL-BRIDGES-ROADMAP.md). Chrome DevTools plugin → BP5 inspiration.
+- **Notes:** [EXTERNAL-BRIDGES-ROADMAP.md](./EXTERNAL-BRIDGES-ROADMAP.md). Chrome DevTools plugin → BP5 inspiration. Skill pack vetting → [IDEA-F14](#idea-f14-forge-skill-security--skillspector) (Program **SS**).
 - **Status:** scoped
 
 ### [IDEA-F01] Settings gamification label rename
@@ -771,6 +798,32 @@ Out of scope: Live Cursor agent execution (B03), operate-plane patron board (COS
 - **Outcome:** Optional **daily/session token caps** and spend summary when frontier BYOK is enabled — honest “you chose to spend” meter; local inference unaffected.
 - **Notes:** Trust-loop complement; no bundled API rent. Pairs inference router metrics.
 - **Status:** captured
+
+### [IDEA-F14] Forge skill security — SkillSpector · Program **SS**
+- **Lane:** F · Forge · D
+- **Priority:** **P1**
+- **Trigger gate:** G2 (SS0–SS1) · G3+ (SS2)
+- **Outcome:** Scan Forge **skills** (`agent-workspace/{appId}/skills/*.md`, import bundles, future skill packs) with [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) **before** install/sync on appliance — static pass required; operator sees risk score + block/warn on high severity.
+- **Notes:** Trending Jun 2026 · OWASP agentic-skills alignment · Apache-2.0 upstream. **Trust loop** for third-party skills — pairs Go Live / approval story. Default **`--no-llm`** on box (sovereign); optional semantic scan BYOK in Settings. Pairs **GK3** skill-pack catalog · Forge import/export · `agentskills.io` format. **Not GTM** until hardware-proven. **Not** a replacement for eno2 egress policy.
+- **Status:** scoped
+
+| Wave | Scope | Gate | Done when |
+|------|-------|------|-----------|
+| **SS0** | Wrap `skillspector scan --no-llm` on Forge **import** + manual skill upload; block score ≥ threshold; Settings toggle | G2 | Bad fixture skill rejected in dev QA · operator override logged |
+| **SS1** | CI job on repo `skills/**` + forged demo workspaces; SARIF optional | G2 | PR gate on skill changes · docs in operator card |
+| **SS2** | Skill Pack marketplace pin (GK3) + optional semantic scan BYOK | G3+ | Catalog entry shows last scan timestamp + score |
+
+**Build chat handoff template:**
+
+```
+Sprint: SS0 SkillSpector on Forge import
+Goal: Static scan (--no-llm) blocks high-risk skills before write to agent-workspace
+Done when: qa:local + manual import of malicious fixture · Settings shows scan result
+@ docs/curxor-os/FUTURE-ROADMAP.md § IDEA-F14
+@ pillar-4-dashboard/app/api/claw/import/route.ts
+@ pillar-4-dashboard/app/api/agent-workspace/[appId]/route.ts
+Out of scope: SS1 CI, semantic LLM scan, marketplace UI
+```
 
 ---
 
@@ -1005,6 +1058,7 @@ _Use for raw ideas before lane assignment._
 | Jun 2026 | **GTM-LOOP** Loop positioning doc | Shipped `curxor storefront/docs/LOOP-POSITIONING.md` · UI IDEA-G11 at G3 |
 | Jun 2026 | **IDEA-F12** Operator activity timeline | Home feed · pairs G10 live status |
 | Jun 2026 | **IDEA-F13** Frontier spend caps | Settings · trust loop |
+| Jun 2026 | **IDEA-F14** SkillSpector · Program **SS** | Forge skill scan pre-install · G2 · pairs GK3 trust loop |
 | Jun 2026 | **IDEA-G13** `/for-builders` | Build Plane page · not main hero |
 | Jun 2026 | **GTM-ECON-02** API→OSS narrative ammo | Ben Cera $1M/mo → rented GPU pivot · category tailwind · post-G3 investor/deck only |
 | Jun 2026 | **GTM-LIVE-01** Honest appliance live status | `/status` or public feed from os-event-log · Polsia `/live` pattern · no vanity ARR · G3+ · pairs IDEA-F12 |
@@ -1016,6 +1070,8 @@ _Use for raw ideas before lane assignment._
 
 | Date | Change |
 |------|--------|
+| Jun 2026 | **IDEA-A06** — Settings appliance power controls (PM0–PM2) · unbox §5.4 interim copy |
+| Jun 2026 | **IDEA-F14** · Program **SS** — NVIDIA SkillSpector gate on Forge skills (SS0–SS2) · post-G1 trending scan |
 | Jun 2026 | **CLAW-COMMONS-VISION.md** — persona capsule schema, portal UX, moderation policy · Program CL |
 | Jun 2026 | **Program CL** — Operator Forum (IDEA-G14) + Claw Commons / Clawverse (IDEA-H04); Moltbook-inspired federated agent social |
 | Jun 2026 | **GTM-LOOP** — `LOOP-POSITIONING.md` in storefront; IDEA-G11–G13 · F12–F13 · B08 added from loop gap analysis |
@@ -1063,6 +1119,7 @@ Operate-claw candidates evaluated Jun 2026 — **not** tenth-desk slots. Some co
 - Claw Commons / Clawverse: [CLAW-COMMONS-VISION.md](./CLAW-COMMONS-VISION.md)
 - Inter-Claw handshakes: [INTER-CLAW-HANDSHAKES.md](./INTER-CLAW-HANDSHAKES.md)
 - External bridges (Firecrawl · Grok): [EXTERNAL-BRIDGES-ROADMAP.md](./EXTERNAL-BRIDGES-ROADMAP.md)
+- Forge skill security: [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) · roadmap § [IDEA-F14](#idea-f14-forge-skill-security--skillspector)
 - Signal AI Device Hub: [SIGNAL-AI-DEVICE-HUB.md](./SIGNAL-AI-DEVICE-HUB.md)
 - Home automation bridges: [HOME-AUTOMATION-BRIDGES.md](./HOME-AUTOMATION-BRIDGES.md)
 - Patron Ask (chat UI): [PATRON-CHAT-UI.md](./PATRON-CHAT-UI.md)
