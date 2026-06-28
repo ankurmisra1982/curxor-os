@@ -143,3 +143,4 @@ sudo docker ps | grep ollama
 | [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md) | Step-by-step checklist |
 | [10-ms-s1-max-hardware-bios.md](../guides/10-ms-s1-max-hardware-bios.md) | BIOS detail |
 | [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) | Daily laptop ↔ box loop |
+| [CTO-STATUS-REPORT.md](../../curxor%20storefront/docs/CTO-STATUS-REPORT.md) | Storefront GTM sync · gate status · do/don't claims |
