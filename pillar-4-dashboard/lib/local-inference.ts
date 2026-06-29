@@ -24,6 +24,7 @@ let inferenceChain: Promise<unknown> = Promise.resolve();
 
 let availabilityCache: { at: number; ok: boolean } | null = null;
 const AVAILABILITY_TTL_MS = 5_000;
+const PROBE_TIMEOUT_MS = 3_000;
 
 function assertLocalhost(url: string): void {
   if (!url.includes("127.0.0.1") && !url.includes("localhost")) {
@@ -54,11 +55,17 @@ export async function isLocalInferenceAvailable(): Promise<boolean> {
   try {
     if (env.inferenceBackend === "ollama") {
       assertLocalhost(env.ollamaUrl);
-      const res = await fetch(`${env.ollamaUrl}/api/tags`, { cache: "no-store" });
+      const res = await fetch(`${env.ollamaUrl}/api/tags`, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
+      });
       ok = res.ok;
     } else {
       assertLocalhost(env.inferenceBaseUrl);
-      const res = await fetch(`${env.inferenceBaseUrl}/models`, { cache: "no-store" });
+      const res = await fetch(`${env.inferenceBaseUrl}/models`, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
+      });
       ok = res.ok;
     }
   } catch {

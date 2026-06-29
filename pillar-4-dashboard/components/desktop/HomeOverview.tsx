@@ -12,11 +12,10 @@ import { useMotorStream } from "@/hooks/useMotorStream";
 import { useVisionStream } from "@/hooks/useVisionStream";
 import { enabledAppRoutes } from "@/lib/fre-routing";
 import { getOotbApp, type OotbAppId } from "@/lib/ootb-apps";
-import { SETTINGS_PATH, categoryForApp } from "@/lib/ui-categories";
+import { categoryForApp } from "@/lib/ui-categories";
 
 interface HomeOverviewProps {
   selectedApps: OotbAppId[];
-  onOpenHealth: () => void;
 }
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -26,7 +25,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   forge: "Create",
 };
 
-export function HomeOverview({ selectedApps, onOpenHealth }: HomeOverviewProps) {
+export function HomeOverview({ selectedApps }: HomeOverviewProps) {
   const { level } = useExperienceLevel();
   const showExpertTelemetry = level === "expert";
   const routes = enabledAppRoutes(selectedApps).filter((r) => r.id !== "claw-forge");
@@ -47,25 +46,6 @@ export function HomeOverview({ selectedApps, onOpenHealth }: HomeOverviewProps) 
         </p>
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <StartNewClawButton />
-          <Link
-            href="/claw-forge"
-            className="border border-line px-4 py-2 font-sans text-sm text-stark transition hover:border-cursor-glow hover:text-cursor-glow"
-          >
-            Open The Forge
-          </Link>
-          <Link
-            href={SETTINGS_PATH}
-            className="font-sans text-sm text-muted hover:text-cursor-glow"
-          >
-            Settings
-          </Link>
-          <button
-            type="button"
-            onClick={onOpenHealth}
-            className="font-sans text-sm text-muted hover:text-cursor-glow"
-          >
-            System health
-          </button>
         </div>
         <div className="mt-4">
           <ActiveClawBadge />
@@ -113,7 +93,7 @@ export function HomeOverview({ selectedApps, onOpenHealth }: HomeOverviewProps) 
         />
         <QuickCard
           title="3 · Stay local"
-          body="Reasoning stays on this box. Outbound trades and posts only go through eno2 bridges."
+          body="Reasoning stays on this box. Trades and posts only leave when you connect a broker or social account."
         />
       </section>
 

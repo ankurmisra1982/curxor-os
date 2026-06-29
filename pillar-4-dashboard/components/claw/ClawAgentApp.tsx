@@ -12,7 +12,7 @@ import { ClawAgentConsole } from "@/components/claw/ClawAgentConsole";
 
 import { ForgeAssistProvider } from "@/components/claw/ForgeAssistProvider";
 
-import { getAppAgent } from "@/lib/app-agent-catalog";
+import { getAppAgent, defaultFreConfig } from "@/lib/app-agent-catalog";
 import type { ResolvedAppAgent } from "@/lib/forged-agent-catalog";
 import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
 
@@ -177,25 +177,46 @@ function ClawAgentAppInner({ appId, agentLabel, forgedAgent, children, workspace
 
 
   if (!initialized) {
+    const previewConfig = isValidAppId(appId)
+      ? defaultFreConfig(appId as OotbAppId)
+      : ({} as Record<string, unknown>);
+    const previewCtx: AgentAppContext = {
+      config: previewConfig,
+      onSkill: () => {},
+      skillTick: 0,
+      updateWorkspaceContext: () => {},
+    };
 
     return (
-
-      <AppFreWizard
-        appId={appId}
-        agent={agent ?? undefined}
-        onComplete={(nextConfig) => {
-          setConfig(nextConfig);
-
-          setInitialized(true);
-
-          setLoadError(null);
-
-        }}
-
-      />
-
+      <div className="relative min-h-[520px]">
+        <div className="pointer-events-none select-none opacity-[0.18]" aria-hidden>
+          <div className="flex min-h-[520px] flex-col gap-0 lg:flex-row">
+            <div className={`min-w-0 flex-1 order-2 lg:order-1 ${workspaceClassName}`}>
+              {children(previewCtx)}
+            </div>
+            <div className="order-1 w-full shrink-0 border-b border-line lg:order-2 lg:w-[min(380px,34%)] lg:border-b-0 lg:border-l lg:border-line">
+              <div className="flex h-full min-h-[200px] items-center justify-center font-mono text-[10px] text-muted">
+                Agent panel
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 p-4">
+          <div className="max-h-[92vh] w-full max-w-2xl overflow-hidden shadow-2xl">
+            <AppFreWizard
+              appId={appId}
+              agent={agent ?? undefined}
+              variant="overlay"
+              onComplete={(nextConfig) => {
+                setConfig(nextConfig);
+                setInitialized(true);
+                setLoadError(null);
+              }}
+            />
+          </div>
+        </div>
+      </div>
     );
-
   }
 
 

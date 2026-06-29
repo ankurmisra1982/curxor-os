@@ -37,9 +37,10 @@ interface AppFreWizardProps {
   appId: string;
   agent?: AppAgentDefinition | ResolvedAppAgent;
   onComplete: (config: Record<string, unknown>) => void;
+  variant?: "inline" | "overlay";
 }
 
-export function AppFreWizard({ appId, agent: agentOverride, onComplete }: AppFreWizardProps) {
+export function AppFreWizard({ appId, agent: agentOverride, onComplete, variant = "inline" }: AppFreWizardProps) {
   const agent =
     agentOverride ??
     (isValidAppId(appId) ? getAppAgent(appId as OotbAppId) : null) ??
@@ -73,7 +74,7 @@ export function AppFreWizard({ appId, agent: agentOverride, onComplete }: AppFre
       if (!res.ok) throw new Error("Failed");
       onComplete(config);
     } catch {
-      setError("Could not save app setup. Check /etc/curxor permissions.");
+      setError("Could not save setup. Try again — if it persists, your account may need write access on this box.");
       setSubmitting(false);
     }
   }, [appId, config, onComplete]);
@@ -82,12 +83,17 @@ export function AppFreWizard({ appId, agent: agentOverride, onComplete }: AppFre
   const activateTips = preview ? [...agent.fre.activateTips, ...PREVIEW_FRE_ACTIVATE_TIPS] : agent.fre.activateTips;
   const welcomeLead = preview ? `${agent.fre.welcomeLead}${PREVIEW_FRE_WELCOME_SUFFIX}` : agent.fre.welcomeLead;
 
+  const shellClass =
+    variant === "overlay"
+      ? "flex max-h-[92vh] flex-col border border-cursor-glow/40 bg-panel"
+      : "flex min-h-[480px] flex-col border border-line bg-panel";
+
   return (
-    <div className="flex min-h-[480px] flex-col border border-line bg-panel">
+    <div className={shellClass}>
       <header className="border-b border-line px-6 py-5">
         <div className="flex flex-wrap items-center gap-2">
           <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
-            {agent.ootbLabel} · First Run
+            {agent.ootbLabel} · First-time setup
           </p>
           {preview ? <ComingSoonBadge /> : null}
         </div>

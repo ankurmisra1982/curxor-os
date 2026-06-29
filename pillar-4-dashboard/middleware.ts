@@ -64,7 +64,7 @@ async function readFreRouting(request: NextRequest): Promise<FreCache> {
 
     const url = new URL(STATUS_PATH, request.url);
 
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(3_000) });
 
     if (!res.ok) {
 

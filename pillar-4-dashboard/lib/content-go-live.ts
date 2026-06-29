@@ -8,6 +8,7 @@ import { ensureContentQueue } from "./content-queue-store";
 import { readContentOpsState } from "./content-ops-controls";
 import { listApprovalQueue } from "./content-approval-service";
 import { probePublicContentBase } from "./content-public-base-probe";
+import { resolveDigitalEnvVar } from "./digital-env";
 import type { SocialPlatformId } from "./social-channels";
 import { platformLabel } from "./social-channels";
 
@@ -82,7 +83,7 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
 
   steps.push({
     id: "bridges",
-    label: "Publish bridges ready",
+    label: "Social accounts connected",
     status:
       enabledPlatforms.length === 0
         ? "pending"
@@ -93,22 +94,22 @@ export async function buildGoLiveReport(): Promise<GoLiveReport> {
             : "warning",
     detail:
       enabledPlatforms.length === 0
-        ? "No FRE channels to check"
+        ? "No channels selected in setup"
         : bridgesAllReady
-          ? `${readyCount}/${enabledPlatforms.length} ready`
+          ? `${readyCount}/${enabledPlatforms.length} connected`
           : readyCount === 0
-            ? "Demo mode OK — add digital.env credentials when ready for live publish"
+            ? "Demo mode — connect accounts when you're ready to publish live"
             : blocked.length > 0
-              ? `Fix: ${blocked.map((b) => platformLabel(b.platform)).join(", ")} — see Bridge Health`
-              : `${readyCount}/${enabledPlatforms.length} ready`,
+              ? `Connect: ${blocked.map((b) => platformLabel(b.platform)).join(", ")}`
+              : `${readyCount}/${enabledPlatforms.length} connected`,
   });
 
   const needsPublicBase = channels.some((c) => MEDIA_PLATFORMS.has(c));
-  const publicBase = process.env.CURXOR_CONTENT_PUBLIC_BASE?.trim();
+  const publicBase = (await resolveDigitalEnvVar("CURXOR_CONTENT_PUBLIC_BASE"))?.trim();
   let publicBaseDetail = publicBase
     ? publicBase.replace(/\/$/, "")
     : needsPublicBase
-      ? "Set CURXOR_CONTENT_PUBLIC_BASE in dashboard.env so bridges can fetch image_url"
+      ? "Set a public image web address in Connections (required for Instagram & Pinterest)"
       : "Not required for your current channels";
 
   let publicBaseStatus: GoLiveStepStatus = !needsPublicBase

@@ -62,6 +62,7 @@ import { ContentRecoveryPanel, type RecoveryCandidateRow } from "@/components/ap
 import { ContentPlanPanel, type ContentPlanReportRow } from "@/components/apps/content/ContentPlanPanel";
 import { ContentSignalPanel, type SignalFeedItemRow } from "@/components/apps/content/ContentSignalPanel";
 import { ContentGoLivePanel, type GoLiveReportRow } from "@/components/apps/content/ContentGoLivePanel";
+import { ContentConnectionsOverlay } from "@/components/apps/content/ContentConnectionsOverlay";
 import { ContentEmptyQueuePanel } from "@/components/apps/content/ContentEmptyQueuePanel";
 import { CreatorLevelBadge } from "@/components/apps/content/CreatorLevelBadge";
 import { CreatorLevelUpNudge } from "@/components/apps/content/CreatorLevelUpNudge";
@@ -127,6 +128,8 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
   const [recommendations, setRecommendations] = useState<ContentRecommendationRow[]>([]);
   const [thumbPerf, setThumbPerf] = useState<HookPerfRow[]>([]);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [connectionsOpen, setConnectionsOpen] = useState(false);
+  const [connectionsFocus, setConnectionsFocus] = useState<ContentPlatform | null>(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [approvalPosts, setApprovalPosts] = useState<ContentPost[]>([]);
   const [approvalReplies, setApprovalReplies] = useState<ContentReply[]>([]);
@@ -575,6 +578,19 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     }
   }, []);
 
+  const freChannelList = useMemo(() => {
+    const fromStatus = status?.channels;
+    if (Array.isArray(fromStatus) && fromStatus.length > 0) return fromStatus;
+    const fromConfig = config.channels;
+    if (Array.isArray(fromConfig)) return fromConfig.filter((x): x is string => typeof x === "string");
+    return ["x"];
+  }, [status?.channels, config.channels]);
+
+  const openConnections = useCallback((platform?: ContentPlatform | null) => {
+    setConnectionsFocus(platform ?? null);
+    setConnectionsOpen(true);
+  }, []);
+
   const loadApproval = useCallback(async () => {
     try {
       const [queueRes, auditRes] = await Promise.all([
@@ -778,6 +794,12 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
     loadOps,
     loadExperiments,
   ]);
+
+  const onConnectionsSaved = useCallback(() => {
+    void loadBridgeHealth();
+    void loadBootstrap();
+    void loadStatus();
+  }, [loadBridgeHealth, loadBootstrap, loadStatus]);
 
   const runDemoTour = useCallback(() => {
     setDemoTourRunning(true);
@@ -1285,10 +1307,11 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       <ContentCreationWizard
         open={wizardOpen}
         onClose={() => setWizardOpen(false)}
-        channels={status?.channels ?? ["x"]}
+        channels={freChannelList}
         tone={tone}
         selectedPostId={selected}
         useBestTime={useDataDrivenSchedule}
+        onOpenConnections={() => openConnections(selectedPost?.platform ?? null)}
         onComplete={(result) => {
           if (result.postId) setSelected(result.postId);
           void loadBootstrap({ postId: result.postId });
@@ -1306,6 +1329,16 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           }
         }}
       />
+      <ContentConnectionsOverlay
+        open={connectionsOpen}
+        onClose={() => {
+          setConnectionsOpen(false);
+          setConnectionsFocus(null);
+        }}
+        freChannels={freChannelList}
+        focusPlatform={connectionsFocus}
+        onSaved={onConnectionsSaved}
+      />
       <header className="border border-line bg-panel px-4 py-3">
         <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
           OOTB · {getOotbApp("my-content-creator").name}
@@ -1320,9 +1353,10 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           <button type="button" onClick={() => setWizardOpen(true)} className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow">
             Creation wizard
           </button>
+          <button type="button" onClick={() => openConnections()} className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow">
+            Connections
+          </button>
           <button
-            type="button"
-            onClick={() => setInspectorOpen((v) => !v)}
             disabled={!selectedPost}
             className="border border-line px-2 py-0.5 uppercase text-muted hover:text-stark disabled:opacity-50"
           >
@@ -1373,9 +1407,9 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           unit={
             bridgeHealth
               ? `${bridgeHealth.summary.ready}/${bridgeHealth.summary.live} ready`
-              : status?.bridgeConfigured
-                ? `${vault?.liveCount ?? 0} live bridges`
-                : "digital.env"
+                : status?.bridgeConfigured
+                ? `${vault?.liveCount ?? 0} live`
+                : "Not connected"
           }
         />
       </div>
@@ -1397,6 +1431,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
           onOpenWizard={() => setWizardOpen(true)}
           onRunDemoTour={runDemoTour}
           demoTourRunning={demoTourRunning}
+          onOpenConnections={() => openConnections()}
         />
       </ExperienceAppSection>
 
@@ -1405,8 +1440,8 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         sectionId="bridge"
         minLevel="standard"
         hideWhen={hideCreatorSection("bridge")}
-        title="Bridge Health"
-        subtitle="OAuth status · last publish · rate limits · fix hints for digital.env"
+        title="Connection status"
+        subtitle="Account sign-in · last publish · how to fix issues"
       >
         <ContentBridgeHealthPanel
           report={bridgeHealth}
@@ -1415,6 +1450,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             setBridgeHealthBusy(true);
             void loadBridgeHealth().finally(() => setBridgeHealthBusy(false));
           }}
+          onConnectPlatform={(platform) => openConnections(platform)}
         />
       </ExperienceAppSection>
 

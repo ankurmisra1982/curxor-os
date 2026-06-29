@@ -105,6 +105,8 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
     <>
 
+      <PatronAskProvider>
+
       <DesktopRouteGuard selectedApps={selectedApps} />
 
       <div className="flex h-screen flex-col overflow-hidden bg-void">
@@ -143,11 +145,11 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
               className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow"
 
-              title={isExpert ? "Hide technical telemetry" : "Show mesh and telemetry details"}
+              title={isExpert ? "Hide mesh telemetry strip" : "Show mesh telemetry strip (not experience level)"}
 
             >
 
-              {isExpert ? "Simple" : "Expert"}
+              {isExpert ? "Hide telemetry" : "Telemetry"}
 
             </button>
 
@@ -190,7 +192,7 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
       <SystemHealthDrawer open={healthOpen} onClose={() => setHealthOpen(false)} />
 
-      <PatronAskProvider />
+      </PatronAskProvider>
 
       <CommandPalette
 
@@ -227,9 +229,9 @@ export function FlightCommandDesktop({
   initialThemeMode,
 }: FlightCommandDesktopProps) {
   return (
-    <TelemetryProvider>
-      <ThemeProvider initialScheme={initialColorScheme ?? "curxor"} initialThemeMode={initialThemeMode ?? "dark"}>
-        <UiModeProvider initialMode={initialUiMode ?? "simple"} initialLevel={initialExperienceLevel}>
+    <ThemeProvider initialScheme={initialColorScheme ?? "curxor"} initialThemeMode={initialThemeMode ?? "dark"}>
+      <UiModeProvider initialMode={initialUiMode ?? "simple"} initialLevel={initialExperienceLevel}>
+        <TelemetryProvider>
           <SettingsBootstrap
             initialUiMode={initialUiMode}
             initialExperienceLevel={initialExperienceLevel}
@@ -240,9 +242,9 @@ export function FlightCommandDesktop({
           <DesktopInner selectedApps={selectedApps} forgedApps={forgedApps}>
             {children}
           </DesktopInner>
-        </UiModeProvider>
-      </ThemeProvider>
-    </TelemetryProvider>
+        </TelemetryProvider>
+      </UiModeProvider>
+    </ThemeProvider>
   );
 }
 

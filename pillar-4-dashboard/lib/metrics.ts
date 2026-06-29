@@ -73,14 +73,20 @@ async function probeVllm(
   metricsUrl: string,
 ): Promise<Pick<ComputeMetrics, "tokensPerSecond" | "promptTokensPerSecond" | "modelLoaded" | "backend">> {
   try {
-    const modelsRes = await fetch(`${baseUrl}/models`, { cache: "no-store" });
+    const modelsRes = await fetch(`${baseUrl}/models`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(3_000),
+    });
     let modelLoaded: string | null = null;
     if (modelsRes.ok) {
       const body = (await modelsRes.json()) as { data?: Array<{ id?: string }> };
       modelLoaded = body.data?.[0]?.id ?? null;
     }
 
-    const metricsRes = await fetch(metricsUrl, { cache: "no-store" });
+    const metricsRes = await fetch(metricsUrl, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(3_000),
+    });
     if (metricsRes.ok) {
       const text = await metricsRes.text();
       return {
@@ -104,7 +110,10 @@ async function probeOllama(
   baseUrl: string,
 ): Promise<Pick<ComputeMetrics, "tokensPerSecond" | "promptTokensPerSecond" | "modelLoaded" | "backend">> {
   try {
-    const res = await fetch(`${baseUrl}/api/ps`, { cache: "no-store" });
+    const res = await fetch(`${baseUrl}/api/ps`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(3_000),
+    });
     if (!res.ok) return { backend: "unknown", modelLoaded: null, tokensPerSecond: null, promptTokensPerSecond: null };
     const body = (await res.json()) as { models?: Array<{ name?: string; size?: number }> };
     const modelLoaded = body.models?.[0]?.name ?? null;

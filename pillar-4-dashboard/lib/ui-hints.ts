@@ -10,12 +10,12 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   [HOME_PATH]: {
     id: "home-welcome",
     title: "Welcome to your appliance",
-    body: "Pick a Claw below or ask your agent in plain language. Add or remove Claws anytime in Settings — local inference is the default.",
+    body: "Pick a Claw below or ask your agent in plain language. Add or remove Claws anytime in Settings — local AI is the default.",
   },
   [SETTINGS_PATH]: {
     id: "settings-intro",
     title: "Your preferences, your rules",
-    body: "Add or remove Claws anytime, connect a frontier LLM with your API key or OAuth sign-in (OpenAI), and tune theme and display mode.",
+    body: "Add or remove Claws anytime, optionally connect cloud AI with your API key or sign-in, and tune theme and display mode.",
   },
   "/claw-forge": {
     id: "forge-intro",
@@ -25,12 +25,12 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   "/my-capital": {
     id: "capital-intro",
     title: "Paper trading first",
-    body: "Research any ticker for price + headlines (Beginner). Standard unlocks charts, WSB chatter, and the market digest. Trades egress only through eno2.",
+    body: "Research any ticker for price + headlines (Beginner). Standard unlocks charts, WSB chatter, and the market digest. Trades only leave this box when you connect a broker.",
   },
   "/my-content": {
     id: "content-intro",
     title: "Draft before you publish",
-    body: "Use Draft Post for local LLM copy. Publish sends intent to the bridge — your LLM never touches the internet unless you opt into frontier chat in Settings.",
+    body: "Use Draft Post for local AI copy. Publish goes through your connected social accounts — the AI on this box never posts directly unless you connect a platform.",
   },
   "/my-work": {
     id: "work-intro",
@@ -50,7 +50,7 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
   "/my-vital": {
     id: "vital-intro",
     title: "Longevity desk",
-    body: "Ask about aging science in the Lab tab. Connect wearables, build your protocol, and publish health context to Optimus and Kin — all on your appliance.",
+    body: "Ask about aging science in the Lab tab. Connect wearables, build your protocol, and share health context with Optimus and Kin — all on your appliance.",
   },
   "/my-family": {
     id: "family-intro",

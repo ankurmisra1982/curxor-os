@@ -1,29 +1,18 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import { getMeshBridge, sseEncode } from "@/lib/zmq-bridge";
+import { createHeartbeatSseStream, sseHeartbeatResponse } from "@/lib/sse-heartbeat";
+import { getMeshBridge } from "@/lib/zmq-bridge";
 
 export async function GET(): Promise<Response> {
   const bridge = getMeshBridge();
   await bridge.ensureStarted();
 
-  let unsubscribe = () => {};
-  const stream = new ReadableStream<Uint8Array>({
-    start(controller) {
-      unsubscribe = bridge.subscribeDigital((receipt) => {
-        controller.enqueue(sseEncode(receipt));
-      });
-    },
-    cancel() {
-      unsubscribe();
-    },
-  });
+  const stream = createHeartbeatSseStream((emit) =>
+    bridge.subscribeDigital((receipt) => {
+      emit(receipt);
+    }),
+  );
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
-    },
-  });
+  return sseHeartbeatResponse(stream);
 }

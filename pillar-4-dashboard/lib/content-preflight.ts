@@ -105,8 +105,8 @@ export async function runPostPreflight(postId: string): Promise<PreflightReport 
       checks.push({
         id: "public_base",
         severity: "warning",
-        message: "No public image URL — set CURXOR_CONTENT_PUBLIC_BASE for IG/Pinterest",
-        fixHint: "Configure CURXOR_CONTENT_PUBLIC_BASE in digital.env",
+        message: "No public image URL — Instagram and Pinterest need a web address for images",
+        fixHint: "Set your public image address in Connections.",
       });
     }
   }
@@ -122,14 +122,14 @@ export async function runPostPreflight(postId: string): Promise<PreflightReport 
       checks.push({
         id: "bridge",
         severity: "error",
-        message: `Bridge ${platformHealth.healthLabel} for ${platformHealth.name}`,
-        fixHint: platformHealth.fixHints[0],
+        message: `${platformHealth.name} isn't connected yet`,
+        fixHint: platformHealth.fixHints[0] ?? "Open Connections and sign in to this platform.",
       });
     } else if (platformHealth.health === "degraded") {
       checks.push({
         id: "bridge_degraded",
         severity: "warning",
-        message: `Bridge degraded — ${platformHealth.lastError ?? "recent failures"}`,
+        message: `Connection issue — ${platformHealth.lastError ?? "recent failures"}`,
         fixHint: platformHealth.fixHints[0],
       });
     }

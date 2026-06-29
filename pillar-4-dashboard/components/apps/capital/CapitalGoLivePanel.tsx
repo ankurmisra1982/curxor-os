@@ -102,14 +102,11 @@ export function CapitalGoLivePanel({
             </p>
           </div>
           <div className="border border-line/60 bg-panel/50 px-3 py-2 text-[10px] text-muted">
-            <span className="uppercase tracking-widest text-stark">Exit demo mode</span>
+            <span className="uppercase tracking-widest text-stark">Ready for practice trades?</span>
             <p className="mt-1">
-              When ready for Alpaca paper fills: run{" "}
-              <code className="text-cursor-glow">npm run setup:capital-env</code> then{" "}
-              <code className="text-cursor-glow">npm run configure:capital-keys</code>, restart dev, and refresh this
-              checklist. Verify scaffold: <code className="text-cursor-glow">npm run verify:exit-demo-scaffold</code>.
+              Connect your broker in Capital settings (Alpaca paper is a good first step). Demo rules and simulated fills
+              keep working until you connect.
             </p>
-            <p className="mt-1">Full guide: docs/capital-claw/EXIT-DEMO.md</p>
           </div>
         </div>
       ) : null}

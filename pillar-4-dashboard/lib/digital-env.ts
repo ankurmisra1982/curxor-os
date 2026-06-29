@@ -5,6 +5,11 @@ import { readFile } from "node:fs/promises";
 let digitalEnvCache: Record<string, string> | null = null;
 let digitalEnvLoadPromise: Promise<Record<string, string>> | null = null;
 
+export function invalidateDigitalEnvCache(): void {
+  digitalEnvCache = null;
+  digitalEnvLoadPromise = null;
+}
+
 export function digitalEnvPath(): string {
   return process.env.CURXOR_DIGITAL_ENV_PATH ?? "/etc/curxor/digital.env";
 }

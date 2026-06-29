@@ -83,20 +83,16 @@ export function WorkGoLivePanel({
           <div className="border border-cursor-glow/40 bg-cursor-glow/5 px-3 py-2 text-[10px] text-muted">
             <span className="uppercase tracking-widest text-cursor-glow">Demo mode</span>
             <p className="mt-1">
-              No SMTP bridge configured — expected for this release. Leads, sequences, inbox scan, and simulated sends
-              work locally without mail leaving the appliance.
+              No email connected yet — expected for this release. Leads, sequences, inbox scan, and simulated sends work
+              locally without mail leaving the appliance.
             </p>
           </div>
           <div className="border border-line/60 bg-panel/50 px-3 py-2 text-[10px] text-muted">
-            <span className="uppercase tracking-widest text-stark">Exit demo mode</span>
+            <span className="uppercase tracking-widest text-stark">Ready for live email?</span>
             <p className="mt-1">
-              When ready for live outbound: run{" "}
-              <code className="text-cursor-glow">npm run setup:work-env</code> then set{" "}
-              <code className="text-cursor-glow">SMTP_HOST</code> + <code className="text-cursor-glow">SMTP_FROM</code>{" "}
-              (and optional <code className="text-cursor-glow">IMAP_*</code> / Google OAuth), restart dev, and refresh.
-              Verify scaffold: <code className="text-cursor-glow">npm run verify:work-exit-demo-scaffold</code>.
+              Connect your email in Outreach → Integrations (Google, Microsoft, or SMTP). Simulated sends stop once a
+              real comms path is verified.
             </p>
-            <p className="mt-1">Full guide: docs/outreach-claw/EXIT-DEMO.md#live-ready</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {onOpenSetupWizard ? (
                 <button

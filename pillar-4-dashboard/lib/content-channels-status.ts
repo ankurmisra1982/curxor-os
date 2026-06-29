@@ -26,7 +26,7 @@ function isConfigured(env: Record<string, string>, keys: string[]): boolean {
 
 function statusLabel(ch: SocialChannelDef, configured: boolean): string {
   if (ch.bridgeTier === "live" && configured) return "Ready to publish";
-  if (ch.bridgeTier === "live" && !configured) return "Add credentials to digital.env";
+  if (ch.bridgeTier === "live" && !configured) return "Not connected — use Connections to sign in";
   if (ch.bridgeTier === "messaging" && configured) return "Messaging bridge ready";
   if (ch.bridgeTier === "messaging" && !configured) return "Configure messaging keys";
   if (configured) return "Credentials on box — bridge shipping soon";

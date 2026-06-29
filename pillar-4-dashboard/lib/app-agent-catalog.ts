@@ -602,7 +602,8 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
     ],
     fre: {
       welcomeTitle: "Welcome to Creator Claw",
-      welcomeLead: "Creator Claw is your sovereign social operator — OpenClaw-style skills with NemoClaw-style governance on outbound actions.",
+      welcomeLead:
+        "Draft and schedule on this box. You approve before anything posts online — connect social accounts in Connections when you're ready for live publish.",
       configureTitle: "Channel setup",
       configureLead: "Choose channels, content tone, and your creator stage.",
       fields: [
@@ -729,9 +730,9 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       ],
       activateTitle: "Activate Creator Claw",
       activateTips: [
-        "LLM never talks to the internet — only digital bridges publish.",
-        "Creation Studio: AI Image → Render Video (TTS) → Adapt All → Fan Out (auto-schedule).",
-        "Set CURXOR_CONTENT_PUBLIC_BASE for IG/Pinterest image_url from appliance assets.",
+        "Your AI drafts locally — only connected accounts can post online.",
+        "Creation Studio: AI Image → Render Video → Adapt All → schedule across channels.",
+        "Open Connections after setup to sign in to X, Instagram, and other platforms.",
       ],
     },
     bootMessage: "Creator Claw online. Select a post or ask me to draft content.",

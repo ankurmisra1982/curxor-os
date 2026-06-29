@@ -111,44 +111,44 @@ function buildFixHints(input: {
 }): string[] {
   const hints: string[] = [];
   if (input.bridgeTier !== "live") {
-    hints.push("Publish bridge not live yet — draft locally until tier ships.");
+    hints.push("This platform isn't live yet — you can still draft and schedule locally.");
     return hints;
   }
   if (!input.configured) {
-    hints.push(`Add credentials to ${digitalEnvPath()}`);
+    hints.push(`Connect your ${input.platform === "x" ? "X" : "account"} in Connections — open the connect panel from Go Live or Bridge Health.`);
     if (input.missingEnvKeys.length > 0) {
-      hints.push(`Missing: ${input.missingEnvKeys.join(", ")}`);
+      hints.push(`Still needed: ${input.missingEnvKeys.map((k) => k.replace(/_/g, " ").toLowerCase()).join(", ")}`);
     }
     return hints;
   }
   if (input.tokenExpiresAt) {
     const exp = Date.parse(input.tokenExpiresAt);
     if (Number.isFinite(exp) && exp <= Date.now()) {
-      hints.push("Access token appears expired — refresh OAuth token in digital.env");
+      hints.push("Your sign-in expired — reconnect the account in Connections.");
     } else if (Number.isFinite(exp) && exp - Date.now() < 7 * 86400000) {
-      hints.push("Access token expires within 7 days — plan a refresh");
+      hints.push("Sign-in expires within 7 days — plan to reconnect soon.");
     }
   }
   if (input.lastErrorKind === "auth") {
-    hints.push("Last failure looks like auth — re-run OAuth and update tokens");
+    hints.push("Last publish failed on sign-in — reconnect the account.");
   }
   if (input.lastErrorKind === "rate_limit") {
-    hints.push("Rate limited — reduce publish frequency or wait before retry");
+    hints.push("Rate limited — post less often or wait before retrying.");
   }
   if (input.lastErrorKind === "validation") {
-    hints.push("Payload rejected — check media URLs, board IDs, and platform format rules");
+    hints.push("Post was rejected — check image links, board IDs, and platform format rules.");
   }
   if (input.platform === "instagram" || input.platform === "pinterest") {
-    hints.push("Requires public image_url — set CURXOR_CONTENT_PUBLIC_BASE on appliance");
+    hints.push("Instagram and Pinterest need a public image web address — set it in Connections.");
   }
   if (input.platform === "pinterest" && input.missingEnvKeys.includes("PINTEREST_DEFAULT_BOARD_ID")) {
-    hints.push("Set PINTEREST_DEFAULT_BOARD_ID from GET /v5/boards");
+    hints.push("Pick a default Pinterest board in Connections.");
   }
   if (input.platform === "snapchat") {
-    hints.push("Confirm SNAP_PUBLIC_PROFILE_ID and video_path or video_url");
+    hints.push("Confirm your Snapchat public profile and video file or link.");
   }
   if (hints.length === 0 && input.configured) {
-    hints.push("Bridge configured — publish to verify receipt on digital_in");
+    hints.push("Account connected — publish a test post to confirm.");
   }
   return hints;
 }
@@ -163,16 +163,16 @@ function resolveHealthStatus(input: {
   tokenExpiresAt: string | null;
 }): { health: BridgeHealthStatus; healthLabel: string } {
   if (input.bridgeTier !== "live") {
-    return { health: "planned", healthLabel: "Bridge planned" };
+    return { health: "planned", healthLabel: "Coming soon" };
   }
   if (!input.configured) {
-    return { health: "unconfigured", healthLabel: "Add digital.env credentials" };
+    return { health: "unconfigured", healthLabel: "Not connected" };
   }
 
   const tokenExpired =
     input.tokenExpiresAt && Date.parse(input.tokenExpiresAt) <= Date.now();
   if (tokenExpired || input.lastErrorKind === "auth") {
-    return { health: "auth_expired", healthLabel: "Token or auth issue" };
+    return { health: "auth_expired", healthLabel: "Sign-in expired" };
   }
 
   const failedRecently =

@@ -22,7 +22,7 @@ interface OsApprovalResponse {
 
 const APP_LABEL: Record<OsApprovalItem["appId"], string> = {
   "my-capital": "Capital",
-  "my-work": "Work",
+  "my-work": "Outreach",
   "my-content-creator": "Creator",
 };
 

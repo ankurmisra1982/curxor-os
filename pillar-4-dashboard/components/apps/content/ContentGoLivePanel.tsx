@@ -34,11 +34,13 @@ function statusIcon(status: GoLiveStepStatus): string {
 }
 
 function statusClass(status: GoLiveStepStatus): string {
-  if (status === "complete") return "text-cursor-glow";
+  if (status === "complete") return "text-stark";
   if (status === "warning") return "text-amber-400";
   if (status === "optional") return "text-muted";
   return "text-stark";
 }
+
+const ACTIONABLE_STEPS = new Set(["bridges", "public_base", "fre", "first_post"]);
 
 interface ContentGoLivePanelProps {
   report: GoLiveReportRow | null;
@@ -46,6 +48,8 @@ interface ContentGoLivePanelProps {
   onOpenWizard: () => void;
   onRunDemoTour?: () => void;
   demoTourRunning?: boolean;
+  onStepAction?: (stepId: string) => void;
+  onOpenConnections?: () => void;
 }
 
 export function ContentGoLivePanel({
@@ -54,6 +58,8 @@ export function ContentGoLivePanel({
   onOpenWizard,
   onRunDemoTour,
   demoTourRunning,
+  onStepAction,
+  onOpenConnections,
 }: ContentGoLivePanelProps) {
   if (!report) {
     return (
@@ -76,6 +82,19 @@ export function ContentGoLivePanel({
 
   const headerStatusClass = ready || demoReady ? "text-cursor-glow" : partiallyReady ? "text-stark" : "text-amber-400";
 
+  const handleStepClick = (step: GoLiveStepRow) => {
+    if (step.status === "complete" || step.status === "optional") return;
+    if (step.id === "bridges" || step.id === "public_base") {
+      onOpenConnections?.();
+      return;
+    }
+    if (step.id === "first_post") {
+      onOpenWizard();
+      return;
+    }
+    onStepAction?.(step.id);
+  };
+
   return (
     <div className="space-y-3 font-mono text-[10px]">
       {demoRelease ? (
@@ -83,19 +102,25 @@ export function ContentGoLivePanel({
           <div className="border border-cursor-glow/40 bg-cursor-glow/5 px-3 py-2 text-[10px] text-muted">
             <span className="uppercase tracking-widest text-cursor-glow">Demo mode</span>
             <p className="mt-1">
-              No publish bridge keys configured — expected for this release. Draft, schedule, preflight, and simulated
-              publishes work locally without OAuth tokens.
+              No social accounts connected yet — that&apos;s normal. You can draft, run the publish checklist, and
+              simulate posts locally without signing in anywhere.
             </p>
           </div>
           <div className="border border-line/60 bg-panel/50 px-3 py-2 text-[10px] text-muted">
-            <span className="uppercase tracking-widest text-stark">Exit demo mode</span>
+            <span className="uppercase tracking-widest text-stark">Ready for live publish?</span>
             <p className="mt-1">
-              When ready for live publish: add platform OAuth tokens to{" "}
-              <code className="text-cursor-glow">digital.env</code>, set{" "}
-              <code className="text-cursor-glow">CURXOR_CONTENT_PUBLIC_BASE</code> for IG/Pinterest/TikTok media, then
-              refresh Bridge Health.
+              Connect each platform you want to post to, then set a public image address if you use Instagram or
+              Pinterest.
             </p>
-            <p className="mt-1">Guide: docs/creator-claw/GETTING-STARTED.md</p>
+            {onOpenConnections ? (
+              <button
+                type="button"
+                onClick={onOpenConnections}
+                className="mt-2 border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow"
+              >
+                Open connections
+              </button>
+            ) : null}
           </div>
         </div>
       ) : null}
@@ -117,6 +142,15 @@ export function ContentGoLivePanel({
         {!ready && !demoReady ? (
           <button type="button" onClick={onOpenWizard} className="border border-cursor-glow px-2 py-0.5 uppercase text-cursor-glow">
             Start wizard
+          </button>
+        ) : null}
+        {onOpenConnections ? (
+          <button
+            type="button"
+            onClick={onOpenConnections}
+            className="border border-line px-2 py-0.5 uppercase text-muted hover:border-cursor-glow hover:text-cursor-glow"
+          >
+            Connections
           </button>
         ) : null}
       </div>
@@ -147,15 +181,50 @@ export function ContentGoLivePanel({
       </div>
 
       <ol className="space-y-1.5">
-        {steps.map((step) => (
-          <li key={step.id} className="flex gap-2 border border-line/40 px-2 py-1.5">
-            <span className={`w-4 shrink-0 ${statusClass(step.status)}`}>{statusIcon(step.status)}</span>
-            <div className="min-w-0">
-              <p className={statusClass(step.status)}>{step.label}</p>
-              <p className="mt-0.5 text-muted">{step.detail}</p>
-            </div>
-          </li>
-        ))}
+        {steps.map((step) => {
+          const clickable =
+            (step.status === "warning" || step.status === "pending") && ACTIONABLE_STEPS.has(step.id);
+          return (
+            <li
+              key={step.id}
+              className={`flex gap-2 border border-line/40 px-2 py-1.5 ${
+                clickable ? "cursor-pointer hover:border-cursor-glow/50 hover:bg-surface/50" : ""
+              }`}
+              onClick={clickable ? () => handleStepClick(step) : undefined}
+              onKeyDown={
+                clickable
+                  ? (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleStepClick(step);
+                      }
+                    }
+                  : undefined
+              }
+              role={clickable ? "button" : undefined}
+              tabIndex={clickable ? 0 : undefined}
+            >
+              <span className={`w-4 shrink-0 ${statusClass(step.status)}`}>{statusIcon(step.status)}</span>
+              <div className="min-w-0">
+                <p className={statusClass(step.status)}>{step.label}</p>
+                <p className="mt-0.5 text-muted">
+                  {step.detail}
+                  {clickable ? (
+                    <span className="text-cursor-glow">
+                      {" "}
+                      ·{" "}
+                      {step.id === "bridges" || step.id === "public_base"
+                        ? "Open connections"
+                        : step.id === "first_post"
+                          ? "Start wizard"
+                          : "Fix"}
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

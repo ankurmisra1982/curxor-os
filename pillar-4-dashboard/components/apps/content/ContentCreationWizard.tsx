@@ -9,7 +9,7 @@ export interface WizardPreflightReport {
   ready: boolean;
   blockers: number;
   warnings: number;
-  checks: Array<{ severity: string; message: string; fixHint?: string }>;
+  checks: Array<{ severity: string; message: string; fixHint?: string; id?: string }>;
 }
 
 export interface WizardCompleteResult {
@@ -26,9 +26,10 @@ interface ContentCreationWizardProps {
   selectedPostId: string;
   useBestTime?: boolean;
   onComplete: (result: WizardCompleteResult) => void;
+  onOpenConnections?: () => void;
 }
 
-const STEPS = ["Channel", "Draft", "Media", "Pre-flight", "Schedule"] as const;
+const STEPS = ["Channel", "Draft", "Media", "Publish checklist", "Schedule"] as const;
 
 export function ContentCreationWizard({
   open,
@@ -38,6 +39,7 @@ export function ContentCreationWizard({
   selectedPostId,
   useBestTime = true,
   onComplete,
+  onOpenConnections,
 }: ContentCreationWizardProps) {
   const [step, setStep] = useState(0);
   const [platform, setPlatform] = useState<ContentPlatform>((channels[0] as ContentPlatform) ?? "x");
@@ -282,25 +284,46 @@ export function ContentCreationWizard({
 
         {step === 3 && (
           <div className="space-y-2">
-            <p className="text-muted">Pre-flight checks brand kit, char limits, bridge readiness, and media.</p>
+            <p className="text-muted">
+              Publish checklist — brand rules, character limits, account connection, and media.
+            </p>
             {!preflight ? (
               <p className="text-muted">Running checks…</p>
             ) : (
               <>
                 <p className={preflight.blockers > 0 ? "text-amber-400" : "text-cursor-glow"}>
                   {preflight.blockers > 0
-                    ? `${preflight.blockers} blocker(s) · ${preflight.warnings} warning(s)`
+                    ? `${preflight.blockers} must fix before scheduling · ${preflight.warnings} warning(s)`
                     : preflight.warnings > 0
                       ? `Ready with ${preflight.warnings} warning(s)`
                       : "All checks passed"}
                 </p>
-                <ul className="max-h-32 space-y-1 overflow-y-auto">
+                <ul className="max-h-40 space-y-2 overflow-y-auto">
                   {preflight.checks.slice(0, 8).map((c, i) => (
                     <li key={i} className={c.severity === "error" ? "text-amber-400" : "text-muted"}>
-                      {c.message}
+                      <p>{c.message}</p>
+                      {c.fixHint ? <p className="mt-0.5 text-[9px] text-muted">{c.fixHint}</p> : null}
+                      {c.severity === "error" && c.id === "bridge" && onOpenConnections ? (
+                        <button
+                          type="button"
+                          onClick={onOpenConnections}
+                          className="mt-1 border border-cursor-glow px-2 py-0.5 text-[9px] uppercase text-cursor-glow"
+                        >
+                          Connect account
+                        </button>
+                      ) : null}
                     </li>
                   ))}
                 </ul>
+                {preflight.blockers > 0 && onOpenConnections ? (
+                  <button
+                    type="button"
+                    onClick={onOpenConnections}
+                    className="border border-cursor-glow px-3 py-1 uppercase text-cursor-glow"
+                  >
+                    Open connections
+                  </button>
+                ) : null}
               </>
             )}
           </div>

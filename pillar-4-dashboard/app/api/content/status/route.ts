@@ -39,6 +39,7 @@ import {
   generateThumbnailVariantsForPost,
 } from "@/lib/content-creation-service";
 import { buildBridgeHealthReport } from "@/lib/content-bridge-health";
+import { writeDigitalEnvVars } from "@/lib/digital-env-store";
 import { buildCalendarWeek } from "@/lib/content-calendar";
 import { buildPublishPreview } from "@/lib/content-publish-preview";
 import { validatePostMedia } from "@/lib/content-media-validation";
@@ -991,6 +992,43 @@ export async function POST(request: Request): Promise<Response> {
         : [];
       const report = await buildBridgeHealthReport(channels);
       return Response.json({ ok: true, ...report });
+    }
+
+    case "save_bridge_credentials": {
+      const platform = typeof body.platform === "string" ? body.platform : "";
+      const credentials =
+        body.credentials && typeof body.credentials === "object" && !Array.isArray(body.credentials)
+          ? (body.credentials as Record<string, unknown>)
+          : null;
+      if (!platform || !credentials) {
+        return Response.json({ ok: false, error: "platform and credentials required" }, { status: 400 });
+      }
+      if (!isSocialPlatform(platform)) {
+        return Response.json({ ok: false, error: "Unknown platform" }, { status: 400 });
+      }
+      const { getSocialChannel } = await import("@/lib/social-channels");
+      const ch = getSocialChannel(platform);
+      const updates: Record<string, string> = {};
+      for (const key of ch.envKeys) {
+        const raw = credentials[key];
+        if (typeof raw === "string" && raw.trim()) {
+          updates[key] = raw.trim();
+        }
+      }
+      const publicBase = credentials.CURXOR_CONTENT_PUBLIC_BASE;
+      if (typeof publicBase === "string" && publicBase.trim()) {
+        updates.CURXOR_CONTENT_PUBLIC_BASE = publicBase.trim();
+      }
+      if (Object.keys(updates).length === 0) {
+        return Response.json({ ok: false, error: "Enter at least one credential field" }, { status: 400 });
+      }
+      await writeDigitalEnvVars(updates);
+      const fre = await readAppFreState("my-content-creator");
+      const channels = Array.isArray(fre.config.channels)
+        ? fre.config.channels.filter((x): x is string => typeof x === "string")
+        : [];
+      const report = await buildBridgeHealthReport(channels);
+      return Response.json({ ok: true, saved: Object.keys(updates), ...report });
     }
 
     case "audit_list": {

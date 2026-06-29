@@ -35,19 +35,19 @@ export function ContentPreflightPanel({
   publishing,
   requireApproval,
 }: ContentPreflightPanelProps) {
-  if (loading) return <p className="font-mono text-[10px] text-muted">Running pre-flight checks…</p>;
+  if (loading) return <p className="font-mono text-[10px] text-muted">Running publish checklist…</p>;
   if (!report) return null;
 
   return (
     <div className="mb-3 space-y-2 font-mono text-[10px]">
       <div className="flex flex-wrap gap-2">
-        <span className="uppercase tracking-widest text-muted">Pre-flight</span>
+        <span className="uppercase tracking-widest text-muted">Publish checklist</span>
         {report.ready ? (
           <span className="text-cursor-glow">
             Ready{report.warnings > 0 ? ` · ${report.warnings} warning(s)` : ""}
           </span>
         ) : (
-          <span className="text-red-400">{report.blockers} blocker(s)</span>
+          <span className="text-red-400">{report.blockers} must fix</span>
         )}
         {typeof report.performanceScore === "number" ? (
           <span className="text-muted">
