@@ -152,6 +152,7 @@ export async function POST(request: Request): Promise<Response> {
     reason?: string;
     kind?: string;
     viewThreshold?: number;
+    credentials?: Record<string, unknown>;
   };
 
   try {
