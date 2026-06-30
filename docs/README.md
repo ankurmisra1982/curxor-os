@@ -10,6 +10,7 @@ Guides for deploying, operating, and extending the CurXor OS sovereign edge appl
 
 | Guide | What you'll learn |
 |-------|-------------------|
+| **[Dream state overview](curxor-os/DREAM-STATE-OVERVIEW.md)** | **End-state vision — hardware · sovereign OS · locked hero · three acts** |
 | **[Feature & Function](FEATURE-FUNCTION.md)** | **Full product scope, maturity matrix, API catalog, Claws** |
 | **[Future roadmap](curxor-os/FUTURE-ROADMAP.md)** | **Ideas capture, gates, Program CL / HS / SIG / …** |
 | **[Compute ladder](curxor-os/COMPUTE-LADDER.md)** | **Standard · Pro 128 · Studio — open-weight tiers · press copy (→ storefront)** |

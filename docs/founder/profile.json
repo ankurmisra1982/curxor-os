@@ -1,18 +1,22 @@
 {
-  "version": "0.1.0",
-  "updated": "2026-06-21",
+  "version": "0.1.3",
+  "updated": "2026-06-29",
   "founder": {
     "name": "Ankur Misra",
     "role": "Founder & CEO",
     "company": "CurXor",
     "handles": {
       "x": "ankurmisra",
-      "xDisplay": "CurXor_HQ",
-      "xUrl": "https://x.com/ankurmisra"
+      "xDisplay": "Ankur Misra",
+      "xUrl": "https://x.com/ankurmisra",
+      "linkedin": "https://www.linkedin.com/in/ankurmisra1/",
+      "email": "ankur@curxor.ai"
     },
     "links": {
       "product": "https://curxor.ai",
-      "originThread": "https://x.com/ankurmisra/status/2067473753924129162"
+      "productX": "https://x.com/curxorai",
+      "originThread": "https://x.com/ankurmisra/status/2067473753924129162",
+      "essay": "https://x.com/ankurmisra/status/2070024704925077702"
     }
   },
   "quote": {
@@ -20,10 +24,222 @@
     "attribution": "Ankur Misra",
     "context": "June 2026 — origin of CurXor"
   },
+  "narrative": {
+    "cadence": "weekly long-form refresh — see docs/founder/essay-playbook.md",
+    "latestVersion": "2026-06-27-v0.2",
+    "latestInsight": "Most people use AI daily but only for grammar and basics — they feel under-leveraged, not behind. CurXor closes the gap from chatbot to always-on scale.",
+    "primaryHook": "grammar gap",
+    "essays": {
+      "v1": "docs/founder/x-article-why-im-building-curxor.md",
+      "v0.2": "docs/founder/essays/2026-06-27-v0.2-shallow-usage-gap.md"
+    },
+    "insightBacklog": [
+      {
+        "date": "2026-06-27",
+        "source": "in-person conversation",
+        "quote": "I use it almost every day but I feel like I'm not using it for what I could be — just grammar and basic stuff.",
+        "essayUse": "v0.2 opening hook"
+      }
+    ]
+  },
   "bios": {
-    "short": "Founder, CurXor. Shipping the sovereign edge box OpenClaw proved the world wants — local AI, Claws, and Flight Command out of the box.",
-    "medium": "Founder of CurXor. Building the appliance the agent stack should have shipped as: sovereign edge box, local inference, digital employees on bare metal. Started the day after SpaceX went public and Cursor's acquisition made the frontier undeniable.",
-    "tagline": "Sovereign AI on your metal."
+    "short": "Founder @ CurXor — sovereign AI desk on metal you own. Ten Claws · local inference · $3,999 once · $0/mo API.",
+    "medium": "Founder & CEO, CurXor. Building the sovereign AI appliance — ten Claws on bare metal, Flight Command, $0/mo inference. Jun 18 named it in public; Jun 19 started shipping.",
+    "linkedinHeadline": "Founder & CEO at CurXor · Sovereign AI desk on metal you own · Ten Claws · local inference · $3,999 once · $0/mo API · Building in public",
+    "heroTagline": "Your AI team. On a box you own.",
+    "thesisTagline": "The orchestrator on your desk.",
+    "oneLiner": "CurXor — a desk appliance that runs ten AI agents on hardware you own. $3,999 once. No API rent.",
+    "commentReplyPlain": "Plain version: a $3,999 AI box on your desk with CurXor OS — ten agents that run locally 24/7. No monthly API bill. \"Orchestrator\" is the vision; the box is what you buy.",
+    "stealth": {
+      "xHeadline": "Founder · building in sovereign AI & edge compute",
+      "xBio": "Building something new at the intersection of local AI and autonomous systems. DMs open for operators and early believers.",
+      "linkedinHeadline": "Founder · Sovereign AI & Edge Systems (stealth)",
+      "linkedinAbout": "Building a new company at the intersection of local AI, autonomous agents, and hardware you own. DMs open for operators and select early investors. ankur@curxor.ai",
+      "productXBio": "Sovereign AI on metal you own. Building quietly. Founder → @ankurmisra"
+    }
+  },
+  "dreamState": {
+    "doc": "docs/curxor-os/DREAM-STATE-OVERVIEW.md",
+    "locked": "2026-06-29",
+    "useWhen": "Investor decks · founder essays · /signal · category film · internal north star — not cold storefront H1 until G4",
+    "oneSentence": "CurXor is a sovereign AI system — custom hardware, CurXor OS, and an autonomous team that runs on your metal — designed around you and owned by you.",
+    "hero": {
+      "h1": "Designed around you. Owned by you.",
+      "subhead": "CurXor is a sovereign AI system — custom hardware, CurXor OS, and an autonomous team that runs on your metal. Mint your Claws. Conduct your devices. No API rent.",
+      "accent": "The next interface isn't a device. It's the orchestrator on your desk.",
+      "categoryLine": "A sovereign AI system for your desk"
+    },
+    "threeActs": [
+      {
+        "act": "I",
+        "name": "Prove",
+        "hardware": "MS-S1-class appliance",
+        "os": "CurXor OS on Ubuntu 24.04 — four pillars",
+        "status": "shipping now"
+      },
+      {
+        "act": "II",
+        "name": "Own the metal",
+        "hardware": "CurXor-designed desk appliance",
+        "os": "Hardware-tuned stack",
+        "status": "post-investment"
+      },
+      {
+        "act": "III",
+        "name": "Sovereign",
+        "hardware": "CurXor silicon + industrial stack",
+        "os": "Fully sovereign CurXor OS — not Linux-dependent",
+        "status": "destination"
+      }
+    ],
+    "thesisAccents": [
+      "The next interface isn't a device. It's the orchestrator on your desk.",
+      "Interfaces drift. Your desk conducts.",
+      "Not another device. The desk that runs your world."
+    ],
+    "investorParagraph": "CurXor is a sovereign AI system — not a chat app, not a cloud subscription. Custom desk hardware runs CurXor OS, a full vertical stack built for local inference, autonomous agents, and operator control from the metal up. Ten Claws are your digital employees — capital, creation, outreach, household, devices — minted in The Forge and coordinated through Flight Command and the Claw Cafe. Outbound action crosses a physical egress boundary you control; cognition stays local by default. Today we prove the stack on MS-S1-class metal. After investment, we ship CurXor-designed hardware. The long-term destination is a fully sovereign OS — no Linux dependency, no rented intelligence — so your AI team isn't a feature on someone else's platform. It's yours, from silicon to Claw.",
+    "naming": {
+      "locked": "2026-06-29",
+      "productNoun": "Claw",
+      "doNotRenameTo": ["orchestrator", "agent-as-brand"],
+      "hierarchy": {
+        "operator": "Composer / principal — owns the score",
+        "desk": "Conductor + orchestrator — same desk, two registers",
+        "claw": "Orchestra / sections — ten + Forge",
+        "signal": "Acoustic reach — devices, VR, rooms",
+        "cafe": "The hall — ensemble presence",
+        "masterAi": "Horizon patron above the ten"
+      },
+      "essayOneLiner": "CurXor is the orchestrator on your desk. Claws are the team it runs.",
+      "symphonyEssayLine": "CurXor conducts on your desk. Claws are the orchestra.",
+      "symphonyPayoff": "The symphony plays.",
+      "symphonyBridgeLine": "The orchestrator on your desk — the conductor for your Claws.",
+      "symphonyHeadline": "One desk conducts. The symphony plays.",
+      "gtmConductorAccent": "Interfaces drift. Your desk conducts.",
+      "gtmConductorNote": "Conductor = GTM verb · orchestrator = essay noun — same desk. Claws = orchestra sections.",
+      "coldTrafficGloss": "digital employees · AI agents — introduce Claws after plain English",
+      "gtmGlossExample": "Ten autonomous AI agents on your metal — Claws for capital, content, outreach, and more.",
+      "neverSay": [
+        "Ten orchestrators on your desk",
+        "Ten conductors on your desk",
+        "Claw without plain-English gloss on first touch"
+      ]
+    },
+    "symphony": {
+      "payoff": "The symphony plays.",
+      "headline": "One desk conducts. The symphony plays.",
+      "bridgeLine": "The orchestrator on your desk — the conductor for your Claws.",
+      "roles": [
+        { "id": "operator", "label": "You", "metaphor": "Composer / principal", "body": "You own the score — rules, FRE, approvals." },
+        { "id": "desk", "label": "CurXor desk", "metaphor": "Conductor + orchestrator", "body": "Same desk, two registers — conducts your Claws on metal you own." },
+        { "id": "claws", "label": "Claws", "metaphor": "Orchestra / sections", "body": "Specialists that play in parallel." },
+        { "id": "signal", "label": "Signal", "metaphor": "Acoustic reach", "body": "How the performance reaches rooms, devices, and VR." },
+        { "id": "cafe", "label": "Claw Cafe", "metaphor": "The hall", "body": "Where the ensemble has presence." }
+      ],
+      "storefrontModule": "src/lib/symphony-metaphor.ts",
+      "storefrontComponent": "SymphonySection"
+    }
+  },
+  "messagingLadder": {
+    "rule": "Hero = layers 1–2 (what + do). Thesis = layer 4 only. Never lead cold traffic with orchestrator alone.",
+    "tier": "gtm-ship-now",
+    "dreamStateDoc": "docs/curxor-os/DREAM-STATE-OVERVIEW.md",
+    "dreamStateProfileKey": "dreamState",
+    "storefrontDoc": "docs/founder/storefront-hero-copy.md",
+    "hero": {
+      "h1": "Your AI team. On a box you own.",
+      "subhead": "CurXor is a desk appliance with CurXor OS — ten autonomous AI agents, local inference, and a command dashboard on your network. $3,999 once · $0/mo API for the operate plane.",
+      "accent": "Interfaces drift. Your desk conducts.",
+      "accentGtmNote": "Conductor verb on storefront · links to /signal · orchestrator noun stays in essays/deck",
+      "ctaPrimary": "Pre-order",
+      "ctaSecondary": "See how it works"
+    },
+    "whatIsThisStrip": [
+      {
+        "title": "The box",
+        "body": "A MINISFORUM MS-S1-class appliance. Plug into your network. You own the hardware."
+      },
+      {
+        "title": "CurXor OS",
+        "body": "The desk that conducts — inference, agents, and control on your metal, not a cloud subscription."
+      },
+      {
+        "title": "Ten Claws",
+        "body": "Your orchestra of autonomous AI agents — capital, content, outreach, and more. Mint sections in The Forge."
+      }
+    ],
+    "symphonySection": {
+      "headline": "One desk conducts. The symphony plays.",
+      "payoff": "The symphony plays.",
+      "bridgeLine": "The orchestrator on your desk — the conductor for your Claws."
+    },
+    "layers": [
+      {
+        "id": 1,
+        "name": "what",
+        "job": "Physical object",
+        "examples": ["A box on your desk", "An AI computer you own"]
+      },
+      {
+        "id": 2,
+        "name": "do",
+        "job": "Outcome",
+        "examples": [
+          "Ten AI agents run 24/7 locally — investing, content, outreach",
+          "Plug in. Your AI team works on your metal."
+        ]
+      },
+      {
+        "id": 3,
+        "name": "different",
+        "job": "vs cloud rent",
+        "examples": ["$3,999 once · $0/mo API rent", "Own the hardware + OS, not rent cognition"]
+      },
+      {
+        "id": 4,
+        "name": "thesis",
+        "job": "Vision — essay, /signal, accent only",
+        "examples": [
+          "The orchestrator on your desk",
+          "Interfaces drift. Your desk conducts."
+        ]
+      }
+    ],
+    "tweets": {
+      "product": "What is CurXor?\n\nA box on your desk that runs ten AI agents 24/7 — on your metal, not in someone else's cloud.\n\n$3,999 once · $0/mo API rent.\n\nThe orchestrator on your desk is what we call it once you see the whole picture.",
+      "productShort": "CurXor = hardware + OS for autonomous AI on your desk.\n\nPlug in. Ten agents work locally. You own the box. No API subscription.\n\ncurxor.ai",
+      "founder": "Someone asked what \"the orchestrator on your desk\" means.\n\nPlain English: it's a $3,999 AI computer that ships with CurXor OS — ten agents that run on your metal 24/7, not a ChatGPT bill.\n\nThe fancy line is the vision. The box is the product.",
+      "founderShort": "Fair question. Simple version:\n\nAI hardware box + CurXor OS. Ten autonomous agents on your desk. Local inference. You own it.\n\n\"Orchestrator\" = it coordinates your agents and (eventually) your devices — not another chatbot tab."
+    }
+  },
+  "socialChannels": {
+    "xFounder": {
+      "handle": "@ankurmisra",
+      "mode": "public",
+      "job": "Founder essay, grammar-gap hooks, build energy, pin essay"
+    },
+    "xProduct": {
+      "handle": "@curxorai",
+      "mode": "public",
+      "job": "Product thesis, ship log, pricing, curxor.ai"
+    },
+    "linkedin": {
+      "url": "https://www.linkedin.com/in/ankurmisra1/",
+      "mode": "stealth",
+      "job": "Warm intros only — founder building, no product brochure until G1"
+    },
+    "other": {
+      "mode": "idle",
+      "note": "No posting until deliberate relaunch"
+    }
+  },
+  "stealthMode": {
+    "active": true,
+    "scope": "linkedin-only",
+    "since": "2026-06-25",
+    "exitGate": "G1 golden path green + real Flight Command screenshot → flip LinkedIn to public copy",
+    "doc": "docs/founder/STEALTH-MODE.md",
+    "xRemainsPublic": true
   },
   "originStory": {
     "title": "The viral moment",

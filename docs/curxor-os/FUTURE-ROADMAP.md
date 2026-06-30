@@ -1,6 +1,7 @@
 # CurXor OS — Future Roadmap (ideas capture)
 
 > **Room:** Vision & Strategy — structure ideas here; **no build** in this chat  
+> **Dream state (locked):** [DREAM-STATE-OVERVIEW.md](./DREAM-STATE-OVERVIEW.md) — category north star · three acts · vision hero  
 > **Build freeze:** Until on-device golden path passes · see [PRE-UNBOX-48H.md](./PRE-UNBOX-48H.md)  
 > **Shipped / active sequencing:** [DAY-ONE-BUILD-PLAN.md](./DAY-ONE-BUILD-PLAN.md)  
 > **Owner:** Ankur (what matters) · CTO agent (structure + gates)  

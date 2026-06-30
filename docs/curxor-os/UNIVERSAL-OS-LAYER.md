@@ -1,6 +1,7 @@
 # CurXor OS — Universal layer map
 
 > **Room:** Vision & Strategy · product architecture  
+> **Dream state:** [DREAM-STATE-OVERVIEW.md](./DREAM-STATE-OVERVIEW.md) — locked category · three acts · vision hero  
 > **Status:** Founder map (Jun 2026) · complements [CAFE-OS-LAYER-MODEL.md](./CAFE-OS-LAYER-MODEL.md) (roster)  
 > **Rule:** Universal = **always part of the OS** or **cross-cutting platform** — not one of the ten **operate Claws** (vertical desks).
 

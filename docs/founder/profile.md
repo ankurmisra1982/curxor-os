@@ -57,6 +57,20 @@ Ship the full stack the way OpenClaw proved people want it: **working, out of th
 
 ---
 
+## Dream state (category north star)
+
+The **ship-now** product is Act I — MS-S1-class metal, CurXor OS on Ubuntu, ten Claws + Flight Command. The **fully envisioned end state** is a vertical sovereign AI system: CurXor-designed hardware, fully sovereign OS (not Linux-dependent), and the desk as orchestrator for your team and devices.
+
+**Locked vision hero:** *Designed around you. Owned by you.*
+
+**Thesis:** *The next interface isn't a device. It's the orchestrator on your desk.*
+
+**Naming lock:** *CurXor is the orchestrator on your desk. Claws are the team it runs.* — keep **Claw** as product noun; never rename to orchestrators per agent.
+
+Full overview: [DREAM-STATE-OVERVIEW.md](../curxor-os/DREAM-STATE-OVERVIEW.md) · structured copy in [profile.json](./profile.json) → `dreamState`.
+
+---
+
 ## Timeline
 
 | When | What |
