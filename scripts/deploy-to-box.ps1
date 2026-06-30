@@ -45,7 +45,7 @@ else {
 }
 
 # Staging dir is often root-owned after a prior sudo box-apply-deploy — use sudo for extract.
-$remoteApply = "sudo rm -rf '${RemoteTmp}' && sudo mkdir -p '${RemoteTmp}' && sudo tar -xzf '${RemoteTar}' -C '${RemoteTmp}' && test -f '${RemoteTmp}/scripts/post-update.sh' && sudo rsync -a --delete '${RemoteTmp}/' '${RemoteOpt}/' && sudo find '${RemoteOpt}' -name '*.sh' -exec sed -i 's/\r\$//' {} + && sudo bash '${RemoteOpt}/scripts/post-update.sh' && echo '--- smoke ---' && (curl -sf http://127.0.0.1:3080/api/setup/status && echo ' dashboard OK' || echo 'dashboard not ready yet') && systemctl is-active curxor-dashboard.service || true"
+$remoteApply = "sudo rm -rf '${RemoteTmp}' && sudo mkdir -p '${RemoteTmp}' && sudo tar -xzf '${RemoteTar}' -C '${RemoteTmp}' && test -f '${RemoteTmp}/scripts/post-update.sh' && sudo rsync -a --delete --exclude 'node_modules/' --exclude '.next/' --exclude 'dist/' '${RemoteTmp}/' '${RemoteOpt}/' && sudo find '${RemoteOpt}' -name '*.sh' -exec sed -i 's/\r\$//' {} + && sudo bash '${RemoteOpt}/scripts/post-update.sh' && echo '--- smoke ---' && (curl -sf http://127.0.0.1:3080/api/setup/status && echo ' dashboard OK' || echo 'dashboard not ready yet') && systemctl is-active curxor-dashboard.service || true"
 
 Write-Host "==> CurXor deploy"
 Write-Host "    Repo : $RepoRoot"
@@ -112,7 +112,7 @@ if ($applyExit -ne 0) {
     Write-Host "==> DEPLOY INCOMPLETE (ssh exit $applyExit)." -ForegroundColor Red
     Write-Host "    Tarball is usually at ${RemoteTar}. Finish on the box:"
     Write-Host "      ssh $sshTarget"
-    Write-Host "      sudo bash -c 'rm -rf ${RemoteTmp} && mkdir -p ${RemoteTmp} && tar -xzf ${RemoteTar} -C ${RemoteTmp} && rsync -a --delete ${RemoteTmp}/ ${RemoteOpt}/ && find ${RemoteOpt} -name \"*.sh\" -exec sed -i \"s/\r\$//\" {} + && bash ${RemoteOpt}/scripts/post-update.sh'"
+    Write-Host "      sudo bash /opt/curxor/scripts/box-apply-deploy.sh"
     exit $applyExit
 }
 

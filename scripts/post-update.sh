@@ -71,12 +71,32 @@ rebuild_node_project() {
     if sudo -u "${CURXOR_USER}" bash <<EOF
 set -euo pipefail
 cd '${dir}'
+npm_registry_ok() {
+  curl -sf --connect-timeout 3 https://registry.npmjs.org/ >/dev/null 2>&1
+}
+has_deps() {
+  [[ -d node_modules ]] && [[ -n "\$(ls -A node_modules 2>/dev/null)" ]]
+}
 if command -v pnpm &>/dev/null; then
-  pnpm install --frozen-lockfile 2>/dev/null || pnpm install
-  pnpm build
+  if has_deps; then
+    pnpm build
+  elif npm_registry_ok; then
+    pnpm install --no-frozen-lockfile
+    pnpm build
+  else
+    echo "node_modules missing and npm registry unreachable (offline box)" >&2
+    exit 1
+  fi
 elif command -v npm &>/dev/null; then
-  npm ci 2>/dev/null || npm install
-  npm run build
+  if has_deps; then
+    npm run build
+  elif npm_registry_ok; then
+    npm install
+    npm run build
+  else
+    echo "node_modules missing and npm registry unreachable (offline box)" >&2
+    exit 1
+  fi
 else
   exit 0
 fi
@@ -88,17 +108,29 @@ EOF
   elif (
     cd "${dir}"
     if command -v pnpm &>/dev/null; then
-      pnpm install --frozen-lockfile 2>/dev/null || pnpm install
-      pnpm build
+      if [[ -d node_modules ]] && [[ -n "$(ls -A node_modules 2>/dev/null)" ]]; then
+        pnpm build
+      elif curl -sf --connect-timeout 3 https://registry.npmjs.org/ >/dev/null; then
+        pnpm install --no-frozen-lockfile
+        pnpm build
+      else
+        exit 1
+      fi
     elif command -v npm &>/dev/null; then
-      npm ci 2>/dev/null || npm install
-      npm run build
+      if [[ -d node_modules ]] && [[ -n "$(ls -A node_modules 2>/dev/null)" ]]; then
+        npm run build
+      elif curl -sf --connect-timeout 3 https://registry.npmjs.org/ >/dev/null; then
+        npm install
+        npm run build
+      else
+        exit 1
+      fi
     fi
   ); then
     ok=1
   fi
   if [[ "${ok}" -eq 0 ]]; then
-    log "WARNING: ${label} rebuild failed"
+    log "WARNING: ${label} rebuild failed (node_modules wiped? run scripts/sync-node-deps-to-box.ps1 from laptop)"
   fi
 }
 

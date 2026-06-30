@@ -25,7 +25,11 @@ tar -xzf "${REMOTE_TAR}" -C "${REMOTE_TMP}"
 [[ -f "${REMOTE_TMP}/pillar-4-dashboard/package.json" ]] || die "bad payload: pillar-4-dashboard missing — NOT touching ${REMOTE_OPT}"
 
 echo "==> Payload OK — rsync -> ${REMOTE_OPT}"
-rsync -a --delete "${REMOTE_TMP}/" "${REMOTE_OPT}/"
+rsync -a --delete \
+  --exclude 'node_modules/' \
+  --exclude '.next/' \
+  --exclude 'dist/' \
+  "${REMOTE_TMP}/" "${REMOTE_OPT}/"
 find "${REMOTE_OPT}" -name '*.sh' -exec sed -i 's/\r$//' {} +
 
 echo "==> post-update (rebuild + restart dashboard)"
