@@ -8,12 +8,5 @@ interface HomePageClientProps {
 }
 
 export function HomePageClient({ selectedApps }: HomePageClientProps) {
-  return (
-    <HomeOverview
-      selectedApps={selectedApps}
-      onOpenHealth={() => {
-        window.dispatchEvent(new CustomEvent("curxor:open-health"));
-      }}
-    />
-  );
+  return <HomeOverview selectedApps={selectedApps} />;
 }

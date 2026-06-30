@@ -36,8 +36,7 @@ def _tune_common(sock: zmq.Socket, rcvhwm: int, sndhwm: int, *, conflate: bool) 
     sock.setsockopt(zmq.TCP_KEEPALIVE, 1)
     sock.setsockopt(zmq.TCP_KEEPALIVE_IDLE, 30)
     sock.setsockopt(zmq.IMMEDIATE, 1)
-    # Disable Nagle — critical for sub-ms motor frames on 10GbE mesh
-    sock.setsockopt(zmq.TCP_NODELAY, 1)
+    # Nagle is disabled by libzmq on all TCP sockets (tune_tcp_socket); no ZMQ_TCP_NODELAY in pyzmq 27+
     if conflate:
         sock.setsockopt(zmq.CONFLATE, 1)
 

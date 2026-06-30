@@ -21,14 +21,12 @@ def _tune_pub(sock: zmq.Socket, sndhwm: int) -> None:
     sock.setsockopt(zmq.SNDHWM, sndhwm)
     sock.setsockopt(zmq.LINGER, 0)
     sock.setsockopt(zmq.IMMEDIATE, 1)
-    sock.setsockopt(zmq.TCP_NODELAY, 1)
 
 
 def _tune_sub(sock: zmq.Socket, rcvhwm: int, *, conflate: bool = False) -> None:
     sock.setsockopt(zmq.RCVHWM, rcvhwm)
     sock.setsockopt(zmq.LINGER, 0)
     sock.setsockopt(zmq.IMMEDIATE, 1)
-    sock.setsockopt(zmq.TCP_NODELAY, 1)
     if conflate:
         sock.setsockopt(zmq.CONFLATE, 1)
 

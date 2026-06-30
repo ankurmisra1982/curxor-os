@@ -2,122 +2,144 @@
 
 > **Maps to:** [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md)  
 > **Box:** `curxor` · **SKU:** Standard 64 GB · **Software:** 0.9.1  
-> **Golden path:** FRE green **2026-06-28** · Part 4 cables **pending**
+> **Golden path:** **COMPLETE 2026-06-29** — verify PASS · smile test PASS
+
+### Current ops (post–Part 4)
+
+| What | Value |
+|------|--------|
+| **Browser home** | **`http://10.0.0.1:3080/home`** |
+| **SSH** | **`ssh ankur@10.0.0.1`** (COMMAND cable · laptop `10.0.0.2`) |
+| **Deploy** | `.\scripts\deploy-to-box.ps1` from laptop (use `dos2unix` / `copy-script-to-box.ps1` for `.sh`) |
+
+### MS-S1 MAX interface map (verified)
+
+| Role | CurXor name | **Linux iface** | IPv4 |
+|------|-------------|-----------------|------|
+| COMMAND | Command Port | **`enp98s0`** | **`10.0.0.1/24`** |
+| EGRESS | Egress Port / mesh | **`enp97s0`** | **`10.77.0.1/24`** |
+
+**Not `eno1`/`eno2` on this hardware.** Scripts default to `enp98s0`/`enp97s0` via `scripts/lib/network-defaults.sh`.
+
+**Obsolete:** `192.168.86.211` was USB dongle → router DHCP during first install only. After mesh + captive portal, use **`10.0.0.1`** only.
 
 ---
 
 ## Timeline vs guide
 
-| Guide block | Guide step | Status | Session notes |
-|-------------|------------|--------|---------------|
-| **0** | Unbox · power · monitor | **Done** | HDMI + USB keyboard/mouse; ran Windows briefly before Ubuntu |
-| **1** | BIOS UMA ~48 GB | **Done** | MINISFORUM AMI `02.22.0058` · **Advanced → AMD CBS → NBIO Common Options → GFX Configuration** · UMA Mode **UMA_SPECIFIED** · Frame buffer **48 GB** · Secure Boot **Disabled** |
-| **2** | Ubuntu 24.04 USB | **Done** | ISO: `ubuntu-24.04.4-desktop-amd64.iso` · Rufus **GPT + UEFI + ISO mode** · **Interactive** install · **Default** apps · 3rd-party graphics/Wi‑Fi **yes** · media codecs **no** · hostname **`curxor`** · user **`ankur`** |
-| **2.2** | First login · SSH | **Done** | `openssh-server` enabled · **BOX_IP:** `192.168.86.211` · **SSH:** `ssh curxor` (laptop `~/.ssh/config`) · NIC: `enp97s0` (USB LAN dongle to router) |
-| **3** | Copy + `install-all.sh` | **Done** | Laptop `scp` → `/tmp/curxor-os` → `/opt/curxor` · see **Pitfalls** below |
-| **3.2** | `deploy.sh --pull-models` | **Done** | `moondream:1.8b` + `qwen3:8b` pulled · warm step slow but **init exited 0** |
-| **4** | eno cables + network scripts | **Pending** | `eno2 not found` during install (expected until built-in ports cabled) |
-| **5** | Dashboard + FRE | **Done** | `http://192.168.86.211:3080` · FRE apps: `my-capital`, `my-content-creator`, `my-work` |
-| **6** | Smile test / verify script | **Partial** | FRE + dashboard OK · full flagship click-through + `verify-unbox-day.sh --post-models` **not run yet** |
+| Guide block | Status | Session notes |
+|-------------|--------|---------------|
+| **0–3** | **Done** | BIOS 48 GB UMA · Ubuntu 24.04.4 · `/opt/curxor` · models pulled |
+| **4** | **Done** | EGRESS → Nest router · COMMAND → laptop USB Ethernet · captive + mesh scripts |
+| **5** | **Done** | FRE: `my-capital`, `my-content-creator`, `my-work` |
+| **6** | **Done** | `verify-unbox-day.sh --post-models` PASS · smile test PASS |
 
 ---
 
-## Guide section checklist (pen-and-paper boxes)
+## Pitfalls & fixes (Windows → Linux)
 
-### Part 1 — BIOS
+### COMMAND cable steals laptop internet (dual-homed Wi-Fi + cable)
 
-| Guide item | Actual |
-|------------|--------|
-| UMA path | **GFX Configuration** (not top-level NBIO only) |
-| UMA value | **48 GB** on 64 GB SKU |
-| iGPU | Enabled (via UMA_SPECIFIED) |
-| Secure Boot | Disabled → triggers Windows BitLocker until disk erased |
+**Symptom:** Google/DNS broken, "no internet" on Ethernet, or captive portal when Wi-Fi is still connected.
 
-### Part 2 — Ubuntu
+**Root cause (old box config):** DHCP `option:router` + wildcard DNS `address=/#/10.0.0.1`. Laptop static `10.0.0.2` with gateway `10.0.0.1` has the same effect. DNS set to home router (e.g. `192.168.86.1`) on the COMMAND adapter does **not** fix it — router is not on `10.0.0.0/24`.
 
-| Guide item | Actual |
-|------------|--------|
-| Wrong ISO trap | **Do not** use `ubuntu-26.04` — use **24.04 LTS** |
-| BitLocker loop | Set **USB #1 in BIOS Boot tab**; don't need recovery key if erasing disk |
-| Live vs installed | Purple desktop + **Install Ubuntu** icon = still on USB; must run installer to disk |
-| Boot priority | **USB Device: UEFI: Samsung…** #1 · Quiet Boot off for debugging |
-
-### Part 3 — CurXor install
-
-| Guide item | Actual |
-|------------|--------|
-| First copy | `scp -r C:\Users\ankur\curxor-os curxor:/tmp/curxor-os` from **laptop** (or `ankur@192.168.86.211` before Host alias) |
-| `deploy-to-box.ps1` | **Updates only** — not first-time install |
-| `install-all.sh` | Ran after `dos2unix` on `*.sh` |
-| ROCm apt conflict | Remove Ubuntu `rocminfo`; install from AMD ROCm 7.2 repo |
-| `amdkfd` at install | Normal before reboot; `/dev/kfd` present after reboot |
-| Models | Standard 64: `moondream:1.8b`, `qwen3:8b` ✓ |
-
-### Part 4 — Cables (next session)
-
-| Guide item | Plan |
-|------------|------|
-| COMMAND | Built-in port → laptop or router → **eno1** |
-| EGRESS | Other built-in port → router → **eno2** |
-| USB dongle | Fine for install; **not** final COMMAND/EGRESS layout |
-| Scripts | `setup-captive-portal.sh` · `setup-mesh-network.sh` |
-| Verify | `verify-unbox-day.sh --post-models` |
-
-### Part 5 — FRE (completed)
-
-```json
-{
-  "initialized": true,
-  "selectedApps": ["my-capital", "my-content-creator", "my-work"],
-  "provisionedAt": "2026-06-28T06:23:17.645Z"
-}
-```
-
-Browser: **http://192.168.86.211:3080/setup** → Step 2 Pick Claws → **BEGIN PROVISIONING**
-
----
-
-## Pitfalls & fixes (Windows → Linux copy path)
-
-Run these on the box when copying from a Windows laptop:
+**Box fix:**
 
 ```bash
-# 1. CRLF in shell scripts and env files
-sudo apt-get install -y dos2unix
-sudo find /opt/curxor -type f \( -name '*.sh' -o -name '*.env' -o -name '*.example' \) -exec dos2unix {} +
-sudo dos2unix /etc/curxor/*.env
+sudo /opt/curxor/scripts/setup-captive-portal.sh
+grep -E 'option:router|address=/#/' /etc/dnsmasq.d/curxor-captive.conf && echo BAD || echo OK
+```
 
-# 2. Docker "unable to find group render"
-sudo groupadd -r render 2>/dev/null || true
-sudo systemctl restart docker
-# If still fails, in docker-compose.yml group_add use numeric GIDs:
-#   video → "44"   render → "992"  (verify with getent group)
+`verify-unbox-day.sh` warns if wildcard DNS or `option:router` remains. Probe domains only: `config/captive-portal/captive-dns-domains.txt`.
 
-# 3. Ollama healthcheck (image has no curl)
-# Use compose with: test: ["CMD", "ollama", "list"]  start_period: 120s
-# Add OLLAMA_IGPU_ENABLE: "1" for gfx1151 / Strix Halo
+**Laptop fix (Windows):** IP `10.0.0.2/24`, gateway **blank**, DNS **automatic**. One-time:
 
-# 4. Dashboard CHDIR / permission denied
-sudo chmod 755 /opt/curxor
-sudo chown -R curxor:curxor /opt/curxor/pillar-4-dashboard
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install-laptop-command-port.ps1
+```
+
+**Session notes (2026-06-29):**
+
+- Box reboot cleared stale ARP when L2 lookup worked but TCP to `10.0.0.2` failed
+- `ip neigh show dev enp98s0` — `STALE` entry for `10.0.0.2` MAC confirms correct cable
+- `curl http://10.0.0.1` port 80 from **on box** returns `000` — normal (iptables redirect is inbound-only)
+- `curl -sf http://10.0.0.1:3080/api/setup/status` on box must be **200**
+- Browser must use **`http://`** not `https://`; incognito fixes false "down"
+- SSH `~/.ssh/config` `HostName` must be **`10.0.0.1`**, not `192.168.86.211`
+- `install-laptop-command-port.ps1` looked hung: silent `schtasks` + slow `Test-NetConnection` — repo now prints progress and uses `-SkipVerification` on install
+- Windows: no `New-NetRoute -PolicyStore PersistentStore`; `setup-laptop-command-port.ps1` uses `route add -p`
+
+### CRLF (required after `scp` from Windows)
+
+```bash
+sudo find /opt/curxor -name '*.sh' -exec dos2unix {} +
 sudo dos2unix /etc/systemd/system/curxor-*.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now curxor-dashboard
+# Symptom: bash\r: No such file or directory | set: pipefail: invalid option
 ```
 
-**Compose note:** `ollama-init` inline `command` with `$${...}` breaks `docker compose` on some versions — use `config/ollama/init-models.sh` bind-mount (fixed in repo `docker-compose.yml`).
+### dnsmasq `bind-dynamic` vs `bind-interfaces`
 
-**Warm step:** `[curxor] Warming VLA weights into UMA heap...` can sit **10–20+ min** on first ROCm run; `curxor-ollama-init` **Exited (0)** = success even if deploy terminal looks stuck.
+Ubuntu 24.04 default `/etc/dnsmasq.conf` may have **`bind-dynamic`** — conflicts with captive portal **`bind-interfaces`**.
+
+```text
+cannot set --bind-interfaces and --bind-dynamic
+```
+
+**Fix:** `setup-captive-portal.sh` now comments both out; re-run script or `sudo sed -i 's/^bind-dynamic/#bind-dynamic/' /etc/dnsmasq.conf`. Do **not** copy `config/captive-portal/dnsmasq-captive.conf` verbatim — script **generates** iface names.
+
+### Telemetry broker — pyzmq 27 `TCP_NODELAY`
+
+**Symptom:** `AttributeError: module 'zmq' has no attribute 'TCP_NODELAY'` · broker crash loop.
+
+**Fix (repo):** removed redundant `setsockopt` — libzmq disables Nagle on all TCP sockets. On box without redeploy:
+
+```bash
+sudo sed -i '/zmq\.TCP_NODELAY/d' \
+  /opt/curxor/pillar-3-telemetry/.venv/lib/python3.12/site-packages/curxor_broker/*.py
+sudo systemctl restart curxor-telemetry-broker
+```
+
+### verify-gpu — `/dev/dri/card1` not card0
+
+MS-S1 iGPU is often **`card1`**. Repo `verify-gpu.sh` accepts any `/dev/dri/card*`.
+
+### ~15 Gi in `free -h` is normal
+
+64 GB SKU + **48 GB UMA BIOS** → Linux sees **~15–16 Gi** system RAM; rest is GPU carve-out. Dashboard `gpuHeapGb: 48` confirms UMA.
+
+### Interface env vars (all network scripts)
+
+```bash
+export CURXOR_CMD_IFACE=enp98s0
+export CURXOR_MESH_IFACE=enp97s0
+sudo CURXOR_CMD_IFACE=enp98s0 CURXOR_MESH_IFACE=enp97s0 \
+  /opt/curxor/scripts/verify-unbox-day.sh --post-models
+```
+
+### Temporary internet on box (apt/pip)
+
+Mesh isolates EGRESS. For apt during unbox: temporary Nest IP on `enp97s0` + `echo 'nameserver 8.8.8.8' | sudo tee /etc/resolv.conf`, then restore mesh.
+
+### Docker render group
+
+`unable to find group render` after reboot → `sudo systemctl restart docker` or numeric GIDs in compose.
+
+### Ollama
+
+Healthcheck: `ollama list` not `curl`. `OLLAMA_IGPU_ENABLE=1` for gfx1151.
 
 ---
 
-## Smoke commands (post-FRE)
+## Verification snapshot (2026-06-29)
 
-```bash
-curl -sf http://127.0.0.1:11434/api/tags && echo " ollama OK"
-curl -sf http://127.0.0.1:3080/api/setup/status && echo " dashboard OK"
-systemctl is-active curxor-dashboard curxor-compute
-sudo docker ps | grep ollama
+```text
+verify-unbox-day.sh --post-models : PASS (0 failures, 4 warnings)
+  Warnings: rocm-smi, curxor-compute/engine not installed (Ollama Docker OK)
+curxor-telemetry-broker : active
+10.77.0.1:9100-9201     : listening
+Ollama                  : qwen3:8b, moondream:1.8b
+Dashboard               : /api/setup/status OK, gpuHeapGb 48
 ```
 
 ---
@@ -128,9 +150,10 @@ sudo docker ps | grep ollama
 |-------|--------|
 | Hostname | `curxor` |
 | User | `ankur` |
-| LAN IP | `192.168.86.211` (router DHCP; may change — update `HostName` in `~/.ssh/config`) |
-| Dashboard | http://192.168.86.211:3080 |
-| SSH | **`ssh curxor`** (key auth · Host **curxor** → `192.168.86.211`) |
+| COMMAND | `enp98s0` @ `10.0.0.1` |
+| EGRESS/mesh | `enp97s0` @ `10.77.0.1` |
+| Dashboard | http://10.0.0.1:3080/home |
+| SSH | `ssh ankur@10.0.0.1` (laptop static `10.0.0.2/24`) |
 | SKU | Standard 64 GB · UMA 48 GB |
 | Inference | Ollama ROCm · `moondream:1.8b` · `qwen3:8b` |
 
@@ -141,6 +164,6 @@ sudo docker ps | grep ollama
 | Doc | When |
 |-----|------|
 | [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md) | Step-by-step checklist |
-| [10-ms-s1-max-hardware-bios.md](../guides/10-ms-s1-max-hardware-bios.md) | BIOS detail |
+| [10-ms-s1-max-hardware-bios.md](../guides/10-ms-s1-max-hardware-bios.md) | BIOS + NIC names |
 | [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) | Daily laptop ↔ box loop |
-| [CTO-STATUS-REPORT.md](../../curxor%20storefront/docs/CTO-STATUS-REPORT.md) | Storefront GTM sync · gate status · do/don't claims |
+| [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) | Deploy + CRLF |

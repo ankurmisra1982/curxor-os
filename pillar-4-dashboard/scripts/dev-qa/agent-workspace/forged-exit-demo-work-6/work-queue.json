@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-28T22:20:30.813Z",
+  "leads": [
+    {
+      "id": "LEAD-001",
+      "name": "Demo Prospect",
+      "email": "demo-o-work-6@forged.local",
+      "company": "CurXor Pilot",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-28T22:20:30.773Z",
+      "updatedAt": "2026-06-28T22:20:30.773Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-002",
+      "name": "Exit Lead",
+      "email": "exit-1782685230792@forged.local",
+      "company": "",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-28T22:20:30.813Z",
+      "updatedAt": "2026-06-28T22:20:30.813Z",
+      "lastTouchAt": null
+    }
+  ],
+  "tasks": [],
+  "sequences": [],
+  "sends": [],
+  "mailIndex": [],
+  "syncLog": []
+}

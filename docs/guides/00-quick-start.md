@@ -16,7 +16,9 @@ The **npm/Next.js build** ships UI and API routes. **Model weights are not bundl
 2. **Install stack** — `sudo /opt/curxor/scripts/install-all.sh`
 3. **Deploy local LLM** — `sudo /opt/curxor/pillar-1-compute/scripts/deploy.sh --pull-models` (30–90 min first time; Pro 128 pulls Qwen3 + Qwen3.6 extras — see [128GB cheat sheet](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md))
 4. **Verify inference** — `curl -sf http://127.0.0.1:11434/api/tags`
-5. **Open dashboard** — `http://<appliance-ip>:3080` → complete **FRE** at `/setup`
+5. **Open dashboard** — `http://10.0.0.1:3080/home` (COMMAND cable) → FRE at `/setup` on first boot
+
+**Laptop (Wi-Fi + COMMAND cable):** keep both connected. One-time Windows setup: `powershell -ExecutionPolicy Bypass -File .\scripts\install-laptop-command-port.ps1` (Administrator). Laptop IP `10.0.0.2/24`, no gateway on COMMAND adapter. See [Networking](03-networking.md#dual-homed-laptop-wi-fi--command-cable-simultaneously).
 
 Optional: captive portal (`setup-captive-portal.sh`), OTA cron (`install-ota-cron.sh`).
 
@@ -26,10 +28,10 @@ Optional: captive portal (`setup-captive-portal.sh`), OTA cron (`install-ota-cro
 
 | NIC | IP | Role |
 |-----|-----|------|
-| **eno1** | `10.0.0.1` | Operators, captive portal, Flight Command |
-| **eno2** | `10.77.0.1` | Agent mesh + digital bridges (Alpaca, X) |
+| **Command Port** (`enp98s0` on MS-S1) | `10.0.0.1` | Operators, captive portal, Flight Command |
+| **Egress Port** (`enp97s0` on MS-S1) | `10.77.0.1` | Agent mesh + digital bridges (Alpaca, X) |
 
-Unplug **eno2** to kill all outbound agent traffic. Inference stays on `127.0.0.1`.
+Unplug **Egress** to kill all outbound agent traffic. Inference stays on `127.0.0.1`.
 
 ---
 

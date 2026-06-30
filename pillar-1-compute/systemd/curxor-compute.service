@@ -11,6 +11,7 @@ RemainAfterExit=yes
 WorkingDirectory=/opt/curxor/pillar-1-compute
 EnvironmentFile=-/etc/curxor/compute.env
 ExecStartPre=/bin/bash -c 'test -e /dev/kfd'
+ExecStartPre=/opt/curxor/pillar-1-compute/scripts/patch-compose-group-gids.sh
 ExecStart=/bin/bash -c 'set -a; source /etc/curxor/compute.env; set +a; /usr/bin/docker compose --profile ${CURXOR_INFERENCE_BACKEND:-ollama} up -d --remove-orphans'
 ExecStop=/usr/bin/docker compose --profile ollama --profile vllm down
 TimeoutStartSec=600

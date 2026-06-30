@@ -1,0 +1,12 @@
+# Drop-in: match mesh NIC name on your hardware (MS-S1 MAX = enp97s0).
+# Install:
+#   sudo mkdir -p /etc/systemd/system/curxor-telemetry-broker.service.d
+#   sudo cp iface.conf.example /etc/systemd/system/curxor-telemetry-broker.service.d/iface.conf
+#   sudo systemctl daemon-reload && sudo systemctl restart curxor-telemetry-broker
+#
+[Unit]
+BindsTo=sys-subsystem-net-devices-enp97s0.device
+After=sys-subsystem-net-devices-enp97s0.device
+
+[Service]
+Environment=CURXOR_MESH_IFACE=enp97s0

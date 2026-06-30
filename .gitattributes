@@ -1,0 +1,2 @@
+*.sh text eol=lf
+# Enforce LF in git; still run sed -i 's/\r$//' on the box after ad-hoc scp — see FOUNDER-PATCH-RUNBOOK.md

@@ -13,6 +13,7 @@ TARGET_GPU_GB="${CURXOR_GPU_HEAP_GB:-48}"
 echo "==> CurXor UMA configuration check"
 echo "    System RAM : ${TOTAL_GB} GB (unified)"
 echo "    Target GPU : ${TARGET_GPU_GB} GB (BIOS + GTT)"
+echo "    Visible OS : ~$(( TOTAL_GB - TARGET_GPU_GB )) GB in free -h (rest is UMA GPU carve-out)"
 
 # ── Read current GTT from amdgpu ────────────────────────────────────────────
 GTT_KB=""

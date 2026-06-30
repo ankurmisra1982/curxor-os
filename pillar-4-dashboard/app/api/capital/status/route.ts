@@ -35,8 +35,13 @@ import { executeCapitalTrade, previewTrade, submitTradeToBridge } from "@/lib/ca
 import type { AutonomousMode, RuleState, TradeAction } from "@/lib/capital-queue-types";
 
 export async function GET(): Promise<Response> {
-  const status = await fetchCapitalStatus({ sync: false });
-  return Response.json(status, { headers: { "Cache-Control": "no-store" } });
+  try {
+    const status = await fetchCapitalStatus({ sync: false });
+    return Response.json(status, { headers: { "Cache-Control": "no-store" } });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Capital status unavailable";
+    return Response.json({ ok: false, error: message }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request): Promise<Response> {

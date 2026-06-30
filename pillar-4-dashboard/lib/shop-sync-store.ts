@@ -94,6 +94,18 @@ function storePath(): string {
   return process.env.CURXOR_SHOP_SYNC_PATH ?? "/etc/curxor/shop-sync.json";
 }
 
+/** Serialize read-modify-write — parallel channel syncs must not clobber each other. */
+let shopSyncWriteLock: Promise<void> = Promise.resolve();
+
+async function withShopSyncLock<T>(fn: () => Promise<T>): Promise<T> {
+  const run = shopSyncWriteLock.then(fn);
+  shopSyncWriteLock = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  return run;
+}
+
 export async function readShopSync(): Promise<ShopSyncStateV2 | null> {
   try {
     const raw = await readFile(storePath(), "utf8");
@@ -136,10 +148,12 @@ export async function readShopSync(): Promise<ShopSyncStateV2 | null> {
 }
 
 export async function writeShopSync(state: ShopSyncStateV2): Promise<void> {
-  const filePath = storePath();
-  await mkdir(path.dirname(filePath), { recursive: true });
-  const normalized = recomputeMerged(state);
-  await writeFile(filePath, `${JSON.stringify(normalized, null, 2)}\n`, { mode: 0o640 });
+  await withShopSyncLock(async () => {
+    const filePath = storePath();
+    await mkdir(path.dirname(filePath), { recursive: true });
+    const normalized = recomputeMerged(state);
+    await writeFile(filePath, `${JSON.stringify(normalized, null, 2)}\n`, { mode: 0o640 });
+  });
 }
 
 export async function patchChannelSync(
@@ -153,16 +167,21 @@ export async function patchChannelSync(
     pipelineOrders?: ShopPipelineOrder[];
   },
 ): Promise<ShopSyncStateV2> {
-  const existing = (await readShopSync()) ?? emptyShopSyncState();
-  const slice = existing.channels[channel];
-  existing.channels[channel] = {
-    ...slice,
-    ...patch,
-    spreads: patch.spreads ?? slice.spreads,
-    pipelineOrders: patch.pipelineOrders ?? slice.pipelineOrders,
-  };
-  await writeShopSync(existing);
-  return (await readShopSync()) ?? existing;
+  return withShopSyncLock(async () => {
+    const existing = (await readShopSync()) ?? emptyShopSyncState();
+    const slice = existing.channels[channel];
+    existing.channels[channel] = {
+      ...slice,
+      ...patch,
+      spreads: patch.spreads ?? slice.spreads,
+      pipelineOrders: patch.pipelineOrders ?? slice.pipelineOrders,
+    };
+    const filePath = storePath();
+    await mkdir(path.dirname(filePath), { recursive: true });
+    const normalized = recomputeMerged(existing);
+    await writeFile(filePath, `${JSON.stringify(normalized, null, 2)}\n`, { mode: 0o640 });
+    return normalized;
+  });
 }
 
 export function channelConnected(slice: ChannelSyncSlice): boolean {

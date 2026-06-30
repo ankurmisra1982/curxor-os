@@ -67,12 +67,12 @@ You are turning a **MINISFORUM MS-S1 MAX** into your **CurXor** box — a sovere
 
 The MS-S1 has **two network ports** on the back.
 
-| Cable label | CurXor name | Plugs into | Goes to | What it does |
-|-------------|-------------|------------|---------|--------------|
-| **COMMAND** | eno1 | One port on MS-S1 | **Your laptop** (direct or via router) | Dashboard — your control panel |
-| **EGRESS** | eno2 | The **other** port | **Home router** (internet) | Outbound trades, posts, scrapers — **unplug to stop outbound AI** |
+| Cable label | CurXor name | Linux iface (MS-S1) | Plugs into | Goes to | What it does |
+|-------------|-------------|---------------------|------------|---------|--------------|
+| **COMMAND** | Command Port | **`enp98s0`** | One built-in port | **Your laptop** (USB Ethernet) | Dashboard @ `10.0.0.1` |
+| **EGRESS** | Egress Port | **`enp97s0`** | Other built-in port | **Home router** | Mesh `10.77.0.1` · outbound bridges — **unplug to stop outbound AI** |
 
-**Label cables with tape before you plug in.** After install we confirm which physical port is eno1 vs eno2 with one command. Swapped cables are fixable — not a disaster.
+**Label cables with tape before you plug in.** MS-S1 MAX does **not** use `eno1`/`eno2` — run `ip link` to confirm `enp98s0` / `enp97s0`. Swapped cables are fixable.
 
 ### Picture — cable layout
 
@@ -102,7 +102,7 @@ The MS-S1 has **two network ports** on the back.
 2. ☐ **EGRESS:** MS-S1 port → **router**.  
 3. ☐ **COMMAND:** MS-S1 other port → **laptop Ethernet** (or same router + Wi‑Fi on laptop).  
 4. ☐ Photo which cable is in which port.  
-5. ☐ After Part 4, run `ip link show eno1` / `eno2` to confirm. Swap cables if needed.
+5. ☐ After Part 4, run `ip link show enp98s0` / `enp97s0` (or `ip link | grep enp`). Swap cables if IPs wrong.
 
 **Never swap these mentally:** Command = you. Egress = internet/outbound.
 
@@ -117,8 +117,8 @@ The MS-S1 has **two network ports** on the back.
 | **Dashboard / Flight Command** | CurXor UI in browser — port **3080** |
 | **FRE** | First-run setup wizard — pick your Claws |
 | **Claw** | One AI app (Work, Capital, Creator, Forge, …) |
-| **eno1 / Command Port** | Network port for **you** |
-| **eno2 / Egress Port** | Network port for **outbound AI** |
+| **Command Port** | Network port for **you** (MS-S1: `enp98s0` @ `10.0.0.1`) |
+| **Egress Port** | Network port for **mesh + outbound AI** (MS-S1: `enp97s0` @ `10.77.0.1`) |
 | **Ollama** | Local LLM on the box (model download takes time first run) |
 | **Demo mode** | Works without API keys — honest labels |
 
@@ -176,7 +176,7 @@ sudo systemctl enable --now ssh
 ip addr | grep "inet "
 ```
 
-Note the IP (e.g. `192.168.1.x`) — that's **BOX_IP** for browser URLs. On the laptop, add **`Host curxor`** to `~/.ssh/config` so deploy uses **`ssh curxor`** (see [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) §3b).
+Note the IP for SSH during first install (often router DHCP). **After Part 4 (captive portal):** browser and SSH use **`10.0.0.1`** on the COMMAND cable; laptop **`10.0.0.2`**. Add **`Host curxor`** → `HostName 10.0.0.1` in `~/.ssh/config` (see [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) §3b).
 
 ---
 
@@ -273,8 +273,8 @@ sudo /opt/curxor/scripts/setup-mesh-network.sh
 ### Confirm ports
 
 ```bash
-ip link show eno1
-ip link show eno2
+ip link show enp98s0
+ip link show enp97s0
 ```
 
 If missing, list all: `ip link | grep -E '^[0-9]+:'` — photo → CTO.
@@ -410,8 +410,8 @@ See [19-kiosk-mode.md](../guides/19-kiosk-mode.md).
 │  CURXOR UNBOX — QUICK REFERENCE                         │
 ├─────────────────────────────────────────────────────────┤
 │  SKU: Standard 64 GB · UMA max ~48 GB in BIOS           │
-│  COMMAND  →  Laptop (eno1)                              │
-│  EGRESS   →  Router (eno2) — unplug = stop outbound AI  │
+│  COMMAND  →  Laptop (enp98s0 @ 10.0.0.1)                │
+│  EGRESS   →  Router (enp97s0) — unplug = stop outbound  │
 │                                                         │
 │  Dashboard:  http://10.0.0.1:3080  or  http://BOX_IP:3080│
 │  Setup:      /setup                                       │

@@ -12,7 +12,7 @@ export async function buildOsApprovalInbox(limit = 12): Promise<OsApprovalInbox>
   const [capitalFile, workFile, creatorQueue] = await Promise.all([
     ensureCapitalQueue(),
     ensureWorkQueue(),
-    listApprovalQueue(),
+    listApprovalQueue().catch(() => ({ posts: [], replies: [] })),
   ]);
 
   const items: OsApprovalItem[] = [];

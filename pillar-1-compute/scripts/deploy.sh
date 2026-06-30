@@ -89,6 +89,7 @@ fi
 # ── Start services ──────────────────────────────────────────────────────────
 if [[ "${INIT_ONLY}" == false ]]; then
   echo "==> Starting ${BACKEND}..."
+  "${SCRIPT_DIR}/patch-compose-group-gids.sh"
   docker compose --profile "${PROFILE}" up -d
 fi
 

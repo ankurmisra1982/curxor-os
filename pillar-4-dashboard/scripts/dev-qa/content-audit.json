@@ -2,6 +2,370 @@
   "version": 1,
   "entries": [
     {
+      "id": "2a24cecd-9d37-4329-baa7-ae8fd3d92773",
+      "at": "2026-06-28T22:29:15.784Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1260",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1260",
+        "ok": true
+      }
+    },
+    {
+      "id": "b821e235-6313-4b60-b8d8-21154e0b9bc0",
+      "at": "2026-06-28T22:29:15.726Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "e9937ea3-5ca1-4427-bb90-4bf63a6b82c1",
+      "at": "2026-06-28T22:29:01.384Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1258",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1258",
+        "ok": true
+      }
+    },
+    {
+      "id": "48f1ef99-de96-4764-95f4-62b638bd917c",
+      "at": "2026-06-28T22:29:01.183Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "96c3208d-f545-4267-9ac1-a8f252b3c137",
+      "at": "2026-06-28T22:20:07.160Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1255",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1255",
+        "ok": true
+      }
+    },
+    {
+      "id": "a97b2cf1-c648-412f-9d32-3809fb825517",
+      "at": "2026-06-28T22:20:07.100Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "6c2c2224-0a1d-4f06-b422-32841c55adef",
+      "at": "2026-06-28T22:19:52.964Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1253",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1253",
+        "ok": true
+      }
+    },
+    {
+      "id": "d5c99f40-eb44-4ffe-a643-4c96b52eefdb",
+      "at": "2026-06-28T22:19:52.760Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "ba987c7b-9e06-45dc-bb2f-136467ea1e61",
+      "at": "2026-06-28T22:17:38.439Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1250",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1250",
+        "ok": true
+      }
+    },
+    {
+      "id": "2106d6e7-3491-44ba-a009-2841c3bc4805",
+      "at": "2026-06-28T22:17:38.376Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "ac9878af-070d-4a64-a5b6-c4b245dd274e",
+      "at": "2026-06-28T22:17:24.360Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1248",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1248",
+        "ok": true
+      }
+    },
+    {
+      "id": "c58621fa-5a4e-4d73-b3a7-d874518ec319",
+      "at": "2026-06-28T22:17:24.145Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "095a90f8-07ac-4714-b70d-762901cc5b40",
+      "at": "2026-06-27T03:36:38.606Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1245",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1245",
+        "ok": true
+      }
+    },
+    {
+      "id": "531a5676-ea7e-4f13-911b-533a2b59e02b",
+      "at": "2026-06-27T03:36:38.548Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "d0c05805-6654-4498-a81f-ad9e6f778611",
+      "at": "2026-06-27T03:36:24.186Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1243",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1243",
+        "ok": true
+      }
+    },
+    {
+      "id": "263a4be2-5777-4a8e-aa82-12be4857a8f8",
+      "at": "2026-06-27T03:36:23.973Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "95e4799c-16fe-48e1-a63a-f6c0717cbe21",
+      "at": "2026-06-26T21:56:35.389Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1240",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1240",
+        "ok": true
+      }
+    },
+    {
+      "id": "56083711-bbc9-4f95-a163-b7a55fc192f0",
+      "at": "2026-06-26T21:56:35.295Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "dcd32668-5f36-4d9f-a1ee-beec6c5cb725",
+      "at": "2026-06-26T21:56:20.461Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1238",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1238",
+        "ok": true
+      }
+    },
+    {
+      "id": "e02d3afc-f91a-43fe-a57d-3cb7bfa7a76a",
+      "at": "2026-06-26T21:56:20.232Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "5f72e910-1731-4c6a-b976-7d89b80feecf",
+      "at": "2026-06-26T21:50:25.065Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1235",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1235",
+        "ok": true
+      }
+    },
+    {
+      "id": "6b5256c6-adf5-40d6-83d3-596b90d9fff6",
+      "at": "2026-06-26T21:50:25.010Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "9f6f44a5-52fe-4664-9966-dd77f08476a6",
+      "at": "2026-06-26T21:50:10.499Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1233",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1233",
+        "ok": true
+      }
+    },
+    {
+      "id": "a3322e31-f14f-4cc4-8d58-44f5319f5664",
+      "at": "2026-06-26T21:50:10.297Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "7a89aa65-f731-4ade-861b-5b0985cd8728",
+      "at": "2026-06-26T21:48:02.289Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1230",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1230",
+        "ok": true
+      }
+    },
+    {
+      "id": "ba2faa8f-a602-4294-bb1c-0fe69e53186d",
+      "at": "2026-06-26T21:48:02.245Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
+      "id": "4b476465-ddaa-4724-8210-098ad1a541d7",
+      "at": "2026-06-26T21:47:47.892Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1228",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1228",
+        "ok": true
+      }
+    },
+    {
+      "id": "3a47a372-b6ff-40ed-8fef-5fd8e6f27fb4",
+      "at": "2026-06-26T21:47:47.660Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-922",
+      "actor": "demo-tour",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-ST-922",
+        "ok": true
+      }
+    },
+    {
       "id": "552602e5-45b3-4a38-802f-6c9418b15ceb",
       "at": "2026-06-26T08:04:19.860Z",
       "action": "publish_post",
@@ -3304,5 +3668,5 @@
       }
     }
   ],
-  "updatedAt": "2026-06-26T08:04:19.860Z"
+  "updatedAt": "2026-06-28T22:29:15.785Z"
 }

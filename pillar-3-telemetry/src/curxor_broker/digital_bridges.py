@@ -3646,11 +3646,9 @@ class DigitalBridgeRuntime:
         pub = self._ctx.socket(zmq.PUB)
         sub.setsockopt(zmq.RCVHWM, 64)
         sub.setsockopt(zmq.LINGER, 0)
-        sub.setsockopt(zmq.TCP_NODELAY, 1)
         pub.setsockopt(zmq.SNDHWM, 64)
         pub.setsockopt(zmq.LINGER, 0)
         pub.setsockopt(zmq.IMMEDIATE, 1)
-        pub.setsockopt(zmq.TCP_NODELAY, 1)
 
         sub.connect(f"tcp://{self._bind_ip}:{self._config.motor_xpub_port}")
         pub.connect(f"tcp://{self._bind_ip}:{self._config.vision_xsub_port}")

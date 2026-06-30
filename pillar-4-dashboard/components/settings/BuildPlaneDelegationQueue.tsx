@@ -56,10 +56,20 @@ export function BuildPlaneDelegationQueue({ enabled, allowDelegation }: BuildPla
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
+  const [loadError, setLoadError] = useState<string | null>(null);
+
   const load = useCallback(async () => {
-    const res = await fetch("/api/build/delegation", { cache: "no-store" });
-    if (!res.ok) return;
-    setReport((await res.json()) as DelegationReport);
+    setLoadError(null);
+    try {
+      const res = await fetch("/api/build/delegation", { cache: "no-store" });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? `HTTP ${res.status}`);
+      }
+      setReport((await res.json()) as DelegationReport);
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : "Could not load delegation queue");
+    }
   }, []);
 
   useEffect(() => {
@@ -92,7 +102,24 @@ export function BuildPlaneDelegationQueue({ enabled, allowDelegation }: BuildPla
   );
 
   if (!report) {
-    return <p className="font-mono text-[10px] text-muted">Loading delegation queue…</p>;
+    return (
+      <div className="font-mono text-[10px] text-muted">
+        {loadError ? (
+          <>
+            <p className="text-amber-300">Delegation queue unavailable — {loadError}</p>
+            <button
+              type="button"
+              onClick={() => void load()}
+              className="mt-2 border border-line px-2 py-1 uppercase tracking-widest text-stark hover:border-cursor-glow"
+            >
+              Retry
+            </button>
+          </>
+        ) : (
+          "Loading delegation queue…"
+        )}
+      </div>
+    );
   }
 
   const { policy } = report;

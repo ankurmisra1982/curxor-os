@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -120,7 +121,6 @@ function PatronAskDesktopChrome({
       const ui = data.patronAsk?.ui ?? "minimized";
       setSavedUi(ui);
       if (ui === "sheet" && !isFullscreenRoute) setOpen(true);
-      if (ui === "fullscreen" && !isFullscreenRoute) router.push(ASK_PATH);
     } catch {
       // ignore
     }
@@ -141,6 +141,15 @@ function PatronAskDesktopChrome({
       void patchPatronAsk({ ui: "fullscreen", lastReadAt: new Date().toISOString() });
     }
   }, [isFullscreenRoute, setOpen, setUnread]);
+
+  const wasFullscreenRoute = useRef(false);
+  useEffect(() => {
+    if (wasFullscreenRoute.current && !isFullscreenRoute) {
+      void patchPatronAsk({ ui: "minimized" });
+      setSavedUi("minimized");
+    }
+    wasFullscreenRoute.current = isFullscreenRoute;
+  }, [isFullscreenRoute]);
 
   const openSheet = useCallback(() => {
     setOpen(true);

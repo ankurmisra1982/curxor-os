@@ -34,9 +34,10 @@ import { mergePilotCatalog } from "./capital-pilot-catalog";
 import { computePortfolioHealth } from "./capital-portfolio-health";
 import { buildTaxLotSummaries } from "./capital-tax-lots";
 import { isCapitalLiveEnvEnabled } from "./capital-live-env";
+import { resolveStorePath } from "./curxor-store-path";
 
 function storePath(): string {
-  return process.env.CURXOR_CAPITAL_QUEUE_PATH ?? "/etc/curxor/capital-queue.json";
+  return resolveStorePath("CURXOR_CAPITAL_QUEUE_PATH", "/etc/curxor/capital-queue.json");
 }
 
 /** Serializes JSON read-modify-write cycles to prevent lost updates under concurrent POSTs. */
@@ -202,7 +203,13 @@ export async function ensureCapitalQueue(): Promise<CapitalQueueFile> {
   try {
     const raw = await readFile(filePath, "utf8");
     const parsed = JSON.parse(raw) as Partial<CapitalQueueFile>;
-    return normalizeFile(parsed, riskProfile);
+    try {
+      return normalizeFile(parsed, riskProfile);
+    } catch {
+      const seeded = seedDemoQueue(riskProfile);
+      await writeCapitalFile(seeded);
+      return seeded;
+    }
   } catch {
     const seeded = seedDemoQueue(riskProfile);
     await writeCapitalFile(seeded);

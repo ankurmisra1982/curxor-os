@@ -1,6 +1,6 @@
 # CurXor OS — Pillar 3: Telemetry Broker
 
-Zero-copy ZeroMQ pub/sub daemon for the **robotics mesh** (secondary 10GbE, `eno2`).
+Zero-copy ZeroMQ pub/sub daemon for the **robotics mesh** (Egress Port — MS-S1 MAX: `enp97s0` @ `10.77.0.1`).
 
 ## Architecture
 
@@ -18,10 +18,10 @@ Motor traffic uses a **separate proxy** from vision to prevent head-of-line bloc
 
 | Topic | Direction | Publisher connect | Subscriber connect |
 |-------|-----------|-------------------|-------------------|
-| `telemetry/vision_in` | Claw → Engine | `tcp://<eno2_ip>:9100` | `tcp://<eno2_ip>:9101` |
-| `telemetry/motor_out` | Engine → Claw | `tcp://<eno2_ip>:9200` | `tcp://<eno2_ip>:9201` |
+| `telemetry/vision_in` | Claw → Engine | `tcp://<mesh_ip>:9100` | `tcp://<mesh_ip>:9101` |
+| `telemetry/motor_out` | Engine → Claw | `tcp://<mesh_ip>:9200` | `tcp://<mesh_ip>:9201` |
 
-All sockets bind **only** to the IPv4 address of `eno2` — never `0.0.0.0`.
+All sockets bind **only** to the IPv4 address of the mesh NIC — never `0.0.0.0`.
 
 ## Install (Ubuntu 24.04 appliance)
 
@@ -31,9 +31,9 @@ cd /opt/curxor/pillar-3-telemetry
 chmod +x scripts/*.sh
 sudo ./scripts/install.sh
 
-# Configure robotics mesh on Port 2 (example)
-sudo ip addr add 10.77.0.1/24 dev eno2
-sudo ip link set eno2 up
+# MS-S1 MAX: run setup-mesh-network.sh or:
+sudo CURXOR_MESH_IFACE=enp97s0 ip addr add 10.77.0.1/24 dev enp97s0
+sudo ip link set enp97s0 up
 
 sudo systemctl enable --now curxor-telemetry-broker
 ./scripts/verify-mesh.sh
@@ -65,7 +65,7 @@ from curxor_broker.client import MotorPublisher, VisionSubscriber
 from curxor_broker.protocol import motor_now
 
 ctx = zmq.Context.instance()
-BROKER = "10.77.0.1"  # eno2 mesh IP
+BROKER = "10.77.0.1"  # mesh / Egress Port IP
 
 vision = VisionSubscriber(ctx, BROKER, 9101)
 motor = MotorPublisher(ctx, BROKER, 9200)
@@ -79,19 +79,19 @@ motor.send_command(motor_now(claw_id=1, x=0.12, y=-0.03, z=0.41, seq=1))
 | Setting | Vision | Motor | Why |
 |---------|--------|-------|-----|
 | `RCVHWM/SNDHWM` | 4096 | 16 | Vision bursts; motor stays shallow |
-| `TCP_NODELAY` | ✓ | ✓ | Disable Nagle on 10GbE mesh |
+| Nagle (libzmq) | ✓ | ✓ | Disabled in libzmq `tune_tcp_socket` on all TCP sockets |
 | `CONFLATE` (sub) | ✗ | ✓ | Actuators always take latest command |
 | Separate proxy | ✓ | ✓ | No vision frame blocking motor path |
 
-Production: pin broker thread to an isolated CPU core and assign `eno2` IRQ affinity via `/proc/irq/`.
+Production: pin broker thread to an isolated CPU core and assign mesh NIC IRQ affinity via `/proc/irq/`.
 
 ## Configuration
 
 Environment file: `/etc/curxor/telemetry-broker.env` (see `.env.example`).
 
 ```bash
-CURXOR_MESH_IFACE=eno2
-CURXOR_MESH_BIND_IP=          # auto-detect from eno2
+CURXOR_MESH_IFACE=enp97s0
+CURXOR_MESH_BIND_IP=          # auto-detect from mesh NIC
 CURXOR_TOPIC_VISION=telemetry/vision_in
 CURXOR_TOPIC_MOTOR=telemetry/motor_out
 ```
@@ -104,6 +104,10 @@ CURXOR_TOPIC_MOTOR=telemetry/motor_out
 | **Pillar 2** | Engine publishes motor, subscribes vision |
 | **Pillar 4** | Dashboard subscribes both topics via XPUB ports |
 
+### pyzmq 27+
+
+Do not call `zmq.TCP_NODELAY` — removed in pyzmq 27. libzmq already disables Nagle on TCP sockets. If upgrading an old venv, redeploy pillar-3 from repo.
+
 ## Files
 
 ```
@@ -112,7 +116,7 @@ pillar-3-telemetry/
 │   ├── broker.py       # Dual zmq.proxy daemon
 │   ├── client.py       # Publisher/subscriber helpers
 │   ├── protocol.py     # Binary wire formats
-│   ├── network.py      # eno2 bind resolution
+│   ├── network.py      # mesh NIC bind resolution
 │   └── config.py
 ├── systemd/curxor-telemetry-broker.service
 ├── scripts/install.sh

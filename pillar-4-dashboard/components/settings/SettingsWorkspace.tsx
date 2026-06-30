@@ -28,6 +28,17 @@ import type {
 
 type SettingsTab = "claws" | "intelligence" | "appearance" | "agent" | "general";
 
+const PRIMARY_SOURCE_HINTS: Record<IntelligenceSource, string> = {
+  local: "All chat and planning stay on this appliance's local models.",
+  frontier: "Requires a connected frontier provider — no fallback to local.",
+  auto: "Uses frontier when connected; otherwise falls back to local models.",
+};
+
+const CAFE_TITLE_HINTS: Record<"mythic" | "neutral", string> = {
+  mythic: "Mythic titles on your ascension profile — Sprout, Voyager, and beyond.",
+  neutral: "Plain tier labels (L1–L6) instead of mythic names on your profile.",
+};
+
 interface InferenceStatus {
   localAvailable: boolean;
   frontierAvailable: boolean;
@@ -419,8 +430,17 @@ export function SettingsWorkspace() {
                     </button>
                   ))}
                 </div>
+                <p className="mt-3 font-sans text-xs text-muted">
+                  Current:{" "}
+                  {primarySource === "local"
+                    ? "Local only"
+                    : primarySource === "frontier"
+                      ? "Frontier only"
+                      : "Auto"}{" "}
+                  — {PRIMARY_SOURCE_HINTS[primarySource]}
+                </p>
                 {inference ? (
-                  <p className="mt-3 font-mono text-[11px] text-muted">
+                  <p className="mt-2 font-mono text-[11px] text-muted">
                     Local {inference.localAvailable ? "online" : "offline"} · Frontier{" "}
                     {inference.frontierAvailable ? "connected" : "not connected"}
                   </p>
@@ -708,7 +728,7 @@ export function SettingsWorkspace() {
               <section>
                 <h2 className="font-sans text-lg font-semibold text-stark">Claw Cafe title style</h2>
                 <p className="mt-1 font-sans text-xs text-muted">
-                  Mythic titles (Sprout, Voyager…) or neutral labels on your ascension profile.
+                  How ascension tiers appear in Claw Cafe and cross-Claw XP surfaces.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {(
@@ -731,6 +751,10 @@ export function SettingsWorkspace() {
                     </button>
                   ))}
                 </div>
+                <p className="mt-2 font-sans text-xs text-muted">
+                  Current: {cafeTitleStyle === "mythic" ? "Mythic" : "Neutral"} —{" "}
+                  {CAFE_TITLE_HINTS[cafeTitleStyle]}
+                </p>
               </section>
 
               <section>

@@ -27,11 +27,14 @@ async function policyInput() {
   };
 }
 
-export async function GET(request: Request): Promise<Response> {
-  const denied = requireLanAuth(request);
-  if (denied) return denied;
-  const report = await buildDelegationReport(24);
-  return Response.json(report);
+export async function GET(): Promise<Response> {
+  try {
+    const report = await buildDelegationReport(24);
+    return Response.json(report);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Delegation report unavailable";
+    return Response.json({ ok: false, error: message }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request): Promise<Response> {

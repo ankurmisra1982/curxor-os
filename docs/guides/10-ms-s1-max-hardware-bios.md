@@ -10,10 +10,10 @@ Hardware-specific setup for the **MINISFORUM MS-S1 MAX** running CurXor OS.
 | GPU | Radeon 8060S (integrated, gfx1151) |
 | Memory | 64 GB or **128 GB** LPDDR5X **UMA** (single pool, soldered SKU) |
 | ROCm arch | `gfx1151` (`HSA_OVERRIDE_GFX_VERSION=11.5.1`) |
-| Networking | Dual 10GbE — **eno1** (user LAN), **eno2** (robotics mesh) |
+| Networking | Dual 10GbE — **Command Port** (`enp98s0` @ `10.0.0.1`), **Egress Port** (`enp97s0` @ `10.77.0.1`) on verified MS-S1 unbox |
 | OS target | Ubuntu 24.04 LTS minimal |
 
-CurXor OS treats this as a **sovereign edge appliance**: inference on localhost, robotics on eno2, operators on eno1.
+CurXor OS treats this as a **sovereign edge appliance**: inference on localhost, robotics on Egress Port, operators on Command Port.
 
 ## Physical layout
 
@@ -21,17 +21,15 @@ CurXor OS treats this as a **sovereign edge appliance**: inference on localhost,
 ┌─────────────────────────────────────────────────────────┐
 │  MINISFORUM MS-S1 MAX                                   │
 │                                                         │
-│  [eno1] ──► User LAN / Wi‑Fi AP / captive portal       │
-│             CurXor: 10.0.0.1 (setup-captive-portal)   │
+│  [enp98s0] Command Port ──► Laptop / captive portal @ 10.0.0.1   │
 │                                                         │
-│  [eno2] ──► Robotics mesh / cameras / claw controllers  │
-│             CurXor: 10.77.0.1 (setup-mesh-network)      │
+│  [enp97s0] Egress Port ──► Router + mesh @ 10.77.0.1    │
 │                                                         │
 │  [USB / storage] ──► Install media, offline model cache   │
 └─────────────────────────────────────────────────────────┘
 ```
 
-Label cables at install time. Swapping eno1/eno2 breaks captive portal vs mesh isolation.
+Label cables at install time. Swapping Command vs Egress ports breaks captive portal vs mesh isolation.
 
 ## BIOS access
 
@@ -54,7 +52,7 @@ Firmware menu names vary by revision. Look for **Advanced**, **Chipset**, **AMD 
 | iGPU | **Enabled** | Required for ROCm inference |
 | Shared memory above 512 MB | **Enabled** if offered | Allows large heap |
 
-Leave ~12–16 GB for Ubuntu, Pillar 2–4, and broker overhead.
+Leave ~12–16 GB for Ubuntu, Pillar 2–4, and broker overhead. After boot, **`free -h` shows ~15 Gi** on a 64 GB SKU with 48 GB UMA — that is correct, not missing RAM.
 
 Validate after boot:
 
@@ -104,7 +102,7 @@ Thermal throttling shows up as inference latency spikes — check `journalctl` a
 
 - Enable both 10GbE controllers
 - Disable unused Wi‑Fi if present (reduces attack surface on sovereign nodes)
-- Do **not** enable NIC teaming across eno1+eno2 — CurXor requires isolation
+- Do **not** enable NIC teaming across Command + Egress ports — CurXor requires isolation
 
 ## Kernel supplement (after BIOS)
 
@@ -127,15 +125,15 @@ BIOS carve-out remains primary; kernel GTT is supplementary.
 
 ```bash
 # ROCm sees gfx1151
-rocminfo | grep -i gfx1151
+rocminfo 2>&1 | grep -i gfx1151
 rocm-smi --showmeminfo
 
 # Docker GPU
 /opt/curxor/pillar-1-compute/scripts/verify-gpu.sh
 
 # NIC roles
-ip link show eno1
-ip link show eno2
+ip link show enp98s0
+ip link show enp97s0
 ip addr | grep -E '10\.0\.0\.1|10\.77\.0\.1'
 
 # Full stack

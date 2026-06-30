@@ -69,6 +69,9 @@ export function ComputeMetricsWidget({ active = true, className = "" }: ComputeM
         <div>
           <div className="text-[9px] uppercase">Tokens/s</div>
           <div className="text-stark">{metrics.tokensPerSecond ?? "—"}</div>
+          {metrics.tokensPerSecondHint ? (
+            <div className="mt-0.5 text-[9px] leading-snug text-muted">{metrics.tokensPerSecondHint}</div>
+          ) : null}
         </div>
         <div>
           <div className="text-[9px] uppercase">UMA used</div>

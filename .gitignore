@@ -10,3 +10,6 @@ typecheck-out.txt
 
 # Cursor IDE local state
 .cursor/
+
+# Local operator monitors (do not commit)
+wifi-box-monitor.log

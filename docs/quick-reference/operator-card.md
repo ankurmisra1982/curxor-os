@@ -12,26 +12,30 @@ Print this card at the rack. Expanded quick start: [guides/00-quick-start.md](..
 
 | What | Where |
 |------|-------|
-| Dashboard (laptop) | `http://<appliance-ip>:3080` |
+| Dashboard (laptop / COMMAND cable) | **`http://10.0.0.1:3080/home`** (use `http://` not `https://`) |
+| Laptop IP (COMMAND cable) | **`10.0.0.2/24`** · **no gateway** · DNS automatic · Wi-Fi keeps internet |
+| Laptop setup (Windows, once) | `powershell -ExecutionPolicy Bypass -File .\scripts\install-laptop-command-port.ps1` (Administrator) |
+| Re-apply routing | `.\scripts\setup-laptop-command-port.ps1` |
+| SSH | **`ssh curxor`** or **`ssh ankur@10.0.0.1`** (`HostName 10.0.0.1` in `~/.ssh/config`) |
 | Dashboard (on-box display, optional) | `http://127.0.0.1:3080` |
-| Kiosk (tty1 fullscreen) | `install-kiosk-mode.sh` → reboot — [19-kiosk-mode.md](../guides/19-kiosk-mode.md) |
-| Captive (eno1) | Any URL → `http://10.0.0.1` |
 | FRE wizard | `/setup` (first boot) |
 | The Forge | `/claw-forge` or header **+ Forge** |
 | System Health | Header → OTA log + compute metrics |
 
+**Daily loop:** Wi-Fi on + COMMAND cable in → open **`http://10.0.0.1:3080/home`** → `ssh curxor` for logs/deploy. No need to unplug cable for internet after split-route install.
+
 ---
 
-## Network
+## Network (MS-S1 MAX verified)
 
-| NIC | IP | Role |
-|-----|-----|------|
-| **eno1** | `10.0.0.1` | Operators · captive portal |
-| **eno2** | `10.77.0.1` | Mesh + digital bridges |
+| Role | Iface | IP |
+|------|-------|-----|
+| **Command Port** | `enp98s0` | `10.0.0.1` |
+| **Egress Port** | `enp97s0` | `10.77.0.1` |
 
-Mesh: vision **9100/9101** · motor **9200/9201** · digital **9200/9101**
+Mesh: vision **9100/9101** · motor **9200/9201**
 
-**Unplug eno2** → no outbound trades/posts. LLM stays on localhost.
+**Unplug Egress** → no outbound trades/posts. LLM stays on localhost.
 
 ---
 
@@ -59,12 +63,11 @@ Mesh: vision **9100/9101** · motor **9200/9201** · digital **9200/9101**
 | Verify | `curl -sf http://127.0.0.1:11434/api/tags` |
 | Restart | `sudo systemctl restart curxor-compute` |
 
-**Default stack:** `moondream:1.8b` + `qwen3:8b` · Pro 128 adds `qwen3-vl:8b`, `qwen3:14b`, `batiai/qwen3.6-35b:q4` via `OLLAMA_EXTRA_MODELS`
-
-**Uses inference:** engine loop · Forge chat · Creator/Capital/Outreach/Arbitrage chat · plan skills  
-**Skills only (no LLM→internet):** Execute Trade · Publish Post → mesh → bridge
+**Default stack:** `moondream:1.8b` + `qwen3:8b` · Pro 128 adds extras via `OLLAMA_EXTRA_MODELS`
 
 Dashboard fallback if Ollama down: rule-based chat still works.
+
+**UMA:** `free -h` may show **~15 Gi** on 64 GB SKU with 48 GB GPU heap — normal.
 
 ---
 
@@ -84,8 +87,6 @@ journalctl -u curxor-engine -f
 journalctl -u curxor-dashboard -f
 ```
 
-**Shut down / reboot whole box (monitor):** Ubuntu **Power** menu · or hold MS-S1 **power button**. Kiosk tty1: **Ctrl+Alt+F3** → `sudo reboot` / `sudo shutdown -h now`. No in-app power UI yet — [UNBOX-PRINTABLE-GUIDE.md](../curxor-os/UNBOX-PRINTABLE-GUIDE.md) §5.4 · roadmap IDEA-A06.
-
 ---
 
 ## First boot
@@ -93,21 +94,14 @@ journalctl -u curxor-dashboard -f
 | SKU | BIOS UMA | Env |
 |-----|----------|-----|
 | **Standard 64** ($3,999) | MAX (~48 GB) | `CURXOR_TOTAL_RAM_GB=64` · `CURXOR_GPU_HEAP_GB=48` |
-| **Pro 128** ($4,999) | MAX (~96 GB) | `CURXOR_TOTAL_RAM_GB=128` · `CURXOR_GPU_HEAP_GB=96` — [cheat sheet](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md) |
+| **Pro 128** ($4,999) | MAX (~96 GB) | `CURXOR_TOTAL_RAM_GB=128` · `CURXOR_GPU_HEAP_GB=96` |
 
-1. BIOS UMA **MAX** (see row above)
-2. `sudo /opt/curxor/scripts/install-all.sh`
-3. `sudo …/deploy.sh --pull-models`
-4. Dashboard → FRE (`/setup`) — pick Claw modules
-5. Optional: captive portal · OTA cron
-
-**After golden path** — optional kiosk (tty1 fullscreen):
-
-```bash
-sudo /opt/curxor/scripts/install-kiosk-mode.sh
-# or: sudo CURXOR_ENABLE_KIOSK=1 /opt/curxor/scripts/install-all.sh
-sudo reboot
-```
+1. BIOS UMA **MAX**
+2. `sudo find /opt/curxor -name '*.sh' -exec dos2unix {} +` (after Windows `scp`)
+3. `sudo /opt/curxor/scripts/install-all.sh`
+4. `sudo …/deploy.sh --pull-models`
+5. Part 4 cables + `setup-captive-portal.sh` / `setup-mesh-network.sh`
+6. Dashboard → **`http://10.0.0.1:3080/home`**
 
 ---
 
@@ -117,7 +111,7 @@ sudo reboot
 |------|---------|
 | `/etc/curxor/compute.env` | Ollama/vLLM |
 | `/etc/curxor/dashboard.env` | UI + inference client |
-| `/etc/curxor/digital.env` | Alpaca / X keys (eno2) |
+| `/etc/curxor/digital.env` | Alpaca / X keys (Egress bridges) |
 | `/etc/curxor/fre-state.json` | Global FRE |
 | `/etc/curxor/claw-profiles.json` | Forged Claws |
 
@@ -128,22 +122,16 @@ sudo reboot
 | Problem | Try |
 |---------|-----|
 | No inference | `curl :11434/api/tags` · `restart curxor-compute` |
-| Chat feels “scripted” | Ollama not running — deploy models |
-| No mesh / SSE empty | `eno2` IP · `CURXOR_MESH_BROKER_IP=10.77.0.1` |
-| Trade/post fails | `digital.env` keys · `restart curxor-telemetry-broker` |
+| Broker crash loop | pyzmq 27 `TCP_NODELAY` — see [UNBOX-FIELD-LOG.md](../curxor-os/UNBOX-FIELD-LOG.md) |
+| No mesh / SSE empty | `enp97s0` @ `10.77.0.1` · `systemctl status curxor-telemetry-broker` |
+| dnsmasq won't start | `bind-dynamic` conflict — re-run `setup-captive-portal.sh` |
+| Laptop loses internet on cable | No gateway/DNS on COMMAND · run `install-laptop-command-port.ps1` · re-run `setup-captive-portal.sh` on box |
+| `google.com` → `10.0.0.1` | Wildcard DNS on box — `grep address=/#/ /etc/dnsmasq.d/curxor-captive.conf` |
+| Browser "down" but SSH OK | Use **`http://`** not `https://` · incognito / restart browser |
+| SSH fails | `HostName 10.0.0.1` in `~/.ssh/config` (not `192.168.86.211`) |
+| TCP fails, L2 looks OK | Box reboot · `ip neigh show dev enp98s0` for `10.0.0.2` |
+| `bash\r` after scp | `dos2unix` on script |
 | Stuck on /setup | Reset FRE — Installation guide |
-| Port 3080 conflict (dev) | Use `:3081` or free stale process |
-
----
-
-## OTA
-
-```bash
-sudo /opt/curxor/scripts/ota-updater.sh --dry-run
-sudo tail -f /var/log/curxor/ota-update.log
-```
-
-Cron: **03:00** · `/etc/cron.d/curxor-ota`
 
 ---
 

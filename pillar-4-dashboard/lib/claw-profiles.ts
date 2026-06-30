@@ -22,7 +22,13 @@ export async function readClawProfiles(): Promise<ClawProfilesState> {
     const raw = await readFile(getClawProfilesPath(), "utf8");
     const parsed = JSON.parse(raw) as Partial<ClawProfilesState>;
     const claws = Array.isArray(parsed.claws)
-      ? parsed.claws.map((c) => normalizeProfile(c as ClawProfile))
+      ? parsed.claws.flatMap((c) => {
+          try {
+            return [normalizeProfile(c as ClawProfile)];
+          } catch {
+            return [];
+          }
+        })
       : [];
     return {
       claws,

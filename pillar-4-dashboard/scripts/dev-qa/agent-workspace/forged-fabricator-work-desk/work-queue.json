@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-26T21:48:06.341Z",
+  "leads": [
+    {
+      "id": "LEAD-001",
+      "name": "Demo Prospect",
+      "email": "demo-ork-desk@forged.local",
+      "company": "CurXor Pilot",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-06-26T21:48:06.341Z",
+      "updatedAt": "2026-06-26T21:48:06.341Z",
+      "lastTouchAt": null
+    }
+  ],
+  "tasks": [],
+  "sequences": [],
+  "sends": [],
+  "mailIndex": [],
+  "syncLog": []
+}

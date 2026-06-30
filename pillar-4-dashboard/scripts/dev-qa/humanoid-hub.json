@@ -9,7 +9,7 @@
       "vendorLabel": "Humanoid-class · home assistant",
       "status": "standby",
       "safetyProfile": "standard",
-      "pairedAt": "2026-06-26T08:04:18.335Z",
+      "pairedAt": "2026-06-28T22:29:12.030Z",
       "meshNodeId": "mesh://curxor/HOME-HUMANOI-59E550",
       "discoverName": "CURXOR-HOME-HUMANOI",
       "createdAt": "2026-06-23T00:03:51.020Z"
@@ -86,7 +86,7 @@
       "id": "9965bf6d-b50e-489c-8874-cb01a6dbb77b",
       "text": "Shoes off at the door — preview rule",
       "priority": "essential",
-      "syncedAt": "2026-06-26T08:04:18.360Z",
+      "syncedAt": "2026-06-28T22:29:12.062Z",
       "createdAt": "2026-06-23T01:58:00.157Z"
     }
   ],
@@ -129,6 +129,150 @@
     }
   ],
   "routines": [
+    {
+      "id": "routine-200ccbb9",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-348d4b8e",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-218b847c",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-aa682ea6",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-d082f1fb",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-2bcebb72",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-b32bb8a4",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-c931ba1a",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-0727ac61",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-2b96d31d",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-adc3d259",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-99610b85",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-f7b48a19",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-15285960",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-f7ac0a7a",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
+    {
+      "id": "routine-82ae233e",
+      "label": "When guests arrive, greet them warmly and offer ",
+      "description": "When guests arrive, greet them warmly and offer to take coats.",
+      "trigger": "Guest profile active or door signal",
+      "enabled": true,
+      "previewOnly": true,
+      "source": "composed"
+    },
     {
       "id": "routine-eddf3208",
       "label": "When guests arrive, greet them warmly and offer ",
@@ -200,150 +344,6 @@
       "enabled": true,
       "previewOnly": true,
       "source": "composed"
-    },
-    {
-      "id": "routine-b58e0476",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-9c3ce112",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-c9fe1b4d",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-62070eb6",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-e36712ca",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-0e209485",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-e2be7565",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-a9b729c6",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-f5e3c1f4",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-0a37e7b5",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-db55012a",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-4cf2b8d9",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-bba620ba",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-fd20118d",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-07134f47",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
-    },
-    {
-      "id": "routine-9fabda32",
-      "label": "When guests arrive, greet them warmly and offer ",
-      "description": "When guests arrive, greet them warmly and offer to take coats.",
-      "trigger": "Guest profile active or door signal",
-      "enabled": true,
-      "previewOnly": true,
-      "source": "composed"
     }
   ],
   "setupCompleted": [
@@ -352,8 +352,8 @@
     "teach_rules",
     "pair_hardware"
   ],
-  "lastKnowledgeSyncAt": "2026-06-26T08:04:18.360Z",
+  "lastKnowledgeSyncAt": "2026-06-28T22:29:12.062Z",
   "notifyWhenLive": false,
   "pairWizard": null,
-  "updatedAt": "2026-06-26T08:04:18.441Z"
+  "updatedAt": "2026-06-28T22:29:12.131Z"
 }

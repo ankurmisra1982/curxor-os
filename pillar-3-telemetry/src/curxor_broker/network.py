@@ -1,4 +1,4 @@
-"""Robotics mesh network binding — eno2 only."""
+"""Robotics mesh network binding — Egress Port NIC only (MS-S1: enp97s0)."""
 
 from __future__ import annotations
 

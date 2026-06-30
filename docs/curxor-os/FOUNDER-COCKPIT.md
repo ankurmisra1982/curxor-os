@@ -13,11 +13,11 @@
 | **Laptop** `C:\Users\ankur\curxor-os` | Source of truth · Cursor · `git` · `npm run qa:local` |
 | **MS-S1** `/opt/curxor/` | Shipped code (replace on deploy) |
 | **MS-S1** `/etc/curxor/` | **Your** operator data (persists across code deploys) |
-| **SSH** `ssh curxor` | Laptop → box (key auth via `~/.ssh/config` Host **curxor**) |
-| **Browser** `http://<BOX_IP>:3080` | Dogfood UI — same as end user (IP in field log; DHCP may change) |
+| **SSH** `ssh curxor` | Laptop → box on **COMMAND cable** (`HostName 10.0.0.1`) |
+| **Browser** **`http://10.0.0.1:3080/home`** | Operator home (Command Port captive) — dogfood UI |
 
 **Rule:** Code on laptop → gate green → deploy to box → UAT in browser.  
-**Don’t** treat `/opt/curxor` as your main editor; hotfixes on the box must be copied back to the laptop same day.
+**Don't** treat `/opt/curxor` as your main editor; hotfixes on the box must be copied back to the laptop same day.
 
 **@curxorai posts:** draft queue + X-only Go Live → [X-CONTENT-QUEUE.md](./X-CONTENT-QUEUE.md)
 
@@ -25,16 +25,22 @@
 
 ## One-time setup (after Ubuntu + `install-all.sh`)
 
-### 1. Note the box IP
+### 1. Note the box addresses
 
-On the MS-S1:
+| Use | Address |
+|-----|---------|
+| **Browser (operator home)** | **`http://10.0.0.1:3080/home`** (Command Port) |
+| **SSH from laptop** | **`10.0.0.1`** on COMMAND USB Ethernet · laptop **`10.0.0.2/24`** (static or DHCP from dnsmasq) |
+
+MS-S1 interface map: **`enp98s0`** = Command · **`enp97s0`** = Egress/mesh. See [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md).
+
+On the MS-S1, confirm:
 
 ```bash
-ip addr | grep "inet "
+ip -4 addr show enp98s0 enp97s0
 ```
 
-Write down **eno1** LAN IP (e.g. `10.0.0.x` captive mode or DHCP from router). Call this **`BOX_IP`**.  
-Example (Jun 28 unbox, USB dongle): `192.168.86.211` — see [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md).
+**Do not use** pre-mesh router IPs (e.g. `192.168.86.211`) after Part 4 — they are obsolete.
 
 ### 2. Enable SSH (on the box)
 
@@ -68,12 +74,12 @@ Add to **`%USERPROFILE%\.ssh\config`** (Windows) so deploy + daily ops use **`ss
 
 ```
 Host curxor
-    HostName 192.168.86.211
+    HostName 10.0.0.1
     User ankur
     IdentityFile ~/.ssh/id_ed25519
 ```
 
-Update **`HostName`** when DHCP changes (check `ip addr` on box or router lease table).
+Set **`HostName 10.0.0.1`** when the laptop is on the COMMAND cable (`10.0.0.2`). Browser home stays **`http://10.0.0.1:3080/home`**.
 
 Test:
 
@@ -83,14 +89,33 @@ ssh curxor "hostname && systemctl is-active curxor-dashboard"
 
 All commands below use **`ssh curxor`** / **`scp … curxor:`** when this block is present. Legacy form `ankur@BOX_IP` still works.
 
+### 3c. COMMAND port split-route (Windows, one-time)
+
+Plug COMMAND USB Ethernet + stay on Wi-Fi. Run once as Administrator from repo root:
+
+```powershell
+cd C:\Users\ankur\curxor-os
+powershell -ExecutionPolicy Bypass -File .\scripts\install-laptop-command-port.ps1
+```
+
+This registers scheduled tasks so routing self-heals at logon and when the cable connects. COMMAND adapter: **`10.0.0.2/24`**, gateway **blank**, DNS **automatic**. Wi-Fi keeps internet; cable reaches the box only.
+
+Re-apply manually after adapter changes:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-laptop-command-port.ps1
+```
+
+See [Networking — dual-homed laptop](../guides/03-networking.md#dual-homed-laptop-wi-fi--command-cable-simultaneously).
+
 ### 4. Bookmarks
 
 | What | URL / path |
 |------|------------|
-| Flight Command | `http://BOX_IP:3080` |
-| Setup / FRE | `http://BOX_IP:3080/setup` |
-| Health | `http://BOX_IP:3080/api/setup/status` |
-| Local LLM tags | `http://BOX_IP:11434/api/tags` (on box via SSH + curl) |
+| **Flight Command (home)** | **`http://10.0.0.1:3080/home`** |
+| Setup / FRE | `http://10.0.0.1:3080/setup` |
+| Health API | `http://10.0.0.1:3080/api/setup/status` |
+| Local LLM tags | `http://127.0.0.1:11434/api/tags` (on box via SSH + curl) |
 
 ### 5. Cursor workspace
 
@@ -102,11 +127,13 @@ Optional second window: **Remote-SSH** to **`curxor`** → open `/opt/curxor` on
 
 ## Daily loop
 
+**Before you build:** Wi-Fi on, COMMAND cable in, open **`http://10.0.0.1:3080/home`**. Use **`ssh curxor`** for box commands. Both links stay up; you do not unplug the cable for internet after [split-route install](#3c-command-port-split-route-windows-one-time).
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ 1. BUILD (laptop)     npm run dev / edit · qa:local     │
 │ 2. DEPLOY (laptop→box) scp/rsync → post-update          │
-│ 3. RESTART (box)      systemctl restart curxor-os.target│
+│ 3. RESTART (box)      post-update.sh restarts curxor-dashboard │
 │ 4. OPERATE (browser)  http://BOX_IP:3080 — dogfood      │
 │ 5. COMMIT (laptop)    git commit when box + qa green    │
 └─────────────────────────────────────────────────────────┘
@@ -135,23 +162,33 @@ cd C:\Users\ankur\curxor-os
 
 Default target: **`curxor`** (`~/.ssh/config` Host). Optional `-BoxIp BOX_IP` only for browser URL hint in script output.
 
-The script: `scp` whole tree → on-box `rsync` to `/opt/curxor/` → `post-update.sh` → `systemctl restart curxor-os.target` → quick curl smoke.
+The script: **tar** (no `.git`/`.next`) → **scp** → on-box extract + `rsync` to `/opt/curxor/` → **`sed -i 's/\r$//'` on all `*.sh`** → `post-update.sh` (rebuild, restart dashboard) → curl smoke.
 
-Flags: `-SshHost curxor` (default) · `-BoxIp` legacy IP form · `-SkipScp` if payload is already in `/tmp/curxor-os` · `-WhatIf` to print steps without running.
+**CRLF:** Any script you **scp alone** to `/tmp` must be stripped on the box before `bash`: `sed -i 's/\r$//' /tmp/script.sh`. Or use `.\scripts\copy-script-to-box.ps1` from the laptop. Full detail: [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **CRLF** section.
 
-**Option A2 — Manual SCP** (same steps as the script)
+**Enter sudo password when SSH prompts.** If you miss it, see [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **Finish a stuck deploy**.
+
+**Quick reference:** [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — deploy, debug, hotfix one-liners.
+
+Flags: `-SshHost curxor` (default) · `-BoxIp 10.0.0.1` (browser URL hint only) · `-SkipPack` if tarball already on box · `-WhatIf` to print steps without running.
+
+**Option A2 — Manual** (same steps as the script)
 
 ```powershell
-scp -r C:\Users\ankur\curxor-os curxor:/tmp/curxor-os
+cd C:\Users\ankur\curxor-os
+scp -r . curxor:/tmp/curxor-os
 ```
 
 On the box:
 
 ```bash
 sudo rsync -a --delete /tmp/curxor-os/ /opt/curxor/
+sudo find /opt/curxor -name '*.sh' -exec sed -i 's/\r$//' {} +
 sudo bash /opt/curxor/scripts/post-update.sh
-sudo systemctl restart curxor-os.target
 ```
+
+`post-update.sh` rebuilds pillar-4-dashboard and runs `systemctl restart curxor-dashboard.service`.  
+**Do not** rely on `systemctl restart curxor-os.target` alone — it does not recycle the dashboard process.
 
 **Option B — USB** (no network)
 
@@ -159,8 +196,8 @@ Copy `curxor-os` folder to USB on laptop → on box:
 
 ```bash
 sudo rsync -a --delete /media/$USER/*/curxor-os/ /opt/curxor/
+sudo find /opt/curxor -name '*.sh' -exec sed -i 's/\r$//' {} +
 sudo bash /opt/curxor/scripts/post-update.sh
-sudo systemctl restart curxor-os.target
 ```
 
 **First install only** (blank box): use `install-all.sh` instead of `post-update.sh`:
@@ -200,7 +237,7 @@ If you need a clean slate: backup `/etc/curxor` first, then `seed-appliance-data
 
 ---
 
-## Giving the Cursor agent “eyes” (front + back)
+## Giving the Cursor agent "eyes" (front + back)
 
 The agent does **not** auto-watch the box. In an Agent chat, provide:
 
@@ -243,8 +280,8 @@ curl -s http://127.0.0.1:11434/api/tags | head
 sudo ls -la /etc/curxor/
 sudo cat /etc/curxor/fre-state.json
 
-# Mesh / eno2
-ip addr show eno1 eno2
+# Mesh / Egress Port
+ip addr show enp98s0 enp97s0
 /opt/curxor/pillar-3-telemetry/scripts/verify-mesh.sh
 
 # Full verify
@@ -255,7 +292,7 @@ sudo /opt/curxor/scripts/verify-unbox-day.sh
 
 ## Cursor on the box (optional — founder only)
 
-| Do | Don’t |
+| Do | Don't |
 |----|--------|
 | Install Cursor on Ubuntu desktop for ROCm-only bugs | Use box as primary git workspace |
 | Use Remote-SSH from laptop (lighter) | Ship Cursor to customers |
@@ -296,11 +333,15 @@ Until OTA URL is live, **rsync + post-update** is correct.
 
 | Symptom | Check |
 |---------|--------|
-| Browser can’t reach box | `ping BOX_IP` · same LAN · firewall · `ss -tlnp \| grep 3080` on box |
-| 500 after deploy | `journalctl -u curxor-dashboard` · re-run `post-update.sh` |
+| Browser can't reach box | **`http://10.0.0.1:3080/home`** (not `https://`) · incognito if cached · `ss -tlnp \| grep 3080` on box |
+| Internet dies when cable plugged in | COMMAND gateway/DNS blank · `install-laptop-command-port.ps1` · box: no `address=/#/` in dnsmasq |
+| L2 OK, TCP to box fails | Box reboot · `ip neigh show dev enp98s0` should list `10.0.0.2` |
+| 500 after deploy | `journalctl -u curxor-dashboard` · `.env.local` on box? · re-run `post-update.sh` |
+| Dashboard won't start (CHDIR) | `ls -la /opt/curxor` — fix perms: `chmod 755` + `chown curxor:curxor pillar-4-dashboard` |
+| post-update fails | Use `sudo bash post-update.sh` · CRLF: `sed -i 's/\r$//' /path/to/script.sh` before bash |
 | QA green on laptop, broken on box | ROCm/Ollama · env in `/etc/curxor/*.env` · paths differ from dev-qa |
-| Data “reset” after deploy | Should not happen — if it did, check writes going to `/etc/curxor` not `/opt/curxor/scripts/dev-qa` |
-| SSH refused | `sudo systemctl status ssh` · update **`HostName`** in `~/.ssh/config` if DHCP changed |
+| Data "reset" after deploy | Should not happen — if it did, check writes going to `/etc/curxor` not `/opt/curxor/scripts/dev-qa` |
+| SSH refused | `HostName 10.0.0.1` in `~/.ssh/config` (not `192.168.86.211`) · `sudo systemctl status ssh` |
 
 ---
 
@@ -308,6 +349,7 @@ Until OTA URL is live, **rsync + post-update** is correct.
 
 | Doc | Use |
 |-----|-----|
+| [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) | **Deploy · debug · hotfix** (start here when stuck) |
 | [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md) | First boot |
 | [HW-READINESS-CHECKLIST.md](./HW-READINESS-CHECKLIST.md) | Golden path |
 | [07-flight-command-dashboard.md](../guides/07-flight-command-dashboard.md) | Operator UI |
@@ -315,4 +357,4 @@ Until OTA URL is live, **rsync + post-update** is correct.
 
 ---
 
-*When DHCP changes: update **`HostName`** in `~/.ssh/config` (Host **curxor**) and **`BOX_IP`** in browser bookmarks / [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md).*
+*Browser home: **`http://10.0.0.1:3080/home`**. SSH `HostName` is always **`10.0.0.1`** on COMMAND cable (not pre-mesh router IPs). See [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md).*

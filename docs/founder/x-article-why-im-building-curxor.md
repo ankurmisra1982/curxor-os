@@ -1,6 +1,8 @@
-# Why I'm Building CurXor
+# Why I'm Building CurXor — v1
 
 **Ankur Misra · Founder · June 2026**
+
+> **Newer draft:** [v0.2 · shallow usage gap](essays/2026-06-27-v0.2-shallow-usage-gap.md) (Jun 27, 2026) · weekly cadence in [essay-playbook.md](essay-playbook.md)
 
 ---
 

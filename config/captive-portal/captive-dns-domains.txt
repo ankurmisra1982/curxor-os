@@ -1,0 +1,12 @@
+# Domains that resolve to the Command Port appliance IP for captive-portal pop-up.
+# General internet names are NOT listed — dual-homed laptops keep normal DNS on Wi-Fi.
+captive.apple.com
+www.apple.com
+connectivitycheck.gstatic.com
+clients3.google.com
+connectivitycheck.android.com
+www.msftconnecttest.com
+msftconnecttest.com
+detectportal.firefox.com
+curxor.local
+home.curxor

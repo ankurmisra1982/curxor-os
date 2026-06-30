@@ -27,13 +27,12 @@
 
 ### A. Inventory + full verify (30 min)
 
-**One-shot CTO session** (inventory → GPU → eno1/eno2 → mesh → inference → stack):
+**One-shot CTO session** (inventory → GPU → Command/Egress NICs → mesh → inference → stack):
 
 ```bash
 sudo chmod +x /opt/curxor/scripts/verify-unbox-day.sh
-sudo /opt/curxor/scripts/verify-unbox-day.sh
-# After deploy.sh --pull-models:
-sudo /opt/curxor/scripts/verify-unbox-day.sh --post-models
+sudo CURXOR_CMD_IFACE=enp98s0 CURXOR_MESH_IFACE=enp97s0 \
+  /opt/curxor/scripts/verify-unbox-day.sh --post-models
 ```
 
 Paste the **GOLDEN PATH NOTES** block from script output into install addendum / GitHub issues.
@@ -46,8 +45,8 @@ Follow [10-ms-s1-max-hardware-bios.md](../guides/10-ms-s1-max-hardware-bios.md):
 
 - UMA / GPU memory → **Maximum** (~48 GB on 64 · **~96 GB on 128**)
 - **Pro 128 SKU:** [MS-S1-128GB-UNBOX-CHEATSHEET.md](./MS-S1-128GB-UNBOX-CHEATSHEET.md)
-- Label **eno1** = Command Port (operator LAN)
-- Label **eno2** = Egress Port (mesh + bridges)
+- Label **Command Port** = `enp98s0` @ `10.0.0.1` (MS-S1 MAX verified)
+- Label **Egress Port** = `enp97s0` @ `10.77.0.1`
 
 ### C. Install stack (60–90 min)
 
@@ -66,7 +65,7 @@ curl -s http://127.0.0.1:3080/api/setup/status | jq .
 
 ### D. First boot UX (30 min)
 
-1. Browse to `http://<eno1-ip>:3080` from laptop on Command Port *(optional alt: on-box browser → `http://127.0.0.1:3080` — see [Flight Command guide](../guides/07-flight-command-dashboard.md); not prioritized vs laptop path)*
+1. Browse to **`http://10.0.0.1:3080/home`** from laptop on COMMAND USB Ethernet (`10.0.0.2`)
 2. Complete **FRE** (`/setup`) — pick Capital, Creator, Work, Forge
 3. Open each flagship Claw — confirm FRE wizards, no 500s
 4. **Claw Cafe** — Ascension tab → Sync → pixel room populates
@@ -141,10 +140,10 @@ Do this once UAT smile + on-device smoke pass — before heavy demo captures or 
 
 | # | Task | Done |
 |---|------|------|
-| F1 | Note **`BOX_IP`** (eno1 LAN) · set **`Host curxor`** in laptop `~/.ssh/config` | [x] |
+| F1 | SSH **`HostName 10.0.0.1`** · laptop `10.0.0.2` on COMMAND cable | [x] |
 | F2 | Enable SSH on box · `openssh-server` | [x] |
 | F3 | SSH key → passwordless **`ssh curxor`** | [x] |
-| F4 | Bookmark `http://BOX_IP:3080` (dogfood UI) | [ ] |
+| F4 | Bookmark **`http://10.0.0.1:3080/home`** | [x] |
 | F5 | Test deploy loop: laptop `qa:local` → `scp`/rsync → `post-update.sh` → restart → browser UAT | [ ] |
 | F6 | Confirm operator data in `/etc/curxor/` survives one deploy | [ ] |
 | F7 | Optional: Cursor Remote-SSH to box · optional kiosk (`install-kiosk-mode.sh`) | [ ] |

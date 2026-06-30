@@ -3,8 +3,7 @@ Description=CurXor OS Pillar 3 — ZeroMQ Telemetry Broker + Digital Bridges
 Documentation=file:///opt/curxor/pillar-3-telemetry/README.md
 After=network-online.target
 Wants=network-online.target
-BindsTo=sys-subsystem-net-devices-eno2.device
-After=sys-subsystem-net-devices-eno2.device
+# Optional: BindsTo mesh NIC — install systemd/curxor-telemetry-broker.service.d/iface.conf.example
 
 [Service]
 Type=simple
@@ -14,7 +13,7 @@ WorkingDirectory=/opt/curxor/pillar-3-telemetry
 EnvironmentFile=/etc/curxor/telemetry-broker.env
 EnvironmentFile=-/etc/curxor/digital.env
 Environment=PYTHONUNBUFFERED=1
-ExecStartPre=/bin/bash -c 'test -e /sys/class/net/${CURXOR_MESH_IFACE:-eno2}/operstate'
+ExecStartPre=/bin/bash -c 'test -e /sys/class/net/${CURXOR_MESH_IFACE:-enp97s0}/operstate'
 ExecStart=/opt/curxor/pillar-3-telemetry/.venv/bin/curxor-broker-stack
 Restart=always
 RestartSec=2

@@ -9,7 +9,7 @@ Deploy CurXor OS on an MS-S1 MAX appliance running **Ubuntu 24.04 LTS**.
 | Hardware | MINISFORUM MS-S1 MAX — **Standard 64 GB** ($3,999) or **Pro 128 GB** ($4,999) UMA |
 | OS | Ubuntu 24.04 minimal, cloud-init or manual install |
 | BIOS | Set GPU UMA heap to maximum (~48 GB on 64 · **~96 GB on 128**) — see [MS-S1 MAX BIOS guide](10-ms-s1-max-hardware-bios.md) · [128GB cheat sheet](../curxor-os/MS-S1-128GB-UNBOX-CHEATSHEET.md) |
-| Network | Two NICs: **eno1** (user LAN), **eno2** (robotics mesh) |
+| Network | Two NICs: **Command Port** (`enp98s0`), **Egress Port** (`enp97s0`) on MS-S1 MAX — see [Networking](03-networking.md) |
 
 ## Method A — Copy tree and run meta-installer
 
@@ -27,7 +27,7 @@ sudo /opt/curxor/scripts/install-all.sh
 The meta-installer:
 
 1. Installs all four pillars in order (compute → engine → telemetry → dashboard)
-2. Configures **eno2 mesh** at `10.77.0.1/24` via `setup-mesh-network.sh`
+2. Configures **Egress Port mesh** at `10.77.0.1/24` via `setup-mesh-network.sh`
 3. Installs `curxor-os.target` and enables the full stack
 
 ## Method B — Cloud-init / autoinstall (offline media)

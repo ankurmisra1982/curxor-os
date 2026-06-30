@@ -1,11 +1,14 @@
 import { readFile } from "node:fs/promises";
 
 import { loadDashboardEnv } from "./env";
+import { getLastInferenceThroughput } from "./inference-throughput";
 
 export interface ComputeMetrics {
   timestamp: string;
   tokensPerSecond: number | null;
   promptTokensPerSecond: number | null;
+  /** Plain-English hint for tokens/s (live vLLM vs last Ollama chat). */
+  tokensPerSecondHint: string | null;
   modelLoaded: string | null;
   backend: "vllm" | "ollama" | "unknown";
   memory: {
@@ -36,10 +39,26 @@ export async function collectComputeMetrics(): Promise<ComputeMetrics> {
 
   const usedGb = (mem.totalKb - mem.availableKb) / 1024 / 1024;
 
+  const lastChat = getLastInferenceThroughput();
+  let tokensPerSecond = active.tokensPerSecond;
+  let tokensPerSecondHint: string | null = null;
+
+  if (tokensPerSecond != null) {
+    tokensPerSecondHint = "Live from inference engine";
+  } else if (active.backend === "ollama") {
+    if (lastChat) {
+      tokensPerSecond = lastChat.tokensPerSecond;
+      tokensPerSecondHint = `Last chat · ${lastChat.model}`;
+    } else {
+      tokensPerSecondHint = "Chat in any Claw to measure speed";
+    }
+  }
+
   return {
     timestamp: new Date().toISOString(),
-    tokensPerSecond: active.tokensPerSecond,
+    tokensPerSecond,
     promptTokensPerSecond: active.promptTokensPerSecond,
+    tokensPerSecondHint,
     modelLoaded: active.modelLoaded,
     backend: active.backend,
     memory: {

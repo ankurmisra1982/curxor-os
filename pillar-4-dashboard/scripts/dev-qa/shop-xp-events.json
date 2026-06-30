@@ -1,9 +1,17 @@
 {
   "events": [
     {
+      "id": "SHP-0004",
+      "kind": "desk_activated",
+      "at": "2026-06-28T22:30:01.404Z",
+      "payload": {
+        "storeName": "Arbitrage Desk"
+      }
+    },
+    {
       "id": "SHP-0003",
       "kind": "channel_sync",
-      "at": "2026-06-26T08:05:05.352Z",
+      "at": "2026-06-28T22:30:01.403Z",
       "payload": {
         "channel": "shopify"
       }
@@ -11,17 +19,17 @@
     {
       "id": "SHP-0002",
       "kind": "channel_sync",
-      "at": "2026-06-26T08:05:05.349Z",
+      "at": "2026-06-28T22:30:01.243Z",
       "payload": {
-        "channel": "ebay"
+        "channel": "printify"
       }
     },
     {
       "id": "SHP-0001",
-      "kind": "channel_sync",
-      "at": "2026-06-26T08:05:05.199Z",
+      "kind": "desk_activated",
+      "at": "2026-06-28T22:30:01.242Z",
       "payload": {
-        "channel": "printify"
+        "storeName": "Arbitrage Desk"
       }
     }
   ]

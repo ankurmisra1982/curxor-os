@@ -48,7 +48,10 @@ if [[ -x "${CURXOR_ROOT}/scripts/ensure-app-fre-dir.sh" ]]; then
   "${CURXOR_ROOT}/scripts/ensure-app-fre-dir.sh" || log "WARNING: ensure-app-fre-dir returned non-zero"
 fi
 
-if [[ -x "${CURXOR_ROOT}/scripts/setup-mesh-network.sh" ]]; then
+if [[ -f /var/lib/curxor/.egress-wan-enabled && -x "${CURXOR_ROOT}/scripts/setup-egress-wan.sh" ]]; then
+  log "Re-applying egress WAN (mesh + router DHCP)"
+  "${CURXOR_ROOT}/scripts/setup-egress-wan.sh" || log "WARNING: egress WAN setup returned non-zero"
+elif [[ -x "${CURXOR_ROOT}/scripts/setup-mesh-network.sh" ]]; then
   log "Re-applying mesh network (Egress Port)"
   "${CURXOR_ROOT}/scripts/setup-mesh-network.sh" || log "WARNING: mesh setup returned non-zero"
 fi

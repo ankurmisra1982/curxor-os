@@ -16,7 +16,12 @@ echo "==> CurXor GPU verification (Ryzen AI Max+ 395 / gfx1151)"
 
 # ── Device nodes ────────────────────────────────────────────────────────────
 [[ -e /dev/kfd ]] && pass "/dev/kfd present" || fail "/dev/kfd missing — load amdkfd"
-[[ -e /dev/dri/card0 ]] && pass "/dev/dri/card0 present" || fail "/dev/dri missing — load amdgpu"
+dri_card="$(compgen -G '/dev/dri/card[0-9]*' | head -1 || true)"
+if [[ -n "${dri_card}" ]]; then
+  pass "${dri_card} present (MS-S1 often card1, not card0)"
+else
+  fail "/dev/dri missing — load amdgpu"
+fi
 
 # ── Groups ──────────────────────────────────────────────────────────────────
 id -nG | grep -qw video && pass "user in 'video' group" || warn "add user to video: sudo usermod -aG video \$USER"
@@ -25,7 +30,7 @@ id -nG | grep -qw docker && pass "user in 'docker' group" || warn "add user to d
 
 # ── ROCm ────────────────────────────────────────────────────────────────────
 if command -v rocminfo &>/dev/null; then
-  if rocminfo 2>/dev/null | grep -qi "gfx1151\|gfx1150"; then
+  if rocminfo 2>&1 | grep -qi "gfx1151\|gfx1150"; then
     pass "rocminfo reports Strix Halo GPU (gfx115x)"
   else
     warn "rocminfo did not show gfx1151 — set HSA_OVERRIDE_GFX_VERSION=11.5.1"

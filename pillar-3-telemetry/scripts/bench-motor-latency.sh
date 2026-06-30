@@ -7,7 +7,7 @@ if [[ -f "${ENV_FILE}" ]]; then
   set -a; source "${ENV_FILE}"; set +a
 fi
 
-IFACE="${CURXOR_MESH_IFACE:-eno2}"
+IFACE="${CURXOR_MESH_IFACE:-enp97s0}"
 MESH_IP="${CURXOR_MESH_BIND_IP:-$(ip -4 -o addr show dev "${IFACE}" | awk '{print $4}' | cut -d/ -f1 | head -1)}"
 INSTALL_ROOT="${CURXOR_INSTALL_ROOT:-/opt/curxor/pillar-3-telemetry}"
 VENV="${INSTALL_ROOT}/.venv/bin/python3"

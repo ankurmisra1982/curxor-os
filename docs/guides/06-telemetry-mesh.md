@@ -1,6 +1,6 @@
 # Telemetry Mesh Guide
 
-Pillar 3 runs a **dual-proxy ZeroMQ broker** bound exclusively to the robotics mesh NIC (eno2).
+Pillar 3 runs a **dual-proxy ZeroMQ broker** bound exclusively to the Egress Port / mesh NIC (`enp97s0` @ `10.77.0.1` on MS-S1 MAX).
 
 ## Architecture
 
@@ -20,7 +20,7 @@ Implementation uses `zmq.proxy()` in libzmq (zero-copy C forwarding).
 | Vision | `telemetry/vision_in` | 9100 | 9101 |
 | Motor | `telemetry/motor_out` | 9200 | 9201 |
 
-Bind IP: auto-detected from eno2, or set `CURXOR_MESH_BIND_IP=10.77.0.1` in `/etc/curxor/telemetry-broker.env`.
+Bind IP: auto-detected from mesh NIC, or set `CURXOR_MESH_BIND_IP=10.77.0.1` and `CURXOR_MESH_IFACE=enp97s0` in `/etc/curxor/telemetry-broker.env`.
 
 ## Wire formats
 

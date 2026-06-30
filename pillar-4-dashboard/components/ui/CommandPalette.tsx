@@ -59,7 +59,7 @@ export function CommandPalette({
       },
       {
         id: "mode",
-        label: isExpert ? "Switch to Simple mode" : "Switch to Expert mode",
+        label: isExpert ? "Hide telemetry strip" : "Show telemetry strip",
         hint: "Show or hide telemetry details",
         run: onToggleMode,
       },

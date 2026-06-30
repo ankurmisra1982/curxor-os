@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # CurXor OS — Unbox day verification (MS-S1 MAX CTO session)
-# Runs inventory → GPU/ROCm → eno1/eno2 roles → mesh → inference smoke → stack health.
+# Runs inventory → GPU/ROCm → Command/Egress NIC roles → mesh → inference smoke → stack health.
 #
 # Usage:
 #   sudo /opt/curxor/scripts/verify-unbox-day.sh
@@ -10,10 +10,14 @@
 set -euo pipefail
 
 CURXOR_ROOT="${CURXOR_ROOT:-/opt/curxor}"
-CMD_IFACE="${CURXOR_CMD_IFACE:-eno1}"
-MESH_IFACE="${CURXOR_MESH_IFACE:-eno2}"
-CMD_IP="${CURXOR_APPLIANCE_IP:-10.0.0.1}"
-MESH_IP="${CURXOR_MESH_BIND_IP:-10.77.0.1}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/network-defaults.sh
+source "${SCRIPT_DIR}/lib/network-defaults.sh"
+
+CMD_IFACE="${CURXOR_CMD_IFACE}"
+MESH_IFACE="${CURXOR_MESH_IFACE}"
+CMD_IP="${CURXOR_APPLIANCE_IP}"
+MESH_IP="${CURXOR_MESH_BIND_IP}"
 DASHBOARD_PORT="${CURXOR_DASHBOARD_PORT:-3080}"
 POST_MODELS=false
 
@@ -57,14 +61,16 @@ uname -a
 echo ""
 if command -v lsb_release &>/dev/null; then lsb_release -a 2>/dev/null || true; fi
 echo ""
-echo "--- ip link (eno/eth) ---"
-ip link show 2>/dev/null | grep -E '^[0-9]+:|eno|eth' || ip link show
+echo "--- ip link (enp/eth) ---"
+ip link show 2>/dev/null | grep -E '^[0-9]+:|enp|eno|eth' || ip link show
 echo ""
 echo "--- storage ---"
 df -h / /var/lib/curxor 2>/dev/null || df -h /
 echo ""
 echo "--- memory ---"
 free -h
+echo ""
+echo "    (MS-S1 64 GB + 48 GB UMA: ~15 Gi in free -h is normal — rest is GPU carve-out)"
 echo ""
 if command -v rocm-smi &>/dev/null; then
   pass "rocm-smi present (pre-install inventory)"
@@ -92,6 +98,10 @@ else
 fi
 
 CMD_ADDR="$(ip -4 -o addr show dev "${CMD_IFACE}" 2>/dev/null | awk '{print $4}' | cut -d/ -f1 | head -1 || true)"
+MESH_HAS_MESH_IP=false
+if ip -4 addr show dev "${MESH_IFACE}" 2>/dev/null | grep -q "inet ${MESH_IP}/"; then
+  MESH_HAS_MESH_IP=true
+fi
 MESH_ADDR="$(ip -4 -o addr show dev "${MESH_IFACE}" 2>/dev/null | awk '{print $4}' | cut -d/ -f1 | head -1 || true)"
 
 if [[ "${CMD_ADDR}" == "${CMD_IP}" ]]; then
@@ -104,18 +114,22 @@ else
   fi
 fi
 
-if [[ "${MESH_ADDR}" == "${MESH_IP}" ]]; then
-  pass "${MESH_IFACE} IPv4 ${MESH_ADDR} (robotics mesh)"
+if [[ "${MESH_HAS_MESH_IP}" == true ]]; then
+  pass "${MESH_IFACE} has mesh IPv4 ${MESH_IP} (robotics mesh)"
+elif [[ -n "${MESH_ADDR}" ]]; then
+  warn "${MESH_IFACE} missing ${MESH_IP} (has ${MESH_ADDR}) — run setup-mesh-network.sh or setup-egress-wan.sh"
 else
-  if [[ -n "${MESH_ADDR}" ]]; then
-    warn "${MESH_IFACE} is ${MESH_ADDR}, expected ${MESH_IP} — run setup-mesh-network.sh"
-  else
-    warn "no IPv4 on ${MESH_IFACE} — run: sudo ${CURXOR_ROOT}/scripts/setup-mesh-network.sh"
-  fi
+  warn "no IPv4 on ${MESH_IFACE} — run: sudo ${CURXOR_ROOT}/scripts/setup-mesh-network.sh"
 fi
 
 if systemctl is-active --quiet dnsmasq 2>/dev/null; then
   pass "dnsmasq active (captive portal DHCP/DNS)"
+  if [[ -f /etc/dnsmasq.d/curxor-captive.conf ]] && grep -q 'address=/#/' /etc/dnsmasq.d/curxor-captive.conf; then
+    warn "dnsmasq still has wildcard address=/#/ — re-run setup-captive-portal.sh (hijacks laptop internet)"
+  fi
+  if [[ -f /etc/dnsmasq.d/curxor-captive.conf ]] && grep -q 'option:router' /etc/dnsmasq.d/curxor-captive.conf; then
+    warn "dnsmasq still pushes option:router — re-run setup-captive-portal.sh"
+  fi
 else
   warn "dnsmasq not active — captive portal optional until operator LAN test"
 fi
@@ -133,7 +147,7 @@ else
 fi
 
 if command -v rocminfo &>/dev/null; then
-  if rocminfo 2>/dev/null | grep -qi "gfx1151\|gfx1150"; then
+  if rocminfo 2>&1 | grep -qi "gfx1151\|gfx1150"; then
     pass "rocminfo reports gfx115x"
   else
     warn "rocminfo missing gfx1151 — set HSA_OVERRIDE_GFX_VERSION=11.5.1"
@@ -147,7 +161,7 @@ if command -v rocm-smi &>/dev/null; then
   rocm-smi --showmeminfo vram 2>/dev/null || rocm-smi --showmeminfo 2>/dev/null || rocm-smi 2>/dev/null | head -10 || true
 fi
 
-section "D. Robotics mesh (eno2 broker)"
+section "D. Robotics mesh (${MESH_IFACE:-mesh} broker)"
 MESH_SCRIPT="${CURXOR_ROOT}/pillar-3-telemetry/scripts/verify-mesh.sh"
 if [[ -x "${MESH_SCRIPT}" ]]; then
   if "${MESH_SCRIPT}"; then
@@ -226,6 +240,22 @@ for UNIT in curxor-os.target curxor-compute curxor-telemetry-broker curxor-engin
     warn "${UNIT} not installed — run install-all.sh"
   fi
 done
+
+section "H. Egress WAN (Digital Bridges / OTA / frontier)"
+EGRESS_VERIFY="${CURXOR_ROOT}/scripts/verify-egress-wan.sh"
+if [[ -x "${EGRESS_VERIFY}" ]]; then
+  if "${EGRESS_VERIFY}"; then
+    pass "egress WAN verification"
+  else
+    warn "egress WAN not ready — Egress cable → router, then: sudo ${CURXOR_ROOT}/scripts/setup-egress-wan.sh"
+  fi
+else
+  if ip route show default 2>/dev/null | grep -q .; then
+    pass "default route present (egress WAN likely up)"
+  else
+    warn "no default route on box — run setup-egress-wan.sh after Egress → router cable"
+  fi
+fi
 
 section "GOLDEN PATH NOTES (paste into docs/issues)"
 cat <<EOF

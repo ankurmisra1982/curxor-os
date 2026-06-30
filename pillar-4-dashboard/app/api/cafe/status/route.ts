@@ -12,8 +12,13 @@ import { buildCafeGoLiveReport } from "@/lib/cafe-go-live";
 import { runCafeDemoTour } from "@/lib/cafe-demo-tour";
 
 export async function GET(): Promise<Response> {
-  const bootstrap = await buildCafeAscensionBootstrap();
-  return Response.json(bootstrap);
+  try {
+    const bootstrap = await buildCafeAscensionBootstrap();
+    return Response.json(bootstrap);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Cafe status unavailable";
+    return Response.json({ ok: false, error: message }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request): Promise<Response> {

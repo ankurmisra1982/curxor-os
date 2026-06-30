@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "CurXor OS Pillar 3 — ZeroMQ pub/sub telemetry broker for robotics mesh"
 requires-python = ">=3.11"
 dependencies = [
-  "pyzmq>=25.1.0",
+  "pyzmq>=25.1.0",  # 27+ removes ZMQ_TCP_NODELAY — broker does not set it (libzmq handles Nagle)
   "aiohttp>=3.9.0",
   "tweepy>=4.14.0",
 ]

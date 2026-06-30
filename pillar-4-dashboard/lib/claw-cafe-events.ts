@@ -297,7 +297,11 @@ export async function buildCafeAscensionBootstrap(options?: { autoSync?: boolean
     characters = await defaultCharacters();
   }
   if (!optOut) {
-    characters = await applyCafeApprovalOverlay(characters);
+    try {
+      characters = await applyCafeApprovalOverlay(characters);
+    } catch {
+      // overlay is optional — keep base characters
+    }
   }
 
   const ascension = buildAscensionState({

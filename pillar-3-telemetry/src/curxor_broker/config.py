@@ -43,7 +43,7 @@ class BrokerConfig:
     @classmethod
     def from_env(cls) -> BrokerConfig:
         return cls(
-            mesh_iface=os.environ.get("CURXOR_MESH_IFACE", "eno2"),
+            mesh_iface=os.environ.get("CURXOR_MESH_IFACE", "enp97s0"),
             mesh_bind_ip=os.environ.get("CURXOR_MESH_BIND_IP", "").strip(),
             topic_vision=os.environ.get("CURXOR_TOPIC_VISION", "telemetry/vision_in"),
             topic_motor=os.environ.get("CURXOR_TOPIC_MOTOR", "telemetry/motor_out"),

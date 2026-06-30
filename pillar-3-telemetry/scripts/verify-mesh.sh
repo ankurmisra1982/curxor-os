@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CurXor OS — Verify robotics mesh broker on eno2
+# CurXor OS — Verify robotics mesh broker on Egress Port (MS-S1: enp97s0)
 set -euo pipefail
 
 ENV_FILE="${ENV_FILE:-/etc/curxor/telemetry-broker.env}"
@@ -7,7 +7,7 @@ if [[ -f "${ENV_FILE}" ]]; then
   set -a; source "${ENV_FILE}"; set +a
 fi
 
-IFACE="${CURXOR_MESH_IFACE:-eno2}"
+IFACE="${CURXOR_MESH_IFACE:-enp97s0}"
 RED='\033[0;31m'; GRN='\033[0;32m'; YL='\033[1;33m'; NC='\033[0m'
 FAIL=0
 pass() { echo -e "${GRN}[PASS]${NC} $*"; }

@@ -1,0 +1,14 @@
+{
+  "initialized": true,
+  "config": {
+    "riskProfile": "balanced",
+    "meshPublish": false,
+    "growthLevel": "L1",
+    "watchlist": [
+      "SPY"
+    ],
+    "forgedIntent": "Exit demo scaffold capital desk",
+    "forgedTemplateId": "capital-desk"
+  },
+  "initializedAt": "2026-06-26T21:57:04.328Z"
+}

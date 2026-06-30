@@ -155,7 +155,17 @@ export async function generateImageLocal(prompt: string, model?: string): Promis
       image?: string;
       images?: string[];
       response?: string;
+      eval_count?: number;
+      eval_duration?: number;
     };
+
+    const { recordOllamaThroughput } = await import("./inference-throughput");
+    recordOllamaThroughput({
+      evalCount: data.eval_count,
+      evalDurationNs: data.eval_duration,
+      model: imageModel,
+      source: "ollama_generate",
+    });
 
     const raw = data.images?.[0] ?? data.image ?? data.response;
     if (typeof raw !== "string" || raw.length < 64) return null;
@@ -219,7 +229,20 @@ async function chatOllama(
     body: JSON.stringify(body),
   }, env.inferenceTimeoutMs);
 
-  const data = (await response.json()) as { message?: { content?: string } };
+  const data = (await response.json()) as {
+    message?: { content?: string };
+    eval_count?: number;
+    eval_duration?: number;
+  };
+
+  const { recordOllamaThroughput } = await import("./inference-throughput");
+  recordOllamaThroughput({
+    evalCount: data.eval_count,
+    evalDurationNs: data.eval_duration,
+    model,
+    source: "ollama_chat",
+  });
+
   return {
     content: data.message?.content?.trim() ?? "",
     model,

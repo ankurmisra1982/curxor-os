@@ -28,7 +28,7 @@ rsync -a --delete \
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   cp "${INSTALL_ROOT}/.env.example" "${ENV_FILE}"
-  echo "==> Wrote ${ENV_FILE} — verify CURXOR_MESH_IFACE=eno2"
+  echo "==> Wrote ${ENV_FILE} — verify CURXOR_MESH_IFACE=enp97s0 (MS-S1 Egress Port)"
 fi
 
 DIGITAL_ENV="/etc/curxor/digital.env"
@@ -50,7 +50,7 @@ chown -R "${SERVICE_USER}:${SERVICE_USER}" /var/lib/curxor "${INSTALL_ROOT}"
 
 echo ""
 echo "==> Install complete."
-echo "    1. Ensure eno2 is configured on robotics mesh subnet (Port 2)"
+echo "    1. Ensure Egress Port NIC is on robotics mesh subnet (MS-S1: enp97s0 @ 10.77.0.1)"
 echo "    2. Edit ${ENV_FILE} if needed"
 echo "    3. sudo systemctl enable --now curxor-telemetry-broker"
 echo "    4. ${INSTALL_ROOT}/scripts/verify-mesh.sh"

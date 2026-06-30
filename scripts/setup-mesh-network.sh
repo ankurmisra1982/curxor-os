@@ -1,10 +1,25 @@
 #!/usr/bin/env bash
-# CurXor OS — Configure robotics mesh NIC (eno2) for Pillar 3 broker
+# CurXor OS — Configure robotics mesh NIC (Egress Port) for Pillar 3 broker
 set -euo pipefail
 
-MESH_IFACE="${CURXOR_MESH_IFACE:-eno2}"
-MESH_IP="${CURXOR_MESH_BIND_IP:-10.77.0.1}"
-MESH_CIDR="${CURXOR_MESH_CIDR:-24}"
+if grep -q $'\r' "$0" 2>/dev/null; then
+  sed -i 's/\r$//' "$0"
+  exec bash "$0" "$@"
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/network-defaults.sh
+source "${SCRIPT_DIR}/lib/network-defaults.sh"
+
+EGRESS_WAN_SCRIPT="${SCRIPT_DIR}/setup-egress-wan.sh"
+if [[ -f "${CURXOR_EGRESS_WAN_FLAG}" && -x "${EGRESS_WAN_SCRIPT}" ]]; then
+  echo "==> Egress WAN flag set — delegating to setup-egress-wan.sh"
+  exec "${EGRESS_WAN_SCRIPT}"
+fi
+
+MESH_IFACE="${CURXOR_MESH_IFACE}"
+MESH_IP="${CURXOR_MESH_BIND_IP}"
+MESH_CIDR="${CURXOR_MESH_CIDR}"
 NETPLAN_DROPIN="/etc/netplan/99-curxor-mesh.yaml"
 
 if [[ "${EUID}" -ne 0 ]]; then
@@ -20,7 +35,7 @@ fi
 echo "==> CurXor mesh network on ${MESH_IFACE} -> ${MESH_IP}/${MESH_CIDR}"
 
 cat > "${NETPLAN_DROPIN}" <<EOF
-# CurXor OS — robotics mesh (Port 2 / eno2). Do not use for captive portal.
+# CurXor OS — robotics mesh (Egress Port). Do not use for captive portal.
 network:
   version: 2
   ethernets:

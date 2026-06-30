@@ -30,7 +30,7 @@ echo "    Root: ${CURXOR_ROOT}"
 
 mkdir -p "${CURXOR_ROOT}/scripts" /etc/curxor/engine.env.d
 
-chmod +x "${SCRIPT_DIR}/setup-mesh-network.sh" "${SCRIPT_DIR}/apply-active-claw.sh" "${SCRIPT_DIR}/ota-updater.sh" "${SCRIPT_DIR}/install-ota-cron.sh" "${SCRIPT_DIR}/post-update.sh" "${SCRIPT_DIR}/ensure-app-fre-dir.sh" "${SCRIPT_DIR}/patch-app-fre-dir.sh" "${SCRIPT_DIR}/install-kiosk-mode.sh" "${SCRIPT_DIR}/kiosk-launch.sh" "${SCRIPT_DIR}/verify-kiosk-mode.sh" 2>/dev/null || true
+chmod +x "${SCRIPT_DIR}/setup-mesh-network.sh" "${SCRIPT_DIR}/setup-egress-wan.sh" "${SCRIPT_DIR}/verify-egress-wan.sh" "${SCRIPT_DIR}/apply-active-claw.sh" "${SCRIPT_DIR}/ota-updater.sh" "${SCRIPT_DIR}/install-ota-cron.sh" "${SCRIPT_DIR}/post-update.sh" "${SCRIPT_DIR}/ensure-app-fre-dir.sh" "${SCRIPT_DIR}/patch-app-fre-dir.sh" "${SCRIPT_DIR}/install-kiosk-mode.sh" "${SCRIPT_DIR}/kiosk-launch.sh" "${SCRIPT_DIR}/verify-kiosk-mode.sh" 2>/dev/null || true
 chmod +x "${CURXOR_ROOT}/docs/scripts/export-guides-pdf.sh" 2>/dev/null || true
 
 echo ""
@@ -103,7 +103,7 @@ done
 
 echo ""
 
-echo "==> Configuring robotics mesh (eno2)..."
+echo "==> Configuring robotics mesh (Egress Port)..."
 
 "${SCRIPT_DIR}/setup-mesh-network.sh"
 
