@@ -54,6 +54,14 @@ sudo bash /tmp/your-script.sh
 **All shipped scripts** under `/opt/curxor` (deploy / manual rsync):
 
 ```bash
+# Prefer script dirs only — avoids permission errors in node_modules/
+sudo find /opt/curxor/scripts /opt/curxor/pillar-4-dashboard/scripts /opt/curxor/pillar-2-engine \
+  -name '*.sh' -exec sed -i 's/\r$//' {} +
+```
+
+Broad find (can fail on `node_modules` permission denied):
+
+```bash
 sudo find /opt/curxor -name '*.sh' -exec sed -i 's/\r$//' {} +
 ```
 
@@ -72,7 +80,26 @@ cd C:\Users\ankur\curxor-os
 # then on box: sudo bash /tmp/reset-appliance-data.sh
 ```
 
-`deploy-to-box.ps1` runs `find … sed -i 's/\r$//'` on `/opt/curxor` after rsync — you do **not** need a separate strip for full deploys.
+`deploy-to-box.ps1` strips CRLF after rsync (script dirs only) — you do **not** need a separate strip for full deploys.
+
+### PowerShell trap (2026-07-01)
+
+**Do not** put `sed -i 's/\r$//'` inside a PowerShell **double-quoted** string. `\r` becomes a real carriage return and the remote `sed` pattern is wrong — `post-update.sh` keeps CRLF and bash fails with:
+
+```text
+post-update.sh: line 13: syntax error near unexpected token `$'{\r''
+post-update.sh: line 13: `log() {
+```
+
+**Fix in repo:** `deploy-to-box.ps1` uses `$shCrLfStrip = 's/\r$//'` (single-quoted) in a here-string.
+
+**Recover on box** (tarball usually still at `/tmp/curxor-deploy.tar.gz`):
+
+```bash
+ssh -t curxor "sudo find /opt/curxor/scripts /opt/curxor/pillar-4-dashboard/scripts /opt/curxor/pillar-2-engine -name '*.sh' -exec sed -i 's/\r$//' {} + && sudo bash /opt/curxor/scripts/post-update.sh"
+```
+
+Or: `sudo bash /opt/curxor/scripts/box-apply-deploy.sh /tmp/curxor-deploy.tar.gz`
 
 ---
 
@@ -151,7 +178,7 @@ rm -rf /tmp/curxor-os && mkdir -p /tmp/curxor-os
 tar -xzf /tmp/curxor-deploy.tar.gz -C /tmp/curxor-os
 test -f /tmp/curxor-os/scripts/post-update.sh && test -f /tmp/curxor-os/pillar-4-dashboard/package.json && echo "payload OK"
 sudo rsync -a --delete /tmp/curxor-os/ /opt/curxor/
-sudo find /opt/curxor -name '*.sh' -exec sed -i 's/\r$//' {} +
+sudo find /opt/curxor/scripts /opt/curxor/pillar-4-dashboard/scripts /opt/curxor/pillar-2-engine -name '*.sh' -exec sed -i 's/\r$//' {} +
 sudo bash /opt/curxor/scripts/post-update.sh
 ```
 
@@ -172,7 +199,7 @@ scp $env:TEMP\curxor-deploy.tar.gz curxor:/tmp/
 **On box (SSH):**
 
 ```bash
-sudo bash -c 'rm -rf /tmp/curxor-os && mkdir -p /tmp/curxor-os && tar -xzf /tmp/curxor-deploy.tar.gz -C /tmp/curxor-os && rsync -a --delete /tmp/curxor-os/ /opt/curxor/ && find /opt/curxor -name "*.sh" -exec sed -i "s/\r$//" {} + && bash /opt/curxor/scripts/post-update.sh'
+sudo bash -c 'rm -rf /tmp/curxor-os && mkdir -p /tmp/curxor-os && tar -xzf /tmp/curxor-deploy.tar.gz -C /tmp/curxor-os && rsync -a --delete /tmp/curxor-os/ /opt/curxor/ && find /opt/curxor/scripts /opt/curxor/pillar-4-dashboard/scripts /opt/curxor/pillar-2-engine -name "*.sh" -exec sed -i "s/\r$//" {} + && bash /opt/curxor/scripts/post-update.sh'
 ```
 
 `post-update.sh` rebuilds the dashboard and restarts the service.  
@@ -189,6 +216,7 @@ sudo bash -c 'rm -rf /tmp/curxor-os && mkdir -p /tmp/curxor-os && tar -xzf /tmp/
 | **`Permission denied` / `CHDIR`** | `/opt/curxor` owned `ankur:700` after scp | `sudo chmod 755 /opt/curxor` · `sudo chown -R curxor:curxor /opt/curxor/pillar-4-dashboard` · restart |
 | **`post-update.sh: Permission denied`** | Script not executable | `sudo bash /opt/curxor/scripts/post-update.sh` (not `./post-update.sh`) |
 | **`set: pipefail: invalid option`** | CRLF in shell script (Windows scp) | `sed -i 's/\r$//' /path/to/script.sh` then re-run — see **CRLF** section above |
+| **`syntax error near unexpected token $'{\r''` on `log()`** | CRLF survived deploy (`post-update.sh`) | Strip script dirs (CRLF section) then `sudo bash /opt/curxor/scripts/post-update.sh` |
 | **`invalid option name` on line 1** | Same CRLF issue | `sed -i 's/\r$//' …` before `sudo bash` |
 | **Patron FAB bottom-left, tiny** | Old build has `relative` on `fixed` button | Rebuild dashboard (post-update) or sed fix on `PatronAskFab.tsx` + `npm run build` |
 | **`/ask` client crash** | Stale `.next` or missing PatronAskProvider wrap | Full post-update rebuild + restart |
@@ -292,4 +320,4 @@ Then open **`http://10.0.0.1:3080/setup`** and pick claws again. Capital/Creator
 
 ---
 
-*Last hardened: 2026-06-29 — CRLF strip standard (`sed -i 's/\r$//'`), copy-script-to-box, reset-appliance.*
+*Last hardened: 2026-07-01 — deploy-to-box.ps1 CRLF here-string fix; script-dir-only find; onboarding ship on box.*

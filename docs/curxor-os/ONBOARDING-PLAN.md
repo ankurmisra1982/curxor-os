@@ -56,8 +56,39 @@ else → app routes
 - `middleware.ts` — welcome gate after FRE
 - `components/setup/SetupWizard.tsx` — thin Essential appliance wizard
 
+## Ship status (2026-07-01)
+
+| Item | Status |
+|------|--------|
+| ONB-0–4 code | Merged via [PR #6](https://github.com/ankurmisra1982/curxor-os/pull/6) on `master` |
+| Laptop QA | `npm run qa:local` green with `--rebuild` after code changes; use `--port 3081` if 3080 busy |
+| CI | `qa-smoke.mjs` seeds `POST /api/onboarding/privacy-ack` before egress-gated tests |
+| Demo tour | `lib/content-demo-tour.ts` — direct `publishPostToBridge` when bridge unconfigured |
+| MS-S1 box | Deployed 2026-07-01 · `welcomeCompleted` + `privacyAcknowledged` · dashboard **active** |
+
+### Dogfood (laptop)
+
+```powershell
+cd pillar-4-dashboard
+# .env.local: NEXT_PUBLIC_CURXOR_SHELL_V2=1
+npm run dev   # http://127.0.0.1:3080 → /setup or /welcome or /home
+```
+
+**Reset for full path:** `fre-state.json` → `initialized: false`; remove `operatorProfile` from `user-settings.json`.
+
+### Box deploy
+
+```powershell
+cd C:\Users\ankur\curxor-os
+.\scripts\deploy-to-box.ps1 -SshHost curxor
+```
+
+Enter sudo when prompted (~5–8 min build). If CRLF breaks `post-update.sh`, see `FOUNDER-PATCH-RUNBOOK.md` — **PowerShell trap** under CRLF.
+
+**Agent handoff:** [ONBOARDING-OPS-HANDOFF.md](./ONBOARDING-OPS-HANDOFF.md)
+
 ## Concerns / follow-ups
 
-- **Box deploy:** run same dogfood on MS-S1 (`/etc/curxor/*`); set `CURXOR_ONBOARDING_CUTOVER` if ship date moves.
-- **Legacy grandfather:** FRE provisioned before cutover skips `/welcome`; set `CURXOR_ONBOARDING_LEGACY_GRANDFATHER=1` to force-skip in dev.
+- **Legacy grandfather:** FRE provisioned before cutover skips `/welcome`; set `CURXOR_ONBOARDING_LEGACY_GRANDFATHER=1` to force-skip in dev. CI/smoke must ack privacy separately (grandfather sets `privacyDeferred` only).
 - **Connections status** in welcome step uses heuristic mapping from `/api/shell/connectors` — refine when connector IDs stabilize.
+- **Cutover date:** set `CURXOR_ONBOARDING_CUTOVER` env if ship date moves from `2026-07-01`.

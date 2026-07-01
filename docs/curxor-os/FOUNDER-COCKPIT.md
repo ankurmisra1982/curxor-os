@@ -162,9 +162,9 @@ cd C:\Users\ankur\curxor-os
 
 Default target: **`curxor`** (`~/.ssh/config` Host). Optional `-BoxIp BOX_IP` only for browser URL hint in script output.
 
-The script: **tar** (no `.git`/`.next`) → **scp** → on-box extract + `rsync` to `/opt/curxor/` → **`sed -i 's/\r$//'` on all `*.sh`** → `post-update.sh` (rebuild, restart dashboard) → curl smoke.
+The script: **tar** (no `.git`/`.next`) → **scp** → on-box extract + `rsync` to `/opt/curxor/` → **`sed -i 's/\r$//'` on script dirs** (not whole tree — avoids `node_modules` permission errors) → `post-update.sh` (rebuild, restart dashboard) → curl smoke.
 
-**CRLF:** Any script you **scp alone** to `/tmp` must be stripped on the box before `bash`: `sed -i 's/\r$//' /tmp/script.sh`. Or use `.\scripts\copy-script-to-box.ps1` from the laptop. Full detail: [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **CRLF** section.
+**CRLF:** Any script you **scp alone** to `/tmp` must be stripped on the box before `bash`: `sed -i 's/\r$//' /tmp/script.sh`. Or use `.\scripts\copy-script-to-box.ps1` from the laptop. If deploy fails with `syntax error near unexpected token $'{\r''` on `log()`, see [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **PowerShell trap** under CRLF.
 
 **Enter sudo password when SSH prompts.** If you miss it, see [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **Finish a stuck deploy**.
 
@@ -183,7 +183,7 @@ On the box:
 
 ```bash
 sudo rsync -a --delete /tmp/curxor-os/ /opt/curxor/
-sudo find /opt/curxor -name '*.sh' -exec sed -i 's/\r$//' {} +
+sudo find /opt/curxor/scripts /opt/curxor/pillar-4-dashboard/scripts /opt/curxor/pillar-2-engine -name '*.sh' -exec sed -i 's/\r$//' {} +
 sudo bash /opt/curxor/scripts/post-update.sh
 ```
 
@@ -196,7 +196,7 @@ Copy `curxor-os` folder to USB on laptop → on box:
 
 ```bash
 sudo rsync -a --delete /media/$USER/*/curxor-os/ /opt/curxor/
-sudo find /opt/curxor -name '*.sh' -exec sed -i 's/\r$//' {} +
+sudo find /opt/curxor/scripts /opt/curxor/pillar-4-dashboard/scripts /opt/curxor/pillar-2-engine -name '*.sh' -exec sed -i 's/\r$//' {} +
 sudo bash /opt/curxor/scripts/post-update.sh
 ```
 
