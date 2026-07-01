@@ -1,6 +1,7 @@
 import type { OotbAppId } from "./ootb-apps";
 import { APP_ROUTES } from "./app-routes";
 import type { ForgedAppRecord } from "./forged-apps-types";
+import { isUniversalShellApp, type ShellNavLayer } from "./ol1-layer";
 
 export const HOME_PATH = "/home";
 export const SETTINGS_PATH = "/settings";
@@ -48,6 +49,8 @@ export interface NavItem {
   appId: OotbAppId | null;
   category: ClawCategoryId;
   noviceLabel: string;
+  /** Shell v2 OL1 layer */
+  layer?: ShellNavLayer;
 }
 
 export function forgedNavItems(apps: ForgedAppRecord[]): NavItem[] {
@@ -73,9 +76,16 @@ export function buildNavItems(selectedAppIds: OotbAppId[], forgedApps: ForgedApp
 
   const routes = APP_ROUTES.filter((r) => {
     if (r.id === "claw-forge") return true;
+    if (isUniversalShellApp(r.id)) return false;
     if (selectedAppIds.length === 0) return true;
     return selectedAppIds.includes(r.id);
   });
+
+  const layerFor = (appId: OotbAppId | null): ShellNavLayer | undefined => {
+    if (!appId) return "home";
+    if (isUniversalShellApp(appId)) return "universal";
+    return "operate";
+  };
 
   const items = routes.map((r) => ({
     href: r.href,
@@ -84,6 +94,7 @@ export function buildNavItems(selectedAppIds: OotbAppId[], forgedApps: ForgedApp
     appId: r.id,
     category: categoryForApp(r.id),
     noviceLabel: r.name,
+    layer: layerFor(r.id),
   }));
 
   // Forged desks are optional — primary AppNav omits them; Command Palette + Forge fleet include them.

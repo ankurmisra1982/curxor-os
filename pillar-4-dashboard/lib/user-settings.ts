@@ -24,11 +24,16 @@ import {
   type UiMode,
   type PatronAskSettings,
   type PatronWeeklyBundleSettings,
+  type FlightCommandSettings,
+  type NotificationMode,
+  type OperatorProfile,
   type UserSettings,
   type UserSettingsPatch,
   DEFAULT_BUILD_PLANE,
 } from "./user-settings-types";
 import { sanitizeBuildPlane } from "./build-plane";
+import { stripUniversalFromSelected } from "./ol1-layer";
+import { isTextScale } from "./text-scale";
 
 function isColorScheme(v: unknown): v is ColorScheme {
   return v === "curxor" || v === "ocean" || v === "amber" || v === "mono";
@@ -88,6 +93,65 @@ function mergePatronAsk(
         : typeof partial?.lastReadAt === "string"
           ? partial.lastReadAt
           : base.lastReadAt ?? null,
+    voiceEnabled:
+      typeof partial?.voiceEnabled === "boolean" ? partial.voiceEnabled : base.voiceEnabled === true,
+  };
+}
+
+function isNotificationMode(v: unknown): v is NotificationMode {
+  return v === "calm" || v === "regular" || v === "power";
+}
+
+function mergeFlightCommand(
+  partial: UserSettingsPatch["flightCommand"],
+  base: FlightCommandSettings | undefined,
+): FlightCommandSettings {
+  const resolved = base ?? {};
+  return {
+    homeLastVisitedAt:
+      partial?.homeLastVisitedAt === null
+        ? null
+        : typeof partial?.homeLastVisitedAt === "string"
+          ? partial.homeLastVisitedAt
+          : resolved.homeLastVisitedAt ?? null,
+    notificationMode: isNotificationMode(partial?.notificationMode)
+      ? partial.notificationMode
+      : isNotificationMode(resolved.notificationMode)
+        ? resolved.notificationMode
+        : "calm",
+  };
+}
+
+function mergeOperatorProfile(
+  partial: UserSettingsPatch["operatorProfile"],
+  base: OperatorProfile | undefined,
+): OperatorProfile | undefined {
+  if (!partial && !base) return undefined;
+  const resolved = base ?? {};
+  return {
+    displayName:
+      typeof partial?.displayName === "string" ? partial.displayName : resolved.displayName,
+    timezone: typeof partial?.timezone === "string" ? partial.timezone : resolved.timezone,
+    city: typeof partial?.city === "string" ? partial.city : resolved.city,
+    privacyAcknowledgedAt:
+      partial?.privacyAcknowledgedAt === null
+        ? null
+        : typeof partial?.privacyAcknowledgedAt === "string"
+          ? partial.privacyAcknowledgedAt
+          : resolved.privacyAcknowledgedAt ?? null,
+    privacyDeferred:
+      typeof partial?.privacyDeferred === "boolean"
+        ? partial.privacyDeferred
+        : resolved.privacyDeferred === true,
+    completedAt:
+      partial?.completedAt === null
+        ? null
+        : typeof partial?.completedAt === "string"
+          ? partial.completedAt
+          : resolved.completedAt ?? null,
+    skippedSteps: Array.isArray(partial?.skippedSteps)
+      ? partial.skippedSteps.map(String)
+      : resolved.skippedSteps,
   };
 }
 
@@ -168,9 +232,11 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
 
   return {
     version: 1,
-    selectedApps: Array.isArray(partial.selectedApps)
-      ? validateAppIds(partial.selectedApps.map(String))
-      : base.selectedApps,
+    selectedApps: stripUniversalFromSelected(
+      Array.isArray(partial.selectedApps)
+        ? validateAppIds(partial.selectedApps.map(String))
+        : stripUniversalFromSelected(base.selectedApps),
+    ),
     forgedAppSlugs: Array.isArray(partial.forgedAppSlugs)
       ? partial.forgedAppSlugs.map(String).filter(Boolean)
       : base.forgedAppSlugs ?? [],
@@ -255,6 +321,11 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
       themeMode: isThemeMode(partial.appearance?.themeMode)
         ? partial.appearance.themeMode
         : base.appearance.themeMode ?? "dark",
+      textScale: isTextScale(partial.appearance?.textScale)
+        ? partial.appearance.textScale
+        : isTextScale(base.appearance.textScale)
+          ? base.appearance.textScale
+          : "large",
     },
     intelligence: {
       primarySource: isIntelligenceSource(partial.intelligence?.primarySource)
@@ -328,6 +399,8 @@ function mergeSettings(partial: UserSettingsPatch, base: UserSettings): UserSett
       partial.patronWeeklyBundle,
       base.patronWeeklyBundle ?? { weekOf: null, lastConfirmedAt: null },
     ),
+    flightCommand: mergeFlightCommand(partial.flightCommand, base.flightCommand),
+    operatorProfile: mergeOperatorProfile(partial.operatorProfile, base.operatorProfile),
     updatedAt: new Date().toISOString(),
   };
 }
@@ -374,9 +447,9 @@ export async function syncFreSelectedApps(apps: OotbAppId[]): Promise<void> {
 }
 
 export async function updateSelectedClaws(apps: OotbAppId[]): Promise<UserSettings> {
-  const validated = validateAppIds(apps.map(String));
+  const validated = stripUniversalFromSelected(validateAppIds(apps.map(String)));
   if (validated.length === 0) {
-    throw new Error("At least one Claw must remain enabled");
+    throw new Error("At least one operate Claw must remain enabled");
   }
   const next = await updateUserSettings({ selectedApps: validated });
   await syncFreSelectedApps(validated);

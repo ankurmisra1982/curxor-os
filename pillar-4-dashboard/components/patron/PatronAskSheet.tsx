@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { usePatronAsk } from "./PatronAskProvider";
 import { PatronAskThread } from "./PatronAskThread";
@@ -8,6 +8,11 @@ import { PatronAskHeaderBadges } from "./PatronAskHeaderBadges";
 
 export function PatronAskSheet() {
   const { open, minimize, openFullscreen, clawLabel, inferenceStatus } = usePatronAsk();
+  const [abovePatronDock, setAbovePatronDock] = useState(false);
+
+  useEffect(() => {
+    setAbovePatronDock(!!document.querySelector("[data-curxor-shell-v2]"));
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -29,7 +34,9 @@ export function PatronAskSheet() {
         onClick={minimize}
       />
       <aside
-        className="fixed bottom-20 right-6 z-[45] flex w-[380px] max-h-[min(520px,70vh)] flex-col overflow-hidden rounded-t-lg border border-line bg-void shadow-[0_0_48px_rgba(188,19,254,0.15)]"
+        className={`fixed z-[45] flex w-[380px] max-h-[min(520px,70vh)] flex-col overflow-hidden rounded-t-lg border border-line bg-void shadow-[0_0_48px_rgba(188,19,254,0.15)] ${
+          abovePatronDock ? "bottom-24 right-4 md:right-6" : "bottom-20 right-6"
+        }`}
         role="dialog"
         aria-label="Patron Ask"
       >

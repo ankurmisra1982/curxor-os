@@ -101,12 +101,19 @@ async function ingestOsEventToCafe(event: OsEventKind, payload: OsEventPayload):
         ? "claw-forge"
         : "claw-cafe";
 
-  const cafeKindByEvent: Record<OsEventKind, import("./claw-cafe-events").CafeEventKind> = {
+  const cafeKindByEvent: Partial<Record<OsEventKind, import("./claw-cafe-events").CafeEventKind>> = {
     "forge.claw_minted": "forge.claw_minted",
     "go_live.failed": "os.go_live_failed",
     "ota.available": "os.ota_available",
     "eno2.down": "os.eno2_down",
+    "claw.skill_completed": "forge.desk_activity",
+    "claw.approval_required": "work.approval_pending",
+    "scheduler.heartbeat": "forge.desk_activity",
+    "bridge.receipt": "forge.desk_activity",
   };
+
+  const cafeKind = cafeKindByEvent[event];
+  if (!cafeKind) return false;
 
   const bubbleByEvent: Partial<Record<OsEventKind, string>> = {
     "go_live.failed": "Go Live blocked — check desk checklist",
@@ -122,7 +129,7 @@ async function ingestOsEventToCafe(event: OsEventKind, payload: OsEventPayload):
         : event;
 
   await ingestCafeEvent({
-    kind: cafeKindByEvent[event],
+    kind: cafeKind,
     appId,
     xp: event === "forge.claw_minted" ? { ascension: 0, knowledge: 0 } : { ascension: 8, knowledge: 5 },
     bubble: bubbleByEvent[event] ?? event,

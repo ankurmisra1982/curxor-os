@@ -4,13 +4,14 @@ export const dynamic = "force-dynamic";
 import type { ReactNode } from "react";
 
 import { FlightCommandDesktop } from "@/components/desktop/FlightCommandDesktop";
-import { requireFreInitialized } from "@/lib/fre-guard";
+import { requireFreInitialized, requireWelcomeCompleted } from "@/lib/fre-guard";
 import { readForgedApps } from "@/lib/forged-apps-store";
 import { normalizeSelectedApps } from "@/lib/fre-routing";
 import { readUserSettings } from "@/lib/user-settings";
 
 export default async function DesktopLayout({ children }: { children: ReactNode }) {
   await requireFreInitialized();
+  await requireWelcomeCompleted();
   const settings = await readUserSettings();
   const selectedApps = normalizeSelectedApps(settings.selectedApps);
   const forgedState = await readForgedApps();

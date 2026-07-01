@@ -4,29 +4,48 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { PrivacyAcknowledgmentPanel } from "@/components/settings/PrivacyAcknowledgmentPanel";
 import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
 import { AgentRuntimeSettingsPanels } from "@/components/settings/AgentRuntimeSettingsPanels";
 import { BuildPlanePanel } from "@/components/settings/BuildPlanePanel";
+import { IntegrationsSettingsPanel } from "@/components/settings/IntegrationsSettingsPanel";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import {
   EXPERIENCE_LEVEL_DESCRIPTIONS,
   EXPERIENCE_LEVEL_LABELS,
+  EXPERIENCE_LEVELS,
   type ExperienceLevel,
 } from "@/lib/experience-level";
 import { GROWTH_LABELS, type GrowthLevel } from "@/lib/os-growth-level";
 import { FORGE_GROWTH_LABELS } from "@/lib/forge-level-copy";
 import type { FrontierProvider } from "@/lib/frontier-providers";
 import { THEME_PRESETS } from "@/lib/theme-presets";
+import { applyTextScale } from "@/lib/text-scale";
 import type { OotbAppId } from "@/lib/ootb-apps";
 import type {
   ColorScheme,
   IntelligenceSource,
+  TextScale,
   UiMode,
   UserSettings,
 } from "@/lib/user-settings-types";
 
-type SettingsTab = "claws" | "intelligence" | "appearance" | "agent" | "general";
+type SettingsTab = "claws" | "integrations" | "intelligence" | "appearance" | "agent" | "general";
+
+const SETTINGS_TABS: SettingsTab[] = [
+  "claws",
+  "integrations",
+  "intelligence",
+  "appearance",
+  "agent",
+  "general",
+];
+
+function tabFromSearchParam(value: string | null): SettingsTab | null {
+  if (!value || !SETTINGS_TABS.includes(value as SettingsTab)) return null;
+  return value as SettingsTab;
+}
 
 const PRIMARY_SOURCE_HINTS: Record<IntelligenceSource, string> = {
   local: "All chat and planning stay on this appliance's local models.",
@@ -103,6 +122,7 @@ export function SettingsWorkspace() {
   const [shopGrowthLevel, setShopGrowthLevel] = useState<GrowthLevel | "">("");
   const [workGamificationOptOut, setWorkGamificationOptOut] = useState(false);
   const [cafeTitleStyle, setCafeTitleStyle] = useState<"mythic" | "neutral">("mythic");
+  const [textScale, setTextScale] = useState<TextScale>("large");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -133,6 +153,8 @@ export function SettingsWorkspace() {
       setKinGrowthLevel(data.settings.appearance.kinGrowthLevel ?? "");
       setWorkGamificationOptOut(data.settings.appearance.workGamificationOptOut === true);
       setCafeTitleStyle(data.settings.appearance.cafeTitleStyle === "neutral" ? "neutral" : "mythic");
+      setTextScale(data.settings.appearance.textScale ?? "large");
+      applyTextScale(data.settings.appearance.textScale ?? "large");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Load failed");
     } finally {
@@ -147,6 +169,8 @@ export function SettingsWorkspace() {
   useEffect(() => {
     const oauth = searchParams.get("oauth");
     const oauthError = searchParams.get("oauth_error");
+    const tabParam = tabFromSearchParam(searchParams.get("tab"));
+    if (tabParam) setTab(tabParam);
     if (oauth === "success") {
       setMessage("Provider linked via OAuth.");
       setTab("intelligence");
@@ -257,16 +281,18 @@ export function SettingsWorkspace() {
           shopGrowthLevel: shopGrowthLevel || null,
           workGamificationOptOut,
           cafeTitleStyle,
+          textScale,
         },
       });
       setSettings(data.settings);
+      applyTextScale(textScale);
       setMessage("Appearance saved.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed");
     } finally {
       setSaving(false);
     }
-  }, [level, colorScheme, themeMode, workGrowthLevel, creatorGrowthLevel, capitalGrowthLevel, vitalGrowthLevel, forgeGrowthLevel, kinGrowthLevel, shopGrowthLevel, workGamificationOptOut, cafeTitleStyle]);
+  }, [level, colorScheme, themeMode, textScale, workGrowthLevel, creatorGrowthLevel, capitalGrowthLevel, vitalGrowthLevel, forgeGrowthLevel, kinGrowthLevel, shopGrowthLevel, workGamificationOptOut, cafeTitleStyle]);
 
   const connectProvider = useCallback(async () => {
     if (!frontierProviderId) {
@@ -330,6 +356,7 @@ export function SettingsWorkspace() {
 
   const tabs: { id: SettingsTab; label: string; hint: string }[] = [
     { id: "claws", label: "Claws", hint: "Add or remove digital employees" },
+    { id: "integrations", label: "Integrations", hint: "Publish, trade, and comms bridges" },
     { id: "intelligence", label: "Intelligence", hint: "Local, frontier, or both" },
     { id: "appearance", label: "Appearance", hint: "Theme and display mode" },
     { id: "agent", label: "Agent runtime", hint: "Channels, CCP, heartbeat" },
@@ -399,6 +426,8 @@ export function SettingsWorkspace() {
               </div>
             </div>
           ) : null}
+
+          {tab === "integrations" ? <IntegrationsSettingsPanel isExpert={isExpert} /> : null}
 
           {tab === "intelligence" ? (
             <div className="space-y-6 p-6">
@@ -674,13 +703,19 @@ export function SettingsWorkspace() {
 
           {tab === "appearance" ? (
             <div className="space-y-6 p-6">
+              <PrivacyAcknowledgmentPanel
+                acknowledged={Boolean(settings?.operatorProfile?.privacyAcknowledgedAt)}
+                deferred={settings?.operatorProfile?.privacyDeferred === true}
+                onAcknowledged={() => void load()}
+              />
+
               <section>
                 <h2 className="font-sans text-lg font-semibold text-stark">Experience level</h2>
                 <p className="mt-1 font-sans text-xs text-muted">
                   Applies to all Claw apps — controls panels, tips, and advanced tools.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {(["beginner", "standard", "expert"] as ExperienceLevel[]).map((value) => (
+                  {EXPERIENCE_LEVELS.map((value) => (
                     <button
                       key={value}
                       type="button"
@@ -702,6 +737,38 @@ export function SettingsWorkspace() {
                   Current: {levelLabel} — {levelDescription}
                   {isExpert ? " · Mesh telemetry visible." : ""}
                 </p>
+              </section>
+
+              <section>
+                <h2 className="font-sans text-lg font-semibold text-stark">Text size</h2>
+                <p className="mt-1 font-sans text-xs text-muted">
+                  OS-wide body scale for monitor and MS-S1 display — not browser zoom.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {(
+                    [
+                      ["default", "Default"],
+                      ["large", "Large (recommended)"],
+                      ["extra-large", "Extra large"],
+                    ] as const
+                  ).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => {
+                        setTextScale(value);
+                        applyTextScale(value);
+                      }}
+                      className={`border px-3 py-2 font-sans text-xs ${
+                        textScale === value
+                          ? "border-cursor-glow text-cursor-glow"
+                          : "border-line text-muted hover:text-stark"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </section>
 
               <section>
