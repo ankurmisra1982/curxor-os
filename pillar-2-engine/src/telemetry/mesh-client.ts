@@ -54,11 +54,18 @@ export async function createMeshClient(config: EngineConfig): Promise<MeshClient
     },
 
     async readVision(timeoutMs = 100): Promise<VisionFrame | null> {
-      const parts = (await Promise.race([
-        visionSub.receive() as Promise<Buffer[]>,
-        sleep(timeoutMs).then(() => null),
-      ])) as Buffer[] | null;
-      if (!parts || parts.length !== 3) return null;
+      const previousTimeout = visionSub.receiveTimeout;
+      visionSub.receiveTimeout = timeoutMs;
+      let parts: Buffer[];
+      try {
+        parts = (await visionSub.receive()) as Buffer[];
+      } catch (err) {
+        if (isReceiveTimeout(err)) return null;
+        throw err;
+      } finally {
+        visionSub.receiveTimeout = previousTimeout;
+      }
+      if (parts.length !== 3) return null;
 
       const header = parts[1];
       const payload = parts[2];
@@ -80,4 +87,10 @@ export async function createMeshClient(config: EngineConfig): Promise<MeshClient
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isReceiveTimeout(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  const code = (err as NodeJS.ErrnoException).code;
+  return code === "EAGAIN" || code === "EWOULDBLOCK";
 }
