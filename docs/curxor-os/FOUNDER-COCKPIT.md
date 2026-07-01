@@ -151,26 +151,27 @@ Fix until green before deploying.
 
 ### Step 2 — Deploy code to box
 
-**Option A — `deploy-to-box.ps1` (recommended on Windows)**
+**Option A — `ship-patch.ps1` (recommended on Windows)**
 
-From repo root on the laptop (after `qa:local` is green):
+From repo root on the laptop (after `qa:local` is green for merge ships):
 
 ```powershell
 cd C:\Users\ankur\curxor-os
-.\scripts\deploy-to-box.ps1
+.\scripts\ship-patch.ps1 -Quick              # daily patches
+.\scripts\ship-patch.ps1                       # typecheck + qa:local + deploy
 ```
 
-Default target: **`curxor`** (`~/.ssh/config` Host). Optional `-BoxIp BOX_IP` only for browser URL hint in script output.
+Wraps `deploy-to-box.ps1`. Default target: **`curxor`** (`~/.ssh/config`).
 
-The script: **tar** (no `.git`/`.next`) → **scp** → on-box extract + `rsync` to `/opt/curxor/` → **`sed -i 's/\r$//'` on script dirs** (not whole tree — avoids `node_modules` permission errors) → `post-update.sh` (rebuild, restart dashboard) → curl smoke.
+The deploy path: **tar** (no `.git`/`.next`) + `.deploy-stamp` → **scp** → passwordless **`box-apply-deploy.sh`** → `post-update.sh` → **`box-smoke.sh`**.
 
-**CRLF:** Any script you **scp alone** to `/tmp` must be stripped on the box before `bash`: `sed -i 's/\r$//' /tmp/script.sh`. Or use `.\scripts\copy-script-to-box.ps1` from the laptop. If deploy fails with `syntax error near unexpected token $'{\r''` on `log()`, see [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **PowerShell trap** under CRLF.
+**CRLF:** Any script you **scp alone** to `/tmp` must be stripped on the box before `bash`: `sed -i 's/\r$//' /tmp/script.sh`. Or use `.\scripts\copy-script-to-box.ps1`. See [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **PowerShell trap** under CRLF.
 
-**Enter sudo password when SSH prompts.** If you miss it, see [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — **Finish a stuck deploy**.
+**Sudo:** not required per deploy after `box-install-deploy-sudo-override.ps1` (one-time). If deploy fails, see **Finish a stuck deploy** in the runbook.
 
-**Quick reference:** [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) — deploy, debug, hotfix one-liners.
+**Quick reference:** [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) · agent rule: `.cursor/rules/founder-ship-loop.mdc`
 
-Flags: `-SshHost curxor` (default) · `-BoxIp 10.0.0.1` (browser URL hint only) · `-SkipPack` if tarball already on box · `-WhatIf` to print steps without running.
+Flags: `-Quick` · `-OpsSmoke` · `-SkipQa` · `-WhatIf`. Low-level: `deploy-to-box.ps1` · `-SkipPack` if tarball already on box.
 
 **Option A2 — Manual** (same steps as the script)
 

@@ -1,0 +1,59 @@
+---
+description: Onboarding ship + box deploy ops handoff for build chats (ONB-0–4, dogfood, QA, deploy)
+alwaysApply: false
+---
+
+# Onboarding & deploy ops handoff
+
+Use when touching `/welcome`, `/setup`, Essential mode, privacy gates, or shipping to the box.
+
+**Deploy / ship:** follow `.cursor/rules/founder-ship-loop.mdc` — use `ship-patch.ps1`, not ad-hoc scp.
+
+## Flow (shipped ONB-0–4)
+
+```
+!initialized → /setup → /welcome → /home
+```
+
+- Default tier: **Essential** (`experience-level.ts`, `DEFAULT_USER_SETTINGS`)
+- Privacy: hard gate before egress (`egress-policy.ts`, `POST /api/onboarding/privacy-ack`)
+- Legacy: FRE before `2026-07-01` skips `/welcome` but sets `privacyDeferred` only — smoke/CI must ack privacy
+
+## Dogfood (laptop)
+
+```powershell
+cd pillar-4-dashboard
+# .env.local: NEXT_PUBLIC_CURXOR_SHELL_V2=1
+npm run dev   # http://127.0.0.1:3080
+```
+
+**Reset full path:** `scripts/dev-qa/fre-state.json` → `initialized: false`; remove `operatorProfile` from `user-settings.json`.
+
+## QA
+
+```powershell
+npm run qa:local -- --rebuild --port 3081   # if 3080 busy
+```
+
+- Stale `.next` hides fixes — always `--rebuild` after tour/onboarding code changes
+- `qa-smoke.mjs` seeds privacy ack before connector/firecrawl/OAuth tests
+
+## Box deploy (summary)
+
+```powershell
+cd C:\Users\ankur\curxor-os
+.\scripts\ship-patch.ps1 -Quick    # or full ship-patch.ps1 before merge
+```
+
+Passwordless after `box-install-deploy-sudo-override.ps1`. Smoke: `box-smoke.sh` · stamp: `/opt/curxor/.deploy-stamp`.
+
+## Key files
+
+| Area | Paths |
+|------|-------|
+| Ship loop rule | `.cursor/rules/founder-ship-loop.mdc` |
+| Plan | `docs/curxor-os/ONBOARDING-PLAN.md` |
+| Onboarding | `lib/onboarding.ts`, `middleware.ts`, `components/welcome/*` |
+| Privacy | `lib/egress-policy.ts`, `components/settings/PrivacyAcknowledgmentPanel.tsx` |
+| Deploy | `scripts/ship-patch.ps1`, `scripts/deploy-to-box.ps1`, `scripts/box-apply-deploy.sh`, `scripts/box-smoke.sh` |
+| Runbook | `docs/curxor-os/FOUNDER-PATCH-RUNBOOK.md` |

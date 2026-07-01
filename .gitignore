@@ -8,8 +8,16 @@ build-out.txt
 qa-out.txt
 typecheck-out.txt
 
-# Cursor IDE local state
-.cursor/
+# Cursor IDE local state (rules are committed for agent handoff)
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 
 # Local operator monitors (do not commit)
 wifi-box-monitor.log
+
+# CurXor ops bridge credentials (ops@curxor.ai — CTO-managed, never commit)
+config/local/ops-digital.env
+
+# Laptop deploy stamp (written during pack, shipped in tarball)
+.deploy-stamp

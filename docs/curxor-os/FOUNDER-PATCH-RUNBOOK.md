@@ -105,53 +105,43 @@ Or: `sudo bash /opt/curxor/scripts/box-apply-deploy.sh /tmp/curxor-deploy.tar.gz
 
 ## Ship a patch (happy path)
 
-### 1. Laptop — gate (optional but recommended)
-
-```powershell
-cd C:\Users\ankur\curxor-os\pillar-4-dashboard
-npm.cmd run typecheck
-```
-
-### 2. Laptop — deploy
+### 1. Laptop — gate + deploy (one command)
 
 ```powershell
 cd C:\Users\ankur\curxor-os
-.\scripts\deploy-to-box.ps1
+.\scripts\ship-patch.ps1 -Quick              # daily: typecheck + deploy
+.\scripts\ship-patch.ps1                       # merge/wave: + qa:local
+.\scripts\ship-patch.ps1 -OpsSmoke             # + ops bridge smoke on box
 ```
 
-Default SSH target: **`curxor`** (`~/.ssh/config`). Optional `-BoxIp` only changes the browser URL printed at the end (use `-BoxIp 10.0.0.1` for captive hint).
+**Do not** raw scp/rsync to `/opt/curxor` except recovery below. Agent build chats: see `.cursor/rules/founder-ship-loop.mdc`.
 
-**Must run from the repo folder** — not `C:\Users\ankur>`.
+`ship-patch.ps1` calls `deploy-to-box.ps1` which:
+1. **tar** repo (skips `.git`, `node_modules`, `.next`) + writes `.deploy-stamp` (git commit)
+2. **scp** → `/tmp/curxor-deploy.tar.gz`
+3. **passwordless** `sudo /opt/curxor/scripts/box-apply-deploy.sh` (after one-time `box-install-deploy-sudo-override.ps1`)
+4. `post-update.sh` rebuild + restart dashboard
+5. `box-smoke.sh` API checks
 
-The script:
-1. **tar** repo on laptop (skips `.git`, `node_modules`, `.next`) → faster, no permission spam
-2. **scp** archive → `/tmp/curxor-deploy.tar.gz` on box
-3. SSH: extract → `/tmp/curxor-os/` → `sudo rsync` → `/opt/curxor/`
-4. Strip CRLF from `*.sh`, remove `.env.local`, fix permissions
-5. `npm run build` in pillar-4-dashboard (~5–8 min)
-6. Restart **`curxor-dashboard.service`**
-
-**You must enter your sudo password when SSH prompts.** If you skip it, the script prints **`DEPLOY INCOMPLETE`** — the old build is still running.
+**Sudo password:** not required per deploy if deploy sudo override is installed. One-time bootstrap: `.\scripts\box-install-deploy-sudo-override.ps1`.
 
 ### How to know deploy actually worked
 
-| Check | Good | Bad (sudo skipped or build failed) |
-|-------|------|-------------------------------------|
-| Script output | `Post-update complete` + `dashboard OK` | `sudo: a password is required` |
-| Box grep | `grep "Hide telemetry" /opt/curxor/pillar-4-dashboard/components/desktop/FlightCommandDesktop.tsx` finds a line | Permission denied or no match |
+| Check | Good | Bad |
+|-------|------|-----|
+| Script output | `Post-update complete` + `box-smoke passed` (or APIs 200) | `DEPLOY INCOMPLETE` |
+| Stamp | `ssh curxor cat /opt/curxor/.deploy-stamp` matches laptop `git rev-parse HEAD` | old commit / missing |
 | Browser | Hard refresh shows your change | Same old UI |
 
-### 3. Smoke (box or laptop browser)
+### 2. Smoke (auto + manual)
+
+Deploy runs `box-smoke.sh`. Re-run if dashboard was still restarting:
 
 ```bash
-# On box:
-curl -s -o /dev/null -w "capital: %{http_code}\n" http://127.0.0.1:3080/api/capital/status
-systemctl is-active curxor-dashboard.service
+ssh curxor "bash /opt/curxor/scripts/box-smoke.sh"
 ```
 
-Expect **`capital: 200`** and **`active`**.
-
-### 4. Browser
+### 3. Browser
 
 Hard refresh **`http://10.0.0.1:3080/home`** (`Ctrl+Shift+R`) → click your changed page.
 

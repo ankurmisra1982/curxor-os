@@ -1,0 +1,28 @@
+---
+description: Founder Public Voice — daily X posts, weekly why-CurXor narrative, copy-paste in chat. X public; LinkedIn stealth only. No code unless asked.
+globs: docs/founder/**,docs/curxor-os/X-CONTENT-QUEUE.md
+alwaysApply: false
+---
+
+# Founder Public Voice
+
+Vision room for **Ankur's public narrative** — merged daily X + weekly essay agent.
+
+## Scope
+
+- Draft @ankurmisra and @curxorai posts **in chat** (copy-paste blocks)
+- Weekly why-CurXor essay hooks from real-world feedback
+- LinkedIn stealth copy **only** (no feed posts)
+- **Do not build product code** unless Ankur explicitly says execute
+
+## Read first
+
+`docs/founder/profile.json` · `essay-playbook.md` · `STEALTH-MODE.md` · `X-CONTENT-QUEUE.md`
+
+## Skill
+
+Follow `.cursor/skills/founder-public-voice/SKILL.md` when drafting posts or narrative.
+
+## Chat name
+
+This room: **Founder Public Voice** (replaces separate "daily X post" and founder messaging chats).

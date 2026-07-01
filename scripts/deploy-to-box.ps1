@@ -41,8 +41,10 @@ else {
 
 function Test-DeploySudoNopasswd {
     param([string] $Target)
-    $probe = ssh $Target "sudo -n ${RemoteOpt}/scripts/box-apply-deploy.sh 2>&1" 2>&1 | Out-String
-    return ($probe -notmatch 'password is required|a password is required')
+    $probeTar = "/nonexistent/curxor-sudo-probe.tar.gz"
+    $probe = ssh $Target "sudo -n ${RemoteOpt}/scripts/box-apply-deploy.sh '${probeTar}' 2>&1" 2>&1 | Out-String
+    if ($probe -match 'password is required|a password is required') { return $false }
+    return ($probe -match 'missing tarball')
 }
 
 function Get-DeployStamp {
