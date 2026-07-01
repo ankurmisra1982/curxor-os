@@ -2,7 +2,7 @@
 
 > **Room:** Vision & Strategy — structure ideas here; **no build** in this chat  
 > **Dream state (locked):** [DREAM-STATE-OVERVIEW.md](./DREAM-STATE-OVERVIEW.md) — category north star · three acts · vision hero  
-> **Build freeze:** Until on-device golden path passes · see [PRE-UNBOX-48H.md](./PRE-UNBOX-48H.md)  
+> **Build freeze:** Post-G1 — bug fixes + G2 release work until v1.0.0 tags · see [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md)  
 > **Shipped / active sequencing:** [DAY-ONE-BUILD-PLAN.md](./DAY-ONE-BUILD-PLAN.md)  
 > **Owner:** Ankur (what matters) · CTO agent (structure + gates)  
 > **Last updated:** June 2026
@@ -40,7 +40,7 @@
 | **G3** | Appliance demo captures | Storefront · investor assets |
 | **G4** | Operator UAT smile on hardware | Tier C depth · rebrand · fundraise narrative |
 
-**Current state:** G0 target · **G1 blocked** until MS-S1 MAX session.
+**Current state:** **G1 green** (golden path closed 2026-06-29 on MS-S1) · **G2 current** — v1.0.0 tag, signed OTA, factory USB.
 
 ---
 
