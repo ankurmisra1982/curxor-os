@@ -62,6 +62,7 @@ import { ContentRecoveryPanel, type RecoveryCandidateRow } from "@/components/ap
 import { ContentPlanPanel, type ContentPlanReportRow } from "@/components/apps/content/ContentPlanPanel";
 import { ContentSignalPanel, type SignalFeedItemRow } from "@/components/apps/content/ContentSignalPanel";
 import { ContentGoLivePanel, type GoLiveReportRow } from "@/components/apps/content/ContentGoLivePanel";
+import { ContentPipelineStepper } from "@/components/apps/content/ContentPipelineStepper";
 import { ContentConnectionsOverlay } from "@/components/apps/content/ContentConnectionsOverlay";
 import { ContentEmptyQueuePanel } from "@/components/apps/content/ContentEmptyQueuePanel";
 import { CreatorLevelBadge } from "@/components/apps/content/CreatorLevelBadge";
@@ -1905,7 +1906,11 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         title="Content Queue"
         subtitle="Persisted on appliance · Draft Post saves to queue · Publish sends text via digital_out"
       >
-        <div className="mb-3 flex flex-wrap items-center gap-2">
+        <ContentPipelineStepper
+          post={selectedPost}
+          bridgeConfigured={status?.bridgeConfigured ?? false}
+        />
+        <div className="mb-3 mt-3 flex flex-wrap items-center gap-2">
           <button
             type="button"
             disabled={creating}

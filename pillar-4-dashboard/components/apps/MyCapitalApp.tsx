@@ -23,6 +23,7 @@ import { CapitalPendingTradesBanner } from "@/components/apps/capital/CapitalPen
 import { CapitalMoversPanel } from "@/components/apps/capital/CapitalMoversPanel";
 import { CapitalPilotMarketplacePanel } from "@/components/apps/capital/CapitalPilotMarketplacePanel";
 import { CapitalSubscriptionsPanel } from "@/components/apps/capital/CapitalSubscriptionsPanel";
+import { CapitalBridgeStatusPanel } from "@/components/apps/capital/CapitalBridgeStatusPanel";
 import { CapitalBrokersPanel, CapitalPermissionsPanel } from "@/components/apps/capital/CapitalPermissionsPanel";
 import { CapitalRecoveryPanel } from "@/components/apps/capital/CapitalRecoveryPanel";
 import { CapitalRulesPanel } from "@/components/apps/capital/CapitalRulesPanel";
@@ -948,6 +949,12 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
 
       {capitalFeatureVisible(growthLevel, "brokers") ? (
       <ExperienceAppSection appId="my-capital" sectionId="brokers" minLevel="standard" title="Broker integrations" subtitle="Alpaca live · TradingView webhook · Robinhood MCP" hideWhen={hideCapitalSection("brokers")}>
+        <div className="space-y-3">
+        <CapitalBridgeStatusPanel
+          brokers={status?.brokers ?? []}
+          bridgeConfigured={status?.bridgeConfigured ?? false}
+          source={status?.source ?? "demo"}
+        />
         <CapitalBrokersPanel
           brokers={status?.brokers ?? []}
           activeBrokerId={status?.permissions.activeBrokerId}
@@ -1053,6 +1060,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
             setSignal(`${brokerId} unlinked`);
           }}
         />
+        </div>
       </ExperienceAppSection>
       ) : null}
 

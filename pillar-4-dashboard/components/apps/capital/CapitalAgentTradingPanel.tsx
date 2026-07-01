@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { CapitalOrderPreviewPanel } from "@/components/apps/capital/CapitalOrderPreviewPanel";
+import { CapitalReasoningAccordion } from "@/components/apps/capital/CapitalReasoningAccordion";
 import type { AutoApprovalPolicy } from "@/lib/capital-auto-approval-types";
 import type { AgentAuditEntry, CapitalTrade, TradePreview } from "@/lib/capital-queue-types";
 
@@ -126,21 +127,7 @@ export function CapitalAgentTradingPanel({
 
       {signal ? <p className="text-[10px] text-muted">{signal}</p> : null}
 
-      <div>
-        <p className="mb-1 text-[10px] uppercase tracking-widest text-muted">Agent audit log</p>
-        {auditLog.length === 0 ? (
-          <p className="text-muted">No agent activity yet — connect MCP or use Claw chat skills.</p>
-        ) : (
-          auditLog.slice(0, 12).map((row) => (
-            <div key={row.id} className="border-b border-line/40 py-1 text-[10px]">
-              <span className="text-cursor-glow">{row.kind}</span>
-              <span className="text-muted"> · {row.source}</span>
-              {row.ticker ? <span className="text-stark"> · {row.ticker}</span> : null}
-              <p className="text-muted">{row.note}</p>
-            </div>
-          ))
-        )}
-      </div>
+      <CapitalReasoningAccordion entries={auditLog} />
     </div>
   );
 }
