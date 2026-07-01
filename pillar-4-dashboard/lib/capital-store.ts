@@ -468,9 +468,21 @@ export async function setRuleState(ruleId: string, state: RuleState): Promise<Ca
     const file = await ensureCapitalQueue();
     const idx = file.rules.findIndex((r) => r.id === ruleId);
     if (idx < 0) return null;
+    const prior = file.rules[idx]!.state;
     file.rules[idx] = { ...file.rules[idx]!, state, updatedAt: new Date().toISOString() };
     await writeCapitalFile(file);
-    return file.rules[idx]!;
+    const rule = file.rules[idx]!;
+    if (state === "ARMED" && prior !== "ARMED") {
+      const { emitClawSkillCompleted } = await import("./claw-activity-events");
+      void emitClawSkillCompleted({
+        appId: "my-capital",
+        summary: `Rule armed · ${rule.asset} (${rule.name})`,
+        skillId: "arm_rule",
+        evidence: rule.id,
+        dedupeKey: `capital:rule:${rule.id}:armed`,
+      });
+    }
+    return rule;
   });
 }
 
@@ -529,9 +541,31 @@ export async function updateTrade(
     const file = await ensureCapitalQueue();
     const idx = file.trades.findIndex((t) => t.id === tradeId);
     if (idx < 0) return null;
+    const prior = file.trades[idx]!.status;
     file.trades[idx] = { ...file.trades[idx]!, ...patch };
     await writeCapitalFile(file);
-    return file.trades[idx]!;
+    const trade = file.trades[idx]!;
+    const nextStatus = trade.status;
+    if (
+      prior !== nextStatus &&
+      (nextStatus === "simulated" || nextStatus === "filled" || nextStatus === "submitted")
+    ) {
+      const mode =
+        nextStatus === "simulated"
+          ? "practice fill"
+          : nextStatus === "filled"
+            ? "filled"
+            : "submitted";
+      const { emitClawSkillCompleted } = await import("./claw-activity-events");
+      void emitClawSkillCompleted({
+        appId: "my-capital",
+        summary: `${trade.action.toUpperCase()} ${trade.qty} ${trade.ticker} · ${mode}`,
+        skillId: "execute_trade",
+        evidence: trade.id,
+        dedupeKey: `capital:trade:${trade.id}:${nextStatus}`,
+      });
+    }
+    return trade;
   });
 }
 

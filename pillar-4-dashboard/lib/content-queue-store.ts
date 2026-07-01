@@ -381,6 +381,7 @@ export async function scheduleContentPost(
     updatedAt: new Date().toISOString(),
   };
   await writeQueueFile(file);
+  const post = file.posts[idx]!;
 
   const whenDate = new Date(when);
   const cron = `${whenDate.getMinutes()} ${whenDate.getHours()} * * *`;
@@ -393,16 +394,24 @@ export async function scheduleContentPost(
     enabled: true,
   });
 
-  const scheduled = file.posts[idx]!;
   const { emitCreatorXpEvent } = await import("./creator-xp-events");
   void emitCreatorXpEvent("post_scheduled", {
     postId,
-    channel: scheduled.channel,
-    platform: scheduled.platform,
+    channel: post.channel,
+    platform: post.platform,
     scheduledAt: when,
   });
 
-  return scheduled;
+  const { emitClawSkillCompleted } = await import("./claw-activity-events");
+  void emitClawSkillCompleted({
+    appId: "my-content-creator",
+    summary: `Scheduled · ${post.platform} · ${post.channel}`,
+    skillId: "schedule_post",
+    evidence: post.id,
+    dedupeKey: `creator:schedule:${post.id}`,
+  });
+
+  return post;
 }
 
 export async function saveHookVariants(
@@ -716,7 +725,16 @@ export async function markPostPublished(
     updatedAt: now,
   };
   await writeQueueFile(file);
-  return file.posts[idx]!;
+  const post = file.posts[idx]!;
+  const { emitClawSkillCompleted } = await import("./claw-activity-events");
+  void emitClawSkillCompleted({
+    appId: "my-content-creator",
+    summary: `Published · ${post.platform} · ${post.channel}`,
+    skillId: "publish_post",
+    evidence: post.id,
+    dedupeKey: `creator:publish:${post.id}`,
+  });
+  return post;
 }
 
 export async function setPostCampaignId(

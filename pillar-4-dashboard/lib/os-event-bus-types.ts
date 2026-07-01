@@ -3,13 +3,21 @@ export type OsEventKind =
   | "forge.claw_minted"
   | "go_live.failed"
   | "ota.available"
-  | "eno2.down";
+  | "eno2.down"
+  | "claw.skill_completed"
+  | "claw.approval_required"
+  | "scheduler.heartbeat"
+  | "bridge.receipt";
 
 export const OS_EVENT_KINDS: OsEventKind[] = [
   "forge.claw_minted",
   "go_live.failed",
   "ota.available",
   "eno2.down",
+  "claw.skill_completed",
+  "claw.approval_required",
+  "scheduler.heartbeat",
+  "bridge.receipt",
 ];
 
 export type OsEventPayload = Record<string, unknown>;

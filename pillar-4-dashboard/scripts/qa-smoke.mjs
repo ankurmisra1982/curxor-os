@@ -30,7 +30,21 @@ console.log(`==> QA smoke · base=${BASE}\n`);
 
 await check("setup status", async () => {
   const data = await getJson("/api/setup/status");
-  return typeof data.initialized === "boolean";
+  return typeof data.initialized === "boolean" && typeof data.welcomeCompleted === "boolean";
+});
+
+await check("onboarding status", async () => {
+  const data = await getJson("/api/onboarding/status");
+  return (
+    typeof data.welcomeCompleted === "boolean" && typeof data.privacyAcknowledged === "boolean"
+  );
+});
+
+await check("onboarding privacy ack (qa seed)", async () => {
+  const before = await getJson("/api/onboarding/status");
+  if (before.privacyAcknowledged === true) return true;
+  const { ok, json } = await postJson("/api/onboarding/privacy-ack", {});
+  return ok && json.privacyAcknowledged === true;
 });
 
 await check("settings GET", async () => {
@@ -130,7 +144,7 @@ await check("build plane worker probe demo", async () => {
 
 await check("build plane event bus log", async () => {
   const data = await getJson("/api/build/events?limit=8");
-  return data.ok === true && Array.isArray(data.events) && Array.isArray(data.kinds) && data.kinds.length === 4;
+  return data.ok === true && Array.isArray(data.events) && Array.isArray(data.kinds) && data.kinds.length === 8;
 });
 
 await check("build plane event bus emit demo", async () => {
@@ -1247,6 +1261,137 @@ await check("mesh digital route", async () => {
 await check("compute metrics", async () => {
   const data = await getJson("/api/metrics/compute");
   return data.backend === "ollama" || data.backend === "vllm" || data.backend === "unknown";
+});
+
+await check("shell sovereignty", async () => {
+  const data = await getJson("/api/shell/sovereignty");
+  return (
+    data.localInference?.host === "127.0.0.1" &&
+    typeof data.egress?.paused === "boolean" &&
+    typeof data.memory?.totalGb === "number" &&
+    ["local", "frontier", "auto"].includes(data.frontier?.primarySource)
+  );
+});
+
+await check("activity feed", async () => {
+  const data = await getJson("/api/activity/feed");
+  return (
+    data.ok === true &&
+    Array.isArray(data.attention) &&
+    Array.isArray(data.items) &&
+    typeof data.generatedAt === "string"
+  );
+});
+
+await check("activity visit", async () => {
+  const { ok, json } = await postJson("/api/activity/visit", {});
+  return ok === true && json.ok === true && typeof json.homeLastVisitedAt === "string";
+});
+
+await check("shell team status", async () => {
+  const data = await getJson("/api/shell/team-status");
+  return data.ok === true && Array.isArray(data.claws);
+});
+
+await check("shell connectors summary", async () => {
+  const data = await getJson("/api/shell/connectors");
+  const publish = data.domains?.find((d) => d.id === "publish");
+  const trade = data.domains?.find((d) => d.id === "trade");
+  const comms = data.domains?.find((d) => d.id === "comms");
+  const messaging = data.domains?.find((d) => d.id === "messaging");
+  const web = data.domains?.find((d) => d.id === "web");
+  return (
+    data.ok === true &&
+    typeof data.generatedAt === "string" &&
+    typeof data.summary?.domainsNeedingAttention === "number" &&
+    Array.isArray(data.domains) &&
+    data.domains.length === 5 &&
+    publish?.label === "Publish" &&
+    trade?.label === "Trade" &&
+    comms?.label === "Comms" &&
+    messaging?.label === "Messaging" &&
+    web?.label === "Web context" &&
+    Array.isArray(data.publish?.platforms) &&
+    Array.isArray(data.trade?.brokers) &&
+    Array.isArray(data.trade?.fixHints) &&
+    Array.isArray(data.comms?.connectors) &&
+    Array.isArray(data.messaging?.connectors) &&
+    data.messaging.connectors.length === 3 &&
+    Array.isArray(data.web?.connectors) &&
+    data.web.connectors.length === 3 &&
+    typeof data.comms?.commsPathReady === "boolean" &&
+    Array.isArray(data.links) &&
+    data.links.length >= 5
+  );
+});
+
+await check("shell connectors link alpaca verify", async () => {
+  const { ok, json } = await postJson("/api/shell/connectors/link", {
+    connectorId: "alpaca_paper",
+    action: "verify",
+  });
+  return ok === true && typeof json.connected === "boolean" && typeof json.detail === "string";
+});
+
+await check("shell connectors link bluesky guided", async () => {
+  const { ok, json } = await postJson("/api/shell/connectors/link", {
+    connectorId: "alpaca_paper",
+    action: "start",
+  });
+  return ok === true && Array.isArray(json.steps) && json.steps.length >= 3;
+});
+
+await check("web firecrawl status", async () => {
+  const data = await getJson("/api/web/firecrawl");
+  return (
+    data.ok === true &&
+    typeof data.configured === "boolean" &&
+    typeof data.config?.dailyCreditCap === "number" &&
+    data.connector?.id === "firecrawl"
+  );
+});
+
+await check("web firecrawl scrape_test demo", async () => {
+  const { ok, json } = await postJson("/api/web/firecrawl", {
+    action: "scrape_test",
+    url: "https://example.com",
+  });
+  return (
+    ok === true &&
+    json.result?.ok === true &&
+    typeof json.result.markdown === "string" &&
+    json.result.markdown.length > 20
+  );
+});
+
+await check("web firecrawl mcp_probe", async () => {
+  const { ok, json } = await postJson("/api/web/firecrawl", { action: "mcp_probe" });
+  return (
+    ok === true &&
+    typeof json.probe?.configured === "boolean" &&
+    typeof json.probe?.detail === "string"
+  );
+});
+
+await check("content seed_from_url demo", async () => {
+  const { ok, json } = await postJson("/api/content/status", {
+    action: "seed_from_url",
+    url: "https://example.com/trend-article",
+  });
+  return (
+    ok === true &&
+    json.post?.id &&
+    typeof json.post.draftText === "string" &&
+    json.post.draftText.includes("Outline") &&
+    json.demo === true
+  );
+});
+
+await check("ol1 fre pickable excludes universal", async () => {
+  const data = await getJson("/api/settings");
+  const apps = data.settings?.selectedApps ?? [];
+  const universal = ["claw-cafe", "tesla-optimus-engine", "my-family"];
+  return universal.every((id) => !apps.includes(id));
 });
 
 await check("claw profiles", async () => {

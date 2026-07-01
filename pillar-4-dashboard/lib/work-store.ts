@@ -679,9 +679,25 @@ export async function updateSendStatus(
   const file = await ensureWorkQueue();
   const idx = file.sends.findIndex((s) => s.id === sendId);
   if (idx < 0) return null;
+  const prior = file.sends[idx]!.status;
   file.sends[idx] = { ...file.sends[idx]!, ...patch };
   await writeWorkFile(file);
-  return file.sends[idx]!;
+  const send = file.sends[idx]!;
+  const nextStatus = send.status;
+  if (prior !== nextStatus && (nextStatus === "simulated" || nextStatus === "sent")) {
+    const { emitClawSkillCompleted } = await import("./claw-activity-events");
+    void emitClawSkillCompleted({
+      appId: "my-work",
+      summary:
+        nextStatus === "simulated"
+          ? `Simulated send · ${send.subject.slice(0, 64) || send.to}`
+          : `Sent · ${send.subject.slice(0, 64) || send.to}`,
+      skillId: "send_sequence_step",
+      evidence: send.id,
+      dedupeKey: `work:send:${send.id}:${nextStatus}`,
+    });
+  }
+  return send;
 }
 
 export async function ingestMailIndex(entries: MailIndexEntry[]): Promise<number> {

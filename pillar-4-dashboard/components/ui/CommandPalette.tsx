@@ -59,8 +59,8 @@ export function CommandPalette({
       },
       {
         id: "mode",
-        label: isExpert ? "Hide telemetry strip" : "Show telemetry strip",
-        hint: "Show or hide telemetry details",
+        label: isExpert ? "Simple mode" : "Expert mode",
+        hint: isExpert ? "Calmer home · hide status rail" : "Mission control · telemetry + status rail",
         run: onToggleMode,
       },
     ];

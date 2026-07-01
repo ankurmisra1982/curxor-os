@@ -4,16 +4,13 @@
 
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 
 
 
-import { StartNewClawButton } from "@/components/claw/StartNewClawButton";
-
+import { LegacyFlightCommandLayout } from "@/components/desktop/LegacyFlightCommandLayout";
 import { DesktopRouteGuard } from "@/components/desktop/DesktopRouteGuard";
 
 import { CommandPalette } from "@/components/ui/CommandPalette";
-import { ContextHintBar } from "@/components/ui/ContextHintBar";
 import { ExpertBodyClass } from "@/components/ui/ExpertBodyClass";
 import { SettingsBootstrap } from "@/components/ui/SettingsBootstrap";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
@@ -24,14 +21,12 @@ import { SystemHealthDrawer } from "@/components/system/SystemHealthDrawer";
 
 import { TelemetryProvider } from "@/components/telemetry/TelemetryProvider";
 
-import { AppNav } from "./AppNav";
-
-import { LiveTelemetryStrip } from "@/components/telemetry/LiveTelemetryStrip";
+import { ShellLayout } from "@/components/shell/ShellLayout";
 
 import { UiModeProvider, useUiMode } from "@/components/ui/UiModeProvider";
 
+import { isShellV2Enabled } from "@/lib/shell-config";
 import type { ForgedAppRecord } from "@/lib/forged-apps-types";
-import { SETTINGS_PATH } from "@/lib/ui-categories";
 import type { OotbAppId } from "@/lib/ootb-apps";
 import type { ColorScheme, ThemeMode, UiMode } from "@/lib/user-settings-types";
 
@@ -56,6 +51,8 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
   const [paletteOpen, setPaletteOpen] = useState(false);
 
   const { isExpert, toggleMode } = useUiMode();
+
+  const shellV2 = isShellV2Enabled();
 
 
 
@@ -101,6 +98,14 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
 
 
+  const chromeProps = {
+    onOpenPalette: () => setPaletteOpen(true),
+    onOpenHealth: openHealth,
+    onToggleMode: toggleMode,
+  };
+
+
+
   return (
 
     <>
@@ -109,84 +114,19 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
       <DesktopRouteGuard selectedApps={selectedApps} />
 
-      <div className="flex h-screen flex-col overflow-hidden bg-void">
-
-        <header className="flex shrink-0 items-center justify-between border-b border-line bg-panel px-4 py-3">
-
-          <div>
-
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">CurXor OS</p>
-
-            <h1 className="font-sans text-base font-semibold tracking-tight text-stark">Flight Command</h1>
-
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-
-            <button
-
-              type="button"
-
-              onClick={() => setPaletteOpen(true)}
-
-              className="hidden border border-line px-3 py-1.5 font-sans text-xs text-muted transition hover:border-cursor-glow hover:text-stark sm:inline-flex"
-
-            >
-
-              Search <span className="ml-2 font-mono text-[10px] text-muted">Ctrl K</span>
-
-            </button>
-
-            <button
-
-              type="button"
-
-              onClick={toggleMode}
-
-              className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow"
-
-              title={isExpert ? "Hide mesh telemetry strip" : "Show mesh telemetry strip (not experience level)"}
-
-            >
-
-              {isExpert ? "Hide telemetry" : "Telemetry"}
-
-            </button>
-
-            <Link
-              href={SETTINGS_PATH}
-              className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow hover:text-cursor-glow"
-            >
-              Settings
-            </Link>
-
-            <button
-              type="button"
-              onClick={openHealth}
-              className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow hover:text-cursor-glow"
-            >
-              Health
-            </button>
-
-            <StartNewClawButton />
-
-          </div>
-
-        </header>
-
-
-
-        <AppNav selectedApps={selectedApps} />
-
-        <ContextHintBar />
-
-        {isExpert ? <LiveTelemetryStrip /> : null}
-
-
-
-        <main className="min-h-0 flex-1 overflow-y-auto bg-panel p-4 md:p-6">{children}</main>
-
-      </div>
+      {shellV2 ? (
+        <ShellLayout
+          selectedApps={selectedApps}
+          forgedApps={forgedApps}
+          {...chromeProps}
+        >
+          {children}
+        </ShellLayout>
+      ) : (
+        <LegacyFlightCommandLayout selectedApps={selectedApps} {...chromeProps}>
+          {children}
+        </LegacyFlightCommandLayout>
+      )}
 
 
 
@@ -247,5 +187,4 @@ export function FlightCommandDesktop({
     </ThemeProvider>
   );
 }
-
 

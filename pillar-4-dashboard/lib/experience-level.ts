@@ -1,32 +1,45 @@
 /** Shared experience level types — safe for client and server. */
 
-export type ExperienceLevel = "beginner" | "standard" | "expert";
+export type ExperienceLevel = "essential" | "beginner" | "standard" | "expert";
 
 /** @deprecated use ExperienceLevel — kept for settings backward compatibility */
 export type UiMode = "simple" | "expert";
 
-export const EXPERIENCE_LEVELS: ExperienceLevel[] = ["beginner", "standard", "expert"];
+export const EXPERIENCE_LEVELS: ExperienceLevel[] = [
+  "essential",
+  "beginner",
+  "standard",
+  "expert",
+];
 
 export const EXPERIENCE_LEVEL_ORDER: Record<ExperienceLevel, number> = {
-  beginner: 0,
-  standard: 1,
-  expert: 2,
+  essential: 0,
+  beginner: 1,
+  standard: 2,
+  expert: 3,
 };
 
 export const EXPERIENCE_LEVEL_LABELS: Record<ExperienceLevel, string> = {
+  essential: "Essential",
   beginner: "Beginner",
   standard: "Standard",
   expert: "Expert",
 };
 
 export const EXPERIENCE_LEVEL_DESCRIPTIONS: Record<ExperienceLevel, string> = {
+  essential: "Feed-first home, plain language, voice-friendly — best for day one",
   beginner: "Guided workflow — tips, fewer panels, essentials only",
   standard: "Full creator tools with contextual suggestions",
   expert: "All panels, mesh telemetry, advanced ops & experiments",
 };
 
 export function isExperienceLevel(v: unknown): v is ExperienceLevel {
-  return v === "beginner" || v === "standard" || v === "expert";
+  return (
+    v === "essential" ||
+    v === "beginner" ||
+    v === "standard" ||
+    v === "expert"
+  );
 }
 
 export function isUiMode(v: unknown): v is UiMode {

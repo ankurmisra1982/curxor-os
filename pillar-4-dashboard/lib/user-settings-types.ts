@@ -7,6 +7,8 @@ export type UiMode = "simple" | "expert";
 export type ColorScheme = "curxor" | "ocean" | "amber" | "mono";
 export type ThemeMode = "dark" | "light" | "system";
 export type IntelligenceSource = "local" | "frontier" | "auto";
+export type TextScale = "default" | "large" | "extra-large";
+export type NotificationMode = "calm" | "regular" | "power";
 
 export type BuildPlaneLinkStatus = "disconnected" | "linked" | "error";
 export type BuildPlaneWorkerStatus = "unknown" | "online" | "offline";
@@ -63,11 +65,21 @@ export interface SanitizedBuildPlaneSettings {
 export interface PatronAskSettings {
   ui: "minimized" | "sheet" | "fullscreen";
   lastReadAt?: string | null;
+  /** Browser mic + spoken replies for Patron thread. */
+  voiceEnabled?: boolean;
 }
 
 export interface PatronWeeklyBundleSettings {
   weekOf?: string | null;
   lastConfirmedAt?: string | null;
+}
+
+/** Flight Command home / feed preferences (UX-2). */
+export interface FlightCommandSettings {
+  /** ISO timestamp — feed highlights rows newer than this on Home. */
+  homeLastVisitedAt?: string | null;
+  /** Feed interrupt density (UX-5). */
+  notificationMode?: NotificationMode;
 }
 
 export interface ConnectedProvider {
@@ -78,6 +90,17 @@ export interface ConnectedProvider {
   oauthLinked: boolean;
   /** Guided attestation when OAuth is unavailable (Cursor, Anthropic). */
   subscriptionLinked: boolean;
+}
+
+/** Your Box operator profile — human onboarding on /welcome. */
+export interface OperatorProfile {
+  displayName?: string;
+  timezone?: string;
+  city?: string;
+  privacyAcknowledgedAt?: string | null;
+  privacyDeferred?: boolean;
+  completedAt?: string | null;
+  skippedSteps?: string[];
 }
 
 export interface UserSettings {
@@ -111,6 +134,8 @@ export interface UserSettings {
     cafeTitleStyle?: "mythic" | "neutral";
     colorScheme: ColorScheme;
     themeMode: ThemeMode;
+    /** OS-wide body text scale (UX-5). */
+    textScale?: TextScale;
   };
   intelligence: {
     primarySource: IntelligenceSource;
@@ -143,6 +168,10 @@ export interface UserSettings {
   patronAsk?: PatronAskSettings;
   /** Patron weekly multi-Claw plan acknowledgment (CH5). */
   patronWeeklyBundle?: PatronWeeklyBundleSettings;
+  /** Flight Command shell preferences (UX-2 feed). */
+  flightCommand?: FlightCommandSettings;
+  /** Human profile from Your Box wizard (/welcome). */
+  operatorProfile?: OperatorProfile;
   updatedAt: string;
 }
 
@@ -157,6 +186,8 @@ export type UserSettingsPatch = {
   buildPlane?: Partial<BuildPlaneSettings>;
   patronAsk?: Partial<PatronAskSettings>;
   patronWeeklyBundle?: Partial<PatronWeeklyBundleSettings>;
+  flightCommand?: Partial<FlightCommandSettings>;
+  operatorProfile?: Partial<OperatorProfile>;
 };
 
 export const DEFAULT_BUILD_PLANE: BuildPlaneSettings = {
@@ -182,9 +213,10 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   forgedAppSlugs: [],
   appearance: {
     uiMode: "simple",
-    experienceLevel: "beginner",
+    experienceLevel: "essential",
     colorScheme: "curxor",
     themeMode: "dark",
+    textScale: "large",
   },
   intelligence: {
     primarySource: "local",

@@ -82,6 +82,8 @@ import { requirePublishApproval, requireReplyApproval } from "@/lib/content-appr
 import { getApprovalTelegramStatus } from "@/lib/content-approval-telegram";
 import { buildPublishTrustReport, readPublishTrustConfig } from "@/lib/content-trust-tiers";
 import { listAuditEntries } from "@/lib/content-audit-store";
+import { seedCreatorDraftFromUrl } from "@/lib/content-draft-seed";
+import { privacyEgressDeniedResponse } from "@/lib/egress-policy";
 import { requireLanAuth } from "@/lib/lan-auth";
 import type { ContentFormat } from "@/lib/content-queue-types";
 import { isSocialPlatform, type SocialPlatformId } from "@/lib/social-channels";
@@ -153,6 +155,7 @@ export async function POST(request: Request): Promise<Response> {
     kind?: string;
     viewThreshold?: number;
     credentials?: Record<string, unknown>;
+    url?: string;
   };
 
   try {
@@ -1425,6 +1428,22 @@ export async function POST(request: Request): Promise<Response> {
         selectedPostId: typeof body.postId === "string" ? body.postId : undefined,
       });
       return Response.json(bootstrap);
+    }
+
+    case "seed_from_url": {
+      const url = typeof body.url === "string" ? body.url.trim() : "";
+      if (!url) return Response.json({ error: "url required" }, { status: 400 });
+      const privacyDenied = await privacyEgressDeniedResponse();
+      if (privacyDenied) return privacyDenied;
+      const result = await seedCreatorDraftFromUrl(
+        url,
+        typeof body.platform === "string" ? body.platform : undefined,
+      );
+      if (!result.ok) {
+        return Response.json({ ...result, ok: false }, { status: 400 });
+      }
+      const status = await fetchContentStatus();
+      return Response.json({ ...result, ...status, ok: true });
     }
 
     case "handoff_to_swarm": {

@@ -19,6 +19,7 @@ interface ExperienceContextValue {
   /** @deprecated use level */
   mode: UiMode;
   level: ExperienceLevel;
+  isEssential: boolean;
   isBeginner: boolean;
   isStandard: boolean;
   isExpert: boolean;
@@ -53,7 +54,12 @@ export function UiModeProvider({
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "beginner" || stored === "standard" || stored === "expert") {
+      if (
+        stored === "essential" ||
+        stored === "beginner" ||
+        stored === "standard" ||
+        stored === "expert"
+      ) {
         setLevelState(stored);
         return;
       }
@@ -84,6 +90,7 @@ export function UiModeProvider({
   );
 
   const toggleMode = useCallback(() => {
+    if (level === "essential") return;
     setLevel(level === "expert" ? "beginner" : "expert");
   }, [level, setLevel]);
 
@@ -93,6 +100,7 @@ export function UiModeProvider({
     () => ({
       mode,
       level,
+      isEssential: level === "essential",
       isBeginner: level === "beginner",
       isStandard: level === "standard",
       isExpert: level === "expert",

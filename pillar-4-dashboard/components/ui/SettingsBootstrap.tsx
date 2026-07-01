@@ -2,16 +2,20 @@
 
 import { useEffect, useRef } from "react";
 
-import { useTheme } from "@/components/ui/ThemeProvider";
-import { useExperienceLevel } from "@/components/ui/UiModeProvider";
+import type { TextScale } from "@/lib/user-settings-types";
+import { applyTextScale } from "@/lib/text-scale";
 import type { ExperienceLevel } from "@/lib/experience-level";
 import type { ColorScheme, ThemeMode, UiMode } from "@/lib/user-settings-types";
+
+import { useTheme } from "./ThemeProvider";
+import { useExperienceLevel } from "./UiModeProvider";
 
 interface SettingsBootstrapProps {
   initialUiMode?: UiMode;
   initialExperienceLevel?: ExperienceLevel;
   initialColorScheme?: ColorScheme;
   initialThemeMode?: ThemeMode;
+  initialTextScale?: TextScale;
 }
 
 export function SettingsBootstrap({
@@ -19,6 +23,7 @@ export function SettingsBootstrap({
   initialExperienceLevel,
   initialColorScheme,
   initialThemeMode,
+  initialTextScale,
 }: SettingsBootstrapProps) {
   const { setLevel, setMode } = useExperienceLevel();
   const { setColorScheme, setThemeMode } = useTheme();
@@ -32,15 +37,14 @@ export function SettingsBootstrap({
   setColorSchemeRef.current = setColorScheme;
   setThemeModeRef.current = setThemeMode;
 
-  // Layout SSR props — applied once before the API round-trip.
   useEffect(() => {
     if (initialExperienceLevel) setLevelRef.current(initialExperienceLevel);
     else if (initialUiMode) setModeRef.current(initialUiMode);
     if (initialColorScheme) setColorSchemeRef.current(initialColorScheme);
     if (initialThemeMode) setThemeModeRef.current(initialThemeMode);
-  }, [initialExperienceLevel, initialUiMode, initialColorScheme, initialThemeMode]);
+    if (initialTextScale) applyTextScale(initialTextScale);
+  }, [initialExperienceLevel, initialUiMode, initialColorScheme, initialThemeMode, initialTextScale]);
 
-  // Saved server settings win on cold load (over layout props and localStorage).
   useEffect(() => {
     let cancelled = false;
 
@@ -55,6 +59,7 @@ export function SettingsBootstrap({
               experienceLevel?: ExperienceLevel;
               colorScheme?: ColorScheme;
               themeMode?: ThemeMode;
+              textScale?: TextScale;
             };
           };
         };
@@ -63,6 +68,7 @@ export function SettingsBootstrap({
         else if (appearance?.uiMode) setModeRef.current(appearance.uiMode);
         if (appearance?.colorScheme) setColorSchemeRef.current(appearance.colorScheme);
         if (appearance?.themeMode) setThemeModeRef.current(appearance.themeMode);
+        if (appearance?.textScale) applyTextScale(appearance.textScale);
       } catch {
         /* offline */
       }

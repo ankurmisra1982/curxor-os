@@ -8,10 +8,20 @@ import { usePatronAsk } from "./PatronAskProvider";
 export function PatronAskFab() {
   const { open, unread, toggle } = usePatronAsk();
   const [mounted, setMounted] = useState(false);
+  const [hideForPatronDock, setHideForPatronDock] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
-  if (open || !mounted) return null;
+  useEffect(() => {
+    const shellRoot = document.querySelector("[data-curxor-shell-v2]");
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setHideForPatronDock(!!shellRoot && mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  if (open || !mounted || hideForPatronDock) return null;
 
   return createPortal(
     <button

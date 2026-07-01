@@ -7,6 +7,7 @@ import { OOTB_APPS, type OotbAppId } from "@/lib/ootb-apps";
 interface ProvisioningStepProps {
   apps: OotbAppId[];
   active: boolean;
+  essential?: boolean;
 }
 
 type RowStatus = "pending" | "downloading" | "configuring" | "done";
@@ -18,14 +19,20 @@ interface MatrixRow {
   progress: number;
 }
 
-export function ProvisioningStep({ apps, active }: ProvisioningStepProps) {
+const ESSENTIAL_LABELS: Partial<Record<OotbAppId, string>> = {
+  "my-capital": "Money",
+  "my-content-creator": "Content",
+  "my-work": "Outreach",
+};
+
+export function ProvisioningStep({ apps, active, essential = false }: ProvisioningStepProps) {
   const appRows = useMemo(
     () =>
       OOTB_APPS.filter((a) => apps.includes(a.id)).map((a) => ({
         id: `app-${a.id}`,
-        label: a.name,
+        label: essential && ESSENTIAL_LABELS[a.id] ? ESSENTIAL_LABELS[a.id]! : a.name,
       })),
-    [apps],
+    [apps, essential],
   );
 
   const [rows, setRows] = useState<MatrixRow[]>(() =>
@@ -75,6 +82,41 @@ export function ProvisioningStep({ apps, active }: ProvisioningStepProps) {
 
     return () => clearInterval(timer);
   }, [active, appRows]);
+
+  if (essential) {
+    return (
+      <div className="p-6">
+        <h2 className="font-sans text-lg font-semibold text-stark">Setting up your jobs</h2>
+        <p className="mt-2 font-sans text-sm text-muted">
+          Installing specialists on this box — stays local, no cloud download.
+        </p>
+        <ul className="mt-6 space-y-3">
+          {rows.map((row) => (
+            <li key={row.id} className="border border-line bg-void px-4 py-3">
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-sans text-sm text-stark">{row.label}</span>
+                <span
+                  className={`font-sans text-xs ${
+                    row.status === "done" ? "text-cursor-glow" : "text-muted"
+                  }`}
+                >
+                  {row.status === "done" ? "Ready" : row.status === "pending" ? "Waiting…" : "Working…"}
+                </span>
+              </div>
+              <div className="mt-2 h-1.5 overflow-hidden border border-line bg-panel">
+                <div
+                  className={`h-full transition-all duration-500 ${
+                    row.status === "done" ? "bg-cursor-glow" : "bg-cursor-dim animate-pulse"
+                  }`}
+                  style={{ width: `${row.progress}%` }}
+                />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">

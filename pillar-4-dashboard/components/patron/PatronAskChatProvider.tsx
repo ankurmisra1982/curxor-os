@@ -11,6 +11,7 @@ import {
 
 import { isValidAppId, type OotbAppId } from "@/lib/ootb-apps";
 import type { AgentChatTurn } from "@/lib/app-agent-types";
+import { getPatronVoiceSupport } from "@/lib/patron-voice-browser";
 
 export type PatronInference = "local" | "fallback" | "frontier";
 
@@ -19,6 +20,9 @@ export interface PatronAskChatContextValue {
   loading: boolean;
   inferenceStatus: PatronInference | null;
   historyLoaded: boolean;
+  voiceEnabled: boolean;
+  voiceSupported: boolean;
+  setVoiceEnabled: (enabled: boolean) => void;
   loadHistory: () => Promise<void>;
   send: (text: string) => Promise<void>;
 }
@@ -50,6 +54,22 @@ export function PatronAskChatProvider({
   const [inferenceStatus, setInferenceStatus] = useState<PatronInference | null>(null);
   const [historyLoaded, setHistoryLoaded] = useState(false);
   const [localInferenceAvailable, setLocalInferenceAvailable] = useState(true);
+  const [voiceEnabled, setVoiceEnabledState] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+
+  useEffect(() => {
+    const support = getPatronVoiceSupport();
+    setVoiceSupported(support.recognition || support.synthesis);
+  }, []);
+
+  const setVoiceEnabled = useCallback((enabled: boolean) => {
+    setVoiceEnabledState(enabled);
+    void fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ patronAsk: { voiceEnabled: enabled } }),
+    });
+  }, []);
 
   const loadHistory = useCallback(async () => {
     try {
@@ -70,8 +90,11 @@ export function PatronAskChatProvider({
         const params = routeAppId ? `?routeAppId=${encodeURIComponent(routeAppId)}` : "";
         const res = await fetch(`/api/patron/context${params}`, { cache: "no-store" });
         if (!res.ok) return;
-        const data = (await res.json()) as { inferenceAvailable?: boolean };
+        const data = (await res.json()) as { inferenceAvailable?: boolean; patronAsk?: { voiceEnabled?: boolean } };
         setLocalInferenceAvailable(data.inferenceAvailable !== false);
+        if (typeof data.patronAsk?.voiceEnabled === "boolean") {
+          setVoiceEnabledState(data.patronAsk.voiceEnabled);
+        }
       } catch {
         // ignore
       }
@@ -127,6 +150,9 @@ export function PatronAskChatProvider({
     loading,
     inferenceStatus: badgeInference,
     historyLoaded,
+    voiceEnabled,
+    voiceSupported,
+    setVoiceEnabled,
     loadHistory,
     send,
   };
