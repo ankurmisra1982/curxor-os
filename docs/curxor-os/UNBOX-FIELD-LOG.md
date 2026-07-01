@@ -2,7 +2,7 @@
 
 > **Maps to:** [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md)  
 > **Box:** `curxor` · **SKU:** Standard 64 GB · **Software:** 0.9.1  
-> **Golden path:** **COMPLETE 2026-06-29** — verify PASS · smile test PASS
+> **Golden path:** **COMPLETE 2026-07-01** — verify PASS · Nest Pro egress restored · smile test PASS
 
 ### Current ops (post–Part 4)
 
@@ -30,7 +30,7 @@
 | Guide block | Status | Session notes |
 |-------------|--------|---------------|
 | **0–3** | **Done** | BIOS 48 GB UMA · Ubuntu 24.04.4 · `/opt/curxor` · models pulled |
-| **4** | **Done** | EGRESS → Nest router · COMMAND → laptop USB Ethernet · captive + mesh scripts |
+| **4** | **Done** | EGRESS → Nest Pro (2026-07-01 swap) · COMMAND → laptop USB Ethernet · captive + mesh scripts |
 | **5** | **Done** | FRE: `my-capital`, `my-content-creator`, `my-work` |
 | **6** | **Done** | `verify-unbox-day.sh --post-models` PASS · smile test PASS |
 
@@ -129,9 +129,37 @@ Mesh isolates EGRESS. For apt during unbox: temporary Nest IP on `enp97s0` + `ec
 
 Healthcheck: `ollama list` not `curl`. `OLLAMA_IGPU_ENABLE=1` for gfx1151.
 
+### Engine ZMQ `EBUSY` (Promise.race on vision receive)
+
+**Symptom:** `curxor-engine` crash loop · `Socket is busy reading; only one receive operation may be in progress`.
+
+**Cause:** `mesh-client.ts` used `Promise.race` between `visionSub.receive()` and timeout — orphaned receive on next loop.
+
+**Fix (repo):** use `visionSub.receiveTimeout` instead. Hot-patched on box 2026-07-01; ship via next `deploy-to-box.ps1`.
+
 ---
 
-## Verification snapshot (2026-06-29)
+## Verification snapshot (2026-07-01 — Nest Pro egress swap)
+
+```text
+# CurXor unbox verification — curxor — 2026-07-01T17:09:26-04:00
+- OS: Ubuntu 24.04.4 LTS · kernel 6.17.0-35-generic
+- Path: clean Ubuntu vs vendor image → (record A or B)
+- enp98s0: 10.0.0.1 (want 10.0.0.1)
+- enp97s0: 10.77.0.1 (want 10.77.0.1)
+- rocminfo gfx1151: gfx1151
+- Ollama :11434: OK
+- verify-mesh: PASS
+- Failures: 0 · Warnings: 4
+
+Post-install-all (same session):
+  curxor-dashboard          : active
+  curxor-telemetry-broker   : active · 10.77.0.1:9100-9201 listening
+  curxor-compute            : active (Ollama Docker · qwen3:8b, moondream:1.8b)
+  egress WAN                : 192.168.86.240 via Nest Pro · verify-egress-wan.sh PASS
+```
+
+## Verification snapshot (2026-06-29 — initial unbox)
 
 ```text
 verify-unbox-day.sh --post-models : PASS (0 failures, 4 warnings)
