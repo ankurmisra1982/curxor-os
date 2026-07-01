@@ -40,6 +40,13 @@ await check("onboarding status", async () => {
   );
 });
 
+await check("onboarding privacy ack (qa seed)", async () => {
+  const before = await getJson("/api/onboarding/status");
+  if (before.privacyAcknowledged === true) return true;
+  const { ok, json } = await postJson("/api/onboarding/privacy-ack", {});
+  return ok && json.privacyAcknowledged === true;
+});
+
 await check("settings GET", async () => {
   const data = await getJson("/api/settings");
   return (
