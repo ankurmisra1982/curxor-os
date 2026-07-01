@@ -2,12 +2,16 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { parseAuthorizationCode } from "@/lib/oauth/pkce";
+import { privacyEgressDeniedResponse } from "@/lib/egress-policy";
 import { requireLanAuth } from "@/lib/lan-auth";
 import { completeOAuthProviderLink } from "@/lib/provider-link-sessions";
 
 export async function POST(request: Request): Promise<Response> {
   const denied = requireLanAuth(request);
   if (denied) return denied;
+
+  const privacyDenied = await privacyEgressDeniedResponse();
+  if (privacyDenied) return privacyDenied;
 
   let body: { sessionId?: string; callbackUrl?: string; code?: string };
   try {

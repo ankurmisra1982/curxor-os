@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { getFrontierProvider } from "@/lib/frontier-providers";
 import { validateFrontierApiKey } from "@/lib/frontier-validate";
+import { privacyEgressDeniedResponse } from "@/lib/egress-policy";
 import { requireLanAuth } from "@/lib/lan-auth";
 import { getProviderApiKey, setProviderApiKey } from "@/lib/llm-credentials";
 import { readUserSettings, sanitizeSettingsForClient, updateUserSettings } from "@/lib/user-settings";
@@ -10,6 +11,9 @@ import { readUserSettings, sanitizeSettingsForClient, updateUserSettings } from 
 export async function POST(request: Request): Promise<Response> {
   const denied = requireLanAuth(request);
   if (denied) return denied;
+
+  const privacyDenied = await privacyEgressDeniedResponse();
+  if (privacyDenied) return privacyDenied;
 
   let body: {
     providerId?: string;

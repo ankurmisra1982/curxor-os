@@ -56,7 +56,7 @@ export async function POST(request: Request): Promise<Response> {
 
   if (connectorId === "google_workspace") {
     if (action === "start") {
-      const link = buildWorkGoogleAuthorizeUrl();
+      const link = await buildWorkGoogleAuthorizeUrl();
       if ("error" in link) {
         return Response.json({
           ok: true,

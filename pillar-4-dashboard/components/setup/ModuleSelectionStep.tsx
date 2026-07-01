@@ -1,23 +1,52 @@
 "use client";
 
-import { OOTB_APPS, type OotbAppId } from "@/lib/ootb-apps";
+import { frePickableApps } from "@/lib/shell-nav";
+import type { OotbAppId } from "@/lib/ootb-apps";
 
 interface ModuleSelectionStepProps {
   selectedApps: OotbAppId[];
   onToggle: (id: OotbAppId) => void;
+  /** Plain-language labels for Essential / thin setup (ONB-3). */
+  essential?: boolean;
 }
 
-export function ModuleSelectionStep({ selectedApps, onToggle }: ModuleSelectionStepProps) {
+const ESSENTIAL_LABELS: Partial<Record<OotbAppId, string>> = {
+  "my-capital": "Money",
+  "my-content-creator": "Content",
+  "my-work": "Outreach",
+  "my-shop": "Deals",
+  "my-vital": "Health",
+  "robotaxi-fleet-manager": "Fleet",
+  "claw-forge": "Custom apps",
+};
+
+export function ModuleSelectionStep({
+  selectedApps,
+  onToggle,
+  essential = false,
+}: ModuleSelectionStepProps) {
+  const pickable = frePickableApps();
+
   return (
     <div className="p-6">
-      <h2 className="font-sans text-lg font-semibold text-stark">Choose your Claws</h2>
+      <h2 className="font-sans text-lg font-semibold text-stark">
+        {essential ? "Which jobs do you want help with?" : "Choose your operate Claws"}
+      </h2>
       <p className="mt-2 font-sans text-sm text-muted">
-        Turn on the digital employees you want on this appliance. You can change this later in Settings.
+        {essential
+          ? "Turn on the specialists you want on this box. You can add more anytime in Settings."
+          : "Turn on the specialists you want on this appliance. Claw Cafe, Signal, and Kin stay available in the universal strip — they are not hired here."}
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {OOTB_APPS.map((app) => {
+        {pickable.map((app) => {
           const active = selectedApps.includes(app.id);
+          const label =
+            essential && ESSENTIAL_LABELS[app.id]
+              ? ESSENTIAL_LABELS[app.id]
+              : app.id === "my-work"
+                ? "Outreach Claw"
+                : app.name;
           return (
             <button
               key={app.id}
@@ -30,7 +59,7 @@ export function ModuleSelectionStep({ selectedApps, onToggle }: ModuleSelectionS
               }`}
             >
               <div className="flex items-start justify-between gap-3">
-                <span className="font-sans text-sm font-medium text-stark">{app.name}</span>
+                <span className="font-sans text-sm font-medium text-stark">{label}</span>
                 <span
                   className={`font-sans text-xs ${active ? "text-cursor-glow" : "text-muted"}`}
                 >

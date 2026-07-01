@@ -8,15 +8,32 @@ const HANDSHAKE_CHECKS = [
   { id: "zmq", label: "ZeroMQ Telemetry Spine", detail: "Pub/sub broker handshake OK" },
 ] as const;
 
+const ESSENTIAL_CHECK = {
+  id: "ready",
+  label: "Your box is ready",
+  detail: "Local AI and storage are online on this appliance",
+} as const;
+
 interface SystemHandshakeStepProps {
   onComplete: () => void;
+  /** Thin check for Essential onboarding — no NPU/ZMQ theater. */
+  essential?: boolean;
 }
 
-export function SystemHandshakeStep({ onComplete }: SystemHandshakeStepProps) {
+export function SystemHandshakeStep({ onComplete, essential = false }: SystemHandshakeStepProps) {
   const [completed, setCompleted] = useState<string[]>([]);
   const [running, setRunning] = useState(true);
 
   useEffect(() => {
+    if (essential) {
+      const timer = setTimeout(() => {
+        setCompleted([ESSENTIAL_CHECK.id]);
+        setRunning(false);
+        setTimeout(onComplete, 400);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+
     let idx = 0;
     const timer = setInterval(() => {
       if (idx >= HANDSHAKE_CHECKS.length) {
@@ -30,17 +47,23 @@ export function SystemHandshakeStep({ onComplete }: SystemHandshakeStepProps) {
       idx += 1;
     }, 480);
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, [essential, onComplete]);
+
+  const checks = essential ? [ESSENTIAL_CHECK] : HANDSHAKE_CHECKS;
 
   return (
     <div className="p-6">
-      <h2 className="font-display text-sm uppercase tracking-[0.24em] text-stark">System Handshake</h2>
+      <h2 className="font-display text-sm uppercase tracking-[0.24em] text-stark">
+        {essential ? "Quick check" : "System Handshake"}
+      </h2>
       <p className="mt-2 font-mono text-xs text-muted">
-        Verifying local hardware and the robotics telemetry spine — no cloud calls.
+        {essential
+          ? "Making sure your appliance is ready — no cloud calls."
+          : "Verifying local hardware and the robotics telemetry spine — no cloud calls."}
       </p>
 
       <div className="mt-6 space-y-2">
-        {HANDSHAKE_CHECKS.map((check) => {
+        {checks.map((check) => {
           const done = completed.includes(check.id);
           return (
             <div
@@ -57,7 +80,7 @@ export function SystemHandshakeStep({ onComplete }: SystemHandshakeStepProps) {
                 <div className="font-mono text-[10px] text-muted">{check.detail}</div>
               </div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
-                {done ? "LINKED" : running ? "…" : "—"}
+                {done ? "READY" : running ? "…" : "—"}
               </span>
             </div>
           );
