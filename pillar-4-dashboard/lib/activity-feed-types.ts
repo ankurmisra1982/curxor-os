@@ -11,10 +11,19 @@ export interface ActivityFeedRow {
   sinceLastVisit: boolean;
 }
 
+export interface ActivityFeedSummary {
+  totalActions: number;
+  sinceLastVisit: number;
+  clawsActive: number;
+  byClaw: Record<string, number>;
+  headline?: string;
+}
+
 export interface ActivityFeedResponse {
   ok: true;
   generatedAt: string;
   homeLastVisitedAt: string | null;
+  summary: ActivityFeedSummary;
   attention: ActivityFeedRow[];
   items: ActivityFeedRow[];
 }

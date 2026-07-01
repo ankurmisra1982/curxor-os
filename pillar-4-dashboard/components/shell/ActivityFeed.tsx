@@ -1,11 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-
-import type { ActivityFeedResponse } from "@/lib/activity-feed-types";
+import { buildActivityFeedSummary } from "@/lib/activity-feed-summary";
+import { useActivityFeed } from "@/hooks/useActivityFeed";
 
 import { AttentionQueue } from "./AttentionQueue";
-import { FeedRow } from "./FeedRow";
+import { OvernightWorkSection } from "./OvernightWorkSection";
 
 interface ActivityFeedProps {
   variant?: "home" | "rail";
@@ -13,62 +12,20 @@ interface ActivityFeedProps {
 }
 
 function FeedSkeleton({ compact }: { compact: boolean }) {
-  if (compact) {
-    return (
-      <div className="space-y-2">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-12 animate-pulse border border-line bg-panel/60" />
-        ))}
-      </div>
-    );
-  }
   return (
-    <div className="space-y-2">
-      {[0, 1, 2, 3].map((i) => (
-        <div key={i} className="h-14 animate-pulse border border-line bg-panel/60" />
-      ))}
-    </div>
+    <div className={`border border-line bg-panel animate-pulse ${compact ? "h-16" : "h-20"}`} />
   );
 }
 
 export function ActivityFeed({ variant = "home", className = "" }: ActivityFeedProps) {
-  const [data, setData] = useState<ActivityFeedResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { loading, attention, items, summary, empty } = useActivityFeed();
   const compact = variant === "rail";
-
-  const load = useCallback(async () => {
-    try {
-      const res = await fetch("/api/activity/feed", { cache: "no-store" });
-      if (!res.ok) return;
-      setData((await res.json()) as ActivityFeedResponse);
-    } catch {
-      /* ignore */
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void load();
-    const timer = setInterval(() => void load(), 30_000);
-    return () => clearInterval(timer);
-  }, [load]);
-
-  const attention = data?.attention ?? [];
-  const items = data?.items ?? [];
-  const sinceCount = [...attention, ...items].filter((r) => r.sinceLastVisit).length;
-  const empty = !loading && attention.length === 0 && items.length === 0;
 
   if (loading) {
     return (
       <div className={compact ? `flex flex-1 flex-col gap-2 ${className}` : `space-y-4 ${className}`}>
-        {!compact ? (
-          <header className="border border-line bg-panel px-4 py-3">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow">Overnight work</p>
-            <p className="mt-1 font-sans text-sm text-stark">Loading your team&apos;s activity…</p>
-          </header>
-        ) : null}
         <FeedSkeleton compact={compact} />
+        {!compact ? <FeedSkeleton compact={false} /> : null}
       </div>
     );
   }
@@ -82,13 +39,7 @@ export function ActivityFeed({ variant = "home", className = "" }: ActivityFeedP
             Your team is ready — run a demo tour or complete a desk action to populate the feed.
           </p>
         ) : (
-          <ul className="space-y-2">
-            {items.slice(0, 12).map((row) => (
-              <li key={row.id}>
-                <FeedRow row={row} compact />
-              </li>
-            ))}
-          </ul>
+          <OvernightWorkSection items={items.slice(0, 12)} summary={summary} compact />
         )}
       </div>
     );
@@ -96,36 +47,11 @@ export function ActivityFeed({ variant = "home", className = "" }: ActivityFeedP
 
   return (
     <section className={`space-y-4 ${className}`}>
-      <header className="border border-line bg-panel px-4 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow">Overnight work</p>
-            <p className="mt-1 font-sans text-sm text-stark">What your team did on your metal</p>
-          </div>
-          {sinceCount > 0 ? (
-            <span className="font-mono text-[10px] text-cursor-glow">{sinceCount} new since last visit</span>
-          ) : null}
-        </div>
-      </header>
-
       <AttentionQueue items={attention} />
-
       {empty ? (
-        <div className="border border-line bg-void px-4 py-6 text-center">
-          <p className="font-sans text-sm text-stark">Your team is ready</p>
-          <p className="mt-2 font-sans text-xs text-muted">
-            Overnight work fills when Capital, Creator, or Outreach complete a skill on your metal.
-            Run a demo tour or execute a practice trade to see rows here.
-          </p>
-        </div>
+        <OvernightWorkSection items={[]} summary={buildActivityFeedSummary([])} />
       ) : (
-        <ul className="space-y-2">
-          {items.map((row) => (
-            <li key={row.id}>
-              <FeedRow row={row} />
-            </li>
-          ))}
-        </ul>
+        <OvernightWorkSection items={items} summary={summary} />
       )}
     </section>
   );

@@ -9,6 +9,7 @@ import { UnifiedInboxPanel } from "@/components/comms/UnifiedInboxPanel";
 import { OsApprovalStrip } from "@/components/os/OsApprovalStrip";
 import { WelcomeSettingsBanner } from "@/components/desktop/WelcomeSettingsBanner";
 import { StartNewClawButton } from "@/components/claw/StartNewClawButton";
+import { HomeMorningCanvas } from "@/components/desktop/HomeMorningCanvas";
 import { ActivityFeed } from "@/components/shell/ActivityFeed";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { useMotorStream } from "@/hooks/useMotorStream";
@@ -110,70 +111,72 @@ export function HomeOverview({ selectedApps }: HomeOverviewProps) {
     })
     .filter((row): row is NonNullable<typeof row> => row !== null);
 
+  const jobsSection = (
+    <section>
+      <h2 className="font-sans text-sm font-medium text-stark">
+        {isEssential ? "What do you want to work on?" : "Your team"}
+      </h2>
+      <p className="mt-1 font-sans text-xs text-muted">
+        {isEssential
+          ? "Pick a job — chat and one-tap actions open inside each workspace."
+          : "Operate Claws — tap to open a workspace with chat and one-tap actions."}
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {isEssential
+          ? essentialJobs.map(({ route, title, blurb }) => (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={`group border border-line bg-void transition hover:border-cursor-glow hover:bg-panel ${feedFirst ? "p-4" : "p-5"}`}
+              >
+                <span className={`font-sans font-medium text-stark group-hover:text-cursor-glow ${feedFirst ? "text-base" : "text-lg"}`}>
+                  {title}
+                </span>
+                <p className={`mt-2 font-sans leading-relaxed text-muted ${feedFirst ? "text-xs" : "text-sm"}`}>
+                  {blurb}
+                </p>
+              </Link>
+            ))
+          : routes.map((route) => {
+              const app = getOotbApp(route.id);
+              const cat = CATEGORY_LABEL[categoryForApp(route.id)] ?? "Claw";
+              return (
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className="group border border-line bg-void p-4 transition hover:border-cursor-glow hover:bg-panel"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="font-sans text-base font-medium text-stark group-hover:text-cursor-glow">
+                      {app.name}
+                    </span>
+                    <span className="font-mono text-[10px] text-muted">{cat}</span>
+                  </div>
+                  <p className="mt-2 font-sans text-xs leading-relaxed text-muted">{app.description}</p>
+                </Link>
+              );
+            })}
+      </div>
+    </section>
+  );
+
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className={`mx-auto max-w-5xl ${feedFirst ? "space-y-5" : "space-y-8"}`}>
       <WelcomeSettingsBanner />
       {feedFirst ? (
-        <>
-          {feed}
-          {hero}
-        </>
+        <HomeMorningCanvas hero={hero} jobs={jobsSection} />
       ) : (
         <>
           {hero}
           {feed}
           {approvals}
+          {jobsSection}
         </>
       )}
 
       {!isEssential ? (
         <UnifiedInboxPanel compact title="Recent conversations" />
       ) : null}
-
-      <section>
-        <h2 className="font-sans text-sm font-medium text-stark">
-          {isEssential ? "What do you want to work on?" : "Your team"}
-        </h2>
-        <p className="mt-1 font-sans text-xs text-muted">
-          {isEssential
-            ? "Pick a job — chat and one-tap actions open inside each workspace."
-            : "Operate Claws — tap to open a workspace with chat and one-tap actions."}
-        </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {isEssential
-            ? essentialJobs.map(({ route, title, blurb }) => (
-                <Link
-                  key={route.href}
-                  href={route.href}
-                  className="group border border-line bg-void p-5 transition hover:border-cursor-glow hover:bg-panel"
-                >
-                  <span className="font-sans text-lg font-medium text-stark group-hover:text-cursor-glow">
-                    {title}
-                  </span>
-                  <p className="mt-2 font-sans text-sm leading-relaxed text-muted">{blurb}</p>
-                </Link>
-              ))
-            : routes.map((route) => {
-                const app = getOotbApp(route.id);
-                const cat = CATEGORY_LABEL[categoryForApp(route.id)] ?? "Claw";
-                return (
-                  <Link
-                    key={route.href}
-                    href={route.href}
-                    className="group border border-line bg-void p-4 transition hover:border-cursor-glow hover:bg-panel"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="font-sans text-base font-medium text-stark group-hover:text-cursor-glow">
-                        {app.name}
-                      </span>
-                      <span className="font-mono text-[10px] text-muted">{cat}</span>
-                    </div>
-                    <p className="mt-2 font-sans text-xs leading-relaxed text-muted">{app.description}</p>
-                  </Link>
-                );
-              })}
-        </div>
-      </section>
 
       {!isEssential ? (
         <section className="grid gap-4 md:grid-cols-3">

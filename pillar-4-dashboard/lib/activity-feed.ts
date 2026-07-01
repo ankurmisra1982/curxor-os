@@ -6,6 +6,7 @@ import { readOsEventLog } from "./os-event-log-store";
 import type { OsEventKind, OsEventRecord } from "./os-event-bus-types";
 import { readUserSettings, updateUserSettings } from "./user-settings";
 import type { ActivityFeedRow, ActivityFeedTier } from "./activity-feed-types";
+import { buildActivityFeedSummary } from "./activity-feed-summary";
 import {
   ACTIVITY_FEED_DISPLAY_CAP,
   ACTIVITY_FEED_WINDOW_MS,
@@ -133,6 +134,7 @@ export async function buildActivityFeed(limit = ACTIVITY_FEED_DISPLAY_CAP): Prom
   homeLastVisitedAt: string | null;
   attention: ActivityFeedRow[];
   items: ActivityFeedRow[];
+  summary: ReturnType<typeof buildActivityFeedSummary>;
 }> {
   const settings = await readUserSettings();
   const homeLastVisitedAt = settings.flightCommand?.homeLastVisitedAt ?? null;
@@ -146,8 +148,9 @@ export async function buildActivityFeed(limit = ACTIVITY_FEED_DISPLAY_CAP): Prom
     .reverse();
   const hydrated = await hydrateActivityFromQueues(sinceMs, ACTIVITY_FEED_WINDOW_MS);
   const items = mergeActivityRows(eventItems, hydrated, limit);
+  const summary = buildActivityFeedSummary(items);
 
-  return { homeLastVisitedAt, attention, items };
+  return { homeLastVisitedAt, attention, items, summary };
 }
 
 export async function markHomeVisited(): Promise<string> {
