@@ -33,7 +33,7 @@ export function ShellLayout({
   onOpenHealth,
   onToggleMode,
 }: ShellLayoutProps) {
-  const { isExpert, isEssential } = useUiMode();
+  const { isLayoutExpert, isEssential } = useUiMode();
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-void" data-curxor-shell-v2>
@@ -42,10 +42,10 @@ export function ShellLayout({
         onOpenPalette={onOpenPalette}
         onOpenHealth={onOpenHealth}
         onToggleMode={onToggleMode}
-        isExpert={isExpert}
+        isExpert={isLayoutExpert}
         isEssential={isEssential}
       />
-      {isExpert ? <LiveTelemetryStrip /> : null}
+      {isLayoutExpert ? <LiveTelemetryStrip /> : null}
       <UniversalStrip />
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <OperateRail selectedApps={selectedApps} forgedApps={forgedApps} />
@@ -55,7 +55,7 @@ export function ShellLayout({
           <main className="min-h-0 flex-1 overflow-y-auto bg-panel p-4 md:p-6">{children}</main>
           <PatronDock />
         </div>
-        {isExpert ? <ShellStatusRail /> : null}
+        {isLayoutExpert ? <ShellStatusRail /> : null}
       </div>
     </div>
   );

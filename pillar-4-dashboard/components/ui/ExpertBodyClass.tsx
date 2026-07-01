@@ -5,12 +5,12 @@ import { useEffect } from "react";
 import { useUiMode } from "@/components/ui/UiModeProvider";
 
 export function ExpertBodyClass() {
-  const { isExpert } = useUiMode();
+  const { isLayoutExpert } = useUiMode();
 
   useEffect(() => {
-    document.body.classList.toggle("expert-mode", isExpert);
+    document.body.classList.toggle("expert-mode", isLayoutExpert);
     return () => document.body.classList.remove("expert-mode");
-  }, [isExpert]);
+  }, [isLayoutExpert]);
 
   return null;
 }

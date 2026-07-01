@@ -42,14 +42,14 @@ function NavLink({
 
 export function AppNav({ selectedApps }: AppNavProps) {
   const pathname = usePathname();
-  const { isExpert } = useUiMode();
+  const { isLayoutExpert } = useUiMode();
   const items = buildNavItems(selectedApps);
   const groups = groupedNavItems(items);
 
   return (
     <nav className="shrink-0 border-b border-line bg-surface">
       <div className="hidden px-4 py-1.5 md:block">
-        {isExpert ? (
+        {isLayoutExpert ? (
           <div className="flex flex-nowrap items-end gap-x-3 overflow-x-auto">
             {groups.map(({ category, items: groupItems }, groupIndex) => {
               const showCategoryLabel = category.id !== "home";
