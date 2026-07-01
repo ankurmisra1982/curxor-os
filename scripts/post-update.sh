@@ -14,6 +14,14 @@ log() {
   echo "${LOG_TAG} $*"
 }
 
+if [[ "${1:-}" == "--ops-bridge-only" ]]; then
+  STAGING="${2:-/tmp/curxor-ops-staging}"
+  SCRIPT="${CURXOR_ROOT}/scripts/box-install-ops-bridge.sh"
+  [[ -x "${SCRIPT}" ]] || die() { echo "${LOG_TAG} missing ${SCRIPT}" >&2; exit 1; }
+  log "Ops bridge only (staging=${STAGING})"
+  exec bash "${SCRIPT}" "${STAGING}"
+fi
+
 log "CurXor OS post-update starting (root=${CURXOR_ROOT})"
 
 CURXOR_USER="${CURXOR_USER:-curxor}"
