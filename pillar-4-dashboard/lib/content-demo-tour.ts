@@ -2,8 +2,8 @@ import "server-only";
 
 import { readAppFreState } from "./app-fre-state";
 import { buildBridgeHealthReport } from "./content-bridge-health";
-import { requestPostPublish } from "./content-approval-service";
 import { runPostPreflight, type PreflightReport } from "./content-preflight";
+import { publishPostToBridge } from "./content-publish-executor";
 import {
   advancePostStage,
   createContentPost,
@@ -93,14 +93,13 @@ export async function runContentDemoTour(): Promise<ContentDemoTourResult> {
 
   let simulatedPublish = false;
   if (bridgeUnconfigured) {
-    const out = await requestPostPublish(post.id, fre.config, "demo-tour");
-    if (out.mode === "published" && out.result.ok) {
+    // Unconfigured bridge = local demo only — skip approval queue (not real egress).
+    const result = await publishPostToBridge(post.id, fre.config);
+    if (result.ok) {
       simulatedPublish = true;
-      steps.push(`Simulated publish · demo://local · ${out.result.id}`);
-    } else if (out.mode === "pending") {
-      steps.push("Publish queued for approval · demo tour scheduled");
+      steps.push(`Simulated publish · demo://local · ${result.id}`);
     } else {
-      steps.push(`Publish attempt · ${out.result.error ?? "bridge path"}`);
+      steps.push(`Publish attempt · ${result.error ?? "bridge path"}`);
     }
   } else {
     steps.push("Bridge configured — schedule only (use Publish now for live send)");

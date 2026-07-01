@@ -1,13 +1,17 @@
 import { APP_ROUTES } from "./app-routes";
+import { isUniversalShellApp, UNIVERSAL_SHELL_APP_IDS } from "./ol1-layer";
 import { HOME_PATH } from "./ui-categories";
 import type { OotbAppId } from "./ootb-apps";
 import { isValidAppId } from "./ootb-apps";
 
-/** Always reachable — agent factory is cross-cutting, not a FRE module pick. */
-export const ALWAYS_ENABLED_APP_IDS: OotbAppId[] = ["claw-forge"];
+/** Always reachable — agent factory + OL1 universal surfaces. */
+export const ALWAYS_ENABLED_APP_IDS: OotbAppId[] = [
+  "claw-forge",
+  ...UNIVERSAL_SHELL_APP_IDS,
+];
 
 export function normalizeSelectedApps(ids: string[]): OotbAppId[] {
-  return ids.filter(isValidAppId);
+  return ids.filter(isValidAppId).filter((id) => !isUniversalShellApp(id));
 }
 
 export function isAppEnabled(appId: OotbAppId, selectedApps: OotbAppId[]): boolean {
@@ -19,6 +23,13 @@ export function isAppEnabled(appId: OotbAppId, selectedApps: OotbAppId[]): boole
 export function enabledAppRoutes(selectedApps: OotbAppId[]) {
   const selected = normalizeSelectedApps(selectedApps);
   return APP_ROUTES.filter((route) => isAppEnabled(route.id, selected));
+}
+
+/** Operate-plane routes for Home roster and legacy nav (excludes universal + Forge). */
+export function enabledOperateAppRoutes(selectedApps: OotbAppId[]) {
+  return enabledAppRoutes(selectedApps).filter(
+    (route) => route.id !== "claw-forge" && !isUniversalShellApp(route.id),
+  );
 }
 
 export function appIdFromPathname(pathname: string): OotbAppId | null {
