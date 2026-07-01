@@ -26,7 +26,7 @@ export function LegacyFlightCommandLayout({
   onOpenHealth,
   onToggleMode,
 }: LegacyFlightCommandLayoutProps) {
-  const { isExpert } = useUiMode();
+  const { isLayoutExpert, isEssential } = useUiMode();
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-void">
@@ -47,9 +47,15 @@ export function LegacyFlightCommandLayout({
             type="button"
             onClick={onToggleMode}
             className="border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow"
-            title={isExpert ? "Show simpler home layout" : "Show mission control panels"}
+            title={isLayoutExpert ? "Show simpler home layout" : "Show mission control panels"}
           >
-            {isExpert ? "Simple" : "Expert"}
+            {isEssential
+              ? isLayoutExpert
+                ? "Simpler view"
+                : "More detail"
+              : isLayoutExpert
+                ? "Simple"
+                : "Expert"}
           </button>
           <Link
             href={SETTINGS_PATH}
@@ -70,7 +76,7 @@ export function LegacyFlightCommandLayout({
 
       <AppNav selectedApps={selectedApps} />
       <ContextHintBar />
-      {isExpert ? <LiveTelemetryStrip /> : null}
+      {isLayoutExpert ? <LiveTelemetryStrip /> : null}
       <main className="min-h-0 flex-1 overflow-y-auto bg-panel p-4 md:p-6">{children}</main>
     </div>
   );

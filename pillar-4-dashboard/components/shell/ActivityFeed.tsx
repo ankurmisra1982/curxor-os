@@ -9,17 +9,31 @@ import { FeedRow } from "./FeedRow";
 
 interface ActivityFeedProps {
   variant?: "home" | "rail";
-  /** Mark home visit after load (Simple Home “since you last visit”). */
-  markVisitOnMount?: boolean;
   className?: string;
 }
 
-export function ActivityFeed({
-  variant = "home",
-  markVisitOnMount = false,
-  className = "",
-}: ActivityFeedProps) {
+function FeedSkeleton({ compact }: { compact: boolean }) {
+  if (compact) {
+    return (
+      <div className="space-y-2">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="h-12 animate-pulse border border-line bg-panel/60" />
+        ))}
+      </div>
+    );
+  }
+  return (
+    <div className="space-y-2">
+      {[0, 1, 2, 3].map((i) => (
+        <div key={i} className="h-14 animate-pulse border border-line bg-panel/60" />
+      ))}
+    </div>
+  );
+}
+
+export function ActivityFeed({ variant = "home", className = "" }: ActivityFeedProps) {
   const [data, setData] = useState<ActivityFeedResponse | null>(null);
+  const [loading, setLoading] = useState(true);
   const compact = variant === "rail";
 
   const load = useCallback(async () => {
@@ -29,6 +43,8 @@ export function ActivityFeed({
       setData((await res.json()) as ActivityFeedResponse);
     } catch {
       /* ignore */
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -38,17 +54,24 @@ export function ActivityFeed({
     return () => clearInterval(timer);
   }, [load]);
 
-  useEffect(() => {
-    if (!markVisitOnMount || !data) return;
-    return () => {
-      void fetch("/api/activity/visit", { method: "POST" });
-    };
-  }, [markVisitOnMount, data]);
-
   const attention = data?.attention ?? [];
   const items = data?.items ?? [];
   const sinceCount = [...attention, ...items].filter((r) => r.sinceLastVisit).length;
-  const empty = attention.length === 0 && items.length === 0;
+  const empty = !loading && attention.length === 0 && items.length === 0;
+
+  if (loading) {
+    return (
+      <div className={compact ? `flex flex-1 flex-col gap-2 ${className}` : `space-y-4 ${className}`}>
+        {!compact ? (
+          <header className="border border-line bg-panel px-4 py-3">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow">Overnight work</p>
+            <p className="mt-1 font-sans text-sm text-stark">Loading your team&apos;s activity…</p>
+          </header>
+        ) : null}
+        <FeedSkeleton compact={compact} />
+      </div>
+    );
+  }
 
   if (compact) {
     return (

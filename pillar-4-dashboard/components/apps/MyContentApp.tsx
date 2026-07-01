@@ -1417,7 +1417,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       <ExperienceAppSection
         appId="my-content-creator"
         sectionId="go-live"
-        minLevel="beginner"
+        minLevel="essential"
         hideWhen={hideCreatorSection("go-live")}
         title="Go Live"
         subtitle="Checklist · today · first post"
@@ -1547,7 +1547,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         <ExperienceAppSection
           appId="my-content-creator"
           sectionId="creation-studio"
-          minLevel="beginner"
+          minLevel="essential"
           hideWhen={hideCreatorSection("creation-studio")}
           title="Creation Studio"
           subtitle={`AI pipeline · TTS: ${studioCaps.tts} · image gen: ${studioCaps.imageGen ? "ollama" : "off"} · auto-schedule: ${autoSchedule ? "ON" : "OFF"}`}
@@ -1900,7 +1900,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
       <ExperienceAppSection
         appId="my-content-creator"
         sectionId="queue"
-        minLevel="beginner"
+        minLevel="essential"
         hideWhen={hideCreatorSection("queue")}
         title="Content Queue"
         subtitle="Persisted on appliance · Draft Post saves to queue · Publish sends text via digital_out"
@@ -1959,7 +1959,7 @@ export function MyContentApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         <ExperienceAppSection
           appId="my-content-creator"
           sectionId="draft-editor"
-          minLevel="beginner"
+          minLevel="essential"
           hideWhen={hideCreatorSection("draft-editor")}
           title="Draft Editor"
           subtitle={

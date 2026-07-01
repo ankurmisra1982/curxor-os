@@ -5,10 +5,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import {
   EXPERIENCE_LEVEL_DESCRIPTIONS,
   EXPERIENCE_LEVEL_LABELS,
-  experienceLevelFromUiMode,
   meetsExperienceLevel,
   resolveExperienceLevel,
-  uiModeFromExperienceLevel,
   type ExperienceLevel,
   type UiMode,
 } from "@/lib/experience-level";
@@ -16,25 +14,31 @@ import {
 export type { UiMode, ExperienceLevel };
 
 interface ExperienceContextValue {
-  /** @deprecated use level */
+  layoutMode: UiMode;
+  /** @deprecated use layoutMode */
   mode: UiMode;
   level: ExperienceLevel;
   isEssential: boolean;
   isBeginner: boolean;
   isStandard: boolean;
   isExpert: boolean;
-  /** @deprecated use isExpert */
+  isLayoutExpert: boolean;
+  /** @deprecated use isLayoutExpert */
   isExpertLegacy: boolean;
   setLevel: (level: ExperienceLevel) => void;
-  /** @deprecated use setLevel */
+  setLayoutMode: (mode: UiMode) => void;
+  /** @deprecated use setLayoutMode */
   setMode: (mode: UiMode) => void;
+  toggleLayout: () => void;
+  /** @deprecated use toggleLayout */
   toggleMode: () => void;
   meetsLevel: (required: ExperienceLevel) => boolean;
   levelLabel: string;
   levelDescription: string;
 }
 
-const STORAGE_KEY = "curxor-experience-level";
+const EXPERIENCE_STORAGE_KEY = "curxor-experience-level";
+const LAYOUT_STORAGE_KEY = "curxor-layout-mode";
 const LEGACY_STORAGE_KEY = "curxor-ui-mode";
 
 const ExperienceContext = createContext<ExperienceContextValue | null>(null);
@@ -48,24 +52,29 @@ export function UiModeProvider({
   initialMode?: UiMode;
   initialLevel?: ExperienceLevel;
 }) {
-  const resolvedInitial = initialLevel ?? resolveExperienceLevel(initialMode, null);
-  const [level, setLevelState] = useState<ExperienceLevel>(resolvedInitial);
+  const resolvedInitialLevel = initialLevel ?? resolveExperienceLevel(initialMode, null);
+  const [level, setLevelState] = useState<ExperienceLevel>(resolvedInitialLevel);
+  const [layoutMode, setLayoutModeState] = useState<UiMode>(initialMode);
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const storedLevel = localStorage.getItem(EXPERIENCE_STORAGE_KEY);
       if (
-        stored === "essential" ||
-        stored === "beginner" ||
-        stored === "standard" ||
-        stored === "expert"
+        storedLevel === "essential" ||
+        storedLevel === "beginner" ||
+        storedLevel === "standard" ||
+        storedLevel === "expert"
       ) {
-        setLevelState(stored);
+        setLevelState(storedLevel);
+      }
+      const storedLayout = localStorage.getItem(LAYOUT_STORAGE_KEY);
+      if (storedLayout === "expert" || storedLayout === "simple") {
+        setLayoutModeState(storedLayout);
         return;
       }
       const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
       if (legacy === "expert" || legacy === "simple") {
-        setLevelState(experienceLevelFromUiMode(legacy));
+        setLayoutModeState(legacy);
       }
     } catch {
       /* private mode */
@@ -75,44 +84,49 @@ export function UiModeProvider({
   const setLevel = useCallback((next: ExperienceLevel) => {
     setLevelState(next);
     try {
-      localStorage.setItem(STORAGE_KEY, next);
-      localStorage.setItem(LEGACY_STORAGE_KEY, uiModeFromExperienceLevel(next));
+      localStorage.setItem(EXPERIENCE_STORAGE_KEY, next);
     } catch {
       /* ignore */
     }
   }, []);
 
-  const setMode = useCallback(
-    (mode: UiMode) => {
-      setLevel(experienceLevelFromUiMode(mode));
-    },
-    [setLevel],
-  );
+  const setLayoutMode = useCallback((mode: UiMode) => {
+    setLayoutModeState(mode);
+    try {
+      localStorage.setItem(LAYOUT_STORAGE_KEY, mode);
+      localStorage.setItem(LEGACY_STORAGE_KEY, mode);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
-  const toggleMode = useCallback(() => {
-    if (level === "essential") return;
-    setLevel(level === "expert" ? "beginner" : "expert");
-  }, [level, setLevel]);
+  const toggleLayout = useCallback(() => {
+    setLayoutMode(layoutMode === "expert" ? "simple" : "expert");
+  }, [layoutMode, setLayoutMode]);
 
-  const mode = uiModeFromExperienceLevel(level);
+  const isLayoutExpert = layoutMode === "expert";
 
   const value = useMemo(
     () => ({
-      mode,
+      layoutMode,
+      mode: layoutMode,
       level,
       isEssential: level === "essential",
       isBeginner: level === "beginner",
       isStandard: level === "standard",
       isExpert: level === "expert",
-      isExpertLegacy: level === "expert",
+      isLayoutExpert,
+      isExpertLegacy: isLayoutExpert,
       setLevel,
-      setMode,
-      toggleMode,
+      setLayoutMode,
+      setMode: setLayoutMode,
+      toggleLayout,
+      toggleMode: toggleLayout,
       meetsLevel: (required: ExperienceLevel) => meetsExperienceLevel(level, required),
       levelLabel: EXPERIENCE_LEVEL_LABELS[level],
       levelDescription: EXPERIENCE_LEVEL_DESCRIPTIONS[level],
     }),
-    [level, mode, setLevel, setMode, toggleMode],
+    [layoutMode, level, setLevel, setLayoutMode, toggleLayout, isLayoutExpert],
   );
 
   return <ExperienceContext.Provider value={value}>{children}</ExperienceContext.Provider>;

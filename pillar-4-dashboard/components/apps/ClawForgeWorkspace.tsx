@@ -129,7 +129,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
   const [embeddedWizardKey, setEmbeddedWizardKey] = useState(0);
 
   const [setupWizardOpen, setSetupWizardOpen] = useState(false);
-
+  const [statusLoaded, setStatusLoaded] = useState(false);
   const setupNudgeShown = useRef(false);
 
 
@@ -193,7 +193,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
     setCafeEventCount(Array.isArray(data.cafeEvents) ? data.cafeEvents.length : 0);
 
     setInferenceBackend(data.goLive?.inferenceBackend ?? "unknown");
-
+    setStatusLoaded(true);
   }, []);
 
 
@@ -208,15 +208,13 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
   useEffect(() => {
 
-    if (setupNudgeShown.current) return;
-
-    if (config.forgeSetupComplete === true || forgedApps.length > 0) return;
-
+    if (!statusLoaded || setupNudgeShown.current) return;
+    if (config.forgeSetupComplete === true) return;
+    if (settingsGrowth != null) return;
+    if (fleetCounts.total > 0 || forgedApps.length > 0) return;
     setupNudgeShown.current = true;
-
     setSetupWizardOpen(true);
-
-  }, [config.forgeSetupComplete, forgedApps.length]);
+  }, [statusLoaded, config.forgeSetupComplete, forgedApps.length, fleetCounts.total, settingsGrowth]);
 
 
 
@@ -498,7 +496,7 @@ export function ClawForgeWorkspace({ config, skillTick, lastSkillId }: AgentAppC
 
         sectionId="go-live"
 
-        minLevel="beginner"
+        minLevel="essential"
 
         title="Go Live"
 

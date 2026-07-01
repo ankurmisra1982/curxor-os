@@ -32,7 +32,7 @@ interface SovereigntyPayload {
 }
 
 export function SovereigntyStrip() {
-  const { isExpert } = useUiMode();
+  const { isLayoutExpert } = useUiMode();
   const [data, setData] = useState<SovereigntyPayload | null>(null);
 
   const load = useCallback(async () => {
@@ -72,7 +72,7 @@ export function SovereigntyStrip() {
             aria-hidden
           />
           <span className="text-stark">{inferenceLabel}</span>
-          {isExpert && data?.localInference.model ? (
+          {isLayoutExpert && data?.localInference.model ? (
             <span className="font-mono text-[10px] text-muted">{data.localInference.host}</span>
           ) : null}
         </span>
@@ -81,7 +81,7 @@ export function SovereigntyStrip() {
         <span className="hidden md:inline">
           Cloud: <span className="text-stark">{data?.frontier.label ?? "—"}</span>
         </span>
-        {isExpert && data?.localInference.tokensPerSecond != null ? (
+        {isLayoutExpert && data?.localInference.tokensPerSecond != null ? (
           <span className="hidden lg:inline font-mono text-[10px] text-cursor-glow">
             {data.localInference.tokensPerSecond.toFixed(1)} tok/s
           </span>

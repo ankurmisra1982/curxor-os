@@ -6,6 +6,7 @@ import type { ActivityFeedRow } from "./activity-feed-types";
 import { ensureWorkQueue } from "./work-store";
 
 export const ACTIVITY_FEED_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+export const ACTIVITY_FEED_DISPLAY_CAP = 12;
 
 function isSince(iso: string, sinceMs: number | null): boolean {
   if (sinceMs == null) return false;
@@ -19,7 +20,8 @@ function withinWindow(iso: string, windowMs: number): boolean {
   return t >= Date.now() - windowMs;
 }
 
-/** Backfill feed rows from desk queue files (UX-2b-ii — existing box data). */
+const CREATOR_WORK_STAGES = new Set(["SCRIPT", "RENDER", "IDEATE", "DRAFT", "PENDING_APPROVAL"]);
+
 export async function hydrateActivityFromQueues(
   homeSinceMs: number | null,
   windowMs = ACTIVITY_FEED_WINDOW_MS,
@@ -56,11 +58,12 @@ export async function hydrateActivityFromQueues(
     });
   }
 
+  const armedByAsset = new Map<string, ActivityFeedRow>();
   for (const rule of capital.rules) {
     if (rule.state !== "ARMED") continue;
     const timestamp = rule.updatedAt ?? rule.createdAt;
     if (!withinWindow(timestamp, windowMs)) continue;
-    rows.push({
+    const row: ActivityFeedRow = {
       id: `hydrate:capital:rule:${rule.id}`,
       timestamp,
       claw: "CAPITAL",
@@ -69,8 +72,13 @@ export async function hydrateActivityFromQueues(
       href: "/my-capital",
       evidence: rule.id,
       sinceLastVisit: isSince(timestamp, homeSinceMs),
-    });
+    };
+    const prev = armedByAsset.get(rule.asset);
+    if (!prev || Date.parse(row.timestamp) > Date.parse(prev.timestamp)) {
+      armedByAsset.set(rule.asset, row);
+    }
   }
+  rows.push(...armedByAsset.values());
 
   for (const send of work.sends) {
     if (send.status !== "simulated" && send.status !== "sent") continue;
@@ -87,6 +95,38 @@ export async function hydrateActivityFromQueues(
       tier: "success",
       href: "/my-work",
       evidence: send.id,
+      sinceLastVisit: isSince(timestamp, homeSinceMs),
+    });
+  }
+
+  for (const seq of work.sequences) {
+    if (seq.status !== "active" && seq.status !== "paused" && seq.status !== "completed") continue;
+    const timestamp = seq.updatedAt ?? seq.createdAt;
+    if (!withinWindow(timestamp, windowMs)) continue;
+    rows.push({
+      id: `hydrate:work:seq:${seq.id}`,
+      timestamp,
+      claw: "OUTREACH",
+      summary: `Sequence ${seq.status} · ${seq.name}`,
+      tier: seq.status === "completed" ? "success" : "system",
+      href: "/my-work",
+      evidence: seq.id,
+      sinceLastVisit: isSince(timestamp, homeSinceMs),
+    });
+  }
+
+  for (const task of work.tasks) {
+    if (!task.done) continue;
+    const timestamp = task.updatedAt ?? task.createdAt;
+    if (!withinWindow(timestamp, windowMs)) continue;
+    rows.push({
+      id: `hydrate:work:task:${task.id}`,
+      timestamp,
+      claw: "OUTREACH",
+      summary: `Task done · ${task.title}`,
+      tier: "success",
+      href: "/my-work",
+      evidence: task.id,
       sinceLastVisit: isSince(timestamp, homeSinceMs),
     });
   }
@@ -116,11 +156,51 @@ export async function hydrateActivityFromQueues(
         evidence: post.id,
         sinceLastVisit: isSince(post.updatedAt, homeSinceMs),
       });
+      continue;
+    }
+    if (CREATOR_WORK_STAGES.has(post.stage)) {
+      const timestamp = post.updatedAt ?? post.createdAt;
+      if (!withinWindow(timestamp, windowMs)) continue;
+      rows.push({
+        id: `hydrate:creator:stage:${post.id}`,
+        timestamp,
+        claw: "CREATOR",
+        summary: `${post.stage} · ${post.platform} · ${post.channel}`,
+        tier: "system",
+        href: "/my-content",
+        evidence: post.id,
+        sinceLastVisit: isSince(timestamp, homeSinceMs),
+      });
     }
   }
 
   rows.sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
   return rows;
+}
+
+function rowDedupeKey(row: ActivityFeedRow): string {
+  const base = row.summary.replace(/\s+/g, " ").trim().toLowerCase();
+  if (row.claw === "CAPITAL" && base.startsWith("rule armed")) {
+    const asset = base.match(/rule armed · ([^\s(]+)/)?.[1] ?? base;
+    return `${row.claw}:rule:${asset}`;
+  }
+  return `${row.claw}:${base.slice(0, 72)}`;
+}
+
+export function dedupeActivityFeedRows(rows: ActivityFeedRow[], cap = ACTIVITY_FEED_DISPLAY_CAP): ActivityFeedRow[] {
+  const sorted = [...rows].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
+  const seen = new Set<string>();
+  const out: ActivityFeedRow[] = [];
+
+  for (const row of sorted) {
+    const key = rowDedupeKey(row);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(row);
+    if (out.length >= cap) break;
+  }
+
+  return out;
 }
 
 export function mergeActivityRows(
@@ -139,6 +219,5 @@ export function mergeActivityRows(
         !eventItems.some((existing) => existing.id === row.id),
     ),
   ];
-  merged.sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
-  return merged.slice(0, limit);
+  return dedupeActivityFeedRows(merged, limit);
 }

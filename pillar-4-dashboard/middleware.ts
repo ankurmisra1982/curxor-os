@@ -74,6 +74,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
   const fre = await readFreRouting(request);
 
+  if (pathname === "/my-content-creator") {
+    return NextResponse.redirect(new URL("/my-content", request.url));
+  }
+
   if (pathname.startsWith(SETUP_PATH)) {
     if (fre.initialized) {
       const target = fre.welcomeCompleted ? fre.defaultHref : WELCOME_PATH;

@@ -50,7 +50,7 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  const { isExpert, toggleMode } = useUiMode();
+  const { isLayoutExpert, toggleLayout } = useUiMode();
 
   const shellV2 = isShellV2Enabled();
 
@@ -101,7 +101,7 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
   const chromeProps = {
     onOpenPalette: () => setPaletteOpen(true),
     onOpenHealth: openHealth,
-    onToggleMode: toggleMode,
+    onToggleMode: toggleLayout,
   };
 
 
@@ -145,9 +145,9 @@ function DesktopInner({ children, selectedApps, forgedApps = [] }: FlightCommand
 
         onOpenHealth={openHealth}
 
-        onToggleMode={toggleMode}
+        onToggleMode={toggleLayout}
 
-        isExpert={isExpert}
+        isExpert={isLayoutExpert}
 
       />
 

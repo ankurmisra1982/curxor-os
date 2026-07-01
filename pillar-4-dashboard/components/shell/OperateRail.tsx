@@ -79,12 +79,12 @@ function OperateNavLink({
 
 export function OperateRail({ selectedApps, forgedApps = [] }: OperateRailProps) {
   const pathname = usePathname();
-  const { isExpert } = useUiMode();
+  const { isLayoutExpert } = useUiMode();
   const [expanded, setExpanded] = useState(false);
   const [teamByApp, setTeamByApp] = useState<Record<string, TeamClawState>>({});
 
   const loadTeam = useCallback(async () => {
-    if (!isExpert) return;
+    if (!isLayoutExpert) return;
     try {
       const res = await fetch("/api/shell/team-status", { cache: "no-store" });
       if (!res.ok) return;
@@ -95,7 +95,7 @@ export function OperateRail({ selectedApps, forgedApps = [] }: OperateRailProps)
     } catch {
       /* ignore */
     }
-  }, [isExpert]);
+  }, [isLayoutExpert]);
 
   useEffect(() => {
     void loadTeam();
@@ -143,7 +143,7 @@ export function OperateRail({ selectedApps, forgedApps = [] }: OperateRailProps)
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto px-2 py-3">
-        {isExpert && expanded
+        {isLayoutExpert && expanded
           ? grouped.map(({ category, items }) => (
               <div key={category.id}>
                 <p className="mb-1 px-1 font-mono text-[9px] uppercase tracking-widest text-muted">

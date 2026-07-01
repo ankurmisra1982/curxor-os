@@ -7,6 +7,7 @@ import type { OsEventKind, OsEventRecord } from "./os-event-bus-types";
 import { readUserSettings, updateUserSettings } from "./user-settings";
 import type { ActivityFeedRow, ActivityFeedTier } from "./activity-feed-types";
 import {
+  ACTIVITY_FEED_DISPLAY_CAP,
   ACTIVITY_FEED_WINDOW_MS,
   hydrateActivityFromQueues,
   mergeActivityRows,
@@ -128,7 +129,7 @@ function eventRow(record: OsEventRecord, sinceMs: number | null): ActivityFeedRo
   };
 }
 
-export async function buildActivityFeed(limit = 40): Promise<{
+export async function buildActivityFeed(limit = ACTIVITY_FEED_DISPLAY_CAP): Promise<{
   homeLastVisitedAt: string | null;
   attention: ActivityFeedRow[];
   items: ActivityFeedRow[];

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { StartNewClawButton } from "@/components/claw/StartNewClawButton";
-import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import { SETTINGS_PATH } from "@/lib/ui-categories";
+import { APP_ROUTES } from "@/lib/ootb-apps";
 
 interface FlightCommandHeaderProps {
   onOpenPalette: () => void;
@@ -14,6 +15,17 @@ interface FlightCommandHeaderProps {
   isEssential?: boolean;
 }
 
+function headerTitle(pathname: string, isEssential: boolean): string {
+  if (pathname === "/home" || pathname === "/") {
+    return isEssential ? "Home" : "Flight Command";
+  }
+  const match = APP_ROUTES.find((r) => pathname === r.href || pathname.startsWith(`${r.href}/`));
+  if (match) return match.name;
+  if (pathname.startsWith("/my-claw/")) return "Forged desk";
+  if (pathname.startsWith("/settings")) return "Settings";
+  return "Flight Command";
+}
+
 export function FlightCommandHeader({
   onOpenPalette,
   onOpenHealth,
@@ -21,13 +33,21 @@ export function FlightCommandHeader({
   isExpert,
   isEssential = false,
 }: FlightCommandHeaderProps) {
+  const pathname = usePathname() ?? "/home";
+  const title = headerTitle(pathname, isEssential);
+  const layoutToggleLabel = isEssential
+    ? isExpert
+      ? "Simpler view"
+      : "More detail"
+    : isExpert
+      ? "Simple"
+      : "Expert";
+
   return (
     <header className="flex shrink-0 items-center justify-between border-b border-line bg-panel px-3 py-3 md:px-4">
       <div>
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">CurXor OS</p>
-        <h1 className="font-sans text-base font-semibold tracking-tight text-stark">
-          {isEssential ? "Home" : "Flight Command"}
-        </h1>
+        <h1 className="font-sans text-base font-semibold tracking-tight text-stark">{title}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         <button
@@ -37,16 +57,14 @@ export function FlightCommandHeader({
         >
           Search <span className="ml-2 font-mono text-[10px] text-muted">Ctrl K</span>
         </button>
-        {!isEssential ? (
-          <button
-            type="button"
-            onClick={onToggleMode}
-            className="min-h-11 border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow"
-            title={isExpert ? "Show simpler home layout" : "Show mission control panels"}
-          >
-            {isExpert ? "Simple" : "Expert"}
-          </button>
-        ) : null}
+        <button
+          type="button"
+          onClick={onToggleMode}
+          className="min-h-11 border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow"
+          title={isExpert ? "Show simpler home layout" : "Show mission control panels"}
+        >
+          {layoutToggleLabel}
+        </button>
         <Link
           href={SETTINGS_PATH}
           className="min-h-11 border border-line px-3 py-1.5 font-sans text-xs text-stark transition hover:border-cursor-glow hover:text-cursor-glow inline-flex items-center"

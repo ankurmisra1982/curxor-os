@@ -95,6 +95,7 @@ export function growthLevelFromExperience(level: ExperienceLevel): GrowthLevel {
 }
 
 /** Collapse growth level to legacy gate for components not yet migrated */
+/** Maps claw growth L1–L5 to desk depth — not global appearance.experienceLevel. */
 export function experienceLevelFromGrowth(growth: GrowthLevel): ExperienceLevel {
   if (growth === "L1" || growth === "L2") return "beginner";
   if (growth === "L3" || growth === "L4") return "standard";

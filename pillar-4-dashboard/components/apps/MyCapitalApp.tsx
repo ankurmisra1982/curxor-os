@@ -677,7 +677,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         <ExperienceAppSection
           appId="my-capital"
           sectionId="recent-trades"
-          minLevel="beginner"
+          minLevel="essential"
           title="Recent trades"
           subtitle={capitalTerm(growthLevel, "recentTradesSubtitle")}
           hideWhen={hideCapitalSection("recent-trades")}
@@ -690,7 +690,7 @@ export function MyCapitalApp({ config, skillTick, lastSkillId, updateWorkspaceCo
         <ExperienceAppSection
           appId="my-capital"
           sectionId="go-live"
-          minLevel="beginner"
+          minLevel="essential"
           title={capitalTerm(growthLevel, "goLive")}
           subtitle={capitalTerm(growthLevel, "goLiveSubtitle")}
           hideWhen={hideCapitalSection("go-live")}
