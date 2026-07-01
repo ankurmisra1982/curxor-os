@@ -2,6 +2,32 @@
   "version": 1,
   "entries": [
     {
+      "id": "b0fd01e2-d85d-4dde-bcc2-c164b20a9001",
+      "at": "2026-07-01T07:25:02.739Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1266",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1266",
+        "ok": true
+      }
+    },
+    {
+      "id": "993a1ba5-e1a2-444e-8afd-8209ca86a525",
+      "at": "2026-07-01T07:24:46.605Z",
+      "action": "publish_post",
+      "targetType": "post",
+      "targetId": "POST-1263",
+      "actor": "operator",
+      "detail": "Published via bridge",
+      "meta": {
+        "intentId": "SIM-T-1263",
+        "ok": true
+      }
+    },
+    {
       "id": "2a24cecd-9d37-4329-baa7-ae8fd3d92773",
       "at": "2026-06-28T22:29:15.784Z",
       "action": "publish_post",
@@ -3668,5 +3694,5 @@
       }
     }
   ],
-  "updatedAt": "2026-06-28T22:29:15.785Z"
+  "updatedAt": "2026-07-01T07:25:02.739Z"
 }

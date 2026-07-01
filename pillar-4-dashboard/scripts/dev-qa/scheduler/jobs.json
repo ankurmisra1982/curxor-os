@@ -2652,9 +2652,45 @@
       "skillId": "publish_post",
       "schedule": "0 9 * * *",
       "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-01T07:24:46.507Z",
+      "id": "content-POST-1262",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-01T07:25:02.621Z",
+      "id": "content-POST-1265",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-01T07:25:35.626Z",
+      "id": "content-POST-1267",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
     }
   ],
   "daemonEnabled": true,
   "pollIntervalSeconds": 60,
-  "updatedAt": "2026-06-28T22:29:43.734Z"
+  "updatedAt": "2026-07-01T07:25:35.627Z"
 }

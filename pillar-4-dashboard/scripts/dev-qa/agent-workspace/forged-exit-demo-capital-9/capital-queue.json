@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-01T06:48:40.228Z",
+  "watchlist": [
+    {
+      "ticker": "SPY",
+      "note": "Local research snapshot for SPY on forged capital desk.",
+      "lastPrice": 387.24,
+      "updatedAt": "2026-07-01T06:48:40.194Z"
+    }
+  ],
+  "rules": [
+    {
+      "id": "RULE-001",
+      "name": "SPY dip buy",
+      "asset": "SPY",
+      "conditionType": "price_drop_pct",
+      "action": "buy",
+      "qty": 1,
+      "state": "PAUSED",
+      "createdAt": "2026-07-01T00:02:35.550Z",
+      "updatedAt": "2026-07-01T00:02:35.550Z"
+    },
+    {
+      "id": "RULE-002",
+      "name": "Exit rule",
+      "asset": "SPY",
+      "conditionType": "price_drop_pct",
+      "action": "buy",
+      "qty": 1,
+      "state": "ARMED",
+      "createdAt": "2026-07-01T00:02:35.634Z",
+      "updatedAt": "2026-07-01T00:02:35.649Z"
+    },
+    {
+      "id": "RULE-003",
+      "name": "Exit rule",
+      "asset": "SPY",
+      "conditionType": "price_drop_pct",
+      "action": "buy",
+      "qty": 1,
+      "state": "ARMED",
+      "createdAt": "2026-07-01T06:48:40.212Z",
+      "updatedAt": "2026-07-01T06:48:40.228Z"
+    }
+  ]
+}

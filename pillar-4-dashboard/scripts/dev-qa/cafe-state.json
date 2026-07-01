@@ -1,58 +1,34 @@
 {
   "events": [
     {
-      "id": "CAFE-00004",
+      "id": "CAFE-00002",
       "kind": "shop.channel_sync",
       "appId": "my-shop",
-      "at": "2026-06-28T22:30:01.406Z",
+      "at": "2026-07-01T07:25:54.944Z",
       "xp": {
         "ascension": 8,
         "wealth": 5
       },
       "bubble": "Desk activated",
-      "sourceRef": "shop-live:desk_activated:1782685801405"
-    },
-    {
-      "id": "CAFE-00003",
-      "kind": "shop.channel_sync",
-      "appId": "my-shop",
-      "at": "2026-06-28T22:30:01.406Z",
-      "xp": {
-        "ascension": 8,
-        "wealth": 5
-      },
-      "bubble": "Sync · printify",
-      "sourceRef": "shop-live:channel_sync:1782685801405"
-    },
-    {
-      "id": "CAFE-00002",
-      "kind": "shop.channel_sync",
-      "appId": "my-shop",
-      "at": "2026-06-28T22:30:01.405Z",
-      "xp": {
-        "ascension": 8,
-        "wealth": 5
-      },
-      "bubble": "Sync · shopify",
-      "sourceRef": "shop-live:channel_sync:1782685801404"
+      "sourceRef": "shop-live:desk_activated:1782890754942"
     },
     {
       "id": "CAFE-00001",
       "kind": "shop.channel_sync",
       "appId": "my-shop",
-      "at": "2026-06-28T22:30:01.248Z",
+      "at": "2026-07-01T07:25:54.774Z",
       "xp": {
         "ascension": 8,
         "wealth": 5
       },
-      "bubble": "Sync · printify",
-      "sourceRef": "shop-live:channel_sync:1782685801244"
+      "bubble": "Desk activated",
+      "sourceRef": "shop-live:desk_activated:1782890754771"
     }
   ],
-  "ascensionXp": 32,
+  "ascensionXp": 16,
   "affinities": {
     "knowledge": 0,
-    "wealth": 20
+    "wealth": 10
   },
   "milestones": {
     "knowledgeEvent": false,
@@ -61,15 +37,6 @@
     "forgeMint": false
   },
   "characters": [
-    {
-      "id": "char-claw-forge",
-      "label": "FORGE",
-      "appId": "claw-forge",
-      "station": "anvil",
-      "state": "idle",
-      "bubble": null,
-      "lastEventAt": null
-    },
     {
       "id": "char-my-capital",
       "label": "CAP",
@@ -98,15 +65,6 @@
       "lastEventAt": null
     },
     {
-      "id": "char-tesla-optimus-engine",
-      "label": "SIG",
-      "appId": "tesla-optimus-engine",
-      "station": "couch",
-      "state": "idle",
-      "bubble": "Preview",
-      "lastEventAt": null
-    },
-    {
       "id": "char-robotaxi-fleet-manager",
       "label": "SWARM",
       "appId": "robotaxi-fleet-manager",
@@ -119,15 +77,6 @@
       "id": "char-my-vital",
       "label": "VIT",
       "appId": "my-vital",
-      "station": "couch",
-      "state": "idle",
-      "bubble": "Preview",
-      "lastEventAt": null
-    },
-    {
-      "id": "char-my-family",
-      "label": "KIN",
-      "appId": "my-family",
       "station": "couch",
       "state": "idle",
       "bubble": "Preview",
@@ -176,8 +125,8 @@
       "station": "mailbox",
       "state": "act",
       "bubble": "Desk activated",
-      "lastEventAt": "2026-06-28T22:30:01.406Z"
+      "lastEventAt": "2026-07-01T07:25:54.944Z"
     }
   ],
-  "lastRoomPulseAt": "2026-06-28T22:30:01.406Z"
+  "lastRoomPulseAt": "2026-07-01T07:25:54.944Z"
 }

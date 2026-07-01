@@ -1,6 +1,22 @@
 {
   "events": [
     {
+      "id": "SHP-0006",
+      "kind": "channel_sync",
+      "at": "2026-07-01T07:25:54.942Z",
+      "payload": {
+        "channel": "printify"
+      }
+    },
+    {
+      "id": "SHP-0005",
+      "kind": "desk_activated",
+      "at": "2026-07-01T07:25:54.770Z",
+      "payload": {
+        "storeName": "Arbitrage Desk"
+      }
+    },
+    {
       "id": "SHP-0004",
       "kind": "desk_activated",
       "at": "2026-06-28T22:30:01.404Z",

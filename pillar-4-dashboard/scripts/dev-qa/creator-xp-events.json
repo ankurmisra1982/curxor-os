@@ -3,6 +3,100 @@
     {
       "id": "CXP-0201",
       "kind": "post_scheduled",
+      "at": "2026-07-01T07:25:35.631Z",
+      "payload": {
+        "postId": "POST-1267",
+        "channel": "User flow QA",
+        "platform": "x",
+        "scheduledAt": "2026-07-07T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_published",
+      "at": "2026-07-01T07:25:02.739Z",
+      "payload": {
+        "postId": "POST-1266",
+        "platform": "x",
+        "channel": "Checklist publish_now"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "demo_tour_complete",
+      "at": "2026-07-01T07:25:02.685Z",
+      "payload": {
+        "postId": "POST-922",
+        "platform": "x"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_scheduled",
+      "at": "2026-07-01T07:25:02.676Z",
+      "payload": {
+        "postId": "POST-922",
+        "channel": "Demo tour · x",
+        "platform": "x",
+        "scheduledAt": "2026-07-07T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_scheduled",
+      "at": "2026-07-01T07:25:02.625Z",
+      "payload": {
+        "postId": "POST-1265",
+        "channel": "Creator checklist",
+        "platform": "x",
+        "scheduledAt": "2026-07-07T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_published",
+      "at": "2026-07-01T07:24:46.606Z",
+      "payload": {
+        "postId": "POST-1263",
+        "platform": "x",
+        "channel": "QA publish_now smoke"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_scheduled",
+      "at": "2026-07-01T07:24:46.510Z",
+      "payload": {
+        "postId": "POST-1262",
+        "channel": "QA smoke create",
+        "platform": "x",
+        "scheduledAt": "2026-07-07T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_published",
+      "at": "2026-07-01T07:24:46.398Z",
+      "payload": {
+        "postId": "POST-922",
+        "platform": "x",
+        "channel": "Demo tour · x"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_scheduled",
+      "at": "2026-07-01T07:24:46.381Z",
+      "payload": {
+        "postId": "POST-922",
+        "channel": "Demo tour · x",
+        "platform": "x",
+        "scheduledAt": "2026-07-07T13:00:00.000Z"
+      }
+    },
+    {
+      "id": "CXP-0201",
+      "kind": "post_scheduled",
       "at": "2026-06-28T22:29:43.738Z",
       "payload": {
         "postId": "POST-1261",
@@ -1955,100 +2049,6 @@
         "postId": "POST-922",
         "platform": "x",
         "channel": "Demo tour · x"
-      }
-    },
-    {
-      "id": "CXP-0056",
-      "kind": "post_scheduled",
-      "at": "2026-06-24T03:03:07.341Z",
-      "payload": {
-        "postId": "POST-922",
-        "channel": "Demo tour · x",
-        "platform": "x",
-        "scheduledAt": "2026-06-30T13:00:00.000Z"
-      }
-    },
-    {
-      "id": "CXP-0055",
-      "kind": "post_scheduled",
-      "at": "2026-06-24T03:03:07.295Z",
-      "payload": {
-        "postId": "POST-1195",
-        "channel": "Creator checklist",
-        "platform": "x",
-        "scheduledAt": "2026-06-30T13:00:00.000Z"
-      }
-    },
-    {
-      "id": "CXP-0054",
-      "kind": "post_published",
-      "at": "2026-06-24T03:02:55.133Z",
-      "payload": {
-        "postId": "POST-1194",
-        "platform": "x",
-        "channel": "QA publish_now smoke"
-      }
-    },
-    {
-      "id": "CXP-0053",
-      "kind": "post_scheduled",
-      "at": "2026-06-24T03:02:55.028Z",
-      "payload": {
-        "postId": "POST-1193",
-        "channel": "QA smoke create",
-        "platform": "x",
-        "scheduledAt": "2026-06-30T13:00:00.000Z"
-      }
-    },
-    {
-      "id": "CXP-0052",
-      "kind": "demo_tour_complete",
-      "at": "2026-06-24T03:02:54.894Z",
-      "payload": {
-        "postId": "POST-922",
-        "platform": "x"
-      }
-    },
-    {
-      "id": "CXP-0051",
-      "kind": "post_published",
-      "at": "2026-06-24T03:02:54.890Z",
-      "payload": {
-        "postId": "POST-922",
-        "platform": "x",
-        "channel": "Demo tour · x"
-      }
-    },
-    {
-      "id": "CXP-0050",
-      "kind": "post_scheduled",
-      "at": "2026-06-24T03:02:54.880Z",
-      "payload": {
-        "postId": "POST-922",
-        "channel": "Demo tour · x",
-        "platform": "x",
-        "scheduledAt": "2026-06-30T13:00:00.000Z"
-      }
-    },
-    {
-      "id": "CXP-0049",
-      "kind": "post_scheduled",
-      "at": "2026-06-24T03:00:16.994Z",
-      "payload": {
-        "postId": "POST-1192",
-        "channel": "User flow QA",
-        "platform": "x",
-        "scheduledAt": "2026-06-30T13:00:00.000Z"
-      }
-    },
-    {
-      "id": "CXP-0048",
-      "kind": "post_published",
-      "at": "2026-06-24T02:59:49.480Z",
-      "payload": {
-        "postId": "POST-1191",
-        "platform": "x",
-        "channel": "Checklist publish_now"
       }
     }
   ]

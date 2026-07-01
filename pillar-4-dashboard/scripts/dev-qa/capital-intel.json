@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-06-28T22:29:44.649Z",
+  "updatedAt": "2026-07-01T07:25:38.238Z",
   "digest": {
     "digest": [
       {
@@ -13,7 +13,7 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-28T22:17:14.603Z"
+        "publishedAt": "2026-07-01T07:24:29.403Z"
       },
       {
         "id": "f70709ef99f6d4",
@@ -24,178 +24,197 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-28T22:17:14.603Z"
+        "publishedAt": "2026-07-01T07:24:29.403Z"
       },
       {
-        "id": "d95622e51c5e5b",
-        "headline": "Stock futures rise along with oil prices as traders weigh U.S. attacks on Iran over the weekend: Live updates",
+        "id": "687b13bb97268d",
+        "headline": "Europe’s defense boom faces a new test: Can it actually deliver weapons?",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/stock-futures-today-live-updates.html",
+        "url": "https://www.cnbc.com/2026/07/01/europe-defense-stocks-rearmament.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T07:18:52.000Z"
+      },
+      {
+        "id": "2478bdfc84192d",
+        "headline": "Dow futures hit reverse after strongest first half in five years: Live updates",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/30/stock-market-today-live-updates.html",
         "tickers": [],
         "sentiment": "bullish",
-        "publishedAt": "2026-06-28T22:15:31.000Z"
+        "publishedAt": "2026-07-01T07:17:38.000Z"
       },
       {
-        "id": "ee0bfe682f4daa",
-        "headline": "America can&apos;t get enough of protein. The dairy industry can&apos;t keep up",
+        "id": "e3279301d49dd1",
+        "headline": "Xi touts China Communist Party&apos;s global influence in speech marking 105th anniversary",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/america-cant-get-enough-protein-the-dairy-industry-cant-keep-up.html",
+        "url": "https://www.cnbc.com/2026/07/01/china-xi-jinping-ccp-105th-anniversary-global-influence-taiwan.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T07:07:57.000Z"
+      },
+      {
+        "id": "2587836429913a",
+        "headline": "LNG market disruption may continue for months as a top producer withholds some Italian shipments",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/01/qatarenergy-extend-force-majeure-september-italys-edison-iran-war-.html",
         "tickers": [
-          "GLP"
+          "LNG"
         ],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-28T21:35:15.000Z"
-      },
-      {
-        "id": "a4f91541af750b",
-        "headline": "Iran talks on hold after fighting breaks out and Trump once again threatens annihilation",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/trump-threatens-iran-with-annihilation-kuwait-bahrain-report-attacks.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-28T20:57:32.000Z"
-      },
-      {
-        "id": "2a52eabd2b4f5c",
-        "headline": "Thirty-three people rescued, thousands still missing after Venezuela quakes",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/thousands-still-missing-after-devastating-venezuela-quakes.html",
-        "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-28T16:29:05.000Z"
-      },
-      {
-        "id": "3f5955943fc538",
-        "headline": "Some renters say homeownership isn&apos;t part of their American Dream: Renting is &apos;really freeing for me&apos;",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/some-renters-say-homeownership-isnt-part-of-their-american-dream.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-28T14:05:01.000Z"
-      },
-      {
-        "id": "4f634a3cb87682",
-        "headline": "IRAs hold trillions more than 401(k) plans — yet people hardly save in them",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/ira-money-401k-rollovers.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-28T13:30:01.000Z"
-      },
-      {
-        "id": "e4aca969a24ecc",
-        "headline": "If you think China needs to dethrone U.S. dollar, you don&apos;t understand how it is waging global currency war",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/china-doesnt-need-to-de-throne-dollar-to-win-global-currency-war.html",
-        "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-28T13:25:43.000Z"
-      },
-      {
-        "id": "c4f04344c5900b",
-        "headline": "Saudi Aramco helicopter crash kills 14 nationals, state news agency says",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/saudi-aramco-helicopter-crash-kills-14-nationals-state-news-agency.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-28T12:52:24.000Z"
-      },
-      {
-        "id": "3339f3abe664cf",
-        "headline": "Top Wall Street analysts are bullish on these 3 stocks for strong long-term growth potential",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/top-analysts-bullish-on-these-stocks-for-long-term-growth-potential.html",
-        "tickers": [],
         "sentiment": "bullish",
-        "publishedAt": "2026-06-28T12:29:57.000Z"
+        "publishedAt": "2026-07-01T06:34:15.000Z"
       },
       {
-        "id": "ed3421b6ad534d",
-        "headline": "These 10 Chinese stocks are powering U.S. data centers",
+        "id": "fbc203e97dae27",
+        "headline": "North Sea oil and renewables: The UK’s next PM faces a defining energy policy decision",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/these-10-chinese-stocks-are-powering-us-data-centers.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-28T12:23:56.000Z"
-      },
-      {
-        "id": "0674d1cac0055d",
-        "headline": "Morgan Stanley says salt is the new oil. Here&apos;s why and how to play it",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/morgan-stanley-says-salt-is-the-new-oil-heres-why-and-how-to-play-it.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-06-28T12:19:35.000Z"
-      },
-      {
-        "id": "435df1e94626cc",
-        "headline": "Seniors in Medicare are about to get landmark obesity drug coverage — but many may not know it yet",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/medicare-will-soon-cover-obesity-drugs-but-many-seniors-may-not-know.html",
-        "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-28T12:00:01.000Z"
-      },
-      {
-        "id": "361edab8bed3d5",
-        "headline": "A &apos;perfect storm&apos; points to a much smaller U.S. auto market by 2040",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/us-auto-market.html",
-        "tickers": [],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-28T11:00:01.000Z"
-      },
-      {
-        "id": "33f4d98de41a50",
-        "headline": "From protein coffee to CBD soda: How brands are cashing in on the functional beverage boom",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/28/protein-coffee-cbd-soda-starbucks-functional-beverage-boom.html",
+        "url": "https://www.cnbc.com/2026/07/01/burnham-north-sea-oil-energy-security.html",
         "tickers": [
-          "CBD",
-          "EMEA",
+          "UK",
+          "PM"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T06:28:00.000Z"
+      },
+      {
+        "id": "3deea6a8813b01",
+        "headline": "KKR to control South Korea&apos;s $1.3 billion renewables platform with SK as AI power demand rises",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/01/kkr-sk-launch-1-3-billion-south-korea-renewable-energy-platform-ai-data-centers.html",
+        "tickers": [
+          "KKR",
+          "SK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T06:11:08.000Z"
+      },
+      {
+        "id": "db194d83ca9721",
+        "headline": "Japan spent $74 billion propping up the yen. Investors say the real battle is with the Fed",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/01/japan-yen-40-year-low-intervention-fed-boj-carry-trade.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T05:33:43.000Z"
+      },
+      {
+        "id": "d98af860b3bf73",
+        "headline": "Employers who laid off workers citing AI are already starting to regret it",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/01/employers-who-laid-off-workers-for-ai-are-reversing-their-decisions.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T04:37:25.000Z"
+      },
+      {
+        "id": "63aa42a9308fce",
+        "headline": "Anthropic says Trump admin has lifted export controls on Claude Fable 5 and Mythos 5",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/30/anthropic-says-trump-admin-has-lifted-export-controls-on-claude-fable-5-and-mythos-5.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T04:16:12.000Z"
+      },
+      {
+        "id": "832586e4e8b1a9",
+        "headline": "Iran says it is selling oil at 20% premium as end of U.S. blockade sees 40 million barrels exported",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/01/iran-us-mou-negotiation-war-oil-exports-strait-of-hormuz-.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-01T02:51:58.000Z"
+      },
+      {
+        "id": "d90dba88f204c3",
+        "headline": "Trump&apos;s annual financial disclosure shows more than $580M in crypto-related income",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/30/trump-financial-disclosure-released.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-30T22:53:43.000Z"
+      },
+      {
+        "id": "8c55d4a17efeca",
+        "headline": "Jim Cramer says the AI trade has shifted — and these stocks are leading now",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/30/jim-cramer-ai-trade-shifted-stocks-leading-now.html",
+        "tickers": [
           "CNBC"
         ],
-        "sentiment": "bearish",
-        "publishedAt": "2026-06-28T05:00:01.000Z"
-      },
-      {
-        "id": "a3d6c311cf50bd",
-        "headline": "SpaceX to join the Nasdaq-100 in a fast-tracked process that will drive huge ETF buying demand",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/26/spacex-added-to-nasdaq-100.html",
-        "tickers": [],
-        "sentiment": "bullish",
-        "publishedAt": "2026-06-27T21:34:59.000Z"
-      },
-      {
-        "id": "d9b41b483d5ff8",
-        "headline": "‘Heated Rivalry’ fuels a boom in gay romance stories, with women leading the fandom",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/27/heated-rivalry-red-white-royal-blue-rachel-reid-gay-romance-yaoi-mlm.html",
-        "tickers": [],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-27T14:54:47.000Z"
+        "publishedAt": "2026-06-30T22:24:43.000Z"
       },
       {
-        "id": "1ee481582efbaf",
-        "headline": "The memory shortage shaking Apple and Microsoft is &apos;existential crisis&apos; for smaller players",
+        "id": "1484d81c1040c5",
+        "headline": "Asia’s IPO boom looks strong. Here’s why it may be more complicated",
         "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/06/27/memory-crunch-shaking-apple-and-microsoft-existential-for-small-guys.html",
+        "url": "https://www.cnbc.com/video/2026/06/30/asias-ipo-boom-looks-strong-heres-why-it-may-be-more-complicated.html",
+        "tickers": [
+          "CNBC"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-30T22:00:01.000Z"
+      },
+      {
+        "id": "59626f2ca870b1",
+        "headline": "Trump&apos;s massive defense budget, depleted war machine, spark U.S. state battle for business and jobs",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/06/30/trump-trillion-dollar-defense-budget-missile-contracts.html",
         "tickers": [],
         "sentiment": "bearish",
-        "publishedAt": "2026-06-27T13:21:37.000Z"
+        "publishedAt": "2026-06-30T15:31:39.000Z"
       },
       {
-        "id": "faaa9ded29e82a",
-        "headline": "MasterBrand, Inc.  (MBC)  (CIK 0001941365) filed 8-K/A",
+        "id": "b080b98ed7b7bf",
+        "headline": "Prestige Consumer Healthcare Inc.  (PBH)  (CIK 0001295947) filed 8-K/A",
         "source": "SEC · 8-K",
-        "url": "https://www.sec.gov/Archives/edgar/data/1941365/000194136526000065/0001941365-26-000065-index.htm",
+        "url": "https://www.sec.gov/Archives/edgar/data/1295947/000129594726000025/0001295947-26-000025-index.htm",
         "tickers": [
-          "MBC",
+          "PBH",
           "CIK"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-06-26T12:00:00.000Z"
+        "publishedAt": "2026-06-30T12:00:00.000Z"
+      },
+      {
+        "id": "299ed9a41845e1",
+        "headline": "JANUS HENDERSON GROUP PLC  (JHG)  (CIK 0001274173) filed 8-K",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/1274173/000110465926079401/0001104659-26-079401-index.htm",
+        "tickers": [
+          "JANUS",
+          "GROUP",
+          "PLC",
+          "JHG",
+          "CIK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-30T12:00:00.000Z"
+      },
+      {
+        "id": "81314dd55d3dd6",
+        "headline": "COLLEGIUM PHARMACEUTICAL, INC  (COLL)  (CIK 0001267565) filed 8-K/A",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/1267565/000110465926079323/0001104659-26-079323-index.htm",
+        "tickers": [
+          "INC",
+          "COLL",
+          "CIK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-30T12:00:00.000Z"
+      },
+      {
+        "id": "f689a6cf6308dd",
+        "headline": "Virgin Galactic Holdings, Inc  (SPCE)  (CIK 0001706946) filed 8-K/A",
+        "source": "SEC · 8-K",
+        "url": "https://www.sec.gov/Archives/edgar/data/1706946/000170694626000115/0001706946-26-000115-index.htm",
+        "tickers": [
+          "SPCE",
+          "CIK"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-06-29T12:00:00.000Z"
       }
     ],
     "featuredTickers": [
@@ -204,7 +223,7 @@
       "NVDA",
       "SPY"
     ],
-    "updatedAt": "2026-06-28T22:17:17.097Z"
+    "updatedAt": "2026-07-01T07:24:32.589Z"
   },
   "tickerBySymbol": {
     "SPY": {
@@ -212,9 +231,9 @@
       "fundamentals": {
         "symbol": "SPY",
         "name": "State Street SPDR S&P 500 ETF Trust",
-        "price": 728.99,
+        "price": 746.77,
         "changePct1d": null,
-        "changePct5d": -2.3769974109467342,
+        "changePct5d": 1.7980291996613662,
         "marketCap": null,
         "peRatio": null,
         "fiftyTwoWeekHigh": null,
@@ -223,21 +242,6 @@
         "avgVolume": null
       },
       "chart": [
-        {
-          "t": "2026-03-27T13:30:00.000Z",
-          "close": 634.0900268554688,
-          "volume": 103649400
-        },
-        {
-          "t": "2026-03-30T13:30:00.000Z",
-          "close": 631.969970703125,
-          "volume": 99275900
-        },
-        {
-          "t": "2026-03-31T13:30:00.000Z",
-          "close": 650.3400268554688,
-          "volume": 152534100
-        },
         {
           "t": "2026-04-01T13:30:00.000Z",
           "close": 655.239990234375,
@@ -536,141 +540,151 @@
         {
           "t": "2026-06-26T13:30:00.000Z",
           "close": 728.989990234375,
-          "volume": 70932800
+          "volume": 71034000
+        },
+        {
+          "t": "2026-06-29T13:30:00.000Z",
+          "close": 741,
+          "volume": 58035200
+        },
+        {
+          "t": "2026-06-30T13:30:00.000Z",
+          "close": 746.77001953125,
+          "volume": 55540700
         }
       ],
       "news": [
         {
-          "id": "a4f91541af750b",
+          "id": "687b13bb97268d",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Iran talks on hold after fighting breaks out and Trump once again threatens annihilation",
-          "excerpt": "Iran says it targeted U.S. military facilities in Kuwait and Bahrain following U.S. strikes on targets in and around the Strait of Hormuz.",
-          "url": "https://www.cnbc.com/2026/06/28/trump-threatens-iran-with-annihilation-kuwait-bahrain-report-attacks.html",
+          "title": "Europe’s defense boom faces a new test: Can it actually deliver weapons?",
+          "excerpt": "Europe’s defense boom faces a test as investors weigh whether budgets and backlogs can become weapons, factories and returns.",
+          "url": "https://www.cnbc.com/2026/07/01/europe-defense-stocks-rearmament.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-28T22:23:39.000Z"
+          "publishedAt": "2026-07-01T07:18:52.000Z"
         },
         {
-          "id": "d95622e51c5e5b",
+          "id": "2478bdfc84192d",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "Stock futures rise along with oil prices as traders weigh U.S. attacks on Iran over the weekend: Live updates",
-          "excerpt": "Wall Street is coming off a mixed week, characterized by a rotation out of tech and into other parts of the stock market.",
-          "url": "https://www.cnbc.com/2026/06/28/stock-futures-today-live-updates.html",
+          "title": "Dow futures hit reverse after strongest first half in five years: Live updates",
+          "excerpt": "The Dow Jones Industrial Average rose 8.9% in the first half of 2026.",
+          "url": "https://www.cnbc.com/2026/06/30/stock-market-today-live-updates.html",
           "sentiment": "bullish",
           "score": 1,
-          "publishedAt": "2026-06-28T22:15:31.000Z"
+          "publishedAt": "2026-07-01T07:17:38.000Z"
         },
         {
-          "id": "ee0bfe682f4daa",
+          "id": "e3279301d49dd1",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "America can&apos;t get enough of protein. The dairy industry can&apos;t keep up",
-          "excerpt": "Demand for whey protein is off the charts as American diet trends change and GLP-1s boom, and the dairy industry is struggling to produce enough.",
-          "url": "https://www.cnbc.com/2026/06/28/america-cant-get-enough-protein-the-dairy-industry-cant-keep-up.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-28T21:35:15.000Z"
-        },
-        {
-          "id": "2a52eabd2b4f5c",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Thirty-three people rescued, thousands still missing after Venezuela quakes",
-          "excerpt": "Just under 50,000 people were listed as unaccounted for on a website promoted by the country's political opposition on Sunday.",
-          "url": "https://www.cnbc.com/2026/06/28/thousands-still-missing-after-devastating-venezuela-quakes.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-28T16:29:05.000Z"
-        },
-        {
-          "id": "3f5955943fc538",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Some renters say homeownership isn&apos;t part of their American Dream: Renting is &apos;really freeing for me&apos;",
-          "excerpt": "Some no longer see renting as a temporary stop on the path to homeownership but rather a long-term lifestyle choice, reflecting a shift in the American Dream.",
-          "url": "https://www.cnbc.com/2026/06/28/some-renters-say-homeownership-isnt-part-of-their-american-dream.html",
+          "title": "Xi touts China Communist Party&apos;s global influence in speech marking 105th anniversary",
+          "excerpt": "Chinese President Xi Jinping spoke Wednesday to commemorate the 105th anniversary of the ruling Communist Party of China.",
+          "url": "https://www.cnbc.com/2026/07/01/china-xi-jinping-ccp-105th-anniversary-global-influence-taiwan.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-28T14:05:01.000Z"
+          "publishedAt": "2026-07-01T07:07:57.000Z"
         },
         {
-          "id": "4f634a3cb87682",
+          "id": "2587836429913a",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "IRAs hold trillions more than 401(k) plans — yet people hardly save in them",
-          "excerpt": "Investors are increasingly rolling money from 401(k) plans to IRAs. Some observers fear they're exposed to poor investment advice.",
-          "url": "https://www.cnbc.com/2026/06/28/ira-money-401k-rollovers.html",
+          "title": "LNG market disruption may continue for months as a top producer withholds some Italian shipments",
+          "excerpt": "QatarEnergy extended its force majeure, withholding four additional LNG cargoes until September, as damage from the war prolongs supply constraints.",
+          "url": "https://www.cnbc.com/2026/07/01/qatarenergy-extend-force-majeure-september-italys-edison-iran-war-.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-07-01T06:34:15.000Z"
+        },
+        {
+          "id": "fbc203e97dae27",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "North Sea oil and renewables: The UK’s next PM faces a defining energy policy decision",
+          "excerpt": "Andy Burnham could face an early test over North Sea oil drilling as energy shocks revive the UK energy security debate.",
+          "url": "https://www.cnbc.com/2026/07/01/burnham-north-sea-oil-energy-security.html",
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-28T13:30:01.000Z"
+          "publishedAt": "2026-07-01T06:28:00.000Z"
         },
         {
-          "id": "e4aca969a24ecc",
+          "id": "3deea6a8813b01",
           "source": "cnbc",
           "sourceLabel": "CNBC",
-          "title": "If you think China needs to dethrone U.S. dollar, you don&apos;t understand how it is waging global currency war",
-          "excerpt": "It's misguided to focus on China's renminbi replacing the U.S. dollar. Beijing is already successfully reducing dependence on a dollar-centric global system.",
-          "url": "https://www.cnbc.com/2026/06/28/china-doesnt-need-to-de-throne-dollar-to-win-global-currency-war.html",
+          "title": "KKR to control South Korea&apos;s $1.3 billion renewables platform with SK as AI power demand rises",
+          "excerpt": "The announcement came after South Korea announced on Monday three massive investment projects, spanning semiconductors, physical AI and AI data centers.",
+          "url": "https://www.cnbc.com/2026/07/01/kkr-sk-launch-1-3-billion-south-korea-renewable-energy-platform-ai-data-centers.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-01T06:11:08.000Z"
+        },
+        {
+          "id": "db194d83ca9721",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Japan spent $74 billion propping up the yen. Investors say the real battle is with the Fed",
+          "excerpt": "Yen intervention alone is unlikely to reverse losses while wide U.S.-Japan rate differentials keep supporting the dollar, said analysts.",
+          "url": "https://www.cnbc.com/2026/07/01/japan-yen-40-year-low-intervention-fed-boj-carry-trade.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-01T05:33:43.000Z"
+        },
+        {
+          "id": "d98af860b3bf73",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Employers who laid off workers citing AI are already starting to regret it",
+          "excerpt": "Companies are realizing artificial intelligence can't do everything after all, prompting them to rehire employees to grow their businesses",
+          "url": "https://www.cnbc.com/2026/07/01/employers-who-laid-off-workers-for-ai-are-reversing-their-decisions.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-01T04:37:25.000Z"
+        },
+        {
+          "id": "832586e4e8b1a9",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Iran says it is selling oil at 20% premium as end of U.S. blockade sees 40 million barrels exported",
+          "excerpt": "The ceasefire prompted a surge in crude shipments through the Strait of Hormuz, where traffic had largely ground to a halt during the conflict.",
+          "url": "https://www.cnbc.com/2026/07/01/iran-us-mou-negotiation-war-oil-exports-strait-of-hormuz-.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-01T02:51:58.000Z"
+        },
+        {
+          "id": "d90dba88f204c3",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Trump&apos;s annual financial disclosure shows more than $580M in crypto-related income",
+          "excerpt": "Trump's 927-page financial disclosure report for 2025 totals more than 900 pages detailing holdings in cryptocurrency and stocks.",
+          "url": "https://www.cnbc.com/2026/06/30/trump-financial-disclosure-released.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-30T22:53:43.000Z"
+        },
+        {
+          "id": "1484d81c1040c5",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Asia’s IPO boom looks strong. Here’s why it may be more complicated",
+          "excerpt": "Asia-Pacific is leading the global IPO market, but its boom is not one story. Hong Kong, Mainland China and India are each powered by a different IPO engine — offshore liquidity, policy-guided capital and domestic retail demand. This CNBC Explains looks at why raising billions is",
+          "url": "https://www.cnbc.com/video/2026/06/30/asias-ipo-boom-looks-strong-heres-why-it-may-be-more-complicated.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-06-30T22:00:01.000Z"
+        },
+        {
+          "id": "59626f2ca870b1",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Trump&apos;s massive defense budget, depleted war machine, spark U.S. state battle for business and jobs",
+          "excerpt": "Trump's huge defense budget request and a race to replenish weapons stocks while building hypersonic missiles lead to war between U.S. states for jobs.",
+          "url": "https://www.cnbc.com/2026/06/30/trump-trillion-dollar-defense-budget-missile-contracts.html",
           "sentiment": "bearish",
           "score": -1,
-          "publishedAt": "2026-06-28T13:25:43.000Z"
-        },
-        {
-          "id": "c4f04344c5900b",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Saudi Aramco helicopter crash kills 14 nationals, state news agency says",
-          "excerpt": "Aramco had resumed crude oil loadings on Friday at its Ras Tanura terminal in the Gulf after they were halted for nearly four months.",
-          "url": "https://www.cnbc.com/2026/06/28/saudi-aramco-helicopter-crash-kills-14-nationals-state-news-agency.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-28T12:52:24.000Z"
-        },
-        {
-          "id": "ed3421b6ad534d",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "These 10 Chinese stocks are powering U.S. data centers",
-          "excerpt": "Many of the top-performing mainland Chinese stocks this year make components used in data centers globally, according to 22V Research.",
-          "url": "https://www.cnbc.com/2026/06/28/these-10-chinese-stocks-are-powering-us-data-centers.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-28T12:23:56.000Z"
-        },
-        {
-          "id": "0674d1cac0055d",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Morgan Stanley says salt is the new oil. Here&apos;s why and how to play it",
-          "excerpt": "Salt can become as sought-out as oil amid a boom in demand for sodium-ion batteries, according to the firm.",
-          "url": "https://www.cnbc.com/2026/06/28/morgan-stanley-says-salt-is-the-new-oil-heres-why-and-how-to-play-it.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-06-28T12:19:35.000Z"
-        },
-        {
-          "id": "435df1e94626cc",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Seniors in Medicare are about to get landmark obesity drug coverage — but many may not know it yet",
-          "excerpt": "Many seniors may be unaware of the landmark coverage shift starting on July 1, with limited advertising seen from the government or Eli Lilly and Novo.",
-          "url": "https://www.cnbc.com/2026/06/28/medicare-will-soon-cover-obesity-drugs-but-many-seniors-may-not-know.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-28T12:00:01.000Z"
-        },
-        {
-          "id": "361edab8bed3d5",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "A &apos;perfect storm&apos; points to a much smaller U.S. auto market by 2040",
-          "excerpt": "The auto industry is selling fewer cars--one forecaster says this is a fundamental change, and it is going to get worse.",
-          "url": "https://www.cnbc.com/2026/06/28/us-auto-market.html",
-          "sentiment": "bearish",
-          "score": -1,
-          "publishedAt": "2026-06-28T11:00:01.000Z"
+          "publishedAt": "2026-06-30T15:31:39.000Z"
         }
       ],
       "chatter": [
@@ -683,25 +697,25 @@
           "url": null,
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-06-28T22:29:43.998Z"
+          "publishedAt": "2026-07-01T07:25:35.855Z"
         }
       ],
       "sentiment": {
         "label": "mixed",
-        "score": -0.2857142857142857,
-        "bullishPct": 7,
-        "bearishPct": 36,
-        "sampleSize": 14
+        "score": 0.07692307692307693,
+        "bullishPct": 15,
+        "bearishPct": 8,
+        "sampleSize": 13
       },
-      "smartTake": "SPY price updating · Chatter skews mixed (7% bull / 36% bear). CNBC: Iran talks on hold after fighting breaks out and Trump once again threatens anni",
+      "smartTake": "SPY price updating · Chatter skews mixed (15% bull / 8% bear). CNBC: Europe’s defense boom faces a new test: Can it actually deliver weapons?",
       "citations": [
-        "CNBC: Iran talks on hold after fighting breaks out and Trump once again threatens anni",
-        "CNBC: Stock futures rise along with oil prices as traders weigh U.S. attacks on Iran o",
+        "CNBC: Europe’s defense boom faces a new test: Can it actually deliver weapons?",
+        "CNBC: Dow futures hit reverse after strongest first half in five years: Live updates",
         "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
       ],
       "nextEarningsDate": null,
       "contradictionNote": null,
-      "updatedAt": "2026-06-28T22:29:44.648Z"
+      "updatedAt": "2026-07-01T07:25:38.236Z"
     },
     "BTCUSD": {
       "symbol": "BTCUSD",
@@ -1886,6 +1900,16 @@
     "notifyIntelFires": true
   },
   "thesisEntries": [
+    {
+      "id": "TH-055",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-01T07:24:39.614Z"
+    },
     {
       "id": "TH-054",
       "symbol": "SPY",

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "linked": true,
+  "tokens": {
+    "accessToken": "mock-dev-qa-google-access-token",
+    "refreshToken": "mock-dev-qa-google-refresh-token",
+    "expiresAt": "2026-07-01T08:24:46.180Z",
+    "scope": "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly openid",
+    "updatedAt": "2026-07-01T07:24:47.180Z"
+  },
+  "updatedAt": "2026-07-01T07:24:47.180Z"
+}

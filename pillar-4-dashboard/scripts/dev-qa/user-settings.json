@@ -5,12 +5,8 @@
     "my-content-creator",
     "my-work",
     "my-shop",
-    "tesla-optimus-engine",
     "robotaxi-fleet-manager",
-    "claw-cafe",
-    "my-vital",
-    "my-family",
-    "claw-forge"
+    "my-vital"
   ],
   "forgedAppSlugs": [
     "demo-tour-desk",
@@ -173,7 +169,22 @@
     "flow-forged-capital-7",
     "flow-assist-work-7",
     "flow-round-trip-7",
-    "flow-reimport-claw-7"
+    "flow-reimport-claw-7",
+    "checklist-work-desk-8",
+    "checklist-creator-desk-8",
+    "checklist-island-claw-8",
+    "checklist-mesh-desk-8",
+    "checklist-cafe-mint-8",
+    "checklist-capital-desk-8",
+    "exit-demo-work-8",
+    "exit-demo-creator-8",
+    "exit-demo-capital-8",
+    "flow-forged-work-8",
+    "flow-forged-creator-8",
+    "flow-forged-capital-8",
+    "flow-assist-work-8",
+    "flow-round-trip-8",
+    "flow-reimport-claw-8"
   ],
   "appearance": {
     "uiMode": "simple",
@@ -189,7 +200,8 @@
     "workGamificationOptOut": false,
     "cafeTitleStyle": "mythic",
     "colorScheme": "curxor",
-    "themeMode": "dark"
+    "themeMode": "dark",
+    "textScale": "large"
   },
   "intelligence": {
     "primarySource": "local",
@@ -216,7 +228,7 @@
   "buildPlane": {
     "enabled": true,
     "linkStatus": "linked",
-    "linkedAt": "2026-06-28T22:28:58.261Z",
+    "linkedAt": "2026-07-01T07:24:28.173Z",
     "workerStatus": "online",
     "allowDelegation": true,
     "allowWriteTools": false,
@@ -225,17 +237,28 @@
     "workerHost": "127.0.0.1",
     "workerSshPort": 22,
     "workerSshUser": "curxor",
-    "workerLastProbeAt": "2026-06-28T22:28:58.261Z",
+    "workerLastProbeAt": "2026-07-01T07:24:28.173Z",
     "workerWizardCompletedAt": null,
     "workerCompletedSteps": []
   },
   "patronAsk": {
     "ui": "minimized",
-    "lastReadAt": null
+    "lastReadAt": null,
+    "voiceEnabled": false
   },
   "patronWeeklyBundle": {
-    "weekOf": "2026-06-22",
-    "lastConfirmedAt": "2026-06-28T22:29:12.483Z"
+    "weekOf": "2026-06-29",
+    "lastConfirmedAt": "2026-07-01T07:24:59.468Z"
   },
-  "updatedAt": "2026-06-28T22:29:57.900Z"
+  "flightCommand": {
+    "homeLastVisitedAt": "2026-07-01T07:25:57.299Z",
+    "notificationMode": "calm"
+  },
+  "operatorProfile": {
+    "displayName": "Ankur",
+    "privacyAcknowledgedAt": "2026-07-01T07:24:27.936Z",
+    "privacyDeferred": false,
+    "completedAt": "2026-06-20T06:00:00.000Z"
+  },
+  "updatedAt": "2026-07-01T07:25:57.301Z"
 }

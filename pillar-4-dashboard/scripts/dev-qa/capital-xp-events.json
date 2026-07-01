@@ -1,6 +1,78 @@
 {
   "events": [
     {
+      "id": "KXP-0168",
+      "kind": "rule_armed",
+      "at": "2026-07-01T07:25:38.372Z",
+      "payload": {
+        "ruleId": "RULE-82",
+        "asset": "NVDA"
+      }
+    },
+    {
+      "id": "KXP-0167",
+      "kind": "rule_armed",
+      "at": "2026-07-01T07:25:38.290Z",
+      "payload": {
+        "ruleId": "RULE-81",
+        "asset": "SPY"
+      }
+    },
+    {
+      "id": "KXP-0166",
+      "kind": "rule_armed",
+      "at": "2026-07-01T07:25:35.757Z",
+      "payload": {
+        "ruleId": "RULE-80",
+        "asset": "SPY"
+      }
+    },
+    {
+      "id": "KXP-0165",
+      "kind": "demo_tour_complete",
+      "at": "2026-07-01T07:25:35.706Z",
+      "payload": {
+        "ruleId": "RULE-10",
+        "asset": "QQQ"
+      }
+    },
+    {
+      "id": "KXP-0164",
+      "kind": "rule_armed",
+      "at": "2026-07-01T07:25:02.168Z",
+      "payload": {
+        "ruleId": "RULE-79",
+        "asset": "SPY"
+      }
+    },
+    {
+      "id": "KXP-0163",
+      "kind": "demo_tour_complete",
+      "at": "2026-07-01T07:25:02.098Z",
+      "payload": {
+        "ruleId": "RULE-10",
+        "asset": "QQQ"
+      }
+    },
+    {
+      "id": "KXP-0162",
+      "kind": "rule_armed",
+      "at": "2026-07-01T07:24:28.753Z",
+      "payload": {
+        "ruleId": "RULE-01",
+        "asset": "BTC-USD"
+      }
+    },
+    {
+      "id": "KXP-0161",
+      "kind": "demo_tour_complete",
+      "at": "2026-07-01T07:24:28.725Z",
+      "payload": {
+        "ruleId": "RULE-10",
+        "asset": "QQQ"
+      }
+    },
+    {
       "id": "KXP-0160",
       "kind": "rule_armed",
       "at": "2026-06-28T22:29:44.799Z",

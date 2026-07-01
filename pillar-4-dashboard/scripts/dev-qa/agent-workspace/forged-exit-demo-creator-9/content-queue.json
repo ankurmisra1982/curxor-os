@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-01T06:48:38.627Z",
+  "posts": [
+    {
+      "id": "POST-001",
+      "channel": "CurXor Dev Log",
+      "platform": "x",
+      "stage": "SCRIPT",
+      "draftText": "Sovereign creator desk on CurXor — draft locally, schedule on appliance, publish via eno2 bridge when wired.",
+      "scheduledAt": null,
+      "createdAt": "2026-07-01T00:02:33.915Z",
+      "updatedAt": "2026-07-01T00:02:33.915Z"
+    },
+    {
+      "id": "POST-002",
+      "channel": "X / Twitter",
+      "platform": "x",
+      "stage": "SCHEDULED",
+      "draftText": "Exit demo forged creator draft.",
+      "scheduledAt": "2026-07-01T22:00:00.000Z",
+      "createdAt": "2026-07-01T00:02:33.975Z",
+      "updatedAt": "2026-07-01T00:02:33.991Z"
+    },
+    {
+      "id": "POST-003",
+      "channel": "X / Twitter",
+      "platform": "x",
+      "stage": "SCHEDULED",
+      "draftText": "Exit demo forged creator draft.",
+      "scheduledAt": "2026-07-01T22:00:00.000Z",
+      "createdAt": "2026-07-01T06:48:38.611Z",
+      "updatedAt": "2026-07-01T06:48:38.627Z"
+    }
+  ]
+}

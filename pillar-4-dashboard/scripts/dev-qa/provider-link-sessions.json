@@ -1,6 +1,20 @@
 {
   "sessions": [
     {
+      "id": "632f543e-9071-48c5-ad33-67b5acb2cfcd",
+      "providerId": "openai",
+      "createdAt": "2026-07-01T07:24:28.649Z",
+      "completedAt": null,
+      "expiresAt": "2026-07-01T07:54:28.649Z",
+      "status": "pending",
+      "frontierModel": "gpt-4o-mini",
+      "linkMode": "oauth",
+      "oauthState": "dbf35ed82fe09395769111c77cead6057052d77aa1c73e0e37be9846524b7c03",
+      "codeVerifier": "EVnix6fFOkmfkci2T_2IaFvFahP4CmwhwzJCinstz_Y",
+      "redirectUri": "http://localhost:1455/auth/callback",
+      "authorizeUrl": "https://auth.openai.com/oauth/authorize?response_type=code&client_id=app_EMoamEEZ73f0CkXaXp7hrann&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email+offline_access&state=dbf35ed82fe09395769111c77cead6057052d77aa1c73e0e37be9846524b7c03&code_challenge=jX4ggt3SOatD4doifXxODcerB09qQJ_8-ZD8hR6O4N0&code_challenge_method=S256&id_token_add_organizations=true&codex_cli_simplified_flow=true&originator=curxor_os"
+    },
+    {
       "id": "eb970a4d-cb4f-4029-b382-7fe0f8299a9b",
       "providerId": "openai",
       "createdAt": "2026-06-28T22:28:58.733Z",
