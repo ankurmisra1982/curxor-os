@@ -56,7 +56,7 @@ export function ActivityFeed({
         <AttentionQueue items={attention} compact />
         {empty ? (
           <p className="font-sans text-xs leading-relaxed text-muted">
-            Your team is ready — enable Outreach sequences to start overnight work.
+            Your team is ready — run a demo tour or complete a desk action to populate the feed.
           </p>
         ) : (
           <ul className="space-y-2">
@@ -91,7 +91,8 @@ export function ActivityFeed({
         <div className="border border-line bg-void px-4 py-6 text-center">
           <p className="font-sans text-sm text-stark">Your team is ready</p>
           <p className="mt-2 font-sans text-xs text-muted">
-            Enable Outreach sequences or arm Capital rules — overnight work will show up here.
+            Overnight work fills when Capital, Creator, or Outreach complete a skill on your metal.
+            Run a demo tour or execute a practice trade to see rows here.
           </p>
         </div>
       ) : (

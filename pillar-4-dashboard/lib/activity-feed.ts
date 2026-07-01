@@ -6,6 +6,11 @@ import { readOsEventLog } from "./os-event-log-store";
 import type { OsEventKind, OsEventRecord } from "./os-event-bus-types";
 import { readUserSettings, updateUserSettings } from "./user-settings";
 import type { ActivityFeedRow, ActivityFeedTier } from "./activity-feed-types";
+import {
+  ACTIVITY_FEED_WINDOW_MS,
+  hydrateActivityFromQueues,
+  mergeActivityRows,
+} from "./activity-feed-hydrate";
 
 const APP_LABEL: Record<OsApprovalItem["appId"], string> = {
   "my-capital": "CAPITAL",
@@ -75,9 +80,18 @@ function narrateEvent(record: OsEventRecord): { claw: string; summary: string; e
       };
     case "claw.skill_completed":
       return {
-        claw: typeof p.appId === "string" ? String(p.appId).replace("my-", "").toUpperCase() : "CLAW",
+        claw:
+          typeof p.appId === "string"
+            ? p.appId === "my-capital"
+              ? "CAPITAL"
+              : p.appId === "my-work"
+                ? "OUTREACH"
+                : p.appId === "my-content-creator"
+                  ? "CREATOR"
+                  : String(p.appId).replace("my-", "").toUpperCase()
+            : "CLAW",
         summary: typeof p.summary === "string" ? p.summary : "Skill completed on your metal",
-        evidence: typeof p.skillId === "string" ? p.skillId : undefined,
+        evidence: typeof p.evidence === "string" ? p.evidence : typeof p.skillId === "string" ? p.skillId : undefined,
       };
     case "claw.approval_required":
       return {
@@ -126,10 +140,11 @@ export async function buildActivityFeed(limit = 40): Promise<{
   const [inbox, events] = await Promise.all([buildOsApprovalInbox(24), readOsEventLog(80)]);
 
   const attention = inbox.items.map((item) => approvalRow(item, sinceMs));
-  const items = events
+  const eventItems = events
     .map((record) => eventRow(record, sinceMs))
-    .reverse()
-    .slice(0, limit);
+    .reverse();
+  const hydrated = await hydrateActivityFromQueues(sinceMs, ACTIVITY_FEED_WINDOW_MS);
+  const items = mergeActivityRows(eventItems, hydrated, limit);
 
   return { homeLastVisitedAt, attention, items };
 }
