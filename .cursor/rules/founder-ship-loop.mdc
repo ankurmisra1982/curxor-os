@@ -24,8 +24,9 @@ cd C:\Users\ankur\curxor-os
 2. **Deploy** — run `ship-patch.ps1` (agent runs it; do not tell user to run unless blocked on sudo/password).
 3. **Verify** — confirm `cat /opt/curxor/.deploy-stamp` matches expected commit; `ssh curxor "bash /opt/curxor/scripts/box-smoke.sh"` if deploy smoke raced restart.
 4. **Commit** — laptop `git commit` only after gate + box green.
-5. **package.json / lockfile changed** — also run `.\scripts\sync-node-deps-to-box.ps1` (+ `sync-swc-to-box.ps1` if node_modules came from Windows).
-6. **Never** commit `config/local/ops-digital.env`, `.env.local`, or `.deploy-stamp`.
+5. **package.json / lockfile changed** — deploy warns; run `sync-node-deps-to-box.ps1` (+ `sync-swc-to-box.ps1` if node_modules came from Windows) or `ship-patch.ps1 -SyncDeps`.
+6. **Ops keys to box** — `.\scripts\push-ops-env-to-box.ps1` (laptop `config/local/ops-digital.env` → `/etc/curxor/digital.env`).
+7. **Never** commit `config/local/ops-digital.env`, `.env.local`, or `.deploy-stamp`.
 
 ## Passwordless deploy (installed on box)
 

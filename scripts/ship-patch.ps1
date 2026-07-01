@@ -5,6 +5,8 @@
 #   .\scripts\ship-patch.ps1 -Quick              # typecheck only (skip qa:local)
 #   .\scripts\ship-patch.ps1 -SkipQa -SkipTypecheck
 #   .\scripts\ship-patch.ps1 -OpsSmoke           # also run ops-wave1-smoke on box
+#   .\scripts\ship-patch.ps1 -Prebuilt           # ship WSL-built .next (skip on-box dashboard build)
+#   .\scripts\ship-patch.ps1 -SyncDeps           # auto sync node_modules before deploy
 #   .\scripts\ship-patch.ps1 -WhatIf
 #
 param(
@@ -21,6 +23,12 @@ param(
     [switch] $OpsSmoke,
 
     [switch] $SkipPack,
+
+    [switch] $Prebuilt,
+
+    [switch] $SyncDeps,
+
+    [switch] $SkipDepsCheck,
 
     [switch] $WhatIf
 )
@@ -94,6 +102,9 @@ $deployArgs = @{
     RepoRoot = $RepoRoot
 }
 if ($SkipPack) { $deployArgs.SkipPack = $true }
+if ($Prebuilt) { $deployArgs.Prebuilt = $true }
+if ($SyncDeps) { $deployArgs.SyncDeps = $true }
+if ($SkipDepsCheck) { $deployArgs.SkipDepsCheck = $true }
 if ($WhatIf) { $deployArgs.WhatIf = $true }
 
 & $deployScript @deployArgs

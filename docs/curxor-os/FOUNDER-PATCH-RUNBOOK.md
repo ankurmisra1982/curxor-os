@@ -145,6 +145,41 @@ ssh curxor "bash /opt/curxor/scripts/box-smoke.sh"
 
 Hard refresh **`http://10.0.0.1:3080/home`** (`Ctrl+Shift+R`) → click your changed page.
 
+### Prebuilt dashboard deploy (skip on-box `pnpm build`)
+
+When the box is offline or you want a faster ship, build **`.next` on Linux** (WSL), then deploy with **`-Prebuilt`**:
+
+```bash
+# WSL (from repo root) — produces linux SWC binaries in .next
+cd /mnt/c/Users/ankur/curxor-os/pillar-4-dashboard
+npm ci && npm run build
+```
+
+```powershell
+cd C:\Users\ankur\curxor-os
+.\scripts\ship-patch.ps1 -Quick -Prebuilt
+```
+
+`deploy-to-box.ps1` ships `pillar-4-dashboard/.next` as a separate tarball; `post-update.sh` skips the dashboard rebuild when prebuilt artifacts land. Still runs pillar-2-engine build and restarts the service.
+
+### Push ops bridge keys to box
+
+```powershell
+.\scripts\push-ops-env-to-box.ps1
+```
+
+Edits on laptop: `config/local/ops-digital.env` → `/etc/curxor/digital.env` (never commit either with secrets in git).
+
+### Deps changed since last deploy
+
+If `package.json` or `package-lock.json` changed since the box `.deploy-stamp` commit, deploy warns and offers:
+
+```powershell
+.\scripts\sync-node-deps-to-box.ps1
+.\scripts\sync-swc-to-box.ps1          # Windows node_modules → linux SWC
+.\scripts\ship-patch.ps1 -Quick -SyncDeps   # auto-run both before deploy
+```
+
 ---
 
 ## Finish a stuck deploy (sudo missed during script)

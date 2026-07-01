@@ -135,7 +135,11 @@ EOF
 }
 
 rebuild_node_project "${CURXOR_ROOT}/pillar-2-engine" "pillar-2-engine"
-rebuild_node_project "${CURXOR_ROOT}/pillar-4-dashboard" "pillar-4-dashboard"
+if [[ -n "${CURXOR_SKIP_DASHBOARD_BUILD:-}" && -d "${CURXOR_ROOT}/pillar-4-dashboard/.next" ]]; then
+  log "Skip pillar-4-dashboard rebuild (prebuilt .next from laptop)"
+else
+  rebuild_node_project "${CURXOR_ROOT}/pillar-4-dashboard" "pillar-4-dashboard"
+fi
 
 systemctl daemon-reload
 if systemctl is-active --quiet curxor-dashboard.service; then
