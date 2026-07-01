@@ -100,7 +100,7 @@ export function PatronApprovalCards({ compact = false }: PatronApprovalCardsProp
   return (
     <div className="border-b border-line bg-panel/80 px-3 py-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="font-mono text-[9px] uppercase tracking-widest text-cursor-glow">
+        <p className="curxor-kicker">
           Confirm · {total} pending
         </p>
         {total > visible.length ? (
@@ -115,7 +115,7 @@ export function PatronApprovalCards({ compact = false }: PatronApprovalCardsProp
           return (
             <li
               key={`${item.kind}:${item.id}`}
-              className="border border-[#bc13fe]/30 border-l-2 border-l-[#bc13fe] bg-surface px-3 py-2"
+              className="border border-cursor-glow/30 border-l-2 border-l-cursor-glow bg-surface px-3 py-2"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">

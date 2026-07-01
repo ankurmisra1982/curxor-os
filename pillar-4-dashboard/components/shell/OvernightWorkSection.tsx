@@ -14,6 +14,17 @@ import { FeedRow } from "./FeedRow";
 
 const SECTION_STORAGE_KEY = "curxor-overnight-work-expanded";
 
+function readSectionOpen(sinceCount: number): boolean {
+  try {
+    const stored = sessionStorage.getItem(SECTION_STORAGE_KEY);
+    if (stored === "1") return true;
+    if (stored === "0") return false;
+  } catch {
+    /* ignore */
+  }
+  return sinceCount > 0;
+}
+
 interface OvernightWorkSectionProps {
   items: ActivityFeedRow[];
   summary: ActivityFeedSummary;
@@ -45,7 +56,7 @@ function SummaryStats({ summary, compact }: { summary: ActivityFeedSummary; comp
         ) : null}
       </p>
       {chipLine && !compact ? (
-        <p className="font-mono text-[10px] uppercase tracking-wider text-muted">{chipLine}</p>
+        <p className="curxor-kicker-muted">{chipLine}</p>
       ) : null}
     </div>
   );
@@ -111,7 +122,7 @@ function ClawGroupSection({
           <span className="font-mono text-[9px] uppercase tracking-wider text-cursor-glow">{claw}</span>
           <span className="font-mono text-[9px] text-muted">({items.length})</span>
           {hasNew ? (
-            <span className="rounded bg-cursor-glow/15 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-cursor-glow">
+            <span className="curxor-kicker rounded bg-cursor-glow/15 px-1.5 py-0.5 text-cursor-glow">
               New
             </span>
           ) : null}
@@ -160,7 +171,7 @@ export function OvernightWorkSection({
   onExpandedChange,
 }: OvernightWorkSectionProps) {
   const sinceCount = summary.sinceLastVisit;
-  const [sectionOpen, setSectionOpen] = useState(sinceCount > 0);
+  const [sectionOpen, setSectionOpen] = useState(() => readSectionOpen(sinceCount));
   const groups = useMemo(() => groupActivityByClaw(items), [items]);
 
   useEffect(() => {
@@ -170,18 +181,11 @@ export function OvernightWorkSection({
   useEffect(() => {
     try {
       const stored = sessionStorage.getItem(SECTION_STORAGE_KEY);
-      if (stored === "1") {
-        setSectionOpen(true);
-        return;
-      }
-      if (stored === "0") {
-        setSectionOpen(false);
-        return;
-      }
-      setSectionOpen(sinceCount > 0);
+      if (stored === "1" || stored === "0") return;
     } catch {
-      setSectionOpen(sinceCount > 0);
+      /* ignore */
     }
+    setSectionOpen(sinceCount > 0);
   }, [sinceCount]);
 
   const toggleSection = useCallback(() => {
@@ -199,7 +203,7 @@ export function OvernightWorkSection({
   if (items.length === 0) {
     return (
       <div className={`border border-line bg-panel ${compact ? "px-3 py-2.5" : "px-4 py-3"} ${className}`}>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow">Overnight work</p>
+        <p className="curxor-eyebrow">Overnight work</p>
         <p className={`mt-1 font-sans text-muted ${compact ? "text-[11px]" : "text-xs"}`}>
           Your team is ready — run a demo tour or complete a desk action to populate activity.
         </p>
@@ -216,7 +220,7 @@ export function OvernightWorkSection({
         aria-expanded={sectionOpen}
       >
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-cursor-glow">Overnight work</p>
+          <p className="curxor-eyebrow">Overnight work</p>
           {!sectionOpen ? (
             <SummaryStats summary={summary} compact={compact} />
           ) : (

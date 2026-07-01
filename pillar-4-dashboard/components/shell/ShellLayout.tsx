@@ -52,7 +52,7 @@ export function ShellLayout({
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <EgressAirgapBanner />
           <ContextHintBar />
-          <main className="min-h-0 flex-1 overflow-y-auto bg-panel p-4 md:p-6">{children}</main>
+          <main className="curxor-shell-x min-h-0 flex-1 overflow-y-auto bg-panel py-4 md:py-6">{children}</main>
           <PatronDock />
         </div>
         {isLayoutExpert ? <ShellStatusRail /> : null}

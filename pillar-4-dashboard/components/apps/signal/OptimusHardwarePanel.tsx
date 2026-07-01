@@ -71,7 +71,7 @@ export function OptimusHardwarePanel({ config, skillTick, lastSkillId }: AgentAp
                   step={0.01}
                   value={torque[joint]}
                   onChange={(e) => setTorque((t) => ({ ...t, [joint]: Number(e.target.value) }))}
-                  className="w-full accent-[#bc13fe]"
+                  className="w-full accent-curxor"
                 />
               </label>
             ))}
@@ -94,7 +94,7 @@ export function OptimusHardwarePanel({ config, skillTick, lastSkillId }: AgentAp
               step={0.01}
               value={rlWeight}
               onChange={(e) => setRlWeight(Number(e.target.value))}
-              className="mt-2 w-full accent-[#bc13fe]"
+              className="mt-2 w-full accent-curxor"
             />
             <span className="mt-1 block text-cursor-glow">{rlWeight.toFixed(2)}</span>
           </label>

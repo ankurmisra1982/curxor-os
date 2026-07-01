@@ -72,8 +72,8 @@ export function HomeOverview({ selectedApps }: HomeOverviewProps) {
   useMarkHomeVisitedOnLeave();
 
   const hero = (
-    <section className={`border border-line bg-panel ${feedFirst ? "p-4" : "p-6"}`}>
-      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">CurXor OS</p>
+    <section className={feedFirst ? "curxor-panel" : "curxor-panel md:p-6"}>
+      <p className="curxor-eyebrow">CurXor OS</p>
       <h1
         className={`mt-2 font-sans font-semibold tracking-tight text-stark ${feedFirst ? "text-xl" : "text-2xl"}`}
       >
@@ -111,7 +111,7 @@ export function HomeOverview({ selectedApps }: HomeOverviewProps) {
     })
     .filter((row): row is NonNullable<typeof row> => row !== null);
 
-  const jobsSection = (
+  const jobsSection = (stackJobs = false) => (
     <section>
       <h2 className="font-sans text-sm font-medium text-stark">
         {isEssential ? "What do you want to work on?" : "Your team"}
@@ -121,13 +121,17 @@ export function HomeOverview({ selectedApps }: HomeOverviewProps) {
           ? "Pick a job — chat and one-tap actions open inside each workspace."
           : "Operate Claws — tap to open a workspace with chat and one-tap actions."}
       </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        className={`mt-4 grid gap-3 ${
+          stackJobs ? "grid-cols-1" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        }`}
+      >
         {isEssential
           ? essentialJobs.map(({ route, title, blurb }) => (
               <Link
                 key={route.href}
                 href={route.href}
-                className={`group border border-line bg-void transition hover:border-cursor-glow hover:bg-panel ${feedFirst ? "p-4" : "p-5"}`}
+                className={`group curxor-card ${feedFirst ? "" : "p-5"}`}
               >
                 <span className={`font-sans font-medium text-stark group-hover:text-cursor-glow ${feedFirst ? "text-base" : "text-lg"}`}>
                   {title}
@@ -144,7 +148,7 @@ export function HomeOverview({ selectedApps }: HomeOverviewProps) {
                 <Link
                   key={route.href}
                   href={route.href}
-                  className="group border border-line bg-void p-4 transition hover:border-cursor-glow hover:bg-panel"
+                  className="group curxor-card"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className="font-sans text-base font-medium text-stark group-hover:text-cursor-glow">
@@ -161,16 +165,16 @@ export function HomeOverview({ selectedApps }: HomeOverviewProps) {
   );
 
   return (
-    <div className={`mx-auto max-w-5xl ${feedFirst ? "space-y-5" : "space-y-8"}`}>
+    <div className={`${feedFirst ? "w-full space-y-5" : "mx-auto max-w-5xl space-y-8"}`}>
       <WelcomeSettingsBanner />
       {feedFirst ? (
-        <HomeMorningCanvas hero={hero} jobs={jobsSection} />
+        <HomeMorningCanvas hero={hero} jobs={jobsSection(true)} wideLayout />
       ) : (
         <>
           {hero}
           {feed}
           {approvals}
-          {jobsSection}
+          {jobsSection()}
         </>
       )}
 

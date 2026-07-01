@@ -30,6 +30,10 @@ const config: Config = {
         mono: ["var(--font-jetbrains)", "var(--font-fira)", "ui-monospace", "monospace"],
         display: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
       },
+      accentColor: {
+        curxor: "var(--color-cursor-glow)",
+        cursor: "var(--color-cursor)",
+      },
       boxShadow: {
         cursor: "var(--shadow-cursor)",
         panel: "inset 0 1px 0 rgba(255,255,255,0.04)",

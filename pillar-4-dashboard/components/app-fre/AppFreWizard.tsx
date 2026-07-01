@@ -220,7 +220,7 @@ function FreFieldInput({
           type="checkbox"
           checked={Boolean(value)}
           onChange={(e) => setConfig((c) => ({ ...c, [field.id]: e.target.checked }))}
-          className="accent-[#bc13fe]"
+          className="accent-curxor"
         />
         <span className="font-mono text-xs text-stark">{field.label}</span>
       </label>

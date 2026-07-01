@@ -392,7 +392,7 @@ export function NewClawWizard({
                   type="checkbox"
                   checked={autoChoose}
                   onChange={(e) => setAutoChoose(e.target.checked)}
-                  className="accent-[#bc13fe]"
+                  className="accent-curxor"
                 />
                 <span className="font-mono text-xs text-stark">
                   Intelligently auto-choose local LLMs from intent + budget

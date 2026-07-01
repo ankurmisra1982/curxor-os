@@ -104,6 +104,39 @@ body.expert-mode::before {
   font-family: var(--font-jetbrains);
 }
 
-.font-mono {
+.font-code {
   font-family: var(--font-fira);
+}
+
+@layer components {
+  /* Shell horizontal rhythm — one left edge across strips, main, dock */
+  .curxor-shell-x {
+    @apply px-4 md:px-6;
+  }
+
+  /* Brand eyebrows: CurXor OS, Overnight work, section kickers */
+  .curxor-eyebrow {
+    @apply font-mono text-[10px] uppercase tracking-[0.2em] text-cursor-glow;
+  }
+
+  .curxor-kicker {
+    @apply font-mono text-[9px] uppercase tracking-widest text-cursor-glow;
+  }
+
+  .curxor-kicker-muted {
+    @apply font-mono text-[9px] uppercase tracking-widest text-muted;
+  }
+
+  /* Elevated panels on the content canvas */
+  .curxor-panel {
+    @apply border border-line bg-panel p-4 md:p-5;
+  }
+
+  .curxor-card {
+    @apply border border-line bg-void p-4 transition hover:border-cursor-glow hover:bg-panel;
+  }
+
+  .accent-curxor {
+    accent-color: var(--color-cursor-glow);
+  }
 }

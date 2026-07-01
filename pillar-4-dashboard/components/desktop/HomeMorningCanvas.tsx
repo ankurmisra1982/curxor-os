@@ -11,6 +11,8 @@ import { useActivityFeed } from "@/hooks/useActivityFeed";
 interface HomeMorningCanvasProps {
   hero: ReactNode;
   jobs: ReactNode;
+  /** xl+ two-column: feed left, hero + jobs right */
+  wideLayout?: boolean;
 }
 
 function FeedSkeleton() {
@@ -22,28 +24,13 @@ function FeedSkeleton() {
   );
 }
 
-export function HomeMorningCanvas({ hero, jobs }: HomeMorningCanvasProps) {
+export function HomeMorningCanvas({ hero, jobs, wideLayout = false }: HomeMorningCanvasProps) {
   const { loading, attention, items, summary, empty } = useActivityFeed();
   const [overnightExpanded, setOvernightExpanded] = useState(false);
 
   const hasAttention = attention.length > 0;
   const hasNew = summary.sinceLastVisit > 0;
   const interruptMode = hasAttention || hasNew || overnightExpanded;
-
-  const overnight = (
-    <OvernightWorkSection
-      items={items}
-      summary={empty ? buildActivityFeedSummary([]) : summary}
-      onExpandedChange={setOvernightExpanded}
-    />
-  );
-
-  const feedStack = (
-    <div className="space-y-3">
-      <AttentionQueue items={attention} />
-      {overnight}
-    </div>
-  );
 
   if (loading) {
     return (
@@ -54,22 +41,39 @@ export function HomeMorningCanvas({ hero, jobs }: HomeMorningCanvasProps) {
     );
   }
 
-  if (interruptMode) {
+  const overnight = (
+    <OvernightWorkSection
+      items={items}
+      summary={empty ? buildActivityFeedSummary([]) : summary}
+      onExpandedChange={setOvernightExpanded}
+    />
+  );
+
+  // Keep OvernightWorkSection at a stable tree position — moving it between branches
+  // on expand used to remount it and flip onExpandedChange, causing a refresh loop.
+  if (wideLayout) {
     return (
-      <div className="space-y-4">
-        {feedStack}
-        {hero}
-        {jobs}
+      <div className="space-y-4 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(300px,26rem)] lg:items-start lg:gap-5 lg:space-y-0 xl:gap-6">
+        <div className="space-y-4">
+          {interruptMode ? <AttentionQueue items={attention} /> : null}
+          {overnight}
+          {interruptMode ? hero : null}
+        </div>
+        <div className="space-y-4">
+          {!interruptMode ? hero : null}
+          {jobs}
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {hero}
-      {!empty ? overnight : null}
+      {interruptMode ? <AttentionQueue items={attention} /> : null}
+      {!interruptMode ? hero : null}
+      {overnight}
+      {interruptMode ? hero : null}
       {jobs}
-      {empty ? overnight : null}
     </div>
   );
 }

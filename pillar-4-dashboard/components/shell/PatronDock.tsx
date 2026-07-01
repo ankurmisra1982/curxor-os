@@ -100,7 +100,7 @@ export function PatronDock() {
 
   return (
 
-    <div className="shrink-0 border-t border-line bg-panel px-3 py-3 md:px-6">
+    <div className="curxor-shell-x shrink-0 border-t border-line bg-panel py-3">
 
       <form
 
@@ -112,7 +112,7 @@ export function PatronDock() {
 
         }}
 
-        className="mx-auto flex max-w-3xl items-center gap-2"
+        className="flex w-full items-center gap-2"
 
       >
 

@@ -41,7 +41,7 @@ export function ShellStatusRail() {
       aria-label="Mission status"
     >
       <div className="border-b border-line p-4">
-        <p className="font-mono text-[9px] uppercase tracking-widest text-muted">Egress boundary</p>
+        <p className="curxor-kicker-muted">Egress boundary</p>
         <p
           className={`mt-2 font-sans text-sm font-medium ${egress?.paused ? "text-amber-400" : "text-emerald-400"}`}
         >

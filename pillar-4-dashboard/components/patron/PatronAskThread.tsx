@@ -114,7 +114,7 @@ export function PatronAskThread({ compactApprovals = false }: { compactApprovals
             key={idx}
             className={
               msg.role === "assistant"
-                ? "rounded border-l-2 border-[#bc13fe] bg-panel px-3 py-2"
+                ? "rounded border-l-2 border-cursor-glow bg-panel px-3 py-2"
                 : "rounded border border-line bg-surface px-3 py-2"
             }
           >
@@ -144,7 +144,7 @@ export function PatronAskThread({ compactApprovals = false }: { compactApprovals
                 type="checkbox"
                 checked={voiceEnabled}
                 onChange={(e) => setVoiceEnabled(e.target.checked)}
-                className="accent-[#bc13fe]"
+                className="accent-curxor"
               />
               Voice mode
             </label>

@@ -16,7 +16,7 @@ export function AttentionQueue({ items, compact = false, className = "" }: Atten
   return (
     <section className={`border border-amber-500/40 bg-amber-500/5 ${className}`}>
       <header className={`border-b border-amber-500/30 ${compact ? "px-3 py-2" : "px-4 py-3"}`}>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-amber-400">Needs your OK</p>
+        <p className="curxor-kicker text-amber-400">Needs your OK</p>
         {!compact ? (
           <p className="mt-1 font-sans text-xs text-muted">
             Trades, sends, and publishes waiting on sovereign approval.

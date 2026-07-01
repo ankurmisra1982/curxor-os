@@ -62,7 +62,7 @@ export function SovereigntyStrip() {
 
   return (
     <div
-      className="shrink-0 border-b border-line bg-void px-3 py-2 md:px-4"
+      className="curxor-shell-x shrink-0 border-b border-line bg-void py-2"
       aria-label="Sovereignty status"
     >
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-sans text-xs text-muted">

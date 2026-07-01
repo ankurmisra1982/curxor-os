@@ -39,9 +39,9 @@ export function FeedRow({ row, compact = false }: FeedRowProps) {
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[9px] uppercase tracking-wider text-cursor-glow">{row.claw}</span>
+            <span className="curxor-kicker text-cursor-glow">{row.claw}</span>
             {row.sinceLastVisit ? (
-              <span className="rounded bg-cursor-glow/15 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-cursor-glow">
+              <span className="curxor-kicker rounded bg-cursor-glow/15 px-1.5 py-0.5 text-cursor-glow">
                 New
               </span>
             ) : null}

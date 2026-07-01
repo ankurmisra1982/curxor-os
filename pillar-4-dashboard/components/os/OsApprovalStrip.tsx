@@ -89,9 +89,9 @@ export function OsApprovalStrip({ variant = "home", className = "" }: OsApproval
   }
 
   return (
-    <section className={`border border-amber-500/40 bg-panel ${className}`}>
-      <header className="border-b border-line px-4 py-3">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-amber-400">Needs your OK</p>
+    <section className={`border border-amber-500/40 bg-amber-500/5 ${className}`}>
+      <header className="border-b border-amber-500/30 px-4 py-3">
+        <p className="curxor-kicker text-amber-400">Needs your OK</p>
         <p className="mt-1 font-sans text-sm text-stark">{summary}</p>
         <p className="mt-1 font-sans text-xs text-muted">
           Trades, outbound sends, and publishes waiting on sovereign approval — one tap from Telegram or each desk.
@@ -105,7 +105,7 @@ export function OsApprovalStrip({ variant = "home", className = "" }: OsApproval
               className="flex flex-wrap items-start justify-between gap-2 px-4 py-3 transition hover:bg-void"
             >
               <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-cursor-glow">
+                <p className="curxor-kicker text-cursor-glow">
                   {APP_LABEL[item.appId]} · {KIND_LABEL[item.kind]}
                 </p>
                 <p className="mt-1 font-sans text-sm text-stark">{item.label}</p>

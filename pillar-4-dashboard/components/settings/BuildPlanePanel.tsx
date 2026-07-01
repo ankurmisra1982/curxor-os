@@ -140,7 +140,7 @@ export function BuildPlanePanel({
             setEnabled(next);
             void save({ enabled: next });
           }}
-          className="accent-[#bc13fe]"
+          className="accent-curxor"
         />
         Enable Build Plane overlay
       </label>
@@ -254,7 +254,7 @@ export function BuildPlanePanel({
               setAllowDelegation(next);
               void save({ allowDelegation: next });
             }}
-            className="accent-[#bc13fe]"
+            className="accent-curxor"
           />
           Allow Master AI delegation (G5+ suggest · G6 full queue)
         </label>
@@ -268,7 +268,7 @@ export function BuildPlanePanel({
               setAllowWriteTools(next);
               void save({ allowWriteTools: next });
             }}
-            className="accent-[#bc13fe]"
+            className="accent-curxor"
           />
           Allow inbound MCP write tools (default off)
         </label>

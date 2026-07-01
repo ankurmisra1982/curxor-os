@@ -268,7 +268,7 @@ export function ForgeImportPanel({ onImported }: ForgeImportPanelProps) {
               type="checkbox"
               checked={warningsConfirmed}
               onChange={(e) => setWarningsConfirmed(e.target.checked)}
-              className="accent-[#bc13fe]"
+              className="accent-curxor"
             />
             I reviewed warnings — proceed with import
           </label>

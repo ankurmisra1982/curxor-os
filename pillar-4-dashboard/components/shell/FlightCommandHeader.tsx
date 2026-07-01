@@ -44,9 +44,9 @@ export function FlightCommandHeader({
       : "Expert";
 
   return (
-    <header className="flex shrink-0 items-center justify-between border-b border-line bg-panel px-3 py-3 md:px-4">
+    <header className="curxor-shell-x flex shrink-0 items-center justify-between border-b border-line bg-panel py-3">
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cursor-glow">CurXor OS</p>
+        <p className="curxor-eyebrow">CurXor OS</p>
         <h1 className="font-sans text-base font-semibold tracking-tight text-stark">{title}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-2 sm:gap-3">

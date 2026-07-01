@@ -19,8 +19,8 @@ export function UniversalStrip() {
   const items = buildUniversalNavEntries();
 
   return (
-    <div className="shrink-0 border-b border-line bg-surface px-3 py-2 md:px-4">
-      <div className="mb-1.5 font-mono text-[9px] uppercase tracking-widest text-muted">
+    <div className="curxor-shell-x shrink-0 border-b border-line bg-void py-2">
+      <div className="curxor-kicker-muted mb-1.5">
         Universal · always on
       </div>
       <nav className="flex gap-1.5 overflow-x-auto pb-0.5" aria-label="Universal apps">

@@ -77,7 +77,7 @@ export function LegacyFlightCommandLayout({
       <AppNav selectedApps={selectedApps} />
       <ContextHintBar />
       {isLayoutExpert ? <LiveTelemetryStrip /> : null}
-      <main className="min-h-0 flex-1 overflow-y-auto bg-panel p-4 md:p-6">{children}</main>
+      <main className="curxor-shell-x min-h-0 flex-1 overflow-y-auto bg-panel py-4 md:py-6">{children}</main>
     </div>
   );
 }
