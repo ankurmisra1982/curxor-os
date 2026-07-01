@@ -5,6 +5,7 @@ import type { AgentChatTurn } from "./app-agent-types";
 import { ensureWorkspace, readWorkspace } from "./agent-runtime/workspace-store";
 import { buildContextPromptBlock } from "./claw-context-service";
 import { buildOsApprovalInbox } from "./os-approval-inbox";
+import { buildActivityFeed } from "./activity-feed";
 import { buildPatronWeeklyBundle } from "./patron-weekly-bundle";
 import { chatCompletionRouted } from "./inference-router";
 import {
@@ -81,11 +82,28 @@ function extractReply(content: string): string {
   return trimmed;
 }
 
-function fallbackPatronReply(req: PatronAssistRequest, userMd: string): PatronAssistResult {
+async function fallbackPatronReply(req: PatronAssistRequest, userMd: string): Promise<PatronAssistResult> {
   const name = operatorNameFromUserMd(userMd);
   const greeting = name ? `${name}, ` : "";
   const msg = req.message.trim().toLowerCase();
   const routeAppId = req.routeAppId ?? null;
+
+  if (/overnight|what did .+ do|while i slept|while you slept|what happened/.test(msg)) {
+    try {
+      const feed = await buildActivityFeed(10);
+      const rows = [...feed.attention, ...feed.items].slice(0, 8);
+      if (rows.length > 0) {
+        const lines = rows.map((r) => `• **${r.claw}** — ${r.summary}`);
+        return {
+          reply: `${greeting}From your activity feed (local, no LLM):\n${lines.join("\n")}\n\nOpen a desk for details — I coordinate, I don't execute.`,
+          inference: "fallback",
+          routeAppId,
+        };
+      }
+    } catch {
+      /* fall through */
+    }
+  }
 
   if (/what claw|which claw|where am i|current claw/.test(msg)) {
     if (routeAppId && isValidAppId(routeAppId)) {
@@ -112,6 +130,20 @@ function fallbackPatronReply(req: PatronAssistRequest, userMd: string): PatronAs
   }
 
   if (/summarize|summary|my day|brief/.test(msg)) {
+    try {
+      const feed = await buildActivityFeed(8);
+      const rows = [...feed.attention, ...feed.items].slice(0, 6);
+      if (rows.length > 0) {
+        const lines = rows.map((r) => `• ${r.claw}: ${r.summary}`);
+        return {
+          reply: `${greeting}Quick brief from your feed:\n${lines.join("\n")}`,
+          inference: "fallback",
+          routeAppId,
+        };
+      }
+    } catch {
+      /* fall through */
+    }
     return {
       reply: `${greeting}I can't pull a full brief while inference is down. Check Health for system status, then open your active Claw for desk-specific summaries.`,
       inference: "fallback",
@@ -180,5 +212,5 @@ export async function assistPatron(req: PatronAssistRequest): Promise<PatronAssi
     // fall through to rule-based
   }
 
-  return fallbackPatronReply(req, userMd);
+  return await fallbackPatronReply(req, userMd);
 }
