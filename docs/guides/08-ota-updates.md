@@ -92,8 +92,9 @@ sudo /opt/curxor/scripts/ota-updater.sh --dry-run
 # Watch log
 sudo tail -f /var/log/curxor/ota-update.log
 
-# View in dashboard
-# Flight Command → System Health
+# Operator UI (v1.0.0+)
+# Settings → Updates — Check for updates · Install · live log
+# Flight Command → System Health also tails the same log
 ```
 
 ## Configuration reference
@@ -123,5 +124,5 @@ SSE route `/api/stream/ota-logs` tails the log file in real time. See [Flight Co
 
 ## Related guides
 
-- [Installation](01-installation.md)
+- [Installation](01-installation.md#golden-path-notes-ms-s1-max--verified-2026-07-01) — MS-S1 MAX golden path (verified field notes)
 - [Operations & Troubleshooting](09-operations-troubleshooting.md)

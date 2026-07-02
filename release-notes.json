@@ -140,5 +140,13 @@
       "GET/POST /api/build/delegation — approve/reject/complete audit trail on appliance",
       "Cafe Master AI chamber — suggest build task from patron brief with confirm gate in Settings"
     ]
+  },
+  "1.0.0": {
+    "highlights": [
+      "Golden release G2 — CurXor OS v1.0.0 stable after MS-S1 G1 qa-smoke pass",
+      "Signed OTA release pipeline — CI tarball, SHA256 manifest, GitHub Releases publish path",
+      "Settings → Updates — current version, Check for updates, Install with confirm, live OTA log",
+      "ota-updater.sh backup · verify · rollback on appliance; operator install without SSH"
+    ]
   }
 }

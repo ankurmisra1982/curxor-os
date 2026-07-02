@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Resolve version from tag
+        id: meta
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          echo "version=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "Release version: ${TAG}"
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Gate — pillar-2-engine typecheck
+        working-directory: pillar-2-engine
+        run: |
+          npm ci
+          npm run typecheck
+
+      - name: Gate — pillar-4-dashboard typecheck + build
+        working-directory: pillar-4-dashboard
+        env:
+          CURXOR_MESH_BROKER_IP: 127.0.0.1
+          CURXOR_FRE_STATE_PATH: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/fre-state.json
+          CURXOR_APP_FRE_DIR: ${{ github.workspace }}/pillar-4-dashboard/scripts/dev-qa/app-fre
+        run: |
+          npm ci
+          npm run typecheck
+          npm run build
+
+      - name: Build OTA tarball + manifest
+        env:
+          CURXOR_RELEASE_BASE_URL: https://github.com/${{ github.repository }}/releases/download/v${{ steps.meta.outputs.version }}
+          CURXOR_RELEASE_SIGNING_KEY: ${{ secrets.CURXOR_RELEASE_SIGNING_KEY }}
+        run: |
+          chmod +x scripts/build-release-artifact.sh
+          ./scripts/build-release-artifact.sh "${{ steps.meta.outputs.version }}"
+
+      - name: Upload GitHub Release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/release/curxor-os-${{ steps.meta.outputs.version }}.tar.gz
+            dist/release/version.json
+          generate_release_notes: true
+
+      - name: Release artifact summary
+        run: |
+          echo "## OTA release ${{ steps.meta.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Asset | Path |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Tarball | \`curxor-os-${{ steps.meta.outputs.version }}.tar.gz\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Manifest | \`version.json\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "SHA256: \`$(sha256sum dist/release/curxor-os-${{ steps.meta.outputs.version }}.tar.gz | awk '{print $1}')\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Self-host: copy both files to your mirror \`stable/\` directory and set \`CURXOR_OTA_VERSION_URL\` in \`/etc/curxor/ota.env\`." >> "$GITHUB_STEP_SUMMARY"

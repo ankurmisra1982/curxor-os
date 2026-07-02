@@ -2,7 +2,7 @@
 
 > **Room:** Vision & Strategy · capture only · **no build** until gated  
 > **Operator guide (today):** [08-ota-updates.md](../guides/08-ota-updates.md)  
-> **Roadmap:** Program **UP** in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md) · ties **GR** golden release  
+> **Roadmap:** Program **UP** in [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) · ties **GR** golden release  
 > **Status:** scoped · **Last updated:** June 2026
 
 ---

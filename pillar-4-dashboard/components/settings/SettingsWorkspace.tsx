@@ -9,6 +9,7 @@ import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
 import { AgentRuntimeSettingsPanels } from "@/components/settings/AgentRuntimeSettingsPanels";
 import { BuildPlanePanel } from "@/components/settings/BuildPlanePanel";
 import { IntegrationsSettingsPanel } from "@/components/settings/IntegrationsSettingsPanel";
+import { UpdatesSettingsPanel } from "@/components/settings/UpdatesSettingsPanel";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
 import {
@@ -31,7 +32,7 @@ import type {
   UserSettings,
 } from "@/lib/user-settings-types";
 
-type SettingsTab = "claws" | "integrations" | "intelligence" | "appearance" | "agent" | "general";
+type SettingsTab = "claws" | "integrations" | "intelligence" | "appearance" | "agent" | "general" | "updates";
 
 const SETTINGS_TABS: SettingsTab[] = [
   "claws",
@@ -39,6 +40,7 @@ const SETTINGS_TABS: SettingsTab[] = [
   "intelligence",
   "appearance",
   "agent",
+  "updates",
   "general",
 ];
 
@@ -360,6 +362,7 @@ export function SettingsWorkspace() {
     { id: "intelligence", label: "Intelligence", hint: "Local, frontier, or both" },
     { id: "appearance", label: "Appearance", hint: "Theme and display mode" },
     { id: "agent", label: "Agent runtime", hint: "Channels, CCP, heartbeat" },
+    { id: "updates", label: "Updates", hint: "Check and install CurXor OS patches" },
     { id: "general", label: "General", hint: "Builder overlay + appliance prefs" },
   ];
 
@@ -1030,6 +1033,8 @@ export function SettingsWorkspace() {
               <AgentRuntimeSettingsPanels />
             </div>
           ) : null}
+
+          {tab === "updates" ? <UpdatesSettingsPanel /> : null}
 
           {tab === "general" ? (
             <div className="space-y-6 p-6">

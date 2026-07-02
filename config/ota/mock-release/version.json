@@ -1,11 +1,16 @@
 {
-  "version": "0.2.0",
-  "released": "2026-06-19",
+  "version": "1.0.1",
+  "released": "2026-07-01",
   "channel": "stable",
-  "notes": "Mock release manifest for OTA integration testing.",
+  "min_version": "1.0.0",
+  "severity": "patch",
+  "requires_reboot": false,
+  "release_notes_url": "https://github.com/curxor/curxor-os/releases/tag/v1.0.1",
+  "notes": "Mock release manifest for OTA integration testing (box dry-run / Settings Updates smoke).",
   "artifact": {
-    "url": "https://github.com/curxor/curxor-os/releases/download/v0.2.0/curxor-os-0.2.0.tar.gz",
+    "url": "https://github.com/curxor/curxor-os/releases/download/v1.0.1/curxor-os-1.0.1.tar.gz",
     "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
   },
-  "post_update": "scripts/post-update.sh"
+  "post_update": "scripts/post-update.sh",
+  "signature": ""
 }

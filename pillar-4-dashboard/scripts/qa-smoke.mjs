@@ -57,6 +57,26 @@ await check("settings GET", async () => {
   );
 });
 
+await check("system updates status", async () => {
+  const data = await getJson("/api/system/updates");
+  return (
+    data.ok === true &&
+    typeof data.installed?.version === "string" &&
+    typeof data.updateAvailable === "boolean" &&
+    typeof data.otaConfigured === "boolean"
+  );
+});
+
+await check("system updates check", async () => {
+  const { ok, json } = await postJson("/api/system/updates/check", {});
+  return ok && typeof json.message === "string" && typeof json.updateAvailable === "boolean";
+});
+
+await check("system updates install rejects without confirm", async () => {
+  const { status, json } = await postJson("/api/system/updates/install", {});
+  return status === 400 && json.error === "confirm_required";
+});
+
 await check("settings sakana frontier provider", async () => {
   const data = await getJson("/api/settings");
   const sakana = data.providers?.find((p) => p.id === "sakana");

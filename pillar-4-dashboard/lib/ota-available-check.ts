@@ -11,6 +11,9 @@ interface VersionManifest {
   version?: string;
   channel?: string;
   released?: string;
+  release_notes_url?: string;
+  severity?: string;
+  installed_at?: string | null;
 }
 
 function repoRootFromDashboard(): string {
