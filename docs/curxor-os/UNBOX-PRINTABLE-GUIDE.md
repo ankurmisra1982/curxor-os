@@ -340,7 +340,7 @@ sudo apt update && sudo apt install -y firefox
 
 ### Step 5.4 — Restart or shut down (monitor connected)
 
-Flight Command **does not** ship Shut down / Restart buttons yet (roadmap [IDEA-A06](./FUTURE-ROADMAP.md#idea-a06-settings--appliance-power-controls)). Until then:
+Flight Command **does not** ship Shut down / Restart buttons yet (roadmap [IDEA-A06](./CURRENT-ROADMAP.md#idea-a06-settings--appliance-power-controls)). Until then:
 
 | You want… | Ubuntu desktop (default install) | Kiosk fullscreen ([19-kiosk-mode.md](../guides/19-kiosk-mode.md)) |
 |-----------|-----------------------------------|-------------------------------------------------------------------|
@@ -453,6 +453,7 @@ Real MS-S1 path proved on metal — see **[UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG
 
 | Doc | Purpose |
 |-----|---------|
+| [01-installation.md](../guides/01-installation.md#golden-path-notes-ms-s1-max--verified-2026-07-01) | **Canonical post-unbox — GOLDEN PATH NOTES** |
 | [UNBOX-FIELD-LOG.md](./UNBOX-FIELD-LOG.md) | **First hardware unbox — status map + fixes** |
 | [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) | Daily laptop ↔ box loop after today |
 | [PRE-UNBOX-48H.md](./PRE-UNBOX-48H.md) | Technical gate playbook |

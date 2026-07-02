@@ -183,7 +183,7 @@ Use separate partition or disk for models if imaging many SKUs.
 
 ## Related guides
 
+- [Installation — GOLDEN PATH NOTES](01-installation.md#golden-path-notes-ms-s1-max--verified-2026-07-01)
 - [Inference & Compute](04-inference-compute.md)
-- [Installation](01-installation.md)
 - [Networking](03-networking.md)
 - [Operations & Troubleshooting](09-operations-troubleshooting.md)

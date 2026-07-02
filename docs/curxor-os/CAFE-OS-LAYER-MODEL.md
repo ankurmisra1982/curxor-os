@@ -1,7 +1,7 @@
 # Cafe, Ten Claws & Forge Fusion — OS layer model (locked)
 
 > **Room:** Vision & Strategy · capture only · **no build** until gated  
-> **Roadmap:** Program **OL** (OS layers) · **FF** (Forge Fusion) · **OL-Kin** · **ES** · **LR** in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
+> **Roadmap:** Program **OL** (G2) · **FF** · **OL-Kin** in [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) · G4+ in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
 > **Roster lock:** [IDEA-G07](./FUTURE-ROADMAP.md#idea-g07-operate-claw-roster--estate--learn-founder-locked) (Jun 2026)  
 > **Status:** **founder locked** (June 2026) · **Last updated:** June 2026
 

@@ -1,7 +1,7 @@
 # External Bridges — Firecrawl & Grok Ecosystem (ideas capture)
 
 > **Room:** Vision & Strategy · capture only · **no build** until gated  
-> **Roadmap:** Program **FC** (Firecrawl) · Program **GK** (Grok ecosystem) in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
+> **Roadmap:** Program **FC** (Firecrawl) · Program **GK** (Grok) in [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) · G4+ in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
 > **Last updated:** June 2026 · **Status:** scoped
 
 ---

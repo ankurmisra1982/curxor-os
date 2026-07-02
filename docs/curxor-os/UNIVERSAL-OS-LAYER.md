@@ -219,7 +219,7 @@ Does it have a vertical job-to-be-done (trade, outbound, publish, tutor, …)?
 | **BP5–BP7** | Build Plane runtime · delegation board · build spaces |
 | **MA-COS** | Chief of Staff · patron ops board (operate Kanban) |
 
-Full idea index: [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)
+Full idea index: [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) · [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)
 
 ---
 

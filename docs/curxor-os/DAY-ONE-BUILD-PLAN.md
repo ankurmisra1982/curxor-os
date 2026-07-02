@@ -1,6 +1,6 @@
 # CurXor OS — Day-One Build Plan (revised)
 
-> **Status:** Active · **build frozen** until on-device golden path · ideas → [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
+> **Status:** Active · G1 golden path complete · **current sprints** → [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) · future ideas → [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
 > **Owner:** Ankur (vision) + CTO agent (architecture / sequencing)  
 > **Last updated:** June 2026
 
@@ -285,7 +285,8 @@ Out of scope: [Tier A excellence, hardware install, storefront]
 
 ## References
 
-- Future ideas (Vision room): [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md) · Program **HS** Inter-Claw Handshakes
+- Current roadmap (build-ready): [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) · Program **HS** Inter-Claw Handshakes
+- Future ideas (Vision room): [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)
 - Inter-Claw spec: [INTER-CLAW-HANDSHAKES.md](./INTER-CLAW-HANDSHAKES.md)
 - Signal AI Device Hub: [SIGNAL-AI-DEVICE-HUB.md](./SIGNAL-AI-DEVICE-HUB.md)
 - Growth framework: [GROWTH-LEVEL-FRAMEWORK.md](./GROWTH-LEVEL-FRAMEWORK.md)

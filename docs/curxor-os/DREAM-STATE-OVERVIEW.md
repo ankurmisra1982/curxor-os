@@ -292,7 +292,8 @@ CLAW CAFE          →  the hall — where the ensemble has presence
 | Doc | Role |
 |-----|------|
 | [UNIVERSAL-OS-LAYER.md](./UNIVERSAL-OS-LAYER.md) | Universal vs operate vs platform map |
-| [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md) | Gates · programs · build handoff |
+| [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) | G2–G3 sprints · build handoff |
+| [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md) | Future capture · G4+ programs |
 | [SIGNAL-AI-DEVICE-HUB.md](./SIGNAL-AI-DEVICE-HUB.md) | Signal · devices · neural link |
 | [CLAW-CAFE-PRD.md](./CLAW-CAFE-PRD.md) | Spatial home · ascension |
 | [FEATURE-FUNCTION.md](../FEATURE-FUNCTION.md) | Shipped scope · maturity matrix |

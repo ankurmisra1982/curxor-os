@@ -1,7 +1,7 @@
 # Inter-Claw Handshakes — Vision (ideas capture)
 
 > **Room:** Vision & Strategy · capture only · **no build** until G4  
-> **Roadmap:** Program **HS** · waves H1–H6 in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
+> **Roadmap:** Program **HS** · waves H1–H6 in [CURRENT-ROADMAP.md](./CURRENT-ROADMAP.md) (G2–G3) · H5+ in [FUTURE-ROADMAP.md](./FUTURE-ROADMAP.md)  
 > **Related:** [CLAW-CAFE-PRD.md](./CLAW-CAFE-PRD.md) · CCP in `pillar-4-dashboard/lib/claw-mesh-protocol.ts`  
 > **Last updated:** June 2026 · **Status:** scoped · slotted for post-G2 build
 
