@@ -12,7 +12,8 @@ Guides for deploying, operating, and extending the CurXor OS sovereign edge appl
 |-------|-------------------|
 | **[Dream state overview](curxor-os/DREAM-STATE-OVERVIEW.md)** | **End-state vision — hardware · sovereign OS · locked hero · three acts** |
 | **[Feature & Function](FEATURE-FUNCTION.md)** | **Full product scope, maturity matrix, API catalog, Claws** |
-| **[Future roadmap](curxor-os/FUTURE-ROADMAP.md)** | **Ideas capture, gates, Program CL / HS / SIG / …** |
+| **[Current roadmap](curxor-os/CURRENT-ROADMAP.md)** | **Scoped G1–G3 sprints · build-chat handoffs · Program HS / FC / BP5 / …** |
+| **[Future roadmap](curxor-os/FUTURE-ROADMAP.md)** | **Ideas capture · G4+ programs · parking lot · promote to CURRENT when scoped** |
 | **[Compute ladder](curxor-os/COMPUTE-LADDER.md)** | **Standard · Pro 128 · Studio — open-weight tiers · press copy (→ storefront)** |
 | **[Claw Commons vision](curxor-os/CLAW-COMMONS-VISION.md)** | **Operator Forum + Clawverse — persona capsules, portal UX, moderation** |
 | **[Universal OS layer](curxor-os/UNIVERSAL-OS-LAYER.md)** | **Cafe · Signal · Kin · shell · platform · infra — not operate Claws** |
