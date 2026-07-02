@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-07-02T03:26:52.556Z",
+  "updatedAt": "2026-07-02T05:20:32.999Z",
   "digest": {
     "digest": [
       {
@@ -13,7 +13,7 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-07-02T03:25:56.896Z"
+        "publishedAt": "2026-07-02T05:12:58.000Z"
       },
       {
         "id": "f70709ef99f6d4",
@@ -24,7 +24,65 @@
           "API"
         ],
         "sentiment": "neutral",
-        "publishedAt": "2026-07-02T03:25:56.896Z"
+        "publishedAt": "2026-07-02T05:12:58.000Z"
+      },
+      {
+        "id": "9b438538a23e4a",
+        "headline": "OpenAI proposes 5% stake to Trump administration to ease Washington pressure: report",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/02/openai-proposes-us-government-own-5percent-stake-to-address-political-blowback.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-02T05:06:51.000Z"
+      },
+      {
+        "id": "afcaff2c5c4028",
+        "headline": "Russia launches massive strike on Ukraine as Poland scrambles jets, Finland restricts airspace",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/02/russia-launches-missile-drone-strikes-ukraine-kyiv.html",
+        "tickers": [],
+        "sentiment": "bullish",
+        "publishedAt": "2026-07-02T05:06:23.000Z"
+      },
+      {
+        "id": "61612104f5a02f",
+        "headline": "Shares of BYD and Xiaomi surge as June delivery figures fuel optimism",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/02/china-ev-stocks-xiaomi-byd-june-deliveries-production.html",
+        "tickers": [
+          "BYD"
+        ],
+        "sentiment": "bullish",
+        "publishedAt": "2026-07-02T04:02:35.000Z"
+      },
+      {
+        "id": "f341aa2443e7fc",
+        "headline": "Oil falls as easing Middle East tensions send Brent to its worst quarter since 2020",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/02/oil-prices-fall-after-us-iran-talks-conclude-in-doha.html",
+        "tickers": [],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-02T04:01:46.000Z"
+      },
+      {
+        "id": "18393c0320ccd9",
+        "headline": "Amazon devices chief Panos Panay says AI is moving beyond screens and apps",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/video/2026/07/02/amazon-panos-panay-the-tech-download.html",
+        "tickers": [
+          "SVP"
+        ],
+        "sentiment": "neutral",
+        "publishedAt": "2026-07-02T04:00:01.000Z"
+      },
+      {
+        "id": "8c39b1935dce08",
+        "headline": "The dollar looks ready to break higher. Here&apos;s why Wall Street is turning bullish",
+        "source": "CNBC",
+        "url": "https://www.cnbc.com/2026/07/02/the-dollar-looks-ready-to-break-higher-heres-why-wall-street-is-turning-bullish.html",
+        "tickers": [],
+        "sentiment": "bullish",
+        "publishedAt": "2026-07-02T03:43:24.000Z"
       },
       {
         "id": "300dd8c07f4618",
@@ -47,15 +105,6 @@
         "publishedAt": "2026-07-02T03:04:59.000Z"
       },
       {
-        "id": "f341aa2443e7fc",
-        "headline": "Oil falls as easing Middle East tensions send Brent to its worst quarter since 2020",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/07/02/oil-prices-fall-after-us-iran-talks-conclude-in-doha.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-07-02T02:01:12.000Z"
-      },
-      {
         "id": "35b6f61d49ba8f",
         "headline": "Alibaba-affiliate Ant Group rushes into humanoid robots with a dozen deals in 18 months",
         "source": "CNBC",
@@ -72,45 +121,6 @@
         "tickers": [],
         "sentiment": "neutral",
         "publishedAt": "2026-07-02T00:10:37.000Z"
-      },
-      {
-        "id": "9be5869bb4cefc",
-        "headline": "Inside India newsletter: Amazon, Walmart-owned Flipkart get ready to shake upIndia&apos;s delivery-in-minutes sector",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/07/02/india-amazon-walmart-flipkart-quick-commerce.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-07-02T00:10:37.000Z"
-      },
-      {
-        "id": "2b3c882483c1ff",
-        "headline": "South Korean government discriminated against Coupang, U.S. companies, House report finds",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/07/01/coupang-south-korea-coupang-house-judiciary.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-07-02T00:01:59.000Z"
-      },
-      {
-        "id": "efd5e35f112ca5",
-        "headline": "Why Japanese airlines&apos; $400 fuel surcharges are hitting now — and when they will end",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/07/02/japan-airlines-increase-fuel-surcharges-despite-falling-jet-fuel-costs.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-07-01T23:27:45.000Z"
-      },
-      {
-        "id": "efbcff84ee0620",
-        "headline": "Thursday&apos;s big stock stories: What’s likely to move the market in the next trading session",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/07/01/thursdays-big-stock-stories-whats-likely-to-move-the-market.html",
-        "tickers": [
-          "CNBC",
-          "ET"
-        ],
-        "sentiment": "neutral",
-        "publishedAt": "2026-07-01T23:13:46.000Z"
       },
       {
         "id": "76981e2cd6f000",
@@ -153,15 +163,6 @@
         "tickers": [],
         "sentiment": "neutral",
         "publishedAt": "2026-07-01T12:53:23.000Z"
-      },
-      {
-        "id": "f37a4afbd2fae5",
-        "headline": "Trump Accounts for kids launch July 4: What parents need to know",
-        "source": "CNBC",
-        "url": "https://www.cnbc.com/2026/07/01/trump-accounts-launch-july-4.html",
-        "tickers": [],
-        "sentiment": "neutral",
-        "publishedAt": "2026-07-01T12:15:01.000Z"
       },
       {
         "id": "aecc42dab65d28",
@@ -219,7 +220,7 @@
       "NVDA",
       "SPY"
     ],
-    "updatedAt": "2026-07-02T03:26:03.567Z"
+    "updatedAt": "2026-07-02T05:13:02.737Z"
   },
   "tickerBySymbol": {
     "SPY": {
@@ -546,10 +547,87 @@
         {
           "t": "2026-07-01T13:30:00.000Z",
           "close": 745.760009765625,
-          "volume": 39119066
+          "volume": 46886600
         }
       ],
       "news": [
+        {
+          "id": "afcaff2c5c4028",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Russia launches massive strike on Ukraine as Poland scrambles jets, Finland restricts airspace",
+          "excerpt": "The Russian defence ministry said that it launched a \"massive strike using long-range precision air, land, and sea-based weapons and attack drones.\"",
+          "url": "https://www.cnbc.com/2026/07/02/russia-launches-missile-drone-strikes-ukraine-kyiv.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-07-02T05:14:19.000Z"
+        },
+        {
+          "id": "de7a526db4390d",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Volkswagen braces for boardroom showdown over historic cost-cutting plan",
+          "excerpt": "Volkswagen is poised for a boardroom showdown following reports that the auto giant is weighing up shutting four factories and implementing 100,000 job cuts.",
+          "url": "https://www.cnbc.com/2026/07/02/volkswagen-vw-job-cuts-germany-autos.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-02T05:11:40.000Z"
+        },
+        {
+          "id": "9b438538a23e4a",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "OpenAI proposes 5% stake to Trump administration to ease Washington pressure: report",
+          "excerpt": "Trump said in June that the U.S. taking an ownership stake in AI giants would be \"a beautiful thing\" and make American public \"partners in this revolution.\"",
+          "url": "https://www.cnbc.com/2026/07/02/openai-proposes-us-government-own-5percent-stake-to-address-political-blowback.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-02T05:06:51.000Z"
+        },
+        {
+          "id": "61612104f5a02f",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Shares of BYD and Xiaomi surge as June delivery figures fuel optimism",
+          "excerpt": "Hong Kong-listed shares of Chinese electric vehicle makers surged, after companies posted June vehicle data that helped to buoy investor sentiment.",
+          "url": "https://www.cnbc.com/2026/07/02/china-ev-stocks-xiaomi-byd-june-deliveries-production.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-07-02T04:02:35.000Z"
+        },
+        {
+          "id": "f341aa2443e7fc",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Oil falls as easing Middle East tensions send Brent to its worst quarter since 2020",
+          "excerpt": "Oil prices fell more than 1% on Wednesday after talks between Washington and Tehran concluded.",
+          "url": "https://www.cnbc.com/2026/07/02/oil-prices-fall-after-us-iran-talks-conclude-in-doha.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-02T04:01:46.000Z"
+        },
+        {
+          "id": "18393c0320ccd9",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "Amazon devices chief Panos Panay says AI is moving beyond screens and apps",
+          "excerpt": "Amazon's SVP of devices, Alexa and Leo, Panos Panay joins Arjun Kharpal to discuss how artificial intelligence is reshaping the company's hardware strategy, from Alexa and Echo devices to wearables, smart glasses, robotaxis and satellites.",
+          "url": "https://www.cnbc.com/video/2026/07/02/amazon-panos-panay-the-tech-download.html",
+          "sentiment": "neutral",
+          "score": 0,
+          "publishedAt": "2026-07-02T04:00:01.000Z"
+        },
+        {
+          "id": "8c39b1935dce08",
+          "source": "cnbc",
+          "sourceLabel": "CNBC",
+          "title": "The dollar looks ready to break higher. Here&apos;s why Wall Street is turning bullish",
+          "excerpt": "The U.S. dollar may be emerging from nearly a year of stagnation, with analysts increasingly arguing that the world's reserve currency is poised for a more sustained advance.",
+          "url": "https://www.cnbc.com/2026/07/02/the-dollar-looks-ready-to-break-higher-heres-why-wall-street-is-turning-bullish.html",
+          "sentiment": "bullish",
+          "score": 1,
+          "publishedAt": "2026-07-02T03:43:24.000Z"
+        },
         {
           "id": "300dd8c07f4618",
           "source": "cnbc",
@@ -571,61 +649,6 @@
           "sentiment": "neutral",
           "score": 0,
           "publishedAt": "2026-07-02T03:04:59.000Z"
-        },
-        {
-          "id": "f341aa2443e7fc",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Oil falls as easing Middle East tensions send Brent to its worst quarter since 2020",
-          "excerpt": "Oil prices fell more than 1% on Wednesday after talks between Washington and Tehran concluded.",
-          "url": "https://www.cnbc.com/2026/07/02/oil-prices-fall-after-us-iran-talks-conclude-in-doha.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-02T02:01:12.000Z"
-        },
-        {
-          "id": "35b6f61d49ba8f",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Alibaba-affiliate Ant Group rushes into humanoid robots with a dozen deals in 18 months",
-          "excerpt": "Ant has led a 500 million yuan ($73.59 million) funding round in humanoid robotics company Zeroth, the start-up announced Thursday.",
-          "url": "https://www.cnbc.com/2026/07/01/alibaba-affiliate-ant-group-enters-the-humanoid-robot-market-with-12-deals.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-02T01:00:01.000Z"
-        },
-        {
-          "id": "9be5869bb4cefc",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Inside India newsletter: Amazon, Walmart-owned Flipkart get ready to shake upIndia&apos;s delivery-in-minutes sector",
-          "excerpt": "Amazon and Walmart-owned Flipkart are scrambling to expand quick commerce operations in India, not just to chase growth but to remain relevant to consumers.",
-          "url": "https://www.cnbc.com/2026/07/02/india-amazon-walmart-flipkart-quick-commerce.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-02T00:10:37.000Z"
-        },
-        {
-          "id": "efbcff84ee0620",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Thursday&apos;s big stock stories: What’s likely to move the market in the next trading session",
-          "excerpt": "The Dow hit a record before closing marginally lower on Wednesday. Tune into CNBC Thursday at 5 p.m. ET for an exclusive interview with President Donald Trump.",
-          "url": "https://www.cnbc.com/2026/07/01/thursdays-big-stock-stories-whats-likely-to-move-the-market.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-01T23:13:46.000Z"
-        },
-        {
-          "id": "76981e2cd6f000",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Trump got $15,000 in FIFA tickets from Gianni Infantino. Next up: Presenting the World Cup trophy",
-          "excerpt": "Trump’s ties to FIFA and Gianni Infantino face new scrutiny as the World Cup enters the knockout round and European lawmakers press over a Peace Prize complaint.",
-          "url": "https://www.cnbc.com/2026/07/01/trump-fifa-infantino-world-cup-financial-disclosure.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-01T21:48:39.000Z"
         },
         {
           "id": "0247106159b6c7",
@@ -650,28 +673,6 @@
           "publishedAt": "2026-07-01T16:19:16.000Z"
         },
         {
-          "id": "d98af860b3bf73",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Employers who laid off workers citing AI are already starting to regret it",
-          "excerpt": "Companies are realizing artificial intelligence can't do everything after all, prompting them to rehire employees to grow their businesses",
-          "url": "https://www.cnbc.com/2026/07/01/employers-who-laid-off-workers-for-ai-are-reversing-their-decisions.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-01T12:53:23.000Z"
-        },
-        {
-          "id": "f37a4afbd2fae5",
-          "source": "cnbc",
-          "sourceLabel": "CNBC",
-          "title": "Trump Accounts for kids launch July 4: What parents need to know",
-          "excerpt": "Here's a breakdown of how Trump Accounts work, who qualifies for free money and when the funds can be withdrawn.",
-          "url": "https://www.cnbc.com/2026/07/01/trump-accounts-launch-july-4.html",
-          "sentiment": "neutral",
-          "score": 0,
-          "publishedAt": "2026-07-01T12:15:01.000Z"
-        },
-        {
           "id": "baac184f56e779",
           "source": "cnbc",
           "sourceLabel": "CNBC",
@@ -693,25 +694,25 @@
           "url": null,
           "sentiment": "neutral",
           "score": 0,
-          "publishedAt": "2026-07-02T03:26:51.259Z"
+          "publishedAt": "2026-07-02T05:20:32.907Z"
         }
       ],
       "sentiment": {
         "label": "mixed",
-        "score": -0.07692307692307693,
-        "bullishPct": 0,
+        "score": 0.15384615384615385,
+        "bullishPct": 23,
         "bearishPct": 8,
         "sampleSize": 13
       },
-      "smartTake": "SPY price updating · Chatter skews mixed (0% bull / 8% bear). CNBC: Europe wants to rebalance trade with Beijing, but can&apos;t quit Chinese air co",
+      "smartTake": "SPY price updating · Chatter skews mixed (23% bull / 8% bear). CNBC: Russia launches massive strike on Ukraine as Poland scrambles jets, Finland rest",
       "citations": [
-        "CNBC: Europe wants to rebalance trade with Beijing, but can&apos;t quit Chinese air co",
-        "CNBC: Samsung Electronics, SK Hynix shares tumble over 7% as chip rout spreads from Wa",
+        "CNBC: Russia launches massive strike on Ukraine as Poland scrambles jets, Finland rest",
+        "CNBC: Volkswagen braces for boardroom showdown over historic cost-cutting plan",
         "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
       ],
       "nextEarningsDate": null,
       "contradictionNote": null,
-      "updatedAt": "2026-07-02T03:26:52.555Z"
+      "updatedAt": "2026-07-02T05:20:32.998Z"
     },
     "BTCUSD": {
       "symbol": "BTCUSD",
@@ -1896,6 +1897,96 @@
     "notifyIntelFires": true
   },
   "thesisEntries": [
+    {
+      "id": "TH-068",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T05:20:32.875Z"
+    },
+    {
+      "id": "TH-067",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T05:16:40.870Z"
+    },
+    {
+      "id": "TH-066",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T05:15:22.634Z"
+    },
+    {
+      "id": "TH-065",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T05:14:46.212Z"
+    },
+    {
+      "id": "TH-064",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T05:13:04.664Z"
+    },
+    {
+      "id": "TH-063",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T04:56:51.502Z"
+    },
+    {
+      "id": "TH-062",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T04:44:53.811Z"
+    },
+    {
+      "id": "TH-061",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T04:43:18.675Z"
+    },
+    {
+      "id": "TH-060",
+      "symbol": "SPY",
+      "body": "QA sovereign alpha thesis entry",
+      "source": "manual",
+      "linkedTradeId": null,
+      "linkedRuleId": null,
+      "linkedPilotId": null,
+      "createdAt": "2026-07-02T04:27:09.149Z"
+    },
     {
       "id": "TH-059",
       "symbol": "SPY",

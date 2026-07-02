@@ -126,7 +126,7 @@ export interface UserSettings {
     swarmGrowthLevel?: GrowthLevel | null;
     /** Optional Arbitrage Claw growth override (L1–L5). */
     shopGrowthLevel?: GrowthLevel | null;
-    /** Optional Kin Claw growth override (L1–L5). */
+    /** Optional Kin growth override (L1–L5). */
     kinGrowthLevel?: GrowthLevel | null;
     /** Suppress Outreach Claw XP emit to Claw Cafe */
     workGamificationOptOut?: boolean;

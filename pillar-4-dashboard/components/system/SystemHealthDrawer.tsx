@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
 import { ComputeMetricsWidget } from "./ComputeMetricsWidget";
@@ -49,6 +50,13 @@ export function SystemHealthDrawer({ open, onClose }: SystemHealthDrawerProps) {
           </button>
         </header>
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
+          <p className="border border-line bg-panel px-3 py-2 font-sans text-xs text-muted">
+            Restart stack, reboot, or shut down from{" "}
+            <Link href="/settings?tab=system" className="text-cursor-glow hover:underline">
+              Settings → System
+            </Link>
+            .
+          </p>
           <ComputeMetricsWidget active={open} />
           <OtaTerminalWidget active={open} className="h-full min-h-[50vh]" />
         </div>

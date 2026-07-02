@@ -2808,9 +2808,117 @@
       "skillId": "publish_post",
       "schedule": "0 9 * * *",
       "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T04:27:12.895Z",
+      "id": "content-POST-1289",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T04:43:26.734Z",
+      "id": "content-POST-1292",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T04:45:02.010Z",
+      "id": "content-POST-1295",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T04:56:54.172Z",
+      "id": "content-POST-1298",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T05:13:08.911Z",
+      "id": "content-POST-1301",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T05:14:54.656Z",
+      "id": "content-POST-1304",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T05:15:25.906Z",
+      "id": "content-POST-1307",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T05:16:43.785Z",
+      "id": "content-POST-1310",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
+    },
+    {
+      "lastRunAt": null,
+      "lastStatus": null,
+      "lastError": null,
+      "createdAt": "2026-07-02T05:20:36.777Z",
+      "id": "content-POST-1313",
+      "appId": "my-content-creator",
+      "kind": "skill",
+      "skillId": "publish_post",
+      "schedule": "0 9 * * *",
+      "enabled": true
     }
   ],
   "daemonEnabled": true,
   "pollIntervalSeconds": 60,
-  "updatedAt": "2026-07-02T03:26:50.959Z"
+  "updatedAt": "2026-07-02T05:20:36.777Z"
 }

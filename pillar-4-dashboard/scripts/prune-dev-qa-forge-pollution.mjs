@@ -39,6 +39,7 @@ const OOTB_WORKSPACE_DIRS = new Set([
   "_global",
   "my-capital",
   "my-content-creator",
+  "my-family",
   "my-vital",
   "my-work",
 ]);

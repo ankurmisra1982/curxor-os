@@ -228,6 +228,8 @@ ssh curxor "bash /opt/curxor/scripts/box-smoke.sh http://127.0.0.1:3080"
 
 **2026-07-02 — OL1 + FF0 shipped:** Cafe = Patron Hall (universal strip); Engage inbox under Creator only; FRE picker excludes Cafe · Signal · Kin.
 
+**2026-07-02 — OL-Kin1 shipped:** Kin rename sweep — household mapper (not operate employee); nav "Kin" · GTM "your household on the box".
+
 ---
 
 ## Related

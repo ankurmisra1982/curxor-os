@@ -4499,7 +4499,893 @@
       "forgedAppId": "forged-flow-reimport-claw-11",
       "forgedAppSlug": "flow-reimport-claw-11",
       "meshConnected": false
+    },
+    {
+      "id": "claw-mr305y0q",
+      "name": "Checklist Island Claw",
+      "intent": "Runs workspace-only on appliance.",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:26:49.082Z",
+      "provisioningMode": "imported",
+      "forgedAppSlug": "checklist-island-claw",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr305zcr",
+      "name": "Checklist Work Desk",
+      "intent": "Forge checklist work desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:26:50.811Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-work-desk-12",
+      "forgedAppSlug": "checklist-work-desk-12",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr3060m3",
+      "name": "Checklist Creator Desk",
+      "intent": "Forge checklist creator desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:26:52.443Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-creator-desk-12",
+      "forgedAppSlug": "checklist-creator-desk-12",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr3062zy",
+      "name": "Checklist Island Claw",
+      "intent": "Checklist island promote candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:26:55.534Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-island-claw-12",
+      "forgedAppSlug": "checklist-island-claw-12",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr3065df",
+      "name": "Checklist Archive Claw",
+      "intent": "Checklist island archive candidate",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:26:58.611Z",
+      "provisioningMode": "island",
+      "status": "archived",
+      "archivedAt": "2026-07-02T04:26:58.642Z"
+    },
+    {
+      "id": "claw-mr3066yc",
+      "name": "Checklist Mesh Desk",
+      "intent": "Checklist forged mesh publish",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:00.660Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-mesh-desk-12",
+      "forgedAppSlug": "checklist-mesh-desk-12",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr306878",
+      "name": "Checklist Cafe Mint",
+      "intent": "Checklist cafe mint consumer",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:8b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:02.276Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-cafe-mint-12",
+      "forgedAppSlug": "checklist-cafe-mint-12",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr3069ge",
+      "name": "Checklist Capital Desk",
+      "intent": "Forge checklist capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:03.902Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-checklist-capital-desk-12",
+      "forgedAppSlug": "checklist-capital-desk-12",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr306bty",
+      "name": "Checklist Island Mint",
+      "intent": "Checklist island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:06.982Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr306ig6",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:15.558Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--13",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--13",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr306jnr",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:17.127Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-13",
+      "forgedAppSlug": "qa-smoke-work-desk-13",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr306kvv",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:18.715Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-13",
+      "forgedAppSlug": "qa-smoke-creator-desk-13",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr306m4i",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:20.322Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-13",
+      "forgedAppSlug": "qa-smoke-capital-desk-13",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr306oif",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:27:23.415Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr30rdwe",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:43:29.438Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--14",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--14",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr30rf4n",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:43:31.031Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-14",
+      "forgedAppSlug": "qa-smoke-work-desk-14",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr30rgd0",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:43:32.628Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-14",
+      "forgedAppSlug": "qa-smoke-creator-desk-14",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr30rhli",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:43:34.230Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-14",
+      "forgedAppSlug": "qa-smoke-capital-desk-14",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr30rjzc",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:43:37.320Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr30tfey",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:45:04.714Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--15",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--15",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr30tgnn",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:45:06.323Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-15",
+      "forgedAppSlug": "qa-smoke-work-desk-15",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr30thwr",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:45:07.947Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-15",
+      "forgedAppSlug": "qa-smoke-creator-desk-15",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr30tj56",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:45:09.546Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-15",
+      "forgedAppSlug": "qa-smoke-capital-desk-15",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr30tlir",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:45:12.627Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr318oxh",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:56:56.885Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--16",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--16",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr318q5w",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:56:58.484Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-16",
+      "forgedAppSlug": "qa-smoke-work-desk-16",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr318rdz",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:57:00.071Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-16",
+      "forgedAppSlug": "qa-smoke-creator-desk-16",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr318sm1",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:57:01.657Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-16",
+      "forgedAppSlug": "qa-smoke-capital-desk-16",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr318uzl",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T04:57:04.737Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr31tl1m",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:13:11.626Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--17",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--17",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31tm9n",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:13:13.211Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-17",
+      "forgedAppSlug": "qa-smoke-work-desk-17",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31tnhv",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:13:14.803Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-17",
+      "forgedAppSlug": "qa-smoke-creator-desk-17",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31toqq",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:13:16.418Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-17",
+      "forgedAppSlug": "qa-smoke-capital-desk-17",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31tr4t",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:13:19.517Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr31vuo0",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:14:57.408Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--18",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--18",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31vvw5",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:14:58.997Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-18",
+      "forgedAppSlug": "qa-smoke-work-desk-18",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31vx44",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:00.580Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-18",
+      "forgedAppSlug": "qa-smoke-creator-desk-18",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31vycf",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:02.175Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-18",
+      "forgedAppSlug": "qa-smoke-capital-desk-18",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31w0qf",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:05.271Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr31wiol",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:28.533Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--19",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--19",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31wjwm",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:30.118Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-19",
+      "forgedAppSlug": "qa-smoke-work-desk-19",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31wl4j",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:31.699Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-19",
+      "forgedAppSlug": "qa-smoke-creator-desk-19",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31wmcl",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:33.285Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-19",
+      "forgedAppSlug": "qa-smoke-capital-desk-19",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31woqe",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:15:36.374Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr31y6t4",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:16:46.456Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--20",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--20",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31y81b",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:16:48.047Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-20",
+      "forgedAppSlug": "qa-smoke-work-desk-20",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31y99m",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:16:49.642Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-20",
+      "forgedAppSlug": "qa-smoke-creator-desk-20",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr31yai6",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:16:51.246Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-20",
+      "forgedAppSlug": "qa-smoke-capital-desk-20",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr31ycwa",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:16:54.346Z",
+      "provisioningMode": "island"
+    },
+    {
+      "id": "claw-mr3236pm",
+      "name": "QA smoke framework desk for sorting pipeline",
+      "intent": "QA smoke framework desk for sorting pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:20:39.610Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-framework-desk-for--21",
+      "forgedAppSlug": "qa-smoke-framework-desk-for--21",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr3237xa",
+      "name": "QA Smoke Work Desk",
+      "intent": "QA smoke forged work desk pipeline",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:20:41.182Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-work-desk-21",
+      "forgedAppSlug": "qa-smoke-work-desk-21",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr323959",
+      "name": "QA Smoke Creator Desk",
+      "intent": "QA smoke forged creator desk queue",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:20:42.765Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-creator-desk-21",
+      "forgedAppSlug": "qa-smoke-creator-desk-21",
+      "meshConnected": true
+    },
+    {
+      "id": "claw-mr323adk",
+      "name": "QA Smoke Capital Desk",
+      "intent": "QA smoke forged capital desk",
+      "budgetTier": "balanced",
+      "autoSelected": true,
+      "models": {
+        "vision": "moondream:1.8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:20:44.360Z",
+      "provisioningMode": "framework",
+      "forgedAppId": "forged-qa-smoke-capital-desk-21",
+      "forgedAppSlug": "qa-smoke-capital-desk-21",
+      "meshConnected": false
+    },
+    {
+      "id": "claw-mr323crc",
+      "name": "QA Island Mint",
+      "intent": "QA smoke island mint honest mode",
+      "budgetTier": "balanced",
+      "autoSelected": false,
+      "models": {
+        "vision": "qwen3-vl:8b",
+        "reasoning": "qwen3:14b",
+        "vla": null
+      },
+      "createdAt": "2026-07-02T05:20:47.448Z",
+      "provisioningMode": "island"
     }
   ],
-  "activeClawId": "claw-mr2y1558"
+  "activeClawId": "claw-mr323crc"
 }

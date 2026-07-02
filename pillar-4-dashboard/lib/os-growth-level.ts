@@ -293,7 +293,7 @@ export const SHOP_GROWTH_INTENT_LABELS: Record<ShopGrowthIntent, string> = {
   desk_governance: "Desk lead — policy, audit, and delegation",
 };
 
-/** FRE / settings persona intents — Kin Claw */
+/** FRE / settings persona intents — Kin */
 export type KinGrowthIntent =
   | "solo_member"
   | "helper_roommate"

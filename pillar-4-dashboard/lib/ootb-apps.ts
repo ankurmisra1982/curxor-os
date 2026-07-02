@@ -73,11 +73,11 @@ export const OOTB_APPS = [
   },
   {
     id: "my-family",
-    name: "Kin Claw",
+    name: "Kin",
     href: "/my-family",
     short: "KIN",
     description:
-      "Household identity layer — partner, kids, and guests get their own context so Optimus and Vital personalize per person, not per box.",
+      "Kin — your household on the box. Always-on mapper for profiles, scopes, and devices so Signal, Vital, and every Claw know who is who.",
   },
 ] as const;
 

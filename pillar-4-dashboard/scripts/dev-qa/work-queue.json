@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-02T03:26:52.859Z",
+  "updatedAt": "2026-07-02T05:20:37.786Z",
   "leads": [
     {
       "id": "LEAD-001",
@@ -8,17 +8,17 @@
       "email": "jordan@fintechlabs.io",
       "company": "Fintech Labs",
       "title": "Head of Ops",
-      "stage": "qualified",
+      "stage": "contacted",
       "tags": [
         "fintech",
         "warm",
         "demo-enriched"
       ],
-      "notes": "Met at demo — interested in sovereign appliance for outbound.\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data",
+      "notes": "Met at demo — interested in sovereign appliance for outbound.\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data\nDemo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data",
       "source": "demo",
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:50.575Z",
-      "lastTouchAt": "2026-07-02T03:26:23.311Z"
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T05:20:37.786Z",
+      "lastTouchAt": "2026-07-02T04:56:54.530Z"
     },
     {
       "id": "LEAD-002",
@@ -32,8 +32,8 @@
       ],
       "notes": "",
       "source": "import",
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z",
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.530Z",
       "lastTouchAt": null
     },
     {
@@ -48,26 +48,12 @@
       ],
       "notes": "Asked for pricing on Creator + Outreach bundle.",
       "source": "inbound",
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z",
-      "lastTouchAt": "2026-07-02T03:26:23.311Z"
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.530Z",
+      "lastTouchAt": "2026-07-02T04:56:54.530Z"
     },
     {
       "id": "LEAD-004",
-      "name": "Demo tour · Jordan",
-      "email": "demo@curxor.dev",
-      "company": "Demo Co",
-      "title": "",
-      "stage": "qualified",
-      "tags": [],
-      "notes": "",
-      "source": "manual",
-      "createdAt": "2026-07-02T03:26:23.336Z",
-      "updatedAt": "2026-07-02T03:26:23.336Z",
-      "lastTouchAt": null
-    },
-    {
-      "id": "LEAD-005",
       "name": "Demo tour · internship inquiry",
       "email": "coach@school.edu",
       "company": "Campus Programs",
@@ -76,131 +62,134 @@
       "tags": [],
       "notes": "",
       "source": "manual",
-      "createdAt": "2026-07-02T03:26:44.343Z",
-      "updatedAt": "2026-07-02T03:26:44.343Z",
+      "createdAt": "2026-07-02T05:13:09.086Z",
+      "updatedAt": "2026-07-02T05:13:09.086Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-005",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782969189169@curxor.dev",
+      "company": "QA Co",
+      "title": "",
+      "stage": "new",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-07-02T05:13:09.181Z",
+      "updatedAt": "2026-07-02T05:13:09.181Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-006",
-      "name": "Demo tour · Etsy buyer",
-      "email": "buyer@example.com",
-      "company": "Custom order",
-      "title": "",
-      "stage": "contacted",
+      "name": "Demo tour · internship inquiry",
+      "email": "coach@school.edu",
+      "company": "Campus Programs",
+      "title": "Coordinator",
+      "stage": "new",
       "tags": [],
       "notes": "",
       "source": "manual",
-      "createdAt": "2026-07-02T03:26:44.402Z",
-      "updatedAt": "2026-07-02T03:26:44.402Z",
+      "createdAt": "2026-07-02T05:14:54.836Z",
+      "updatedAt": "2026-07-02T05:14:54.836Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-007",
-      "name": "Demo tour · Jordan",
-      "email": "demo@curxor.dev",
-      "company": "Demo Co",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782969294932@curxor.dev",
+      "company": "QA Co",
       "title": "",
-      "stage": "qualified",
+      "stage": "new",
       "tags": [],
       "notes": "",
-      "source": "manual",
-      "createdAt": "2026-07-02T03:26:44.447Z",
-      "updatedAt": "2026-07-02T03:26:44.447Z",
+      "source": "csv",
+      "createdAt": "2026-07-02T05:14:54.944Z",
+      "updatedAt": "2026-07-02T05:14:54.944Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-008",
-      "name": "Flow Prospect",
-      "email": "flow-1782962810453@example.com",
-      "company": "",
-      "title": "",
+      "name": "Demo tour · internship inquiry",
+      "email": "coach@school.edu",
+      "company": "Campus Programs",
+      "title": "Coordinator",
       "stage": "new",
       "tags": [],
       "notes": "",
       "source": "manual",
-      "createdAt": "2026-07-02T03:26:50.471Z",
-      "updatedAt": "2026-07-02T03:26:50.471Z",
+      "createdAt": "2026-07-02T05:15:26.055Z",
+      "updatedAt": "2026-07-02T05:15:26.055Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-009",
-      "name": "Flow L1 Opportunity",
-      "email": "flow-l1-1782962810603@example.com",
-      "company": "",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782969326138@curxor.dev",
+      "company": "QA Co",
       "title": "",
       "stage": "new",
       "tags": [],
       "notes": "",
-      "source": "manual",
-      "createdAt": "2026-07-02T03:26:50.621Z",
-      "updatedAt": "2026-07-02T03:26:50.621Z",
+      "source": "csv",
+      "createdAt": "2026-07-02T05:15:26.148Z",
+      "updatedAt": "2026-07-02T05:15:26.148Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-010",
-      "name": "Creator Collab",
-      "email": "handoff-1782962812719@example.com",
-      "company": "",
-      "title": "",
+      "name": "Demo tour · internship inquiry",
+      "email": "coach@school.edu",
+      "company": "Campus Programs",
+      "title": "Coordinator",
       "stage": "new",
-      "tags": [
-        "handoff:my-content"
-      ],
-      "notes": "Handoff from my-content: QA engage DM",
-      "source": "handoff:my-content",
-      "createdAt": "2026-07-02T03:26:52.737Z",
-      "updatedAt": "2026-07-02T03:26:52.737Z",
+      "tags": [],
+      "notes": "",
+      "source": "manual",
+      "createdAt": "2026-07-02T05:16:43.958Z",
+      "updatedAt": "2026-07-02T05:16:43.958Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-011",
-      "name": "Capital Intel Lead",
-      "email": "capital-handoff-1782962812762@example.com",
-      "company": "Ticker follow-up",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782969404052@curxor.dev",
+      "company": "QA Co",
       "title": "",
       "stage": "new",
-      "tags": [
-        "handoff:my-capital"
-      ],
-      "notes": "Handoff from my-capital: SPY alert reply",
-      "source": "handoff:my-capital",
-      "createdAt": "2026-07-02T03:26:52.777Z",
-      "updatedAt": "2026-07-02T03:26:52.777Z",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-07-02T05:16:44.063Z",
+      "updatedAt": "2026-07-02T05:16:44.063Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-012",
-      "name": "EdgeCompute posted 3 SDR roles — outbound stack",
-      "email": "signal-edgecompute-posted-3-sdr-1782962812837@example.com",
-      "company": "jobs-rss",
-      "title": "Decision maker",
+      "name": "Demo tour · internship inquiry",
+      "email": "coach@school.edu",
+      "company": "Campus Programs",
+      "title": "Coordinator",
       "stage": "new",
-      "tags": [
-        "signal",
-        "hiring",
-        "demo-enriched"
-      ],
-      "notes": "Demo enrichment — set HUNTER_API_KEY or APOLLO_API_KEY for live data",
-      "source": "signal:hiring",
-      "createdAt": "2026-07-02T03:26:52.838Z",
-      "updatedAt": "2026-07-02T03:26:52.843Z",
+      "tags": [],
+      "notes": "",
+      "source": "manual",
+      "createdAt": "2026-07-02T05:20:36.988Z",
+      "updatedAt": "2026-07-02T05:20:36.988Z",
       "lastTouchAt": null
     },
     {
       "id": "LEAD-013",
-      "name": "QQQ alert follow-up",
-      "email": "playbook-capital-1782962812856@example.com",
-      "company": "Capital desk",
+      "name": "QA TierB",
+      "email": "qa-tierb-1782969637085@curxor.dev",
+      "company": "QA Co",
       "title": "",
       "stage": "new",
-      "tags": [
-        "playbook:capital-alert",
-        "ticker:QQQ"
-      ],
-      "notes": "OS playbook capital-alert · 50 armed rule(s) · 0 open trade(s)",
-      "source": "playbook:capital-alert",
-      "createdAt": "2026-07-02T03:26:52.857Z",
-      "updatedAt": "2026-07-02T03:26:52.857Z",
+      "tags": [],
+      "notes": "",
+      "source": "csv",
+      "createdAt": "2026-07-02T05:20:37.095Z",
+      "updatedAt": "2026-07-02T05:20:37.095Z",
       "lastTouchAt": null
     }
   ],
@@ -212,8 +201,8 @@
       "done": false,
       "leadId": "LEAD-003",
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z"
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.530Z"
     },
     {
       "id": "TASK-002",
@@ -222,8 +211,8 @@
       "done": false,
       "leadId": null,
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z"
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.530Z"
     },
     {
       "id": "TASK-003",
@@ -232,59 +221,48 @@
       "done": true,
       "leadId": null,
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z"
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.530Z"
     },
     {
       "id": "TASK-004",
-      "title": "Snoozed: Re: CurXor pricing",
-      "priority": "P2",
-      "done": true,
-      "leadId": "LEAD-003",
-      "mailId": "MAIL-d9ce20fb",
-      "dueAt": "2026-07-04T03:26:24.085Z",
-      "createdAt": "2026-07-02T03:26:24.085Z",
-      "updatedAt": "2026-07-02T03:26:24.121Z"
-    },
-    {
-      "id": "TASK-005",
       "title": "[School & applications] Internship inquiry",
       "priority": "P2",
       "done": false,
       "leadId": null,
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:44.323Z",
-      "updatedAt": "2026-07-02T03:26:44.323Z"
+      "createdAt": "2026-07-02T05:13:09.088Z",
+      "updatedAt": "2026-07-02T05:13:09.088Z"
     },
     {
-      "id": "TASK-006",
+      "id": "TASK-005",
       "title": "[School & applications] Club sponsor ask",
       "priority": "P2",
       "done": false,
       "leadId": null,
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:44.326Z",
-      "updatedAt": "2026-07-02T03:26:44.326Z"
+      "createdAt": "2026-07-02T05:13:09.089Z",
+      "updatedAt": "2026-07-02T05:13:09.089Z"
     },
     {
-      "id": "TASK-007",
+      "id": "TASK-006",
       "title": "[School & applications] Tournament organizer",
       "priority": "P2",
       "done": false,
       "leadId": null,
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:44.327Z",
-      "updatedAt": "2026-07-02T03:26:44.327Z"
+      "createdAt": "2026-07-02T05:13:09.091Z",
+      "updatedAt": "2026-07-02T05:13:09.091Z"
     },
     {
-      "id": "TASK-008",
+      "id": "TASK-007",
       "title": "[School & applications] Thank-you note",
       "priority": "P2",
       "done": false,
       "leadId": null,
       "dueAt": null,
-      "createdAt": "2026-07-02T03:26:44.328Z",
-      "updatedAt": "2026-07-02T03:26:44.328Z"
+      "createdAt": "2026-07-02T05:13:09.092Z",
+      "updatedAt": "2026-07-02T05:13:09.092Z"
     }
   ],
   "sequences": [
@@ -295,11 +273,11 @@
       "status": "active",
       "pauseOnReply": true,
       "currentStepIndex": 1,
-      "activatedAt": "2026-07-02T03:26:23.311Z",
+      "activatedAt": "2026-07-02T04:56:54.530Z",
       "completedAt": null,
       "lastError": null,
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z",
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.530Z",
       "steps": [
         {
           "id": "STEP-001",
@@ -307,7 +285,7 @@
           "delayDays": 0,
           "subject": "Quick question on outbound stack",
           "body": "Hi {{name}} — saw {{company}} is scaling outbound. We run Creator + Outreach Claw on bare metal with zero SaaS rent. Worth a 10-min look?",
-          "sentAt": "2026-07-02T03:26:23.311Z",
+          "sentAt": "2026-07-02T04:56:54.530Z",
           "scheduledAt": null
         },
         {
@@ -318,7 +296,7 @@
           "subjectAlt": "Quick follow-up on local CRM",
           "body": "Following up — happy to share how we pause sequences on reply and keep CRM on-appliance.",
           "sentAt": null,
-          "scheduledAt": "2026-07-04T03:26:23.311Z"
+          "scheduledAt": "2026-07-04T04:56:54.530Z"
         }
       ]
     },
@@ -326,14 +304,14 @@
       "id": "SEQ-002",
       "name": "Founder cold intro",
       "leadId": "LEAD-002",
-      "status": "draft",
+      "status": "active",
       "pauseOnReply": true,
       "currentStepIndex": 0,
       "activatedAt": null,
       "completedAt": null,
       "lastError": null,
-      "createdAt": "2026-07-02T03:26:23.311Z",
-      "updatedAt": "2026-07-02T03:26:23.311Z",
+      "createdAt": "2026-07-02T04:56:54.530Z",
+      "updatedAt": "2026-07-02T04:56:54.531Z",
       "steps": [
         {
           "id": "STEP-010",
@@ -341,119 +319,73 @@
           "delayDays": 0,
           "subject": "CurXor for {{company}}",
           "body": "Hi {{name}} — local LLM drafts sequences; eno2 bridge sends mail. No cloud CRM bill.",
-          "sentAt": null,
-          "scheduledAt": null
+          "sentAt": "2026-07-02T04:56:54.531Z",
+          "scheduledAt": null,
+          "subjectVariant": "a"
         }
       ]
     },
     {
       "id": "SEQ-003",
-      "name": "Demo tour · approval sequence",
-      "leadId": "LEAD-004",
-      "status": "active",
-      "steps": [
-        {
-          "id": "STEP-02bab718",
-          "kind": "email",
-          "delayDays": 0,
-          "subject": "Demo tour · needs your OK",
-          "body": "Hi {{name}} — this step waits in the approval queue until you release it.",
-          "sentAt": null,
-          "scheduledAt": null
-        }
-      ],
-      "currentStepIndex": 0,
-      "pauseOnReply": true,
-      "createdAt": "2026-07-02T03:26:23.339Z",
-      "updatedAt": "2026-07-02T03:26:23.342Z",
-      "activatedAt": "2026-07-02T03:26:23.342Z",
-      "completedAt": null,
-      "lastError": null
-    },
-    {
-      "id": "SEQ-004",
-      "name": "Order check-in · Jordan Lee",
+      "name": "QA sequence",
       "leadId": "LEAD-001",
-      "status": "draft",
-      "steps": [
-        {
-          "id": "STEP-9fc34fc9",
-          "kind": "email",
-          "delayDays": 0,
-          "subject": "How is everything?",
-          "body": "Hi {{name}},\n\nHope your order arrived well — let me know if you need anything.\n\n",
-          "sentAt": null,
-          "scheduledAt": null
-        },
-        {
-          "id": "STEP-76f9bfc3",
-          "kind": "email",
-          "delayDays": 5,
-          "subject": "Review request",
-          "body": "Hi,\n\nIf you have a moment, a review would really help my shop.\n\n",
-          "sentAt": null,
-          "scheduledAt": null
-        }
-      ],
-      "currentStepIndex": 0,
-      "pauseOnReply": true,
-      "createdAt": "2026-07-02T03:26:44.386Z",
-      "updatedAt": "2026-07-02T03:26:44.386Z",
-      "activatedAt": null,
-      "completedAt": null,
-      "lastError": null
-    },
-    {
-      "id": "SEQ-005",
-      "name": "Order check-in · Demo tour · Etsy buyer",
-      "leadId": "LEAD-006",
       "status": "active",
       "steps": [
         {
-          "id": "STEP-c48810dc",
-          "kind": "email",
-          "delayDays": 0,
-          "subject": "How is everything?",
-          "body": "Hi {{name}},\n\nHope your order arrived well — let me know if you need anything.\n\n",
-          "sentAt": null,
-          "scheduledAt": null
-        },
-        {
-          "id": "STEP-792f10d0",
-          "kind": "email",
-          "delayDays": 5,
-          "subject": "Review request",
-          "body": "Hi,\n\nIf you have a moment, a review would really help my shop.\n\n",
-          "sentAt": null,
-          "scheduledAt": null
-        }
-      ],
-      "currentStepIndex": 0,
-      "pauseOnReply": true,
-      "createdAt": "2026-07-02T03:26:44.404Z",
-      "updatedAt": "2026-07-02T03:26:44.405Z",
-      "activatedAt": "2026-07-02T03:26:44.405Z",
-      "completedAt": null,
-      "lastError": null
-    },
-    {
-      "id": "SEQ-006",
-      "name": "Flow sequence",
-      "leadId": "LEAD-008",
-      "status": "active",
-      "steps": [
-        {
-          "id": "STEP-b863e3e1",
+          "id": "STEP-c81afae4",
           "kind": "email",
           "delayDays": 0,
           "subject": "{{company}} + local outbound stack",
           "subjectAlt": "{{name}}, quick question on outbound",
           "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
           "sentAt": null,
-          "scheduledAt": "2026-07-02T03:31:50.539Z"
+          "scheduledAt": null
         },
         {
-          "id": "STEP-76e6a077",
+          "id": "STEP-9533c9f8",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": "2026-07-02T05:18:09.693Z"
+        },
+        {
+          "id": "STEP-df78486e",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 1,
+      "pauseOnReply": true,
+      "createdAt": "2026-07-02T05:13:09.133Z",
+      "updatedAt": "2026-07-02T05:13:09.693Z",
+      "activatedAt": "2026-07-02T05:13:09.691Z",
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-004",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "active",
+      "steps": [
+        {
+          "id": "STEP-2ff11f08",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": "2026-07-02T05:19:55.484Z"
+        },
+        {
+          "id": "STEP-2fe3dfea",
           "kind": "email",
           "delayDays": 3,
           "subject": "Re: local outbound",
@@ -462,7 +394,7 @@
           "scheduledAt": null
         },
         {
-          "id": "STEP-be3c64bc",
+          "id": "STEP-40d10720",
           "kind": "email",
           "delayDays": 5,
           "subject": "Last note",
@@ -473,342 +405,257 @@
       ],
       "currentStepIndex": 0,
       "pauseOnReply": true,
-      "createdAt": "2026-07-02T03:26:50.493Z",
-      "updatedAt": "2026-07-02T03:26:50.540Z",
-      "activatedAt": "2026-07-02T03:26:50.537Z",
+      "createdAt": "2026-07-02T05:14:54.882Z",
+      "updatedAt": "2026-07-02T05:14:55.485Z",
+      "activatedAt": "2026-07-02T05:14:55.482Z",
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-005",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "active",
+      "steps": [
+        {
+          "id": "STEP-df2bfad6",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": "2026-07-02T05:20:26.594Z"
+        },
+        {
+          "id": "STEP-645acf58",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-5fdefb4e",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-07-02T05:15:26.100Z",
+      "updatedAt": "2026-07-02T05:15:26.594Z",
+      "activatedAt": "2026-07-02T05:15:26.592Z",
+      "completedAt": null,
+      "lastError": null
+    },
+    {
+      "id": "SEQ-006",
+      "name": "QA sequence",
+      "leadId": "LEAD-001",
+      "status": "active",
+      "steps": [
+        {
+          "id": "STEP-816853a7",
+          "kind": "email",
+          "delayDays": 0,
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": "2026-07-02T05:21:44.533Z"
+        },
+        {
+          "id": "STEP-39e825e9",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
+          "sentAt": null,
+          "scheduledAt": null
+        },
+        {
+          "id": "STEP-7fe08e60",
+          "kind": "email",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
+          "sentAt": null,
+          "scheduledAt": null
+        }
+      ],
+      "currentStepIndex": 0,
+      "pauseOnReply": true,
+      "createdAt": "2026-07-02T05:16:43.987Z",
+      "updatedAt": "2026-07-02T05:16:44.533Z",
+      "activatedAt": "2026-07-02T05:16:44.531Z",
       "completedAt": null,
       "lastError": null
     },
     {
       "id": "SEQ-007",
-      "name": "Polite follow-up · Jordan Lee",
+      "name": "QA sequence",
       "leadId": "LEAD-001",
-      "status": "draft",
+      "status": "active",
       "steps": [
         {
-          "id": "STEP-e93ca063",
+          "id": "STEP-f2b61330",
           "kind": "email",
           "delayDays": 0,
-          "subject": "Following up",
-          "body": "Hi {{name}},\n\nJust checking in on my last note — happy to answer questions.\n\n",
+          "subject": "{{company}} + local outbound stack",
+          "subjectAlt": "{{name}}, quick question on outbound",
+          "body": "Hi {{name}} — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+          "sentAt": null,
+          "scheduledAt": "2026-07-02T05:25:37.682Z"
+        },
+        {
+          "id": "STEP-ea1a5e99",
+          "kind": "email",
+          "delayDays": 3,
+          "subject": "Re: local outbound",
+          "body": "{{name}} — following up once. We auto-pause on reply and index mail offline. Still relevant?",
           "sentAt": null,
           "scheduledAt": null
         },
         {
-          "id": "STEP-2722a0cd",
+          "id": "STEP-613246cf",
           "kind": "email",
-          "delayDays": 3,
-          "subject": "Quick bump",
-          "body": "Hi again,\n\nWanted to bump this in case it got buried. No pressure either way.\n\n",
+          "delayDays": 5,
+          "subject": "Last note",
+          "body": "Closing the loop — if timing is off, no worries. Reply anytime if sovereign outbound becomes a priority.",
           "sentAt": null,
           "scheduledAt": null
         }
       ],
       "currentStepIndex": 0,
       "pauseOnReply": true,
-      "createdAt": "2026-07-02T03:26:50.685Z",
-      "updatedAt": "2026-07-02T03:26:50.685Z",
-      "activatedAt": null,
-      "completedAt": null,
-      "lastError": null
-    },
-    {
-      "id": "SEQ-008",
-      "name": "Signal · EdgeCompute posted 3 SDR roles — outbound stack",
-      "leadId": "LEAD-012",
-      "status": "draft",
-      "steps": [
-        {
-          "id": "STEP-efe5f5b1",
-          "kind": "email",
-          "delayDays": 0,
-          "subject": "Following up",
-          "body": "Hi {{name}},\n\nJust checking in on my last note — happy to answer questions.\n\n",
-          "sentAt": null,
-          "scheduledAt": null
-        },
-        {
-          "id": "STEP-3cbb9d96",
-          "kind": "email",
-          "delayDays": 3,
-          "subject": "Quick bump",
-          "body": "Hi again,\n\nWanted to bump this in case it got buried. No pressure either way.\n\n",
-          "sentAt": null,
-          "scheduledAt": null
-        }
-      ],
-      "currentStepIndex": 0,
-      "pauseOnReply": true,
-      "createdAt": "2026-07-02T03:26:52.840Z",
-      "updatedAt": "2026-07-02T03:26:52.840Z",
-      "activatedAt": null,
+      "createdAt": "2026-07-02T05:20:37.033Z",
+      "updatedAt": "2026-07-02T05:20:37.682Z",
+      "activatedAt": "2026-07-02T05:20:37.680Z",
       "completedAt": null,
       "lastError": null
     }
   ],
   "sends": [
     {
-      "sequenceId": "SEQ-003",
-      "stepId": "STEP-02bab718",
-      "leadId": "LEAD-007",
-      "to": "demo@curxor.dev",
-      "subject": "Demo tour · needs your OK",
-      "body": "Hi Jordan — this send is queued for operator approval.",
-      "status": "pending_approval",
-      "sentAt": null,
-      "error": null,
-      "id": "SEND-007",
-      "createdAt": "2026-07-02T03:26:44.450Z"
-    },
-    {
       "sequenceId": "SEQ-005",
-      "stepId": "STEP-c48810dc",
-      "leadId": "LEAD-006",
-      "to": "buyer@example.com",
-      "subject": "How is everything?",
-      "body": "Hi Demo,\n\nHope your order arrived well — let me know if you need anything.\n\n",
+      "stepId": "STEP-df2bfad6",
+      "leadId": "LEAD-001",
+      "to": "jordan@fintechlabs.io",
+      "subject": "Fintech Labs + local outbound stack",
+      "body": "Hi Jordan — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
       "subjectVariant": "a",
       "status": "queued",
       "sentAt": null,
       "error": null,
-      "id": "SEND-006",
-      "createdAt": "2026-07-02T03:26:44.411Z",
-      "undoUntil": "2026-07-02T03:26:52.412Z"
-    },
-    {
-      "sequenceId": "COMPOSE",
-      "stepId": "reply",
-      "leadId": "LEAD-003",
-      "to": "alex@edgecompute.ai",
-      "subject": "Re: undo",
-      "body": "Undo window smoke.",
-      "status": "skipped",
-      "sentAt": null,
-      "error": "Cancelled by operator",
-      "id": "SEND-005",
-      "createdAt": "2026-07-02T03:26:24.017Z",
-      "undoUntil": null
-    },
-    {
-      "sequenceId": "COMPOSE",
-      "stepId": "reply",
-      "leadId": "LEAD-003",
-      "to": "alex@edgecompute.ai",
-      "subject": "Re: live status",
-      "body": "W30 compose send status check.",
-      "status": "queued",
-      "sentAt": null,
-      "error": null,
       "id": "SEND-004",
-      "createdAt": "2026-07-02T03:26:23.969Z",
-      "undoUntil": "2026-07-02T03:26:31.971Z"
+      "createdAt": "2026-07-02T05:20:37.144Z",
+      "undoUntil": "2026-07-02T05:20:45.145Z"
     },
     {
-      "sequenceId": "SEQ-003",
-      "stepId": "STEP-02bab718",
-      "leadId": "LEAD-004",
-      "to": "demo@curxor.dev",
-      "subject": "Demo tour · needs your OK",
-      "body": "Hi Demo — this step waits in the approval queue until you release it.",
+      "sequenceId": "SEQ-004",
+      "stepId": "STEP-2ff11f08",
+      "leadId": "LEAD-001",
+      "to": "jordan@fintechlabs.io",
+      "subject": "Fintech Labs + local outbound stack",
+      "body": "Hi Jordan — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
       "subjectVariant": "a",
       "status": "queued",
       "sentAt": null,
       "error": null,
       "id": "SEND-003",
-      "createdAt": "2026-07-02T03:26:23.771Z",
-      "undoUntil": "2026-07-02T03:26:31.773Z"
+      "createdAt": "2026-07-02T05:20:37.138Z",
+      "undoUntil": "2026-07-02T05:20:45.139Z"
     },
     {
       "sequenceId": "SEQ-003",
-      "stepId": "STEP-02bab718",
-      "leadId": "LEAD-004",
-      "to": "demo@curxor.dev",
-      "subject": "Demo tour · needs your OK",
-      "body": "Hi Demo — this step waits in the approval queue until you release it.",
+      "stepId": "STEP-9533c9f8",
+      "leadId": "LEAD-001",
+      "to": "jordan@fintechlabs.io",
+      "subject": "Re: local outbound",
+      "body": "Jordan — following up once. We auto-pause on reply and index mail offline. Still relevant?",
       "subjectVariant": "a",
       "status": "queued",
       "sentAt": null,
       "error": null,
       "id": "SEND-002",
-      "createdAt": "2026-07-02T03:26:23.726Z",
-      "undoUntil": "2026-07-02T03:26:31.727Z"
+      "createdAt": "2026-07-02T05:20:37.130Z",
+      "undoUntil": "2026-07-02T05:20:45.132Z"
     },
     {
       "sequenceId": "SEQ-003",
-      "stepId": "STEP-02bab718",
-      "leadId": "LEAD-004",
-      "to": "demo@curxor.dev",
-      "subject": "Demo tour · needs your OK",
-      "body": "Hi Jordan — this send is queued for operator approval.",
-      "status": "queued",
-      "sentAt": null,
+      "stepId": "STEP-2cfef155",
+      "leadId": "LEAD-001",
+      "to": "jordan@fintechlabs.io",
+      "subject": "Fintech Labs + local outbound stack",
+      "body": "Hi Jordan — CurXor Outreach runs sequences on-appliance with zero SaaS rent. Interested in a demo?",
+      "subjectVariant": "a",
+      "status": "simulated",
+      "sentAt": "2026-07-02T05:13:09.197Z",
       "error": null,
       "id": "SEND-001",
-      "createdAt": "2026-07-02T03:26:23.346Z",
-      "undoUntil": "2026-07-02T03:26:31.379Z"
+      "createdAt": "2026-07-02T04:56:54.533Z",
+      "undoUntil": null
     }
   ],
   "mailIndex": [
     {
-      "id": "MAIL-0552dd76",
+      "id": "MAIL-ef803742",
       "from": "alex@edgecompute.ai",
       "subject": "Re: CurXor pricing",
       "snippet": "Thanks — interested in appliance tiers. Can we schedule a call?",
-      "receivedAt": "2026-07-02T03:26:44.345Z",
+      "receivedAt": "2026-07-02T05:20:37.172Z",
       "leadId": "LEAD-003",
       "matchedReply": true,
       "replyIntent": "interested"
     },
     {
-      "id": "MAIL-77b8cc1c",
+      "id": "MAIL-c7406c7c",
       "from": "alex@edgecompute.ai",
       "subject": "Re: CurXor pricing",
       "snippet": "Following up on my note — still keen to learn more about on-prem outreach.",
-      "receivedAt": "2026-07-01T03:26:44.345Z",
+      "receivedAt": "2026-07-01T05:20:37.172Z",
       "leadId": "LEAD-003",
       "matchedReply": true,
       "replyIntent": "interested"
     },
     {
-      "id": "MAIL-a511d1f8",
+      "id": "MAIL-8fc8300d",
       "from": "notifications@calendar.local",
       "subject": "Out of office until Monday",
       "snippet": "I am away from email — automatic reply",
-      "receivedAt": "2026-07-02T03:26:44.345Z",
+      "receivedAt": "2026-07-02T05:20:37.172Z",
       "leadId": null,
       "matchedReply": false,
       "replyIntent": "ooo"
     },
     {
-      "id": "MAIL-f663c7b3",
+      "id": "MAIL-fc9c3253",
       "from": "mailer-daemon@edgecompute.ai",
       "subject": "Undeliverable: CurXor pricing",
       "snippet": "Delivery failed for <bounce-probe@example.com> — 550 mailbox unavailable",
-      "receivedAt": "2026-07-02T03:26:44.345Z",
+      "receivedAt": "2026-07-02T05:20:37.172Z",
       "leadId": null,
       "matchedReply": false,
       "replyIntent": "interested"
     }
   ],
-  "syncLog": [
-    {
-      "id": "SYNC-9e928d42",
-      "connector": "hubspot",
-      "action": "sync_hubspot",
-      "detail": "demo · imported=2 pushed=1",
-      "createdAt": "2026-07-02T03:26:24.376Z",
-      "leadId": null,
-      "ok": true,
-      "error": null
-    },
-    {
-      "id": "SYNC-3e123dd6",
-      "connector": "hubspot",
-      "action": "sync_hubspot_push",
-      "detail": "demo push · jordan@fintechlabs.io",
-      "createdAt": "2026-07-02T03:26:24.374Z",
-      "leadId": "LEAD-001",
-      "ok": true,
-      "error": null
-    },
-    {
-      "id": "SYNC-bee716b7",
-      "connector": "hubspot",
-      "action": "sync_hubspot",
-      "detail": "demo import · sam@buildco.dev",
-      "createdAt": "2026-07-02T03:26:24.372Z",
-      "leadId": "LEAD-002",
-      "ok": true,
-      "error": null
-    },
-    {
-      "id": "SYNC-5d28656f",
-      "connector": "hubspot",
-      "action": "sync_hubspot",
-      "detail": "demo import · jordan@fintechlabs.io",
-      "createdAt": "2026-07-02T03:26:24.371Z",
-      "leadId": "LEAD-001",
-      "ok": true,
-      "error": null
-    },
-    {
-      "id": "SYNC-21d82249",
-      "connector": "digest",
-      "action": "needs_you_digest",
-      "detail": "Work Claw — needs you digest\n\nTotal: 1 (0 approvals · 0 interested mail · 1 P1)\n\nStalls:\n\nOpen dashboard → Work Claw → Needs you",
-      "createdAt": "2026-07-02T03:26:23.507Z",
-      "leadId": null,
-      "ok": true,
-      "error": null
-    }
-  ],
-  "agentAuditLog": [
-    {
-      "id": "WAGT-0006",
-      "at": "2026-07-02T03:26:52.859Z",
-      "kind": "handoff",
-      "source": "playbook",
-      "note": "OS playbook capital-alert · QQQ",
-      "sendId": null,
-      "leadId": "LEAD-013"
-    },
-    {
-      "id": "WAGT-0005",
-      "at": "2026-07-02T03:26:52.779Z",
-      "kind": "handoff",
-      "source": "my-capital",
-      "note": "SPY alert reply",
-      "sendId": null,
-      "leadId": "LEAD-011"
-    },
-    {
-      "id": "WAGT-0004",
-      "at": "2026-07-02T03:26:52.739Z",
-      "kind": "handoff",
-      "source": "my-content",
-      "note": "QA engage DM",
-      "sendId": null,
-      "leadId": "LEAD-010"
-    },
-    {
-      "id": "WAGT-0003",
-      "at": "2026-07-02T03:26:24.604Z",
-      "kind": "mcp",
-      "source": "mcp",
-      "tool": "send_sequence_preview",
-      "note": "MCP tools/call · send_sequence_preview",
-      "sendId": null,
-      "leadId": null
-    },
-    {
-      "id": "WAGT-0002",
-      "at": "2026-07-02T03:26:24.423Z",
-      "kind": "sync",
-      "source": "desk",
-      "note": "Pipeline stage → qualified",
-      "sendId": null,
-      "leadId": "LEAD-001"
-    },
-    {
-      "id": "WAGT-0001",
-      "at": "2026-07-02T03:26:23.377Z",
-      "kind": "approval",
-      "source": "telegram_callback",
-      "note": "Demo approve SEND-001",
-      "sendId": "SEND-001",
-      "leadId": null
-    }
-  ],
+  "syncLog": [],
+  "agentAuditLog": [],
   "unsubscribeTokens": {
-    "LEAD-004": "tok-19e66be8-bba",
-    "LEAD-006": "tok-9a668465-a57"
+    "LEAD-001": "tok-18fdc8e6-b46"
   },
   "crmConflictResolutions": [],
   "suppressionList": [
     {
       "email": "bounce-probe@example.com",
       "reason": "Undeliverable: CurXor pricing",
-      "at": "2026-07-02T03:26:23.908Z",
+      "at": "2026-07-02T04:56:54.556Z",
       "source": "bounce"
     }
   ],
@@ -818,17 +665,16 @@
       "source": "jobs-rss",
       "intent": "hiring",
       "score": 82,
-      "receivedAt": "2026-07-02T02:25:54.798Z",
-      "id": "SIG-6b471d3e",
-      "convertedLeadId": "LEAD-012"
+      "receivedAt": "2026-07-02T03:56:46.562Z",
+      "id": "SIG-f248ae60"
     },
     {
       "title": "Northwind Labs raised seed — GTM hire likely",
       "source": "funding-feed",
       "intent": "funding",
       "score": 76,
-      "receivedAt": "2026-07-02T01:25:54.798Z",
-      "id": "SIG-993e6c73"
+      "receivedAt": "2026-07-02T02:56:46.562Z",
+      "id": "SIG-27539e38"
     },
     {
       "title": "CurXor mentioned in sovereign AI thread on HN",
@@ -836,8 +682,8 @@
       "url": "https://news.ycombinator.com",
       "intent": "community",
       "score": 68,
-      "receivedAt": "2026-07-02T00:25:54.798Z",
-      "id": "SIG-2a2189c9"
+      "receivedAt": "2026-07-02T01:56:46.562Z",
+      "id": "SIG-76e13f27"
     }
   ]
 }

@@ -229,7 +229,44 @@
     "flow-forged-capital-11",
     "flow-assist-work-11",
     "flow-round-trip-11",
-    "flow-reimport-claw-11"
+    "flow-reimport-claw-11",
+    "checklist-work-desk-12",
+    "checklist-creator-desk-12",
+    "checklist-island-claw-12",
+    "checklist-mesh-desk-12",
+    "checklist-cafe-mint-12",
+    "checklist-capital-desk-12",
+    "qa-smoke-work-desk-14",
+    "qa-smoke-creator-desk-14",
+    "qa-smoke-capital-desk-14",
+    "qa-smoke-framework-desk-for--15",
+    "qa-smoke-work-desk-15",
+    "qa-smoke-creator-desk-15",
+    "qa-smoke-capital-desk-15",
+    "qa-smoke-framework-desk-for--16",
+    "qa-smoke-work-desk-16",
+    "qa-smoke-creator-desk-16",
+    "qa-smoke-capital-desk-16",
+    "qa-smoke-framework-desk-for--17",
+    "qa-smoke-work-desk-17",
+    "qa-smoke-creator-desk-17",
+    "qa-smoke-capital-desk-17",
+    "qa-smoke-framework-desk-for--18",
+    "qa-smoke-work-desk-18",
+    "qa-smoke-creator-desk-18",
+    "qa-smoke-capital-desk-18",
+    "qa-smoke-framework-desk-for--19",
+    "qa-smoke-work-desk-19",
+    "qa-smoke-creator-desk-19",
+    "qa-smoke-capital-desk-19",
+    "qa-smoke-framework-desk-for--20",
+    "qa-smoke-work-desk-20",
+    "qa-smoke-creator-desk-20",
+    "qa-smoke-capital-desk-20",
+    "qa-smoke-framework-desk-for--21",
+    "qa-smoke-work-desk-21",
+    "qa-smoke-creator-desk-21",
+    "qa-smoke-capital-desk-21"
   ],
   "appearance": {
     "uiMode": "simple",
@@ -273,7 +310,7 @@
   "buildPlane": {
     "enabled": true,
     "linkStatus": "linked",
-    "linkedAt": "2026-07-02T03:25:55.504Z",
+    "linkedAt": "2026-07-02T05:20:29.874Z",
     "workerStatus": "online",
     "allowDelegation": true,
     "allowWriteTools": false,
@@ -282,7 +319,7 @@
     "workerHost": "127.0.0.1",
     "workerSshPort": 22,
     "workerSshUser": "curxor",
-    "workerLastProbeAt": "2026-07-02T03:25:55.504Z",
+    "workerLastProbeAt": "2026-07-02T05:20:29.874Z",
     "workerWizardCompletedAt": null,
     "workerCompletedSteps": []
   },
@@ -293,10 +330,10 @@
   },
   "patronWeeklyBundle": {
     "weekOf": "2026-06-29",
-    "lastConfirmedAt": "2026-07-02T03:26:18.356Z"
+    "lastConfirmedAt": "2026-07-02T05:20:48.501Z"
   },
   "flightCommand": {
-    "homeLastVisitedAt": "2026-07-02T03:26:17.406Z",
+    "homeLastVisitedAt": "2026-07-02T05:20:47.576Z",
     "notificationMode": "calm"
   },
   "operatorProfile": {
@@ -305,5 +342,5 @@
     "privacyDeferred": false,
     "completedAt": "2026-06-20T06:00:00.000Z"
   },
-  "updatedAt": "2026-07-02T03:27:05.810Z"
+  "updatedAt": "2026-07-02T05:20:48.502Z"
 }

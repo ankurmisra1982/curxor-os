@@ -74,7 +74,7 @@ export function KinSettingsPanel({ config, onSaveNotify }: KinSettingsPanelProps
             onChange={(e) => setNotifyWhenLive(e.target.checked)}
             className="border border-line"
           />
-          Remind me when Kin Claw exits preview mode
+          Remind me when Kin exits preview mode
         </label>
         <button
           type="button"

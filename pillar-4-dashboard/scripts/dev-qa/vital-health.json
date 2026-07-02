@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-02T03:27:09.836Z",
+  "updatedAt": "2026-07-02T05:20:47.811Z",
   "vitals": [
     {
       "metric": "resting_hr",
@@ -134,7 +134,7 @@
     }
   ],
   "meta": {
-    "lastLabAt": "2026-07-02T03:27:09.836Z",
+    "lastLabAt": "2026-07-02T05:20:47.811Z",
     "lastWearableSyncAt": "2026-07-02T03:26:50.828Z",
     "lastMeshPublishedAt": "2026-07-02T03:26:50.840Z"
   }

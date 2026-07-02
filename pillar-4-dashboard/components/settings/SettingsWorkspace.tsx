@@ -9,6 +9,7 @@ import { ModuleSelectionStep } from "@/components/setup/ModuleSelectionStep";
 import { AgentRuntimeSettingsPanels } from "@/components/settings/AgentRuntimeSettingsPanels";
 import { BuildPlanePanel } from "@/components/settings/BuildPlanePanel";
 import { IntegrationsSettingsPanel } from "@/components/settings/IntegrationsSettingsPanel";
+import { SystemSettingsPanel } from "@/components/settings/SystemSettingsPanel";
 import { UpdatesSettingsPanel } from "@/components/settings/UpdatesSettingsPanel";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { useExperienceLevel } from "@/components/ui/UiModeProvider";
@@ -32,7 +33,7 @@ import type {
   UserSettings,
 } from "@/lib/user-settings-types";
 
-type SettingsTab = "claws" | "integrations" | "intelligence" | "appearance" | "agent" | "general" | "updates";
+type SettingsTab = "claws" | "integrations" | "intelligence" | "appearance" | "agent" | "general" | "updates" | "system";
 
 const SETTINGS_TABS: SettingsTab[] = [
   "claws",
@@ -41,6 +42,7 @@ const SETTINGS_TABS: SettingsTab[] = [
   "appearance",
   "agent",
   "updates",
+  "system",
   "general",
 ];
 
@@ -363,6 +365,7 @@ export function SettingsWorkspace() {
     { id: "appearance", label: "Appearance", hint: "Theme and display mode" },
     { id: "agent", label: "Agent runtime", hint: "Channels, CCP, heartbeat" },
     { id: "updates", label: "Updates", hint: "Check and install CurXor OS patches" },
+    { id: "system", label: "System", hint: "Restart stack · reboot · shut down" },
     { id: "general", label: "General", hint: "Builder overlay + appliance prefs" },
   ];
 
@@ -923,9 +926,9 @@ export function SettingsWorkspace() {
               </section>
 
               <section>
-                <h2 className="font-sans text-lg font-semibold text-stark">Kin Claw growth level</h2>
+                <h2 className="font-sans text-lg font-semibold text-stark">Kin growth level</h2>
                 <p className="mt-1 font-sans text-xs text-muted">
-                  Optional override for Kin desk persona (Member → Elder). Leave default to use FRE intent.
+                  Optional override for Kin household mapper persona (Member → Elder). Leave default to use FRE intent.
                 </p>
                 <select
                   value={kinGrowthLevel}
@@ -1035,6 +1038,8 @@ export function SettingsWorkspace() {
           ) : null}
 
           {tab === "updates" ? <UpdatesSettingsPanel /> : null}
+
+          {tab === "system" ? <SystemSettingsPanel /> : null}
 
           {tab === "general" ? (
             <div className="space-y-6 p-6">

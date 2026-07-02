@@ -65,8 +65,8 @@ export function previewWorkspaceBanner(appId: ClawPreviewAppId): { title: string
       };
     case "my-family":
       return {
-        title: "Preview module — Kin Claw",
-        body: "Household profiles and CCP sync work locally; advanced family automation ships later.",
+        title: "Preview module — Kin",
+        body: "Household mapper — profiles and CCP sync work locally; advanced family automation ships later.",
       };
     default:
       return {

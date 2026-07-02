@@ -394,7 +394,7 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       ],
       activateTitle: "Enter preview mode",
       activateTips: [
-        "Kin Claw teaches who lives here — Vital adds wellness context for morning routines.",
+        "Kin maps who lives here — Vital adds wellness context for morning routines.",
         "Push knowledge packages rules to mesh; your robot reads them on pair day.",
         "Control tab is mesh demo only — not live humanoid motion in this release.",
       ],
@@ -912,7 +912,7 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       activateTips: [
         "Health bridges connect via eno2 — unplug to pause wearable sync.",
         "Medical reports stay in /etc/curxor/vital-health.json on this appliance.",
-        "Optimus and Kin Claw subscribe to health scope when enabled.",
+        "Optimus and Kin subscribe to health scope when enabled.",
       ],
     },
     bootMessage:
@@ -920,18 +920,18 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
   },
   "my-family": {
     appId: "my-family",
-    agentName: "Kin Claw",
-    tagline: "Who lives in your home — so Optimus, Vital, and every Claw personalize per person (preview)",
-    ootbLabel: "Kin Claw",
+    agentName: "Kin",
+    tagline: "Household mapper — profiles, scopes, and devices for everyone in your home (preview)",
+    ootbLabel: "Kin",
     purpose: [
-      "Give each household member their own identity on the appliance — partner, kids, elders, guests.",
-      "Optimus (Signal Claw) will use profiles for guest-aware tone and physical interactions — preview until family mode ships.",
-      "Vital Claw will route wearables, labs, and longevity advice per member — not one blended health profile.",
-      "Kin publishes family scope to the Claw Context mesh today; profile storage and resync work locally.",
+      "Always-on household identity — who lives here, their roles, and what each Claw may read.",
+      "Signal Claw uses Kin for guest-aware tone and per-member robot policy when hardware pairs.",
+      "Vital Claw routes wearables, labs, and longevity advice per profile — not one blended health blob.",
+      "Publishes family scope to Claw Context mesh; profiles persist locally on your appliance.",
     ],
     howToUse: [
-      "Add your partner and kids — each gets role, communication style, and shared scopes.",
-      "Show the showcase cards to buyers: this is why CurXor beats a single-user AI box.",
+      "Add partner, kids, elders, and guests — each gets role, communication style, and scopes.",
+      "Bind devices to profiles so the mesh knows who is wearing which watch or phone.",
       "Resync mesh after changes so subscribed Claws pick up family.members.* keys.",
     ],
     skills: [
@@ -940,9 +940,9 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       { id: "resync_mesh", label: "Resync Mesh", description: "Publish family context to CCP", kind: "plan" },
     ],
     fre: {
-      welcomeTitle: "Kin Claw — preview mode",
+      welcomeTitle: "Kin — your household on the box",
       welcomeLead:
-        "CurXor should know your household — not treat your kids like you. Kin is the identity layer: Optimus gets guest-aware tone, Vital gets per-member health, every Claw gets the right person. Preview mode: profiles and mesh sync work today; full routing ships later.",
+        "Kin is the always-on household mapper — not a hired Claw. Optimus gets guest-aware tone, Vital gets per-member health, every operate Claw gets the right person. Preview: profiles and mesh sync work today.",
       configureTitle: "Household setup",
       configureLead: "Name your household and tell us who you are coordinating for.",
       fields: [
@@ -974,16 +974,16 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           ],
         },
       ],
-      activateTitle: "Activate Kin Claw (preview)",
+      activateTitle: "Enter Kin preview",
       activateTips: [
-        "Add partner and kids now — demo the Optimus + Vital story even in preview.",
-        "Optimus guest mode reads family context when Signal Claw exits preview.",
-        "Vital household routing ties vitals to the right profile — not one shared blob.",
+        "Kin stays always-on in the universal strip — you don't hire it in Setup Wizard.",
+        "Add partner and kids now — demo the Signal + Vital story even in preview.",
+        "Signal guest mode reads family context when Neural Link exits preview.",
         "Profiles persist to /etc/curxor/family-profiles.json on your appliance.",
       ],
     },
     bootMessage:
-      "Kin Claw ready (preview). Add your partner or kids — each profile is who Optimus and Vital will recognize. Ask how household context flows to the mesh.",
+      "Kin ready (preview). Add household members — each profile is who Signal and Vital will recognize. Ask how family context flows to the mesh.",
   },
   "claw-forge": {
     appId: "claw-forge",

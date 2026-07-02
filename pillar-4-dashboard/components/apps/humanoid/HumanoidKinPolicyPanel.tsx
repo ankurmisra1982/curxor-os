@@ -19,7 +19,7 @@ export function HumanoidKinPolicyPanel({ policies, busy, onUpdate }: HumanoidKin
       <div className="border border-line bg-panel p-4 font-mono text-[10px] text-muted">
         No Kin profiles yet.{" "}
         <Link href="/my-family" className="text-cursor-glow hover:underline">
-          Add household members in Kin Claw →
+          Add household members in Kin →
         </Link>
       </div>
     );

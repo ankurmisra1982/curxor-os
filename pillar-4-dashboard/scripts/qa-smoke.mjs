@@ -77,6 +77,34 @@ await check("system updates install rejects without confirm", async () => {
   return status === 400 && json.error === "confirm_required";
 });
 
+await check("system power status", async () => {
+  const data = await getJson("/api/system/power");
+  return (
+    data.ok === true &&
+    (data.mode === "appliance" || data.mode === "dry-run") &&
+    typeof data.sudoReady === "boolean" &&
+    Array.isArray(data.units)
+  );
+});
+
+await check("system power restart rejects without confirm", async () => {
+  const { status, json } = await postJson("/api/system/power", { action: "restart_stack" });
+  return status === 400 && json.error === "confirm_required";
+});
+
+await check("system power restart dry-run", async () => {
+  const { status, json } = await postJson("/api/system/power", {
+    action: "restart_stack",
+    confirm: true,
+  });
+  return status === 202 && json.ok === true && json.mode === "dry-run";
+});
+
+await check("system power reboot rejects without typed confirm", async () => {
+  const { status, json } = await postJson("/api/system/power", { action: "reboot", confirm: true });
+  return status === 400 && json.error === "confirm_required";
+});
+
 await check("settings sakana frontier provider", async () => {
   const data = await getJson("/api/settings");
   const sakana = data.providers?.find((p) => p.id === "sakana");
@@ -164,7 +192,7 @@ await check("build plane worker probe demo", async () => {
 
 await check("build plane event bus log", async () => {
   const data = await getJson("/api/build/events?limit=8");
-  return data.ok === true && Array.isArray(data.events) && Array.isArray(data.kinds) && data.kinds.length === 8;
+  return data.ok === true && Array.isArray(data.events) && Array.isArray(data.kinds) && data.kinds.length === 9;
 });
 
 await check("build plane event bus emit demo", async () => {
@@ -1746,6 +1774,23 @@ for (const appId of appIds) {
     return typeof json.reply === "string" && json.reply.length > 0;
   });
 }
+
+await check("ol-kin catalog is household mapper", async () => {
+  const data = await getJson("/api/app-agent/my-family");
+  const agent = data.agent;
+  return (
+    agent?.agentName === "Kin" &&
+    agent?.ootbLabel === "Kin" &&
+    typeof agent?.tagline === "string" &&
+    agent.tagline.toLowerCase().includes("household")
+  );
+});
+
+await check("ol-kin fre excludes my-family", async () => {
+  const data = await getJson("/api/settings");
+  const apps = data.settings?.selectedApps ?? [];
+  return !apps.includes("my-family");
+});
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 if (fail > 0) process.exitCode = 1;

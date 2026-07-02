@@ -340,17 +340,19 @@ sudo apt update && sudo apt install -y firefox
 
 ### Step 5.4 — Restart or shut down (monitor connected)
 
-Flight Command **does not** ship Shut down / Restart buttons yet (roadmap [IDEA-A06](./CURRENT-ROADMAP.md#idea-a06-settings--appliance-power-controls)). Until then:
+**Primary path:** **Settings → System** in Flight Command — restart the CurXor stack, reboot, or shut down with typed confirmation. No SSH required on a configured box.
 
-| You want… | Ubuntu desktop (default install) | Kiosk fullscreen ([19-kiosk-mode.md](../guides/19-kiosk-mode.md)) |
-|-----------|-----------------------------------|-------------------------------------------------------------------|
-| **Shut down the box** | Top-right **Power** → Shut Down | **Ctrl+Alt+F3** → log in → `sudo shutdown -h now` · or hold **power button** |
-| **Restart the whole box** | Top-right **Power** → Restart | **Ctrl+Alt+F3** → `sudo reboot` · or power button cycle |
-| **Restart CurXor only** (software stack) | Terminal: `sudo systemctl restart curxor-os.target` | Same via **Ctrl+Alt+F3** terminal |
+| You want… | Settings → System (recommended) | Terminal fallback |
+|-----------|--------------------------------|-------------------|
+| **Restart CurXor only** (software stack) | **Restart CurXor** → confirm | `sudo systemctl restart curxor-os.target` |
+| **Restart the whole box** | **Reboot box** → type `REBOOT` | **Ctrl+Alt+F3** → `sudo reboot` · or Ubuntu Power menu |
+| **Shut down the box** | **Shut down** → type `SHUTDOWN` | **Ctrl+Alt+F3** → `sudo shutdown -h now` · or hold **power button** |
 
-**Buyer-safe one-liner:** *Flight Command runs in the browser. To power off the machine, use Ubuntu’s power menu or the button on the box. To restart just the AI stack, use Settings → System Health logs or the operator card command above.*
+Kiosk fullscreen ([19-kiosk-mode.md](../guides/19-kiosk-mode.md)): use Settings → System from the browser, or **Ctrl+Alt+F3** for terminal fallback.
 
-☐ Test: open Flight Command on the monitor → confirm you know how to shut down before leaving the desk.
+**Buyer-safe one-liner:** *Flight Command runs in the browser. Use Settings → System to restart the AI stack or power off the box. Terminal commands above are the operator fallback.*
+
+☐ Test: open **Settings → System** → confirm restart/shutdown paths before leaving the desk.
 
 ---
 
@@ -418,8 +420,8 @@ See [19-kiosk-mode.md](../guides/19-kiosk-mode.md).
 │                                                         │
 │  Verify:     sudo /opt/curxor/scripts/verify-unbox-day.sh │
 │              --post-models                                │
-│  Restart UI: sudo systemctl restart curxor-os.target      │
-│  Shut down:   Ubuntu Power menu · or hold power button    │
+│  Restart UI: Settings → System · or sudo systemctl restart curxor-os.target │
+│  Shut down:   Settings → System · Ubuntu Power · power button │
 │  Kiosk exit:  Ctrl+Alt+F3 → terminal → sudo reboot        │
 │                                                         │
 │  Version: 0.9.1 · laptop pre-unbox gate: PASS             │

@@ -192,7 +192,7 @@ function computeReadiness(hub: HumanoidHubFile, kinCount: number, vitalLinked: b
       done:
         (kinCount > 0 && hub.kinPolicies.length > 0) ||
         hub.setupCompleted.includes("link_kin"),
-      hint: "Kin Claw teaches who lives here — tune per-member robot policy below.",
+      hint: "Kin maps who lives here — tune per-member robot policy below.",
     },
     {
       id: "teach_rules",
@@ -229,7 +229,7 @@ function computeReadiness(hub: HumanoidHubFile, kinCount: number, vitalLinked: b
       scope: "family",
       label: "Kin · household",
       linked: kinCount > 0,
-      detail: kinCount > 0 ? `${kinCount} member${kinCount === 1 ? "" : "s"} on mesh` : "Add profiles in Kin Claw",
+      detail: kinCount > 0 ? `${kinCount} member${kinCount === 1 ? "" : "s"} on mesh` : "Add profiles in Kin",
     },
     {
       scope: "health",

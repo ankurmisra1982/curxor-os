@@ -7,7 +7,8 @@ export type OsEventKind =
   | "claw.skill_completed"
   | "claw.approval_required"
   | "scheduler.heartbeat"
-  | "bridge.receipt";
+  | "bridge.receipt"
+  | "system.power_action";
 
 export const OS_EVENT_KINDS: OsEventKind[] = [
   "forge.claw_minted",
@@ -18,6 +19,7 @@ export const OS_EVENT_KINDS: OsEventKind[] = [
   "claw.approval_required",
   "scheduler.heartbeat",
   "bridge.receipt",
+  "system.power_action",
 ];
 
 export type OsEventPayload = Record<string, unknown>;

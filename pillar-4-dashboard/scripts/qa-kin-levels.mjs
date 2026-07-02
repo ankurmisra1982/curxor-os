@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Kin Claw growth-level + family API flows.
+ * Kin growth-level + family API flows.
  * Usage: node scripts/qa-kin-levels.mjs [baseUrl]
  */
 import { readFileSync, writeFileSync } from "node:fs";

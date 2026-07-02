@@ -183,7 +183,7 @@ export function HumanoidHomePanel({ onStatus, onSyncRequest, onOpenFleet }: Huma
           </button>
         ) : null}
         <Link href="/my-family" className="border border-line px-3 py-1 uppercase text-stark hover:border-cursor-glow">
-          Open Kin Claw →
+          Open Kin →
         </Link>
         <Link href="/my-vital" className="border border-line px-3 py-1 uppercase text-stark hover:border-cursor-glow">
           Open Vital Claw →

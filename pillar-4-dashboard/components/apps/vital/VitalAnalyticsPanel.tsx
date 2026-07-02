@@ -62,7 +62,7 @@ export function VitalAnalyticsPanel({ vitals, dietSync, protocolStepCount, analy
       ) : null}
 
       <p className="font-sans text-xs text-muted">
-        Analytics never egress — Optimus and Kin Claw only see what you publish to Claw Context mesh.
+        Analytics never egress — Optimus and Kin only see what you publish to Claw Context mesh.
       </p>
     </div>
   );

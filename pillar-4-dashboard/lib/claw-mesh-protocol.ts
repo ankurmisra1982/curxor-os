@@ -116,7 +116,7 @@ export const CCP_REGISTRY: {
       appId: "my-family",
       scopes: ["health", "work", "personal"],
       profileIds: [],
-      description: "Kin Claw surfaces cross-member context for coordination",
+      description: "Kin surfaces cross-member context for coordination",
     },
     {
       appId: "my-capital",
