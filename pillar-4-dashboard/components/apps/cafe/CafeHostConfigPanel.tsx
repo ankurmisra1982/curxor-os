@@ -18,11 +18,11 @@ export function CafeHostConfigPanel({ kioskName, prizeMode, activeLanes }: CafeH
   return (
     <div className="space-y-3 font-mono text-[10px]">
       <p className="text-muted">
-        Desk configuration from Engage Claw FRE — edit via setup wizard or agent console help.
+        Host configuration from Claw Cafe FRE — edit via setup wizard or agent console help.
       </p>
       <dl className="grid gap-2 sm:grid-cols-2">
         <div className="border border-line bg-panel px-3 py-2">
-          <dt className="uppercase tracking-widest text-muted">Engage desk</dt>
+          <dt className="uppercase tracking-widest text-muted">Hall name</dt>
           <dd className="mt-1 text-stark">{kioskName}</dd>
         </div>
         <div className="border border-line bg-panel px-3 py-2">

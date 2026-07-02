@@ -192,7 +192,7 @@ Calm, risk-aware, operator-first.`,
   "kiosk-desk": {
     id: "kiosk-desk",
     label: "Kiosk / retail desk",
-    description: "Engage-style kiosk intent — guest queue, vision, lane ops.",
+    description: "Cafe-style kiosk intent — guest queue, vision, lane ops.",
     cloneHint: "Retail / kiosk domain pack",
     defaultGrowthLevel: "L1",
     agentNameSuffix: "Kiosk Claw",
@@ -202,10 +202,10 @@ Calm, risk-aware, operator-first.`,
       { id: "reset_lane", label: "Reset Lane", description: "Clear lane state", kind: "physical" },
     ],
     freFields: [
-      { id: "kioskName", label: "Kiosk name", type: "text", defaultValue: "Engage Desk" },
+      { id: "kioskName", label: "Kiosk name", type: "text", defaultValue: "Patron Hall" },
       { id: "meshPublish", label: "Publish kiosk events to mesh", type: "toggle", defaultValue: true },
     ],
-    defaultFreConfig: { kioskName: "Engage Desk", meshPublish: true, growthLevel: "L1" },
+    defaultFreConfig: { kioskName: "Patron Hall", meshPublish: true, growthLevel: "L1" },
     soulTemplate: `# {{agentName}}
 
 {{intent}}

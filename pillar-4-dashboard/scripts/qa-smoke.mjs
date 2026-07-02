@@ -669,7 +669,7 @@ await check("mesh digital discord", async () => {
   const { json } = await postJson("/api/mesh/digital", {
     tool: "channel.discord.send",
     payload: {
-      text: "CurXor QA — sovereign Discord bridge for Creator + Engage Claw.",
+      text: "CurXor QA — sovereign Discord bridge for Creator Claw.",
       channel_id: "123456789012345678",
     },
   });
@@ -1412,6 +1412,11 @@ await check("ol1 fre pickable excludes universal", async () => {
   const apps = data.settings?.selectedApps ?? [];
   const universal = ["claw-cafe", "tesla-optimus-engine", "my-family"];
   return universal.every((id) => !apps.includes(id));
+});
+
+await check("ol1 cafe catalog is patron hall", async () => {
+  const data = await getJson("/api/app-agent/claw-cafe");
+  return data.agent?.agentName === "Claw Cafe" && data.agent?.ootbLabel === "Claw Cafe";
 });
 
 await check("claw profiles", async () => {

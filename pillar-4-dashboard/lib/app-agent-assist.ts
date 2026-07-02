@@ -3,6 +3,7 @@ import "server-only";
 import { getAppAgent, type AgentSkill, type AppAgentDefinition } from "./app-agent-catalog";
 import { resolveAppAgent } from "./forged-agent-resolve";
 import type { ResolvedAppAgent } from "./forged-agent-catalog";
+import { CAFE_DEFAULT_KIOSK_NAME } from "./ol1-layer";
 import { isValidAppId, type OotbAppId } from "./ootb-apps";
 import { isForgedAppId, isWorkspaceAppId, type WorkspaceAppId } from "./workspace-app-id";
 import {
@@ -365,15 +366,21 @@ function ruleBasedReply(req: AgentAssistRequest, agent: AppAgentDefinition | Res
 
     case "claw-cafe":
       if (/reply|dm|thread|engage|post/.test(combined)) {
-        return { reply: "Pick a lane and tap Drop Claw to queue the next engagement.", suggestedSkill: "drop_claw" };
+        return {
+          reply: "DM triage lives under Creator → Engage. Here in Patron Hall, pick a lane and tap Drop Claw for kiosk demos.",
+          suggestedSkill: "drop_claw",
+        };
       }
       if (/reset|clear/.test(combined)) {
-        return { reply: "Reset Lane clears thread state for selected lane.", suggestedSkill: "reset_lane" };
+        return { reply: "Reset Lane clears guest queue state for the selected lane.", suggestedSkill: "reset_lane" };
       }
       if (/photo|picture|booth|capture/.test(combined)) {
-        return { reply: "Photo Booth captures current vision_in frame for thread assets.", suggestedSkill: "photo_booth" };
+        return { reply: "Photo Booth captures the current vision_in frame for guest demos.", suggestedSkill: "photo_booth" };
       }
-      return { reply: `${cfgStr(config, "kioskName", "Engage Desk")} ready. Start Game on lane A for live demos.`, suggestedSkill: "start_game" };
+      return {
+        reply: `${cfgStr(config, "kioskName", CAFE_DEFAULT_KIOSK_NAME)} ready. Start Game on lane A for Patron Hall demos.`,
+        suggestedSkill: "start_game",
+      };
 
     case "my-content-creator":
       if (/thumbnail|thumb|image|vision|frame/.test(combined)) {

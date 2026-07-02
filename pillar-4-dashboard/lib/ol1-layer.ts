@@ -11,6 +11,9 @@ export const UNIVERSAL_SHELL_APP_IDS = [
 
 export type UniversalShellAppId = (typeof UNIVERSAL_SHELL_APP_IDS)[number];
 
+/** Default kiosk label when Claw Cafe FRE config is unset (Patron Hall). */
+export const CAFE_DEFAULT_KIOSK_NAME = "Patron Hall";
+
 const UNIVERSAL_SET = new Set<string>(UNIVERSAL_SHELL_APP_IDS);
 
 export function isUniversalShellApp(appId: OotbAppId): boolean {

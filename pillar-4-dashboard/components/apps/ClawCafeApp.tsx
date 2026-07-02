@@ -28,6 +28,7 @@ import type { AscensionState, AscensionTierId } from "@/lib/claw-cafe-ascension"
 import { ASCENSION_TIER_INDEX } from "@/lib/claw-cafe-ascension";
 import type { CafeCharacter } from "@/lib/claw-cafe-spatial";
 import { getOotbApp } from "@/lib/ootb-apps";
+import { CAFE_DEFAULT_KIOSK_NAME } from "@/lib/ol1-layer";
 import { useMotorStream } from "@/hooks/useMotorStream";
 import { useVisionStream } from "@/hooks/useVisionStream";
 
@@ -51,7 +52,7 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
   const growthLevel = resolveCafeGrowthLevel(config, level);
   const [workspaceTab, setWorkspaceTab] = useState<CafeWorkspaceTab>(() => defaultCafeTab(growthLevel));
 
-  const kiosk = typeof config.kioskName === "string" ? config.kioskName : "Engage Desk";
+  const kiosk = typeof config.kioskName === "string" ? config.kioskName : CAFE_DEFAULT_KIOSK_NAME;
   const prizeMode = typeof config.prizeMode === "string" ? config.prizeMode : "demo";
   const activeLanes = useMemo(() => readActiveLanes(config), [config]);
 
@@ -238,12 +239,12 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
     <div className="space-y-4 p-4">
       <header className="border border-line bg-panel px-4 py-3">
         <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-cursor-glow">
-          OOTB · {getOotbApp("claw-cafe").name}
+          Patron Hall · {getOotbApp("claw-cafe").name}
         </p>
         <h1 className="font-display text-sm uppercase tracking-[0.16em] text-stark">{kiosk}</h1>
         <p className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10px] text-muted">
           <span>
-            Engage Claw · lane {activeLane} · {gamesPlayed} engagements · vision {connected ? "LIVE" : "offline"}
+            Claw Cafe · lane {activeLane} · {gamesPlayed} sessions · vision {connected ? "LIVE" : "offline"}
           </span>
           <CafeLevelBadge growthLevel={growthLevel} />
         </p>
@@ -417,8 +418,8 @@ export function ClawCafeApp({ config, skillTick, lastSkillId }: AgentAppContext)
           appId="claw-cafe"
           sectionId="host-config"
           minLevel="standard"
-          title="Desk config"
-          subtitle="FRE settings for kiosk and lane layout"
+          title="Host config"
+          subtitle="Patron Hall kiosk name, prize mode, and lane layout"
         >
           <CafeHostConfigPanel kioskName={kiosk} prizeMode={prizeMode} activeLanes={activeLanes} />
         </ExperienceAppSection>

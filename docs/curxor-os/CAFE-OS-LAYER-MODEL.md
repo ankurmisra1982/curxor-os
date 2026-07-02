@@ -229,7 +229,7 @@ Parent A ──handshake── Parent B (v1: Cap×Cre | Work×Cre | Vital×Kin)
 | Route `/cafe` vs `/claw-cafe` | Optional polish G4 |
 | Learn / Estate Tier C honest cards | Until ES0 / LR0 ship at G4 |
 | Public “fusion” vs “specialist mint” | Pro copy = fusion · Cafe = birth mythic |
-| Code drift | `ootb-apps.ts` still lists Cafe as Engage · Kin in ten — **OL1 pending** |
+| Code drift | ~~`ootb-apps.ts` still lists Cafe as Engage~~ · **OL1 shipped 2026-07-02** |
 
 ---
 

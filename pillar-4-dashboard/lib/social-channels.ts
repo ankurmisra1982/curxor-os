@@ -1,5 +1,5 @@
 /**
- * Canonical catalog of top social & creator platforms for Creator Claw / Engage Claw.
+ * Canonical catalog of top social & creator platforms for Creator Claw.
  * Bridge tiers reflect what digital_bridges.py can execute today on eno2.
  */
 

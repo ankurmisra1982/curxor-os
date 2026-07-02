@@ -57,11 +57,11 @@ export const OOTB_APPS = [
   },
   {
     id: "claw-cafe",
-    name: "Engage Claw",
+    name: "Claw Cafe",
     href: "/claw-cafe",
-    short: "ENG",
+    short: "CAFE",
     description:
-      "Auto-replies, DM triage, and community thread engagement on X and LinkedIn — grow audience while you sleep.",
+      "Patron Hall — pixel room, ascension, handshakes, and cross-Claw celebrations. Always on; Engage inbox lives under Creator.",
   },
   {
     id: "my-vital",

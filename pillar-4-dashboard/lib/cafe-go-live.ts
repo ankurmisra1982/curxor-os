@@ -3,6 +3,7 @@ import "server-only";
 import { readAppFreState } from "./app-fre-state";
 import { readCafeStateMetrics } from "./claw-cafe-events";
 import { collectComputeMetrics } from "./metrics";
+import { CAFE_DEFAULT_KIOSK_NAME } from "./ol1-layer";
 import { readUserSettings } from "./user-settings";
 
 export type CafeGoLiveStepStatus = "complete" | "warning" | "pending" | "optional";
@@ -37,7 +38,7 @@ export async function buildCafeGoLiveReport(): Promise<CafeGoLiveReport> {
   const kioskName =
     typeof fre.config.kioskName === "string" && fre.config.kioskName.trim()
       ? fre.config.kioskName.trim()
-      : "Engage Desk";
+      : CAFE_DEFAULT_KIOSK_NAME;
 
   const steps: CafeGoLiveStep[] = [
     {

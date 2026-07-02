@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { isValidAppId, type OotbAppId } from "./ootb-apps";
+import { stripUniversalFromSelected } from "./ol1-layer";
 
 export type { OotbAppId } from "./ootb-apps";
 export { OOTB_APPS, isValidAppId } from "./ootb-apps";
@@ -29,7 +30,7 @@ export async function readFreState(): Promise<FreState> {
     const parsed = JSON.parse(raw) as Partial<FreState>;
     return {
       initialized: Boolean(parsed.initialized),
-      selectedApps: Array.isArray(parsed.selectedApps) ? parsed.selectedApps : [],
+      selectedApps: stripUniversalFromSelected(validateAppIds(parsed.selectedApps ?? [])),
       provisionedAt: typeof parsed.provisionedAt === "string" ? parsed.provisionedAt : null,
     };
   } catch {
@@ -49,9 +50,10 @@ export async function isFreInitialized(): Promise<boolean> {
 }
 
 export async function markFreProvisioned(selectedApps: OotbAppId[]): Promise<FreState> {
+  const operateApps = stripUniversalFromSelected(validateAppIds(selectedApps.map(String)));
   const next: FreState = {
     initialized: true,
-    selectedApps,
+    selectedApps: operateApps,
     provisionedAt: new Date().toISOString(),
   };
   await writeFreState(next);

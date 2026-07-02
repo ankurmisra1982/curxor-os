@@ -490,18 +490,18 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
   },
   "claw-cafe": {
     appId: "claw-cafe",
-    agentName: "Engage Claw",
-    tagline: "Community and DM engagement employee",
-    ootbLabel: "Engage Claw",
+    agentName: "Claw Cafe",
+    tagline: "Patron Hall — living mirror, ascension, and cross-Claw celebrations",
+    ootbLabel: "Claw Cafe",
     purpose: [
-      "Auto-replies, DM triage, and thread engagement on X and LinkedIn.",
-      "Grow audience while you sleep — all egress via eno2.",
-      "Event kiosk mode for live demos of your sovereign stack.",
+      "Pixel room reflects Work, Creator, Capital, and Forge activity on your box.",
+      "Ascension tiers, handshakes, and demo tours for buyer-ready GTM.",
+      "Play tab keeps the lane kiosk demo — vision feeds when mesh is up.",
     ],
     howToUse: [
-      "Configure channels and engagement rules in FRE.",
-      "Tap skills to simulate guest sessions or publish replies.",
-      "Chat: “Draft replies for my mentions queue.”",
+      "Open Ascension for the pixel room and unified cross-Claw feed.",
+      "Run demo tour from Go Live to celebrate ascension with stub events.",
+      "Configure hall name and lanes in Host tab when you reach L3.",
     ],
     skills: [
       { id: "start_game", label: "Start Game", description: "Begin guest session on lane", kind: "plan" },
@@ -516,12 +516,13 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
       },
     ],
     fre: {
-      welcomeTitle: "Welcome to Engage Claw",
-      welcomeLead: "Engage Claw grows your audience — replies and DMs handled locally, published via eno2.",
-      configureTitle: "Engagement desk",
-      configureLead: "Name your desk and configure demo engagement mode.",
+      welcomeTitle: "Welcome to Claw Cafe",
+      welcomeLead:
+        "Patron Hall is always on — your living mirror for ascension, handshakes, and Forge births. DM triage lives under Creator → Engage.",
+      configureTitle: "Patron Hall kiosk",
+      configureLead: "Name your hall and configure demo play mode.",
       fields: [
-        { id: "kioskName", label: "Engage desk name", type: "text", defaultValue: "Engage Desk", required: true },
+        { id: "kioskName", label: "Hall name", type: "text", defaultValue: "Patron Hall", required: true },
         {
           id: "prizeMode",
           label: "Prize mode",
@@ -559,14 +560,15 @@ export const APP_AGENTS: Record<OotbAppId, AppAgentDefinition> = {
           ],
         },
       ],
-      activateTitle: "Activate Claw Cafe",
+      activateTitle: "Enter Patron Hall",
       activateTips: [
+        "Engage inbox lives under Creator — not the Cafe desk.",
         "Ascension tab is your cross-Claw gamification home — sync events from Work, Creator, Capital, and Forge.",
         "Play tab keeps the kiosk lane demo — Lane A shows live vision when mesh is up.",
         "Run demo tour from Go Live when you want a buyer-ready ascension pulse.",
       ],
     },
-    bootMessage: "Engage Claw ready. Ask me to triage DMs or queue thread replies.",
+    bootMessage: "Patron Hall ready. Open Ascension for the pixel room or start a lane demo on Play.",
   },
   "my-content-creator": {
     appId: "my-content-creator",

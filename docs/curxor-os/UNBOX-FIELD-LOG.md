@@ -226,6 +226,8 @@ ssh curxor "bash /opt/curxor/scripts/box-smoke.sh http://127.0.0.1:3080"
 
 **Verdict:** Flagship four desks + Forge are demo-ready on real MS-S1 hardware. Optional: `.\scripts\push-ops-env-to-box.ps1` for Alpaca paper smoke; add `physicalAddress` + `optOutLine` in Work setup for full live outbound.
 
+**2026-07-02 — OL1 + FF0 shipped:** Cafe = Patron Hall (universal strip); Engage inbox under Creator only; FRE picker excludes Cafe · Signal · Kin.
+
 ---
 
 ## Related

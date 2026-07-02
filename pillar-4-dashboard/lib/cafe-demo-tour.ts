@@ -2,6 +2,7 @@ import "server-only";
 
 import { ingestCafeEvent, syncCafeEventSources } from "./claw-cafe-events";
 import { readAppFreState } from "./app-fre-state";
+import { CAFE_DEFAULT_KIOSK_NAME } from "./ol1-layer";
 import { readUserSettings } from "./user-settings";
 
 export interface CafeDemoTourResult {
@@ -19,7 +20,7 @@ export async function runCafeDemoTour(): Promise<CafeDemoTourResult> {
   const fre = await readAppFreState("claw-cafe");
   const steps: string[] = [];
   const kiosk =
-    typeof fre.config.kioskName === "string" ? fre.config.kioskName : "Engage Desk";
+    typeof fre.config.kioskName === "string" ? fre.config.kioskName : CAFE_DEFAULT_KIOSK_NAME;
   steps.push(fre.initialized ? `Kiosk · ${kiosk}` : "Cafe desk · default kiosk");
 
   const { ingested } = await syncCafeEventSources();

@@ -32,7 +32,7 @@ import {
   DEFAULT_BUILD_PLANE,
 } from "./user-settings-types";
 import { sanitizeBuildPlane } from "./build-plane";
-import { stripUniversalFromSelected } from "./ol1-layer";
+import { stripUniversalFromSelected, isUniversalShellApp } from "./ol1-layer";
 import { isTextScale } from "./text-scale";
 
 function isColorScheme(v: unknown): v is ColorScheme {
@@ -410,12 +410,19 @@ export async function readUserSettings(): Promise<UserSettings> {
   try {
     const raw = await readFile(filePath, "utf8");
     const parsed = JSON.parse(raw) as UserSettingsPatch;
-    return mergeSettings(parsed, DEFAULT_USER_SETTINGS);
+    const merged = mergeSettings(parsed, DEFAULT_USER_SETTINGS);
+    const rawApps = Array.isArray(parsed.selectedApps)
+      ? validateAppIds(parsed.selectedApps.map(String))
+      : [];
+    if (rawApps.some(isUniversalShellApp)) {
+      await writeUserSettings(merged);
+    }
+    return merged;
   } catch {
     const fre = await readFreState();
     const fromFre: UserSettings = {
       ...DEFAULT_USER_SETTINGS,
-      selectedApps: validateAppIds(fre.selectedApps),
+      selectedApps: stripUniversalFromSelected(validateAppIds(fre.selectedApps)),
       updatedAt: fre.provisionedAt ?? new Date().toISOString(),
     };
     return fromFre;

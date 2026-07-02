@@ -63,9 +63,9 @@ export const ROUTE_HINTS: Record<string, ContextHint> = {
     body: "Select a unit in the grid before assigning routes. Dispatch policy stays local on the appliance.",
   },
   "/claw-cafe": {
-    id: "engage-intro",
-    title: "Engagement lanes",
-    body: "Pick a lane and use Drop Claw to queue the next reply. Great for demos and community threads.",
+    id: "cafe-intro",
+    title: "Patron Hall",
+    body: "Play runs lane kiosk demos. Ascension mirrors cross-Claw events in the pixel room.",
   },
   "/setup": {
     id: "setup-intro",
