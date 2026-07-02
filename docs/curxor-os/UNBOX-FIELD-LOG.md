@@ -1,8 +1,8 @@
 # Unbox field log — MS-S1 MAX (Ankur)
 
 > **Maps to:** [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md)  
-> **Box:** `curxor` · **SKU:** Standard 64 GB · **Software:** 0.9.1  
-> **Golden path:** **COMPLETE 2026-07-01** — verify PASS · Nest Pro egress restored · smile test PASS
+> **Box:** `curxor` · **SKU:** Standard 64 GB · **Software:** **1.0.0** (box verified)  
+> **Golden path:** **COMPLETE 2026-07-01** — verify PASS · Nest Pro egress restored · smile test PASS · G1 ✓
 
 ### Current ops (post–Part 4)
 
@@ -191,7 +191,9 @@ Dashboard               : /api/setup/status OK, gpuHeapGb 48
 
 | Doc | When |
 |-----|------|
+| [01-installation.md](../guides/01-installation.md#golden-path-notes-ms-s1-max--verified-2026-07-01) | **Canonical post-unbox guide — GOLDEN PATH NOTES** |
 | [UNBOX-PRINTABLE-GUIDE.md](./UNBOX-PRINTABLE-GUIDE.md) | Step-by-step checklist |
 | [10-ms-s1-max-hardware-bios.md](../guides/10-ms-s1-max-hardware-bios.md) | BIOS + NIC names |
+| [08-ota-updates.md](../guides/08-ota-updates.md) | OTA daemon · Settings → Updates (post GR-1) |
 | [FOUNDER-COCKPIT.md](./FOUNDER-COCKPIT.md) | Daily laptop ↔ box loop |
 | [FOUNDER-PATCH-RUNBOOK.md](./FOUNDER-PATCH-RUNBOOK.md) | Deploy + CRLF |

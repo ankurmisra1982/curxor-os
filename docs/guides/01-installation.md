@@ -2,6 +2,8 @@
 
 Deploy CurXor OS on an MS-S1 MAX appliance running **Ubuntu 24.04 LTS**.
 
+> **MS-S1 MAX post-unbox (canonical):** [GOLDEN PATH NOTES](#golden-path-notes-ms-s1-max--verified-2026-07-01) — verified `enp98s0`/`enp97s0`, **gfx1151**, `CURXOR_CMD_IFACE` / `CURXOR_MESH_IFACE`, and pitfalls from [UNBOX-FIELD-LOG](../curxor-os/UNBOX-FIELD-LOG.md). Hardware: [MS-S1 MAX BIOS](10-ms-s1-max-hardware-bios.md) · Updates: [OTA](08-ota-updates.md) (Settings → Updates).
+
 ## Prerequisites
 
 | Requirement | Notes |
@@ -59,7 +61,7 @@ curl -sf http://127.0.0.1:11434/api/tags && echo "Ollama OK"
 systemctl status curxor-os.target
 systemctl status curxor-compute curxor-telemetry-broker curxor-engine curxor-dashboard
 
-# 4. Optional: captive portal on eno1
+# 4. Optional: captive portal on Command Port (enp98s0) — see [Networking](03-networking.md)
 sudo /opt/curxor/scripts/setup-captive-portal.sh
 
 # 5. Optional: nightly OTA checks
@@ -81,6 +83,102 @@ sudo reboot
 ```
 
 See [Kiosk Mode](19-kiosk-mode.md).
+
+## GOLDEN PATH NOTES (MS-S1 MAX — verified 2026-07-01)
+
+> **Source:** [UNBOX-FIELD-LOG.md](../curxor-os/UNBOX-FIELD-LOG.md) · [UNBOX-PRINTABLE-GUIDE.md](../curxor-os/UNBOX-PRINTABLE-GUIDE.md)  
+> **Hardware detail:** [MS-S1 MAX Hardware & BIOS](10-ms-s1-max-hardware-bios.md) · **Post-GR-1 updates:** [OTA Updates](08-ota-updates.md) (Settings → Updates tab)
+
+Canonical post-unbox reference for the **MINISFORUM MS-S1 MAX** — pasted from field verification, not guessed.
+
+### Interface map (not eno1/eno2)
+
+| Role | CurXor name | **Linux iface** | IPv4 |
+|------|-------------|-----------------|------|
+| COMMAND | Command Port | **`enp98s0`** | **`10.0.0.1/24`** |
+| EGRESS | Egress Port / mesh | **`enp97s0`** | **`10.77.0.1/24`** |
+
+MS-S1 MAX built-in NICs are **`enp98s0` / `enp97s0`**, not `eno1`/`eno2`. Scripts default via `scripts/lib/network-defaults.sh`. Override when iface names differ:
+
+```bash
+export CURXOR_CMD_IFACE=enp98s0
+export CURXOR_MESH_IFACE=enp97s0
+sudo CURXOR_CMD_IFACE=enp98s0 CURXOR_MESH_IFACE=enp97s0 \
+  /opt/curxor/scripts/verify-unbox-day.sh --post-models
+```
+
+After captive portal: browser home **`http://10.0.0.1:3080/home`** · SSH **`ssh user@10.0.0.1`** (laptop static **`10.0.0.2/24`**, gateway blank).
+
+### ROCm, Ollama, and RAM
+
+| Item | Verified value |
+|------|----------------|
+| ROCm arch | **`gfx1151`** (`HSA_OVERRIDE_GFX_VERSION=11.5.1`) |
+| Ollama models (Standard 64 GB) | **`qwen3:8b`** · **`moondream:1.8b`** |
+| System RAM in `free -h` | **~15 Gi** visible — normal on 64 GB SKU with **48 GB UMA BIOS** carve-out |
+| Dashboard UMA confirm | `gpuHeapGb: 48` in `/api/metrics/compute` |
+
+`OLLAMA_IGPU_ENABLE=1` for gfx1151. Healthcheck: `ollama list` (not `curl` alone).
+
+### Verification commands
+
+Run after cables, captive portal, mesh, and model pull:
+
+```bash
+sudo chmod +x /opt/curxor/scripts/verify-unbox-day.sh
+sudo /opt/curxor/scripts/verify-unbox-day.sh --post-models
+```
+
+**Expected PASS snapshot** (2026-07-01 — Nest Pro egress):
+
+```text
+# CurXor unbox verification — curxor — 2026-07-01T17:09:26-04:00
+- OS: Ubuntu 24.04.4 LTS · kernel 6.17.0-35-generic
+- Path: clean Ubuntu vs vendor image → (record A or B)
+- enp98s0: 10.0.0.1 (want 10.0.0.1)
+- enp97s0: 10.77.0.1 (want 10.77.0.1)
+- rocminfo gfx1151: gfx1151
+- Ollama :11434: OK
+- verify-mesh: PASS
+- Failures: 0 · Warnings: 4
+
+Post-install-all (same session):
+  curxor-dashboard          : active
+  curxor-telemetry-broker   : active · 10.77.0.1:9100-9201 listening
+  curxor-compute            : active (Ollama Docker · qwen3:8b, moondream:1.8b)
+  egress WAN                : 192.168.86.240 via Nest Pro · verify-egress-wan.sh PASS
+```
+
+Quick smoke (on box):
+
+```bash
+curl -sf http://127.0.0.1:3080/api/setup/status && echo "dashboard OK"
+curl -sf http://127.0.0.1:11434/api/tags && echo "Ollama OK"
+ip -4 addr show enp98s0 | grep 10.0.0.1
+ip -4 addr show enp97s0 | grep 10.77.0.1
+rocminfo 2>&1 | grep -i gfx1151
+```
+
+### Top pitfalls (Windows → Linux)
+
+| Pitfall | Symptom | Fix |
+|---------|---------|-----|
+| **CRLF after Windows `scp`** | `bash\r: No such file or directory` · `set: pipefail: invalid option` | `sudo find /opt/curxor -name '*.sh' -exec dos2unix {} +` · `sudo dos2unix /etc/systemd/system/curxor-*.service` |
+| **Captive portal DNS hijack** | Laptop loses internet on COMMAND cable; `google.com` → box | Re-run `setup-captive-portal.sh` — no `option:router`, no `address=/#/`; see [Networking — dual-homed laptop](03-networking.md#dual-homed-laptop-wi-fi--command-cable-simultaneously) |
+| **COMMAND cable dual-homed laptop** | Wi-Fi + Ethernet both up; default route stolen | Laptop `10.0.0.2/24`, **gateway blank**, DNS automatic; run `.\scripts\install-laptop-command-port.ps1` (Windows) |
+| **Engine ZMQ `EBUSY`** | `curxor-engine` crash loop · `Socket is busy reading` | Repo fix: `mesh-client.ts` uses `receiveTimeout` instead of `Promise.race` on vision receive — ship via `deploy-to-box.ps1` |
+| **dnsmasq bind conflict** | `cannot set --bind-interfaces and --bind-dynamic` | Re-run `setup-captive-portal.sh` (comments out `bind-dynamic` in `/etc/dnsmasq.conf`) |
+
+Full pitfall table: [UNBOX-FIELD-LOG.md](../curxor-os/UNBOX-FIELD-LOG.md).
+
+### Operator URLs (this hardware)
+
+| What | Value |
+|------|--------|
+| Dashboard | `http://10.0.0.1:3080/home` |
+| FRE | `http://10.0.0.1:3080/setup` |
+| SSH | `ssh user@10.0.0.1` (COMMAND cable) |
+| Deploy from laptop | `.\scripts\deploy-to-box.ps1` (updates after stack exists; first install: manual SCP + `install-all.sh`) |
 
 ## Configuration files created on install
 
@@ -122,7 +220,10 @@ journalctl -u curxor-telemetry-broker -f
 
 - [Quick Start](00-quick-start.md) — operators: Claws, LLM, Forge
 - [Architecture](02-architecture.md) — understand how pillars connect
-- [Networking](03-networking.md) — eno1 vs eno2
+- [Networking](03-networking.md) — Command Port (`enp98s0`) vs Egress Port (`enp97s0`)
 - [Inference & Compute](04-inference-compute.md) — models and UMA
-- [MS-S1 MAX Hardware & BIOS](10-ms-s1-max-hardware-bios.md)
+- [MS-S1 MAX Hardware & BIOS](10-ms-s1-max-hardware-bios.md) — BIOS UMA, gfx1151, NIC names
+- [OTA Updates](08-ota-updates.md) — Settings → Updates tab (post GR-1)
+- [Unbox field log](../curxor-os/UNBOX-FIELD-LOG.md) — verified pitfalls and session notes
+- [Printable unbox guide](../curxor-os/UNBOX-PRINTABLE-GUIDE.md) — step-by-step checklist
 - [Kiosk Mode](19-kiosk-mode.md) — optional monitor-first boot
