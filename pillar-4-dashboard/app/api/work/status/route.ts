@@ -258,17 +258,14 @@ export async function POST(request: Request): Promise<Response> {
           if (denied) return denied;
         }
         const bridgeConfigured = await isWorkEmailBridgeConfigured();
+        let complianceReady = true;
         if (bridgeConfigured) {
           const { checkPreSendGate } = await import("@/lib/work-go-live");
           const gate = await checkPreSendGate();
-          if (!gate.ok) {
-            return Response.json(
-              { ok: false, preSendBlocked: true, gate, error: `Pre-send gate: missing ${gate.missing.join(", ")}` },
-              { status: 422 },
-            );
-          }
+          complianceReady = gate.ok;
         }
-        const autoSendEnabled = await resolveAutoSendOnActivate(bridgeConfigured);
+        const autoSendEnabled =
+          complianceReady && (await resolveAutoSendOnActivate(bridgeConfigured));
         const sequence = await activateSequence(body.sequenceId);
         let autoSendPolicy: AutoSendPolicy = "deferred";
         let nextDueAt: string | null = null;

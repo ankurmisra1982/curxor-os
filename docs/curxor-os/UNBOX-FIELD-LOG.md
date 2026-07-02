@@ -187,6 +187,47 @@ Dashboard               : /api/setup/status OK, gpuHeapGb 48
 
 ---
 
+## Flagship appliance pass (D01–D04 · Lane D · 2026-07-02)
+
+**Gate:** G1 ✓ · P1  
+**Deploy stamp:** `b89d4ead47d58c165cb65690e2b07188cb85d48f` (master)  
+**Target:** `http://10.0.0.1:3080`
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| **D01 Work** `qa:work-checklist` | **PASS** (73/73) | `source=live` (SMTP + Gmail OAuth linked); wizard activate deferred when `physicalAddress` missing — honest |
+| **D02 Capital** `qa:capital-checklist` | **PASS** (8/8) | `source=demo` — no Alpaca paper keys in `/etc/curxor/digital.env` |
+| **D04 Forge→Cafe** `qa:forge-checklist` | **PASS** (23/23) | Cafe mint consumer + `cafeEvents` ledger OK |
+| **Box smoke** `box-smoke.sh` | **PASS** | All API routes 2xx · `curxor-dashboard` active |
+| **Laptop** `npm run qa:local` | **208/209** | 1 pre-existing fail: `build plane delegation suggest approve` (BP5 — out of scope) |
+
+### Keys / config on box
+
+| Key / surface | Status |
+|---------------|--------|
+| `ALPACA_API_KEY_ID` / `ALPACA_API_SECRET_KEY` | **Not set** — Capital runs demo/simulated path |
+| `SMTP_HOST` / `SMTP_FROM` | **Set** — Work bridge reports live |
+| Google Workspace OAuth | **Linked** — morning brief uses Gmail (live) |
+| `physicalAddress` / `optOutLine` (Work FRE) | **Missing** — pre-send gate warns; sequences activate deferred (no fake send) |
+| `N8N_WEBHOOK_URL` | **Not set** — webhook test correctly noops (demo) |
+
+### Appliance fix shipped
+
+`activate_sequence` no longer returns HTTP 422 when the pre-send compliance gate fails (missing CAN-SPAM fields). Sequences activate with `autoSendPolicy: deferred` until compliance is completed — matches demo-honest behavior on partial live config.
+
+```text
+# Re-verify (laptop)
+cd pillar-4-dashboard
+npm run qa:work-checklist -- http://10.0.0.1:3080
+npm run qa:capital-checklist -- http://10.0.0.1:3080
+npm run qa:forge-checklist -- http://10.0.0.1:3080
+ssh curxor "bash /opt/curxor/scripts/box-smoke.sh http://127.0.0.1:3080"
+```
+
+**Verdict:** Flagship four desks + Forge are demo-ready on real MS-S1 hardware. Optional: `.\scripts\push-ops-env-to-box.ps1` for Alpaca paper smoke; add `physicalAddress` + `optOutLine` in Work setup for full live outbound.
+
+---
+
 ## Related
 
 | Doc | When |
