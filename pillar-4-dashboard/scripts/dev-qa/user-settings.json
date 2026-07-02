@@ -184,7 +184,52 @@
     "flow-forged-capital-8",
     "flow-assist-work-8",
     "flow-round-trip-8",
-    "flow-reimport-claw-8"
+    "flow-reimport-claw-8",
+    "checklist-work-desk-9",
+    "checklist-creator-desk-9",
+    "checklist-island-claw-9",
+    "checklist-mesh-desk-9",
+    "checklist-cafe-mint-9",
+    "checklist-capital-desk-9",
+    "exit-demo-work-9",
+    "exit-demo-creator-9",
+    "exit-demo-capital-9",
+    "flow-forged-work-9",
+    "flow-forged-creator-9",
+    "flow-forged-capital-9",
+    "flow-assist-work-9",
+    "flow-round-trip-9",
+    "flow-reimport-claw-9",
+    "checklist-work-desk-10",
+    "checklist-creator-desk-10",
+    "checklist-island-claw-10",
+    "checklist-mesh-desk-10",
+    "checklist-cafe-mint-10",
+    "checklist-capital-desk-10",
+    "exit-demo-work-10",
+    "exit-demo-creator-10",
+    "exit-demo-capital-10",
+    "flow-forged-work-10",
+    "flow-forged-creator-10",
+    "flow-forged-capital-10",
+    "flow-assist-work-10",
+    "flow-round-trip-10",
+    "flow-reimport-claw-10",
+    "checklist-work-desk-11",
+    "checklist-creator-desk-11",
+    "checklist-island-claw-11",
+    "checklist-mesh-desk-11",
+    "checklist-cafe-mint-11",
+    "checklist-capital-desk-11",
+    "exit-demo-work-11",
+    "exit-demo-creator-11",
+    "exit-demo-capital-11",
+    "flow-forged-work-11",
+    "flow-forged-creator-11",
+    "flow-forged-capital-11",
+    "flow-assist-work-11",
+    "flow-round-trip-11",
+    "flow-reimport-claw-11"
   ],
   "appearance": {
     "uiMode": "simple",
@@ -228,7 +273,7 @@
   "buildPlane": {
     "enabled": true,
     "linkStatus": "linked",
-    "linkedAt": "2026-07-01T07:24:28.173Z",
+    "linkedAt": "2026-07-02T03:25:55.504Z",
     "workerStatus": "online",
     "allowDelegation": true,
     "allowWriteTools": false,
@@ -237,7 +282,7 @@
     "workerHost": "127.0.0.1",
     "workerSshPort": 22,
     "workerSshUser": "curxor",
-    "workerLastProbeAt": "2026-07-01T07:24:28.173Z",
+    "workerLastProbeAt": "2026-07-02T03:25:55.504Z",
     "workerWizardCompletedAt": null,
     "workerCompletedSteps": []
   },
@@ -248,10 +293,10 @@
   },
   "patronWeeklyBundle": {
     "weekOf": "2026-06-29",
-    "lastConfirmedAt": "2026-07-01T07:24:59.468Z"
+    "lastConfirmedAt": "2026-07-02T03:26:18.356Z"
   },
   "flightCommand": {
-    "homeLastVisitedAt": "2026-07-01T07:25:57.299Z",
+    "homeLastVisitedAt": "2026-07-02T03:26:17.406Z",
     "notificationMode": "calm"
   },
   "operatorProfile": {
@@ -260,5 +305,5 @@
     "privacyDeferred": false,
     "completedAt": "2026-06-20T06:00:00.000Z"
   },
-  "updatedAt": "2026-07-01T07:25:57.301Z"
+  "updatedAt": "2026-07-02T03:27:05.810Z"
 }

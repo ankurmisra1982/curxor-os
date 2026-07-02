@@ -1,34 +1,22 @@
 {
   "events": [
     {
-      "id": "CAFE-00002",
-      "kind": "shop.channel_sync",
-      "appId": "my-shop",
-      "at": "2026-07-01T07:25:54.944Z",
-      "xp": {
-        "ascension": 8,
-        "wealth": 5
-      },
-      "bubble": "Desk activated",
-      "sourceRef": "shop-live:desk_activated:1782890754942"
-    },
-    {
       "id": "CAFE-00001",
       "kind": "shop.channel_sync",
       "appId": "my-shop",
-      "at": "2026-07-01T07:25:54.774Z",
+      "at": "2026-07-02T03:27:09.467Z",
       "xp": {
         "ascension": 8,
         "wealth": 5
       },
-      "bubble": "Desk activated",
-      "sourceRef": "shop-live:desk_activated:1782890754771"
+      "bubble": "Sync · shopify",
+      "sourceRef": "shop-live:channel_sync:1782962829464"
     }
   ],
-  "ascensionXp": 16,
+  "ascensionXp": 8,
   "affinities": {
     "knowledge": 0,
-    "wealth": 10
+    "wealth": 5
   },
   "milestones": {
     "knowledgeEvent": false,
@@ -124,9 +112,9 @@
       "appId": "my-shop",
       "station": "mailbox",
       "state": "act",
-      "bubble": "Desk activated",
-      "lastEventAt": "2026-07-01T07:25:54.944Z"
+      "bubble": "Sync · shopify",
+      "lastEventAt": "2026-07-02T03:27:09.468Z"
     }
   ],
-  "lastRoomPulseAt": "2026-07-01T07:25:54.944Z"
+  "lastRoomPulseAt": "2026-07-02T03:27:09.467Z"
 }

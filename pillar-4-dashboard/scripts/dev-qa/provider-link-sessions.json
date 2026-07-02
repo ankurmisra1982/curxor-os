@@ -1,6 +1,62 @@
 {
   "sessions": [
     {
+      "id": "1a0f8c3f-881b-41fd-9d00-fab92884e69d",
+      "providerId": "openai",
+      "createdAt": "2026-07-02T03:25:55.972Z",
+      "completedAt": null,
+      "expiresAt": "2026-07-02T03:55:55.972Z",
+      "status": "pending",
+      "frontierModel": "gpt-4o-mini",
+      "linkMode": "oauth",
+      "oauthState": "6eb0442f0d2cca17025879305c35cb33c69a6e5704a9ad08baccdc04cfdf454a",
+      "codeVerifier": "8FJaMpaZFiTr2fZJk2xwZJbBYGWxsku5vN38o5uNNOk",
+      "redirectUri": "http://localhost:1455/auth/callback",
+      "authorizeUrl": "https://auth.openai.com/oauth/authorize?response_type=code&client_id=app_EMoamEEZ73f0CkXaXp7hrann&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email+offline_access&state=6eb0442f0d2cca17025879305c35cb33c69a6e5704a9ad08baccdc04cfdf454a&code_challenge=5584gibRwWPwLTrihMqTMjD5Qa2spFgTkecUzo0uCsg&code_challenge_method=S256&id_token_add_organizations=true&codex_cli_simplified_flow=true&originator=curxor_os"
+    },
+    {
+      "id": "b24c57c7-f145-494c-80c5-6b4a6735eb00",
+      "providerId": "openai",
+      "createdAt": "2026-07-02T01:30:59.458Z",
+      "completedAt": null,
+      "expiresAt": "2026-07-02T02:00:59.458Z",
+      "status": "pending",
+      "frontierModel": "gpt-4o-mini",
+      "linkMode": "oauth",
+      "oauthState": "5e9991577e55b1cc8f6f30e36552403cc715ba7236fe95cd2cd2843d9f5c1570",
+      "codeVerifier": "h_LMPUyQDQAgFR-gBgaB5yRBfSmK6nmduNdYGVfiK2c",
+      "redirectUri": "http://localhost:1455/auth/callback",
+      "authorizeUrl": "https://auth.openai.com/oauth/authorize?response_type=code&client_id=app_EMoamEEZ73f0CkXaXp7hrann&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email+offline_access&state=5e9991577e55b1cc8f6f30e36552403cc715ba7236fe95cd2cd2843d9f5c1570&code_challenge=lAeTtL6m5BU_9jHouL41HWR8khxX4GbGAIVLwbQ-1Ts&code_challenge_method=S256&id_token_add_organizations=true&codex_cli_simplified_flow=true&originator=curxor_os"
+    },
+    {
+      "id": "238f9324-a4b5-462b-9d57-97558d5cda5a",
+      "providerId": "openai",
+      "createdAt": "2026-07-02T01:28:24.916Z",
+      "completedAt": null,
+      "expiresAt": "2026-07-02T01:58:24.916Z",
+      "status": "pending",
+      "frontierModel": "gpt-4o-mini",
+      "linkMode": "oauth",
+      "oauthState": "8b67ae71f6e4c53a839f4a75bc87bb3cf19df1888135154ec9c6098be53ca13f",
+      "codeVerifier": "qO65ec3luNIuOW8bc7MFY17ne-9697vB6RTnNQ2sQrs",
+      "redirectUri": "http://localhost:1455/auth/callback",
+      "authorizeUrl": "https://auth.openai.com/oauth/authorize?response_type=code&client_id=app_EMoamEEZ73f0CkXaXp7hrann&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email+offline_access&state=8b67ae71f6e4c53a839f4a75bc87bb3cf19df1888135154ec9c6098be53ca13f&code_challenge=s3rNOeXnISZIbnNX2-oxXY_PMHkmV8xpQRJr8Tv2nX4&code_challenge_method=S256&id_token_add_organizations=true&codex_cli_simplified_flow=true&originator=curxor_os"
+    },
+    {
+      "id": "a2782629-8bf8-46e0-8e8b-40f2a0400bfe",
+      "providerId": "openai",
+      "createdAt": "2026-07-02T01:24:42.433Z",
+      "completedAt": null,
+      "expiresAt": "2026-07-02T01:54:42.433Z",
+      "status": "pending",
+      "frontierModel": "gpt-4o-mini",
+      "linkMode": "oauth",
+      "oauthState": "ab579f235aa95aea62c7f7405e5716b7aa392dc830c39e61d5325f5f662aaa4b",
+      "codeVerifier": "O-g5qKkqKMaNlnZuuVYtZrBQQYBUtVnYReAkGdq3Yig",
+      "redirectUri": "http://localhost:1455/auth/callback",
+      "authorizeUrl": "https://auth.openai.com/oauth/authorize?response_type=code&client_id=app_EMoamEEZ73f0CkXaXp7hrann&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email+offline_access&state=ab579f235aa95aea62c7f7405e5716b7aa392dc830c39e61d5325f5f662aaa4b&code_challenge=D707bvSHVol2jB0CRBQUQ4FRTX77WJCYD0JEKZ71_xs&code_challenge_method=S256&id_token_add_organizations=true&codex_cli_simplified_flow=true&originator=curxor_os"
+    },
+    {
       "id": "632f543e-9071-48c5-ad33-67b5acb2cfcd",
       "providerId": "openai",
       "createdAt": "2026-07-01T07:24:28.649Z",

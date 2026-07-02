@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-01T06:48:37.043Z",
+  "updatedAt": "2026-07-02T01:29:14.261Z",
   "leads": [
     {
       "id": "LEAD-001",
@@ -48,6 +48,22 @@
       "source": "forged-desk",
       "createdAt": "2026-07-01T06:48:37.043Z",
       "updatedAt": "2026-07-01T06:48:37.043Z",
+      "lastTouchAt": null
+    },
+    {
+      "id": "LEAD-004",
+      "name": "Exit Lead",
+      "email": "exit-1782955754259@forged.local",
+      "company": "",
+      "title": "",
+      "stage": "new",
+      "tags": [
+        "forged"
+      ],
+      "notes": "",
+      "source": "forged-desk",
+      "createdAt": "2026-07-02T01:29:14.261Z",
+      "updatedAt": "2026-07-02T01:29:14.261Z",
       "lastTouchAt": null
     }
   ],

@@ -120,7 +120,7 @@
   "channels": {
     "shopify": {
       "label": "mock.myshopify.com",
-      "syncedAt": "2026-07-01T07:25:54.935Z",
+      "syncedAt": "2026-07-02T03:27:09.455Z",
       "receiptId": "mock-receipt",
       "spreads": [
         {
@@ -173,7 +173,7 @@
     },
     "ebay": {
       "label": "sandbox",
-      "syncedAt": "2026-07-01T07:25:54.935Z",
+      "syncedAt": "2026-07-02T03:27:09.455Z",
       "receiptId": "mock-ebay-receipt",
       "spreads": [
         {
@@ -219,7 +219,7 @@
     },
     "printify": {
       "label": "mock-shop",
-      "syncedAt": "2026-07-01T07:25:54.935Z",
+      "syncedAt": "2026-07-02T03:27:09.455Z",
       "receiptId": "mock-printify-receipt",
       "spreads": [
         {

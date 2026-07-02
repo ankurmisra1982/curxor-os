@@ -2,14 +2,14 @@
   "records": [
     {
       "envelope": {
-        "id": "890b19ac-e56b-4264-94e7-6f0f9e9daed5",
+        "id": "357895cc-81bb-4212-bc28-b65ab973704f",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-family",
         "profileId": "demo-child-004",
         "scope": "family",
         "key": "members.demo-child-004",
-        "timestamp": "2026-07-01T07:25:55.083Z",
+        "timestamp": "2026-07-02T03:27:09.624Z",
         "ttlSeconds": null,
         "payload": {
           "displayName": "Maya",
@@ -29,19 +29,19 @@
           "channelHandles": []
         }
       },
-      "storedAt": "2026-07-01T07:25:55.083Z",
+      "storedAt": "2026-07-02T03:27:09.624Z",
       "expiresAt": null
     },
     {
       "envelope": {
-        "id": "7d4d6e92-ed16-40fc-9e66-9a1c8bff170e",
+        "id": "792d424d-01a0-485b-ab9a-169db6342407",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-family",
         "profileId": "demo-child-003",
         "scope": "family",
         "key": "members.demo-child-003",
-        "timestamp": "2026-07-01T07:25:55.080Z",
+        "timestamp": "2026-07-02T03:27:09.622Z",
         "ttlSeconds": null,
         "payload": {
           "displayName": "Arjun",
@@ -61,19 +61,19 @@
           "channelHandles": []
         }
       },
-      "storedAt": "2026-07-01T07:25:55.080Z",
+      "storedAt": "2026-07-02T03:27:09.622Z",
       "expiresAt": null
     },
     {
       "envelope": {
-        "id": "54486f15-42e4-4403-8ad3-f203dd247dc0",
+        "id": "5c8163c0-9667-4e26-8204-ce457972da10",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-family",
         "profileId": "demo-partner-002",
         "scope": "family",
         "key": "devices.demo-partner-002",
-        "timestamp": "2026-07-01T07:25:55.078Z",
+        "timestamp": "2026-07-02T03:27:09.621Z",
         "ttlSeconds": 3600,
         "payload": {
           "devices": [
@@ -87,19 +87,19 @@
           ]
         }
       },
-      "storedAt": "2026-07-01T07:25:55.078Z",
-      "expiresAt": "2026-07-01T08:25:55.078Z"
+      "storedAt": "2026-07-02T03:27:09.621Z",
+      "expiresAt": "2026-07-02T04:27:09.621Z"
     },
     {
       "envelope": {
-        "id": "bb2dd729-1141-4932-ba42-4d529b6ce915",
+        "id": "c5cdccc3-e280-4942-8e88-0bc9894c6890",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-family",
         "profileId": "demo-partner-002",
         "scope": "family",
         "key": "members.demo-partner-002",
-        "timestamp": "2026-07-01T07:25:55.076Z",
+        "timestamp": "2026-07-02T03:27:09.619Z",
         "ttlSeconds": null,
         "payload": {
           "displayName": "Priya",
@@ -125,19 +125,19 @@
           ]
         }
       },
-      "storedAt": "2026-07-01T07:25:55.076Z",
+      "storedAt": "2026-07-02T03:27:09.619Z",
       "expiresAt": null
     },
     {
       "envelope": {
-        "id": "5db23c26-e6dc-49f7-9c29-8d0d2ac98500",
+        "id": "320a1dd9-08cd-4eae-948d-461e4b3dc828",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-family",
         "profileId": "demo-owner-001",
         "scope": "family",
         "key": "devices.demo-owner-001",
-        "timestamp": "2026-07-01T07:25:55.075Z",
+        "timestamp": "2026-07-02T03:27:09.618Z",
         "ttlSeconds": 3600,
         "payload": {
           "devices": [
@@ -151,19 +151,19 @@
           ]
         }
       },
-      "storedAt": "2026-07-01T07:25:55.075Z",
-      "expiresAt": "2026-07-01T08:25:55.075Z"
+      "storedAt": "2026-07-02T03:27:09.618Z",
+      "expiresAt": "2026-07-02T04:27:09.618Z"
     },
     {
       "envelope": {
-        "id": "730ca72f-2305-4aae-9bcd-7c256a49cc02",
+        "id": "9dc8176e-fbae-4c55-808c-902955c496e7",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-family",
         "profileId": "demo-owner-001",
         "scope": "family",
         "key": "members.demo-owner-001",
-        "timestamp": "2026-07-01T07:25:55.073Z",
+        "timestamp": "2026-07-02T03:27:09.616Z",
         "ttlSeconds": null,
         "payload": {
           "displayName": "Ankur",
@@ -191,19 +191,19 @@
           ]
         }
       },
-      "storedAt": "2026-07-01T07:25:55.073Z",
+      "storedAt": "2026-07-02T03:27:09.616Z",
       "expiresAt": null
     },
     {
       "envelope": {
-        "id": "610eb8e0-4337-4557-94ec-fc2650cb0393",
+        "id": "6187cbe1-34bc-4019-8260-a1760915ecf2",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": null,
         "scope": "work",
         "key": "inbox.rollup",
-        "timestamp": "2026-07-01T07:25:53.346Z",
+        "timestamp": "2026-07-02T03:27:07.848Z",
         "ttlSeconds": 3600,
         "payload": {
           "sessionCount": 9,
@@ -214,7 +214,7 @@
               "appId": "robotaxi-fleet-manager",
               "profileId": "demo-owner-001",
               "preview": "Dispatching SW-MQPV → B3 (latency policy).",
-              "updatedAt": "2026-07-01T07:25:53.342Z"
+              "updatedAt": "2026-07-02T03:27:07.843Z"
             },
             {
               "sessionId": "webchat:tesla-optimus-engine",
@@ -222,7 +222,7 @@
               "appId": "tesla-optimus-engine",
               "profileId": "demo-owner-001",
               "preview": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
-              "updatedAt": "2026-07-01T07:25:35.544Z"
+              "updatedAt": "2026-07-02T03:26:50.875Z"
             },
             {
               "sessionId": "webchat:my-vital",
@@ -230,7 +230,7 @@
               "appId": "my-vital",
               "profileId": "demo-owner-001",
               "preview": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context",
-              "updatedAt": "2026-07-01T07:25:35.426Z"
+              "updatedAt": "2026-07-02T03:26:50.743Z"
             },
             {
               "sessionId": "webchat:my-work",
@@ -238,7 +238,7 @@
               "appId": "my-work",
               "profileId": "demo-owner-001",
               "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
-              "updatedAt": "2026-07-01T07:25:35.146Z"
+              "updatedAt": "2026-07-02T03:26:50.457Z"
             },
             {
               "sessionId": "webchat:my-capital",
@@ -246,7 +246,7 @@
               "appId": "my-capital",
               "profileId": "demo-owner-001",
               "preview": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
-              "updatedAt": "2026-07-01T07:25:34.923Z"
+              "updatedAt": "2026-07-02T03:26:50.244Z"
             },
             {
               "sessionId": "webchat:my-shop",
@@ -254,7 +254,7 @@
               "appId": "my-shop",
               "profileId": "demo-owner-001",
               "preview": "Preview margin watch — local spread demo only. Tap Ingest Order for a brief or unlock Sort SKU at Flipper level.",
-              "updatedAt": "2026-07-01T07:25:01.801Z"
+              "updatedAt": "2026-07-02T03:26:20.714Z"
             },
             {
               "sessionId": "webchat:patron:main",
@@ -262,7 +262,7 @@
               "appId": "my-capital",
               "profileId": null,
               "preview": "Primary operator, Patron online (fallback mode). Local LLM unavailable — I still read your profile. What do you need?",
-              "updatedAt": "2026-07-01T07:25:01.750Z"
+              "updatedAt": "2026-07-02T03:26:20.645Z"
             },
             {
               "sessionId": "webchat:webchat:my-work",
@@ -281,22 +281,22 @@
               "updatedAt": "2026-06-21T03:14:26.211Z"
             }
           ],
-          "updatedAt": "2026-07-01T07:25:53.345Z"
+          "updatedAt": "2026-07-02T03:27:07.848Z"
         }
       },
-      "storedAt": "2026-07-01T07:25:53.346Z",
-      "expiresAt": "2026-07-01T08:25:53.346Z"
+      "storedAt": "2026-07-02T03:27:07.848Z",
+      "expiresAt": "2026-07-02T04:27:07.848Z"
     },
     {
       "envelope": {
-        "id": "114683ef-1e3c-4185-aa1c-259af4997694",
+        "id": "24936188-34a9-48e1-b91f-729bc5d8b2ec",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": "demo-owner-001",
-        "scope": "personal",
-        "key": "comms.latest.webchat:robotaxi-fleet-manager",
-        "timestamp": "2026-07-01T07:25:53.344Z",
+        "scope": "hardware",
+        "key": "inbox.webchat:robotaxi-fleet-manager",
+        "timestamp": "2026-07-02T03:27:07.844Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:robotaxi-fleet-manager",
@@ -309,59 +309,58 @@
           "lastUser": "dispatch lowest latency to B3",
           "lastReply": "Dispatching SW-MQPV → B3 (latency policy).",
           "preview": "Dispatching SW-MQPV → B3 (latency policy).",
-          "updatedAt": "2026-07-01T07:25:53.344Z",
-          "unified": true
+          "updatedAt": "2026-07-02T03:27:07.844Z"
         }
       },
-      "storedAt": "2026-07-01T07:25:53.344Z",
-      "expiresAt": "2026-07-08T07:25:53.344Z"
+      "storedAt": "2026-07-02T03:27:07.844Z",
+      "expiresAt": "2026-07-09T03:27:07.844Z"
     },
     {
       "envelope": {
-        "id": "67b8ab05-b670-4ef0-8612-43e76120b5b0",
+        "id": "5536fdc1-567c-4885-8e90-70d6805448f3",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-capital",
         "profileId": null,
         "scope": "finance",
         "key": "intel.ticker.SPY",
-        "timestamp": "2026-07-01T07:25:38.239Z",
+        "timestamp": "2026-07-02T03:26:52.558Z",
         "ttlSeconds": 3600,
         "payload": {
           "symbol": "SPY",
           "name": "State Street SPDR S&P 500 ETF Trust",
-          "price": 746.77,
+          "price": 745.76,
           "changePct1d": null,
           "marketCap": null,
           "sentiment": {
             "label": "mixed",
-            "score": 0.07692307692307693,
-            "bullishPct": 15,
+            "score": -0.07692307692307693,
+            "bullishPct": 0,
             "bearishPct": 8,
             "sampleSize": 13
           },
-          "smartTake": "SPY price updating · Chatter skews mixed (15% bull / 8% bear). CNBC: Europe’s defense boom faces a new test: Can it actually deliver weapons?",
+          "smartTake": "SPY price updating · Chatter skews mixed (0% bull / 8% bear). CNBC: Europe wants to rebalance trade with Beijing, but can&apos;t quit Chinese air co",
           "citations": [
-            "CNBC: Europe’s defense boom faces a new test: Can it actually deliver weapons?",
-            "CNBC: Dow futures hit reverse after strongest first half in five years: Live updates",
+            "CNBC: Europe wants to rebalance trade with Beijing, but can&apos;t quit Chinese air co",
+            "CNBC: Samsung Electronics, SK Hynix shares tumble over 7% as chip rout spreads from Wa",
             "X · FinTwit (demo): $SPY on watch — link X_BEARER_TOKEN for live FinTwit search"
           ],
-          "updatedAt": "2026-07-01T07:25:38.236Z"
+          "updatedAt": "2026-07-02T03:26:52.555Z"
         }
       },
-      "storedAt": "2026-07-01T07:25:38.239Z",
-      "expiresAt": "2026-07-01T08:25:38.239Z"
+      "storedAt": "2026-07-02T03:26:52.558Z",
+      "expiresAt": "2026-07-02T04:26:52.558Z"
     },
     {
       "envelope": {
-        "id": "855b2c0d-349c-4a37-a82b-5f069b4a9bdd",
+        "id": "0d1fd063-777a-4d94-8c02-0b559fb22ca6",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": "demo-owner-001",
         "scope": "personal",
         "key": "comms.latest.webchat:tesla-optimus-engine",
-        "timestamp": "2026-07-01T07:25:35.545Z",
+        "timestamp": "2026-07-02T03:26:50.876Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:tesla-optimus-engine",
@@ -374,23 +373,23 @@
           "lastUser": "What do you know about my household?",
           "lastReply": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
           "preview": "Fleet tab — add robot slots, run Pair day wizard (preview). Simulated BLE + motor handshake on appliance.",
-          "updatedAt": "2026-07-01T07:25:35.545Z",
+          "updatedAt": "2026-07-02T03:26:50.876Z",
           "unified": true
         }
       },
-      "storedAt": "2026-07-01T07:25:35.545Z",
-      "expiresAt": "2026-07-08T07:25:35.545Z"
+      "storedAt": "2026-07-02T03:26:50.876Z",
+      "expiresAt": "2026-07-09T03:26:50.876Z"
     },
     {
       "envelope": {
-        "id": "0da46ad0-d60a-4976-978b-2aa546101d1c",
+        "id": "f49713a4-c54a-4a4d-bcd6-bfbb962ebbb8",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-vital",
         "profileId": null,
         "scope": "health",
         "key": "protocol.active",
-        "timestamp": "2026-07-01T07:25:35.501Z",
+        "timestamp": "2026-07-02T03:26:50.837Z",
         "ttlSeconds": 86400,
         "payload": {
           "steps": [
@@ -421,66 +420,66 @@
           ]
         }
       },
-      "storedAt": "2026-07-01T07:25:35.501Z",
-      "expiresAt": "2026-07-02T07:25:35.501Z"
+      "storedAt": "2026-07-02T03:26:50.837Z",
+      "expiresAt": "2026-07-03T03:26:50.837Z"
     },
     {
       "envelope": {
-        "id": "34ec05b3-c53d-436e-81ad-0e4c719e04a1",
+        "id": "3651be54-6cfe-4212-9330-6556307ae064",
         "version": 1,
         "action": "publish",
         "sourceAppId": "my-vital",
         "profileId": null,
         "scope": "health",
         "key": "vitals.latest",
-        "timestamp": "2026-07-01T07:25:35.499Z",
+        "timestamp": "2026-07-02T03:26:50.833Z",
         "ttlSeconds": 3600,
         "payload": {
           "readings": [
             {
               "metric": "resting_hr",
-              "value": 56,
+              "value": 61,
               "unit": "bpm",
-              "recordedAt": "2026-07-01T07:25:35.493Z",
+              "recordedAt": "2026-07-02T03:26:50.828Z",
               "source": "oura"
             },
             {
               "metric": "hrv",
-              "value": 39,
+              "value": 43,
               "unit": "ms",
-              "recordedAt": "2026-07-01T07:25:35.493Z",
+              "recordedAt": "2026-07-02T03:26:50.828Z",
               "source": "oura"
             },
             {
               "metric": "sleep_score",
-              "value": 84,
+              "value": 85,
               "unit": "score",
-              "recordedAt": "2026-07-01T07:25:35.493Z",
+              "recordedAt": "2026-07-02T03:26:50.828Z",
               "source": "oura"
             },
             {
               "metric": "steps",
-              "value": 8620,
+              "value": 8220,
               "unit": "count",
-              "recordedAt": "2026-07-01T07:25:35.493Z",
+              "recordedAt": "2026-07-02T03:26:50.828Z",
               "source": "apple_health"
             }
           ]
         }
       },
-      "storedAt": "2026-07-01T07:25:35.499Z",
-      "expiresAt": "2026-07-01T08:25:35.499Z"
+      "storedAt": "2026-07-02T03:26:50.833Z",
+      "expiresAt": "2026-07-02T04:26:50.833Z"
     },
     {
       "envelope": {
-        "id": "4ab7f472-5663-46ad-aaed-230ec5e320e8",
+        "id": "365b15c9-8ba4-4711-834b-15f5b1bad410",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": "demo-owner-001",
         "scope": "health",
         "key": "inbox.webchat:my-vital",
-        "timestamp": "2026-07-01T07:25:35.428Z",
+        "timestamp": "2026-07-02T03:26:50.744Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:my-vital",
@@ -493,22 +492,22 @@
           "lastUser": "status check",
           "lastReply": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context, but stresses sleep, exercise, and fasting as the foundation. Vital Lab maps this to your vitals and lab vault when you Ask.\n\nOpen the Ask / Lab tab for more preview Q&A. Educational only — not medical advice. Vital Claw runs on your appliance; confirm changes with a qualified clinician.",
           "preview": "Sinclair's framing: aging is partly loss of epigenetic information. NAD+ supports sirtuin repair pathways — he discusses precursors (NMN/NR) in research context",
-          "updatedAt": "2026-07-01T07:25:35.428Z"
+          "updatedAt": "2026-07-02T03:26:50.744Z"
         }
       },
-      "storedAt": "2026-07-01T07:25:35.428Z",
-      "expiresAt": "2026-07-08T07:25:35.428Z"
+      "storedAt": "2026-07-02T03:26:50.744Z",
+      "expiresAt": "2026-07-09T03:26:50.744Z"
     },
     {
       "envelope": {
-        "id": "5c8c9a9f-e54c-4569-922a-7f20419c8eee",
+        "id": "7fbe7310-ae38-4c98-89e3-ee5ad2284266",
         "version": 1,
         "action": "publish",
         "sourceAppId": "bridge",
         "profileId": "demo-owner-001",
         "scope": "personal",
         "key": "comms.latest.webchat:my-work",
-        "timestamp": "2026-07-01T07:25:35.148Z",
+        "timestamp": "2026-07-02T03:26:50.459Z",
         "ttlSeconds": 604800,
         "payload": {
           "sessionId": "webchat:my-work",
@@ -521,12 +520,40 @@
           "lastUser": "Remember to follow up with Acme Corp tomorrow morning",
           "lastReply": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
           "preview": "I'll stage a sequence on lane A. Tap Sort Tray or Move to Tray to publish the next step.",
-          "updatedAt": "2026-07-01T07:25:35.148Z",
+          "updatedAt": "2026-07-02T03:26:50.459Z",
           "unified": true
         }
       },
-      "storedAt": "2026-07-01T07:25:35.148Z",
-      "expiresAt": "2026-07-08T07:25:35.148Z"
+      "storedAt": "2026-07-02T03:26:50.459Z",
+      "expiresAt": "2026-07-09T03:26:50.459Z"
+    },
+    {
+      "envelope": {
+        "id": "df4025f9-e609-43b4-b24d-7c630a86b977",
+        "version": 1,
+        "action": "publish",
+        "sourceAppId": "bridge",
+        "profileId": "demo-owner-001",
+        "scope": "finance",
+        "key": "inbox.webchat:my-capital",
+        "timestamp": "2026-07-02T03:26:50.245Z",
+        "ttlSeconds": 604800,
+        "payload": {
+          "sessionId": "webchat:my-capital",
+          "channel": "webchat",
+          "externalChatId": "my-capital",
+          "appId": "my-capital",
+          "profileId": "demo-owner-001",
+          "profileName": "Ankur",
+          "senderLabel": "dashboard",
+          "lastUser": "What is my trading mode?",
+          "lastReply": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
+          "preview": "Preview Trade runs review_equity_order — notional, risk note, auto-approve check before execute.",
+          "updatedAt": "2026-07-02T03:26:50.245Z"
+        }
+      },
+      "storedAt": "2026-07-02T03:26:50.245Z",
+      "expiresAt": "2026-07-09T03:26:50.245Z"
     }
   ]
 }

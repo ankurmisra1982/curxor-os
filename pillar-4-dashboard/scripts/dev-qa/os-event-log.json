@@ -1,2898 +1,6 @@
 {
   "events": [
     {
-      "id": "os-cbee2bb0-229c-48b3-97f5-b22e7f945023",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:23.782Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510623773-dcoe1l",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqvgsvt1",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-0c072820-a89c-49ad-ac6c-16d939af6add",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:31.432Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510631427-eyaxhq",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Work Desk",
-        "appId": "forged-checklist-work-desk-2",
-        "forgedSlug": "checklist-work-desk-2",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-e63df149-82a4-44d0-abef-e83e8f5a1e82",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:33.030Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510633026-cqzf6w",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Creator Desk",
-        "appId": "forged-checklist-creator-desk-2",
-        "forgedSlug": "checklist-creator-desk-2",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-f5109b71-c44a-4b83-b5c7-7c71edd90b3b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:36.108Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510636103-mdmzyn",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Claw",
-        "appId": "claw-mqvgt5bn",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-b47e363a-b3d3-4d3c-ba55-b0c9a55ba0eb",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:36.125Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510636122-gemcgr",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Island Claw",
-        "appId": "forged-checklist-island-claw-2",
-        "forgedSlug": "checklist-island-claw-2",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-de280510-c7d2-426a-95a3-9b246bbec0ce",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:39.184Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510639179-elcate",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Archive Claw",
-        "appId": "claw-mqvgt7p6",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-abb7113c-0c38-47fa-ba23-60ce059c6cdd",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:40.839Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510640835-ljotaj",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Mesh Desk",
-        "appId": "forged-checklist-mesh-desk-2",
-        "forgedSlug": "checklist-mesh-desk-2",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-186f9df9-e7b6-4688-833c-81a8343696cb",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:42.429Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510642424-bykszs",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Cafe Mint",
-        "appId": "forged-checklist-cafe-mint-2",
-        "forgedSlug": "checklist-cafe-mint-2",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9dd4deca-c4d9-4d3f-8636-2cef70e6333a",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:44.017Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510644012-ayqhwc",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Capital Desk",
-        "appId": "forged-checklist-capital-desk-2",
-        "forgedSlug": "checklist-capital-desk-2",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-6855232f-c8c2-4ec8-8b4e-d1f8f5a7a0f1",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:47.108Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510647097-g11uko",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Mint",
-        "appId": "claw-mqvgtdsz",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-4c0df92c-f66d-41de-812c-b97928b16fde",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:50.328Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510650318-4w14xm",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Work",
-        "appId": "forged-exit-demo-work-2",
-        "forgedSlug": "exit-demo-work-2",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9b4ab850-08eb-495b-8259-5120bfebc73c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:51.944Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510651933-h66ynv",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Creator",
-        "appId": "forged-exit-demo-creator-2",
-        "forgedSlug": "exit-demo-creator-2",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-59932f25-29d8-428d-88e5-06260bf09733",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:53.567Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510653560-egovcu",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Capital",
-        "appId": "forged-exit-demo-capital-2",
-        "forgedSlug": "exit-demo-capital-2",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9c000717-747c-40cf-8453-e71cfa4d46e4",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:57.921Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510657914-m84v3h",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Work",
-        "appId": "forged-flow-forged-work-2",
-        "forgedSlug": "flow-forged-work-2",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-c6395f02-6a3f-40fe-8438-8217f4e06473",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:50:59.533Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510659527-1a0ydd",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Creator",
-        "appId": "forged-flow-forged-creator-2",
-        "forgedSlug": "flow-forged-creator-2",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-5a5af2ec-12fb-4551-8429-62c618bb4514",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:51:01.151Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510661145-9s2csd",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Capital",
-        "appId": "forged-flow-forged-capital-2",
-        "forgedSlug": "flow-forged-capital-2",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-af9c8b38-dafe-4609-9e7a-64e30e49ed1d",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:51:04.250Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510664244-d7e3pg",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Flow Island Claw",
-        "appId": "claw-mqvgtr1c",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-15531205-c391-4fd3-b6ad-ee7773472a70",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:51:05.813Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510665808-h80xl3",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Assist Work",
-        "appId": "forged-flow-assist-work-2",
-        "forgedSlug": "flow-assist-work-2",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9d0c6409-a643-4d37-8682-657eb6e1a38b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:51:07.408Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510667396-zgjnj9",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Round Trip",
-        "appId": "forged-flow-round-trip-2",
-        "forgedSlug": "flow-round-trip-2",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-13100cac-6ab0-4510-9771-dd84d8f2e77b",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-26T21:52:36.649Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782510756648",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9839ccd0-1eb6-438d-aea1-8f2811649e55",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:53:10.299Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510790254-dqvj9l",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--13",
-        "forgedSlug": "qa-smoke-framework-desk-for--13",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-d79fc958-4bd2-4fad-83e7-0016ee66bf69",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:53:13.277Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510793227-z75033",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-12",
-        "forgedSlug": "qa-smoke-work-desk-12",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-8f51a125-c701-4b5b-80be-5b1ed2bc6522",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:53:16.252Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510796202-y99c4h",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-12",
-        "forgedSlug": "qa-smoke-creator-desk-12",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-be8fb9cf-58b4-419a-8ac3-29de819aee1f",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:53:17.974Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510797950-l418ym",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-12",
-        "forgedSlug": "qa-smoke-capital-desk-12",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2f7c252c-9a82-4950-88e4-b228b245ad13",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:53:21.193Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510801184-ffoq9p",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqvgwop2",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9ad39023-1bdc-4060-a97d-531513e13327",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-26T21:56:15.710Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782510975709",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1d818250-f6bd-4150-a124-3d0046881aec",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:23.003Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510982998-kz8unt",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--3",
-        "forgedSlug": "qa-smoke-framework-desk-for--3",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-5f6b7aea-1194-47cd-8a00-523dfe269cc3",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:24.580Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510984570-o6qjt7",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-3",
-        "forgedSlug": "qa-smoke-work-desk-3",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-0ae1d7fd-dbee-4376-bf97-f200a55b2c4c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:26.197Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510986188-n30afg",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-3",
-        "forgedSlug": "qa-smoke-creator-desk-3",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-ee69d218-d8e1-4d1d-b794-2cc98b8f6053",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:27.809Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510987799-htyonx",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-3",
-        "forgedSlug": "qa-smoke-capital-desk-3",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-5d01132b-92e7-4974-b810-3c9c1158136e",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:30.910Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782510990897-mx1vw9",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqvh0r2y",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1780a64c-b2f9-4273-9c72-0c4c0f611084",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-26T21:56:36.996Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782510996995",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-a1a75b5a-be1e-47b1-a8b7-368140fe0f1b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:42.400Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511002393-wooulx",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Work Desk",
-        "appId": "forged-checklist-work-desk-3",
-        "forgedSlug": "checklist-work-desk-3",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1a7f59d6-d361-4fde-9a56-d0fd0b68a17f",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:44.021Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511004011-7ur416",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Creator Desk",
-        "appId": "forged-checklist-creator-desk-3",
-        "forgedSlug": "checklist-creator-desk-3",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-c8fee2c0-33d4-45a0-9736-baa3d0a81342",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:47.101Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511007096-z6fl0d",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Claw",
-        "appId": "claw-mqvh13l4",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-69d2b7c4-b8b3-47d7-9cc5-5d0c60355c53",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:47.123Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511007118-la4oqt",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Island Claw",
-        "appId": "forged-checklist-island-claw-3",
-        "forgedSlug": "checklist-island-claw-3",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-ce09701b-1930-4229-beaa-c56591bc78e5",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:50.187Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511010180-omuja6",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Archive Claw",
-        "appId": "claw-mqvh15yp",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9a73ded9-4fc0-44f3-b6c5-cc2e682a9635",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:51.900Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511011896-zn63kx",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Mesh Desk",
-        "appId": "forged-checklist-mesh-desk-3",
-        "forgedSlug": "checklist-mesh-desk-3",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2534f159-7bb3-4350-8835-829426fcaebe",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:53.503Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511013498-srq4ws",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Cafe Mint",
-        "appId": "forged-checklist-cafe-mint-3",
-        "forgedSlug": "checklist-cafe-mint-3",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-88d0d8ef-3920-464b-a945-0af12766913b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:55.121Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511015114-xfuk9s",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Capital Desk",
-        "appId": "forged-checklist-capital-desk-3",
-        "forgedSlug": "checklist-capital-desk-3",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-28b837df-5c08-4b17-baa7-26112e76c587",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:56:58.183Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511018178-4qj02d",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Mint",
-        "appId": "claw-mqvh1c4x",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-ac5ce70d-5dda-4d56-9d0c-191af58beae6",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:01.196Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511021188-a0nsao",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Work",
-        "appId": "forged-exit-demo-work-3",
-        "forgedSlug": "exit-demo-work-3",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-77309746-a0d6-4728-9c7b-ef3be2704e63",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:02.767Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511022761-4db1mu",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Creator",
-        "appId": "forged-exit-demo-creator-3",
-        "forgedSlug": "exit-demo-creator-3",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9d513720-2379-444e-8c63-684e92894b97",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:04.360Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511024355-rclwr1",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Capital",
-        "appId": "forged-exit-demo-capital-3",
-        "forgedSlug": "exit-demo-capital-3",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9065383a-33c5-4449-956d-849bf65bf1ae",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:10.710Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511030705-dmav1q",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Work",
-        "appId": "forged-flow-forged-work-3",
-        "forgedSlug": "flow-forged-work-3",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-54ccd4df-6959-4248-b1d1-e270c6936dd6",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:12.221Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511032173-7ualjb",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--14",
-        "forgedSlug": "qa-smoke-framework-desk-for--14",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-14d2019f-c0aa-4ed4-97c2-215daf6a5cab",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:12.313Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511032304-77bwzo",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Creator",
-        "appId": "forged-flow-forged-creator-3",
-        "forgedSlug": "flow-forged-creator-3",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-220d39f7-5c7b-4eb7-a3ff-8df3475d8a5b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:13.921Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511033916-x1igae",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Capital",
-        "appId": "forged-flow-forged-capital-3",
-        "forgedSlug": "flow-forged-capital-3",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-3be8f459-2e8b-4f1c-b0c4-44119fe3e41d",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:15.211Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511035162-zrbfrq",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-13",
-        "forgedSlug": "qa-smoke-work-desk-13",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-ec30d96f-b35d-4eb3-8f49-8b16351d2064",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:17.007Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511037001-qkhflk",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Flow Island Claw",
-        "appId": "claw-mqvh1qnr",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-677ecbec-cf59-4a9c-b8be-555c3680390f",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:18.201Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511038153-aas3x4",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-13",
-        "forgedSlug": "qa-smoke-creator-desk-13",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-c9f5ddfc-42c2-4e3a-aeee-6e7199d34bd7",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:18.565Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511038560-4zrugz",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Assist Work",
-        "appId": "forged-flow-assist-work-3",
-        "forgedSlug": "flow-assist-work-3",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-4e5b572b-422c-475f-afdf-4aa68a7b35c0",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:20.176Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511040167-vjbj11",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Round Trip",
-        "appId": "forged-flow-round-trip-3",
-        "forgedSlug": "flow-round-trip-3",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-699881da-f6b0-4eeb-b3c8-40b494c37f43",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:30.606Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511050587-00nb8u",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-13",
-        "forgedSlug": "qa-smoke-capital-desk-13",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-5b60cb3b-43a3-4731-8abf-1701a8660e34",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-26T21:57:33.896Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782511053888-4q2c79",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqvh23oo",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-3eae97fb-0dda-4844-a22a-e6bbb6bb86a7",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-27T03:36:15.465Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782531375464",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-63bef326-d5cd-48d0-a19e-6a60f5868cab",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:26.653Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531386648-dord70",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--4",
-        "forgedSlug": "qa-smoke-framework-desk-for--4",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-77557dec-e77b-4c3a-a8fd-ec15a0485011",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:28.221Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531388216-vfxjfz",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-4",
-        "forgedSlug": "qa-smoke-work-desk-4",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-5a9f60b6-455e-424f-9089-1734c6606107",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:29.826Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531389820-mcrsze",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-4",
-        "forgedSlug": "qa-smoke-creator-desk-4",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-6e49bc9f-8778-44ad-b0ef-6330dde2107b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:31.427Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531391422-pnomyv",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-4",
-        "forgedSlug": "qa-smoke-capital-desk-4",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-edfea733-2ba3-45ed-a6a2-fc105b5f986b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:34.532Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531394525-hk94nd",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqvt62ml",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1601f1c4-009c-4b2b-b3dc-a56e765503f9",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:44.270Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531404266-kv9mwz",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Work Desk",
-        "appId": "forged-checklist-work-desk-4",
-        "forgedSlug": "checklist-work-desk-4",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-4a96309d-6c49-4e1b-8d28-bc898fa1b10d",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:45.871Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531405866-qvu9jc",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Creator Desk",
-        "appId": "forged-checklist-creator-desk-4",
-        "forgedSlug": "checklist-creator-desk-4",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-31112a42-97fa-479a-9f82-49ff50e6fca8",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:48.939Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531408934-5npjrr",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Claw",
-        "appId": "claw-mqvt6dqo",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-34d004b9-5cf5-4538-9368-7e80f72e8b3c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:48.969Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531408966-zdh8d4",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Island Claw",
-        "appId": "forged-checklist-island-claw-4",
-        "forgedSlug": "checklist-island-claw-4",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1629460c-6723-421b-ac6d-0c11c3a6d852",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:52.040Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531412035-me24hy",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Archive Claw",
-        "appId": "claw-mqvt6g4r",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-01d31e04-aebe-43e0-832e-204f580ae8f4",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:53.778Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531413773-awhkq0",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Mesh Desk",
-        "appId": "forged-checklist-mesh-desk-4",
-        "forgedSlug": "checklist-mesh-desk-4",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9ebeecc6-65d2-44a3-9fec-9e72df495de9",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:55.381Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531415377-m7l1dw",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Cafe Mint",
-        "appId": "forged-checklist-cafe-mint-4",
-        "forgedSlug": "checklist-cafe-mint-4",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-f3450a6f-9fa0-4f98-aa1f-3e9c9d278db0",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:36:57.015Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531417009-za3zl9",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Capital Desk",
-        "appId": "forged-checklist-capital-desk-4",
-        "forgedSlug": "checklist-capital-desk-4",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-f173dccf-f6a5-4560-88e7-ad951ff6950c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:00.085Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531420080-da7b1p",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Mint",
-        "appId": "claw-mqvt6mce",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-114021f5-2a28-465c-a009-30a853fc5949",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:02.739Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531422734-i7aoam",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Work",
-        "appId": "forged-exit-demo-work-4",
-        "forgedSlug": "exit-demo-work-4",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-7e047ab1-b2db-4318-9b77-d7ceeb3dff42",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:04.322Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531424318-74yz0a",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Creator",
-        "appId": "forged-exit-demo-creator-4",
-        "forgedSlug": "exit-demo-creator-4",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-77684fa9-89a9-4381-966f-1cc2b5664070",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:05.931Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531425924-18fvpg",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Capital",
-        "appId": "forged-exit-demo-capital-4",
-        "forgedSlug": "exit-demo-capital-4",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-4189c185-b91e-41ec-8bbc-a6a7c7eec0bd",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:09.723Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531429718-qe5d5m",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Work",
-        "appId": "forged-flow-forged-work-4",
-        "forgedSlug": "flow-forged-work-4",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-3987abaa-2405-4aec-8de3-5e13251dec89",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:11.336Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531431331-l8i1p6",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Creator",
-        "appId": "forged-flow-forged-creator-4",
-        "forgedSlug": "flow-forged-creator-4",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1dea4678-d7b1-4af3-846d-e67a76ab8cd6",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:12.965Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531432960-2cal9f",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Capital",
-        "appId": "forged-flow-forged-capital-4",
-        "forgedSlug": "flow-forged-capital-4",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-554734b1-d83a-48bb-aed3-7d5a8a4615f2",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:16.067Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531436062-yvwbvq",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Flow Island Claw",
-        "appId": "claw-mqvt6yoc",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-06bf1e12-34c3-4f4f-96d8-fcd664ed2189",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:17.634Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531437629-9hhcac",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Assist Work",
-        "appId": "forged-flow-assist-work-4",
-        "forgedSlug": "flow-assist-work-4",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-3495bfb7-0c7c-4303-a5b7-346765928bb8",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-27T03:37:19.231Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782531439226-zzl6uo",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Round Trip",
-        "appId": "forged-flow-round-trip-4",
-        "forgedSlug": "flow-round-trip-4",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-a9a4739f-9e71-4e6a-b20a-1bc0e64c645b",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-28T22:17:13.427Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782685033426",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9215d393-2d9b-404e-bd49-1261deaf7ea9",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:26.651Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685046642-pipmu5",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--5",
-        "forgedSlug": "qa-smoke-framework-desk-for--5",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-e7655479-1f85-4d62-bdaf-dcd4fddeb9b0",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:28.222Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685048217-xw6fv5",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-5",
-        "forgedSlug": "qa-smoke-work-desk-5",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-03005d03-96bb-4df7-b677-ba414ca57497",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:29.800Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685049795-0brlur",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-5",
-        "forgedSlug": "qa-smoke-creator-desk-5",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-632af37b-ddda-4d3e-ae9c-b8d96a638fc4",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:31.398Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685051394-hwnrfd",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-5",
-        "forgedSlug": "qa-smoke-capital-desk-5",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-aaa9bb32-8048-4097-bac6-1179ecafb233",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:34.479Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685054472-ir1yjg",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqycnjeh",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-6e9d13df-69e2-48c5-9655-7052fc180296",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:44.000Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685063993-1z7hpg",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Work Desk",
-        "appId": "forged-checklist-work-desk-5",
-        "forgedSlug": "checklist-work-desk-5",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-880caa72-a555-4838-8716-734bab97f182",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:45.606Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685065601-379d6r",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Creator Desk",
-        "appId": "forged-checklist-creator-desk-5",
-        "forgedSlug": "checklist-creator-desk-5",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-432eccc4-429c-4636-823f-d470395ed610",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:48.678Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685068671-ec01ju",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Claw",
-        "appId": "claw-mqycnuch",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2259121f-fe88-4524-ba75-d5ef8cd0eb02",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:48.730Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685068720-o6h867",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Island Claw",
-        "appId": "forged-checklist-island-claw-5",
-        "forgedSlug": "checklist-island-claw-5",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-14da136b-c455-435f-aa88-d42d5edbc8ac",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:51.793Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685071787-9wsctz",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Archive Claw",
-        "appId": "claw-mqycnwrf",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-6efe3c8b-370f-4053-9845-86def0df7fd0",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:53.673Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685073666-950sjq",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Mesh Desk",
-        "appId": "forged-checklist-mesh-desk-5",
-        "forgedSlug": "checklist-mesh-desk-5",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-bc36abfb-2237-41b4-a338-22152884a0de",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:55.310Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685075305-o1vjur",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Cafe Mint",
-        "appId": "forged-checklist-cafe-mint-5",
-        "forgedSlug": "checklist-cafe-mint-5",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-61145be6-d24e-4f4e-8ced-c0001c144100",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:17:56.933Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685076927-p5auko",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Capital Desk",
-        "appId": "forged-checklist-capital-desk-5",
-        "forgedSlug": "checklist-capital-desk-5",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-31acaca2-1137-4061-9671-2b122700fdf8",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:00.025Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685080018-4swvlk",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Mint",
-        "appId": "claw-mqyco33u",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-d00a30d6-a970-498d-98a3-8e4314e1b475",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:02.547Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685082542-cuqj5k",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Work",
-        "appId": "forged-exit-demo-work-5",
-        "forgedSlug": "exit-demo-work-5",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-f63d9ad7-96d2-4964-b4a0-55033f9282a5",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:04.122Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685084116-cj2yl2",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Creator",
-        "appId": "forged-exit-demo-creator-5",
-        "forgedSlug": "exit-demo-creator-5",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-8723939f-6620-4484-a938-24a7b7b915fa",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:05.712Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685085706-0xxot4",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Capital",
-        "appId": "forged-exit-demo-capital-5",
-        "forgedSlug": "exit-demo-capital-5",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-a38bbbd3-c8f9-48f6-a56e-03ee86b4ae84",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:10.436Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685090431-6slqho",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Work",
-        "appId": "forged-flow-forged-work-5",
-        "forgedSlug": "flow-forged-work-5",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-fa5e8cef-aa16-4bf2-8d95-2add63867666",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:12.045Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685092040-u4yiy1",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Creator",
-        "appId": "forged-flow-forged-creator-5",
-        "forgedSlug": "flow-forged-creator-5",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-9b84d473-5067-4250-ab90-98e1ac7941a5",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:13.675Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685093670-parq5y",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Capital",
-        "appId": "forged-flow-forged-capital-5",
-        "forgedSlug": "flow-forged-capital-5",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-c8e5d3ce-34d6-49a8-b1fa-40a88c4e668d",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:16.768Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685096764-ve42v4",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Flow Island Claw",
-        "appId": "claw-mqycog17",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-b8bb2364-5080-4720-9887-52849bae1c06",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:18.369Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685098363-y7mg0u",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Assist Work",
-        "appId": "forged-flow-assist-work-5",
-        "forgedSlug": "flow-assist-work-5",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-7ea6145a-f61e-4b81-a201-e20b44d6a495",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:18:19.962Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685099956-u2xaqj",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Round Trip",
-        "appId": "forged-flow-round-trip-5",
-        "forgedSlug": "flow-round-trip-5",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-da598088-4201-444a-aed8-5a65057e6b5a",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-28T22:19:43.276Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782685183276",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-3c045749-9c0a-4485-a17f-3d06b0535feb",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:19:55.289Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685195284-fe6rv8",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--6",
-        "forgedSlug": "qa-smoke-framework-desk-for--6",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-b1f00801-8fa4-4cb4-adba-978c04bdeaae",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:19:56.888Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685196883-c7mqpn",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-6",
-        "forgedSlug": "qa-smoke-work-desk-6",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-aee102e0-fbf6-45ce-9d20-8408a5af55d7",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:19:58.490Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685198485-xfdgz1",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-6",
-        "forgedSlug": "qa-smoke-creator-desk-6",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-d771d897-b994-49e5-a1ca-e8ec4afb3632",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:00.060Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685200055-sjshu8",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-6",
-        "forgedSlug": "qa-smoke-capital-desk-6",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-f0180dc9-20ff-44df-8d3e-971bf3503d60",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:03.154Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685203146-e7ts7e",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqycqq44",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-3439bd1f-3d1e-413d-8ea8-4fc66a4bf6cf",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:12.529Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685212524-n5l2x0",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Work Desk",
-        "appId": "forged-checklist-work-desk-6",
-        "forgedSlug": "checklist-work-desk-6",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-0da3543e-2889-4971-8731-5727b7ae421f",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:14.161Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685214156-ubxb05",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Creator Desk",
-        "appId": "forged-checklist-creator-desk-6",
-        "forgedSlug": "checklist-creator-desk-6",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-def6922e-bdf2-49da-95f4-d076ac8152b0",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:17.228Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685217223-yec27r",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Claw",
-        "appId": "claw-mqycr0zb",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-27580775-4815-4a75-9060-abfd12e8def5",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:17.246Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685217243-m8arkf",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Island Claw",
-        "appId": "forged-checklist-island-claw-6",
-        "forgedSlug": "checklist-island-claw-6",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-fca8ede8-f188-4f2c-ab9d-04b855e9a339",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:20.284Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685220278-qjyjbj",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Archive Claw",
-        "appId": "claw-mqycr3c1",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-4e2fe42c-65a1-41c4-9cc4-97d220e8f707",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:22.079Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685222074-zx8ccx",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Mesh Desk",
-        "appId": "forged-checklist-mesh-desk-6",
-        "forgedSlug": "checklist-mesh-desk-6",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-706f2c19-9561-4618-a1c0-a9ad921c2e0c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:23.679Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685223673-wr0x2v",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Cafe Mint",
-        "appId": "forged-checklist-cafe-mint-6",
-        "forgedSlug": "checklist-cafe-mint-6",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-a65a32b2-329c-486b-8402-c02a25b461b4",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:25.272Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685225267-1vm6uv",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Capital Desk",
-        "appId": "forged-checklist-capital-desk-6",
-        "forgedSlug": "checklist-capital-desk-6",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-d7289473-ca25-49d8-9ddb-1c16e901fdda",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:28.352Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685228347-rfhjv9",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Mint",
-        "appId": "claw-mqycr9k4",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-24ef9f3a-ed7f-40d6-bc04-f8b07b38fdae",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:30.797Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685230791-au3u4r",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Work",
-        "appId": "forged-exit-demo-work-6",
-        "forgedSlug": "exit-demo-work-6",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-524e2b8a-43b5-4956-82b2-7eb1aa9f84ed",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:32.393Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685232387-etjqol",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Creator",
-        "appId": "forged-exit-demo-creator-6",
-        "forgedSlug": "exit-demo-creator-6",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2cad2384-41c0-4b16-aa05-795a27d67917",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:33.978Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685233974-zj9zq4",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Capital",
-        "appId": "forged-exit-demo-capital-6",
-        "forgedSlug": "exit-demo-capital-6",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-c1a7028a-d03d-458f-b5bb-2836937730e4",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:39.724Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685239719-lf6b7n",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Work",
-        "appId": "forged-flow-forged-work-6",
-        "forgedSlug": "flow-forged-work-6",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-14dec14a-57a8-4687-a484-6bc903b9110b",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:41.340Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685241334-ravi9p",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Creator",
-        "appId": "forged-flow-forged-creator-6",
-        "forgedSlug": "flow-forged-creator-6",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-d113e9bb-f7ac-43c7-b81b-9f6e471464de",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:42.990Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685242985-xb1bt4",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Capital",
-        "appId": "forged-flow-forged-capital-6",
-        "forgedSlug": "flow-forged-capital-6",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-14fed0e0-c0f4-46e1-9679-ab8d624972cc",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:46.078Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685246072-yixbzp",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Flow Island Claw",
-        "appId": "claw-mqycrn8o",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-cc305b95-a629-458c-a64f-f0ef209a6f48",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:47.639Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685247634-hi2vhg",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Assist Work",
-        "appId": "forged-flow-assist-work-6",
-        "forgedSlug": "flow-assist-work-6",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-c044db97-517c-4927-9e8e-d995c08f486c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:20:49.234Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685249228-grlfho",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Round Trip",
-        "appId": "forged-flow-round-trip-6",
-        "forgedSlug": "flow-round-trip-6",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-1fac378b-e43d-4255-8eb9-2ef584b6df88",
-      "event": "go_live.failed",
-      "timestamp": "2026-06-28T22:28:58.314Z",
-      "payload": {
-        "appId": "demo",
-        "dedupeKey": "demo:1782685738313",
-        "demo": true
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2ae3f5da-0cd0-4ba5-ab22-1bf578a4b0ff",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:03.767Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685743761-q7yz3s",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA smoke framework desk for sorting pipeline",
-        "appId": "forged-qa-smoke-framework-desk-for--7",
-        "forgedSlug": "qa-smoke-framework-desk-for--7",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2e2820bb-2998-4ed8-abfb-4113f3a9ef29",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:05.338Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685745332-u6wk2m",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Work Desk",
-        "appId": "forged-qa-smoke-work-desk-7",
-        "forgedSlug": "qa-smoke-work-desk-7",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-528d323c-cb64-478b-b1ea-1307f509ee22",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:06.939Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685746934-qsddtb",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Creator Desk",
-        "appId": "forged-qa-smoke-creator-desk-7",
-        "forgedSlug": "qa-smoke-creator-desk-7",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-a82b5ee6-38ef-4410-a2c3-5312787944e2",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:08.524Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685748518-qw797s",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "QA Smoke Capital Desk",
-        "appId": "forged-qa-smoke-capital-desk-7",
-        "forgedSlug": "qa-smoke-capital-desk-7",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-4da6ce09-3a07-4015-8869-fe440b785e5f",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:11.651Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685751645-xrm1om",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "QA Island Mint",
-        "appId": "claw-mqyd2hbr",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-2c8511e4-81b8-4acd-a2e6-af63ed97558c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:21.141Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685761136-ef4ux5",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Work Desk",
-        "appId": "forged-checklist-work-desk-7",
-        "forgedSlug": "checklist-work-desk-7",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-66a699f2-62ab-459a-8efc-8a506ce014f1",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:22.767Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685762762-h3iew2",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Creator Desk",
-        "appId": "forged-checklist-creator-desk-7",
-        "forgedSlug": "checklist-creator-desk-7",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-828a0356-873d-454e-bf0d-bf5c67713669",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:25.851Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685765846-9t96u1",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Claw",
-        "appId": "claw-mqyd2sap",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-d7729fdd-0cad-473e-a732-52751a5b8b54",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:25.870Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685765866-e3m72e",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Island Claw",
-        "appId": "forged-checklist-island-claw-7",
-        "forgedSlug": "checklist-island-claw-7",
-        "templateId": "blank-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-69b5fefd-43f2-4a65-9282-8ad92e78baad",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:28.917Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685768911-ow1n37",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Archive Claw",
-        "appId": "claw-mqyd2unw",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-ededdb38-f001-4c34-9e90-caad67e9731e",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:30.756Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685770751-wy4ogp",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Mesh Desk",
-        "appId": "forged-checklist-mesh-desk-7",
-        "forgedSlug": "checklist-mesh-desk-7",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-a1fd4bfd-df82-4e2b-b51c-8aeb44335d5a",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:32.380Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685772375-q5gy8u",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Cafe Mint",
-        "appId": "forged-checklist-cafe-mint-7",
-        "forgedSlug": "checklist-cafe-mint-7",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-8af043b4-22f3-492e-9cfb-9f8724790d93",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:33.993Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685773989-df67h5",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Checklist Capital Desk",
-        "appId": "forged-checklist-capital-desk-7",
-        "forgedSlug": "checklist-capital-desk-7",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-842634dd-3bbc-46f9-8934-f469fa961d91",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:37.082Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685777075-azr67u",
-        "forgeKind": "forge.claw_minted",
-        "mode": "island",
-        "name": "Checklist Island Mint",
-        "appId": "claw-mqyd30yq",
-        "forgedSlug": null,
-        "templateId": null
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-b75dbb52-be7a-4316-bb77-b0a67d718d38",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:39.714Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685779706-5w7q1l",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Work",
-        "appId": "forged-exit-demo-work-7",
-        "forgedSlug": "exit-demo-work-7",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-de07c45a-6d87-4fd7-9686-beeb4e203bba",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:41.306Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685781301-appxup",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Creator",
-        "appId": "forged-exit-demo-creator-7",
-        "forgedSlug": "exit-demo-creator-7",
-        "templateId": "creator-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-8507fce2-b50a-4767-9351-bf4d01dad80c",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:42.914Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685782906-th8ssi",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Exit Demo Capital",
-        "appId": "forged-exit-demo-capital-7",
-        "forgedSlug": "exit-demo-capital-7",
-        "templateId": "capital-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
-      "id": "os-74d0af38-9df5-4296-ba36-da95f85a32c3",
-      "event": "forge.claw_minted",
-      "timestamp": "2026-06-28T22:29:47.171Z",
-      "payload": {
-        "dedupeKey": "forge:forge-1782685787167-q6t0h6",
-        "forgeKind": "forge.framework_provisioned",
-        "mode": "framework",
-        "name": "Flow Forged Work",
-        "appId": "forged-flow-forged-work-7",
-        "forgedSlug": "flow-forged-work-7",
-        "templateId": "work-desk"
-      },
-      "webhook": {
-        "attempted": false,
-        "ok": true,
-        "demo": true,
-        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
-      }
-    },
-    {
       "id": "os-28a98b4e-d97b-4f89-856d-51f4ece09c9a",
       "event": "forge.claw_minted",
       "timestamp": "2026-06-28T22:29:48.751Z",
@@ -3909,6 +1017,2774 @@
         "name": "Flow Round Trip",
         "appId": "forged-flow-round-trip-8",
         "forgedSlug": "flow-round-trip-8",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-bb2be526-3d43-4274-a835-9a17f4b66a39",
+      "event": "go_live.failed",
+      "timestamp": "2026-07-02T01:24:41.996Z",
+      "payload": {
+        "appId": "demo",
+        "dedupeKey": "demo:1782955481995",
+        "demo": true
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-7ec89b61-5729-43fa-a1fd-c4f08b8d8ffe",
+      "event": "ota.available",
+      "timestamp": "2026-07-02T01:24:42.037Z",
+      "payload": {
+        "dedupeKey": "ota:1.0.1",
+        "installed": "1.0.0",
+        "latest": "1.0.1",
+        "channel": "stable",
+        "released": "2026-07-01"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b3a2cb10-4b94-4d3c-acad-0cc044cde8fe",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:42.534Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-072",
+        "dedupeKey": "capital:trade:TRD-072:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-31e6ed49-e250-42f9-b63c-33890ba3eccf",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:42.597Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-073",
+        "dedupeKey": "capital:trade:TRD-073:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-acbe767c-d9e8-4d63-9b38-89794452abfa",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:42.915Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-074",
+        "dedupeKey": "capital:trade:TRD-074:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-c7f15496-2f40-40a7-a0e3-a36fb0a057d3",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:49.881Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · QA smoke create",
+        "skillId": "schedule_post",
+        "evidence": "POST-1268",
+        "dedupeKey": "creator:schedule:POST-1268"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-75c5f0bb-6d6d-4f83-9095-eec032b92feb",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:50.001Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · QA publish_now smoke",
+        "skillId": "publish_post",
+        "evidence": "POST-1269",
+        "dedupeKey": "creator:publish:POST-1269"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-9716e559-fcfa-4b09-8fad-7cd31cae27e1",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:50.276Z",
+      "payload": {
+        "appId": "my-work",
+        "summary": "Simulated send · Re: live status",
+        "skillId": "send_sequence_step",
+        "evidence": "SEND-010",
+        "dedupeKey": "work:send:SEND-010:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-b84f8bd1-cd8c-4a52-8034-c6c72080ba01",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:50.285Z",
+      "payload": {
+        "appId": "my-work",
+        "summary": "Simulated send · Demo tour · needs your OK",
+        "skillId": "send_sequence_step",
+        "evidence": "SEND-009",
+        "dedupeKey": "work:send:SEND-009:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-5a615e07-8c2e-4c60-b3b6-4c7aa662dfe9",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:50.301Z",
+      "payload": {
+        "appId": "my-work",
+        "summary": "Simulated send · Re: checklist",
+        "skillId": "send_sequence_step",
+        "evidence": "SEND-008",
+        "dedupeKey": "work:send:SEND-008:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-de49f7a8-7cd3-458c-a41a-beaf7712ac33",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:24:51.028Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (SPY dip 5%)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-13",
+        "dedupeKey": "capital:rule:RULE-13:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-341cada9-4b0f-442d-93c2-c776817b3efa",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:24:52.819Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955492813-zxtqbi",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA smoke framework desk for sorting pipeline",
+        "appId": "forged-qa-smoke-framework-desk-for--9",
+        "forgedSlug": "qa-smoke-framework-desk-for--9",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b111a5fa-f72b-477f-aa94-932741e90b9d",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:24:54.412Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955494401-dzvm40",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Work Desk",
+        "appId": "forged-qa-smoke-work-desk-9",
+        "forgedSlug": "qa-smoke-work-desk-9",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-f72b03e1-63ee-46b5-858f-330a495afdc9",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:24:56.037Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955496030-xvxjw7",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Creator Desk",
+        "appId": "forged-qa-smoke-creator-desk-9",
+        "forgedSlug": "qa-smoke-creator-desk-9",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-f57539b7-1221-42f7-afdc-c26c8640afd5",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:24:57.646Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955497637-xtzruq",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Capital Desk",
+        "appId": "forged-qa-smoke-capital-desk-9",
+        "forgedSlug": "qa-smoke-capital-desk-9",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-30100ab0-80a1-478a-83ed-33b4984a41b0",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:25:00.762Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955500751-c32u8f",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "QA Island Mint",
+        "appId": "claw-mr2to52p",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-7379a5c8-7f7c-430b-95e1-b88af2577ff1",
+      "event": "go_live.failed",
+      "timestamp": "2026-07-02T01:28:24.479Z",
+      "payload": {
+        "appId": "demo",
+        "dedupeKey": "demo:1782955704478",
+        "demo": true
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-5e5a2f41-d818-4520-84e9-0e77cc2fc2c9",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:25.008Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-075",
+        "dedupeKey": "capital:trade:TRD-075:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-d96e8abd-2461-494f-b0b9-74ee70aa5437",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:25.092Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-076",
+        "dedupeKey": "capital:trade:TRD-076:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-ed5822ad-cb84-456f-8092-e483bad784f6",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:25.437Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-077",
+        "dedupeKey": "capital:trade:TRD-077:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-ff297514-4e6c-4935-89f9-a81ba92ab504",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:32.595Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · QA smoke create",
+        "skillId": "schedule_post",
+        "evidence": "POST-1271",
+        "dedupeKey": "creator:schedule:POST-1271"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-98e9d79e-abd8-4bac-a6fe-6a6ec30000a5",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:32.710Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · QA publish_now smoke",
+        "skillId": "publish_post",
+        "evidence": "POST-1272",
+        "dedupeKey": "creator:publish:POST-1272"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-4964937a-084e-4d68-b960-cbec21ea0777",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:33.902Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (SPY dip 5%)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-14",
+        "dedupeKey": "capital:rule:RULE-14:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-c21f4e33-711f-4b82-bb58-5c30702c3f22",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:35.717Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955715712-zstcms",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA smoke framework desk for sorting pipeline",
+        "appId": "forged-qa-smoke-framework-desk-for--10",
+        "forgedSlug": "qa-smoke-framework-desk-for--10",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-7698ca4e-1b2f-4f09-8372-d6fc1a6b2206",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:37.315Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955717309-i969t9",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Work Desk",
+        "appId": "forged-qa-smoke-work-desk-10",
+        "forgedSlug": "qa-smoke-work-desk-10",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-21ec7468-c949-4e89-92bd-9f5be409ce05",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:38.922Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955718916-y5ut0x",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Creator Desk",
+        "appId": "forged-qa-smoke-creator-desk-10",
+        "forgedSlug": "qa-smoke-creator-desk-10",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-6194e01b-a7e5-4149-ba34-9943ed648fa4",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:40.552Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955720546-1gx91z",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Capital Desk",
+        "appId": "forged-qa-smoke-capital-desk-10",
+        "forgedSlug": "qa-smoke-capital-desk-10",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-98390e9e-23a7-4eed-8360-ef409ef6f402",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:43.664Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955723654-zh3ldk",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "QA Island Mint",
+        "appId": "claw-mr2tsx2g",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-213045f1-d80f-463f-9034-793cd5e93310",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:47.486Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-078",
+        "dedupeKey": "capital:trade:TRD-078:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-06a106d0-f35c-4aa3-ae49-a67028fc05ca",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:47.564Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (Checklist execute 1782955727515)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-93",
+        "dedupeKey": "capital:rule:RULE-93:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-a1c95f15-20f3-4be0-914d-fb25e60a58c9",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:47.651Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-079",
+        "dedupeKey": "capital:trade:TRD-079:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-32e51b54-798f-4ec0-826a-41b87970cbf6",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:47.784Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-080",
+        "dedupeKey": "capital:trade:TRD-080:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-33ff291d-3b65-402b-963c-66e171a28979",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:48.243Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · Creator checklist",
+        "skillId": "schedule_post",
+        "evidence": "POST-1274",
+        "dedupeKey": "creator:schedule:POST-1274"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-677d9c59-8b0e-471e-931f-8636044da307",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:28:48.352Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · Checklist publish_now",
+        "skillId": "publish_post",
+        "evidence": "POST-1275",
+        "dedupeKey": "creator:publish:POST-1275"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-e67449ce-d24c-49cb-a432-4a8485260174",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:55.018Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955735012-scu6hg",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Work Desk",
+        "appId": "forged-checklist-work-desk-9",
+        "forgedSlug": "checklist-work-desk-9",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-f72a7efd-80a3-4daa-b771-cd438add8073",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:56.667Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955736662-xuq6ji",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Creator Desk",
+        "appId": "forged-checklist-creator-desk-9",
+        "forgedSlug": "checklist-creator-desk-9",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-84e278c3-d6ba-4499-9305-77114b79db6e",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:59.745Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955739736-zvcwdb",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Island Claw",
+        "appId": "claw-mr2tt9hb",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b7e90b5a-9345-4c43-9b84-2d016946cdd7",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:28:59.783Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955739779-smapd9",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Island Claw",
+        "appId": "forged-checklist-island-claw-9",
+        "forgedSlug": "checklist-island-claw-9",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-caa9caed-b451-434f-be13-5b1aeb379ca6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:02.859Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955742852-8zv70h",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Archive Claw",
+        "appId": "claw-mr2ttbvq",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-bb0b3a4f-2fce-4bf1-92fb-2991cae02407",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:04.986Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955744980-1f44ji",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Mesh Desk",
+        "appId": "forged-checklist-mesh-desk-9",
+        "forgedSlug": "checklist-mesh-desk-9",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-541860d5-5ebd-4985-867e-7f470cd41cbc",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:06.603Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955746597-hgi2z5",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Cafe Mint",
+        "appId": "forged-checklist-cafe-mint-9",
+        "forgedSlug": "checklist-cafe-mint-9",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-62235441-a04e-4a2b-9f84-d67ec8f09352",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:08.236Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955748228-y56zg9",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Capital Desk",
+        "appId": "forged-checklist-capital-desk-9",
+        "forgedSlug": "checklist-capital-desk-9",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-c945a55f-90a7-45b9-a115-7f19961ee937",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:11.353Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955751347-0b8dxg",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Island Mint",
+        "appId": "claw-mr2ttift",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-444b658f-466e-4ca3-81e6-7eb8200d34c2",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:14.253Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955754248-hxjt4q",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Work",
+        "appId": "forged-exit-demo-work-9",
+        "forgedSlug": "exit-demo-work-9",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-78f099bb-56ef-4970-9986-cdfd864784ac",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:15.835Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955755830-avwpi2",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Creator",
+        "appId": "forged-exit-demo-creator-9",
+        "forgedSlug": "exit-demo-creator-9",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-1cab5b50-7990-45f0-8f81-a1a076961ef7",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:17.437Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955757431-ff4hbd",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Capital",
+        "appId": "forged-exit-demo-capital-9",
+        "forgedSlug": "exit-demo-capital-9",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-f79a1cb8-8130-47ca-8dcc-567f776e1410",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:18.531Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · User flow QA",
+        "skillId": "schedule_post",
+        "evidence": "POST-1276",
+        "dedupeKey": "creator:schedule:POST-1276"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-2da5d1b5-8249-43c0-ba67-7e4a88ac9ba5",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:18.635Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-081",
+        "dedupeKey": "capital:trade:TRD-081:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-66b68581-b113-4840-b933-96a6b4304036",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:18.733Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (QA flow rule)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-94",
+        "dedupeKey": "capital:rule:RULE-94:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-6309ac46-af94-45f1-9c83-270f26afe67e",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:18.788Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-082",
+        "dedupeKey": "capital:trade:TRD-082:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-d06d3cd1-7e4d-480c-adde-dd6cb88cb022",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:19.253Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (SPY dip 5%)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-95",
+        "dedupeKey": "capital:rule:RULE-95:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-a1d540a5-667f-4113-8bd2-e256aa4e4963",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:19.313Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-083",
+        "dedupeKey": "capital:trade:TRD-083:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-d175c480-34ae-41fe-a9e1-c5cffca3abf1",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:29:19.448Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · NVDA (Flow rebalance)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-96",
+        "dedupeKey": "capital:rule:RULE-96:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-259f058e-8e62-440a-af82-bc0d91084e4b",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:21.900Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955761895-i6ycyk",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Work",
+        "appId": "forged-flow-forged-work-9",
+        "forgedSlug": "flow-forged-work-9",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-8383d0c2-ae05-4469-86aa-f1edd40d7c21",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:23.549Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955763533-hiagm1",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Creator",
+        "appId": "forged-flow-forged-creator-9",
+        "forgedSlug": "flow-forged-creator-9",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b1f58a73-5aef-411f-9878-67a0f5a967f6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:25.192Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955765187-7vni6e",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Capital",
+        "appId": "forged-flow-forged-capital-9",
+        "forgedSlug": "flow-forged-capital-9",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-81a60f7f-dfbf-4fa4-8c54-3323a3918c45",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:28.289Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955768281-qpu6xw",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Flow Island Claw",
+        "appId": "claw-mr2ttvi5",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-68ac3f3a-5e0a-495d-8c48-3dc54d4cc8e1",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:29.890Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955769885-aode0a",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Assist Work",
+        "appId": "forged-flow-assist-work-9",
+        "forgedSlug": "flow-assist-work-9",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-f56965c0-3e22-4090-83ca-6bb707afb751",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:29:31.491Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955771486-0qm9p6",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Round Trip",
+        "appId": "forged-flow-round-trip-9",
+        "forgedSlug": "flow-round-trip-9",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-3894aabf-458a-4dc4-98d0-c222c33c40dc",
+      "event": "go_live.failed",
+      "timestamp": "2026-07-02T01:30:59.031Z",
+      "payload": {
+        "appId": "demo",
+        "dedupeKey": "demo:1782955859030",
+        "demo": true
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-d9ec8605-ecd3-4403-b913-d1e4d75e1de8",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:30:59.555Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-084",
+        "dedupeKey": "capital:trade:TRD-084:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-bdb9ac4d-3fe5-44b7-bfd7-f7e4bf3c61cb",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:30:59.622Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-085",
+        "dedupeKey": "capital:trade:TRD-085:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-f9f3b74e-34fe-4059-8c98-6929268fba67",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:30:59.995Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-086",
+        "dedupeKey": "capital:trade:TRD-086:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-317029e6-2ad8-4d35-a06b-52625b646d6c",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:09.537Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · QA smoke create",
+        "skillId": "schedule_post",
+        "evidence": "POST-1277",
+        "dedupeKey": "creator:schedule:POST-1277"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-2047e63c-b0ae-4a07-b339-2bf5ca416fb9",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:09.630Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · QA publish_now smoke",
+        "skillId": "publish_post",
+        "evidence": "POST-1278",
+        "dedupeKey": "creator:publish:POST-1278"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-a91b7ae6-fabf-42f6-af8e-a4f9a0a7a149",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:10.651Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (SPY chat rule)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-15",
+        "dedupeKey": "capital:rule:RULE-15:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-f43f7e35-fc38-491f-99f6-cfca997640cc",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:12.426Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955872418-m7b5hl",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA smoke framework desk for sorting pipeline",
+        "appId": "forged-qa-smoke-framework-desk-for--11",
+        "forgedSlug": "qa-smoke-framework-desk-for--11",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-e0c2ad80-c4f9-4286-88d7-f7159e138474",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:14.026Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955874020-rd3s13",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Work Desk",
+        "appId": "forged-qa-smoke-work-desk-11",
+        "forgedSlug": "qa-smoke-work-desk-11",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b889bdbb-91f5-40d1-9faa-87836c88b897",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:15.642Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955875637-o6elor",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Creator Desk",
+        "appId": "forged-qa-smoke-creator-desk-11",
+        "forgedSlug": "qa-smoke-creator-desk-11",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-240a5c4b-6332-430a-95be-56f98a24cad2",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:17.263Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955877256-za5fxj",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Capital Desk",
+        "appId": "forged-qa-smoke-capital-desk-11",
+        "forgedSlug": "qa-smoke-capital-desk-11",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-83cb05d2-42dc-446d-a07d-bc66d6b1feb6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:20.382Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955880375-9lvrlp",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "QA Island Mint",
+        "appId": "claw-mr2tw9zw",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-fd6a1b82-f971-4de3-9506-0d5de80df0d2",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:24.063Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-087",
+        "dedupeKey": "capital:trade:TRD-087:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-4a31ae39-6035-4a5c-8b82-a7612e5a9cd3",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:24.162Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (Checklist execute 1782955884077)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-102",
+        "dedupeKey": "capital:rule:RULE-102:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-67695cce-3571-4953-b0f7-9139eb0f86dc",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:24.222Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-088",
+        "dedupeKey": "capital:trade:TRD-088:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-0dc2e116-6776-4c1f-a760-8a955ab88aa3",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:24.345Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-089",
+        "dedupeKey": "capital:trade:TRD-089:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-95279d7a-a846-4555-8aca-1a807b793276",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:24.759Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · Creator checklist",
+        "skillId": "schedule_post",
+        "evidence": "POST-1280",
+        "dedupeKey": "creator:schedule:POST-1280"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-e3cd4c74-5d4f-478c-979c-ec7a5b7b88cd",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:24.863Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · Checklist publish_now",
+        "skillId": "publish_post",
+        "evidence": "POST-1281",
+        "dedupeKey": "creator:publish:POST-1281"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-e5fbaa36-797c-45d9-8d70-34eefe1d0cfd",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:31.423Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955891416-ef67ni",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Work Desk",
+        "appId": "forged-checklist-work-desk-10",
+        "forgedSlug": "checklist-work-desk-10",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-72c29660-c726-40dd-b16d-94bee55bf32a",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:33.069Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955893060-es7oqy",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Creator Desk",
+        "appId": "forged-checklist-creator-desk-10",
+        "forgedSlug": "checklist-creator-desk-10",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-3e3c083e-6fb9-4fb1-bc5e-10515ae24c09",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:36.146Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955896140-zdu6lh",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Island Claw",
+        "appId": "claw-mr2twm5t",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-992d2841-a66f-4258-88b6-7e7ec0f8e62d",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:36.195Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955896185-916khq",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Island Claw",
+        "appId": "forged-checklist-island-claw-10",
+        "forgedSlug": "checklist-island-claw-10",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-bfd5bf50-5085-40e7-8b21-7ba074f9fdc6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:39.288Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955899279-g9plb1",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Archive Claw",
+        "appId": "claw-mr2twokw",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-37160ebe-ac28-4dc6-9132-5e60c2e97c17",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:41.394Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955901388-6vb7p6",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Mesh Desk",
+        "appId": "forged-checklist-mesh-desk-10",
+        "forgedSlug": "checklist-mesh-desk-10",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b423db6f-8774-48e9-aa9f-eb934a88440e",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:43.020Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955903012-jeoyi5",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Cafe Mint",
+        "appId": "forged-checklist-cafe-mint-10",
+        "forgedSlug": "checklist-cafe-mint-10",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-c3768069-c4e5-4683-8372-794787b39c5a",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:44.684Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955904677-1slvkx",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Capital Desk",
+        "appId": "forged-checklist-capital-desk-10",
+        "forgedSlug": "checklist-capital-desk-10",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-4e3ab2d9-a482-40dd-9089-d742fc53532f",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:47.785Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955907777-anz511",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Island Mint",
+        "appId": "claw-mr2twv50",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b99fde2a-2d34-4ff6-b90b-be0a4dcd82c2",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:50.845Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955910839-6fz868",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Work",
+        "appId": "forged-exit-demo-work-10",
+        "forgedSlug": "exit-demo-work-10",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-72f7f079-8d19-4138-a67a-0627a3e7be57",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:52.450Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955912443-rnudzb",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Creator",
+        "appId": "forged-exit-demo-creator-10",
+        "forgedSlug": "exit-demo-creator-10",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-1e3ab556-75f2-471b-a6d7-23ae95511ead",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:31:54.084Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955914076-iut44c",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Capital",
+        "appId": "forged-exit-demo-capital-10",
+        "forgedSlug": "exit-demo-capital-10",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-0565a4f6-4b95-44ee-81e2-77d67b00160c",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:55.157Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · User flow QA",
+        "skillId": "schedule_post",
+        "evidence": "POST-1282",
+        "dedupeKey": "creator:schedule:POST-1282"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-a9a784d2-911e-47d8-b33b-bb89057c1534",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:55.279Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-090",
+        "dedupeKey": "capital:trade:TRD-090:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-95d45d9c-58ad-407f-bb12-295e746f1066",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:55.350Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (QA flow rule)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-103",
+        "dedupeKey": "capital:rule:RULE-103:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-cbe3cf56-1fa4-49de-b45a-700bf5cce9a7",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:55.397Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-091",
+        "dedupeKey": "capital:trade:TRD-091:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-98413e1d-f0d8-41e1-8876-3341ec0adccc",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:57.420Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (SPY dip 5%)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-104",
+        "dedupeKey": "capital:rule:RULE-104:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-1796eaf0-6448-4a9d-9fba-69698f206d5d",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:57.476Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-092",
+        "dedupeKey": "capital:trade:TRD-092:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-2eb90925-82a6-4077-9539-abaa537be5d1",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T01:31:57.553Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · NVDA (Flow rebalance)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-105",
+        "dedupeKey": "capital:rule:RULE-105:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-e139cc19-3416-458f-a798-077ab6207578",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:32:00.065Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955920055-7gtnnu",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Work",
+        "appId": "forged-flow-forged-work-10",
+        "forgedSlug": "flow-forged-work-10",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-74395399-fb4e-4541-99bf-e54532976da8",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:32:01.699Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955921691-1wtvok",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Creator",
+        "appId": "forged-flow-forged-creator-10",
+        "forgedSlug": "flow-forged-creator-10",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-b1dcb773-4c4b-4a6e-8ec2-f2856be289e1",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:32:03.365Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955923355-otrscw",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Capital",
+        "appId": "forged-flow-forged-capital-10",
+        "forgedSlug": "flow-forged-capital-10",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-d705fd01-562c-411b-9d69-25cc56e687ed",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:32:06.470Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955926463-3c35va",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Flow Island Claw",
+        "appId": "claw-mr2tx9k0",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-7bd7d954-8e9f-4aa2-942b-1ed0a3c3ba23",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:32:08.079Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955928070-6lzjku",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Assist Work",
+        "appId": "forged-flow-assist-work-10",
+        "forgedSlug": "flow-assist-work-10",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-c29e91c0-eab2-4508-bcbb-4cab741d35a9",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T01:32:09.712Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782955929705-bfeunm",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Round Trip",
+        "appId": "forged-flow-round-trip-10",
+        "forgedSlug": "flow-round-trip-10",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-6fb0c6dc-b217-4a75-a784-3c0dda6fcdca",
+      "event": "go_live.failed",
+      "timestamp": "2026-07-02T03:25:55.555Z",
+      "payload": {
+        "appId": "demo",
+        "dedupeKey": "demo:1782962755554",
+        "demo": true
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-20b8d35f-8aef-4f59-b726-0dd6cf1a2cae",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:25:56.049Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-093",
+        "dedupeKey": "capital:trade:TRD-093:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-812837cb-30a7-48be-be8e-0e37c81f7db6",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:25:56.112Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-094",
+        "dedupeKey": "capital:trade:TRD-094:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-f1fe4ef7-b044-4e48-9b05-d7725a16efe5",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:25:56.429Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 0.01 BTC-USD · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-095",
+        "dedupeKey": "capital:trade:TRD-095:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-02af80cc-0f29-4b6e-a263-e61eec60c49f",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:06.518Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · QA smoke create",
+        "skillId": "schedule_post",
+        "evidence": "POST-1283",
+        "dedupeKey": "creator:schedule:POST-1283"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-ae2253fb-d386-443d-8b0a-b704d3298037",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:06.611Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · QA publish_now smoke",
+        "skillId": "publish_post",
+        "evidence": "POST-1284",
+        "dedupeKey": "creator:publish:POST-1284"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-eeb6e96a-3166-4b79-ae50-18e76e87885a",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:06.828Z",
+      "payload": {
+        "appId": "my-work",
+        "summary": "Simulated send · Re: live status",
+        "skillId": "send_sequence_step",
+        "evidence": "SEND-005",
+        "dedupeKey": "work:send:SEND-005:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-399e6aec-11f7-4f82-a298-59b0667f3029",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:07.617Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (QA rebalance)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-20",
+        "dedupeKey": "capital:rule:RULE-20:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-a755e294-334f-423b-afbf-75d4895615c6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:09.391Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962769385-akclcz",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA smoke framework desk for sorting pipeline",
+        "appId": "forged-qa-smoke-framework-desk-for--12",
+        "forgedSlug": "qa-smoke-framework-desk-for--12",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-a0e7552a-0646-41e9-9c32-ee3cfd9803f0",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:10.973Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962770967-pt2ujy",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Work Desk",
+        "appId": "forged-qa-smoke-work-desk-12",
+        "forgedSlug": "qa-smoke-work-desk-12",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-98e389be-8169-4ed9-b33f-57f6c30038be",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:12.575Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962772565-i49tqr",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Creator Desk",
+        "appId": "forged-qa-smoke-creator-desk-12",
+        "forgedSlug": "qa-smoke-creator-desk-12",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-77e84f2f-526a-4ea8-bbd0-49569f215826",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:14.186Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962774178-dnut86",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "QA Smoke Capital Desk",
+        "appId": "forged-qa-smoke-capital-desk-12",
+        "forgedSlug": "qa-smoke-capital-desk-12",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-bde60869-55b4-4abc-a9c0-53cdd9327301",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:17.294Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962777287-irjxjy",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "QA Island Mint",
+        "appId": "claw-mr2y03ov",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-c522e244-7adb-4113-86eb-350b4cea6989",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:21.055Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-096",
+        "dedupeKey": "capital:trade:TRD-096:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-dc5614a4-b484-465e-9260-2154c3e00ed2",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:21.125Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (Checklist execute 1782962781077)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-111",
+        "dedupeKey": "capital:rule:RULE-111:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-e42b98cf-3c35-4df6-beab-83ef1a18d326",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:21.190Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-097",
+        "dedupeKey": "capital:trade:TRD-097:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-b4a0f186-a6ab-408c-a4e3-ac930d0f579c",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:21.330Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-098",
+        "dedupeKey": "capital:trade:TRD-098:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-47ed91df-d188-4990-9718-0aea9b555388",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:21.718Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · Creator checklist",
+        "skillId": "schedule_post",
+        "evidence": "POST-1286",
+        "dedupeKey": "creator:schedule:POST-1286"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-4f0a142e-9cc0-4d67-b07a-908fdff1d1b1",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:21.826Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Published · x · Checklist publish_now",
+        "skillId": "publish_post",
+        "evidence": "POST-1287",
+        "dedupeKey": "creator:publish:POST-1287"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-75758252-770b-44ff-a6dd-79c9c5b45147",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:28.006Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962788000-ljkkat",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Work Desk",
+        "appId": "forged-checklist-work-desk-11",
+        "forgedSlug": "checklist-work-desk-11",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-7b4ec816-e245-438e-99f4-aed2344f7f1d",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:29.619Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962789610-31qbja",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Creator Desk",
+        "appId": "forged-checklist-creator-desk-11",
+        "forgedSlug": "checklist-creator-desk-11",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-6516fe58-af27-43a2-869d-4bd6483e9b7d",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:32.693Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962792688-hpmif9",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Island Claw",
+        "appId": "claw-mr2y0fku",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-ab129dac-56bd-43ba-81bd-476712ff5f7e",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:32.715Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962792709-ycmqca",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Island Claw",
+        "appId": "forged-checklist-island-claw-11",
+        "forgedSlug": "checklist-island-claw-11",
+        "templateId": "blank-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-cc5b08b3-934c-4d7a-8213-954ac4329bc2",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:35.761Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962795755-7ufn6w",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Archive Claw",
+        "appId": "claw-mr2y0hxx",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-c003bef0-51cd-49be-a192-37e4e766f517",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:37.819Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962797811-r1gtw5",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Mesh Desk",
+        "appId": "forged-checklist-mesh-desk-11",
+        "forgedSlug": "checklist-mesh-desk-11",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-5149774c-de9d-404a-bf87-f95cd54a9140",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:39.433Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962799426-84kv7n",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Cafe Mint",
+        "appId": "forged-checklist-cafe-mint-11",
+        "forgedSlug": "checklist-cafe-mint-11",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-5c4c14d6-61d8-4bcb-b4bf-3f806f53e56f",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:41.062Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962801056-0elx5f",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Checklist Capital Desk",
+        "appId": "forged-checklist-capital-desk-11",
+        "forgedSlug": "checklist-capital-desk-11",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-d94f1fef-e3ed-4256-bb15-7aec817a9cd6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:44.155Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962804149-ayzink",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Checklist Island Mint",
+        "appId": "claw-mr2y0of4",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-5944b834-8ccc-4651-90d9-87d19e909fb4",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:46.913Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962806908-acsqxm",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Work",
+        "appId": "forged-exit-demo-work-11",
+        "forgedSlug": "exit-demo-work-11",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-7f5d41be-5d98-4fdf-9479-5462d47875b6",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:48.475Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962808469-o8cbgm",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Creator",
+        "appId": "forged-exit-demo-creator-11",
+        "forgedSlug": "exit-demo-creator-11",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-bba7c629-6dcf-4c3f-8e9b-8f398665f148",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:50.072Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962810064-f75l3l",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Exit Demo Capital",
+        "appId": "forged-exit-demo-capital-11",
+        "forgedSlug": "exit-demo-capital-11",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-4c6bd49d-430c-4a93-b62e-232d4ff2c5f7",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:50.964Z",
+      "payload": {
+        "appId": "my-content-creator",
+        "summary": "Scheduled · x · User flow QA",
+        "skillId": "schedule_post",
+        "evidence": "POST-1288",
+        "dedupeKey": "creator:schedule:POST-1288"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-18ee60ad-289d-458a-86a9-81838d5a5ed3",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:51.066Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 QQQ · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-099",
+        "dedupeKey": "capital:trade:TRD-099:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-c81e4df2-f169-483a-8710-55217bc5c7de",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:51.144Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (QA flow rule)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-112",
+        "dedupeKey": "capital:rule:RULE-112:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-de47d1f9-ce2e-4691-85af-10b30bb64737",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:51.187Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-100",
+        "dedupeKey": "capital:trade:TRD-100:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-fbbd4fff-1fec-4a36-a79c-99d1fdf5bf66",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:52.596Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · SPY (SPY dip 5%)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-113",
+        "dedupeKey": "capital:rule:RULE-113:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-70399722-a4a5-497a-a2a4-5f92be46c3b1",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:52.643Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "BUY 1 SPY · practice fill",
+        "skillId": "execute_trade",
+        "evidence": "TRD-101",
+        "dedupeKey": "capital:trade:TRD-101:simulated"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-6decca51-dd28-47f6-8d9f-51eae199484d",
+      "event": "claw.skill_completed",
+      "timestamp": "2026-07-02T03:26:52.726Z",
+      "payload": {
+        "appId": "my-capital",
+        "summary": "Rule armed · NVDA (Flow rebalance)",
+        "skillId": "arm_rule",
+        "evidence": "RULE-114",
+        "dedupeKey": "capital:rule:RULE-114:armed"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "Webhook skipped"
+      }
+    },
+    {
+      "id": "os-a88b4f3b-380d-48e7-a8f1-5c6a8c0fca1c",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:55.044Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962815039-sfw09i",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Work",
+        "appId": "forged-flow-forged-work-11",
+        "forgedSlug": "flow-forged-work-11",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-042ef9fa-9b1d-46b1-8aed-e4cf1c085f72",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:56.656Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962816649-drbcbf",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Creator",
+        "appId": "forged-flow-forged-creator-11",
+        "forgedSlug": "flow-forged-creator-11",
+        "templateId": "creator-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-d9115269-d0c0-43ad-9825-08a167f3a91b",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:26:58.280Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962818274-6yo34p",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Forged Capital",
+        "appId": "forged-flow-forged-capital-11",
+        "forgedSlug": "flow-forged-capital-11",
+        "templateId": "capital-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-46eb839c-438c-4cbb-8fd1-43e0084f2efd",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:27:01.371Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962821365-il12pe",
+        "forgeKind": "forge.claw_minted",
+        "mode": "island",
+        "name": "Flow Island Claw",
+        "appId": "claw-mr2y11pf",
+        "forgedSlug": null,
+        "templateId": null
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-9371a8fd-1fd4-4672-986f-7b54793e355a",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:27:02.979Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962822974-pbxvm0",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Assist Work",
+        "appId": "forged-flow-assist-work-11",
+        "forgedSlug": "flow-assist-work-11",
+        "templateId": "work-desk"
+      },
+      "webhook": {
+        "attempted": false,
+        "ok": true,
+        "demo": true,
+        "detail": "No webhook URL — set buildPlane.webhookUrl or CURXOR_BUILD_PLANE_WEBHOOK_URL"
+      }
+    },
+    {
+      "id": "os-748261a2-9d8b-4f86-a185-81c177a984f3",
+      "event": "forge.claw_minted",
+      "timestamp": "2026-07-02T03:27:04.569Z",
+      "payload": {
+        "dedupeKey": "forge:forge-1782962824561-qk4tpu",
+        "forgeKind": "forge.framework_provisioned",
+        "mode": "framework",
+        "name": "Flow Round Trip",
+        "appId": "forged-flow-round-trip-11",
+        "forgedSlug": "flow-round-trip-11",
         "templateId": "blank-desk"
       },
       "webhook": {

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-01T06:48:38.627Z",
+  "updatedAt": "2026-07-02T01:29:15.859Z",
   "posts": [
     {
       "id": "POST-001",
@@ -31,6 +31,16 @@
       "scheduledAt": "2026-07-01T22:00:00.000Z",
       "createdAt": "2026-07-01T06:48:38.611Z",
       "updatedAt": "2026-07-01T06:48:38.627Z"
+    },
+    {
+      "id": "POST-004",
+      "channel": "X / Twitter",
+      "platform": "x",
+      "stage": "SCHEDULED",
+      "draftText": "Exit demo forged creator draft.",
+      "scheduledAt": "2026-07-02T22:00:00.000Z",
+      "createdAt": "2026-07-02T01:29:15.845Z",
+      "updatedAt": "2026-07-02T01:29:15.859Z"
     }
   ]
 }

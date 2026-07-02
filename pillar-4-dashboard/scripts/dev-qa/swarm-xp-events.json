@@ -3,6 +3,318 @@
     {
       "id": "SXP-0201",
       "kind": "ping_mesh",
+      "at": "2026-07-02T03:27:08.935Z",
+      "payload": {
+        "unitId": "claw-mqpscfbc",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T03:27:08.067Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0101",
+        "title": "Scaffold rule sweep"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T03:27:08.047Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "Scaffold work batch"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T03:27:08.020Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0101",
+        "title": "Scaffold capital sweep"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "exit_demo_ready",
+      "at": "2026-07-02T03:27:07.994Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "fleet_milestone",
+      "at": "2026-07-02T03:27:07.992Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T03:27:07.883Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "QA swarm handoff"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "exit_demo_ready",
+      "at": "2026-07-02T03:27:07.871Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "fleet_milestone",
+      "at": "2026-07-02T03:27:07.868Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "ping_mesh",
+      "at": "2026-07-02T03:27:07.818Z",
+      "payload": {
+        "unitId": "RX-01",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T03:26:53.438Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "Freeze QA handoff"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "ping_mesh",
+      "at": "2026-07-02T01:32:14.364Z",
+      "payload": {
+        "unitId": "claw-mqpscfbc",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:32:13.501Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0101",
+        "title": "Scaffold rule sweep"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:32:13.480Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "Scaffold work batch"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:32:13.450Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0101",
+        "title": "Scaffold capital sweep"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "exit_demo_ready",
+      "at": "2026-07-02T01:32:13.420Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "fleet_milestone",
+      "at": "2026-07-02T01:32:13.417Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:32:13.268Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "QA swarm handoff"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "exit_demo_ready",
+      "at": "2026-07-02T01:32:13.237Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "fleet_milestone",
+      "at": "2026-07-02T01:32:13.234Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "ping_mesh",
+      "at": "2026-07-02T01:32:13.196Z",
+      "payload": {
+        "unitId": "RX-01",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:31:58.401Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "Freeze QA handoff"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "ping_mesh",
+      "at": "2026-07-02T01:29:36.134Z",
+      "payload": {
+        "unitId": "claw-mqpscfbc",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:29:35.253Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0101",
+        "title": "Scaffold rule sweep"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:29:35.223Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "Scaffold work batch"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:29:35.203Z",
+      "payload": {
+        "source": "my-capital",
+        "workloadId": "WL-0101",
+        "title": "Scaffold capital sweep"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "exit_demo_ready",
+      "at": "2026-07-02T01:29:35.176Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "fleet_milestone",
+      "at": "2026-07-02T01:29:35.172Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:29:35.036Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "QA swarm handoff"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "exit_demo_ready",
+      "at": "2026-07-02T01:29:35.022Z",
+      "payload": {
+        "workloads": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "fleet_milestone",
+      "at": "2026-07-02T01:29:35.019Z",
+      "payload": {
+        "scenario": "exit_demo_seed",
+        "count": 5
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "ping_mesh",
+      "at": "2026-07-02T01:29:34.981Z",
+      "payload": {
+        "unitId": "RX-01",
+        "rttMs": 19,
+        "source": "local"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "handoff_received",
+      "at": "2026-07-02T01:29:20.247Z",
+      "payload": {
+        "source": "my-work",
+        "workloadId": "WL-0101",
+        "title": "Freeze QA handoff"
+      }
+    },
+    {
+      "id": "SXP-0201",
+      "kind": "ping_mesh",
       "at": "2026-07-01T07:25:54.434Z",
       "payload": {
         "unitId": "claw-mqpscfbc",
@@ -1576,318 +1888,6 @@
       "at": "2026-06-24T02:11:43.597Z",
       "payload": {
         "unitId": "claw-mqpscfbc",
-        "rttMs": 19,
-        "source": "local"
-      }
-    },
-    {
-      "id": "SXP-0084",
-      "kind": "handoff_received",
-      "at": "2026-06-24T02:11:42.726Z",
-      "payload": {
-        "source": "my-capital",
-        "workloadId": "WL-0037",
-        "title": "Scaffold rule sweep"
-      }
-    },
-    {
-      "id": "SXP-0083",
-      "kind": "handoff_received",
-      "at": "2026-06-24T02:11:42.703Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0036",
-        "title": "Scaffold work batch"
-      }
-    },
-    {
-      "id": "SXP-0082",
-      "kind": "handoff_received",
-      "at": "2026-06-24T02:11:42.686Z",
-      "payload": {
-        "source": "my-capital",
-        "workloadId": "WL-0035",
-        "title": "Scaffold capital sweep"
-      }
-    },
-    {
-      "id": "SXP-0081",
-      "kind": "exit_demo_ready",
-      "at": "2026-06-24T02:11:42.666Z",
-      "payload": {
-        "workloads": 5
-      }
-    },
-    {
-      "id": "SXP-0080",
-      "kind": "fleet_milestone",
-      "at": "2026-06-24T02:11:42.663Z",
-      "payload": {
-        "scenario": "exit_demo_seed",
-        "count": 5
-      }
-    },
-    {
-      "id": "SXP-0079",
-      "kind": "handoff_received",
-      "at": "2026-06-24T02:11:42.544Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0034",
-        "title": "QA swarm handoff"
-      }
-    },
-    {
-      "id": "SXP-0078",
-      "kind": "exit_demo_ready",
-      "at": "2026-06-24T02:11:42.531Z",
-      "payload": {
-        "workloads": 5
-      }
-    },
-    {
-      "id": "SXP-0077",
-      "kind": "fleet_milestone",
-      "at": "2026-06-24T02:11:42.528Z",
-      "payload": {
-        "scenario": "exit_demo_seed",
-        "count": 5
-      }
-    },
-    {
-      "id": "SXP-0076",
-      "kind": "ping_mesh",
-      "at": "2026-06-24T02:11:42.480Z",
-      "payload": {
-        "unitId": "RX-01",
-        "rttMs": 19,
-        "source": "local"
-      }
-    },
-    {
-      "id": "SXP-0075",
-      "kind": "handoff_received",
-      "at": "2026-06-24T02:11:27.911Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0033",
-        "title": "Freeze QA handoff"
-      }
-    },
-    {
-      "id": "SXP-0074",
-      "kind": "ping_mesh",
-      "at": "2026-06-23T22:05:21.476Z",
-      "payload": {
-        "unitId": "claw-mqpscfbc",
-        "rttMs": 19,
-        "source": "local"
-      }
-    },
-    {
-      "id": "SXP-0073",
-      "kind": "handoff_received",
-      "at": "2026-06-23T22:05:20.603Z",
-      "payload": {
-        "source": "my-capital",
-        "workloadId": "WL-0032",
-        "title": "Scaffold rule sweep"
-      }
-    },
-    {
-      "id": "SXP-0072",
-      "kind": "handoff_received",
-      "at": "2026-06-23T22:05:20.580Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0031",
-        "title": "Scaffold work batch"
-      }
-    },
-    {
-      "id": "SXP-0071",
-      "kind": "handoff_received",
-      "at": "2026-06-23T22:05:20.565Z",
-      "payload": {
-        "source": "my-capital",
-        "workloadId": "WL-0030",
-        "title": "Scaffold capital sweep"
-      }
-    },
-    {
-      "id": "SXP-0070",
-      "kind": "exit_demo_ready",
-      "at": "2026-06-23T22:05:20.546Z",
-      "payload": {
-        "workloads": 5
-      }
-    },
-    {
-      "id": "SXP-0069",
-      "kind": "fleet_milestone",
-      "at": "2026-06-23T22:05:20.543Z",
-      "payload": {
-        "scenario": "exit_demo_seed",
-        "count": 5
-      }
-    },
-    {
-      "id": "SXP-0068",
-      "kind": "handoff_received",
-      "at": "2026-06-23T22:05:20.425Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0029",
-        "title": "QA swarm handoff"
-      }
-    },
-    {
-      "id": "SXP-0067",
-      "kind": "exit_demo_ready",
-      "at": "2026-06-23T22:05:20.411Z",
-      "payload": {
-        "workloads": 5
-      }
-    },
-    {
-      "id": "SXP-0066",
-      "kind": "fleet_milestone",
-      "at": "2026-06-23T22:05:20.409Z",
-      "payload": {
-        "scenario": "exit_demo_seed",
-        "count": 5
-      }
-    },
-    {
-      "id": "SXP-0065",
-      "kind": "ping_mesh",
-      "at": "2026-06-23T22:05:20.359Z",
-      "payload": {
-        "unitId": "RX-01",
-        "rttMs": 19,
-        "source": "local"
-      }
-    },
-    {
-      "id": "SXP-0064",
-      "kind": "handoff_received",
-      "at": "2026-06-23T22:05:05.991Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0028",
-        "title": "Freeze QA handoff"
-      }
-    },
-    {
-      "id": "SXP-0063",
-      "kind": "ping_mesh",
-      "at": "2026-06-23T03:25:27.766Z",
-      "payload": {
-        "unitId": "claw-mqprph6g",
-        "rttMs": 19,
-        "source": "local"
-      }
-    },
-    {
-      "id": "SXP-0062",
-      "kind": "handoff_received",
-      "at": "2026-06-23T03:25:26.876Z",
-      "payload": {
-        "source": "my-capital",
-        "workloadId": "WL-0027",
-        "title": "Scaffold rule sweep"
-      }
-    },
-    {
-      "id": "SXP-0061",
-      "kind": "handoff_received",
-      "at": "2026-06-23T03:25:26.842Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0026",
-        "title": "Scaffold work batch"
-      }
-    },
-    {
-      "id": "SXP-0060",
-      "kind": "handoff_received",
-      "at": "2026-06-23T03:25:26.797Z",
-      "payload": {
-        "source": "my-capital",
-        "workloadId": "WL-0025",
-        "title": "Scaffold capital sweep"
-      }
-    },
-    {
-      "id": "SXP-0059",
-      "kind": "exit_demo_ready",
-      "at": "2026-06-23T03:25:26.772Z",
-      "payload": {
-        "workloads": 5
-      }
-    },
-    {
-      "id": "SXP-0058",
-      "kind": "fleet_milestone",
-      "at": "2026-06-23T03:25:26.767Z",
-      "payload": {
-        "scenario": "exit_demo_seed",
-        "count": 5
-      }
-    },
-    {
-      "id": "SXP-0057",
-      "kind": "handoff_received",
-      "at": "2026-06-23T03:25:26.325Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0024",
-        "title": "QA swarm handoff"
-      }
-    },
-    {
-      "id": "SXP-0056",
-      "kind": "exit_demo_ready",
-      "at": "2026-06-23T03:25:26.292Z",
-      "payload": {
-        "workloads": 5
-      }
-    },
-    {
-      "id": "SXP-0055",
-      "kind": "fleet_milestone",
-      "at": "2026-06-23T03:25:26.285Z",
-      "payload": {
-        "scenario": "exit_demo_seed",
-        "count": 5
-      }
-    },
-    {
-      "id": "SXP-0054",
-      "kind": "ping_mesh",
-      "at": "2026-06-23T03:25:26.212Z",
-      "payload": {
-        "unitId": "RX-01",
-        "rttMs": 19,
-        "source": "local"
-      }
-    },
-    {
-      "id": "SXP-0053",
-      "kind": "handoff_received",
-      "at": "2026-06-23T03:25:11.405Z",
-      "payload": {
-        "source": "my-work",
-        "workloadId": "WL-0023",
-        "title": "Freeze QA handoff"
-      }
-    },
-    {
-      "id": "SXP-0052",
-      "kind": "ping_mesh",
-      "at": "2026-06-23T03:18:32.746Z",
-      "payload": {
-        "unitId": "claw-mqprph6g",
         "rttMs": 19,
         "source": "local"
       }
